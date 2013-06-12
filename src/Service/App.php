@@ -89,6 +89,17 @@ class App extends \Wei\App
     protected $models = [];
 
     /**
+     * @var array
+     * @internal
+     */
+    protected $pathMap = [
+        '/admin-api/' => '/api/admin/',
+        '/api/admin/' => '/admin-api/',
+        '/m-api/' => '/api/',
+        '/api/' => '/m-api/',
+    ];
+
+    /**
      * @var WeiBaseController|null
      */
     private $curControllerInstance;
@@ -288,13 +299,10 @@ class App extends \Wei\App
         $options && $this->setOption($options);
 
         $pathInfo = $this->req->getRouterPathInfo();
-        $result = $this->pageRouter->match($pathInfo);
+
+        $result = $this->matchPathInfo($pathInfo);
         if (!$result) {
-            if ($this->fallbackPathInfo) {
-                $result = $this->pageRouter->match($this->fallbackPathInfo);
-            } else {
-                throw new \Exception('Not Found', static::NOT_FOUND);
-            }
+            throw new \Exception('Not Found', static::NOT_FOUND);
         }
 
         $this->req->set($result['params']);
@@ -498,6 +506,34 @@ class App extends \Wei\App
             $app = AppModel::select('id')->fetch('domain', $domain);
             return $app ? $app['id'] : null;
         });
+    }
+
+    /**
+     * @internal
+     */
+    protected function matchPathInfo(string $pathInfo): ?array
+    {
+        $result = $this->pageRouter->match($pathInfo);
+        if ($result) {
+            return $result;
+        }
+
+        foreach ($this->pathMap as $search => $replace) {
+            if (str_contains($pathInfo, $search)) {
+                $pathInfo = str_replace($search, $replace, $pathInfo);
+                $result = $this->pageRouter->match($pathInfo);
+                if ($result) {
+                    return $result;
+                }
+                break;
+            }
+        }
+
+        if ($this->fallbackPathInfo) {
+            return $this->pageRouter->match($this->fallbackPathInfo);
+        }
+
+        return null;
     }
 
     /**
