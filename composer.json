@@ -1,0 +1,15 @@
+{
+  "name": "miaoxing/plugin",
+  "keywords": [
+    "plugin"
+  ],
+  "license": "MIT",
+  "require": {
+    "wei/wei": "0.9.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "miaoxing\\plugin\\": ""
+    }
+  }
+}
