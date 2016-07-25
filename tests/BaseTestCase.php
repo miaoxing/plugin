@@ -1,6 +1,6 @@
 <?php
 
-namespace plugins\plugin\tests;
+namespace miaoxing\plugin\tests;
 
 use plugins\app\tests\BaseFixture;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace plugins\plugin\tests\controllers\admin;
+namespace miaoxing\plugin\tests\controllers\admin;
 
-class PluginTest extends \plugins\plugin\tests\BaseControllerTestCase
+class PluginTest extends \miaoxing\plugin\tests\BaseControllerTestCase
 {
 
 }

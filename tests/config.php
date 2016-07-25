@@ -11,13 +11,13 @@ return [
         'aliases' => [
             'plugin' => 'miaoxing\plugin\services\Plugin'
         ],
-        'import' => [
+        /*'import' => [
             // 导入默认应用的服务
             [
                 'dir' => 'services',
                 'namespace' => 'services'
             ]
-        ],
+        ],*/
         'providers' => [
             'cache' => 'memcache',
         ],
@@ -37,7 +37,7 @@ return [
         'dbname' => 'test',
         'charset' => 'utf8mb4',
         'password' => getenv('MYSQL_PASSWORD'),
-        'recordClass' => 'plugins\plugin\BaseModel',
+        'recordClass' => 'miaoxing\plugin\BaseModel',
     ],
     // 产品核心的数据库
     'app.db' => [
@@ -47,7 +47,7 @@ return [
         'dbname' => 'app',
         'charset' => 'utf8mb4',
         'password' => getenv('MYSQL_PASSWORD'),
-        'recordClass' => 'plugins\plugin\BaseModel',
+        'recordClass' => 'miaoxing\plugin\BaseModel',
     ],
     // 视图
     'view' => [
