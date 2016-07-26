@@ -48,6 +48,7 @@
   $.extend($, <?= json_encode($app->getConfig()) ?>);
 </script>
 <?php $event->trigger('inlineScript') ?>
+<?= $block->get('html') ?>
 <?php $event->trigger('beforePageScript') ?>
 <?= $block->get('js') ?>
 <?php $event->trigger('afterScript') ?>
