@@ -24,13 +24,19 @@ class Plugin extends BaseService
     const DEFAULT_PRIORITY = 100;
 
     /**
+     * @var string
+     */
+    protected $curNamespace;
+
+    /**
      * 插件所在的目录,允许使用通配符
      *
      * @var array
      */
     protected $dirs = [
-        'plugins',
-        'vendor/*'
+        '.',
+        'plugins/*',
+        'vendor/*/*'
     ];
 
     /**
@@ -141,7 +147,7 @@ class Plugin extends BaseService
      */
     protected function getWeiAliases()
     {
-        return $this->generateClassMap($this->dirs, '/*/services/*.php', 'services');
+        return $this->generateClassMap($this->dirs, '/services/*.php', 'services');
     }
 
     /**
@@ -152,7 +158,7 @@ class Plugin extends BaseService
     protected function getAppControllerMap()
     {
         // TODO 暂时支持三级控制器,待控制器升级后改为两级
-        return $this->generateClassMap($this->dirs, '/*/controllers/{*,*/*,*/*/*}.php', 'controllers');
+        return $this->generateClassMap($this->dirs, '/controllers/{*,*/*,*/*/*}.php', 'controllers');
     }
 
     /**
@@ -163,9 +169,9 @@ class Plugin extends BaseService
     protected function getPluginClasses()
     {
         if (!$this->pluginClasses) {
-            $files = $this->globByDirs($this->dirs, '/*/Plugin.php');
+            $files = $this->globByDirs($this->dirs, '/Plugin.php');
             foreach ($files as $file) {
-                $class = $this->guestClassName($file);
+                $class = $this->guessClassName($file);
                 $names = explode('\\', $class);
                 $name = $names[count($names) - 2];
                 $this->pluginClasses[$name] = $class;
@@ -511,7 +517,7 @@ class Plugin extends BaseService
         $files = $this->globByDirs($dirs, $pattern);
 
         foreach ($files as $file) {
-            $class = $this->guestClassName($file);
+            $class = $this->guessClassName($file);
             $name = $this->getShortName($class, $type);
 
             $this->addDuplicates($map, $name, $class);
@@ -527,8 +533,13 @@ class Plugin extends BaseService
      * @param string $file
      * @return string
      */
-    protected function guestClassName($file)
+    protected function guessClassName($file)
     {
+        // 假设为根目录
+        if ($file[0] === '.') {
+            $file = $this->curNamespace . '\\' . ltrim($file, './');
+        }
+
         // 忽略开头的vendor目录
         if (substr($file, 0, 7) == 'vendor/') {
             $file = substr($file, 7);
