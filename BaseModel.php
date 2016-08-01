@@ -3,8 +3,8 @@
 namespace miaoxing\plugin;
 
 use JsonSerializable;
-use plugins\ret\RetTrait;
 use Wei\Record;
+use Wei\RetTrait;
 
 /**
  * @method \miaoxing\plugin\BaseModel db($table = null) Create a new record object
