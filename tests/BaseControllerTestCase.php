@@ -83,7 +83,9 @@ class BaseControllerTestCase extends BaseTestCase
     {
         $wei = wei();
 
-        $wei->curUser->loginById(1);
+        if ($wei->has('curUser')) {
+            $wei->curUser->loginById(1);
+        }
 
         $wei->setNamespace('test');
 

@@ -11,13 +11,6 @@ return [
         'aliases' => [
             'plugin' => 'miaoxing\plugin\services\Plugin'
         ],
-        /*'import' => [
-            // 导入默认应用的服务
-            [
-                'dir' => 'services',
-                'namespace' => 'services'
-            ]
-        ],*/
         'providers' => [
             'cache' => 'memcache',
         ],
@@ -67,5 +60,8 @@ return [
         ]
     ],
     'js.raven' => [
+    ],
+    'plugin' => [
+        'curNamespace' => 'miaoxing\plugin'
     ]
 ];

@@ -39,7 +39,6 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $wei->request->setOption('gets', []);
         $wei->response->setStatusCode(200);
         $wei->app->setOption('plugin', null);
-        $wei->db->useDb('test'); // TODO 在某个测试被改为test2,由更改的还原回来
         $wei->block->setOption('data', []);
     }
 
