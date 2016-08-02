@@ -3,7 +3,7 @@
 namespace miaoxing\plugin\middleware;
 
 /**
- * @property \plugins\ret\services\Ret $ret
+ * @property \Wei\Ret $ret
  * @property \Wei\Url $url
  * @method string url($url = '', $argsOrParams = array(), $params = array())
  * @property \services\Logger $logger

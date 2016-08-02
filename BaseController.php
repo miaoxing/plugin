@@ -2,9 +2,7 @@
 
 namespace miaoxing\plugin;
 
-use plugins\app\jobs\SendEmail;
-use plugins\ret\RetTrait;
-use miaoxing\plugin\middleware\RedirectToHttps;
+use Wei\RetTrait;
 
 /**
  * @property \miaoxing\plugin\services\App $app
@@ -20,7 +18,7 @@ use miaoxing\plugin\middleware\RedirectToHttps;
  * @property \plugins\user\services\CurUser $curUser 用户
  * @property \services\Url $url URL生成服务
  * @method   string url($url = '', $argsOrParams = array(), $params = array())
- * @property \plugins\ret\services\Ret $ret 返回值服务
+ * @property \Wei\Ret $ret 返回值服务
  * @property \plugins\setting\services\Setting $setting
  * @method   string setting($name, $default = null) 读取配置
  * @property \services\BaseQueue $queue 队列服务
