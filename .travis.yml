@@ -9,8 +9,7 @@ php:
   - nightly
 
 install:
-  - composer install --prefer-source --no-interaction
-  - composer require satooshi/php-coveralls
+  - composer require satooshi/php-coveralls --prefer-dist --no-interaction
 
 script:
   - phpunit --verbose --stderr --coverage-clover build/logs/clover.xml
