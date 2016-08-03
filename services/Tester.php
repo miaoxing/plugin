@@ -360,7 +360,7 @@ class Tester extends \miaoxing\plugin\BaseService
         ]);
 
         // 模拟自定义回复
-        $wei->qqApp = new \Wei\QqApp([
+        $wei->qqApp = new \plugins\qq\services\QqApp([
             'wei' => $wei,
             'query' => [
                 'signature' => 'c181f86196a54f1813399ddb4c36ae34af043415',
