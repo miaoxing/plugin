@@ -363,4 +363,13 @@ class BaseModel extends Record implements JsonSerializable
     {
         return $this->data;
     }
+
+    /**
+     * @param \Closure $fn
+     * @deprecated 使用filter
+     */
+    public function filterDeprecated(\Closure $fn)
+    {
+        $this->data = array_filter($this->data, $fn);
+    }
 }
