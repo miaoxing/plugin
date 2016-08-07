@@ -48,7 +48,7 @@ namespace miaoxing\plugin
      * @property    SyncQueue $syncQueue 同步的队列服务
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
      * @property    QueueWorker $queueWorker 队列后台服务
-     * @property    \plugins\file\services\Cdn $cdn CDN服务
+     * @property    \miaoxing\file\services\Cdn $cdn CDN服务
      * @property    Xml $xml XML服务
      * @property    Html $html HTML服务
      * @property    Random $random 随机数服务
