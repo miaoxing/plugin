@@ -102,9 +102,7 @@ abstract class BaseController extends \Wei\BaseController
             'e' => $this->e,
             'block' => $this->block,
             'app' => $this->app,
-            'curUser' => $this->curUser,
             'url' => $this->url,
-            'setting' => $this->setting,
             'asset' => $this->asset,
             'event' => $this->event,
             'plugin' => $this->plugin,
@@ -115,6 +113,15 @@ abstract class BaseController extends \Wei\BaseController
             'pageId' => str_replace('/', '-', $this->app->getControllerAction()),
             'adminNavId' => $this->adminNavId,
         ));
+
+        // TODO 移除依赖
+        // 非自带服务先改为按需加载,便于测试
+        $customServices = ['curUser', 'setting'];
+        foreach ($customServices as $service) {
+            if ($this->wei->has($service)) {
+                $this->view->assign($service, $this->$service);
+            }
+        }
 
         // 设置页面名称
         if (!isset($this->view['controllerName'])) {
