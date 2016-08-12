@@ -2,7 +2,7 @@
 
 namespace miaoxing\plugin\tests;
 
-use plugins\app\tests\BaseFixture;
+use miaoxing\app\tests\BaseFixture;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -129,7 +129,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getPluginName()
     {
-        // 类名如 plugins\app\tests\PluginTest
+        // 类名如 miaoxing\app\tests\PluginTest
         // 分为3部分取第2部分
         return explode('\\', get_class($this), 3)[1];
     }
