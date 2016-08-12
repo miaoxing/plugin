@@ -5,21 +5,22 @@
          bootstrap="tests/bootstrap.php"
 >
 
-    <testsuites>
-        <testsuite name="Default Test Suite">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
+  <testsuites>
+    <testsuite name="Default Test Suite">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
 
-    <filter>
-        <whitelist>
-            <directory>.</directory>
-            <exclude>
-                <directory>./docs</directory>
-                <directory>./tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+  <filter>
+    <whitelist>
+      <directory>.</directory>
+      <exclude>
+        <directory>./data</directory>
+        <directory>./docs</directory>
+        <directory>./tests</directory>
+        <directory>./vendor</directory>
+      </exclude>
+    </whitelist>
+  </filter>
 
 </phpunit>
