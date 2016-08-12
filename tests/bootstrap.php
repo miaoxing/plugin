@@ -4,7 +4,8 @@ require 'vendor/autoload.php';
 
 $files = [
     'config.php',
-    'tests/config.php'
+    'tests/config.php',
+    'tests/config-local.php'
 ];
 
 $config = [];
