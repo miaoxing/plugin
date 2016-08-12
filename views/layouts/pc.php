@@ -12,7 +12,7 @@
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
     'assets/tips.css',
     'assets/swipe.css',
-    'plugins/app/assets/app.css'
+    'vendor/miaoxing/app/assets/app.css'
   ]) ?>">
   <?= $block->get('css') ?>
   <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>

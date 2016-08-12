@@ -12,7 +12,7 @@
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
     'assets/tips.css',
     'assets/swipe.css',
-    'plugins/app/assets/app.css'
+    'vendor/miaoxing/app/assets/app.css'
   ]) ?>">
   <?php $event->trigger('prePageCss') ?>
   <?= $block->get('css') ?>
