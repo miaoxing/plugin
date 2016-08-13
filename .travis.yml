@@ -8,6 +8,14 @@ php:
   - hhvm
   - nightly
 
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: nightly
+
+before_install:
+  - phpenv config-add tests/travis.ini
+
 install:
   - composer require satooshi/php-coveralls --no-interaction
 
@@ -16,8 +24,3 @@ script:
 
 after_success:
   - travis_retry php vendor/bin/coveralls -v
-
-matrix:
-  allow_failures:
-    - php: hhvm
-    - php: nightly
