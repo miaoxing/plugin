@@ -14,8 +14,8 @@ use Wei\RetTrait;
  * @property \Wei\Logger $logger
  * @property \Wei\Event $event
  * @property \miaoxing\plugin\services\Plugin $plugin
- * @property \plugins\user\services\User $user 用户
- * @property \plugins\user\services\CurUser $curUser 用户
+ * @property \miaoxing\plugin\services\User $user 用户
+ * @property \miaoxing\plugin\services\CurUser $curUser 用户
  * @property \services\Url $url URL生成服务
  * @method   string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Wei\Ret $ret 返回值服务
