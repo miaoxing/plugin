@@ -35,9 +35,15 @@ foreach ($wei->plugin->getAll() as $plugin) {
 }
 
 // 2. 逐个运行
+// 临时指定所在数据库
+$appTables = [
+    'apps',
+    'regions',
+    'areas',
+];
 foreach ($sqlFiles as $file) {
     $table = basename($file, '.sql');
-    $db = $table == 'apps' ? $wei->appDb : $wei->db;
+    $db = in_array($table, $appTables) ? $wei->appDb : $wei->db;
     loadTable($db, $file, $table);
 }
 
