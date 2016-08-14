@@ -1,5 +1,7 @@
 <?php
 
+use Wei\Db;
+
 require 'vendor/autoload.php';
 
 $files = [
@@ -23,3 +25,25 @@ foreach ($files as $file) {
 }
 
 $wei = wei($config);
+
+// TODO 待更新为migration模式?
+// 1. 获取各插件的SQL文件
+$sqlFiles = [];
+foreach ($wei->plugin->getAll() as $plugin) {
+    $basePath = $plugin->getBasePath();
+    $sqlFiles = array_merge($sqlFiles, glob(($basePath ?: '.') . '/docs/*.sql'));
+}
+
+// 2. 逐个运行
+foreach ($sqlFiles as $file) {
+    $table = basename($file, '.sql');
+    $db = $table == 'apps' ? $wei->appDb : $wei->db;
+    loadTable($db, $file, $table);
+}
+
+function loadTable(Db $db, $file, $table) {
+    $result = $db->fetch("SHOW TABLES LIKE ?", $table);
+    if (!$result) {
+        $db->executeUpdate(file_get_contents($file));
+    }
+}
