@@ -19,6 +19,9 @@ before_install:
 install:
   - composer require satooshi/php-coveralls --no-interaction
 
+before_script:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
 script:
   - phpunit --verbose --stderr --coverage-clover build/logs/clover.xml
 
