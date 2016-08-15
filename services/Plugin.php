@@ -176,6 +176,7 @@ class Plugin extends BaseService
                 $name = $names[count($names) - 2];
                 $this->pluginClasses[$name] = $class;
             }
+            ksort($this->pluginClasses);
         }
         return $this->pluginClasses;
     }
@@ -524,6 +525,7 @@ class Plugin extends BaseService
             $map[$name] = $class;
         }
 
+        ksort($map);
         return $this->filterDuplicates($map, $type);
     }
 
@@ -581,7 +583,7 @@ class Plugin extends BaseService
     {
         $dirs = implode(',', $dirs);
         $pattern = '{' . $dirs . '}' . $pattern;
-        return glob($pattern, GLOB_BRACE);
+        return glob($pattern, GLOB_BRACE | GLOB_NOSORT);
     }
 
     /**
