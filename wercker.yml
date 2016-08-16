@@ -1,0 +1,21 @@
+box: php
+build:
+  services:
+    - id: mysql
+        env:
+          MYSQL_ROOT_PASSWORD:
+  steps:
+    - script:
+        name: Create database
+        code: mysql -h$MYSQL_PORT_3306_TCP_ADDR -P$MYSQL_PORT_3306_TCP_PORT -uroot -p$MYSQL_ENV_MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS test;"
+    - install-packages:
+        packages: git
+    - mbrevda/composer-install@1.0.1
+    - script:
+        name: install phpunit
+        code: |-
+          curl -L https://phar.phpunit.de/phpunit.phar -o /usr/local/bin/phpunit
+          chmod +x /usr/local/bin/phpunit
+    - script:
+        name: PHPUnit integration tests
+        code: phpunit --verbose --stderr
