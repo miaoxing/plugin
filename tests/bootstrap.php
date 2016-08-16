@@ -26,6 +26,11 @@ foreach ($files as $file) {
 
 $wei = wei($config);
 
+
+if (isset($config['test']['skipSql']) && $config['test']['skipSql']) {
+    return;
+}
+
 // TODO 待更新为migration模式?
 // 1. 获取各插件的SQL文件
 $sqlFiles = [];
@@ -47,7 +52,8 @@ foreach ($sqlFiles as $file) {
     loadTable($db, $file, $table);
 }
 
-function loadTable(Db $db, $file, $table) {
+function loadTable(Db $db, $file, $table)
+{
     $result = $db->fetch("SHOW TABLES LIKE ?", $table);
     if (!$result) {
         $db->executeUpdate(file_get_contents($file));
