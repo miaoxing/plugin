@@ -1,9 +1,11 @@
 box: php
+
+services:
+  - id: mysql
+    env:
+      MYSQL_ROOT_PASSWORD:
+
 build:
-  services:
-    - id: mysql
-        env:
-          MYSQL_ROOT_PASSWORD:
   steps:
     - script:
         name: Create database

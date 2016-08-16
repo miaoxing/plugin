@@ -11,7 +11,7 @@ $files = [
 ];
 
 // Add configuration file for CI
-foreach (array('TRAVIS') as $ci) {
+foreach (['TRAVIS', 'WERCKER'] as $ci) {
     if (getenv($ci)) {
         $files[] = 'config-' . strtolower($ci) . '.php';
     }

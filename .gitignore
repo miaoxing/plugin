@@ -2,3 +2,4 @@
 vendor/
 composer.lock
 phpunit.xml
+tests/config-local.php
