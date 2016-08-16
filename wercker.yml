@@ -3,7 +3,7 @@ box: php
 services:
   - id: mysql
     env:
-      MYSQL_ROOT_PASSWORD:
+      MYSQL_ROOT_PASSWORD: mypassword
 
 build:
   steps:
