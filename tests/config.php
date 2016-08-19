@@ -8,9 +8,6 @@ return [
             'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED,
             'date.timezone' => 'Asia/Shanghai'
         ],
-        'autoloadMap' => [
-            '\miaoxing' => 'vendor/miaoxing',
-        ],
         'aliases' => [
             'plugin' => 'miaoxing\plugin\services\Plugin'
         ],

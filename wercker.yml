@@ -1,4 +1,4 @@
-box: miaoxing/php56-fpm
+box: miaoxing/php56-fpm:build
 
 services:
   - id: mysql:5.6
@@ -8,14 +8,9 @@ services:
 build:
   steps:
     - script:
-        name: install nc
-        code: apt-get update && apt-get -y install netcat
-    - script:
         name: wait for mysql connection
         code: |
           while ! nc -q 1 $MYSQL_PORT_3306_TCP_ADDR $MYSQL_PORT_3306_TCP_PORT < /dev/null; do sleep 3; done
-    - install-packages:
-        packages: git
     - mbrevda/composer-install@1.0.1
     - script:
         name: PHPUnit integration tests
