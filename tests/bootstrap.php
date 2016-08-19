@@ -26,6 +26,11 @@ foreach ($files as $file) {
 
 $wei = wei($config);
 
+// 初始化数据库
+$db = $wei->db;
+$db->executeUpdate('CREATE DATABASE IF NOT EXISTS app;');
+$db->executeUpdate('CREATE DATABASE IF NOT EXISTS test;');
+$db->useDb('test');
 
 if (isset($config['test']['skipSql']) && $config['test']['skipSql']) {
     return;
