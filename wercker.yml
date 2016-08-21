@@ -16,5 +16,5 @@ build:
         name: PHPUnit integration tests
         code: phpunit --verbose --stderr
     - script:
-        name: Perform project mess detection using PHPMD
+        name: perform project mess detection using PHPMD
         code: phpmd . text tests/phpmd.xml --exclude vendor --ignore-violations-on-exit

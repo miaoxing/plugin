@@ -35,4 +35,6 @@
 
   <rule ref="rulesets/unusedcode.xml/UnusedPrivateField" />
   <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod" />
+
+  <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/design.xml/ConstructorNewOperator" />
 </ruleset>
