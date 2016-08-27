@@ -19,6 +19,6 @@ build:
         name: perform project mess detection using PHPMD
         code: phpmd . text tests/phpmd.xml --exclude vendor --ignore-violations-on-exit
   after-steps:
-    - miaoxing/github-issue-notify
+    - miaoxing/github-issue-notify:
         token: $GITHUB_ISSUE_TOKEN
         repo: $GITHUB_ISSUE_REPO
