@@ -279,6 +279,8 @@ class App extends \Wei\App
      */
     protected function isRet($response)
     {
-        return is_array($response) && isset($response['code']) && isset($response['message']);
+        return is_array($response)
+        && array_key_exists('code', $response)
+        && array_key_exists('message', $response);
     }
 }
