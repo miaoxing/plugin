@@ -26,7 +26,7 @@ class CheckReferrer extends Base
             if ($host !== $this->request->getHost() && !in_array($host, $this->whitelist)) {
                 return $this->response->json([
                     'code' => -2000,
-                    'message' => '来源不正确'
+                    'message' => '来源不正确',
                 ]);
             }
         }

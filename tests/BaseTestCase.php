@@ -56,6 +56,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $this->mockServices[$name] = $service;
         $mock = $this->getMock(get_class($service), $methods, $arguments);
         $this->wei->$name = $mock;
+
         return $mock;
     }
 
@@ -104,6 +105,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $dom->loadHTML($html);
         libxml_clear_errors();
         $finder = new \DomXPath($dom);
+
         return $finder->query("//*[contains(@class, '$class')]");
     }
 
@@ -119,6 +121,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
                 'test' => $this,
             ]);
         }
+
         return $this->fixture;
     }
 

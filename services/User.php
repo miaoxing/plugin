@@ -71,6 +71,7 @@ class User extends BaseModel
     public function getProfile()
     {
         $this->profile || $this->profile = wei()->userProfile()->findOrInit(['userId' => $this['id']]);
+
         return $this->profile;
     }
 
@@ -87,6 +88,7 @@ class User extends BaseModel
         if ($this->isNew()) {
             $this->save();
         }
+
         return $this;
     }
 
@@ -98,6 +100,7 @@ class User extends BaseModel
     public function getGroup()
     {
         $this->group || $this->group = wei()->group()->findOrInitById($this['groupId'], ['name' => '未分组']);
+
         return $this->group;
     }
 
@@ -124,6 +127,7 @@ class User extends BaseModel
                 return $this[$name];
             }
         }
+
         return $this['isValid'] ? '游客' : '';
     }
 
@@ -137,6 +141,7 @@ class User extends BaseModel
     {
         $this['salt'] || $this['salt'] = $this->password->generateSalt();
         $this['password'] = $this->password->hash($password, $this['salt']);
+
         return $this;
     }
 
@@ -180,6 +185,7 @@ class User extends BaseModel
     {
         return wei()->arrayCache->get('nickName' . $id, function () use ($id) {
             $user = wei()->user()->find(['id' => $id]);
+
             return $user ? $user->getNickName() : '';
         });
     }
@@ -208,24 +214,24 @@ class User extends BaseModel
                 'rules' => [
                     'mobile' => [
                         'required' => true,
-                        'mobileCn' => true
+                        'mobileCn' => true,
                     ],
                     'verifyCode' => [
-                        'required' => true
-                    ]
+                        'required' => true,
+                    ],
                 ],
                 'names' => [
                     'mobile' => '手机号码',
-                    'verifyCode' => '验证码'
+                    'verifyCode' => '验证码',
                 ],
                 'messages' => [
                     'mobile' => [
                         'required' => '请输入手机号码',
                     ],
                     'verifyCode' => [
-                        'required' => '请输入验证码'
+                        'required' => '请输入验证码',
                     ],
-                ]
+                ],
             ]);
             if (!$validator->isValid()) {
                 return ['code' => -1, 'message' => $validator->getFirstMessage()];
@@ -240,7 +246,7 @@ class User extends BaseModel
                 'data' => $data,
                 'rules' => [
                     'email' => [
-                        'required' => true
+                        'required' => true,
                     ],
                 ],
                 'names' => [
@@ -249,8 +255,8 @@ class User extends BaseModel
                 'messages' => [
                     'email' => [
                         'required' => '请输入邮箱',
-                    ]
-                ]
+                    ],
+                ],
             ]);
             if (!$validator->isValid()) {
                 return ['code' => -1, 'message' => $validator->getFirstMessage()];
@@ -264,7 +270,7 @@ class User extends BaseModel
                 'email' => [
                     'required' => false,
                     'email' => true,
-                    'notRecordExists' => ['user', 'email']
+                    'notRecordExists' => ['user', 'email'],
                 ],
                 'username' => [
                     'length' => [3, 30],
@@ -272,13 +278,13 @@ class User extends BaseModel
                     'callback' => function ($input) {
                         return !wei()->isDigit($input[0]);
                     },
-                    'notRecordExists' => ['user', 'username']
+                    'notRecordExists' => ['user', 'username'],
                 ],
                 'password' => [
-                    'minLength' => 6
+                    'minLength' => 6,
                 ],
                 'passwordConfirm' => [
-                    'equalTo' => $data['password']
+                    'equalTo' => $data['password'],
                 ],
             ],
             'names' => [
@@ -288,20 +294,20 @@ class User extends BaseModel
             ],
             'messages' => [
                 'username' => [
-                    'callback' => '用户名不能以数字开头'
+                    'callback' => '用户名不能以数字开头',
                 ],
                 'passwordConfirm' => [
                     'required' => '请再次输入密码',
-                    'equalTo' => '两次输入的密码不相等'
-                ]
-            ]
+                    'equalTo' => '两次输入的密码不相等',
+                ],
+            ],
         ]);
         if (!$validator->isValid()) {
             return ['code' => -7, 'message' => $validator->getFirstMessage()];
         }
 
         if ($data['mobile']) {
-            $user = wei()->user()->withStatus(User::STATUS_MOBILE_VERIFIED)->find(['mobile' => $data['mobile']]);
+            $user = wei()->user()->withStatus(self::STATUS_MOBILE_VERIFIED)->find(['mobile' => $data['mobile']]);
             if ($user) {
                 return ['code' => -8, 'message' => '手机号码已存在'];
             }
@@ -315,9 +321,9 @@ class User extends BaseModel
         }
 
         $this->save([
-            'email' => (string)$data['email'],
-            'mobile' => (string)$data['mobile'],
-            'username' => (string)$data['username'],
+            'email' => (string) $data['email'],
+            'mobile' => (string) $data['mobile'],
+            'username' => (string) $data['username'],
             'source' => isset($data['source']) ? $data['source'] : 0,
         ]);
 
@@ -346,12 +352,13 @@ class User extends BaseModel
 
         wei()->appDb->insert('userLogs', $data + [
                 'appId' => $app->getId(),
-                'userId' => (int)$curUser['id'],
+                'userId' => (int) $curUser['id'],
                 'nickName' => $curUser->getNickName(),
                 'page' => $app->getControllerAction(),
                 'action' => $action,
                 'createTime' => date('Y-m-d H:i:s'),
             ]);
+
         return $this;
     }
 
@@ -421,6 +428,7 @@ class User extends BaseModel
             $t = ~$t;
         }
         $this['status'] = $t & 0xFFFF;
+
         return $this;
     }
 
@@ -432,7 +440,7 @@ class User extends BaseModel
      */
     public function getStatus($position)
     {
-        return (bool)($this['status'] & pow(2, $position - 1));
+        return (bool) ($this['status'] & pow(2, $position - 1));
     }
 
     /**
@@ -444,6 +452,7 @@ class User extends BaseModel
     public function withStatus($position)
     {
         $value = pow(2, $position - 1);
+
         return $this->andWhere("status & $value = $value");
     }
 
@@ -456,6 +465,7 @@ class User extends BaseModel
     public function withoutStatus($position)
     {
         $value = pow(2, $position - 1);
+
         return $this->andWhere("status & $value = 0");
     }
 
@@ -478,7 +488,7 @@ class User extends BaseModel
     public function checkMobile($mobile)
     {
         // 1. 检查是否已存在认证该手机号码的用户
-        $mobileUser = wei()->user()->withStatus(User::STATUS_MOBILE_VERIFIED)->find(['mobile' => $mobile]);
+        $mobileUser = wei()->user()->withStatus(self::STATUS_MOBILE_VERIFIED)->find(['mobile' => $mobile]);
         if ($mobileUser && $mobileUser['id'] != $this['id']) {
             return $this->err('已存在认证该手机号码的用户');
         }
@@ -514,11 +524,12 @@ class User extends BaseModel
 
         // 3. 记录手机信息
         $this['mobile'] = $data['mobile'];
-        $this->setStatus(User::STATUS_MOBILE_VERIFIED, true);
+        $this->setStatus(self::STATUS_MOBILE_VERIFIED, true);
 
         $this->event->trigger('preUserMobileVerify', [$data, $this]);
 
         $this->save();
+
         return $this->suc('绑定成功');
     }
 
@@ -537,21 +548,21 @@ class User extends BaseModel
             'rules' => [
                 'mobile' => [
                     'required' => !$isMobileVerified,
-                    'mobileCn' => true
+                    'mobileCn' => true,
                 ],
                 'name' => [
                     'required' => false,
                 ],
                 'address' => [
                     'required' => false,
-                    'minLength' => 3
+                    'minLength' => 3,
                 ],
             ],
             'names' => [
                 'mobile' => '手机号码',
                 'name' => '姓名',
                 'address' => '详细地址',
-            ]
+            ],
         ]);
         if (!$validator->isValid()) {
             return $this->err($validator->getFirstMessage());
@@ -587,11 +598,11 @@ class User extends BaseModel
                 'oldPassword' => [
                 ],
                 'password' => [
-                    'minLength' => 6
+                    'minLength' => 6,
                 ],
                 'passwordConfirm' => [
-                    'equalTo' => $req['password']
-                ]
+                    'equalTo' => $req['password'],
+                ],
             ],
             'names' => [
                 'oldPassword' => '旧密码',
@@ -600,9 +611,9 @@ class User extends BaseModel
             ],
             'messages' => [
                 'passwordConfirm' => [
-                    'equalTo' => '两次输入的密码不相等'
-                ]
-            ]
+                    'equalTo' => '两次输入的密码不相等',
+                ],
+            ],
         ]);
         if (!$validator->isValid()) {
             return $this->err($validator->getFirstMessage());
@@ -619,6 +630,7 @@ class User extends BaseModel
         // 3. 更新新密码
         $this->setPlainPassword($req['password']);
         $this->save();
+
         return $this->suc();
     }
 }

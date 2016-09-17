@@ -21,7 +21,7 @@ class BaseModel extends Record implements JsonSerializable
         'createTime',
         'createUser',
         'updateTime',
-        'updateUser'
+        'updateUser',
     ];
 
     /**
@@ -52,6 +52,7 @@ class BaseModel extends Record implements JsonSerializable
             $this->detectTable();
         }
         $this->db->addRecordClass($this->table, get_class($this));
+
         return $this->db($this->table);
     }
 
@@ -66,7 +67,7 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         if (in_array('createUser', $this->getFields()) && !$this['createUser']) {
-            $this['createUser'] = (int)wei()->curUser['id'];
+            $this['createUser'] = (int) wei()->curUser['id'];
         }
     }
 
@@ -77,7 +78,7 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         if (in_array('updateUser', $this->getFields())) {
-            $this['updateUser'] = (int)wei()->curUser['id'];
+            $this['updateUser'] = (int) wei()->curUser['id'];
         }
     }
 
@@ -88,7 +89,7 @@ class BaseModel extends Record implements JsonSerializable
                 'tableName' => $this->fullTable,
                 'data' => json_encode($this->data),
                 'deleteTime' => date('Y-m-d H:i:s'),
-                'deleteUser' => (int)wei()->curUser['id'],
+                'deleteUser' => (int) wei()->curUser['id'],
             ]);
         }
     }
@@ -113,6 +114,7 @@ class BaseModel extends Record implements JsonSerializable
         $appId = wei()->app->getId();
         // 设置默认数据,初始化时就会带上
         $this->data['appId'] = $appId;
+
         return $this->andWhere(['appId' => $appId]);
     }
 
@@ -173,8 +175,9 @@ class BaseModel extends Record implements JsonSerializable
 
     public function beColl()
     {
-        $this->data = array();
+        $this->data = [];
         $this->isColl = true;
+
         return $this;
     }
 
@@ -187,7 +190,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         return $this->save([
             'deleteTime' => date('Y-m-d H:i:s'),
-            'deleteUser' => (int)wei()->curUser['id']
+            'deleteUser' => (int) wei()->curUser['id'],
         ]);
     }
 
@@ -207,9 +210,10 @@ class BaseModel extends Record implements JsonSerializable
      * @param array $data
      * @return $this
      */
-    public function saveData($data = array())
+    public function saveData($data = [])
     {
         $data && $this->setData($data);
+
         return $this->save();
     }
 
@@ -222,7 +226,7 @@ class BaseModel extends Record implements JsonSerializable
      * @return $this
      * @todo 和已有的find方法可能会混淆,是否要改为seek或lookup
      */
-    public function findId($id, $data = array())
+    public function findId($id, $data = [])
     {
         if ($id) {
             $this->findOneById($id);
@@ -230,6 +234,7 @@ class BaseModel extends Record implements JsonSerializable
             // Reset status when record not found
             $this->isNew = true;
         }
+
         return $this->fromArray($data);
     }
 
@@ -253,6 +258,7 @@ class BaseModel extends Record implements JsonSerializable
         if ($this['id']) {
             $this->cache->remove($this->getRecordCacheKey());
         }
+
         return $this;
     }
 
@@ -274,6 +280,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         $tag = $this->getUserTag();
         $this->tagCache($tag)->clear();
+
         return $this;
     }
 
@@ -325,8 +332,9 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function resetQuery()
     {
-        $this->params = array();
-        $this->paramTypes = array();
+        $this->params = [];
+        $this->paramTypes = [];
+
         return $this->resetSqlParts();
     }
 
@@ -339,7 +347,8 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function selectExcept($fields)
     {
-        $fields = array_diff($this->getFields(), is_array($fields) ? $fields : array($fields));
+        $fields = array_diff($this->getFields(), is_array($fields) ? $fields : [$fields]);
+
         return $this->select($fields);
     }
 

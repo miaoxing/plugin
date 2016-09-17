@@ -62,7 +62,7 @@ class App extends \Wei\App
     /**
      * {@inheritdoc}
      */
-    public function __invoke(array $options = array())
+    public function __invoke(array $options = [])
     {
         // 1. 获取应用名称和请求路径
         $namespace = $this->getNamespaceFromDomain();
@@ -104,6 +104,7 @@ class App extends \Wei\App
 
         // 4. 启用URL映射
         wei()->urlMapper();
+
         return parent::__invoke($options);
     }
 
@@ -116,6 +117,7 @@ class App extends \Wei\App
         if (!$domain || in_array($domain, $this->domains)) {
             return false;
         }
+
         return $this->appRecord->getIdByDomain($domain);
     }
 
@@ -140,6 +142,7 @@ class App extends \Wei\App
 
         $namespace = wei()->appRecord()->select('name')->fetchColumn(['id' => $appId]);
         wei()->logger->info('Convert wechat appId to namespace ' . $namespace);
+
         return $namespace;
     }
 
@@ -161,6 +164,7 @@ class App extends \Wei\App
     {
         $file = parent::getDefaultTemplate();
         $plugin = $this->getPlugin();
+
         return $plugin ? '@' . $plugin . '/' . $file : $file;
     }
 
@@ -179,6 +183,7 @@ class App extends \Wei\App
                 break;
             }
         }
+
         return $this->plugin;
     }
 
@@ -224,6 +229,7 @@ class App extends \Wei\App
             $record = wei()->appRecord()->findById($id);
             $this->dbNames[$id] = $record['name'];
         }
+
         return $this->dbNames[$id];
     }
 
@@ -267,6 +273,7 @@ class App extends \Wei\App
         } else {
             $type = $ret['code'] === 1 ? 'success' : 'warning';
             $content = $this->view->render('@plugin/ret/ret.php', $ret + ['type' => $type]);
+
             return $this->response->setContent($content);
         }
     }

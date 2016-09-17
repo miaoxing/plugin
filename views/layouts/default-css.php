@@ -1,4 +1,4 @@
-<?php // 成熟后独立为theme插件 ?>
+<?php // 成熟后独立为theme插件?>
 <?php $color = $setting('theme.brandPrimary') ?: '#f28c48'; ?>
 <style>
   a, a:hover {

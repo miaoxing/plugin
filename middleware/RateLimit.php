@@ -47,12 +47,12 @@ class RateLimit extends Base
      */
     public function __invoke($next)
     {
-        $key = 'rate-limit' . $this->getIdentifier() . '-' . (int)(time() / $this->timeWindow);
+        $key = 'rate-limit' . $this->getIdentifier() . '-' . (int) (time() / $this->timeWindow);
 
         if (wei()->counter->incr($key) > $this->max) {
             return $this->response->json([
                 'code' => -2003,
-                'message' => $this->responseText ?: '您的操作太频繁，请稍候再试'
+                'message' => $this->responseText ?: '您的操作太频繁，请稍候再试',
             ]);
         }
 

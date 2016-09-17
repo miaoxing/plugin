@@ -18,7 +18,7 @@ class CurUser extends User
      */
     public function isLogin()
     {
-        return (bool)$this->session['user'];
+        return (bool) $this->session['user'];
     }
 
     /**
@@ -38,12 +38,12 @@ class CurUser extends User
                 ],
                 'password' => [
                     'required' => true,
-                ]
+                ],
             ],
             'names' => [
                 'username' => '用户名',
-                'password' => '密码'
-            ]
+                'password' => '密码',
+            ],
         ]);
 
         if (!$validator->isValid()) {
@@ -53,12 +53,12 @@ class CurUser extends User
         // 2. 检查手机/邮箱/用户名是否存在
         $user = wei()->user();
         switch (true) {
-            case wei()->isMobileCn($data['username']) :
+            case wei()->isMobileCn($data['username']):
                 $field = 'mobile';
                 $user->withStatus(static::STATUS_MOBILE_VERIFIED);
                 break;
 
-            case wei()->isEmail($data['username']) :
+            case wei()->isEmail($data['username']):
                 $field = 'email';
                 break;
 
@@ -114,6 +114,7 @@ class CurUser extends User
     {
         $user = wei()->user()->findOrCreate($conditions, $data);
         $this->loginByRecord($user);
+
         return $this;
     }
 
@@ -128,6 +129,7 @@ class CurUser extends User
         $this->loadRecordData($user);
         $this->session['user'] = $user->toArray($this->sessionFields);
         wei()->event->trigger('userLogin', [$user]);
+
         return ['code' => 1, 'message' => '登录成功'];
     }
 
@@ -140,6 +142,7 @@ class CurUser extends User
     {
         $this->data = [];
         unset($this->session['user']);
+
         return $this;
     }
 
@@ -164,6 +167,7 @@ class CurUser extends User
         if ($user['id'] == $this->session['user']['id']) {
             $this->loginByRecord($user);
         }
+
         return $this;
     }
 
@@ -173,6 +177,7 @@ class CurUser extends User
     public function toArray($returnFields = [])
     {
         $this->loadDbUser();
+
         return parent::toArray($returnFields);
     }
 
@@ -184,6 +189,7 @@ class CurUser extends User
         // 确保是更新操作,同时有ID作为更新条件
         $this->isNew = false;
         $this['id'] = $this->session['user']['id'];
+
         return parent::save($data);
     }
 
@@ -199,6 +205,7 @@ class CurUser extends User
             return $this->session['user'][$name];
         } else {
             $this->loadDbUser();
+
             return parent::get($name);
         }
     }

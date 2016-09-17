@@ -20,6 +20,6 @@ return [
         'inis' => [
             'save_handler' => 'files',
             'save_path' => '',
-        ]
-    ]
+        ],
+    ],
 ];

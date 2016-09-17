@@ -60,7 +60,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function __invoke()
     {
         return new static([
-            'wei' => $this->wei
+            'wei' => $this->wei,
         ]);
     }
 
@@ -71,6 +71,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function controller($controller)
     {
         $this->controller = $controller;
+
         return $this;
     }
 
@@ -81,6 +82,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function action($action)
     {
         $this->action = $action;
+
         return $this;
     }
 
@@ -91,6 +93,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function method($method)
     {
         $this->method = $method;
+
         return $this;
     }
 
@@ -101,6 +104,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function request(array $request)
     {
         $this->request = $request;
+
         return $this;
     }
 
@@ -111,6 +115,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function query(array $query)
     {
         $this->query = $query;
+
         return $this;
     }
 
@@ -121,6 +126,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function post(array $post)
     {
         $this->post = $post;
+
         return $this;
     }
 
@@ -131,6 +137,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function session(array $session)
     {
         $this->session = $session;
+
         return $this;
     }
 
@@ -141,6 +148,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function content($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -151,6 +159,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function dataType($dataType)
     {
         $this->dataType = $dataType;
+
         return $this;
     }
 
@@ -226,35 +235,36 @@ class Tester extends \miaoxing\plugin\BaseService
     protected function parseResponse($data, &$exception)
     {
         switch ($this->dataType) {
-            case 'json' :
-            case 'jsonObject' :
+            case 'json':
+            case 'jsonObject':
                 $data = json_decode($data, $this->dataType === 'json');
                 if (null === $data && json_last_error() != JSON_ERROR_NONE) {
                     $exception = new \ErrorException('JSON parsing error', json_last_error());
                 }
                 break;
 
-            case 'xml' :
-            case 'serialize' :
-                $methods = array(
+            case 'xml':
+            case 'serialize':
+                $methods = [
                     'xml' => 'simplexml_load_string',
                     'serialize' => 'unserialize',
-                );
+                ];
                 $data = @$methods[$this->dataType]($data);
                 if (false === $data && $e = error_get_last()) {
                     $exception = new \ErrorException($e['message'], $e['type'], 0, $e['file'], $e['line']);
                 }
                 break;
 
-            case 'query' :
+            case 'query':
                 // Parse $data(string) and assign the result to $data(array)
                 parse_str($data, $data);
                 break;
 
             case 'text':
-            default :
+            default:
                 break;
         }
+
         return $data;
     }
 
@@ -277,6 +287,7 @@ class Tester extends \miaoxing\plugin\BaseService
     public function logout()
     {
         unset($this->session['user']);
+
         return $this;
     }
 
@@ -325,7 +336,7 @@ class Tester extends \miaoxing\plugin\BaseService
             'authed' => false,
             'applicationId' => 'wxbad0b45542aa0b5e',
             'token' => 'wei',
-            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG'
+            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG',
         ]);
 
         // 模拟自定义回复
@@ -334,9 +345,9 @@ class Tester extends \miaoxing\plugin\BaseService
             'query' => [
                 'signature' => '1273e279da5a3a236a8f20f40d18e5ecc7d84bc6',
                 'timestamp' => '1366032735',
-                'nonce' => '136587223'
+                'nonce' => '136587223',
             ],
-            'postData' => $content
+            'postData' => $content,
         ]);
     }
 
@@ -356,7 +367,7 @@ class Tester extends \miaoxing\plugin\BaseService
             'authed' => false,
             'applicationId' => '200464349',
             'token' => 'weixin',
-            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG'
+            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG',
         ]);
 
         // 模拟自定义回复
@@ -365,9 +376,9 @@ class Tester extends \miaoxing\plugin\BaseService
             'query' => [
                 'signature' => 'c181f86196a54f1813399ddb4c36ae34af043415',
                 'timestamp' => '1366032735',
-                'nonce' => '136587223'
+                'nonce' => '136587223',
             ],
-            'postData' => $content
+            'postData' => $content,
         ]);
 
         return $wei->tester()

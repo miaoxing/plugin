@@ -28,7 +28,7 @@ class BaseControllerTestCase extends BaseTestCase
         $result = $this->dispatch($controller, $action);
 
         if ($result instanceof \Exception) {
-            $this->assertEquals(404, $result->getCode(), (string)$result);
+            $this->assertEquals(404, $result->getCode(), (string) $result);
         } else {
             if ($code) {
                 $this->assertEquals($code, $result->getStatusCode());
@@ -50,16 +50,17 @@ class BaseControllerTestCase extends BaseTestCase
             throw new \Exception(sprintf('Action method not found in controller %s class %s', $controller, $controllerClass));
         }
 
-        $params = array();
+        $params = [];
         foreach ($actions as $action) {
             if (substr($action, -6) == 'Action') {
                 $action = substr($action, 0, -6);
                 $params[] = [
                     $action,
-                    isset($this->statusCodes[$action]) ? $this->statusCodes[$action] : null
+                    isset($this->statusCodes[$action]) ? $this->statusCodes[$action] : null,
                 ];
             }
         }
+
         return $params;
     }
 
@@ -71,6 +72,7 @@ class BaseControllerTestCase extends BaseTestCase
             $controller = substr($parts[1], 0, -4);
             $this->controller = implode('/', array_map('lcfirst', explode('\\', $controller)));
         }
+
         return $this->controller;
     }
 
@@ -94,10 +96,12 @@ class BaseControllerTestCase extends BaseTestCase
             $response = $wei->app->dispatch($controller, $action);
         } catch (\Exception $e) {
             ob_end_clean();
+
             return $e;
         }
 
         ob_end_clean();
+
         return $response;
     }
 }

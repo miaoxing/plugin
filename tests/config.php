@@ -1,4 +1,5 @@
 <?php
+
 return [
     // 服务容器
     'wei' => [
@@ -6,21 +7,21 @@ return [
         'inis' => [
             'display_errors' => true,
             'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED,
-            'date.timezone' => 'Asia/Shanghai'
+            'date.timezone' => 'Asia/Shanghai',
         ],
         'aliases' => [
-            'plugin' => 'miaoxing\plugin\services\Plugin'
+            'plugin' => 'miaoxing\plugin\services\Plugin',
         ],
         'providers' => [
             'cache' => 'memcache',
         ],
         'preload' => [
             'error',
-            'plugin'
-        ]
+            'plugin',
+        ],
     ],
     'app' => [
-        'namespace' => 'test'
+        'namespace' => 'test',
     ],
     // 各项目的数据库
     'db' => [
@@ -48,16 +49,16 @@ return [
     ],
     // 语言翻译
     't' => [
-        'locale' => 'zh-CN'
+        'locale' => 'zh-CN',
     ],
     'phpFileCache' => [
-        'dir' => 'data/cache'
+        'dir' => 'data/cache',
     ],
     'nearCache' => [
         'providers' => [
             'front' => 'arrayCache',
             'back' => 'cache',
-        ]
+        ],
     ],
     'js.raven' => [
     ],
@@ -65,6 +66,6 @@ return [
 
     ],
     'plugin' => [
-        'curNamespace' => 'miaoxing\plugin'
-    ]
+        'curNamespace' => 'miaoxing\plugin',
+    ],
 ];

@@ -8,7 +8,7 @@ class BasicAuth extends Base
 
     public function __invoke($next)
     {
-        if(!$this->validUsers) {
+        if (!$this->validUsers) {
             return $this->responseNotAuthorized();
         }
 
@@ -16,13 +16,13 @@ class BasicAuth extends Base
         $password = $this->request->getServer('PHP_AUTH_PW');
 
         // 检查用户名是否有效
-        if(!in_array($username, $this->validUsers)) {
+        if (!in_array($username, $this->validUsers)) {
             return $this->responseNotAuthorized();
         }
 
         // 查找用户
         $user = wei()->user()->find(['username' => $username]);
-        if(!$user) {
+        if (!$user) {
             return $this->responseNotAuthorized();
         }
 
@@ -35,7 +35,8 @@ class BasicAuth extends Base
         return $next();
     }
 
-    protected function responseNotAuthorized() {
+    protected function responseNotAuthorized()
+    {
         return $this->response
             ->setHeader('WWW-Authenticate', 'Basic realm="API Realm"')
             ->setStatusCode(401)

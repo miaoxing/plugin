@@ -9,14 +9,14 @@ class Plugin extends \miaoxing\plugin\BaseController
     public function indexAction($req)
     {
         switch ($req['_format']) {
-            case 'json' :
+            case 'json':
                 $repo = wei()->plugin;
                 $plugins = $repo->getAll();
 
                 $data = [];
                 foreach ($plugins as $plugin) {
                     $data[] = $plugin->toArray() + [
-                            'installed' => (string)$repo->isInstalled($plugin->getId()),
+                            'installed' => (string) $repo->isInstalled($plugin->getId()),
                         ];
                 }
 
@@ -42,6 +42,7 @@ class Plugin extends \miaoxing\plugin\BaseController
             } else {
                 $ret = $pluginRepo->uninstall($plugin->getId());
             }
+
             return $this->ret($ret);
         }
 
@@ -54,13 +55,14 @@ class Plugin extends \miaoxing\plugin\BaseController
     public function refreshCacheAction()
     {
         wei()->plugin->getEvents(true);
+
         return $this->suc('Refresh cache success !');
     }
 
     public function eventsAction()
     {
         return $this->suc([
-            'data' => wei()->plugin->getEvents()
+            'data' => wei()->plugin->getEvents(),
         ]);
     }
 }

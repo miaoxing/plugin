@@ -7,7 +7,7 @@ require 'vendor/autoload.php';
 $files = [
     'config.php',
     'tests/config.php',
-    'tests/config-local.php'
+    'tests/config-local.php',
 ];
 
 // Add configuration file for CI
@@ -59,7 +59,7 @@ foreach ($sqlFiles as $file) {
 
 function loadTable(Db $db, $file, $table)
 {
-    $result = $db->fetch("SHOW TABLES LIKE ?", $table);
+    $result = $db->fetch('SHOW TABLES LIKE ?', $table);
     if (!$result) {
         $db->executeUpdate(file_get_contents($file));
     }

@@ -8,14 +8,14 @@ class IpRestrict extends Base
 
     public function __invoke($next)
     {
-        if(!$this->allowedIps) {
+        if (!$this->allowedIps) {
             return $this->response
                 ->setStatusCode(403)
                 ->setContent(sprintf('Allowed IPs is not set!'));
         }
 
         $ip = $this->request->getIp();
-        if(!in_array($ip, $this->allowedIps)) {
+        if (!in_array($ip, $this->allowedIps)) {
             return $this->response
                 ->setStatusCode(403)
                 ->setContent(sprintf('IP %s is not allowed!', $ip));

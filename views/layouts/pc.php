@@ -12,7 +12,7 @@
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
     'assets/tips.css',
     'assets/swipe.css',
-    'vendor/miaoxing/app/assets/app.css'
+    'vendor/miaoxing/app/assets/app.css',
   ]) ?>">
   <?= $block->get('css') ?>
   <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
@@ -20,7 +20,7 @@
     'comps/requirejs/require.js',
     'assets/require.js',
     'comps/bootstrap/dist/js/bootstrap.min.js',
-    'assets/app.js'
+    'assets/app.js',
   ]) ?>"></script>
   <script>
     $.extend($, <?= json_encode($app->getConfig()) ?>);

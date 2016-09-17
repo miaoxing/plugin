@@ -88,7 +88,7 @@ class BasePlugin extends \miaoxing\plugin\BaseService
             'id' => $this->getId(),
             'name' => $this->name,
             'version' => $this->version,
-            'description' => $this->description
+            'description' => $this->description,
         ];
     }
 
@@ -147,6 +147,7 @@ class BasePlugin extends \miaoxing\plugin\BaseService
     protected function getEventTemplate()
     {
         $id = $this->getId();
+
         return $id . ':' . $id . '/' . $this->event->getCurName() . $this->view->getExtension();
     }
 
@@ -161,6 +162,7 @@ class BasePlugin extends \miaoxing\plugin\BaseService
             $class = new \ReflectionClass($this);
             $this->basePath = substr(dirname($class->getFileName()), strlen(getcwd()) + 1);
         }
+
         return $this->basePath;
     }
 }

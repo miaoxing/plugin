@@ -12,7 +12,7 @@
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
     'assets/tips.css',
     'assets/swipe.css',
-    'vendor/miaoxing/app/assets/app.css'
+    'vendor/miaoxing/app/assets/app.css',
   ]) ?>">
   <?php $event->trigger('prePageCss') ?>
   <?= $block->get('css') ?>
@@ -41,7 +41,7 @@
   'comps/bootstrap-mobile/dist/js/bootstrap-mobile.min.js',
   'comps/jquery-lazy/jquery-lazy.js',
   'assets/bootstrapPopup.js',
-  'assets/bootstrapAjaxTips.js'
+  'assets/bootstrapAjaxTips.js',
 ]) ?>"></script>
 <script>window.requirejs || document.write('<script src="<?= $asset->fallback($mainJs) ?>"><\/script>')</script>
 <script>

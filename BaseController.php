@@ -47,7 +47,7 @@ abstract class BaseController extends \Wei\BaseController
      * @var array
      */
     protected $guestPages = [
-        'mall', 'wechat', 'auto', 'cli'
+        'mall', 'wechat', 'auto', 'cli',
         /* 非多级控制器在子类中配置 */
     ];
 
@@ -97,7 +97,7 @@ abstract class BaseController extends \Wei\BaseController
         ]);
 
         $controller = $this->app->getController();
-        $this->view->assign(array(
+        $this->view->assign([
             // services
             'e' => $this->e,
             'block' => $this->block,
@@ -112,7 +112,7 @@ abstract class BaseController extends \Wei\BaseController
             'action' => $this->app->getAction(),
             'pageId' => str_replace('/', '-', $this->app->getControllerAction()),
             'adminNavId' => $this->adminNavId,
-        ));
+        ]);
 
         // TODO 移除依赖
         // 非自带服务先改为按需加载,便于测试

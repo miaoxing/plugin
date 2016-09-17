@@ -25,7 +25,7 @@ class Lock extends Base
         if (!wei()->lock($key)) {
             return $this->response->json([
                 'code' => -2001,
-                'message' => '您的操作过快，请稍候再试'
+                'message' => '您的操作过快，请稍候再试',
             ]);
         }
 

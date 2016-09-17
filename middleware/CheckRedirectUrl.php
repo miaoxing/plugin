@@ -27,7 +27,7 @@ class CheckRedirectUrl extends Base
             if ($host && $host !== $this->request->getHost() && !in_array($host, $this->whitelist)) {
                 return $this->response->json([
                     'code' => -400,
-                    'message' => 'Bad Request'
+                    'message' => 'Bad Request',
                 ]);
             }
         }

@@ -8,7 +8,6 @@ namespace miaoxing\plugin\docs {
      */
     class AutoComplete
     {
-
     }
 }
 
@@ -26,4 +25,3 @@ namespace {
     {
     }
 }
-

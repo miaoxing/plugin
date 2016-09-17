@@ -36,7 +36,7 @@ class Plugin extends BaseService
     protected $dirs = [
         '.',
         'plugins/*',
-        'vendor/*/*'
+        'vendor/*/*',
     ];
 
     /**
@@ -86,7 +86,7 @@ class Plugin extends BaseService
      * {@inheritdoc}
      */
     protected $providers = [
-        'configCache' => 'phpFileCache'
+        'configCache' => 'phpFileCache',
     ];
 
     /**
@@ -106,13 +106,13 @@ class Plugin extends BaseService
         // Load configs to services
         $this->wei->setConfig($config + [
                 'event' => [
-                    'loadEvent' => [$this, 'loadEvent']
+                    'loadEvent' => [$this, 'loadEvent'],
                 ],
                 'view' => [
-                    'parseResource' => [$this, 'parseViewResource']
+                    'parseResource' => [$this, 'parseViewResource'],
                 ],
                 'asset' => [
-                    'locateFile' => [$this, 'locateFile']
+                    'locateFile' => [$this, 'locateFile'],
                 ],
             ]);
     }
@@ -128,14 +128,14 @@ class Plugin extends BaseService
         return $this->getCache('plugins-config', $refresh, function () {
             return [
                 'wei' => [
-                    'aliases' => $this->getWeiAliases()
+                    'aliases' => $this->getWeiAliases(),
                 ],
                 'app' => [
                     'controllerMap' => $this->getAppControllerMap(),
                 ],
                 'plugin' => [
                     'pluginClasses' => $this->getPluginClasses(),
-                ]
+                ],
             ];
         });
     }
@@ -178,6 +178,7 @@ class Plugin extends BaseService
             }
             ksort($this->pluginClasses);
         }
+
         return $this->pluginClasses;
     }
 
@@ -190,6 +191,7 @@ class Plugin extends BaseService
     public function locateFile($file)
     {
         $components = $this->parseResource($file);
+
         return ($components['path'] ? ($components['path'] . '/') : '') . $components['file'];
     }
 
@@ -214,6 +216,7 @@ class Plugin extends BaseService
 
         if ($pluginId) {
             $plugin = $this->getOneById($pluginId);
+
             return ['path' => $plugin->getBasePath(), 'file' => $file];
         } else {
             return ['path' => null, 'file' => $resource];
@@ -232,6 +235,7 @@ class Plugin extends BaseService
         if ($components['path']) {
             $components['path'] .= '/views';
         }
+
         return $components;
     }
 
@@ -258,6 +262,7 @@ class Plugin extends BaseService
         if ($refresh || $this->isRefresh()) {
             $this->configCache->remove($key);
         }
+
         return $this->configCache->get($key, function () use ($fn) {
             return $fn();
         });
@@ -274,6 +279,7 @@ class Plugin extends BaseService
         foreach ($this->pluginClasses as $id => $class) {
             $data[] = $this->getOneById($id);
         }
+
         return $data;
     }
 
@@ -290,6 +296,7 @@ class Plugin extends BaseService
         if (!$plugin) {
             throw new \Exception(sprintf('Plugin "%s" not found', $id), 404);
         }
+
         return $plugin;
     }
 
@@ -309,6 +316,7 @@ class Plugin extends BaseService
                 $this->pluginInstances[$id] = new $class(['wei' => $this->wei]);
             }
         }
+
         return $this->pluginInstances[$id];
     }
 
@@ -435,9 +443,11 @@ class Plugin extends BaseService
                         $events[$event['name']][$event['priority']][] = $id;
                     }
                 }
+
                 return $events;
             });
         }
+
         return $this->events;
     }
 
@@ -459,11 +469,12 @@ class Plugin extends BaseService
             $event = lcfirst(substr($method, 2));
             if (is_numeric(substr($event, -1))) {
                 preg_match('/(.+?)(\d+)$/', $event, $matches);
-                $events[] = ['name' => $matches[1], 'priority' => (int)$matches[2]];
+                $events[] = ['name' => $matches[1], 'priority' => (int) $matches[2]];
             } else {
                 $events[] = ['name' => $event, 'priority' => static::DEFAULT_PRIORITY];
             }
         }
+
         return $events;
     }
 
@@ -526,6 +537,7 @@ class Plugin extends BaseService
         }
 
         ksort($map);
+
         return $this->filterDuplicates($map, $type);
     }
 
@@ -583,6 +595,7 @@ class Plugin extends BaseService
     {
         $dirs = implode(',', $dirs);
         $pattern = '{' . $dirs . '}' . $pattern;
+
         return glob($pattern, GLOB_BRACE | GLOB_NOSORT);
     }
 
@@ -657,6 +670,7 @@ class Plugin extends BaseService
         $app = $this->app->getRecord();
         $app['pluginIds'] = array_filter($pluginIds);
         $app->save();
+
         return $this;
     }
 }

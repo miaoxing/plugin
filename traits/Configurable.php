@@ -32,6 +32,7 @@ trait Configurable
     public function setConfig($name, $value)
     {
         $this->configs[$name] = $value;
+
         return $this;
     }
 }

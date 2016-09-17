@@ -17,6 +17,7 @@ class LoadAppConfig extends \miaoxing\plugin\middleware\Base
             $fromApp = wei()->appRecord()->findOneById($fromAppId);
             $this->wei->env->loadConfigDir('plugins/' . $fromApp['name'] . '/configs');
         }
+
         return $next();
     }
 }

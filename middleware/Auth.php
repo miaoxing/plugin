@@ -30,6 +30,7 @@ class Auth extends Base
         /** @var \Wei\Response $res */
         if ($res) {
             $this->logger->info('Got response after user init, response header is', $res->getHeaderString());
+
             return $res;
         }
 
@@ -95,6 +96,7 @@ class Auth extends Base
     {
         if ($this->request->acceptJson()) {
             $url = $this->url->append($url, ['next' => $this->request->getReferer()]);
+
             return $this->response->json([
                 'code' => -401,
                 'message' => '您好,请登录',
@@ -102,6 +104,7 @@ class Auth extends Base
             ]);
         } else {
             $url = $this->url->append($url, ['next' => $this->request->getUrl()]);
+
             return $this->response->redirect($url);
         }
     }
@@ -120,6 +123,7 @@ class Auth extends Base
                 return true;
             }
         }
+
         return false;
     }
 }
