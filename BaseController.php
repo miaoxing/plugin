@@ -98,7 +98,7 @@ abstract class BaseController extends \Wei\BaseController
 
         $controller = $this->app->getController();
         $this->view->assign([
-            // services
+            // Services
             'e' => $this->e,
             'block' => $this->block,
             'app' => $this->app,
@@ -107,7 +107,7 @@ abstract class BaseController extends \Wei\BaseController
             'event' => $this->event,
             'plugin' => $this->plugin,
             'pageConfig' => $this->pageConfig,
-            // strings
+            // Strings
             'controller' => $controller,
             'action' => $this->app->getAction(),
             'pageId' => str_replace('/', '-', $this->app->getControllerAction()),

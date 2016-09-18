@@ -11,17 +11,29 @@
   <arg value="sp"/>
 
   <rule ref="Squiz">
+    <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+    <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/>
     <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned"/>
 
     <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed"/>
     <exclude name="Squiz.Commenting.ClosingDeclarationComment.Missing"/>
     <exclude name="Squiz.Commenting.FileComment.Missing"/>
+    <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
 
     <exclude name="Squiz.Files.FileExtension.ClassFound"/>
+
+    <exclude name="Squiz.WhiteSpace.FunctionClosingBraceSpace.SpacingBeforeClose"/>
   </rule>
+
+  <rule ref="PEAR"/>
+
+  <rule ref="PHPCS"/>
 
   <rule ref="PSR1"/>
 
   <rule ref="PSR2"/>
+
+  <rule ref="Zend"/>-->
 
 </ruleset>
