@@ -277,7 +277,10 @@ class Plugin extends BaseService
     {
         $data = [];
         foreach ($this->pluginClasses as $id => $class) {
-            $data[] = $this->getOneById($id);
+            $plugin = $this->getById($id);
+            if ($plugin) {
+                $data[] = $plugin;
+            }
         }
 
         return $data;
