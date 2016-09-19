@@ -10,30 +10,11 @@
 
   <arg value="sp"/>
 
-  <rule ref="Squiz">
-    <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+  <rule ref="Generic.Classes.DuplicateClassName"/>
+  <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
+  <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
+  <rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
 
-    <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/>
-    <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned"/>
-
-    <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed"/>
-    <exclude name="Squiz.Commenting.ClosingDeclarationComment.Missing"/>
-    <exclude name="Squiz.Commenting.FileComment.Missing"/>
-    <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
-
-    <exclude name="Squiz.Files.FileExtension.ClassFound"/>
-
-    <exclude name="Squiz.WhiteSpace.FunctionClosingBraceSpace.SpacingBeforeClose"/>
-  </rule>
-
-  <rule ref="PEAR"/>
-
-  <rule ref="PHPCS"/>
-
-  <rule ref="PSR1"/>
-
-  <rule ref="PSR2"/>
-
-  <rule ref="Zend"/>-->
-
+  <!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>-->
+  <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
 </ruleset>
