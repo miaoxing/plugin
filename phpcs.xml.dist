@@ -58,7 +58,9 @@
 
   <rule ref="PSR2"/>
 
-  <rule ref="Squiz.Commenting.BlockComment"/>
+  <rule ref="Squiz.Commenting.BlockComment">
+    <exclude name="Squiz.Commenting.BlockComment.WrongStart"/>
+  </rule>
 
   <rule ref="Squiz.NamingConventions.ValidVariableName"/>
 
