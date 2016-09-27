@@ -1,6 +1,6 @@
 <?php // 成熟后独立为theme插件?>
 <?php $color = $setting('theme.brandPrimary') ?: '#f28c48'; ?>
-<!-- htmllint tag-bans="['b']" -->
+<!-- htmllint tag-bans="false" -->
 <style>
   a, a:hover {
     color: <?= $color ?>;
@@ -38,3 +38,4 @@
     border-color: <?= $color ?>;
   }
 </style>
+<!-- htmllint tag-bans="$previous" -->
