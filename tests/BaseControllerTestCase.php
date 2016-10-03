@@ -19,7 +19,11 @@ class BaseControllerTestCase extends BaseTestCase
     protected $statusCodes = [];
 
     /**
+     * 页面可以正常访问
+     *
      * @dataProvider providerForActions
+     * @param string $action
+     * @param null|int $code
      */
     public function testActions($action, $code = null)
     {
@@ -28,14 +32,14 @@ class BaseControllerTestCase extends BaseTestCase
         $result = $this->dispatch($controller, $action);
 
         if ($result instanceof \Exception) {
-            $this->assertEquals(404, $result->getCode(), (string) $result);
+            $this->assertEquals(404, $result->getCode(), $action . '返回404');
         } else {
             if ($code) {
                 $this->assertEquals($code, $result->getStatusCode());
             } else {
                 $this->assertNotEquals(302, $result->getStatusCode());
             }
-            $this->assertNotEmpty($result->getContent());
+            $this->assertNotEmpty($result->getContent(), $action . '返回内容不为空');
         }
     }
 
