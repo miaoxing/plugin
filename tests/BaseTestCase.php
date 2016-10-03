@@ -159,7 +159,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function assertThat($value, \PHPUnit_Framework_Constraint $constraint, $message = '')
     {
