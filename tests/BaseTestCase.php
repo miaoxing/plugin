@@ -3,6 +3,7 @@
 namespace miaoxing\plugin\tests;
 
 use miaoxing\app\tests\BaseFixture;
+use tests\ResultPrinter;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -74,20 +75,40 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         return $model;
     }
 
-    public function assertRetSuc(array $ret, $message = null)
+    public function assertRetSuc(array $ret, $message = null, $assertMessage = null)
     {
-        $this->assertSame(1, $ret['code'], $ret['message']);
-        if (func_num_args() == 2) {
-            $this->assertSame($message, $ret['message']);
+        $assertMessage = $this->buildRetMessage($ret, $assertMessage);
+
+        $expected = ['code' => 1];
+        if ($message !== null) {
+            $expected['message'] = $message;
         }
+
+        $this->assertArraySubset($expected, $ret, true, $assertMessage);
     }
 
-    public function assertRetErr(array $ret, $code, $message = null)
+    public function assertRetErr(array $ret, $code, $message = null, $assertMessage = null)
     {
-        $this->assertSame($code, $ret['code']);
-        if (func_num_args() == 3) {
-            $this->assertSame($message, $ret['message']);
+        $assertMessage = $this->buildRetMessage($ret, $assertMessage);
+
+        $expected = ['code' => $code];
+        if ($message !== null) {
+            $expected['message'] = $message;
         }
+
+        $this->assertArraySubset($expected, $ret, true, $assertMessage);
+    }
+
+    protected function buildRetMessage($ret, $assertMessage = null)
+    {
+        if ($assertMessage === true) {
+            $assertMessage = '返回"%message%"';
+        }
+        if ($assertMessage) {
+            $assertMessage = str_replace(['%message%'], [$ret['message']], $assertMessage);
+        }
+
+        return $assertMessage;
     }
 
     /**
@@ -135,5 +156,16 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         // 类名如 miaoxing\app\tests\PluginTest
         // 分为3部分取第2部分
         return explode('\\', get_class($this), 3)[1];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function assertThat($value, \PHPUnit_Framework_Constraint $constraint, $message = '')
+    {
+        parent::assertThat($value, $constraint, $message);
+        if ($message) {
+            ResultPrinter::addPassMessage($message);
+        }
     }
 }
