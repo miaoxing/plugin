@@ -370,7 +370,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        return $this->data;
+        return $this->toArray();
     }
 
     /**
