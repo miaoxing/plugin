@@ -108,4 +108,27 @@ class BaseControllerTestCase extends BaseTestCase
 
         return $response;
     }
+
+    /**
+     * 运行任务
+     *
+     * @param string $name
+     * @param array $data
+     * @return array
+     */
+    protected function runJob($name, array $data = [])
+    {
+        $parts = explode('/', $name);
+        $action = array_pop($parts);
+        $controller = implode('/', $parts);
+
+        return wei()->tester()
+            ->login(1)
+            ->controller($controller)
+            ->action($action)
+            ->request($data)
+            ->json()
+            ->exec()
+            ->response();
+    }
 }
