@@ -161,6 +161,11 @@ class BasePlugin extends \miaoxing\plugin\BaseService
         if (!$this->basePath) {
             $class = new \ReflectionClass($this);
             $this->basePath = substr(dirname($class->getFileName()), strlen(getcwd()) + 1);
+
+            // TODO 改为默认
+            if (substr($class->getName(), 0, 8) == 'Miaoxing') {
+                $this->basePath = dirname($this->basePath);
+            }
         }
 
         return $this->basePath;

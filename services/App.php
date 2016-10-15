@@ -180,6 +180,7 @@ class App extends \Wei\App
             foreach ($classes as $class) {
                 // 认为第二部分是插件名称
                 list(, $this->plugin) = explode('\\', $class, 3);
+                $this->plugin = lcfirst($this->plugin);
                 break;
             }
         }

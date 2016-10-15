@@ -37,6 +37,7 @@ class Plugin extends BaseService
         '.',
         'plugins/*',
         'vendor/*/*',
+        'vendor/*/*/src'
     ];
 
     /**
@@ -157,8 +158,11 @@ class Plugin extends BaseService
      */
     protected function getAppControllerMap()
     {
-        // TODO 暂时支持三级控制器,待控制器升级后改为两级
-        return $this->generateClassMap($this->dirs, '/controllers/{*,*/*,*/*/*}.php', 'controllers');
+        return array_merge(
+            $this->generateClassMap($this->dirs, '/Controller/{*,*/*}.php', 'Controller'),
+            // TODO 暂时支持三级控制器,待控制器升级后改为两级
+            $this->generateClassMap($this->dirs, '/controllers/{*,*/*,*/*/*}.php', 'controllers')
+        );
     }
 
     /**
@@ -174,6 +178,7 @@ class Plugin extends BaseService
                 $class = $this->guessClassName($file);
                 $names = explode('\\', $class);
                 $name = $names[count($names) - 2];
+                $name = lcfirst($name);
                 $this->pluginClasses[$name] = $class;
             }
             ksort($this->pluginClasses);
@@ -560,6 +565,12 @@ class Plugin extends BaseService
         // 忽略开头的vendor目录
         if (substr($file, 0, 7) == 'vendor/') {
             $file = substr($file, 7);
+        }
+
+        if (strpos($file, '/src/') !== false) {
+            require_once 'vendor/' . $file;
+            $class = end(get_declared_classes());
+            return $class;
         }
 
         // 移除结尾的.php扩展名,并替换目录为命名空间分隔符
