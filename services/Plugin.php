@@ -225,7 +225,12 @@ class Plugin extends BaseService
         if ($pluginId) {
             $plugin = $this->getOneById($pluginId);
 
-            return ['path' => $plugin->getBasePath(), 'file' => $file];
+            $path = $plugin->getBasePath();
+            if (substr(get_class($plugin), 0, 8) == 'Miaoxing') {
+                $path .= '/resources';
+            }
+
+            return ['path' => $path, 'file' => $file];
         } else {
             return ['path' => null, 'file' => $resource];
         }
