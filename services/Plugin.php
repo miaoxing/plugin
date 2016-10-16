@@ -148,7 +148,10 @@ class Plugin extends BaseService
      */
     protected function getWeiAliases()
     {
-        return $this->generateClassMap($this->dirs, '/services/*.php', 'services');
+        return array_merge(
+            $this->generateClassMap($this->dirs, '/Service/*.php', 'Service'),
+            $this->generateClassMap($this->dirs, '/services/*.php', 'services')
+        );
     }
 
     /**
