@@ -99,7 +99,18 @@ class BasePlugin extends \miaoxing\plugin\BaseService
      */
     public function getId()
     {
-        return lcfirst(explode('\\', get_class($this))[1]);
+        $class = get_class($this);
+        $id = lcfirst(explode('\\', $class)[1]);
+        if (substr($class, 0, 8) == 'Miaoxing') {
+            $id = $this->dash($id);
+        }
+
+        return $id;
+    }
+
+    protected function dash($name)
+    {
+        return strtolower(preg_replace('/([A-Z])/', '-$1', $name));
     }
 
     /**

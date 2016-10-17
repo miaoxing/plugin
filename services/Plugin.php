@@ -179,9 +179,16 @@ class Plugin extends BaseService
             $files = $this->globByDirs($this->dirs, '/Plugin.php');
             foreach ($files as $file) {
                 $class = $this->guessClassName($file);
-                $names = explode('\\', $class);
-                $name = $names[count($names) - 2];
-                $name = lcfirst($name);
+
+                // TODO
+                if (substr($class, 0, 8) == 'Miaoxing') {
+                    $name = explode('/', $file)[2];
+                } else {
+                    $names = explode('\\', $class);
+                    $name = $names[count($names) - 2];
+                    $name = lcfirst($name);
+                }
+
                 $this->pluginClasses[$name] = $class;
             }
             ksort($this->pluginClasses);
