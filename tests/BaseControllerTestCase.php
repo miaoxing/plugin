@@ -72,7 +72,7 @@ class BaseControllerTestCase extends BaseTestCase
     {
         if (!$this->controller) {
             $class = get_called_class();
-            $parts = explode('controllers\\', $class);
+            $parts = explode('Controller\\', $class);
             $controller = substr($parts[1], 0, -4);
             $this->controller = implode('/', array_map('lcfirst', explode('\\', $controller)));
         }
