@@ -99,7 +99,7 @@ class BasePlugin extends \miaoxing\plugin\BaseService
      */
     public function getId()
     {
-        return explode('\\', get_class($this))[1];
+        return lcfirst(explode('\\', get_class($this))[1]);
     }
 
     /**

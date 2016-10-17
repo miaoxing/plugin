@@ -604,10 +604,11 @@ class Plugin extends BaseService
         // 如miaoxing\user\controllers\admin\User返回admin\User
         $name = explode('\\' . $type . '\\', $class, 2)[1];
 
-        // 将最后一级的名称转换为小写,如admin\User改为admin\user
+        // 将名称转换为小写
         $pos = strrpos($name, '\\');
         $pos = $pos === false ? 0 : $pos + 1;
         $name[$pos] = lcfirst($name[$pos]);
+        $name = lcfirst($name);
 
         return $name;
     }
