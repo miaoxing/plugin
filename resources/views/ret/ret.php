@@ -1,6 +1,6 @@
 <?php $view->layout() ?>
 
-<link rel="stylesheet" href="<?= $asset('@plugin/assets/ret.css') ?>">
+<link rel="stylesheet" href="<?= $asset('@plugin/css/ret.css') ?>">
 
 <div class="ret ret-<?= $type ?>">
     <div class="ret-icon">
