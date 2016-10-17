@@ -199,8 +199,13 @@ class Plugin extends BaseService
     public function locateFile($file)
     {
         $components = $this->parseResource($file);
+        if ($components['path']) {
+            $path = dirname($components['path']) . '/public/';
 
-        return ($components['path'] ? ($components['path'] . '/') : '') . $components['file'];
+            return $path . $components['file'];
+        } else {
+            return $components['file'];
+        }
     }
 
     /**
@@ -225,6 +230,7 @@ class Plugin extends BaseService
         if ($pluginId) {
             $plugin = $this->getOneById($pluginId);
 
+            // TODO 默认
             $path = $plugin->getBasePath();
             if (substr(get_class($plugin), 0, 8) == 'Miaoxing') {
                 $path .= '/resources';
