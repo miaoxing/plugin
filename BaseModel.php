@@ -136,7 +136,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function notDeleted()
     {
-        return $this->andWhere(['deleteTime' => '0000-00-00 00:00:00']);
+        return $this->andWhere([$this->fullTable . '.deleteTime' => '0000-00-00 00:00:00']);
     }
 
     /**
@@ -146,7 +146,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function deleted()
     {
-        return $this->andWhere("deleteTime != '0000-00-00 00:00:00'");
+        return $this->andWhere($this->fullTable . ".deleteTime != '0000-00-00 00:00:00'");
     }
 
     /**
