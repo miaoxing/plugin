@@ -65,7 +65,7 @@ class User extends BaseModel
      */
     public function valid()
     {
-        return $this->where(['isValid' => 1]);
+        return $this->andWhere(['isValid' => 1]);
     }
 
     public function getProfile()
