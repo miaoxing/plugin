@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="//cdn.bootcss.com/jquery-mobile/1.4.0/jquery.mobile.min.css">
   <link rel="stylesheet" href="<?= $asset([
     'assets/swipe.css',
-    'vendor/miaoxing/app/assets/jqm.css',
+    'plugins/app/css/jqm.css',
   ]) ?>">
   <?php $event->trigger('prePageCss') ?>
   <?= $block->get('css') ?>
