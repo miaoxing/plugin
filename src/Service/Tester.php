@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\services;
+namespace Miaoxing\Plugin\Service;
 
 class Tester extends \miaoxing\plugin\BaseService
 {

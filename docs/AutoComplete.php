@@ -3,8 +3,8 @@
 namespace miaoxing\plugin\docs {
 
     /**
-     * @property    \miaoxing\plugin\services\Tester $tester
-     * @method      \miaoxing\plugin\services\Tester tester()
+     * @property    \Miaoxing\Plugin\Service\Tester $tester
+     * @method      \Miaoxing\Plugin\Service\Tester tester()
      */
     class AutoComplete
     {
@@ -12,7 +12,7 @@ namespace miaoxing\plugin\docs {
 }
 
 namespace {
-    /** @var \miaoxing\plugin\services\Plugin $plugin */
+    /** @var \Miaoxing\Plugin\Service\Plugin $plugin */
     $plugin = wei()->plugin;
 
     /** @var \Wei\Event $event */

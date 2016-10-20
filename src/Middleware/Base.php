@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\middleware;
+namespace Miaoxing\Plugin\Middleware;
 
 /**
  * @property \miaoxing\plugin\services\App $app

@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\services;
+namespace Miaoxing\Plugin\Service;
 
 use Exception;
 use miaoxing\plugin\BaseService;

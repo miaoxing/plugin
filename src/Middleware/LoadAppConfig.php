@@ -1,11 +1,11 @@
 <?php
 
-namespace miaoxing\plugin\middleware;
+namespace Miaoxing\Plugin\Middleware;
 
 /**
  * 如果请求地址包含其他应用的ID,加载该应用的配置
  */
-class LoadAppConfig extends \miaoxing\plugin\middleware\Base
+class LoadAppConfig extends \Miaoxing\Plugin\Middleware\Base
 {
     /**
      * {@inheritdoc}

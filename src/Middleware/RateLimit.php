@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\middleware;
+namespace Miaoxing\Plugin\Middleware;
 
 /**
  * 限制用户在一段请求时间内(如每分钟,每小时,每天)最多的请求次数

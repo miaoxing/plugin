@@ -13,7 +13,7 @@ use Wei\RetTrait;
  * @property \Wei\View $view
  * @property \Wei\Logger $logger
  * @property \Wei\Event $event
- * @property \miaoxing\plugin\services\Plugin $plugin
+ * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \miaoxing\plugin\services\User $user 用户
  * @property \miaoxing\plugin\services\CurUser $curUser 用户
  * @property \services\Url $url URL生成服务
@@ -76,7 +76,8 @@ abstract class BaseController extends \Wei\BaseController
 
         $this->initViewVars();
 
-        $this->middleware(\miaoxing\plugin\middleware\Auth::className(), [
+        $this->middleware(
+            Middleware\Auth::className(), [
             'guestPages' => $this->guestPages,
             'adminGuestPages' => $this->adminGuestPages,
         ]);

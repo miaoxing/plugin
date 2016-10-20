@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\middleware;
+namespace Miaoxing\Plugin\Middleware;
 
 /**
  * 检查来源是否为当前域名或在白名单中

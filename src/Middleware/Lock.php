@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\middleware;
+namespace Miaoxing\Plugin\Middleware;
 
 /**
  * 对请求用户或IP加锁,控制页面只能由一个请求访问

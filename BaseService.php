@@ -35,7 +35,7 @@ namespace miaoxing\plugin
      * @property    App $app 应用管理服务
      * @property    CsvExporter $csvExporter Csv格式数据导出服务
      * @property    SafeUrl $safeUrl 生成带签名的安全URL
-     * @property    \miaoxing\plugin\services\Plugin $plugin 插件管理器
+     * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
      * @property    Handlebars $handlebars Handlebars模板引擎
      * @property    Excel $excel Excel操作的快捷服务
      * @property    Chart $chart 构造图表数据的辅助服务
@@ -48,7 +48,6 @@ namespace miaoxing\plugin
      * @property    SyncQueue $syncQueue 同步的队列服务
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
      * @property    QueueWorker $queueWorker 队列后台服务
-     * @property    \miaoxing\file\services\Cdn $cdn CDN服务
      * @property    Xml $xml XML服务
      * @property    Html $html HTML服务
      * @property    Random $random 随机数服务

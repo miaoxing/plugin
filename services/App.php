@@ -7,7 +7,7 @@ use Wei\Response;
 /**
  * @method \miaoxing\plugin\BaseModel appDb($table)
  * @property \Wei\Event $event
- * @property \miaoxing\plugin\services\Plugin $plugin
+ * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\App\Service\AppRecord $appRecord 应用的数据库服务
  */
 class App extends \Wei\App

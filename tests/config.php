@@ -10,7 +10,7 @@ return [
             'date.timezone' => 'Asia/Shanghai',
         ],
         'aliases' => [
-            'plugin' => 'miaoxing\plugin\services\Plugin',
+            'plugin' => 'Miaoxing\Plugin\Service\Plugin',
         ],
         'providers' => [
             'cache' => 'memcache',

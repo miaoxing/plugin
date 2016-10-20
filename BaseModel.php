@@ -9,7 +9,7 @@ use Wei\RetTrait;
 /**
  * @method \miaoxing\plugin\BaseModel db($table = null) Create a new record object
  * @property \Wei\BaseCache $cache
- * @property \miaoxing\plugin\services\Plugin $plugin
+ * @property \Miaoxing\Plugin\Service\Plugin $plugin
  */
 class BaseModel extends Record implements JsonSerializable
 {
