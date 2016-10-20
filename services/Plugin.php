@@ -589,9 +589,23 @@ class Plugin extends BaseService
         }
 
         if (strpos($file, '/src/') !== false) {
-            require_once 'vendor/' . $file;
-            $class = end(get_declared_classes());
-            return $class;
+            list($packageName, $className) = explode('/src/', $file, 2);
+
+            $composerJson = 'vendor/' . $packageName . '/composer.json';
+            $json = json_decode(file_get_contents($composerJson), true);
+            if (!isset($json['autoload']['psr-4']) || !$json['autoload']['psr-4']) {
+                throw new \Exception('Missing psr-4 autoload config');
+            }
+
+            $namespace = key($json['autoload']['psr-4']);
+            $namespace = rtrim($namespace, '\\');
+
+            // Remove ending .php
+            $className = substr($className, 0, -4);
+            $className = strtr($className, '/', '\\');
+            $className = $namespace . '\\' . $className;
+
+            return $className;
         }
 
         // 移除结尾的.php扩展名,并替换目录为命名空间分隔符
@@ -608,7 +622,7 @@ class Plugin extends BaseService
     protected function getShortName($class, $type)
     {
         // 获取类名中,类型之后的半段
-        // 如miaoxing\user\controllers\admin\User返回admin\User
+        // 如Miaoxing\User\Controller\Admin\User返回Admin\User
         $name = explode('\\' . $type . '\\', $class, 2)[1];
 
         // 将名称转换为小写
