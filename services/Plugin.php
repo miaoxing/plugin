@@ -2,6 +2,7 @@
 
 namespace miaoxing\plugin\services;
 
+use Exception;
 use miaoxing\plugin\BaseService;
 
 /**
@@ -317,13 +318,13 @@ class Plugin extends BaseService
      *
      * @param string $id
      * @return \miaoxing\plugin\BasePlugin
-     * @throws \Exception 当插件类不存在时
+     * @throws Exception 当插件类不存在时
      */
     public function getOneById($id)
     {
         $plugin = $this->getById($id);
         if (!$plugin) {
-            throw new \Exception(sprintf('Plugin "%s" not found', $id), 404);
+            throw new Exception(sprintf('Plugin "%s" not found', $id), 404);
         }
 
         return $plugin;
@@ -575,6 +576,7 @@ class Plugin extends BaseService
      *
      * @param string $file
      * @return string
+     * @throws Exception
      */
     protected function guessClassName($file)
     {
@@ -592,9 +594,13 @@ class Plugin extends BaseService
             list($packageName, $className) = explode('/src/', $file, 2);
 
             $composerJson = 'vendor/' . $packageName . '/composer.json';
+            if (!is_file($composerJson)) {
+                throw new Exception(sprintf('Composer file "%s" not found', $composerJson));
+            }
+
             $json = json_decode(file_get_contents($composerJson), true);
             if (!isset($json['autoload']['psr-4']) || !$json['autoload']['psr-4']) {
-                throw new \Exception('Missing psr-4 autoload config');
+                throw new Exception('Missing psr-4 autoload config');
             }
 
             $namespace = key($json['autoload']['psr-4']);
