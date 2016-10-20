@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Middleware;
 
 /**
- * @property \miaoxing\plugin\services\App $app
+ * @property \Miaoxing\Plugin\Service\App $app
  * @property \Wei\Request $request
  * @property \Wei\Response $response
  */

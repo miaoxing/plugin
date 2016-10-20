@@ -3,9 +3,10 @@
 namespace miaoxing\plugin;
 
 use Wei\RetTrait;
+use Miaoxing\Plugin\Middleware\Auth;
 
 /**
- * @property \miaoxing\plugin\services\App $app
+ * @property \Miaoxing\Plugin\Service\App $app
  * @property \Wei\Request $request
  * @method   string request($name, $default = '')
  * @property \Wei\Response $response
@@ -77,7 +78,7 @@ abstract class BaseController extends \Wei\BaseController
         $this->initViewVars();
 
         $this->middleware(
-            Middleware\Auth::className(), [
+            Auth::className(), [
             'guestPages' => $this->guestPages,
             'adminGuestPages' => $this->adminGuestPages,
         ]);

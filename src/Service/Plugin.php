@@ -15,7 +15,7 @@ use miaoxing\plugin\BaseService;
  *                                       或者线上服务器可写,否则可改为memcached,redis等缓存
  * @property \Wei\Event $event
  * @property \Wei\Request $request
- * @property \miaoxing\plugin\services\App $app
+ * @property \Miaoxing\Plugin\Service\App $app
  */
 class Plugin extends BaseService
 {
@@ -37,7 +37,6 @@ class Plugin extends BaseService
     protected $dirs = [
         '.',
         'plugins/*',
-        'vendor/*/*',
         'vendor/*/*/src'
     ];
 
