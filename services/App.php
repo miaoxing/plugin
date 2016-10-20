@@ -8,7 +8,7 @@ use Wei\Response;
  * @method \miaoxing\plugin\BaseModel appDb($table)
  * @property \Wei\Event $event
  * @property \miaoxing\plugin\services\Plugin $plugin
- * @property \miaoxing\app\services\AppRecord $appRecord 应用的数据库服务
+ * @property \Miaoxing\App\Service\AppRecord $appRecord 应用的数据库服务
  */
 class App extends \Wei\App
 {
@@ -191,7 +191,7 @@ class App extends \Wei\App
     /**
      * 获取App数据表对象
      *
-     * @return \miaoxing\app\services\AppRecord
+     * @return \Miaoxing\App\Service\AppRecord
      */
     public function getRecord()
     {
