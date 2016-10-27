@@ -552,7 +552,7 @@ class Plugin extends BaseService
      * @param string $type
      * @return array
      */
-    protected function generateClassMap(array $dirs, $pattern, $type)
+    public function generateClassMap(array $dirs, $pattern, $type)
     {
         $map = [];
         $files = $this->globByDirs($dirs, $pattern);
