@@ -24,4 +24,9 @@ class Migrations extends BaseController
     {
         return $this->migration->rollback();
     }
+
+    public function makeAction($req)
+    {
+        return $this->migration->make($req);
+    }
 }
