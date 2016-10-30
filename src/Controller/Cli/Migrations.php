@@ -38,6 +38,6 @@ class Migrations extends BaseController
     protected function makeDefinition()
     {
         $this->addArgument('name');
-        $this->addOption('path');
+        //$this->addOption('path');
     }
 }

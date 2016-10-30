@@ -27,7 +27,7 @@ trait CliDefinition
 
         // $argv looks like ['index.php', 'command', 'arg1', 'arg2']
         // arguments are start from the third element
-        return $this->addOption($index + 2, $name);
+        return $this->addOption($name, $index + 2);
     }
 
     /**
