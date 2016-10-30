@@ -13,6 +13,14 @@ class Migrations extends BaseController
 {
     use CliDefinition;
 
+    public function __construct(array $options)
+    {
+        parent::__construct($options);
+
+        // TODO 避免后续输出导致session启动失败
+        $this->session;
+    }
+
     public function indexAction()
     {
         return $this->migrateAction();
@@ -38,6 +46,6 @@ class Migrations extends BaseController
     protected function makeDefinition()
     {
         $this->addArgument('name');
-        //$this->addOption('path');
+        $this->addOption('path');
     }
 }
