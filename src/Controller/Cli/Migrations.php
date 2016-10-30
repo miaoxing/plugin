@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Controller\Cli;
 
 use miaoxing\plugin\BaseController;
+use Miaoxing\Plugin\CliDefinition;
 use services\Migration;
 
 /**
@@ -10,6 +11,8 @@ use services\Migration;
  */
 class Migrations extends BaseController
 {
+    use CliDefinition;
+
     public function indexAction()
     {
         return $this->migrateAction();
@@ -27,11 +30,14 @@ class Migrations extends BaseController
 
     public function makeAction($req)
     {
+        $this->makeDefinition();
+
         return $this->migration->make($req);
     }
 
     protected function makeDefinition()
     {
-        $this->map('v', 'verbose');
+        $this->addArgument('name');
+        $this->addOption('path');
     }
 }
