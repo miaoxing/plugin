@@ -29,4 +29,9 @@ class Migrations extends BaseController
     {
         return $this->migration->make($req);
     }
+
+    protected function makeDefinition()
+    {
+        $this->map('v', 'verbose');
+    }
 }
