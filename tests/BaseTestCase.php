@@ -161,11 +161,16 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    public static function assertThat($value, \PHPUnit_Framework_Constraint $constraint, $message = '')
+    /*public static function assertThat($value, \PHPUnit_Framework_Constraint $constraint, $message = '')
     {
         parent::assertThat($value, $constraint, $message);
         if ($message) {
             ResultPrinter::addPassMessage($message);
         }
+    }*/
+
+    protected function step($message)
+    {
+        ResultPrinter::addPassMessage($message);
     }
 }
