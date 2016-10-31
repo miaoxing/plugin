@@ -35,6 +35,11 @@ class Migrations extends BaseController
         return $this->migration->make($req);
     }
 
+    public function statusAction()
+    {
+        return $this->migration->status();
+    }
+
     protected function makeDefinition()
     {
         $this->addArgument('name');
