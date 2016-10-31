@@ -159,18 +159,16 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $message
+     * @param string $args
      */
-    /*public static function assertThat($value, \PHPUnit_Framework_Constraint $constraint, $message = '')
+    protected function step($message, $args = null)
     {
-        parent::assertThat($value, $constraint, $message);
-        if ($message) {
-            ResultPrinter::addPassMessage($message);
+        $args = func_get_args();
+        if (count($args) > 1) {
+            array_shift($args);
+            $message = vsprintf($message, $args);
         }
-    }*/
-
-    protected function step($message)
-    {
-        ResultPrinter::addPassMessage($message);
+        ResultPrinter::addMessage($message);
     }
 }
