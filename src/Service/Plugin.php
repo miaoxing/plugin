@@ -570,6 +570,25 @@ class Plugin extends BaseService
         return $this->filterDuplicates($map, $type);
     }
 
+    public function getPluginIdByClass($class)
+    {
+        // 类名如Miaoxing\App\Controller/Apps
+        $id = explode('\\', $class, 3)[1];
+
+        // TODO V2 全部都要转换
+        // 如果首字母是大写,认为是新版类名,转换为连接符格式
+        if (strtoupper($id[0]) == $id[0]) {
+            $id = $this->dash($id);
+        }
+
+        return $id;
+    }
+
+    protected function dash($name)
+    {
+        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
+    }
+
     /**
      * Guest class name by file name
      *
