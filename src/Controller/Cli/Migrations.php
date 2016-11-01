@@ -23,9 +23,11 @@ class Migrations extends BaseController
         return $this->migration->migrate();
     }
 
-    public function rollbackAction()
+    public function rollbackAction($req)
     {
-        return $this->migration->rollback();
+        $this->rollbackDefinition();
+
+        return $this->migration->rollback($req);
     }
 
     public function makeAction($req)
@@ -38,6 +40,11 @@ class Migrations extends BaseController
     public function statusAction()
     {
         return $this->migration->status();
+    }
+
+    protected function rollbackDefinition()
+    {
+        $this->addOption('target', 't');
     }
 
     protected function makeDefinition()
