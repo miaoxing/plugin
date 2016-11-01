@@ -4,21 +4,23 @@ echo '<?php';
 ?>
 
 
-namespace Miaoxing\Region\Migration;
+namespace MyNamespace\Migration;
 
-use miaoxing\plugin\BaseService;
-use services\Scheme;
+use Miaoxing\Plugin\BaseMigration;
 
-/**
- * @property Scheme $scheme
- */
-class <?= $class ?> extends BaseService
+class <?= $class ?> extends BaseMigration
 {
+    /**
+     * {@inheritdoc}
+     */
     public function up()
     {
         //
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function down()
     {
         //

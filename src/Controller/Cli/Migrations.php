@@ -30,11 +30,11 @@ class Migrations extends BaseController
         return $this->migration->rollback($req);
     }
 
-    public function makeAction($req)
+    public function createAction($req)
     {
-        $this->makeDefinition();
+        $this->createDefinition();
 
-        return $this->migration->make($req);
+        return $this->migration->create($req);
     }
 
     public function statusAction()
@@ -47,7 +47,7 @@ class Migrations extends BaseController
         $this->addOption('target', 't');
     }
 
-    protected function makeDefinition()
+    protected function createDefinition()
     {
         $this->addArgument('name');
         $this->addOption('path');
