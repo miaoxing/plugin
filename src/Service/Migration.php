@@ -19,8 +19,7 @@ class Migration extends BaseService
      * @var array
      */
     protected $paths = [
-        '.',
-        'plugins/*',
+        'src',
         'vendor/*/*/src',
     ];
 
