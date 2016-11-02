@@ -3,10 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use miaoxing\plugin\BaseService;
-use services\Cli;
-use services\Db;
-use Miaoxing\Plugin\Service\Scheme;
-use Wei\Request;
+use Wei\Db;
 use Wei\RetTrait;
 
 /**

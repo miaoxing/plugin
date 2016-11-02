@@ -48,14 +48,15 @@ foreach ($wei->plugin->getAll() as $plugin) {
 // 临时指定所在数据库
 $appTables = [
     'apps',
-    'regions',
-    'areas',
 ];
 foreach ($sqlFiles as $file) {
     $table = basename($file, '.sql');
     $db = in_array($table, $appTables) ? $wei->appDb : $wei->db;
     loadTable($db, $file, $table);
 }
+
+// 3. 执行迁移语句
+$wei->migration->migrate();
 
 function loadTable(Db $db, $file, $table)
 {
