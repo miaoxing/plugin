@@ -15,6 +15,7 @@ namespace miaoxing\plugin
     use services\Handlebars;
     use services\Html;
     use services\Lbs;
+    use Miaoxing\Plugin\Service\Migration;
     use services\QueueWorker;
     use services\Random;
     use services\RedisQueue;
@@ -52,6 +53,7 @@ namespace miaoxing\plugin
      * @property    Html $html HTML服务
      * @property    Random $random 随机数服务
      * @property    Coll $coll 组合服务
+     * @property    Migration $migration 迁移服务
      * @property    DataProvider $dataProvider 创建新项目时,提供数据源的对象
      * @method      dataProviders\Base dataProvider($type = 'common') 初始化数据源对象
      */
