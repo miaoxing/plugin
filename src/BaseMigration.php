@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin;
 
-use services\Scheme;
+use Miaoxing\Plugin\Service\Scheme;
 use Wei\Base;
 use Wei\Db;
 
