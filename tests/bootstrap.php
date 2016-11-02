@@ -29,6 +29,7 @@ $wei = wei($config);
 // 初始化数据库
 $db = $wei->db;
 $db->executeUpdate('CREATE DATABASE IF NOT EXISTS app;');
+$db->useDb('app');
 
 if (isset($config['test']['skipSql']) && $config['test']['skipSql']) {
     return;

@@ -28,7 +28,7 @@ return [
         'host' => 'mysql',
         'port' => 3306,
         'user' => 'root',
-        'dbname' => 'app', // 留空,待启动脚本检测和创建数据库
+        'dbname' => '', // 留空,待启动脚本检测和创建数据库
         'charset' => 'utf8mb4',
         'password' => getenv('MYSQL_PASSWORD'),
         'recordClass' => 'miaoxing\plugin\BaseModel',
