@@ -13,13 +13,8 @@
 
   <filter>
     <whitelist>
-      <directory>.</directory>
-      <exclude>
-        <directory>./data</directory>
-        <directory>./docs</directory>
-        <directory>./tests</directory>
-        <directory>./vendor</directory>
-      </exclude>
+      <directory>src</directory>
+      <directory>resources</directory>
     </whitelist>
   </filter>
 

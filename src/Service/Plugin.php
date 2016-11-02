@@ -37,6 +37,7 @@ class Plugin extends BaseService
     protected $dirs = [
         '.',
         'plugins/*',
+        'src',
         'vendor/*/*/src'
     ];
 
@@ -149,8 +150,8 @@ class Plugin extends BaseService
     protected function getWeiAliases()
     {
         return array_merge(
-            $this->generateClassMap($this->dirs, '/Service/*.php', 'Service'),
-            $this->generateClassMap($this->dirs, '/services/*.php', 'services')
+            $this->generateClassMap($this->dirs, '/services/*.php', 'services'),
+            $this->generateClassMap($this->dirs, '/Service/*.php', 'Service')
         );
     }
 
@@ -180,9 +181,10 @@ class Plugin extends BaseService
             foreach ($files as $file) {
                 $class = $this->guessClassName($file);
 
-                // TODO
+                // TODO V2改为默认
                 if (substr($class, 0, 8) == 'Miaoxing') {
-                    $name = explode('/', $file)[2];
+                    $name = explode('\\', $class)[1];
+                    $name = $this->dash($name);
                 } else {
                     $names = explode('\\', $class);
                     $name = $names[count($names) - 2];
@@ -584,6 +586,10 @@ class Plugin extends BaseService
         return $id;
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     protected function dash($name)
     {
         return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
@@ -600,18 +606,15 @@ class Plugin extends BaseService
     {
         // 假设为根目录
         if ($file[0] === '.') {
-            $file = $this->curNamespace . '\\' . ltrim($file, './');
+            $file = '\\' . ltrim($file, './');
         }
+        $className = $file;
 
-        // 忽略开头的vendor目录
-        if (substr($file, 0, 7) == 'vendor/') {
-            $file = substr($file, 7);
-        }
+        // TODO V2 处理V2的插件形式,如src/Plugin.php和vendor/*/*/src/Plugin.php
+        if (strpos($file, 'src/') !== false) {
+            list($dir, $className) = explode('src/', $file);
 
-        if (strpos($file, '/src/') !== false) {
-            list($packageName, $className) = explode('/src/', $file, 2);
-
-            $composerJson = 'vendor/' . $packageName . '/composer.json';
+            $composerJson = ($dir ? ($dir . '/') : '') . 'composer.json';
             if (!is_file($composerJson)) {
                 throw new Exception(sprintf('Composer file "%s" not found', $composerJson));
             }
@@ -622,18 +625,11 @@ class Plugin extends BaseService
             }
 
             $namespace = key($json['autoload']['psr-4']);
-            $namespace = rtrim($namespace, '\\');
-
-            // Remove ending .php
-            $className = substr($className, 0, -4);
-            $className = strtr($className, '/', '\\');
-            $className = $namespace . '\\' . $className;
-
-            return $className;
+            $className = rtrim($namespace, '\\') . '\\' . $className;
         }
 
         // 移除结尾的.php扩展名,并替换目录为命名空间分隔符
-        return strtr(substr($file, 0, -4), ['/' => '\\']);
+        return strtr(substr($className, 0, -4), ['/' => '\\']);
     }
 
     /**

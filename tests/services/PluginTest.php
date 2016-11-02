@@ -10,7 +10,7 @@ class PluginTest extends BaseTestCase
     {
         $plugin = wei()->plugin->getById('plugin');
 
-        $this->assertInstanceOf('miaoxing\plugin\Plugin', $plugin);
+        $this->assertInstanceOf('Miaoxing\Plugin\Plugin', $plugin);
     }
 
     public function testGetByIdButPluginNotExists()

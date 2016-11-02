@@ -66,6 +66,6 @@ return [
 
     ],
     'plugin' => [
-        'curNamespace' => 'miaoxing\plugin',
+        'curNamespace' => 'Miaoxing\Plugin',
     ],
 ];
