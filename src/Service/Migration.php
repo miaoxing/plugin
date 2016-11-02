@@ -223,6 +223,6 @@ class Migration extends BaseService
      */
     protected function writeln($message)
     {
-        echo $message . "\n";
+        fwrite(STDERR, $message . "\n");
     }
 }
