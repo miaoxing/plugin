@@ -159,12 +159,10 @@ class Scheme extends BaseService
 
     public function dropColumn($column)
     {
-
     }
 
     public function renameColumn($from, $to)
     {
-
     }
 
     /**
@@ -315,7 +313,7 @@ class Scheme extends BaseService
                 break;
 
             case is_bool($default):
-                $value = (string)$default;
+                $value = (string) $default;
                 break;
 
             default:
@@ -519,6 +517,7 @@ class Scheme extends BaseService
     public function id($column = 'id')
     {
         $this->int($column)->unsigned()->autoIncrement();
+
         return $this->primary($column);
     }
 
