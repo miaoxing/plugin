@@ -53,6 +53,11 @@ class Scheme extends BaseService
     protected $autoDefault = true;
 
     /**
+     * @var bool
+     */
+    protected $autoUnsigned = true;
+
+    /**
      * @var string
      */
     protected $autoIncrement = '';
@@ -109,6 +114,16 @@ class Scheme extends BaseService
             self::TYPE_TEXT => 'text',
             self::TYPE_TIMESTAMP => 'timestamp',
         ],
+    ];
+
+    /**
+     * @var array
+     */
+    protected $unsignedTypes = [
+        self::TYPE_BOOL,
+        self::TYPE_INT,
+        self::TYPE_TINY_INT,
+        self::TYPE_SMALL_INT,
     ];
 
     public function table($table)
@@ -227,6 +242,7 @@ class Scheme extends BaseService
     protected function getColumnSql($column, array $options)
     {
         $sql = $column . ' ' . $this->getTypeSql($options) . ' ';
+        $sql .= $this->getUnsignedSql($options);
         $sql .= $this->getNullSql($options['null']);
 
         // Auto increment do not have default value
@@ -253,6 +269,19 @@ class Scheme extends BaseService
         }
 
         return $sql;
+    }
+
+    protected function getUnsignedSql($options)
+    {
+        if (isset($options['unsigned'])) {
+            return $options['unsigned'] ? 'unsigned ' : '';
+        }
+
+        if ($this->autoUnsigned && in_array($options['type'], $this->unsignedTypes)) {
+            return 'unsigned ';
+        }
+
+        return '';
     }
 
     protected function getNullSql($null)
