@@ -10,7 +10,10 @@ use Miaoxing\Plugin\Service\Cli;
  */
 class Assets extends BaseController
 {
-    public function linkAction()
+    /**
+     * 发布素材到开放的目录
+     */
+    public function publishAction()
     {
         $cli = $this->cli;
 
