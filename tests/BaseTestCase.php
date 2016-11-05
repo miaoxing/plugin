@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\tests;
+namespace MiaoxingTest\Plugin;
 
 use miaoxing\app\tests\BaseFixture;
 use tests\ResultPrinter;

@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin\tests;
+namespace MiaoxingTest\Plugin;
 
 class BaseControllerTestCase extends BaseTestCase
 {

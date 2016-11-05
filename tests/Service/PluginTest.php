@@ -1,8 +1,8 @@
 <?php
 
-namespace miaoxing\plugin\tests\services;
+namespace MiaoxingTest\Plugin\Service;
 
-use miaoxing\plugin\tests\BaseTestCase;
+use MiaoxingTest\Plugin\BaseTestCase;
 
 class PluginTest extends BaseTestCase
 {

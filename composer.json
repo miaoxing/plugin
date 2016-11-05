@@ -12,5 +12,10 @@
       "Miaoxing\\Plugin\\": "src",
       "miaoxing\\plugin\\": ""
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MiaoxingTest\\Plugin\\": "tests"
+    }
   }
 }
