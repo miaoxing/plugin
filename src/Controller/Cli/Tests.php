@@ -21,12 +21,14 @@ class Tests extends BaseController
 
         if (!$req['plugin']) {
             $this->writeln($cli->error('缺少插件编号'));
+
             return;
         }
 
         $plugin = $this->plugin->getById($req['plugin']);
         if (!$plugin) {
             $this->writeln($cli->error(sprintf('插件"%s"不存在', $req['plugin'])));
+
             return;
         }
 
@@ -42,7 +44,7 @@ class Tests extends BaseController
 
             list($namespace, $class) = $this->getTestClass($class);
 
-            $this->createFile($testFile, $namespace, $class);;
+            $this->createFile($testFile, $namespace, $class);
         }
     }
 
@@ -67,7 +69,6 @@ class Tests extends BaseController
      */
     protected function getTestClass($class)
     {
-
         $parts = explode('\\', $class);
         $parts[0] .= 'Test';
 
@@ -75,7 +76,7 @@ class Tests extends BaseController
         $class = $parts[$count] . 'Test';
 
         unset($parts[$count]);
-        $namespace=  implode('\\', $parts);
+        $namespace = implode('\\', $parts);
 
         return [$namespace, $class];
     }
