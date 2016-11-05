@@ -181,4 +181,14 @@ class BasePlugin extends \miaoxing\plugin\BaseService
 
         return $this->basePath;
     }
+
+    /**
+     * @return array
+     */
+    public function getControllerMap()
+    {
+        $basePath = $this->getBasePath() . '/src';
+
+        return $this->plugin->generateClassMap([$basePath], '/Controller/{*,*/*}.php', 'Controller');
+    }
 }
