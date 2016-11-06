@@ -1,7 +1,7 @@
 <?php
 
 $file = 'coverage.txt';
-$minPercentage = isset($argv[1]) ? (int)$argv[1] : 30;
+$minPercentage = isset($argv[1]) ? (int) $argv[1] : 30;
 
 if (!is_file($file)) {
     return err('未找到覆盖率文件"%s"', $file);
