@@ -9,7 +9,7 @@ if (!is_file($file)) {
 
 $content = file_get_contents($file);
 
-preg_match('/Lines:   (.+?)%/', $content, $matches);
+preg_match('/Lines:\s+(.+?)%/', $content, $matches);
 if (!isset($matches[1])) {
     return err('coverage percentage not exits');
 }
