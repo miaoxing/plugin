@@ -14,11 +14,23 @@ build:
     - mbrevda/composer-install@1.0.1
     - script:
         name: PHPUnit integration tests
-        code: phpunit --verbose --stderr
+        code: phpunit --verbose --stderr --coverage-text |& tee -a coverage.txt
+    - script:
+        name: check coverage
+        code: php build/check-coverage.php
     - script:
         name: perform project mess detection using PHPMD
         code: phpmd . text tests/phpmd.xml --exclude vendor --ignore-violations-on-exit
   after-steps:
+    - script:
+        name: merge error reports
+        code: |
+          count=`ls -1 build/reports/*.txt 2>/dev/null | wc -l`
+          if [ $count != 0 ]; then
+            cat build/reports/*.txt > error.txt
+          fi
     - miaoxing/github-issue-notify:
         token: $GITHUB_ISSUE_TOKEN
         repo: $GITHUB_ISSUE_REPO
+        title: "【$(date +%y-%m-%d)】Build failed: %title%"
+        error_file: error.txt
