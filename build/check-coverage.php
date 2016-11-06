@@ -37,7 +37,6 @@ function err($message, $args = null, $_ = null)
     $dir = 'build/reports';
     if (!is_dir($dir)) {
         mkdir($dir, 0777, true);
-        chmod($dir, 0777);
     }
     file_put_contents($dir . '/check-coverage.txt', $message);
 
