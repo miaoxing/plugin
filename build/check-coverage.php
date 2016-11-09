@@ -21,7 +21,7 @@ if ($percentage < $minPercentage) {
     return suc('覆盖率是%s%%,', $percentage);
 }
 
-function suc($message, $args = null, $_ = null)
+function suc($message, $args = null, $args2 = null)
 {
     $message = format(func_get_args());
     echo $message . PHP_EOL;
@@ -29,7 +29,7 @@ function suc($message, $args = null, $_ = null)
     return '';
 }
 
-function err($message, $args = null, $_ = null)
+function err($message, $args = null, $args2 = null)
 {
     $message = format(func_get_args());
     echo $message . PHP_EOL;
