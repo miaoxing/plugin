@@ -31,7 +31,11 @@
       <property name="exceptions" value="id,fn,ua,db,to"/>
     </properties>
   </rule>
-  <rule ref="rulesets/naming.xml/ShortMethodName" />
+  <rule ref="rulesets/naming.xml/ShortMethodName">
+    <properties>
+      <property name="exceptions" value="up"/>
+    </properties>
+  </rule>
   <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
 
   <rule ref="rulesets/unusedcode.xml/UnusedPrivateField" />
