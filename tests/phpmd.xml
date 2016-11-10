@@ -45,7 +45,7 @@
 
   <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/cleancode.xml/ConstructorNewOperator" />
   <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/cleancode.xml/PublicFieldDeclaration" />
-  <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/cleancode.xml/ReturnStatement" />
+  <!--<rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/cleancode.xml/ReturnStatement" />-->
   <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/cleancode.xml/TryStatement" />
 
   <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/naming.xml/ClassNameSuffix" />
