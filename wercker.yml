@@ -17,7 +17,7 @@ build:
         code: phpunit --verbose --stderr --coverage-text |& tee -a coverage.txt
     - script:
         name: check coverage
-        code: php build/check-coverage.php
+        code: php build/check-coverage.php 1
     - script:
         name: perform project mess detection using PHPMD
         code: phpmd . text tests/phpmd.xml --exclude vendor --ignore-violations-on-exit
