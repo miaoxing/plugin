@@ -57,7 +57,6 @@
   <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/cleancode.xml/TryStatement" />
 
   <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/naming.xml/ClassNameSuffix" />
-  <rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/naming.xml/CommentDescription" />
   <!--<rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/naming.xml/ControllerMethodName" />-->
   <!--<rule ref="/root/.composer/vendor/mi-schi/phpmd-extension/rulesets/naming.xml/MethodName" />-->
 </ruleset>

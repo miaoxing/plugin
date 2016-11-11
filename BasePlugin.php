@@ -44,6 +44,8 @@ class BasePlugin extends \miaoxing\plugin\BaseService
     protected $require = [];
 
     /**
+     * 插件的唯一数字ID
+     *
      * @var int
      */
     protected $id;
