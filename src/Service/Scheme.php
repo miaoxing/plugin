@@ -17,6 +17,8 @@ class Scheme extends BaseService
 
     const TYPE_INT = 'int';
 
+    const TYPE_MEDIUM_TEXT = 'mediumText';
+
     const TYPE_TINY_INT = 'tinyInt';
 
     const TYPE_SMALL_INT = 'smallInt';
@@ -92,6 +94,7 @@ class Scheme extends BaseService
         self::TYPE_CHAR => '',
         self::TYPE_DATETIME => "'0000-00-00 00:00:00'",
         self::TYPE_INT => '0',
+        self::TYPE_MEDIUM_TEXT => false,
         self::TYPE_TINY_INT => '0',
         self::TYPE_SMALL_INT => '0',
         self::TYPE_STRING => '',
@@ -108,6 +111,7 @@ class Scheme extends BaseService
             self::TYPE_CHAR => 'char',
             self::TYPE_DATETIME => 'datetime',
             self::TYPE_INT => 'int',
+            self::TYPE_MEDIUM_TEXT => 'mediumtext',
             self::TYPE_TINY_INT => 'tinyint',
             self::TYPE_SMALL_INT => 'smallint',
             self::TYPE_STRING => 'varchar',
@@ -387,6 +391,11 @@ class Scheme extends BaseService
     public function int($column, $length = null)
     {
         return $this->addColumn($column, self::TYPE_INT, ['length' => $length]);
+    }
+
+    public function mediumText($column)
+    {
+        return $this->addColumn($column, self::TYPE_MEDIUM_TEXT);
     }
 
     public function tinyInt($column, $length = null)

@@ -20,7 +20,7 @@ use Miaoxing\Plugin\Middleware\Auth;
  * @property \services\Url $url URL生成服务
  * @method   string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Wei\Ret $ret 返回值服务
- * @property \plugins\setting\services\Setting $setting
+ * @property \Miaoxing\Setting\Service\Setting\Setting $setting
  * @method   string setting($name, $default = null) 读取配置
  * @property \services\BaseQueue $queue 队列服务
  */
