@@ -32,7 +32,7 @@ class BaseControllerTestCase extends BaseTestCase
         $result = $this->dispatch($controller, $action);
 
         if ($result instanceof \Exception) {
-            $this->assertEquals(404, $result->getCode(), $action . '返回404');
+            $this->assertEquals(404, $result->getCode(), $action . '返回' . $result->getMessage());
         } else {
             if ($code) {
                 $this->assertEquals($code, $result->getStatusCode());
