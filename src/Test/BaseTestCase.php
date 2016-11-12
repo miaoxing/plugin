@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Test;
 
 use miaoxing\app\tests\BaseFixture;
-use tests\ResultPrinter;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
