@@ -1,11 +1,11 @@
 {
   "name": "miaoxing/plugin",
   "keywords": [
-    "plugin"
+    "miaoxing", "plugin"
   ],
   "license": "MIT",
   "require": {
-    "wei/wei": "0.9.*"
+    "wei/wei": "dev-master@dev"
   },
   "autoload": {
     "psr-4": {
@@ -17,5 +17,7 @@
     "psr-4": {
       "MiaoxingTest\\Plugin\\": "tests"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
