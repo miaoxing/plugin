@@ -9,7 +9,7 @@ trait Service
      *
      * @var array
      */
-    protected $providers = array();
+    protected $providers = [];
 
     /**
      * Invoke a service by the given name
@@ -31,6 +31,6 @@ trait Service
      */
     public function __get($name)
     {
-        return $this->$name = $this->wei->get($name, array(), $this->providers);
+        return $this->$name = $this->wei->get($name, [], $this->providers);
     }
 }
