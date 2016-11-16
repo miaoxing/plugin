@@ -17,6 +17,8 @@ class Scheme extends BaseService
 
     const TYPE_DATETIME = 'datetime';
 
+    const TYPE_DOUBLE = 'double';
+
     const TYPE_INT = 'int';
 
     const TYPE_MEDIUM_TEXT = 'mediumText';
@@ -96,6 +98,7 @@ class Scheme extends BaseService
         self::TYPE_BOOL => '0',
         self::TYPE_CHAR => '',
         self::TYPE_DATETIME => "'0000-00-00 00:00:00'",
+        self::TYPE_DOUBLE => '0',
         self::TYPE_INT => '0',
         self::TYPE_MEDIUM_TEXT => false,
         self::TYPE_TINY_INT => '0',
@@ -114,6 +117,7 @@ class Scheme extends BaseService
             self::TYPE_BOOL => 'tinyint(1)',
             self::TYPE_CHAR => 'char',
             self::TYPE_DATETIME => 'datetime',
+            self::TYPE_DOUBLE => 'double',
             self::TYPE_INT => 'int',
             self::TYPE_MEDIUM_TEXT => 'mediumtext',
             self::TYPE_TINY_INT => 'tinyint',
@@ -130,6 +134,7 @@ class Scheme extends BaseService
     protected $unsignedTypes = [
         self::TYPE_BIG_INT,
         self::TYPE_BOOL,
+        self::TYPE_DOUBLE,
         self::TYPE_INT,
         self::TYPE_TINY_INT,
         self::TYPE_SMALL_INT,
@@ -391,6 +396,11 @@ class Scheme extends BaseService
     public function char($column, $length = 255)
     {
         return $this->addColumn($column, self::TYPE_CHAR, ['length' => $length]);
+    }
+
+    public function double($column)
+    {
+        return $this->addColumn($column, self::TYPE_DOUBLE);
     }
 
     public function string($column, $length = 255)
