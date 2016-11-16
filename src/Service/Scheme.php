@@ -9,6 +9,8 @@ use miaoxing\plugin\BaseService;
  */
 class Scheme extends BaseService
 {
+    const TYPE_BIG_INT = 'bigInt';
+
     const TYPE_BOOL = 'bool';
 
     const TYPE_CHAR = 'char';
@@ -90,6 +92,7 @@ class Scheme extends BaseService
     ];
 
     protected $typeDefaults = [
+        self::TYPE_BIG_INT => '0',
         self::TYPE_BOOL => '0',
         self::TYPE_CHAR => '',
         self::TYPE_DATETIME => "'0000-00-00 00:00:00'",
@@ -107,6 +110,7 @@ class Scheme extends BaseService
      */
     protected $typeMaps = [
         'mysql' => [
+            self::TYPE_BIG_INT => 'bigint',
             self::TYPE_BOOL => 'tinyint(1)',
             self::TYPE_CHAR => 'char',
             self::TYPE_DATETIME => 'datetime',
@@ -124,6 +128,7 @@ class Scheme extends BaseService
      * @var array
      */
     protected $unsignedTypes = [
+        self::TYPE_BIG_INT,
         self::TYPE_BOOL,
         self::TYPE_INT,
         self::TYPE_TINY_INT,
@@ -371,6 +376,11 @@ class Scheme extends BaseService
         $this->db->executeUpdate($this->getSql());
 
         return $this;
+    }
+
+    public function bigInt($column)
+    {
+        return $this->addColumn($column, self::TYPE_BIG_INT);
     }
 
     public function bool($column)
