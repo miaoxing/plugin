@@ -34,16 +34,6 @@ class BasePlugin extends \miaoxing\plugin\BaseService
     protected $description = '';
 
     /**
-     * 插件的依赖关系
-     *
-     * @var array
-     * @link https://github.com/npm/node-semver
-     * @link https://getcomposer.org/doc/01-basic-usage.md#package-versions
-     * @todo 废弃,改为composer.json
-     */
-    protected $require = [];
-
-    /**
      * 插件的唯一数字ID
      *
      * @var int
