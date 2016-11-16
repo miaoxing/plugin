@@ -2,8 +2,6 @@
 
 namespace miaoxing\plugin
 {
-
-    use Miaoxing\Plugin\Service\App;
     use services\BaiduApi;
     use services\BaseQueue;
     use services\Chart;
@@ -21,7 +19,6 @@ namespace miaoxing\plugin
     use services\RedisQueue;
     use services\SafeUrl;
     use services\SinaApi;
-    use services\StatsD;
     use services\SyncQueue;
     use services\TaobaoApi;
     use services\Xml;
@@ -44,7 +41,6 @@ namespace miaoxing\plugin
      * @property    BaiduApi $baiduApi 百度Web服务API
      * @property    SinaApi $sinaApi 新浪Web服务API
      * @property    TaobaoApi $taobaoApi 淘宝Web服务API
-     * @property    StatsD $statsD Sends statistics to the stats daemon over UDP
      * @property    BaseQueue $queue 队列服务
      * @property    SyncQueue $syncQueue 同步的队列服务
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
