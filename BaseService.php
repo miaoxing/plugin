@@ -2,7 +2,7 @@
 
 namespace miaoxing\plugin
 {
-    use services\BaiduApi;
+    use Miaoxing\Region\Service\BaiduApi;
     use services\BaseQueue;
     use services\Chart;
     use services\Coll;
@@ -12,15 +12,13 @@ namespace miaoxing\plugin
     use services\Excel;
     use services\Handlebars;
     use services\Html;
-    use services\Lbs;
+    use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
     use services\QueueWorker;
     use services\Random;
     use services\RedisQueue;
     use services\SafeUrl;
-    use services\SinaApi;
     use services\SyncQueue;
-    use services\TaobaoApi;
     use services\Xml;
 
     /**
@@ -39,8 +37,6 @@ namespace miaoxing\plugin
      * @property    Chart $chart 构造图表数据的辅助服务
      * @property    Lbs $lbs 基于位置的服务
      * @property    BaiduApi $baiduApi 百度Web服务API
-     * @property    SinaApi $sinaApi 新浪Web服务API
-     * @property    TaobaoApi $taobaoApi 淘宝Web服务API
      * @property    BaseQueue $queue 队列服务
      * @property    SyncQueue $syncQueue 同步的队列服务
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
