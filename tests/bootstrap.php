@@ -54,7 +54,12 @@ foreach ($sqlFiles as $file) {
     loadTable($db, $file, $table);
 }
 
-// 3. 执行迁移语句
+// 3. 逐个安装插件
+foreach ($wei->plugin->getAll() as $plugin) {
+    $wei->plugin->install($plugin->getId());
+}
+
+// 4. 执行迁移语句
 $wei->migration->migrate();
 
 function loadTable(Db $db, $file, $table)
