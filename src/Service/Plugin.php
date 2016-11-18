@@ -33,7 +33,7 @@ class Plugin extends BaseService
         '.',
         'plugins/*',
         'src',
-        'vendor/*/*/src'
+        'vendor/*/*/src',
     ];
 
     /**
