@@ -17,6 +17,8 @@ class Scheme extends BaseService
 
     const TYPE_DATETIME = 'datetime';
 
+    const TYPE_DECIMAL = 'decimal';
+
     const TYPE_DOUBLE = 'double';
 
     const TYPE_INT = 'int';
@@ -52,6 +54,11 @@ class Scheme extends BaseService
      * @var string
      */
     protected $collate = 'utf8mb4_unicode_ci';
+
+    /**
+     * @var string
+     */
+    protected $tableComment = '';
 
     /**
      * @var bool
@@ -98,6 +105,7 @@ class Scheme extends BaseService
         self::TYPE_BOOL => '0',
         self::TYPE_CHAR => '',
         self::TYPE_DATETIME => "'0000-00-00 00:00:00'",
+        self::TYPE_DECIMAL => '0',
         self::TYPE_DOUBLE => '0',
         self::TYPE_INT => '0',
         self::TYPE_MEDIUM_TEXT => false,
@@ -117,6 +125,7 @@ class Scheme extends BaseService
             self::TYPE_BOOL => 'tinyint(1)',
             self::TYPE_CHAR => 'char',
             self::TYPE_DATETIME => 'datetime',
+            self::TYPE_DECIMAL => 'decimal',
             self::TYPE_DOUBLE => 'double',
             self::TYPE_INT => 'int',
             self::TYPE_MEDIUM_TEXT => 'mediumtext',
@@ -155,6 +164,7 @@ class Scheme extends BaseService
         $this->indexes = [];
         $this->lastColumn = null;
         $this->autoIncrement = '';
+        $this->tableComment = '';
     }
 
     /**
@@ -248,6 +258,10 @@ class Scheme extends BaseService
             $sql .= ' COLLATE=' . $this->collate;
         }
 
+        if ($this->tableComment) {
+            $sql .= " COMMENT='" . $this->tableComment . "'";
+        }
+
         return $sql;
     }
 
@@ -277,7 +291,11 @@ class Scheme extends BaseService
         $sql = $this->typeMaps[$driver][$options['type']];
 
         if ($options['length']) {
-            $sql .= '(' . $options['length'] . ')';
+            if ($options['scale']) {
+                $sql .= '(' . $options['length'] . ', ' . $options['scale'] .  ')';
+            } else {
+                $sql .= '(' . $options['length'] . ')';
+            }
         }
 
         return $sql;
@@ -396,6 +414,11 @@ class Scheme extends BaseService
     public function char($column, $length = 255)
     {
         return $this->addColumn($column, self::TYPE_CHAR, ['length' => $length]);
+    }
+
+    public function decimal($column, $length, $scale = 2)
+    {
+        return $this->addColumn($column, self::TYPE_DECIMAL, ['length' => $length, 'scale' => $scale]);
     }
 
     public function double($column)
@@ -553,5 +576,12 @@ class Scheme extends BaseService
     public function timestamps()
     {
         return $this->timestamp('createTime')->timestamp('updateTime');
+    }
+
+    public function tableComment($comment)
+    {
+        $this->tableComment = $comment;
+
+        return $this;
     }
 }
