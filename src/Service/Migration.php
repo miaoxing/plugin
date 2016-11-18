@@ -101,6 +101,7 @@ class Migration extends BaseService
 
         if (!$migrationIds) {
             $this->writeln($cli->success('Nothing to rollback.'));
+
             return;
         }
 
@@ -123,7 +124,7 @@ class Migration extends BaseService
 
         if ($req['plugin-id']) {
             $plugin = $this->plugin->getOneById($req['plugin-id']);
-            $path = $plugin->getBasePath() . '/src/Migration';;
+            $path = $plugin->getBasePath() . '/src/Migration';
             $reflection = new ReflectionClass($plugin);
             $namespace = $reflection->getNamespaceName() . '\\Migration';
         } else {
@@ -154,6 +155,7 @@ class Migration extends BaseService
         $status = $this->getStatus();
         if (!$status) {
             $this->writeln('No migrations found.');
+
             return;
         }
 
