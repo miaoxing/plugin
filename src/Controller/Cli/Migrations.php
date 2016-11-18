@@ -50,6 +50,7 @@ class Migrations extends BaseController
     protected function createDefinition()
     {
         $this->addArgument('name');
-        $this->addOption('path');
+        $this->addOption('path', 'p');
+        $this->addOption('plugin-id', 'i');
     }
 }

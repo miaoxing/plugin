@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use miaoxing\plugin\BaseService;
+use ReflectionClass;
 use Wei\Db;
 use Wei\RetTrait;
 
@@ -119,19 +120,28 @@ class Migration extends BaseService
     public function create($req)
     {
         $class = 'V' . date('YmdHis') . $req['name'];
-        $path = $req['path'] . '/' . $class . '.php';
 
-        if (!is_dir($req['path'])) {
-            mkdir($req['path'], 0777, true);
-            chmod($req['path'], 0777);
+        if ($req['plugin-id']) {
+            $plugin = $this->plugin->getOneById($req['plugin-id']);
+            $path = $plugin->getBasePath() . '/src/Migration';;
+            $reflection = new ReflectionClass($plugin);
+            $namespace = $reflection->getNamespaceName() . '\\Migration';
+        } else {
+            $path = $req['path'];
+            $namespace = $req['namespace'];
+        }
+
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+            chmod($path, 0777);
         }
 
         ob_start();
         require  'vendor/miaoxing/plugin/resources/stubs/migration.php';
         $content = ob_get_clean();
 
-        file_put_contents($path, $content);
-        chmod($path, 0777);
+        $file = $path . '/' . $class . '.php';
+        file_put_contents($file, $content);
 
         return $this->suc();
     }

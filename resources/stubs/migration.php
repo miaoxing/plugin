@@ -3,8 +3,10 @@
 echo '<?php';
 ?>
 
+<?php if ($namespace) : ?>
 
-namespace MyNamespace\Migration;
+namespace <?= $namespace ?>;
+<?php endif ?>
 
 use Miaoxing\Plugin\BaseMigration;
 
