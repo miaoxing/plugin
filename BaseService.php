@@ -5,7 +5,7 @@ namespace miaoxing\plugin
     use Miaoxing\Region\Service\BaiduApi;
     use services\BaseQueue;
     use services\Chart;
-    use services\Coll;
+    use Miaoxing\App\Service\Coll;
     use services\CsvExporter;
     use services\DataProvider;
     use services\dataProviders;
