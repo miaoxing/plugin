@@ -25,11 +25,6 @@ class Plugin extends BaseService
     const DEFAULT_PRIORITY = 100;
 
     /**
-     * @var string
-     */
-    protected $curNamespace;
-
-    /**
      * 插件所在的目录,允许使用通配符
      *
      * @var array

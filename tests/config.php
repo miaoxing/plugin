@@ -64,8 +64,5 @@ return [
     ],
     'error.logger' => [
 
-    ],
-    'plugin' => [
-        'curNamespace' => 'Miaoxing\Plugin',
-    ],
+    ]
 ];
