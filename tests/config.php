@@ -21,7 +21,7 @@ return [
         ],
     ],
     'app' => [
-        'namespace' => 'test',
+        'namespace' => 'app',
     ],
     // 各项目的数据库
     'db' => [
