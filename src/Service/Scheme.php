@@ -149,6 +149,14 @@ class Scheme extends BaseService
         self::TYPE_SMALL_INT,
     ];
 
+    /**
+     * @var array
+     */
+    protected $stringTypes = [
+        self::TYPE_CHAR,
+        self::TYPE_STRING,
+    ];
+
     public function table($table)
     {
         $this->reset();
@@ -338,6 +346,10 @@ class Scheme extends BaseService
         switch (true) {
             case $default === '':
                 $value = "''";
+                break;
+
+            case in_array($options['type'], $this->stringTypes):
+                $value = var_export($default, true);
                 break;
 
             case $default === null:
