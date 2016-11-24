@@ -24,6 +24,7 @@ cache:
 
 before_install:
   - phpenv config-add tests/travis.ini
+  - nvm install node
 
 install:
   - composer install --no-interaction
