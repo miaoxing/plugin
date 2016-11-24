@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行命令
