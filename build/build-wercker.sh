@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # 1. 执行各类检查
 bash "${BASH_SOURCE[0]%/*}/phpunit.sh"
 bash "${BASH_SOURCE[0]%/*}/phpcs.sh"

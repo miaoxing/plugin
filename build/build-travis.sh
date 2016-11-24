@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # 1. 执行各类检查
 mkdir -p reports
 PATH=~/.composer/vendor/bin:$PATH
