@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 changed_files=()
 function get_changed_files () {
   # 1. 取出更改的文件
