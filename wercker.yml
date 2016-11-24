@@ -13,22 +13,11 @@ build:
           while ! nc -q 1 $MYSQL_PORT_3306_TCP_ADDR $MYSQL_PORT_3306_TCP_PORT < /dev/null; do sleep 2; done
     - mbrevda/composer-install@1.0.1
     - script:
-        name: PHPUnit integration tests
-        code: phpunit --verbose --stderr --coverage-text |& tee -a coverage.txt
-    - script:
-        name: check coverage
-        code: php build/check-coverage.php 1
-    - script:
-        name: perform project mess detection using PHPMD
-        code: phpmd . text tests/phpmd.xml --exclude vendor --ignore-violations-on-exit
-  after-steps:
-    - script:
-        name: merge error reports
+        name: check all rules
         code: |
-          count=`ls -1 build/reports/*.txt 2>/dev/null | wc -l`
-          if [ $count != 0 ]; then
-            cat build/reports/*.txt > error.txt
-          fi
+          bash build/build-wercker.sh
+          php build/check-coverage.php 1
+  after-steps:
     - miaoxing/github-issue-notify:
         token: $GITHUB_ISSUE_TOKEN
         repo: $GITHUB_ISSUE_REPO

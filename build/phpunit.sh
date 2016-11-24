@@ -4,10 +4,10 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行检查
 report="reports/phpunit.txt"
-command="phpunit --verbose --stderr --coverage-clover build/logs/clover.xml"
+command="phpunit --verbose --stderr --coverage-clover build/logs/clover.xml --coverage-text"
 echo "${command}";
 
-${command} | tee ${report}
+${command} 2>&1 | tee ${report}
 
 # 2. 调整报告
 if [[ ${PIPESTATUS[0]} == 0 ]]; then
