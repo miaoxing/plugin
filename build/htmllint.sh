@@ -3,11 +3,17 @@
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行命令
+
+config=""
+if [ ! -e ".htmllintrc" ]; then
+  config=" --rc=vendor/miaoxing/plugin/.htmllintrc"
+fi
+
 files=`find resources/views -type f`
 files=${files//
 / }
 report="reports/htmllint.txt"
-command="htmllint ${files[@]}"
+command="htmllint$config ${files[@]}"
 echo "${command}";
 
 ${command} | tee ${report}

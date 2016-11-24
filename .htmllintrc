@@ -1,0 +1,22 @@
+{
+  "plugins": [],
+  "attr-name-style": "dash",
+  "attr-req-value": true,
+  "class-no-dup": true,
+  "doctype-html5": true,
+  "id-class-ignore-regex": "<\\?=(.+?)\\?>",
+  "id-class-no-ad": true,
+  "id-class-style": "dash",
+  "id-no-dup": true,
+  "img-req-alt": false,
+  "indent-style": "spaces",
+  "indent-width": 2,
+  "label-req-for": false,
+  "tag-bans": [
+    "style",
+    "b"
+  ],
+  "tag-close": true,
+  "tag-name-lowercase": true,
+  "tag-name-match": true
+}

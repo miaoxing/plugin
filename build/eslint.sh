@@ -3,8 +3,18 @@
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行命令
+
+config=""
+if [ ! -e ".eslintrc.json" ]; then
+  config=" --config=vendor/miaoxing/plugin/.eslintrc.json"
+fi
+
+if [ ! -e ".eslintignore" ]; then
+  config+=" --ignore-path=vendor/miaoxing/plugin/.eslintignore"
+fi
+
 report="reports/eslint.txt"
-command="eslint ."
+command="eslint$config ."
 echo "${command}";
 
 ${command} | tee ${report}
