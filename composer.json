@@ -7,9 +7,6 @@
   "require": {
     "wei/wei": "dev-master@dev"
   },
-  "require-dev": {
-    "miaoxing/build": "dev-master@dev"
-  },
   "autoload": {
     "psr-4": {
       "Miaoxing\\Plugin\\": "src",
