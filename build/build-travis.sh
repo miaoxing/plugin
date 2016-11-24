@@ -25,10 +25,15 @@ fi
 
 # Check if error file not empty
 if [ -e "$error_file" ]; then
-    detail=$(cat "$error_file")
+  detail=$(cat "$error_file")
 else
-    echo "error file \"$error_file\" not found"
-    exit 0
+  echo "error file \"$error_file\" not found"
+  exit 0
+fi
+
+if [ "$detail" == "" ]; then
+  echo "error file is empty"
+  exit 0
 fi
 
 # Build issue title
@@ -42,13 +47,11 @@ Message: $message
 
 "
 
-if [ "$detail" != "" ]; then
-    body+="Detail:
+body+="Detail:
 \`\`\`
 $detail
 \`\`\`
 "
-fi
 
 body+="
 
