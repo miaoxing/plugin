@@ -4,7 +4,7 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行检查
 report="reports/phpcs.txt"
-command="phpcs --standard=Miaoxing --report-file=${report} ."
+command="phpcs --standard=Miaoxing --report-file=${report} -v ."
 echo "${command}";
 
 ${command}
