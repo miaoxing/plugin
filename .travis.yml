@@ -36,7 +36,3 @@ script:
 after_success:
   - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
   - travis_retry php coveralls.phar -v --exclude-no-stmt
-
-notifications:
-  webhooks:
-    - http://build.miaoxingyun.com/travis-notifications
