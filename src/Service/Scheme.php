@@ -587,7 +587,17 @@ class Scheme extends BaseService
 
     public function timestamps()
     {
-        return $this->timestamp('createTime')->timestamp('updateTime');
+        return $this->timestamp('created_at')->timestamp('updated_at');
+    }
+
+    public function userstamps()
+    {
+        return $this->int('created_by')->int('updated_by');
+    }
+
+    public function softDeletable()
+    {
+        return $this->timestamp('deleted_at')->int('deleted_by');
     }
 
     public function tableComment($comment)

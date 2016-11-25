@@ -43,6 +43,20 @@ class BaseModel extends Record implements JsonSerializable
      */
     protected $defaultCacheTime = 1800;
 
+    protected $appIdColumn = 'appId';
+
+    protected $createAtColumn = 'createTime';
+
+    protected $updateAtColumn = 'updateTime';
+
+    protected $createdByColumn = 'createUser';
+
+    protected $updatedByColumn = 'updateUser';
+
+    protected $deletedAtColumn = 'deleteTime';
+
+    protected $deletedByColumn = 'deleteUser';
+
     /**
      * @return BaseModel|BaseModel[]
      */
@@ -62,23 +76,27 @@ class BaseModel extends Record implements JsonSerializable
             $this['id'] = wei()->seq();
         }
 
-        if (in_array('createTime', $this->getFields()) && !$this['createTime']) {
-            $this['createTime'] = date('Y-m-d H:i:s');
+        $fields = $this->getFields();
+
+        if (in_array($this->createAtColumn, $fields) && !$this[$this->createAtColumn]) {
+            $this[$this->createAtColumn] = date('Y-m-d H:i:s');
         }
 
-        if (in_array('createUser', $this->getFields()) && !$this['createUser']) {
-            $this['createUser'] = (int) wei()->curUser['id'];
+        if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
+            $this[$this->createdByColumn] = (int) wei()->curUser['id'];
         }
     }
 
     public function beforeSave()
     {
-        if (in_array('updateTime', $this->getFields())) {
-            $this['updateTime'] = date('Y-m-d H:i:s');
+        $fields = $this->getFields();
+
+        if (in_array($this->updateAtColumn, $fields)) {
+            $this[$this->updateAtColumn] = date('Y-m-d H:i:s');
         }
 
-        if (in_array('updateUser', $this->getFields())) {
-            $this['updateUser'] = (int) wei()->curUser['id'];
+        if (in_array($this->updatedByColumn, $fields)) {
+            $this[$this->updatedByColumn] = (int) wei()->curUser['id'];
         }
     }
 
@@ -113,9 +131,9 @@ class BaseModel extends Record implements JsonSerializable
     {
         $appId = wei()->app->getId();
         // 设置默认数据,初始化时就会带上
-        $this->data['appId'] = $appId;
+        $this->data[$this->appIdColumn] = $appId;
 
-        return $this->andWhere(['appId' => $appId]);
+        return $this->andWhere([$this->appIdColumn => $appId]);
     }
 
     /**
@@ -126,7 +144,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function setAppId($appId = null)
     {
-        return $this->set('appId', $appId ?: wei()->app->getId());
+        return $this->set($this->appIdColumn, $appId ?: wei()->app->getId());
     }
 
     /**
@@ -136,7 +154,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function notDeleted()
     {
-        return $this->andWhere([$this->fullTable . '.deleteTime' => '0000-00-00 00:00:00']);
+        return $this->andWhere([$this->fullTable . '.' . $this->deletedAtColumn => '0000-00-00 00:00:00']);
     }
 
     /**
@@ -146,7 +164,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function deleted()
     {
-        return $this->andWhere($this->fullTable . ".deleteTime != '0000-00-00 00:00:00'");
+        return $this->andWhere($this->fullTable . '.' . $this->deletedAtColumn . " != '0000-00-00 00:00:00'");
     }
 
     /**
@@ -189,8 +207,8 @@ class BaseModel extends Record implements JsonSerializable
     public function softDelete()
     {
         return $this->save([
-            'deleteTime' => date('Y-m-d H:i:s'),
-            'deleteUser' => (int) wei()->curUser['id'],
+            $this->deletedAtColumn => date('Y-m-d H:i:s'),
+            $this->deletedByColumn => (int) wei()->curUser['id'],
         ]);
     }
 
@@ -201,7 +219,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function isSoftDeleted()
     {
-        return $this['deleteTime'] && $this['deleteTime'] != '0000-00-00 00:00:00';
+        return $this[$this->deletedAtColumn] && $this[$this->deletedAtColumn] != '0000-00-00 00:00:00';
     }
 
     /**
@@ -300,7 +318,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function getDbTable($table)
     {
-        return wei()->app->getDbName($this['appId']) . '.' . $table;
+        return wei()->app->getDbName($this[$this->appId]) . '.' . $table;
     }
 
     /**
