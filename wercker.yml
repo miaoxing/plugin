@@ -7,19 +7,13 @@ services:
 
 build:
   steps:
+    - mbrevda/composer-install@1.0.1
     - script:
         name: wait for mysql connection
         code: |
           while ! nc -q 1 $MYSQL_PORT_3306_TCP_ADDR $MYSQL_PORT_3306_TCP_PORT < /dev/null; do sleep 2; done
-    - mbrevda/composer-install@1.0.1
     - script:
         name: check all rules
         code: |
           bash build/build-wercker.sh
           php build/check-coverage.php 1
-  after-steps:
-    - miaoxing/github-issue-notify:
-        token: $GITHUB_ISSUE_TOKEN
-        repo: $GITHUB_ISSUE_REPO
-        title: "【$(date +%y-%m-%d)】Build failed: %title%"
-        error_file: error.txt
