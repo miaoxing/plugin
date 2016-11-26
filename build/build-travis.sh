@@ -4,7 +4,7 @@
 mkdir -p reports
 PATH=~/.composer/vendor/bin:$PATH
 
-bash "${BASH_SOURCE[0]%/*}/phpunit.sh"
+bash "${BASH_SOURCE[0]%/*}/phpunit.sh" "$@"
 
 if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
   bash "${BASH_SOURCE[0]%/*}/phpcs.sh"

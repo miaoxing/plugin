@@ -15,5 +15,4 @@ build:
     - script:
         name: check all rules
         code: |
-          bash build/build-wercker.sh
-          php build/check-coverage.php 1
+          bash build/build-wercker.sh --coverage 1
