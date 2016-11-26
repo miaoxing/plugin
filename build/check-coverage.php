@@ -34,7 +34,7 @@ function err($message, $args = null, $args2 = null)
     $message = format(func_get_args());
     echo $message . PHP_EOL;
 
-    $dir = 'build/reports';
+    $dir = 'reports';
     if (!is_dir($dir)) {
         mkdir($dir, 0777, true);
     }
