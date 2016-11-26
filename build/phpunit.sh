@@ -21,5 +21,5 @@ fi
 
 # 3. 检查覆盖率
 if [[ $1 == '--coverage' ]]; then
-  php "${BASH_SOURCE[0]%/*}/check-coverage.php.sh" $2
+  php "${BASH_SOURCE[0]%/*}/check-coverage.php" $2
 fi
