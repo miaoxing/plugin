@@ -14,7 +14,7 @@ files=${files//
 / }
 report="reports/htmllint.txt"
 command="htmllint$config ${files[@]}"
-echo "${command}";
+info "${command}";
 
 ${command} | tee ${report}
 

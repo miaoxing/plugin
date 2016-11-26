@@ -15,7 +15,7 @@ fi
 
 report="reports/eslint.txt"
 command="eslint$config ."
-echo "${command}";
+info "${command}";
 
 ${command} | tee ${report}
 

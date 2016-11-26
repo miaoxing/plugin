@@ -14,7 +14,7 @@ command="phpmd . text $config \
 --reportfile-text ${report} \
 --exclude vendor \
 --ignore-violations-on-exit"
-echo "${command}";
+info "${command}";
 
 ${command}
 code=$?

@@ -17,7 +17,7 @@ fi
 # 2. 执行命令
 report="reports/csslint.txt"
 command="csslint$config public"
-echo "${command}";
+info "${command}";
 
 ${command} | tee ${report}
 

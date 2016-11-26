@@ -7,7 +7,7 @@ report="reports/phpunit.txt"
 coverage_report="coverage.txt"
 base_command="phpunit --verbose --stderr"
 command="${base_command} --coverage-clover build/logs/clover.xml --coverage-text"
-echo "${command}";
+info "${command}";
 
 ${command} 2>&1 | tee ${coverage_report}
 
