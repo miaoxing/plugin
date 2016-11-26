@@ -18,8 +18,3 @@ if [[ ${PIPESTATUS[0]} == 0 ]]; then
 else
   append_report "${report}" "${base_command}"
 fi
-
-# 3. 检查覆盖率
-if [[ $1 == '--coverage' ]]; then
-  php "${BASH_SOURCE[0]%/*}/check-coverage.php" $2
-fi

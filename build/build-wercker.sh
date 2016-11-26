@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # 1. 执行各类检查
-bash "${BASH_SOURCE[0]%/*}/phpunit.sh" "$@"
+bash "${BASH_SOURCE[0]%/*}/phpunit.sh"
+php "${BASH_SOURCE[0]%/*}/check-coverage.php" $2
 bash "${BASH_SOURCE[0]%/*}/phpcs.sh"
 bash "${BASH_SOURCE[0]%/*}/phpmd.sh"
 bash "${BASH_SOURCE[0]%/*}/csslint.sh"

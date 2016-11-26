@@ -18,7 +18,7 @@ $percentage = $matches[1];
 if ($percentage < $minPercentage) {
     return err('当前覆盖率(%s%%)过低,至少需要%s%%,请增加单元测试', $percentage, $minPercentage);
 } else {
-    return suc('覆盖率是%s%%,', $percentage);
+    return suc('覆盖率是%s%%,达到要求的%s%', $percentage, $minPercentage);
 }
 
 function suc($message, $args = null, $args2 = null)
