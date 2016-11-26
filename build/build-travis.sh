@@ -6,7 +6,6 @@ PATH=~/.composer/vendor/bin:$PATH
 
 bash "${BASH_SOURCE[0]%/*}/phpunit.sh"
 
-
 if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
   if [[ $1 == '--coverage' ]]; then
     php "${BASH_SOURCE[0]%/*}/check-coverage.php" $2
