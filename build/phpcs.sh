@@ -10,6 +10,6 @@ info "${command}";
 ${command} || true
 
 # 2. 移除最后两行空白,并附加命令到报告中
-< "${report}" tail -n +2 | tail -r > temp.txt
+sed -e :a -e '$d;N;2,2ba' -e 'P;D' "${report}" > temp.txt
 mv temp.txt "${report}"
 append_report "${report}" "${command}"
