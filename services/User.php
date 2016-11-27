@@ -370,11 +370,7 @@ class User extends BaseModel
 
         // TODO 移到插件中
         if ($this['wechatOpenId']) {
-            try {
-                $this->db->insert('wechatSyncUsers', ['id' => $this['id']]);
-            } catch (\Exception $e) {
-                wei()->logger->alert($e);
-            }
+            $this->db->insert('wechatSyncUsers', ['id' => $this['id']]);
         }
     }
 
@@ -419,15 +415,15 @@ class User extends BaseModel
      */
     public function setStatus($position, $value)
     {
-        $t = pow(2, $position - 1);
+        $status = pow(2, $position - 1);
         if ($value) {
-            $t = $this['status'] | $t;
+            $status = $this['status'] | $status;
         } elseif ($this['status'] !== null) {
-            $t = $this['status'] & ~$t;
+            $status = $this['status'] & ~$status;
         } else {
-            $t = ~$t;
+            $status = ~$status;
         }
-        $this['status'] = $t & 0xFFFF;
+        $this['status'] = $status & 0xFFFF;
 
         return $this;
     }
@@ -438,7 +434,7 @@ class User extends BaseModel
      * @param int $position
      * @return bool
      */
-    public function getStatus($position)
+    public function isStatus($position)
     {
         return (bool) ($this['status'] & pow(2, $position - 1));
     }
@@ -541,7 +537,7 @@ class User extends BaseModel
      */
     public function updateData($data)
     {
-        $isMobileVerified = $this->getStatus(static::STATUS_MOBILE_VERIFIED);
+        $isMobileVerified = $this->isStatus(static::STATUS_MOBILE_VERIFIED);
 
         $validator = wei()->validate([
             'data' => $data,

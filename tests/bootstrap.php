@@ -51,7 +51,10 @@ $appTables = [
 foreach ($sqlFiles as $file) {
     $table = basename($file, '.sql');
     $db = in_array($table, $appTables) ? $wei->appDb : $wei->db;
-    loadTable($db, $file, $table);
+    $result = $db->fetch('SHOW TABLES LIKE ?', $table);
+    if (!$result) {
+        $db->executeUpdate(file_get_contents($file));
+    }
 }
 
 // 3. 逐个安装插件
@@ -61,11 +64,3 @@ foreach ($wei->plugin->getAll() as $plugin) {
 
 // 4. 执行迁移语句
 $wei->migration->migrate();
-
-function loadTable(Db $db, $file, $table)
-{
-    $result = $db->fetch('SHOW TABLES LIKE ?', $table);
-    if (!$result) {
-        $db->executeUpdate(file_get_contents($file));
-    }
-}

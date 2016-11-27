@@ -1,7 +1,7 @@
 <?php
 
-namespace miaoxing\plugin
-{
+namespace miaoxing\plugin {
+
     use Miaoxing\Region\Service\BaiduApi;
     use services\BaseQueue;
     use services\Chart;
@@ -65,8 +65,8 @@ namespace miaoxing\plugin
     }
 }
 
-namespace
-{
+namespace {
+
     if (!function_exists('wei')) {
         /**
          * @return \miaoxing\plugin\BaseService

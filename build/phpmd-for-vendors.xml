@@ -53,7 +53,6 @@
   <rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/cleancode.xml/ConstructorNewOperator" />
   <rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/cleancode.xml/PublicFieldDeclaration" />
   <!--<rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/cleancode.xml/ReturnStatement" />-->
-  <rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/cleancode.xml/TryStatement" />
 
   <rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/naming.xml/ClassNameSuffix" />
   <!--<rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/naming.xml/ControllerMethodName" />-->

@@ -50,8 +50,12 @@ class BaseControllerTestCase extends BaseTestCase
         $controllerClass = array_pop($controllerClasses);
         $actions = get_class_methods($controllerClass);
 
-        if (is_null($actions)) {
-            throw new \Exception(sprintf('Action method not found in controller %s class %s', $controller, $controllerClass));
+        if ($actions === null) {
+            throw new \Exception(sprintf(
+                'Action method not found in controller %s class %s',
+                $controller,
+                $controllerClass
+            ));
         }
 
         $params = [];

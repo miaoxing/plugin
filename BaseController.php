@@ -49,7 +49,7 @@ abstract class BaseController extends \Wei\BaseController
      */
     protected $guestPages = [
         'mall', 'wechat', 'auto', 'cli',
-        /* 非多级控制器在子类中配置 */
+        // 非多级控制器在子类中配置
     ];
 
     /**
@@ -77,8 +77,7 @@ abstract class BaseController extends \Wei\BaseController
 
         $this->initViewVars();
 
-        $this->middleware(
-            Auth::className(), [
+        $this->middleware(Auth::className(), [
             'guestPages' => $this->guestPages,
             'adminGuestPages' => $this->adminGuestPages,
         ]);

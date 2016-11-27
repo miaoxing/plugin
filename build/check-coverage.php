@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 $file = 'coverage.txt';
 $minPercentage = isset($argv[1]) ? (int) $argv[1] : 30;
 

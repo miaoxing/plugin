@@ -19,7 +19,6 @@
           <th>版本</th>
           <th>描述</th>
           <th>安装</th>
-          <!--<th style="width: 120px">操作</th>-->
         </tr>
         </thead>
         <tbody>
@@ -40,7 +39,7 @@
 <script id="table-actions" type="text/html">
   <div class="action-buttons">
     <a href="<%= $.url('admin/plugin/show', {id: id}) %>"
-       target="_blank" title="查看">
+      target="_blank" title="查看">
       <i class="fa fa-search-plus bigger-130"></i>
     </a>
   </div>
@@ -82,14 +81,7 @@
               value: data
             });
           }
-        }/*,
-         {
-         data: 'id',
-         sClass: 'text-center',
-         render: function (data, type, full) {
-         return template.render('table-actions', full)
-         }
-         }*/
+        }
       ]
     });
 

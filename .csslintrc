@@ -1,4 +1,4 @@
---ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors
+--ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors,bulletproof-font-face
 --exclude-list=comps/,dist/,vendor/
 --errors=known-properties,outline-none,display-property-grouping, \
 bulletproof-font-face,qualified-headings, \

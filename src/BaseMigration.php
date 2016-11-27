@@ -17,7 +17,6 @@ class BaseMigration extends Base
      */
     public function up()
     {
-
     }
 
     /**
@@ -25,6 +24,5 @@ class BaseMigration extends Base
      */
     public function down()
     {
-
     }
 }

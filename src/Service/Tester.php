@@ -249,6 +249,7 @@ class Tester extends \miaoxing\plugin\BaseService
                     'xml' => 'simplexml_load_string',
                     'serialize' => 'unserialize',
                 ];
+                // @codingStandardsIgnoreLine
                 $data = @$methods[$this->dataType]($data);
                 if (false === $data && $e = error_get_last()) {
                     $exception = new \ErrorException($e['message'], $e['type'], 0, $e['file'], $e['line']);

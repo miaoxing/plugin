@@ -171,7 +171,7 @@ class App extends \Wei\App
     /**
      * 获取当前运行的插件名称
      *
-     * @return bool
+     * @return string
      */
     public function getPlugin()
     {

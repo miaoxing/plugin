@@ -12,6 +12,7 @@ namespace miaoxing\plugin\docs {
 }
 
 namespace {
+
     /** @var \Miaoxing\Plugin\Service\Plugin $plugin */
     $plugin = wei()->plugin;
 
