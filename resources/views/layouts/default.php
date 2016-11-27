@@ -20,7 +20,7 @@
   <?php require $view->getFile('plugin:layouts/default-css.php') ?>
   <?php $event->trigger('appendHead') ?>
 </head>
-<body<?= isset($bodyClass) ? (' class="' . $bodyClass . '"') : '' ?>>
+<body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
 
 <div id="<?= $pageId ?>">
   <?php $event->trigger('preContent', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
