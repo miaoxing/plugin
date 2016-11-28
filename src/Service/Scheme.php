@@ -15,6 +15,8 @@ class Scheme extends BaseService
 
     const TYPE_CHAR = 'char';
 
+    const TYPE_DATE = 'date';
+
     const TYPE_DATETIME = 'datetime';
 
     const TYPE_DECIMAL = 'decimal';
@@ -104,6 +106,7 @@ class Scheme extends BaseService
         self::TYPE_BIG_INT => '0',
         self::TYPE_BOOL => '0',
         self::TYPE_CHAR => '',
+        self::TYPE_DATE => "'0000-00-00'",
         self::TYPE_DATETIME => "'0000-00-00 00:00:00'",
         self::TYPE_DECIMAL => '0',
         self::TYPE_DOUBLE => '0',
@@ -124,6 +127,7 @@ class Scheme extends BaseService
             self::TYPE_BIG_INT => 'bigint',
             self::TYPE_BOOL => 'tinyint(1)',
             self::TYPE_CHAR => 'char',
+            self::TYPE_DATE => 'date',
             self::TYPE_DATETIME => 'datetime',
             self::TYPE_DECIMAL => 'decimal',
             self::TYPE_DOUBLE => 'double',
@@ -468,6 +472,11 @@ class Scheme extends BaseService
         return $this->addColumn($column, self::TYPE_TEXT);
     }
 
+    public function date($column)
+    {
+        return $this->addColumn($column, self::TYPE_DATE);
+    }
+
     public function datetime($column)
     {
         return $this->addColumn($column, self::TYPE_DATETIME);
@@ -585,19 +594,34 @@ class Scheme extends BaseService
         return $this->primary($column);
     }
 
-    public function timestamps()
+    public function timestampsV2()
     {
         return $this->timestamp('created_at')->timestamp('updated_at');
     }
 
-    public function userstamps()
+    public function userstampsV2()
     {
         return $this->int('created_by')->int('updated_by');
     }
 
-    public function softDeletable()
+    public function softDeletableV2()
     {
         return $this->timestamp('deleted_at')->int('deleted_by');
+    }
+
+    public function timestamps()
+    {
+        return $this->timestamp('createTime')->timestamp('updateTime');
+    }
+
+    public function userstamps()
+    {
+        return $this->int('createUser')->int('updateUser');
+    }
+
+    public function softDeletable()
+    {
+        return $this->timestamp('deleteTime')->int('deleteUser');
     }
 
     public function tableComment($comment)
