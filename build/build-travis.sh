@@ -42,7 +42,7 @@ fi
 # Build issue title
 message=$(git log -1 --pretty=%B "$TRAVIS_COMMIT")
 title="【$(date +%y-%m-%d)】Build failed: $message - $TRAVIS_PHP_VERSION"
-assignee=$(git log -1 --pretty=%cn "$TRAVIS_COMMIT")
+assignee=$(git log -1 --pretty=%an "$TRAVIS_COMMIT")
 body="Status: failed
 
 Author: $assignee
