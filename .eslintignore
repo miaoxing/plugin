@@ -1,5 +1,6 @@
 comps/*
 dist/*
 node_modules/*
+public/comps
+public/dist/*
 vendor/*
-
