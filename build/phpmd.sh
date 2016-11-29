@@ -16,10 +16,7 @@ command="phpmd . text $config \
 --ignore-violations-on-exit"
 info "${command}";
 
-${command}
-code=$?
+${command} || true
 
 # 2. 附加命令到报告中
 append_report "${report}" "${command}"
-
-exit ${code}

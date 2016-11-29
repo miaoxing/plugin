@@ -2,14 +2,20 @@
 
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
-# 1. 执行命令
+# 1. 忽略没有视图目录的情况,否则csslint会返回错误
+dir="resources/views"
+if [ ! -d "${dir}" ]; then
+  echo "No ${dir} directory, exit."
+  exit;
+fi
 
+# 2. 执行命令
 config=""
 if [ ! -e ".htmllintrc" ]; then
   config=" --rc=vendor/miaoxing/plugin/.htmllintrc"
 fi
 
-files=`find resources/views -type f`
+files=`find ${dir} -type f`
 files=${files//
 / }
 report="reports/htmllint.txt"
@@ -18,7 +24,7 @@ info "${command}";
 
 ${command} | tee ${report}
 
-# 2. 调整报告
+# 3. 调整报告
 if [[ ${PIPESTATUS[0]} == 0 ]]; then
   # 如果检测没有问题,删除报告
   rm -f ${report}
