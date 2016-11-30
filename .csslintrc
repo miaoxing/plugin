@@ -1,10 +1,10 @@
---ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors,bulletproof-font-face,gradients
+--ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors,bulletproof-font-face,gradients,important
 --exclude-list=comps/,dist/,vendor/
 --errors=known-properties,outline-none,display-property-grouping, \
 bulletproof-font-face,qualified-headings, \
 errors,duplicate-background-images,duplicate-properties,empty-rules, \
 selector-max-approaching,floats,font-faces, \
-font-sizes,shorthand,important,import,import-ie-limit,ids,text-indent, \
+font-sizes,shorthand,import,import-ie-limit,ids,text-indent, \
 rules-count,regex-selectors,overqualified-elements,selector-max, \
 selector-newline,star-property-hack,underscore-property-hack, \
 unique-headings,universal-selector,unqualified-attributes,vendor-prefix, \

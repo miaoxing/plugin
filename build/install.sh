@@ -18,11 +18,10 @@ composer global require miaoxing/coding-standards:0.9.2 \
 
 PATH=~/.composer/vendor/bin:$PATH
 
-# Install eslint
 npm install -g eslint babel-eslint
 
-# Install htmllint-cli
 npm install -g htmllint-cli
 
-# Install csslint
 npm install -g csslint
+
+npm install -g stylelint
