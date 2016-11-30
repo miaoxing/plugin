@@ -40,7 +40,9 @@ function err($message, $args = null, $args2 = null)
     if (!is_dir($dir)) {
         mkdir($dir, 0777, true);
     }
-    file_put_contents($dir . '/check-coverage.txt', $message);
+
+    $content = $message . str_repeat(PHP_EOL, 2) . str_repeat('=', 70);
+    file_put_contents($dir . '/check-coverage.txt', $content);
 
     return '';
 }
