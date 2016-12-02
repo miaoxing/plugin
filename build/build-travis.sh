@@ -62,11 +62,12 @@ body+="
 View the changeset: $TRAVIS_REPO_SLUG@$TRAVIS_COMMIT
 
 View the full build log and details: https://travis-ci.org/$TRAVIS_REPO_SLUG/jobs/$TRAVIS_JOB_ID"
+body=${body//\\/\\\\}
 body=${body//\"/\\\"}
 body=${body//\	/\\\t}
 body=${body//
 /\\\n}
-body=`echo "${body}" | perl -pe 's/\e\[?.*?[\@-~]//g'`
+body=`echo "${body}" | perl -pe 's/\e\[?.*?[\@-~]//g'` # 过滤颜色
 
 data="{\"title\":\"$title\",\"body\":\"$body\",\"assignees\":[\"$assignee\"],\"labels\":[\"task\"]}"
 echo "$data"
