@@ -6,15 +6,16 @@ set -e
 mkdir -p reports
 PATH=~/.composer/vendor/bin:$PATH
 
-bash "${BASH_SOURCE[0]%/*}/phpunit.sh" $@
-
 if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
+  bash "${BASH_SOURCE[0]%/*}/phpunit.sh" $@
   bash "${BASH_SOURCE[0]%/*}/phpcs.sh"
   bash "${BASH_SOURCE[0]%/*}/phpmd.sh"
   bash "${BASH_SOURCE[0]%/*}/csslint.sh"
   bash "${BASH_SOURCE[0]%/*}/stylelint.sh"
   bash "${BASH_SOURCE[0]%/*}/eslint.sh"
   bash "${BASH_SOURCE[0]%/*}/htmllint.sh"
+else
+  bash "${BASH_SOURCE[0]%/*}/phpunit.sh"
 fi
 
 # 2. 合并错误报告
