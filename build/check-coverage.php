@@ -2,7 +2,7 @@
 
 // @codingStandardsIgnoreFile
 
-$file = 'coverage.txt';
+$file = 'reports/phpunit.txt';
 $minPercentage = isset($argv[1]) ? (int) $argv[1] : 30;
 
 if (!is_file($file)) {
