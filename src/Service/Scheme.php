@@ -291,7 +291,10 @@ class Scheme extends BaseService
         if ($this->autoIncrement == $column) {
             $sql .= ' AUTO_INCREMENT';
         } else {
-            $sql .= ' ' . $this->getDefaultSql($options);
+            $defaultSql = $this->getDefaultSql($options);
+            if ($defaultSql) {
+                $sql .= ' ' . $defaultSql;
+            }
         }
 
         if ($options['comment']) {

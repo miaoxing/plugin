@@ -20,16 +20,12 @@ class Tests extends BaseController
         $this->createDefinition();
 
         if (!$req['plugin']) {
-            $this->writeln($cli->error('缺少插件编号'));
-
-            return;
+            return $this->err('缺少插件编号');
         }
 
         $plugin = $this->plugin->getById($req['plugin']);
         if (!$plugin) {
-            $this->writeln($cli->error(sprintf('插件"%s"不存在', $req['plugin'])));
-
-            return;
+            return $this->err(sprintf('插件"%s"不存在', $req['plugin']));
         }
 
         $classes = $plugin->getControllerMap();
@@ -46,6 +42,8 @@ class Tests extends BaseController
 
             $this->createFile($testFile, $namespace, $class);
         }
+
+        return $this->suc();
     }
 
     protected function getTestFile(BasePlugin $plugin, $class)

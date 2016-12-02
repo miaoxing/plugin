@@ -42,6 +42,8 @@ class Assets extends BaseController
             $this->writeln(sprintf('Symlink %s to %s', $cli->success($source), $cli->success($target)));
             symlink($source, $target);
         }
+
+        return $this->suc();
     }
 
     /**

@@ -5,6 +5,8 @@ namespace miaoxing\plugin\docs {
     /**
      * @property    \Miaoxing\Plugin\Service\Tester $tester
      * @method      \Miaoxing\Plugin\Service\Tester tester()
+     *
+     * @property    \Miaoxing\Plugin\Service\Scheme $scheme
      */
     class AutoComplete
     {
