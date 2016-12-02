@@ -1,15 +1,22 @@
 #!/bin/bash
 
+body=`cat "a.txt"`
+echo ${body}
+exit
+
+body=`echo ${body} | perl -pe 's/\e\[?.*?[\@-~]//g'`
+
+
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行检查
 report="reports/phpunit.txt"
-coverage_report="coverage.txt"
 base_command="phpunit --verbose --stderr"
 command="${base_command} --coverage-clover build/logs/clover.xml --coverage-text"
 info "${command}";
 
 ${command} 2>&1 | tee ${report}
+code=${PIPESTATUS[0]}
 
 # 2. 检查覆盖率
 if [[ $1 == '--coverage' ]]; then
@@ -17,7 +24,7 @@ if [[ $1 == '--coverage' ]]; then
 fi
 
 # 3. 调整报告
-if [[ ${PIPESTATUS[0]} == 0 ]]; then
+if [[ ${code} == 0 ]]; then
   # 如果检测没有问题,删除报告
   rm -f ${report}
 else
