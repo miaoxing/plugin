@@ -1,12 +1,5 @@
 #!/bin/bash
 
-body=`cat "a.txt"`
-echo ${body}
-exit
-
-body=`echo ${body} | perl -pe 's/\e\[?.*?[\@-~]//g'`
-
-
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行检查
