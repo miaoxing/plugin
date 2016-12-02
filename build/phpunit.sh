@@ -5,7 +5,7 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 # 1. 执行检查
 report="reports/phpunit.txt"
 coverage_report="coverage.txt"
-base_command="phpunit --verbose"
+base_command="phpunit --verbose --stderr"
 command="${base_command} --colors=never --coverage-clover build/logs/clover.xml --coverage-text"
 info "${command}";
 
