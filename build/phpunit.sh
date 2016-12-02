@@ -6,7 +6,7 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 report="reports/phpunit.txt"
 coverage_report="coverage.txt"
 base_command="phpunit --verbose --stderr"
-command="${base_command} --colors=never --coverage-clover build/logs/clover.xml --coverage-text"
+command="${base_command} --coverage-clover build/logs/clover.xml --coverage-text"
 info "${command}";
 
 ${command} 2>&1 | tee ${report}
