@@ -55,5 +55,5 @@ function format($args)
         $message = vsprintf($message, $args);
     }
 
-    return $message;
+    return PHP_EOL . $message . PHP_EOL;
 }

@@ -11,7 +11,12 @@ info "${command}";
 
 ${command} 2>&1 | tee ${report}
 
-# 2. 调整报告
+# 2. 检查覆盖率
+if [[ $1 == '--coverage' ]]; then
+  php "${BASH_SOURCE[0]%/*}/check-coverage.php" $2
+fi
+
+# 3. 调整报告
 if [[ ${PIPESTATUS[0]} == 0 ]]; then
   # 如果检测没有问题,删除报告
   rm -f ${report}
