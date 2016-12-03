@@ -40,6 +40,11 @@ if [ "$detail" == "" ]; then
   exit 0
 fi
 
+# 如果允许失败则不创建issue
+if [ "$TRAVIS_PHP_VERSION" == "hhvm" ] || [ "$TRAVIS_PHP_VERSION" == "nightly" ]; then
+  exit 1
+fi
+
 # Build issue title
 message=$(git log -1 --pretty=%B "$TRAVIS_COMMIT")
 title="【$(date +%y-%m-%d)】Build failed: $message - $TRAVIS_PHP_VERSION"
