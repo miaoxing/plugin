@@ -318,7 +318,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function getDbTable($table)
     {
-        return wei()->app->getDbName($this[$this->appId]) . '.' . $table;
+        return wei()->app->getDbName($this[$this->appIdColumn]) . '.' . $table;
     }
 
     /**
