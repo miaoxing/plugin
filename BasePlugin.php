@@ -131,6 +131,36 @@ class BasePlugin extends \miaoxing\plugin\BaseService
     }
 
     /**
+     * 加载插件的各项资源
+     *
+     * @param string $id
+     */
+    protected function initResourcesV2($id = null)
+    {
+        $id || $id = $this->getId();
+        $plugin = $this->plugin->getById($id);
+        $dir = $plugin->getBasePath() . '/src';
+
+        $class = get_class($this);
+        $namespace = substr($class, 0, strrpos($class, '\\'));
+
+        // 1. 加载项目配置
+        $this->env->loadConfigDir($dir . '/configs');
+
+        // 2. 加载项目服务类
+        $serviceDir = $dir . '/Service';
+        if (is_dir($serviceDir)) {
+            $this->wei->import($serviceDir, $namespace . '\Service');
+        }
+
+        // 3. 控制器继承
+        $this->app->setControllerFormat($namespace . '\Controller\%controller%');
+
+        // 4. 视图继承
+        $this->view->setDirs([$dir . '/resources/views'] + $this->view->getDirs());
+    }
+
+    /**
      * Output a rendered template by current event template
      *
      * @param array $data
