@@ -272,14 +272,6 @@ class User extends BaseModel
                     'email' => true,
                     'notRecordExists' => ['user', 'email'],
                 ],
-                'username' => [
-                    'length' => [3, 30],
-                    'alnum' => true,
-                    'callback' => function ($input) {
-                        return !wei()->isDigit($input[0]);
-                    },
-                    'notRecordExists' => ['user', 'username'],
-                ],
                 'password' => [
                     'minLength' => 6,
                 ],
@@ -289,13 +281,9 @@ class User extends BaseModel
             ],
             'names' => [
                 'email' => '邮箱',
-                'username' => '用户名',
                 'password' => '密码',
             ],
             'messages' => [
-                'username' => [
-                    'callback' => '用户名不能以数字开头',
-                ],
                 'passwordConfirm' => [
                     'required' => '请再次输入密码',
                     'equalTo' => '两次输入的密码不相等',
