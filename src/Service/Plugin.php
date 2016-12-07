@@ -144,9 +144,10 @@ class Plugin extends BaseService
      */
     protected function getWeiAliases()
     {
-        return array_merge(
-            $this->generateClassMap($this->dirs, '/services/*.php', 'services'),
-            $this->generateClassMap($this->dirs, '/Service/*.php', 'Service')
+        return $this->generateClassMap(
+            $this->dirs,
+            ['/Service/*.php', '/services/*.php'],
+            ['Service', 'services']
         );
     }
 
@@ -157,10 +158,10 @@ class Plugin extends BaseService
      */
     protected function getAppControllerMap()
     {
-        return array_merge(
-            $this->generateClassMap($this->dirs, '/Controller/{*,*/*}.php', 'Controller'),
-            // TODO 暂时支持三级控制器,待控制器升级后改为两级
-            $this->generateClassMap($this->dirs, '/controllers/{*,*/*,*/*/*}.php', 'controllers')
+        return $this->generateClassMap(
+            $this->dirs,
+            ['/Controller/{*,*/*}.php', '/controllers/{*,*/*,*/*/*}.php'], // TODO 暂时支持三级,待控制器升级后改为两级
+            ['Controller', 'controllers']
         );
     }
 
@@ -545,26 +546,31 @@ class Plugin extends BaseService
      * Generate class map
      *
      * @param array $dirs
-     * @param string $pattern
-     * @param string $type
+     * @param string|array $pattern
+     * @param string|array $type
      * @return array
      */
     public function generateClassMap(array $dirs, $pattern, $type)
     {
+        $patterns = (array) $pattern;
+        $types = (array) $type;
+
         $map = [];
-        $files = $this->globByDirs($dirs, $pattern);
+        foreach ($patterns as $i => $pattern) {
+            $files = $this->globByDirs($dirs, $pattern);
+            foreach ($files as $file) {
+                $class = $this->guessClassName($file);
+                $name = $this->getShortName($class, $types[$i]);
 
-        foreach ($files as $file) {
-            $class = $this->guessClassName($file);
-            $name = $this->getShortName($class, $type);
-
-            $this->addDuplicates($map, $name, $class);
-            $map[$name] = $class;
+                $this->addDuplicates($map, $name, $class);
+                $map[$name] = $class;
+            }
         }
 
         ksort($map);
 
-        return $this->filterDuplicates($map, $type);
+        // Display first type name
+        return $this->filterDuplicates($map, $type[0]);
     }
 
     public function getPluginIdByClass($class)
