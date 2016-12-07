@@ -301,6 +301,11 @@ class User extends BaseModel
             }
         }
 
+        $ret = $this->event->until('userRegisterValidate', [$this]);
+        if ($ret) {
+            return $ret;
+        }
+
         // 3. 保存到数据库
         $this->setPlainPassword($data['password']);
 
