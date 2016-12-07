@@ -41,7 +41,7 @@ class CurUser extends User
                 ],
             ],
             'names' => [
-                'username' => '用户名',
+                'username' => '帐号',
                 'password' => '密码',
             ],
         ]);
