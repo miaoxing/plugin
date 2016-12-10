@@ -15,7 +15,7 @@ namespace miaoxing\plugin {
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
     use services\QueueWorker;
-    use services\Random;
+    use Miaoxing\App\Service\Random;
     use services\RedisQueue;
     use services\SafeUrl;
     use services\SyncQueue;
@@ -43,7 +43,7 @@ namespace miaoxing\plugin {
      * @property    QueueWorker $queueWorker 队列后台服务
      * @property    Xml $xml XML服务
      * @property    Html $html HTML服务
-     * @property    Random $random 随机数服务
+     * @property    \Miaoxing\App\Service\Random $random 随机数服务
      * @property    Coll $coll 组合服务
      * @property    Migration $migration 迁移服务
      * @property    DataProvider $dataProvider 创建新项目时,提供数据源的对象
