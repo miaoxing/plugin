@@ -15,8 +15,8 @@ use Miaoxing\Plugin\Middleware\Auth;
  * @property \Wei\Logger $logger
  * @property \Wei\Event $event
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
- * @property \miaoxing\plugin\services\User $user 用户
- * @property \miaoxing\plugin\services\CurUser $curUser 用户
+ * @property \Miaoxing\Plugin\Service\User $user 用户
+ * @property \Miaoxing\Plugin\Service\CurUser $curUser 用户
  * @property \services\Url $url URL生成服务
  * @method   string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Wei\Ret $ret 返回值服务
