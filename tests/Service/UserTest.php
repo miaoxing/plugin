@@ -66,14 +66,6 @@ class UserTest extends BaseTestCase
         $this->assertFalse($user->isStatus(4));
     }
 
-    public function testUpdateGroup()
-    {
-        $user = wei()->user();
-        $user->updateGroup(1);
-
-        $this->assertEquals(1, $user['groupId']);
-    }
-
     public function testWithStatus()
     {
         $user = wei()->user()->withStatus(User::STATUS_MOBILE_VERIFIED);
@@ -86,5 +78,30 @@ class UserTest extends BaseTestCase
         $user = wei()->user()->withoutStatus(User::STATUS_MOBILE_VERIFIED);
 
         $this->assertContains('status & 1 = 0', $user->getSqlPart('where'));
+    }
+
+    /**
+     * 检查手机号码能否绑定
+     */
+    public function testCheckMobile()
+    {
+        $this->step('清空原测试数据');
+        $testMobile = '12800138000';
+        wei()->user()->delete(['mobile' => $testMobile]);
+
+        $this->step('未存在指定手机号码的用户,可以绑定');
+        $testUser = wei()->user();
+        $ret = $testUser->checkMobile($testMobile);
+        $this->assertRetSuc($ret, '手机号码可以绑定');
+
+        $this->step('存在指定手机号码的用户,但是未认证,可以绑定');
+        $user = wei()->user()->save(['mobile' => $testMobile]);
+        $ret = $testUser->checkMobile($testMobile);
+        $this->assertRetSuc($ret, '手机号码可以绑定');
+
+        $this->step('存在认证手机号码的用户,不能绑定');
+        $user->setStatus(User::STATUS_MOBILE_VERIFIED, true)->save();
+        $ret = $testUser->checkMobile($testMobile);
+        $this->assertRetErr($ret, -1, '已存在认证该手机号码的用户');
     }
 }
