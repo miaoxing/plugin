@@ -15,7 +15,6 @@ namespace miaoxing\plugin {
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
     use services\QueueWorker;
-    use Miaoxing\App\Service\Random;
     use services\RedisQueue;
     use services\SafeUrl;
     use services\SyncQueue;
