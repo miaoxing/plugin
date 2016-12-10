@@ -2,8 +2,6 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\Service\User;
-
 class CurUser extends User
 {
     /**
