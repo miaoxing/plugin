@@ -15,7 +15,7 @@ if [ ! -e ".htmllintrc" ]; then
   config=" --rc=vendor/miaoxing/plugin/.htmllintrc"
 fi
 
-files=`find ${dir} -type f`
+files=`find ${dir} -path resources/views/mailers -prune -o -type f -print`
 files=${files//
 / }
 report="reports/htmllint.txt"
