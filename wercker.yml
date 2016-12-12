@@ -1,4 +1,4 @@
-box: miaoxing/build:v0.9.4
+box: miaoxing/build:v0.9.5
 
 services:
   - id: mysql:5.6
