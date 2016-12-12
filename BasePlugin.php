@@ -139,7 +139,8 @@ class BasePlugin extends \miaoxing\plugin\BaseService
     {
         $id || $id = $this->getId();
         $plugin = $this->plugin->getById($id);
-        $dir = $plugin->getBasePath() . '/src';
+        $basePath = $plugin->getBasePath();
+        $dir = $basePath . '/src';
 
         $class = get_class($this);
         $namespace = substr($class, 0, strrpos($class, '\\'));
@@ -157,7 +158,7 @@ class BasePlugin extends \miaoxing\plugin\BaseService
         $this->app->setControllerFormat($namespace . '\Controller\%controller%');
 
         // 4. 视图继承
-        $this->view->setDirs([$dir . '/resources/views'] + $this->view->getDirs());
+        $this->view->setDirs([$basePath . '/resources/views'] + $this->view->getDirs());
     }
 
     /**
