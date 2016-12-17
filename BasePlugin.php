@@ -140,16 +140,15 @@ class BasePlugin extends \miaoxing\plugin\BaseService
         $id || $id = $this->getId();
         $plugin = $this->plugin->getById($id);
         $basePath = $plugin->getBasePath();
-        $dir = $basePath . '/src';
 
         $class = get_class($this);
         $namespace = substr($class, 0, strrpos($class, '\\'));
 
         // 1. 加载项目配置
-        $this->env->loadConfigDir($dir . '/configs');
+        $this->env->loadConfigDir($basePath . '/configs');
 
         // 2. 加载项目服务类
-        $serviceDir = $dir . '/Service';
+        $serviceDir = $basePath . 'src/Service';
         if (is_dir($serviceDir)) {
             $this->wei->import($serviceDir, $namespace . '\Service');
         }
