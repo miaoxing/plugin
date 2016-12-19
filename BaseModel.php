@@ -57,6 +57,8 @@ class BaseModel extends Record implements JsonSerializable
 
     protected $deletedByColumn = 'deleteUser';
 
+    protected $userIdColumn = 'userId';
+
     /**
      * @return BaseModel|BaseModel[]
      */
@@ -119,7 +121,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function mine()
     {
-        return $this->andWhere(['userId' => wei()->curUser['id']]);
+        return $this->andWhere([$this->userIdColumn => wei()->curUser['id']]);
     }
 
     /**
