@@ -27,6 +27,8 @@ class Scheme extends BaseService
 
     const TYPE_LONG_TEXT = 'longText';
 
+    const TYPE_MEDIUM_INT = 'mediumInt';
+
     const TYPE_MEDIUM_TEXT = 'mediumText';
 
     const TYPE_TINY_INT = 'tinyInt';
@@ -114,6 +116,7 @@ class Scheme extends BaseService
         self::TYPE_DOUBLE => '0',
         self::TYPE_INT => '0',
         self::TYPE_LONG_TEXT => false,
+        self::TYPE_MEDIUM_INT => '0',
         self::TYPE_MEDIUM_TEXT => false,
         self::TYPE_TINY_INT => '0',
         self::TYPE_SMALL_INT => '0',
@@ -136,6 +139,7 @@ class Scheme extends BaseService
             self::TYPE_DOUBLE => 'double',
             self::TYPE_INT => 'int',
             self::TYPE_LONG_TEXT => 'longtext',
+            self::TYPE_MEDIUM_INT => 'mediumint',
             self::TYPE_MEDIUM_TEXT => 'mediumtext',
             self::TYPE_TINY_INT => 'tinyint',
             self::TYPE_SMALL_INT => 'smallint',
@@ -462,6 +466,11 @@ class Scheme extends BaseService
     public function longText($column)
     {
         return $this->addColumn($column, self::TYPE_LONG_TEXT);
+    }
+
+    public function mediumInt($column)
+    {
+        return $this->addColumn($column, self::TYPE_MEDIUM_INT);
     }
 
     public function mediumText($column)
