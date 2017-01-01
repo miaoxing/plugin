@@ -395,6 +395,10 @@ class Plugin extends BaseService
             return ['code' => -4, 'message' => 'Plugin not installed'];
         }
 
+        if ($this->isBuildIn($id)) {
+            return ['code' => -5, 'message' => 'Can not uninstall build-in plugin'];
+        }
+
         $ret = $plugin->uninstall();
         if ($ret['code'] !== 1) {
             return $ret;
@@ -402,6 +406,9 @@ class Plugin extends BaseService
 
         $pluginIds = $this->getInstalledIds();
         $key = array_search($id, $pluginIds);
+        if (false === $key) {
+            return ['code' => -6, 'message' => 'Plugin not installed'];
+        }
         unset($pluginIds[$key]);
         $this->setInstalledIds($pluginIds);
 
