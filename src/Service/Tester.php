@@ -182,6 +182,7 @@ class Tester extends \miaoxing\plugin\BaseService
         $wei = $this->wei;
 
         // 1. 注入各种配置
+        $wei->request->clear();
         $wei->request->set($this->request);
         $wei->request->setOption('gets', $this->query);
         $wei->request->setOption('posts', $this->post);
