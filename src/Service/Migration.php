@@ -6,6 +6,7 @@ use miaoxing\plugin\BaseService;
 use ReflectionClass;
 use Wei\Db;
 use Wei\RetTrait;
+use Wei\Schema;
 
 /**
  * @property Db $db
