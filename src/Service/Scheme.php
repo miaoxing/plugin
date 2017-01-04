@@ -97,6 +97,11 @@ class Scheme extends BaseService
     protected $lastColumn;
 
     /**
+     * @var bool
+     */
+    protected $isChange = false;
+
+    /**
      * @var array
      */
     protected $columnDefaults = [
@@ -104,6 +109,7 @@ class Scheme extends BaseService
         'unique' => false,
         'comment' => '',
         'unsigned' => false,
+        'change' => false,
     ];
 
     protected $typeDefaults = [
@@ -185,6 +191,7 @@ class Scheme extends BaseService
         $this->lastColumn = null;
         $this->autoIncrement = '';
         $this->tableComment = '';
+        $this->isChange = false;
     }
 
     /**
@@ -203,10 +210,21 @@ class Scheme extends BaseService
 
     public function dropColumn($column)
     {
+        $this->columns[$column] = ['drop' => true];
+
+        return $this;
     }
 
-    public function renameColumn($from, $to)
+    public function after($column)
     {
+        return $this->updateLastColumn('after', $column);
+    }
+
+    public function change()
+    {
+        $this->isChange = true;
+
+        return $this->updateLastColumn('change', true);
     }
 
     /**
@@ -224,10 +242,19 @@ class Scheme extends BaseService
     public function getSql()
     {
         $table = $this->table;
+
+        if ($this->hasTable($table)) {
+            $this->isChange = true;
+        }
+
         $columnSql = $this->getCreateDefinition();
 
-        $sql = "CREATE TABLE $table ($columnSql)";
-        $sql .= $this->getTableOptionSql();
+        if ($this->isChange) {
+            $sql = "ALTER TABLE $table" . $columnSql;
+        } else {
+            $sql = "CREATE TABLE $table ($columnSql)";
+            $sql .= $this->getTableOptionSql();
+        }
 
         return $sql;
     }
@@ -287,7 +314,22 @@ class Scheme extends BaseService
 
     protected function getColumnSql($column, array $options)
     {
-        $sql = $column . ' ' . $this->getTypeSql($options) . ' ';
+        $sql = '';
+
+        if (isset($options['drop'])) {
+            $sql .= 'DROP COLUMN ' . $column;
+            return $sql;
+        }
+
+        if ($this->isChange) {
+            if ($options['change']) {
+                $sql .= 'CHANGE COLUMN ' . $column . ' ';
+            } else {
+                $sql .= 'ADD COLUMN ';
+            }
+        }
+
+        $sql .= $column . ' ' . $this->getTypeSql($options) . ' ';
         $sql .= $this->getUnsignedSql($options);
         $sql .= $this->getNullSql($options['null']);
 
@@ -303,6 +345,10 @@ class Scheme extends BaseService
 
         if ($options['comment']) {
             $sql .= " COMMENT '" . $options['comment'] . "'";
+        }
+
+        if (isset($options['after'])) {
+            $sql .=  ' AFTER ' . $options['after'];
         }
 
         return $sql;
