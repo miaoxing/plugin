@@ -7,7 +7,7 @@ use miaoxing\plugin\BaseService;
 /**
  * @property \Wei\Db $db
  */
-class Scheme extends BaseService
+class Schema extends BaseService
 {
     const TYPE_BIG_INT = 'bigInt';
 

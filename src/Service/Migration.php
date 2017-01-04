@@ -9,7 +9,7 @@ use Wei\RetTrait;
 
 /**
  * @property Db $db
- * @property Scheme $scheme
+ * @property Schema $schema
  * @property Cli $cli
  */
 class Migration extends BaseService
@@ -221,8 +221,8 @@ class Migration extends BaseService
      */
     protected function prepareTable()
     {
-        if (!$this->scheme->hasTable($this->table)) {
-            $this->scheme->table($this->table)
+        if (!$this->schema->hasTable($this->table)) {
+            $this->schema->table($this->table)
                 ->string('id', 128)
                 ->timestamp('created_at')
                 ->exec();

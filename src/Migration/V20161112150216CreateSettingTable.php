@@ -11,7 +11,7 @@ class V20161112150216CreateSettingTable extends BaseMigration
      */
     public function up()
     {
-        $this->scheme->table('setting')
+        $this->schema->table('setting')
             ->string('id', 128)
             ->mediumText('value')
             ->primary('id')
@@ -23,6 +23,6 @@ class V20161112150216CreateSettingTable extends BaseMigration
      */
     public function down()
     {
-        $this->scheme->dropIfExists('setting');
+        $this->schema->dropIfExists('setting');
     }
 }

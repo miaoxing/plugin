@@ -2,12 +2,12 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Plugin\Service\Scheme;
+use Miaoxing\Plugin\Service\Schema;
 use Wei\Base;
 use Wei\Db;
 
 /**
- * @property Scheme $scheme
+ * @property Schema $schema
  * @property Db $db
  */
 class BaseMigration extends Base

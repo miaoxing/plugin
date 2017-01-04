@@ -5,16 +5,16 @@ namespace MiaoxingTest\Plugin\Service;
 use Miaoxing\Plugin\Test\BaseTestCase;
 
 /**
- * Scheme
+ * Schema
  */
-class SchemeTest extends BaseTestCase
+class SchemaTest extends BaseTestCase
 {
     /**
      * 生成SQL语句
      */
     public function testGetSql()
     {
-        $sql = wei()->scheme->table('test')->tableComment('Test')
+        $sql = wei()->schema->table('test')->tableComment('Test')
             ->id()
             ->int('user_id')->comment('User ID')
             ->string('name')
