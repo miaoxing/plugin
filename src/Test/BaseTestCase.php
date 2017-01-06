@@ -54,7 +54,15 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     {
         $service = $this->wei->$name;
         $this->mockServices[$name] = $service;
-        $mock = $this->getMock(get_class($service), $methods, $arguments);
+
+        $class = get_class($service);
+        if (!method_exists($this, 'createMock')) {
+            $mock = $this->getMock($class, $methods, $arguments);
+        } else {
+            // For PHPUnit 5.4+
+            $mock = $this->createMock($class);
+        }
+
         $this->wei->$name = $mock;
 
         return $mock;
