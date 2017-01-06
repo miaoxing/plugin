@@ -40,6 +40,8 @@ class User extends BaseModel
     protected $data = [
         'gender' => 1,
         'isValid' => 1,
+        'department' => [],
+        'extAttr' => [],
     ];
 
     /**
