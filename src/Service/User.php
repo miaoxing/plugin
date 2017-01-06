@@ -165,7 +165,7 @@ class User extends BaseModel
      */
     public function isSuperAdmin()
     {
-        return $this['username'] == 'miaostar';
+        return $this['id'] == 1 || $this['username'] == 'miaostar';
     }
 
     /**
