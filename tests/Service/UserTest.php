@@ -16,6 +16,7 @@ class UserTest extends BaseTestCase
     public function testGetNickName()
     {
         $user = wei()->user();
+        $user['isValid'] = false;
         $this->assertEquals('', $user->getNickName());
 
         $user['isValid'] = true;
