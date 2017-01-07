@@ -383,6 +383,25 @@ class User extends BaseModel
         $this->clearRecordCache();
     }
 
+    public function beforeSave()
+    {
+        parent::beforeSave();
+        if (is_array($this['department'])) {
+            $this['department'] = json_encode($this['department'], JSON_UNESCAPED_SLASHES);
+        }
+
+        if (is_array($this['extAttr'])) {
+            $this['extAttr'] = json_encode($this['extAttr'], JSON_UNESCAPED_SLASHES);
+        }
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this['department'] = (array) json_decode($this['department'], true);
+        $this['extAttr'] = (array) json_decode($this['extAttr'], true);
+    }
+
     /**
      * Record: 移动用户分组
      *
