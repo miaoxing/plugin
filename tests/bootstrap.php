@@ -1,8 +1,9 @@
 <?php
 
-use Wei\Db;
+use Composer\Autoload\ClassLoader;
 
-require 'vendor/autoload.php';
+/** @var ClassLoader $loader */
+$loader = require 'vendor/autoload.php';
 
 $files = [
     'config.php',
@@ -30,6 +31,20 @@ $wei = wei($config);
 $db = $wei->db;
 $db->executeUpdate('CREATE DATABASE IF NOT EXISTS app;');
 $db->useDb('app');
+
+// 动态加载所有插件的dev类,用于主项目中测试子插件
+foreach ($wei->plugin->getAll() as $plugin) {
+    $file = $plugin->getBasePath() . '/composer.json';
+    if (!is_file($file)) {
+        continue;
+    }
+    $composer = json_decode(file_get_contents($file), true);
+    foreach ($composer['autoload-dev'] as $autoload) {
+        foreach ($autoload as $prefix => $path) {
+            $loader->addPsr4($prefix, $plugin->getBasePath() . '/' . $path);
+        }
+    }
+}
 
 if (isset($config['test']['skipSql']) && $config['test']['skipSql']) {
     return;
