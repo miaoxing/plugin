@@ -108,14 +108,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     protected function buildRetMessage($ret, $assertMessage = null)
     {
-        if ($assertMessage === true) {
-            $assertMessage = '返回"%message%"';
-        }
-        if ($assertMessage) {
-            $assertMessage = str_replace(['%message%'], [$ret['message']], $assertMessage);
-        }
-
-        return $assertMessage;
+        return $assertMessage . ' ret is ' . json_encode($ret, JSON_UNESCAPED_UNICODE);
     }
 
     /**
