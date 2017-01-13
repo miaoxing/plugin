@@ -24,6 +24,9 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->wei = wei();
+
+        // 将当前测试用例作为一个服务,允许其他服务调用
+        $this->wei->set('testCase', $this);
     }
 
     protected function tearDown()
@@ -162,7 +165,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
      * @param string $message
      * @param string $args
      */
-    protected function step($message, $args = null)
+    public function step($message, $args = null)
     {
         $args = func_get_args();
         if (count($args) > 1) {
