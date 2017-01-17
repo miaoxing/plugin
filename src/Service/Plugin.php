@@ -161,7 +161,7 @@ class Plugin extends BaseService
         // TODO 暂时支持三级,待控制器升级后改为两级
         return $this->generateClassMap(
             $this->dirs,
-            ['/Controller/{*,*/*,*/*/*}.php', '/controllers/{*,*/*,*/*/*}.php'],
+            ['/Controller/{*,*/*}.php', '/controllers/{*,*/*,*/*/*}.php'],
             ['Controller', 'controllers']
         );
     }
