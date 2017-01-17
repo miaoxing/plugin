@@ -158,9 +158,10 @@ class Plugin extends BaseService
      */
     protected function getAppControllerMap()
     {
+        // TODO 暂时支持三级,待控制器升级后改为两级
         return $this->generateClassMap(
             $this->dirs,
-            ['/Controller/{*,*/*}.php', '/controllers/{*,*/*,*/*/*}.php'], // TODO 暂时支持三级,待控制器升级后改为两级
+            ['/Controller/{*,*/*,*/*/*}.php', '/controllers/{*,*/*,*/*/*}.php'],
             ['Controller', 'controllers']
         );
     }
