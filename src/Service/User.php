@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use miaoxing\plugin\BaseModel;
-use plugins\user\services\Group;
+use Miaoxing\Plugin\Service\Group;
 use plugins\user\services\UserProfile;
 
 /**
