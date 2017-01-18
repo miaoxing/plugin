@@ -94,7 +94,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
             $expected['message'] = $message;
         }
 
-        $this->assertArraySubset($expected, $ret, true, $assertMessage);
+        $this->assertArrayContains($expected, $ret, $assertMessage);
     }
 
     public function assertRetErr(array $ret, $code, $message = null, $assertMessage = null)
@@ -106,12 +106,18 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
             $expected['message'] = $message;
         }
 
-        $this->assertArraySubset($expected, $ret, true, $assertMessage);
+        $this->assertArrayContains($expected, $ret, $assertMessage);
     }
 
     protected function buildRetMessage($ret, $assertMessage = null)
     {
         return $assertMessage . ' ret is ' . json_encode($ret, JSON_UNESCAPED_UNICODE);
+    }
+
+    public static function assertArrayContains($subset, $array, $message = '')
+    {
+        $array = array_intersect_key($array, array_flip(array_keys($subset)));
+        parent::assertEquals($subset, $array, $message);
     }
 
     /**
