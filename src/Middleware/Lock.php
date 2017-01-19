@@ -19,7 +19,7 @@ class Lock extends Base
      */
     public function __invoke($next)
     {
-        $name = $this->name ?: $this->app->getControllerAction();
+        $name = $this->name ?: $this->request->getBaseUrl() . $this->request->getPathInfo();
         $key = 'lock-' . $this->getIdentifier() . '-' . $name;
 
         if (!wei()->lock($key)) {
