@@ -258,6 +258,15 @@ class BaseModel extends Record implements JsonSerializable
         return $this->fromArray($data);
     }
 
+    public function findAllByIds($ids)
+    {
+        if (!$ids) {
+            return $this->beColl();
+        }
+
+        return $this->findAll(['id' => $ids]);
+    }
+
     /**
      * 设置缓存的标签为当前表名+用户ID
      *

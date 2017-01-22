@@ -21,7 +21,7 @@ namespace miaoxing\plugin {
     use services\Xml;
 
     /**
-     * @property    \Wei\Db $appDb
+     * @property    \services\Db $appDb
      * @property    \Wei\Event $event
      * @method      \miaoxing\plugin\BaseModel appDb($table = null)
      * @method      \miaoxing\plugin\BaseModel db($table = null)
