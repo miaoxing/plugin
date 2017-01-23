@@ -25,23 +25,23 @@ class BaseControllerTestCase extends BaseTestCase
      * @param string $action
      * @param null|int $code
      */
-//    public function testActions($action, $code = null)
-//    {
-//        $controller = $this->getController();
-//
-//        $result = $this->dispatch($controller, $action);
-//
-//        if ($result instanceof \Exception) {
-//            $this->assertEquals(404, $result->getCode(), $action . '返回' . $result->getMessage());
-//        } else {
-//            if ($code) {
-//                $this->assertEquals($code, $result->getStatusCode());
-//            } else {
-//                $this->assertNotEquals(302, $result->getStatusCode());
-//            }
-//            $this->assertNotEmpty($result->getContent(), $action . '返回内容不为空');
-//        }
-//    }
+    public function testActions($action, $code = null)
+    {
+        $controller = $this->getController();
+
+        $result = $this->dispatch($controller, $action);
+
+        if ($result instanceof \Exception) {
+            $this->assertEquals(404, $result->getCode(), $action . '返回' . $result->getMessage());
+        } else {
+            if ($code) {
+                $this->assertEquals($code, $result->getStatusCode());
+            } else {
+                $this->assertNotEquals(302, $result->getStatusCode());
+            }
+            $this->assertNotEmpty($result->getContent(), $action . '返回内容不为空');
+        }
+    }
 
     public function providerForActions()
     {
