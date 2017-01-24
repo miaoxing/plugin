@@ -4,7 +4,7 @@ namespace miaoxing\plugin {
 
     use Miaoxing\Region\Service\BaiduApi;
     use services\BaseQueue;
-    use services\Chart;
+    use Miaoxing\Stat\Service\Chart;
     use Miaoxing\App\Service\Coll;
     use services\CsvExporter;
     use services\DataProvider;
@@ -33,7 +33,7 @@ namespace miaoxing\plugin {
      * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
      * @property    Handlebars $handlebars Handlebars模板引擎
      * @property    Excel $excel Excel操作的快捷服务
-     * @property    Chart $chart 构造图表数据的辅助服务
+     * @property    \Miaoxing\Plugin\Service\\Miaoxing\Stat\Service\Chart $chart 构造图表数据的辅助服务
      * @property    Lbs $lbs 基于位置的服务
      * @property    BaiduApi $baiduApi 百度Web服务API
      * @property    BaseQueue $queue 队列服务
