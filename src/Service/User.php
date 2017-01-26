@@ -125,7 +125,7 @@ class User extends BaseModel
      */
     public function getNickName()
     {
-        foreach (['nickName', 'username', 'name'] as $name) {
+        foreach (['nickName', 'username', 'email', 'name'] as $name) {
             if ($this[$name]) {
                 return $this[$name];
             }
