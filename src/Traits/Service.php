@@ -1,6 +1,6 @@
 <?php
 
-namespace Miaoxing\Plugin;
+namespace Miaoxing\Plugin\Traits;
 
 trait Service
 {
