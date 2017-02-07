@@ -65,4 +65,9 @@ return [
     'error.logger' => [
 
     ],
+    'mail' => [
+        'options' => [
+            'Mailer' => 'smtp',
+        ],
+    ],
 ];
