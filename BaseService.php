@@ -3,7 +3,7 @@
 namespace miaoxing\plugin {
 
     use Miaoxing\Region\Service\BaiduApi;
-    use services\BaseQueue;
+    use Miaoxing\Queue\Service\BaseQueue;
     use Miaoxing\Stat\Service\Chart;
     use Miaoxing\App\Service\Coll;
     use services\CsvExporter;
@@ -14,10 +14,10 @@ namespace miaoxing\plugin {
     use services\Html;
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
-    use services\QueueWorker;
-    use services\RedisQueue;
+    use Miaoxing\Queue\Service\QueueWorker;
+    use Miaoxing\Queue\Service\RedisQueue;
     use services\SafeUrl;
-    use services\SyncQueue;
+    use Miaoxing\Queue\Service\SyncQueue;
     use services\Xml;
 
     /**
@@ -36,10 +36,10 @@ namespace miaoxing\plugin {
      * @property    \Miaoxing\Plugin\Service\\Miaoxing\Stat\Service\Chart $chart 构造图表数据的辅助服务
      * @property    Lbs $lbs 基于位置的服务
      * @property    BaiduApi $baiduApi 百度Web服务API
-     * @property    BaseQueue $queue 队列服务
-     * @property    SyncQueue $syncQueue 同步的队列服务
+     * @property    \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
+     * @property    \Miaoxing\Queue\Service\SyncQueue $syncQueue 同步的队列服务
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
-     * @property    QueueWorker $queueWorker 队列后台服务
+     * @property    \Miaoxing\Queue\Service\QueueWorker $queueWorker 队列后台服务
      * @property    Xml $xml XML服务
      * @property    Html $html HTML服务
      * @property    \Miaoxing\App\Service\Random $random 随机数服务

@@ -22,7 +22,7 @@ use Miaoxing\Plugin\Middleware\Auth;
  * @property \Wei\Ret $ret 返回值服务
  * @property \Miaoxing\Plugin\Service\Setting $setting
  * @method   string setting($name, $default = null) 读取配置
- * @property \services\BaseQueue $queue 队列服务
+ * @property \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
  */
 abstract class BaseController extends \Wei\BaseController
 {
