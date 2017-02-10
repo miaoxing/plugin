@@ -148,7 +148,7 @@ class BasePlugin extends \miaoxing\plugin\BaseService
         $this->env->loadConfigDir($basePath . '/configs');
 
         // 2. 加载项目服务类
-        $serviceDir = $basePath . 'src/Service';
+        $serviceDir = $basePath . '/src/Service';
         if (is_dir($serviceDir)) {
             $this->wei->import($serviceDir, $namespace . '\Service');
         }
