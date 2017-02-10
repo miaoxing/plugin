@@ -14,6 +14,7 @@ return [
         ],
         'providers' => [
             'cache' => 'memcache',
+            'queue' => 'dbQueue'
         ],
         'preload' => [
             'error',
