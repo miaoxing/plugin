@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use miaoxing\plugin\BaseModel;
 use Miaoxing\Plugin\Service\Group;
-use plugins\user\services\UserProfile;
+use Miaoxing\User\Service\UserProfile;
 
 /**
  * @property \Wei\Session $session
@@ -50,7 +50,7 @@ class User extends BaseModel
     protected $group;
 
     /**
-     * @var UserProfile
+     * @var \Miaoxing\User\Service\UserProfile
      */
     protected $profile;
 
