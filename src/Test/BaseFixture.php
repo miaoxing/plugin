@@ -37,6 +37,7 @@ class BaseFixture extends BaseService
      * @param mixed $property
      * @param callable $fn
      * @return mixed
+     * @deprecated 影响代码提示,废弃,使用 $this->xxx || $this->xxx = xxx代替
      */
     public function set(&$property, callable $fn)
     {
