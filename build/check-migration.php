@@ -34,10 +34,11 @@ try {
 }
 
 // 4. 检查数据表
-$tables = getTables();
-if (count($tables) !== 2) {
-    // 暂时只剩下apps和user两个表
-    err('运行rollback后存在未删除的数据表:' . implode(',', array_column($tables, 'TABLE_NAME')));
+$allowTables = ['apps', 'migrations', 'user'];
+$leftTables = array_column(getTables(), 'TABLE_NAME');
+$leftTables = array_diff($leftTables, $allowTables);
+if ($leftTables) {
+    err('运行rollback后存在未删除的数据表:' . implode(',', $leftTables));
 } else {
     suc('运行rollback成功');
 }
