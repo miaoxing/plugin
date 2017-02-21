@@ -14,7 +14,13 @@ foreach ($dirs as $dir) {
 }
 $wei = wei();
 
-// 2. 运行全部rollback的SQL
+// 2. 先清空数据表,确保不会受Data truncated for column之类的影响
+$tables = getTables();
+foreach ($tables as $table) {
+    wei()->db->query("TRUNCATE TABLE app." . $tables['TABLE_NAME']);
+}
+
+// 3. 运行全部rollback的SQL
 $migrations = $wei->migration->getStatus();
 try {
     $wei->migration->rollback([
@@ -24,14 +30,8 @@ try {
     return err((string) $e);
 }
 
-// 3. 检查数据表
-$tables = wei()->db('information_schema.tables')
-    ->select('TABLE_NAME')
-    ->where([
-        'TABLE_TYPE' => 'BASE TABLE',
-        'TABLE_SCHEMA' => 'app'
-    ])
-    ->fetchAll();
+// 4. 检查数据表
+$tables = getTables();
 if (count($tables) !== 2) {
     // 暂时只剩下apps和user两个表
     err('运行rollback后存在未删除的数据表:' . implode(',', array_column($tables, 'TABLE_NAME')));

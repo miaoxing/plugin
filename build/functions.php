@@ -39,3 +39,16 @@ function format($args)
 
     return PHP_EOL . $message . PHP_EOL;
 }
+
+function getTables()
+{
+    $tables = wei()->db('information_schema.tables')
+        ->select('TABLE_NAME')
+        ->where([
+            'TABLE_TYPE' => 'BASE TABLE',
+            'TABLE_SCHEMA' => 'app'
+        ])
+        ->fetchAll();
+
+    return $tables;
+}
