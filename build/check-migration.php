@@ -34,4 +34,3 @@ if (count($tables) !== 2) {
 } else {
     suc('运行rollback成功');
 }
-

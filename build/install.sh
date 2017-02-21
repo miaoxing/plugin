@@ -20,7 +20,7 @@ PATH=~/.composer/vendor/bin:$PATH
 
 npm install -g eslint babel-eslint
 
-npm install -g htmllint-cli
+npm install -g htmllint-cli@0.0.5
 
 npm install -g csslint
 
