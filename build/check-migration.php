@@ -17,7 +17,7 @@ $wei = wei();
 // 2. 先清空数据表,确保不会受Data truncated for column之类的影响
 $tables = getTables();
 foreach ($tables as $table) {
-    wei()->db->query("TRUNCATE TABLE app." . $tables['TABLE_NAME']);
+    wei()->db->query("TRUNCATE TABLE app." . $table['TABLE_NAME']);
 }
 
 // 3. 运行全部rollback的SQL
