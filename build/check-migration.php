@@ -17,6 +17,9 @@ $wei = wei();
 // 2. 先清空数据表,确保不会受Data truncated for column之类的影响
 $tables = getTables();
 foreach ($tables as $table) {
+    if ($table == 'migrations') {
+        continue;
+    }
     wei()->db->query("TRUNCATE TABLE app." . $table['TABLE_NAME']);
 }
 
