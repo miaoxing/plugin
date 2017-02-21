@@ -43,7 +43,9 @@ class Group extends \miaoxing\plugin\BaseModel
 
     public function getCustomerServiceGroups()
     {
-        $this->customerServiceGroups || $this->customerServiceGroups = wei()->group()->findAll(['isCustomerService' => Group::CUSTOMER_SERVICE]);
+        $this->customerServiceGroups ||
+        $this->customerServiceGroups = wei()->group()->findAll(['isCustomerService' => Group::CUSTOMER_SERVICE]);
+
         return $this->customerServiceGroups;
     }
 }
