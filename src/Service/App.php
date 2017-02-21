@@ -195,6 +195,10 @@ class App extends \Wei\App
      */
     public function getRecord()
     {
+        if ($this->namespace == 'zhw') {
+            wei()->appRecord()->clearTagCache()->find(['name' => $this->namespace]);
+        }
+
         $this->record || $this->record = wei()->appRecord()
             ->tags(false)
             ->setCacheKey('appName:' . $this->namespace)
