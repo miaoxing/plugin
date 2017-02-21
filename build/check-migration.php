@@ -16,9 +16,13 @@ $wei = wei();
 
 // 2. 运行全部rollback的SQL
 $migrations = $wei->migration->getStatus();
-$wei->migration->rollback([
-    'target' => $migrations[0]['id']
-]);
+try {
+    $wei->migration->rollback([
+        'target' => $migrations[0]['id']
+    ]);
+} catch (\Exception $e) {
+    return err((string) $e);
+}
 
 // 3. 检查数据表
 $tables = wei()->db('information_schema.tables')
