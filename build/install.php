@@ -48,4 +48,3 @@ foreach ($wei->plugin->getAll() as $plugin) {
 
 // 6. 执行迁移语句
 $wei->migration->migrate();
-

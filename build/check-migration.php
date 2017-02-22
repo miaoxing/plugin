@@ -14,7 +14,11 @@ foreach ($dirs as $dir) {
 }
 $wei = wei();
 
-// 2. 先清空数据表,确保不会受Data truncated for column之类的影响
+// 2. 初始化数据库
+$db = $wei->db;
+$db->useDb('app');
+
+// 3. 先清空数据表,确保不会受Data truncated for column之类的影响
 $tables = getTables();
 foreach ($tables as $table) {
     if ($table['TABLE_NAME'] == 'migrations') {
@@ -23,7 +27,7 @@ foreach ($tables as $table) {
     $wei->db->query("TRUNCATE TABLE app." . $table['TABLE_NAME']);
 }
 
-// 3. 运行全部rollback的SQL
+// 4. 运行全部rollback的SQL
 $migrations = $wei->migration->getStatus();
 try {
     $wei->migration->rollback([
@@ -33,7 +37,7 @@ try {
     return err((string) $e);
 }
 
-// 4. 检查数据表
+// 5. 检查数据表
 $allowTables = ['apps', 'migrations', 'user'];
 $leftTables = array_column(getTables(), 'TABLE_NAME');
 $leftTables = array_diff($leftTables, $allowTables);
