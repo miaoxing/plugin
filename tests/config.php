@@ -44,6 +44,9 @@ return [
         'password' => getenv('MYSQL_PASSWORD'),
         'recordClass' => 'miaoxing\plugin\BaseModel',
     ],
+    'router' => [
+        'namespaces' => ['admin', 'api', 'cli'],
+    ],
     // 视图
     'view' => [
         'defaultLayout' => 'plugin:layouts/default.php',

@@ -53,7 +53,8 @@ function getTables()
     return $tables;
 }
 
-function init() {
+function init()
+{
     $dirs = [
         '.',
         'vendor/miaoxing/plugin',
