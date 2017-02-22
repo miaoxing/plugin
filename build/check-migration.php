@@ -2,17 +2,7 @@
 
 require 'functions.php';
 
-// 1. 加载配置,初始化服务容器
-$dirs = [
-    '.',
-    'vendor/miaoxing/plugin',
-];
-foreach ($dirs as $dir) {
-    if (is_file($dir . '/tests/init.php')) {
-        require $dir . '/tests/init.php';
-    }
-}
-$wei = wei();
+$wei = init();
 
 // 2. 初始化数据库
 $db = $wei->db;

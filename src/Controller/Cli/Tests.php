@@ -92,7 +92,7 @@ class Tests extends BaseController
         $this->writeln('生成文件 ' . $this->cli->success($file));
 
         ob_start();
-        require  'vendor/miaoxing/plugin/resources/stubs/test.php';
+        require $this->plugin->getById('plugin')->getBasePath() .'/resources/stubs/test.php';
         $content = ob_get_clean();
         file_put_contents($file, $content);
         chmod($file, 0777);

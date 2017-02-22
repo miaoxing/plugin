@@ -52,3 +52,17 @@ function getTables()
 
     return $tables;
 }
+
+function init() {
+    $dirs = [
+        '.',
+        'vendor/miaoxing/plugin',
+    ];
+    foreach ($dirs as $dir) {
+        if (is_file($dir . '/tests/init.php')) {
+            require $dir . '/tests/init.php';
+        }
+    }
+
+    return wei();
+}

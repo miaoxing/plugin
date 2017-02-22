@@ -623,6 +623,11 @@ class Plugin extends BaseService
         if (strpos($file, 'src/') !== false) {
             list($dir, $className) = explode('src/', $file);
 
+            // TODO V2 处理V2的插件形式
+            if ($dir == '\\') {
+                $dir = '';
+            }
+
             $composerJson = ($dir ? ($dir . '/') : '') . 'composer.json';
             if (!is_file($composerJson)) {
                 throw new Exception(sprintf('Composer file "%s" not found', $composerJson));

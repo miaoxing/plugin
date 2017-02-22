@@ -44,7 +44,10 @@ class UrlMapper extends BaseService
     public function matchMap($inputUrl, $outputUrl)
     {
         foreach ($this->map as $key => $value) {
-            if ($this->request->getBaseUrl().'/'.$key == $inputUrl && $this->request->getBaseUrl().'/'.$value == $outputUrl) {
+            if (
+                $this->request->getBaseUrl() . '/' . $key == $inputUrl
+                && $this->request->getBaseUrl() . '/' . $value == $outputUrl
+            ) {
                 return true;
             }
         }
