@@ -6,6 +6,8 @@ set -e
 mkdir -p reports
 PATH=~/.composer/vendor/bin:$PATH
 
+php "${BASH_SOURCE[0]%/*}/install.php"
+
 if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
   bash "${BASH_SOURCE[0]%/*}/phpunit.sh" $@
   bash "${BASH_SOURCE[0]%/*}/phpcs.sh"

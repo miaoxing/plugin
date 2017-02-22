@@ -8,8 +8,8 @@ $dirs = [
     'vendor/miaoxing/plugin',
 ];
 foreach ($dirs as $dir) {
-    if (is_file($dir . '/tests/bootstrap.php')) {
-        require $dir . '/tests/bootstrap.php';
+    if (is_file($dir . '/tests/init.php')) {
+        require $dir . '/tests/init.php';
     }
 }
 $wei = wei();
@@ -20,7 +20,7 @@ foreach ($tables as $table) {
     if ($table['TABLE_NAME'] == 'migrations') {
         continue;
     }
-    wei()->db->query("TRUNCATE TABLE app." . $table['TABLE_NAME']);
+    $wei->db->query("TRUNCATE TABLE app." . $table['TABLE_NAME']);
 }
 
 // 3. 运行全部rollback的SQL
