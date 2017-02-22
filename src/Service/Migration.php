@@ -133,6 +133,11 @@ class Migration extends BaseService
             $namespace = $req['namespace'];
         }
 
+        if (!$path) {
+            $this->writeln($this->cli->error('Path should not be empty'));
+            return $this->err('Path should not be empty');
+        }
+
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
             chmod($path, 0777);
