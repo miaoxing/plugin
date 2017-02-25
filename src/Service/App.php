@@ -133,7 +133,7 @@ class App extends \Wei\App
             return false;
         }
 
-        wei()->logger->info('Got wechat appId ' . $namespace);
+        wei()->logger->debug('Got wechat appId', ['appId' => $namespace]);
 
         $appId = wei()->wechatAccount()->select('appId')->fetchColumn(['applicationId' => $namespace]);
         if (!$appId) {
@@ -141,7 +141,7 @@ class App extends \Wei\App
         }
 
         $namespace = wei()->appRecord()->select('name')->fetchColumn(['id' => $appId]);
-        wei()->logger->info('Convert wechat appId to namespace ' . $namespace);
+        wei()->logger->debug('Convert wechat appId to namespace', ['namespace' => $namespace]);
 
         return $namespace;
     }
