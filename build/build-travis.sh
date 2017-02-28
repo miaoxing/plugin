@@ -81,8 +81,9 @@ body=`echo "${body}" | perl -pe 's/\e\[?.*?[\@-~]//g'` # 过滤颜色
 data="{\"title\":\"$title\",\"body\":\"$body\",\"assignees\":[\"$assignee\"],\"labels\":[\"task\"]}"
 echo "$data"
 
+GITHUB_ISSUE_NOTIFY_REPO=${GITHUB_ISSUE_NOTIFY_REPO:-twinh/test}
 curl -H "Authorization: token $GITHUB_ISSUE_NOTIFY_TOKEN" -d "$data" \
-"https://api.github.com/repos/twinh/test/issues"
+"https://api.github.com/repos/$GITHUB_ISSUE_NOTIFY_REPO/issues"
 
 # 4. 返回构建失败
 exit 1;
