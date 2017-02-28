@@ -42,6 +42,8 @@ class AppRecord extends \miaoxing\plugin\BaseModel
             return true;
         }
 
+        $this->cache->clear();
+
         return $this->cache->get('appExists' . $name, 86400, function () use ($name) {
             $app = wei()->appRecord()->select('name')->fetch(['name' => $name]);
 
