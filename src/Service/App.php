@@ -164,7 +164,6 @@ class App extends \Wei\App
     {
         $file = parent::getDefaultTemplate();
         $plugin = $this->getPlugin();
-
         return $plugin ? '@' . $plugin . '/' . $file : $file;
     }
 
@@ -181,6 +180,12 @@ class App extends \Wei\App
                 // 认为第二部分是插件名称
                 list(, $this->plugin) = explode('\\', $class, 3);
                 $this->plugin = lcfirst($this->plugin);
+
+                // TODO V2改为默认
+                if (substr($class, 0, 8) == 'Miaoxing') {
+                    $this->plugin = $this->dash($this->plugin);
+                }
+
                 break;
             }
         }
@@ -290,5 +295,14 @@ class App extends \Wei\App
         return is_array($response)
         && array_key_exists('code', $response)
         && array_key_exists('message', $response);
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    protected function dash($name)
+    {
+        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
     }
 }
