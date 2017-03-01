@@ -164,6 +164,7 @@ class App extends \Wei\App
     {
         $file = parent::getDefaultTemplate();
         $plugin = $this->getPlugin();
+
         return $plugin ? '@' . $plugin . '/' . $file : $file;
     }
 
