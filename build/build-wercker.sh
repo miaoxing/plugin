@@ -3,7 +3,7 @@
 # 1. 如果上一步是自动修复代码,则不用再做一遍
 message=$(git log -1 --pretty=%B)
 if [[ "$message" == *"[skip fix]"* ]]; then
-  info "skip fix"
+  echo "skip fix"
   exit 0
 fi
 
