@@ -2,7 +2,14 @@
 
 set -e
 
-# 1. 执行各类检查
+# 1. 如果上一步是自动修复代码,则不用再做一遍
+message=$(git log -1 --pretty=%B)
+if [[ "$message" == *"[skip fix]"* ]]; then
+  info "skip fix"
+  exit 0
+fi
+
+# 2. 执行各类检查
 mkdir -p reports
 PATH=~/.composer/vendor/bin:$PATH
 
