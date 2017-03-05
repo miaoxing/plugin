@@ -64,7 +64,7 @@ class Tester extends \miaoxing\plugin\BaseService
         return new static([
             'wei' => $this->wei,
             'controller' => $controller,
-            'action' => $action ?: $this->action
+            'action' => $action ?: $this->action,
         ]);
     }
 
