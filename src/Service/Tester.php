@@ -55,12 +55,16 @@ class Tester extends \miaoxing\plugin\BaseService
     protected $response;
 
     /**
+     * @param string|null $controller
+     * @param string|null $action
      * @return $this
      */
-    public function __invoke()
+    public function __invoke($controller = null, $action = null)
     {
         return new static([
             'wei' => $this->wei,
+            'controller' => $controller,
+            'action' => $action ?: $this->action
         ]);
     }
 
@@ -223,6 +227,10 @@ class Tester extends \miaoxing\plugin\BaseService
      */
     public function response()
     {
+        if (is_null($this->response)) {
+            $this->exec();
+        }
+
         return $this->response;
     }
 

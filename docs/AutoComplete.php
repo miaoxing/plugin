@@ -4,7 +4,7 @@ namespace miaoxing\plugin\docs {
 
     /**
      * @property    \Miaoxing\Plugin\Service\Tester $tester
-     * @method      \Miaoxing\Plugin\Service\Tester tester()
+     * @method      \Miaoxing\Plugin\Service\Tester tester($controller = null, $action = null)
      */
     class AutoComplete
     {
