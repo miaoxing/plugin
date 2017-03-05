@@ -1,7 +1,8 @@
 {
   "rules": {
     "block-no-empty": null,
-    "block-no-single-line": true,
+    "block-opening-brace-newline-after": "always",
+    "block-closing-brace-newline-before": "always",
     "color-hex-case": "lower",
     "color-no-invalid-hex": true,
     "font-family-no-duplicate-names": true,
@@ -12,7 +13,6 @@
     "selector-pseudo-element-case": "lower",
     "selector-pseudo-element-colon-notation": "double",
     "selector-type-case": "lower",
-    "stylelint-disable-reason": "always-before",
     "comment-no-empty": true,
     "comment-whitespace-inside": "always",
     "declaration-colon-space-after": "always",
