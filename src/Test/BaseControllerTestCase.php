@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Test;
 
+use Miaoxing\Plugin\Service\Tester;
+
 class BaseControllerTestCase extends BaseTestCase
 {
     /**
@@ -82,6 +84,30 @@ class BaseControllerTestCase extends BaseTestCase
         }
 
         return $this->controller;
+    }
+
+    protected function getAction()
+    {
+        preg_match('/test(.+?)Action/', $this->getName(), $matches);
+        if (!isset($matches[1])) {
+            throw new \Exception('Invalid test case naming');
+        }
+
+        return lcfirst($matches[1]);
+    }
+
+    /**
+     * @param array $request
+     * @return Tester
+     */
+    protected function visitCurPage(array $request = [])
+    {
+        $controller = $this->getController();
+        $action = $this->getAction();
+        $this->step('访问页面' . $controller . '/' . $action);
+
+        return wei()->tester($controller, $action)
+            ->request($request);
     }
 
     /**

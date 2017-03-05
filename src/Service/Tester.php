@@ -223,11 +223,11 @@ class Tester extends \miaoxing\plugin\BaseService
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function response()
     {
-        if (is_null($this->response)) {
+        if ($this->response === null) {
             $this->exec();
         }
 
