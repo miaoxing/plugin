@@ -322,7 +322,7 @@ class Plugin extends BaseService
     {
         $plugin = $this->getById($id);
         if (!$plugin) {
-            throw new Exception(sprintf('Plugin "%s" not found', $id), 404);
+            throw new Exception(sprintf('Plugin "%s" not found', $id));
         }
 
         return $plugin;
