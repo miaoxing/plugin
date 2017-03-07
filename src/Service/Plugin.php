@@ -430,6 +430,17 @@ class Plugin extends BaseService
     }
 
     /**
+     * Check if a plugin exists
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function has($id)
+    {
+        return class_exists($this->getPluginClass($id));
+    }
+
+    /**
      * Check if a plugin is installed
      *
      * @param string $id

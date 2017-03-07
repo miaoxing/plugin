@@ -45,7 +45,7 @@
   </div>
 </script>
 
-<?php require $view->getFile('admin:admin/checkboxCol.php') ?>
+<?php require $view->getFile('plugin:admin/plugin/checkboxCol.php') ?>
 
 <?= $block('js') ?>
 <script>
