@@ -34,7 +34,10 @@ class Plugin extends \miaoxing\plugin\BaseController
     public function updateAction($req)
     {
         $pluginRepo = wei()->plugin;
-        $plugin = $pluginRepo->getOneById($req['id']);
+        $plugin = $pluginRepo->getById($req['id']);
+        if (!$plugin) {
+            return $this->err(sprintf('插件"%s"不存在', $req['id']));
+        }
 
         if (isset($req['installed'])) {
             if ($req['installed']) {

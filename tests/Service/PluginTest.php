@@ -29,7 +29,7 @@ class PluginTest extends BaseTestCase
 
     public function testGetOneByIdButPluginNotExists()
     {
-        $this->setExpectedException('Exception', 'Plugin "not-exists" not found', 404);
+        $this->setExpectedException('Exception', 'Plugin "not-exists" not found');
 
         wei()->plugin->getOneById('not-exists');
     }
