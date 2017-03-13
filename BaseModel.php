@@ -410,4 +410,16 @@ class BaseModel extends Record implements JsonSerializable
     {
         $this->data = array_filter($this->data, $fn);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray($returnFields = array())
+    {
+        if (!$this->isLoaded()) {
+            $this->loadData($this->isColl() ? 0 : 'id');
+        }
+
+        return parent::toArray($returnFields);
+    }
 }
