@@ -2,8 +2,6 @@
 
 namespace Miaoxing\Plugin\Test;
 
-use Miaoxing\Plugin\Test\BaseFixture;
-
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
     /**

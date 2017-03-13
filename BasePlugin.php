@@ -111,33 +111,6 @@ class BasePlugin extends \miaoxing\plugin\BaseService
     protected function initResources($id = null)
     {
         $id || $id = $this->getId();
-        $dir = 'plugins/' . $id;
-        $namespace = strtr($dir, '/', '\\');
-
-        // 1. 加载项目配置
-        $this->env->loadConfigDir($dir . '/configs');
-
-        // 2. 加载项目服务类
-        $serviceDir = $dir . '/services';
-        if (is_dir($serviceDir)) {
-            $this->wei->import($dir . '/services', $namespace . '\services');
-        }
-
-        // 3. 控制器继承
-        $this->app->setControllerFormat($namespace . '\controllers\%controller%');
-
-        // 4. 视图继承
-        $this->view->setDirs([$dir . '/views'] + $this->view->getDirs());
-    }
-
-    /**
-     * 加载插件的各项资源
-     *
-     * @param string $id
-     */
-    protected function initResourcesV2($id = null)
-    {
-        $id || $id = $this->getId();
         $plugin = $this->plugin->getById($id);
         $basePath = $plugin->getBasePath();
 

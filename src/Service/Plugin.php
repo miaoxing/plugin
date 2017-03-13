@@ -108,9 +108,6 @@ class Plugin extends BaseService
                 'view' => [
                     'parseResource' => [$this, 'parseViewResource'],
                 ],
-                'asset' => [
-                    'locateFile' => [$this, 'locateFile'],
-                ],
             ]);
     }
 
@@ -158,12 +155,7 @@ class Plugin extends BaseService
      */
     protected function getAppControllerMap()
     {
-        // TODO 暂时支持三级,待控制器升级后改为两级
-        return $this->generateClassMap(
-            $this->dirs,
-            ['/Controller/{*,*/*}.php', '/controllers/{*,*/*,*/*/*}.php'],
-            ['Controller', 'controllers']
-        );
+        return $this->generateClassMap($this->dirs, '/Controller/{*,*/*}.php', 'Controller');
     }
 
     /**
@@ -235,12 +227,7 @@ class Plugin extends BaseService
 
         if ($pluginId) {
             $plugin = $this->getOneById($pluginId);
-
-            // TODO 默认
-            $path = $plugin->getBasePath();
-            if (substr(get_class($plugin), 0, 8) == 'Miaoxing') {
-                $path .= '/resources';
-            }
+            $path = $plugin->getBasePath() . '/resources';
 
             return ['path' => $path, 'file' => $file];
         } else {
