@@ -436,7 +436,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         if (!isset($this->$record)) {
             $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
-            $this->$record = wei()->$record()->setOption('isRelation', true)->where([$foreignKey => $this[$localKey]]);
+            $this->$record = $this->wei->$record()->setOption('isRelation', true)->where([$foreignKey => $this[$localKey]]);
         }
 
         return $this->$record;
@@ -446,7 +446,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         if (!isset($this->$record)) {
             $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
-            $this->$record = wei()->$record()
+            $this->$record = $this->wei->$record()
                 ->beColl()
                 ->setOption('isRelation', true)
                 ->where([$foreignKey => $this[$localKey]]);
@@ -459,22 +459,42 @@ class BaseModel extends Record implements JsonSerializable
     {
         foreach ((array) $names as $name) {
             // load relations
+            /** @var BaseModel $record */
             $record = $this->{'get' . ucfirst($name)}();
 
             $baseName = lcfirst(end(explode('\\', get_class($record))));
 
             // fetch data
             $relation = $this->relations[$baseName];
-            $ids = $this->getAll($relation['localKey']);
+            $localKey = $relation['localKey'];
+            $foreignKey = $relation['foreignKey'];
+
+            $ids = $this->getAll($localKey);
             $ids = array_unique(array_filter($ids));
             if ($ids) {
-                $records = wei()->$baseName()->findAll([$relation['foreignKey'] => $ids])->indexBy($relation['foreignKey']);
+                $records = $this->wei->$baseName()->findAll([$foreignKey => $ids]);
+            } else {
+                $records = [];
             }
 
-            // Connect records
-            $localKey = $relation['localKey'];
-            foreach ($this as $row) {
-                $row->$name = isset($records[$row[$localKey]]) ? $records[$row[$localKey]] : null;
+            if (!$record->isColl()) {
+                if ($records) {
+                    $records->indexBy($relation['foreignKey']);
+                }
+
+                // Connect records
+                foreach ($this as $row) {
+                    $row->$name = isset($records[$row[$localKey]]) ? $records[$row[$localKey]] : null;
+                }
+            } else {
+                foreach ($this as $row) {
+                    $rowRelation = $row->$baseName = $this->wei->$baseName()->beColl();
+                    foreach ($records as $record) {
+                        if ($record[$foreignKey] == $row[$localKey]) {
+                            $rowRelation[] = $record;
+                        }
+                    }
+                }
             }
         }
 
