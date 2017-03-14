@@ -455,11 +455,11 @@ class BaseModel extends Record implements JsonSerializable
         return $this->$record;
     }
 
-    public function load($names)
+    public function includes($names)
     {
         foreach ((array) $names as $name) {
             // load relations
-            $record = $this->$name();
+            $record = $this->{'get' . ucfirst($name)}();
 
             $baseName = lcfirst(end(explode('\\', get_class($record))));
 
