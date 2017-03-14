@@ -442,6 +442,19 @@ class BaseModel extends Record implements JsonSerializable
         return $this->$record;
     }
 
+    public function hasMany($record, $foreignKey, $localKey)
+    {
+        if (!isset($this->$record)) {
+            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
+            $this->$record = wei()->$record()
+                ->beColl()
+                ->setOption('isRelation', true)
+                ->where([$foreignKey => $this[$localKey]]);
+        }
+
+        return $this->$record;
+    }
+
     public function load($names)
     {
         foreach ((array) $names as $name) {
