@@ -446,14 +446,16 @@ class BaseModel extends Record implements JsonSerializable
     {
         foreach ((array) $names as $name) {
             // load relations
-            $this->$name();
+            $record = $this->$name();
+
+            $baseName = lcfirst(end(explode('\\', get_class($record))));
 
             // fetch data
-            $relation = $this->relations[$name];
+            $relation = $this->relations[$baseName];
             $ids = $this->getAll($relation['localKey']);
             $ids = array_unique(array_filter($ids));
             if ($ids) {
-                $records = wei()->$name()->findAll([$relation['foreignKey'] => $ids])->indexBy($relation['foreignKey']);
+                $records = wei()->$baseName()->findAll([$relation['foreignKey'] => $ids])->indexBy($relation['foreignKey']);
             }
 
             // Connect records
