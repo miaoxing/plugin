@@ -432,27 +432,36 @@ class BaseModel extends Record implements JsonSerializable
 
     protected $isRelation = false;
 
-    public function hasOne($record, $foreignKey, $localKey)
+    /**
+     * @param string $record
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return $this
+     */
+    public function hasOne($record, $foreignKey = null, $localKey = null)
     {
         if (!isset($this->$record)) {
-            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
-            $this->$record = $this->wei->$record()->setOption('isRelation', true)->where([$foreignKey => $this[$localKey]]);
+            /** @var BaseModel $related */
+            $related = $this->$record = $this->wei->$record();
+
+            $this->setRelation($related, $record, $foreignKey, $localKey);
+
+            $related->setOption('isRelation', true)->where([$foreignKey => $this[$localKey]]);
         }
 
         return $this->$record;
     }
 
-    public function hasMany($record, $foreignKey, $localKey)
+    public function hasMany($record, $foreignKey = null, $localKey = null)
     {
-        if (!isset($this->$record)) {
-            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
-            $this->$record = $this->wei->$record()
-                ->beColl()
-                ->setOption('isRelation', true)
-                ->where([$foreignKey => $this[$localKey]]);
-        }
+        return $this->hasOne($record, $foreignKey, $localKey)->beColl();
+    }
 
-        return $this->$record;
+    protected function setRelation(BaseModel $related, $name, $foreignKey, $localKey)
+    {
+        $localKey || $localKey = $this->getPrimaryKey();
+        $foreignKey || $related = $related->getTable() . '_id';
+        $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
     }
 
     public function includes($names)
