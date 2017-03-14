@@ -422,4 +422,40 @@ class BaseModel extends Record implements JsonSerializable
 
         return parent::toArray($returnFields);
     }
+
+    protected $relations = [];
+
+    public function hasOne($record, $foreignKey, $localKey)
+    {
+        if (!isset($this->$record)) {
+            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
+            $this->$record = wei()->$record()->where([$foreignKey => $this[$localKey]]);
+        }
+
+        return $this->$record;
+    }
+
+    public function load($names)
+    {
+        foreach ((array) $names as $name) {
+            // load relations
+            $this->$name();
+
+            // fetch data
+            $relation = $this->relations[$name];
+            $ids = $this->getAll($relation['localKey']);
+            $ids = array_unique(array_filter($ids));
+            if ($ids) {
+                $records = wei()->$name()->findAll([$relation['foreignKey'] => $ids])->indexBy($relation['foreignKey']);
+            }
+
+            // Connect records
+            $localKey = $relation['localKey'];
+            foreach ($this as $row) {
+                $row->$name = isset($records[$row[$localKey]]) ? $records[$row[$localKey]] : null;
+            }
+        }
+
+        return $this;
+    }
 }
