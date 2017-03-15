@@ -64,7 +64,7 @@ class RecordTest extends BaseTestCase
                 'content' => 'Content 1',
             ],
             [
-                'test_user_id' => '1',
+                'test_user_id' => '2',
                 'title' => 'Article 2',
                 'content' => 'Content 2',
             ],
@@ -133,7 +133,7 @@ class RecordTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
-    public function testBelongsTo()
+    public function testRecordBelongsTo()
     {
         /** @var TestArticle $article */
         $article = wei()->testArticle();
@@ -151,7 +151,43 @@ class RecordTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
-    public function testHasMany()
+    public function testCollBelongsTo()
+    {
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = wei()->testArticle();
+
+        $articles->findAll()->includes('user');
+
+        foreach ($articles as  $article) {
+            $user = $article->getUser();
+            $this->assertEquals($article['test_user_id'], $user['id']);
+        }
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals("SELECT * FROM test_articles", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_users WHERE id IN (?, ?)", $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
+    public function testRecordHasMany()
+    {
+        /** @var TestUser $user */
+        $user = wei()->testUser();
+
+        $user->findOneById(1);
+        $articles = $user->getArticles();
+
+        foreach ($articles as $article) {
+            $this->assertEquals($article['test_user_id'], $user['id']);
+        }
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id = ?", $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
+    public function testCollHasMany()
     {
         /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
