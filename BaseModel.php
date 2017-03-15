@@ -476,10 +476,15 @@ class BaseModel extends Record implements JsonSerializable
             $junctionTable || $junctionTable = $this->getJunctionTable($related);
             $foreignKey || $foreignKey = $this->getForeignKey();
             $relatedKey || $relatedKey = $this->snake($record) . '_' . $this->getPrimaryKey();
-            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $relatedKey];
+            $this->relations[$record] = [
+                'junctionTable' => $junctionTable,
+                'relatedKey' => $relatedKey,
+                'foreignKey' => $foreignKey,
+                'localKey' => 'id',
+            ];
 
             $related->setOption('isRelation', true)->where([
-                $junctionTable. '.' . $foreignKey => $this['id']
+                $junctionTable . '.' . $foreignKey => $this['id'],
             ]);
 
             $relatedTable = $related->getTable();
@@ -496,10 +501,32 @@ class BaseModel extends Record implements JsonSerializable
             // load relations
             /** @var BaseModel $record */
             $record = $this->{'get' . ucfirst($name)}();
-            $serviceName = $this->getClassShortName($record);
+            $serviceName = $this->getClassServiceName($record);
+
+            $relation = $this->relations[$serviceName];
+            if (isset($relation['junctionTable'])) {
+                $ids = $this->getAll($relation['localKey']);
+                $ids = array_unique(array_filter($ids));
+
+                $record->setParameters([]);
+                $records = $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey'])
+                    ->where([$relation['junctionTable'] . '.' . $relation['foreignKey'] => $ids])
+                    ->fetchAll();
+
+                $localKey = $relation['localKey'];
+                $foreignKey = $relation['foreignKey'];
+                foreach ($this->data as $row) {
+                    $rowRelation = $row->$serviceName = $this->wei->$serviceName()->beColl();
+                    foreach ($records as $record) {
+                        if ($record[$foreignKey] == $row[$localKey]) {
+                            $rowRelation[] = $this->wei->$serviceName()->fromArray($record);
+                        }
+                    }
+                }
+                return $this;
+            }
 
             // fetch data
-            $relation = $this->relations[$serviceName];
             $localKey = $relation['localKey'];
             $foreignKey = $relation['foreignKey'];
 
@@ -540,14 +567,14 @@ class BaseModel extends Record implements JsonSerializable
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
     }
 
-    protected function getClassShortName($object)
+    protected function getClassServiceName($object)
     {
         return lcfirst(end(explode('\\', get_class($object))));
     }
 
     protected function getForeignKey()
     {
-        return $this->snake($this->getClassShortName($this)) . '_' . $this->getPrimaryKey();
+        return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
     }
 
     protected function getJunctionTable(BaseModel $related)

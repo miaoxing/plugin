@@ -3,7 +3,6 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
-use MiaoxingTest\App\Fixture\Controller\Test;
 use MiaoxingTest\Plugin\Fixture\TestArticle;
 use MiaoxingTest\Plugin\Fixture\TestTag;
 use MiaoxingTest\Plugin\Fixture\TestUser;
@@ -247,7 +246,8 @@ class RecordTest extends BaseTestCase
         $this->assertEquals("SELECT * FROM test_articles", $queries[0]);
         $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[1]);
         $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[1]);
-        $this->assertCount(3, $queries);
+        $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[1]);
+        $this->assertCount(4, $queries);
     }
 
     public function testRecordHasMany()
@@ -311,7 +311,7 @@ class RecordTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
-    public function testRecordBelongsToManyReverse()
+    public function testRecordBelongsToMany2()
     {
         /** @var TestTag $tag */
         $tag = wei()->testTag();
@@ -330,6 +330,34 @@ class RecordTest extends BaseTestCase
             . ' INNER JOIN test_articles_test_tags'
             . ' ON test_articles_test_tags.test_article_id = test_articles.id'
             . ' WHERE test_articles_test_tags.test_tag_id = ?';
+        $this->assertEquals($sql, $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
+    public function testCollBelongsToMany()
+    {
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = wei()->testArticle();
+
+        $articles->findAll()->includes('tags');
+
+        foreach ($articles as $article) {
+            foreach ($article->getTags() as $tag) {
+                $this->assertInstanceOf(TestTag::className(), $tag);
+            }
+        }
+
+        $this->assertEquals('work', $articles[0]->getTags()[0]['name']);
+        $this->assertEquals('life', $articles[0]->getTags()[1]['name']);
+        $this->assertEquals('work', $articles[1]->getTags()[0]['name']);
+        $this->assertEquals('life', $articles[2]->getTags()[0]['name']);
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
+        $sql = 'SELECT test_tags.*, test_articles_test_tags.test_article_id FROM test_tags'
+            . ' INNER JOIN test_articles_test_tags'
+            . ' ON test_articles_test_tags.test_tag_id = test_tags.id'
+            . ' WHERE test_articles_test_tags.test_article_id IN (?, ?, ?)';
         $this->assertEquals($sql, $queries[1]);
         $this->assertCount(2, $queries);
     }
