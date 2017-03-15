@@ -268,6 +268,28 @@ class RecordTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
+    public function testRecordHasManyWithQuery()
+    {
+        /** @var TestUser $user */
+        $user = wei()->testUser();
+
+        $user->findOneById(1);
+        $articles = $user->getArticles()->desc('id');
+
+        foreach ($articles as $article) {
+            $this->assertEquals($article['test_user_id'], $user['id']);
+        }
+
+        $this->assertEquals(2, $articles->length());
+        $this->assertEquals(3, $articles[0]['id']);
+        $this->assertEquals(1, $articles[1]['id']);
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id = ? ORDER BY id DESC", $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
     public function testCollHasMany()
     {
         /** @var TestUser|TestUser[] $users */
