@@ -473,34 +473,33 @@ class BaseModel extends Record implements JsonSerializable
             // load relations
             /** @var BaseModel $record */
             $record = $this->{'get' . ucfirst($name)}();
-
-            $baseName = lcfirst(end(explode('\\', get_class($record))));
+            $serviceName = $this->getClassBaseName($record);
 
             // fetch data
-            $relation = $this->relations[$baseName];
+            $relation = $this->relations[$serviceName];
             $localKey = $relation['localKey'];
             $foreignKey = $relation['foreignKey'];
 
             $ids = $this->getAll($localKey);
             $ids = array_unique(array_filter($ids));
             if ($ids) {
-                $records = $this->wei->$baseName()->findAll([$foreignKey => $ids]);
+                $records = $this->wei->$serviceName()->findAll([$foreignKey => $ids]);
             } else {
                 $records = [];
             }
 
+            // Connect records
             if (!$record->isColl()) {
                 if ($records) {
-                    $records->indexBy($relation['foreignKey']);
+                    $records->indexBy($foreignKey);
                 }
 
-                // Connect records
-                foreach ($this as $row) {
-                    $row->$name = isset($records[$row[$localKey]]) ? $records[$row[$localKey]] : null;
+                foreach ($this->data as $row) {
+                    $row->$serviceName = isset($records[$row[$localKey]]) ? $records[$row[$localKey]] : null;
                 }
             } else {
-                foreach ($this as $row) {
-                    $rowRelation = $row->$baseName = $this->wei->$baseName()->beColl();
+                foreach ($this->data as $row) {
+                    $rowRelation = $row->$serviceName = $this->wei->$serviceName()->beColl();
                     foreach ($records as $record) {
                         if ($record[$foreignKey] == $row[$localKey]) {
                             $rowRelation[] = $record;

@@ -96,7 +96,7 @@ class RecordTest extends BaseTestCase
         $this->clearLogs();
     }
 
-    public function testHasOne()
+    public function testRecordHasOne()
     {
         /** @var TestUser $user */
         $user = wei()->testUser();
@@ -111,6 +111,25 @@ class RecordTest extends BaseTestCase
 
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1', $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
+    public function testCollHasOne()
+    {
+        /** @var TestUser|TestUser[] $users */
+        $users = wei()->testUser();
+
+        $users->findAll()->includes('profile');
+
+        foreach ($users as $user) {
+            $profile = $user->getProfile();
+            $this->assertEquals($profile['test_user_id'], $user['id']);
+        }
+
+        $queries = wei()->db->getQueries();
+
+        $this->assertEquals("SELECT * FROM test_users", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id IN (?, ?)", $queries[1]);
         $this->assertCount(2, $queries);
     }
 
