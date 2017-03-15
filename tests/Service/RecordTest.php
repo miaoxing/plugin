@@ -26,13 +26,13 @@ class RecordTest extends BaseTestCase
 
         wei()->schema->table('test_profiles')
             ->id()
-            ->int('user_id')
+            ->int('test_user_id')
             ->string('description')
             ->exec();
 
         wei()->schema->table('test_articles')
             ->id()
-            ->int('user_id')
+            ->int('test_user_id')
             ->string('title', 128)
             ->text('content')
             ->exec();
@@ -48,28 +48,28 @@ class RecordTest extends BaseTestCase
 
         wei()->db->insertBatch('test_profiles', [
             [
-                'user_id' => '1',
+                'test_user_id' => '1',
                 'description' => 'My name is twin',
             ],
             [
-                'user_id' => '2',
+                'test_user_id' => '2',
                 'description' => 'My name is admin',
             ]
         ]);
 
         wei()->db->insertBatch('test_articles', [
             [
-                'user_id' => '1',
+                'test_user_id' => '1',
                 'title' => 'Article 1',
                 'content' => 'Content 1',
             ],
             [
-                'user_id' => '1',
+                'test_user_id' => '1',
                 'title' => 'Article 2',
                 'content' => 'Content 2',
             ],
             [
-                'user_id' => '1',
+                'test_user_id' => '1',
                 'title' => 'Article 3',
                 'content' => 'Content 3',
             ]
@@ -105,12 +105,12 @@ class RecordTest extends BaseTestCase
 
         $profile = $user->getProfile();
 
-        $this->assertEquals(1, $profile['user_id']);
+        $this->assertEquals(1, $profile['test_user_id']);
 
         $queries = wei()->db->getQueries();
 
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
-        $this->assertEquals('SELECT * FROM test_profiles WHERE user_id = ? LIMIT 1', $queries[1]);
+        $this->assertEquals('SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1', $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -141,14 +141,14 @@ class RecordTest extends BaseTestCase
 
         foreach ($users as $user) {
             foreach ($user->getArticles() as $article) {
-                $this->assertEquals($article['user_id'], $user['id']);
+                $this->assertEquals($article['test_user_id'], $user['id']);
             }
         }
 
         $queries = wei()->db->getQueries();
 
         $this->assertEquals("SELECT * FROM test_users", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_articles WHERE user_id IN (?, ?)", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?)", $queries[1]);
         $this->assertCount(2, $queries);
     }
 

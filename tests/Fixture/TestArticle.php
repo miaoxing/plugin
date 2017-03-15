@@ -10,6 +10,6 @@ class TestArticle extends BaseModel
 
     public function getUser()
     {
-        return $this->hasOne('testUser', 'id', 'user_id');
+        return $this->belongsTo('testUser');
     }
 }

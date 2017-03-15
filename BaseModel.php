@@ -444,7 +444,9 @@ class BaseModel extends Record implements JsonSerializable
             /** @var BaseModel $related */
             $related = $this->$record = $this->wei->$record();
 
-            $this->setRelation($related, $record, $foreignKey, $localKey);
+            $localKey || $localKey = $this->getPrimaryKey();
+            $foreignKey || $foreignKey = $this->getForeignKey();
+            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
             $related->setOption('isRelation', true)->where([$foreignKey => $this[$localKey]]);
         }
@@ -457,11 +459,12 @@ class BaseModel extends Record implements JsonSerializable
         return $this->hasOne($record, $foreignKey, $localKey)->beColl();
     }
 
-    protected function setRelation(BaseModel $related, $name, $foreignKey, $localKey)
+    public function belongsTo($record, $foreignKey = null, $localKey = null)
     {
-        $localKey || $localKey = $this->getPrimaryKey();
-        $foreignKey || $related = $related->getTable() . '_id';
-        $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
+        $foreignKey || $foreignKey = $this->getPrimaryKey();
+        $localKey || $localKey = $this->snake($record) . '_' . $this->getPrimaryKey();
+
+        return $this->hasOne($record, $foreignKey, $localKey);
     }
 
     public function includes($names)
@@ -508,5 +511,20 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return $this;
+    }
+
+    protected function snake($input)
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+    }
+
+    protected function getClassBaseName($object)
+    {
+        return lcfirst(end(explode('\\', get_class($object))));
+    }
+
+    protected function getForeignKey()
+    {
+        return $this->snake($this->getClassBaseName($this)) . '_' . $this->getPrimaryKey();
     }
 }
