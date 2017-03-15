@@ -175,6 +175,26 @@ class RecordTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
+    public function testCollHasOneLazyLoad()
+    {
+        /** @var TestUser|TestUser[] $users */
+        $users = wei()->testUser();
+
+        $users->findAll();
+
+        foreach ($users as $user) {
+            $profile = $user->getProfile();
+            $this->assertEquals($profile['test_user_id'], $user['id']);
+        }
+
+        $queries = wei()->db->getQueries();
+
+        $this->assertEquals("SELECT * FROM test_users", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1", $queries[1]);
+        $this->assertCount(3, $queries);
+    }
+
     public function testRecordBelongsTo()
     {
         /** @var TestArticle $article */
@@ -209,6 +229,25 @@ class RecordTest extends BaseTestCase
         $this->assertEquals("SELECT * FROM test_articles", $queries[0]);
         $this->assertEquals("SELECT * FROM test_users WHERE id IN (?, ?)", $queries[1]);
         $this->assertCount(2, $queries);
+    }
+
+    public function testCollBelongsToLazyLoad()
+    {
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = wei()->testArticle();
+
+        $articles->findAll();
+
+        foreach ($articles as  $article) {
+            $user = $article->getUser();
+            $this->assertEquals($article['test_user_id'], $user['id']);
+        }
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals("SELECT * FROM test_articles", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[1]);
+        $this->assertCount(3, $queries);
     }
 
     public function testRecordHasMany()
