@@ -12,4 +12,9 @@ class TestUser extends BaseModel
     {
         return $this->hasMany('testArticle', 'user_id', 'id');
     }
+
+    public function getProfile()
+    {
+        return $this->hasOne('testProfile', 'user_id', 'id');
+    }
 }

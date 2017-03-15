@@ -3,6 +3,7 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\App\Fixture\Controller\Test;
 use MiaoxingTest\Plugin\Fixture\TestArticle;
 use MiaoxingTest\Plugin\Fixture\TestUser;
 
@@ -23,6 +24,12 @@ class RecordTest extends BaseTestCase
             ->string('name', 32)
             ->exec();
 
+        wei()->schema->table('test_profiles')
+            ->id()
+            ->int('user_id')
+            ->string('description')
+            ->exec();
+
         wei()->schema->table('test_articles')
             ->id()
             ->int('user_id')
@@ -36,6 +43,17 @@ class RecordTest extends BaseTestCase
             ],
             [
                 'name' => 'admin',
+            ]
+        ]);
+
+        wei()->db->insertBatch('test_profiles', [
+            [
+                'user_id' => '1',
+                'description' => 'My name is twin',
+            ],
+            [
+                'user_id' => '2',
+                'description' => 'My name is admin',
             ]
         ]);
 
@@ -67,13 +85,37 @@ class RecordTest extends BaseTestCase
     public static function dropTables()
     {
         wei()->schema->dropIfExists('test_users');
+        wei()->schema->dropIfExists('test_profiles');
         wei()->schema->dropIfExists('test_articles');
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->clearLogs();
     }
 
     public function testHasOne()
     {
-        $this->clearLogs();
+        /** @var TestUser $user */
+        $user = wei()->testUser();
 
+        $user->findOneById(1);
+
+        $profile = $user->getProfile();
+
+        $this->assertEquals(1, $profile['user_id']);
+
+        $queries = wei()->db->getQueries();
+
+        $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
+        $this->assertEquals('SELECT * FROM test_profiles WHERE user_id = ? LIMIT 1', $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
+    public function testBelongsTo()
+    {
         /** @var TestArticle $article */
         $article = wei()->testArticle();
 
@@ -92,8 +134,6 @@ class RecordTest extends BaseTestCase
 
     public function testHasMany()
     {
-        $this->clearLogs();
-
         /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
 
@@ -117,6 +157,7 @@ class RecordTest extends BaseTestCase
         // preload fields cache
         wei()->testUser()->getFields();
         wei()->testArticle()->getFields();
+        wei()->testProfile()->getFields();
 
         wei()->db->setOption('queries', []);
     }
