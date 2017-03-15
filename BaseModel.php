@@ -467,6 +467,28 @@ class BaseModel extends Record implements JsonSerializable
         return $this->hasOne($record, $foreignKey, $localKey);
     }
 
+    public function belongsToMany($record, $table = null, $foreignKey = null, $localKey = null)
+    {
+        if (!isset($this->$record)) {
+            /** @var BaseModel $related */
+            $related = $this->$record = $this->wei->$record();
+
+            $localKey || $localKey = $this->getPrimaryKey();
+            $foreignKey || $foreignKey = $this->getForeignKey();
+            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
+
+            $related->setOption('isRelation', true)->where([
+                $table. '.' . $localKey => $this['id']
+            ]);
+
+            $relatedTable = $related->getTable();
+            $related->select($relatedTable . '.*')
+                ->innerJoin($table, sprintf('%s.%s = %s.%s', $table, $foreignKey, $relatedTable, 'id'));
+        }
+
+        return $this->$record;
+    }
+
     public function includes($names)
     {
         foreach ((array) $names as $name) {

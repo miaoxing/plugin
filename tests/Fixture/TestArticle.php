@@ -12,4 +12,9 @@ class TestArticle extends BaseModel
     {
         return $this->belongsTo('testUser');
     }
+
+    public function getTags()
+    {
+        return $this->belongsToMany('testTag', 'test_article_test_tag', 'test_tag_id', 'test_article_id');
+    }
 }

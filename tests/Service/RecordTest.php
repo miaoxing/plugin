@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Service;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\App\Fixture\Controller\Test;
 use MiaoxingTest\Plugin\Fixture\TestArticle;
+use MiaoxingTest\Plugin\Fixture\TestTag;
 use MiaoxingTest\Plugin\Fixture\TestUser;
 
 /**
@@ -37,6 +38,17 @@ class RecordTest extends BaseTestCase
             ->text('content')
             ->exec();
 
+        wei()->schema->table('test_tags')
+            ->id()
+            ->string('name')
+            ->exec();
+
+        wei()->schema->table('test_article_test_tag')
+            ->id()
+            ->int('test_article_id')
+            ->int('test_tag_id')
+            ->exec();
+
         wei()->db->insertBatch('test_users', [
             [
                 'name' => 'twin',
@@ -57,6 +69,15 @@ class RecordTest extends BaseTestCase
             ]
         ]);
 
+        wei()->db->insertBatch('test_tags', [
+            [
+                'name' => 'work',
+            ],
+            [
+                'name' => 'life'
+            ]
+        ]);
+
         wei()->db->insertBatch('test_articles', [
             [
                 'test_user_id' => '1',
@@ -74,6 +95,25 @@ class RecordTest extends BaseTestCase
                 'content' => 'Content 3',
             ]
         ]);
+
+        wei()->db->insertBatch('test_article_test_tag', [
+            [
+                'test_article_id' => 1,
+                'test_tag_id' => 1,
+            ],
+            [
+                'test_article_id' => 1,
+                'test_tag_id' => 2,
+            ],
+            [
+                'test_article_id' => 2,
+                'test_tag_id' => 1,
+            ],
+            [
+                'test_article_id' => 3,
+                'test_tag_id' => 2,
+            ]
+        ]);
     }
 
     public static function tearDownAfterClass()
@@ -87,6 +127,8 @@ class RecordTest extends BaseTestCase
         wei()->schema->dropIfExists('test_users');
         wei()->schema->dropIfExists('test_profiles');
         wei()->schema->dropIfExists('test_articles');
+        wei()->schema->dropIfExists('test_tags');
+        wei()->schema->dropIfExists('test_article_test_tag');
     }
 
     public function setUp()
@@ -207,12 +249,59 @@ class RecordTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
+    public function testRecordBelongsToMany()
+    {
+        /** @var TestArticle $article */
+        $article = wei()->testArticle();
+
+        $article->findOneById(1);
+
+        $tags = $article->getTags();
+
+        $this->assertEquals('work', $tags[0]['name']);
+        $this->assertEquals('life', $tags[1]['name']);
+
+        $queries = wei()->db->getQueries();
+
+        $this->assertEquals('SELECT * FROM test_articles WHERE id = ? LIMIT 1', $queries[0]);
+        $sql = 'SELECT test_tags.* FROM test_tags'
+            . ' INNER JOIN test_article_test_tag'
+            . ' ON test_article_test_tag.test_tag_id = test_tags.id'
+            . ' WHERE test_article_test_tag.test_article_id = ?';
+        $this->assertEquals($sql, $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
+    public function testRecordBelongsToManyReverse()
+    {
+        /** @var TestTag $tag */
+        $tag = wei()->testTag();
+
+        $tag->findOneById(1);
+
+        $articles = $tag->getArticles();
+
+        $this->assertEquals('Article 1', $articles[0]['title']);
+        $this->assertEquals('Article 2', $articles[1]['title']);
+
+        $queries = wei()->db->getQueries();
+
+        $this->assertEquals('SELECT * FROM test_tags WHERE id = ? LIMIT 1', $queries[0]);
+        $sql = 'SELECT test_articles.* FROM test_articles'
+            . ' INNER JOIN test_article_test_tag'
+            . ' ON test_article_test_tag.test_article_id = test_articles.id'
+            . ' WHERE test_article_test_tag.test_tag_id = ?';
+        $this->assertEquals($sql, $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
         wei()->testUser()->getFields();
         wei()->testArticle()->getFields();
         wei()->testProfile()->getFields();
+        wei()->testTag()->getFields();
 
         wei()->db->setOption('queries', []);
     }
