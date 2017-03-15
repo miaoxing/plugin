@@ -467,23 +467,24 @@ class BaseModel extends Record implements JsonSerializable
         return $this->hasOne($record, $foreignKey, $localKey);
     }
 
-    public function belongsToMany($record, $table = null, $foreignKey = null, $localKey = null)
+    public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
     {
         if (!isset($this->$record)) {
             /** @var BaseModel $related */
             $related = $this->$record = $this->wei->$record();
 
-            $localKey || $localKey = $this->getPrimaryKey();
+            $junctionTable || $junctionTable = $this->getJunctionTable($related);
             $foreignKey || $foreignKey = $this->getForeignKey();
-            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
+            $relatedKey || $relatedKey = $this->snake($record) . '_' . $this->getPrimaryKey();
+            $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $relatedKey];
 
             $related->setOption('isRelation', true)->where([
-                $table. '.' . $localKey => $this['id']
+                $junctionTable. '.' . $foreignKey => $this['id']
             ]);
 
             $relatedTable = $related->getTable();
             $related->select($relatedTable . '.*')
-                ->innerJoin($table, sprintf('%s.%s = %s.%s', $table, $foreignKey, $relatedTable, 'id'));
+                ->innerJoin($junctionTable, sprintf('%s.%s = %s.%s', $junctionTable, $relatedKey, $relatedTable, 'id'));
         }
 
         return $this->$record;
@@ -495,7 +496,7 @@ class BaseModel extends Record implements JsonSerializable
             // load relations
             /** @var BaseModel $record */
             $record = $this->{'get' . ucfirst($name)}();
-            $serviceName = $this->getClassBaseName($record);
+            $serviceName = $this->getClassShortName($record);
 
             // fetch data
             $relation = $this->relations[$serviceName];
@@ -539,13 +540,21 @@ class BaseModel extends Record implements JsonSerializable
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
     }
 
-    protected function getClassBaseName($object)
+    protected function getClassShortName($object)
     {
         return lcfirst(end(explode('\\', get_class($object))));
     }
 
     protected function getForeignKey()
     {
-        return $this->snake($this->getClassBaseName($this)) . '_' . $this->getPrimaryKey();
+        return $this->snake($this->getClassShortName($this)) . '_' . $this->getPrimaryKey();
+    }
+
+    protected function getJunctionTable(BaseModel $related)
+    {
+        $tables = [$this->getTable(), $related->getTable()];
+        sort($tables);
+
+        return implode('_', $tables);
     }
 }

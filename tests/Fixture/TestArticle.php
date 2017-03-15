@@ -15,6 +15,6 @@ class TestArticle extends BaseModel
 
     public function getTags()
     {
-        return $this->belongsToMany('testTag', 'test_article_test_tag', 'test_tag_id', 'test_article_id');
+        return $this->belongsToMany('testTag');
     }
 }

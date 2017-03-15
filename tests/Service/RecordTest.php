@@ -43,7 +43,7 @@ class RecordTest extends BaseTestCase
             ->string('name')
             ->exec();
 
-        wei()->schema->table('test_article_test_tag')
+        wei()->schema->table('test_articles_test_tags')
             ->id()
             ->int('test_article_id')
             ->int('test_tag_id')
@@ -96,7 +96,7 @@ class RecordTest extends BaseTestCase
             ]
         ]);
 
-        wei()->db->insertBatch('test_article_test_tag', [
+        wei()->db->insertBatch('test_articles_test_tags', [
             [
                 'test_article_id' => 1,
                 'test_tag_id' => 1,
@@ -128,7 +128,7 @@ class RecordTest extends BaseTestCase
         wei()->schema->dropIfExists('test_profiles');
         wei()->schema->dropIfExists('test_articles');
         wei()->schema->dropIfExists('test_tags');
-        wei()->schema->dropIfExists('test_article_test_tag');
+        wei()->schema->dropIfExists('test_articles_test_tags');
     }
 
     public function setUp()
@@ -265,9 +265,9 @@ class RecordTest extends BaseTestCase
 
         $this->assertEquals('SELECT * FROM test_articles WHERE id = ? LIMIT 1', $queries[0]);
         $sql = 'SELECT test_tags.* FROM test_tags'
-            . ' INNER JOIN test_article_test_tag'
-            . ' ON test_article_test_tag.test_tag_id = test_tags.id'
-            . ' WHERE test_article_test_tag.test_article_id = ?';
+            . ' INNER JOIN test_articles_test_tags'
+            . ' ON test_articles_test_tags.test_tag_id = test_tags.id'
+            . ' WHERE test_articles_test_tags.test_article_id = ?';
         $this->assertEquals($sql, $queries[1]);
         $this->assertCount(2, $queries);
     }
@@ -288,9 +288,9 @@ class RecordTest extends BaseTestCase
 
         $this->assertEquals('SELECT * FROM test_tags WHERE id = ? LIMIT 1', $queries[0]);
         $sql = 'SELECT test_articles.* FROM test_articles'
-            . ' INNER JOIN test_article_test_tag'
-            . ' ON test_article_test_tag.test_article_id = test_articles.id'
-            . ' WHERE test_article_test_tag.test_tag_id = ?';
+            . ' INNER JOIN test_articles_test_tags'
+            . ' ON test_articles_test_tags.test_article_id = test_articles.id'
+            . ' WHERE test_articles_test_tags.test_tag_id = ?';
         $this->assertEquals($sql, $queries[1]);
         $this->assertCount(2, $queries);
     }
