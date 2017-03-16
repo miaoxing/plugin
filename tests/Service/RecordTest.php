@@ -476,6 +476,27 @@ class RecordTest extends BaseTestCase
         $this->assertCount(1, $queries);
     }
 
+    public function testNewRecordsRecordIsNull()
+    {
+        /** @var TestUser $user */
+        $user = wei()->testUser();
+
+        $profile = $user->profile;
+
+        $this->assertNull($profile);
+    }
+
+    public function testNewRecordsCollIsNotNull()
+    {
+        /** @var TestUser $user */
+        $user = wei()->testUser();
+
+        $articles = $user->articles;
+
+        $this->assertNotNull($articles);
+        $this->assertInstanceOf(TestArticle::className(), $articles);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache

@@ -630,15 +630,23 @@ class BaseModel extends Record implements JsonSerializable
             $related = $this->$name();
             $serviceName = $this->getClassServiceName($related);
             $relation = $this->relations[$serviceName];
-            if (!$this[$relation['localKey']]) {
-                return $this->$name = null;
-            }
+            $localValue = $this[$relation['localKey']];
 
             if ($related->isColl()) {
-                return $this->$name = $related->findAll();
+                if ($localValue) {
+                    $this->$name = $related->findAll();
+                } else {
+                    $this->$name = $related;
+                }
+            } else {
+                if ($localValue) {
+                    $this->$name = $related->find() ?: null;
+                } else {
+                    $this->$name = null;
+                }
             }
 
-            return $this->$name = $related->find() ?: null;
+            return $this->$name;
         }
 
         // Receive service
