@@ -60,6 +60,20 @@ class BaseModel extends Record implements JsonSerializable
     protected $userIdColumn = 'userId';
 
     /**
+     * The relation configs
+     *
+     * @var array
+     */
+    protected $relations = [];
+
+    /**
+     * The value for relation base query
+     *
+     * @var mixed
+     */
+    protected $relationValue;
+
+    /**
      * @return BaseModel|BaseModel[]
      */
     public function __invoke()
@@ -423,10 +437,6 @@ class BaseModel extends Record implements JsonSerializable
         return parent::toArray($returnFields);
     }
 
-    protected $relations = [];
-
-    protected $relationValue;
-
     /**
      * @param string $record
      * @param string|null $foreignKey
@@ -447,11 +457,23 @@ class BaseModel extends Record implements JsonSerializable
         return $related;
     }
 
+    /**
+     * @param string $record
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return $this
+     */
     public function hasMany($record, $foreignKey = null, $localKey = null)
     {
         return $this->hasOne($record, $foreignKey, $localKey)->beColl();
     }
 
+    /**
+     * @param string $record
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return BaseModel
+     */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
     {
         $foreignKey || $foreignKey = $this->getPrimaryKey();
@@ -460,28 +482,37 @@ class BaseModel extends Record implements JsonSerializable
         return $this->hasOne($record, $foreignKey, $localKey);
     }
 
+    /**
+     * @param string $record
+     * @param string|null $junctionTable
+     * @param string|null $foreignKey
+     * @param string|null $relatedKey
+     * @return BaseModel
+     */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
     {
         /** @var BaseModel $related */
         $related = $this->wei->$record();
 
+        $primaryKey = $this->getPrimaryKey();
         $junctionTable || $junctionTable = $this->getJunctionTable($related);
         $foreignKey || $foreignKey = $this->getForeignKey();
-        $relatedKey || $relatedKey = $this->snake($record) . '_' . $this->getPrimaryKey();
+        $relatedKey || $relatedKey = $this->snake($record) . '_' . $primaryKey;
         $this->relations[$record] = [
             'junctionTable' => $junctionTable,
             'relatedKey' => $relatedKey,
             'foreignKey' => $foreignKey,
-            'localKey' => 'id',
+            'localKey' => $primaryKey,
         ];
-
-        $related->beColl()->where([
-            $junctionTable . '.' . $foreignKey => $this->getRelationValue($this->getPrimaryKey()),
-        ]);
 
         $relatedTable = $related->getTable();
         $related->select($relatedTable . '.*')
-            ->innerJoin($junctionTable, sprintf('%s.%s = %s.%s', $junctionTable, $relatedKey, $relatedTable, 'id'));
+            ->where([$junctionTable . '.' . $foreignKey => $this->getRelationValue($primaryKey)])
+            ->innerJoin(
+                $junctionTable,
+                sprintf('%s.%s = %s.%s', $junctionTable, $relatedKey, $relatedTable, $primaryKey)
+            )
+            ->beColl();
 
         return $related;
     }
@@ -490,38 +521,38 @@ class BaseModel extends Record implements JsonSerializable
     {
         foreach ((array) $names as $name) {
             // 1. Load relation config
-            /** @var BaseModel $record */
-            $record = $this->$name();
-            $isColl = $record->isColl();
-            $serviceName = $this->getClassServiceName($record);
-
-            // 2. Load relation record data
+            /** @var BaseModel $related */
+            $related = $this->$name();
+            $isColl = $related->isColl();
+            $serviceName = $this->getClassServiceName($related);
             $relation = $this->relations[$serviceName];
+
+            // 2. Fetch relation record data
             $ids = $this->getAll($relation['localKey']);
             $ids = array_unique(array_filter($ids));
             if ($ids) {
                 $this->relationValue = $ids;
-                $record = $this->$name();
+                $related = $this->$name();
                 $this->relationValue = null;
             } else {
-                $record = null;
+                $related = null;
             }
 
-            // 3.
+            // 3. Load relation data
             if (isset($relation['junctionTable'])) {
-                $this->loadBelongsToMany($record, $relation, $name, $serviceName);
+                $this->loadBelongsToMany($related, $relation, $name);
             } else if ($isColl) {
-                $this->loadHasMany($record, $relation, $name, $serviceName);
+                $this->loadHasMany($related, $relation, $name);
             } else {
-                $this->loadHasOne($record, $relation, $name, $serviceName);
+                $this->loadHasOne($related, $relation, $name);
             }
         }
     }
 
-    protected function loadHasOne(Record $record, $relation, $name, $serviceName)
+    protected function loadHasOne(Record $related, $relation, $name)
     {
-        if ($record) {
-            $records = $record->findAll();
+        if ($related) {
+            $records = $related->findAll();
         } else {
             $records = [];
         }
@@ -535,24 +566,10 @@ class BaseModel extends Record implements JsonSerializable
         }
     }
 
-    protected function loadHasMany(Record $record, $relation, $name, $serviceName)
+    protected function loadHasMany(Record $related, $relation, $name)
     {
-        $records = $record->findAll();
-        foreach ($this->data as $row) {
-            $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
-            foreach ($records as $record) {
-                if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
-                    $rowRelation[] = $record;
-                }
-            }
-        }
-    }
-
-    protected function loadBelongsToMany(Record $record, $relation, $name, $serviceName)
-    {
-        $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
-        $records = $record->fetchAll();
-
+        $serviceName = $this->getClassServiceName($related);
+        $records = $related->fetchAll();
         foreach ($this->data as $row) {
             $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
             foreach ($records as $record) {
@@ -561,7 +578,12 @@ class BaseModel extends Record implements JsonSerializable
                 }
             }
         }
-        return $this;
+    }
+
+    protected function loadBelongsToMany(Record $record, $relation, $name)
+    {
+        $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
+        $this->loadHasMany($record, $relation, $name);
     }
 
     public function __get($name)
