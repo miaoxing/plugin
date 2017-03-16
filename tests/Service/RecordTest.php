@@ -144,7 +144,7 @@ class RecordTest extends BaseTestCase
 
         $user->findOneById(1);
 
-        $profile = $user->getProfile();
+        $profile = $user->profile;
 
         $this->assertEquals(1, $profile['test_user_id']);
 
@@ -163,7 +163,7 @@ class RecordTest extends BaseTestCase
         $users->findAll()->includes('profile');
 
         foreach ($users as $user) {
-            $profile = $user->getProfile();
+            $profile = $user->profile;
             $this->assertEquals($profile['test_user_id'], $user['id']);
         }
 
@@ -182,7 +182,7 @@ class RecordTest extends BaseTestCase
         $users->findAll();
 
         foreach ($users as $user) {
-            $profile = $user->getProfile();
+            $profile = $user->profile;
             $this->assertEquals($profile['test_user_id'], $user['id']);
         }
 
@@ -201,7 +201,7 @@ class RecordTest extends BaseTestCase
 
         $article->findOneById(1);
 
-        $user = $article->getUser();
+        $user = $article->user;
 
         $this->assertEquals(1, $user['id']);
 
@@ -220,7 +220,7 @@ class RecordTest extends BaseTestCase
         $articles->findAll()->includes('user');
 
         foreach ($articles as  $article) {
-            $user = $article->getUser();
+            $user = $article->user;
             $this->assertEquals($article['test_user_id'], $user['id']);
         }
 
@@ -238,7 +238,7 @@ class RecordTest extends BaseTestCase
         $articles->findAll();
 
         foreach ($articles as  $article) {
-            $user = $article->getUser();
+            $user = $article->user;
             $this->assertEquals($article['test_user_id'], $user['id']);
         }
 
@@ -256,7 +256,7 @@ class RecordTest extends BaseTestCase
         $user = wei()->testUser();
 
         $user->findOneById(1);
-        $articles = $user->getArticles();
+        $articles = $user->articles;
 
         foreach ($articles as $article) {
             $this->assertEquals($article['test_user_id'], $user['id']);
@@ -274,7 +274,7 @@ class RecordTest extends BaseTestCase
         $user = wei()->testUser();
 
         $user->findOneById(1);
-        $articles = $user->getArticles()->andWhere('id >= ?', 1)->desc('id');
+        $articles = $user->articles()->andWhere('id >= ?', 1)->desc('id');
 
         foreach ($articles as $article) {
             $this->assertEquals($article['test_user_id'], $user['id']);
@@ -298,7 +298,7 @@ class RecordTest extends BaseTestCase
         $users->findAll()->includes('articles');
 
         foreach ($users as $user) {
-            foreach ($user->getArticles() as $article) {
+            foreach ($user->articles as $article) {
                 $this->assertEquals($article['test_user_id'], $user['id']);
             }
         }
@@ -318,7 +318,7 @@ class RecordTest extends BaseTestCase
         $users->findAll()->includes('customArticles');
 
         foreach ($users as $user) {
-            foreach ($user->getArticles() as $article) {
+            foreach ($user->customArticles as $article) {
                 $this->assertEquals($article['test_user_id'], $user['id']);
             }
         }
@@ -337,7 +337,7 @@ class RecordTest extends BaseTestCase
 
         $article->findOneById(1);
 
-        $tags = $article->getTags();
+        $tags = $article->tags;
 
         $this->assertEquals('work', $tags[0]['name']);
         $this->assertEquals('life', $tags[1]['name']);
@@ -360,7 +360,7 @@ class RecordTest extends BaseTestCase
 
         $tag->findOneById(1);
 
-        $articles = $tag->getArticles();
+        $articles = $tag->articles;
 
         $this->assertEquals('Article 1', $articles[0]['title']);
         $this->assertEquals('Article 2', $articles[1]['title']);
@@ -382,17 +382,18 @@ class RecordTest extends BaseTestCase
         $articles = wei()->testArticle();
 
         $articles->findAll()->includes('tags');
+        $queries = wei()->db->getQueries();
 
         foreach ($articles as $article) {
-            foreach ($article->getTags() as $tag) {
+            foreach ($article->tags as $tag) {
                 $this->assertInstanceOf(TestTag::className(), $tag);
             }
         }
 
-        $this->assertEquals('work', $articles[0]->getTags()[0]['name']);
-        $this->assertEquals('life', $articles[0]->getTags()[1]['name']);
-        $this->assertEquals('work', $articles[1]->getTags()[0]['name']);
-        $this->assertEquals('life', $articles[2]->getTags()[0]['name']);
+        $this->assertEquals('work', $articles[0]->tags[0]['name']);
+        $this->assertEquals('life', $articles[0]->tags[1]['name']);
+        $this->assertEquals('work', $articles[1]->tags[0]['name']);
+        $this->assertEquals('life', $articles[2]->tags[0]['name']);
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
