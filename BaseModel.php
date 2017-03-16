@@ -549,27 +549,22 @@ class BaseModel extends Record implements JsonSerializable
         }
     }
 
-    protected function loadHasOne(Record $related, $relation, $name)
+    protected function loadHasOne(Record $related = null, $relation, $name)
     {
         if ($related) {
-            $records = $related->findAll();
+            $records = $related->findAll()->indexBy($relation['foreignKey']);
         } else {
             $records = [];
         }
-
-        if ($records) {
-            $records->indexBy($relation['foreignKey']);
-        }
-
         foreach ($this->data as $row) {
             $row->$name = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
         }
     }
 
-    protected function loadHasMany(Record $related, $relation, $name)
+    protected function loadHasMany(Record $related = null, $relation, $name)
     {
         $serviceName = $this->getClassServiceName($related);
-        $records = $related->fetchAll();
+        $records = $related ? $related->fetchAll() : [];
         foreach ($this->data as $row) {
             $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
             foreach ($records as $record) {
@@ -580,10 +575,12 @@ class BaseModel extends Record implements JsonSerializable
         }
     }
 
-    protected function loadBelongsToMany(Record $record, $relation, $name)
+    protected function loadBelongsToMany(Record $related = null, $relation, $name)
     {
-        $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
-        $this->loadHasMany($record, $relation, $name);
+        if ($related) {
+            $related->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
+        }
+        $this->loadHasMany($related, $relation, $name);
     }
 
     public function __get($name)
