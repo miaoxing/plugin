@@ -568,7 +568,7 @@ class BaseModel extends Record implements JsonSerializable
             if ($record->isColl()) {
                 $this->$name = $record->findAll();
             } else {
-                $this->$name = $record->find();
+                $this->$name = $record->find() ?: null;
             }
 
             return $this->$name;

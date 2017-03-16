@@ -54,6 +54,9 @@ class RecordTest extends BaseTestCase
             ],
             [
                 'name' => 'admin',
+            ],
+            [
+                'name' => 'test'
             ]
         ]);
 
@@ -161,15 +164,14 @@ class RecordTest extends BaseTestCase
 
         $users->findAll()->includes('profile');
 
-        foreach ($users as $user) {
-            $profile = $user->profile;
-            $this->assertEquals($profile['test_user_id'], $user['id']);
-        }
+        $this->assertEquals($users[0]['id'], $users[0]->profile['test_user_id']);
+        $this->assertEquals($users[1]['id'], $users[1]->profile['test_user_id']);
+        $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
 
         $this->assertEquals("SELECT * FROM test_users", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id IN (?, ?)", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id IN (?, ?, ?)", $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -180,17 +182,17 @@ class RecordTest extends BaseTestCase
 
         $users->findAll();
 
-        foreach ($users as $user) {
-            $profile = $user->profile;
-            $this->assertEquals($profile['test_user_id'], $user['id']);
-        }
+        $this->assertEquals($users[0]['id'], $users[0]->profile['test_user_id']);
+        $this->assertEquals($users[1]['id'], $users[1]->profile['test_user_id']);
+        $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
 
         $this->assertEquals("SELECT * FROM test_users", $queries[0]);
         $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1", $queries[1]);
         $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1", $queries[1]);
-        $this->assertCount(3, $queries);
+        $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1", $queries[1]);
+        $this->assertCount(4, $queries);
     }
 
     public function testRecordBelongsTo()
@@ -305,7 +307,7 @@ class RecordTest extends BaseTestCase
         $queries = wei()->db->getQueries();
 
         $this->assertEquals("SELECT * FROM test_users", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?)", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?, ?)", $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -401,6 +403,16 @@ class RecordTest extends BaseTestCase
             . ' WHERE test_articles_test_tags.test_article_id IN (?, ?, ?)';
         $this->assertEquals($sql, $queries[1]);
         $this->assertCount(2, $queries);
+    }
+
+    public function testGetHasOneReturnFalse()
+    {
+        /** @var TestUser $user */
+        $user = wei()->testUser();
+
+        $user->findOneById(3);
+
+        $this->assertEquals(null, $user->profile);
     }
 
     protected function clearLogs()
