@@ -480,7 +480,7 @@ class BaseModel extends Record implements JsonSerializable
             'localKey' => 'id',
         ];
 
-        $related->setOption('isRelation', true)->where([
+        $related->setOption('isRelation', true)->beColl()->where([
             $junctionTable . '.' . $foreignKey => $this['id'],
         ]);
 
@@ -565,14 +565,13 @@ class BaseModel extends Record implements JsonSerializable
         if (method_exists($this, $name)) {
             /** @var BaseModel $record */
             $record = $this->$name();
-            $this->$name = $record;
+            if ($record->isColl()) {
+                $this->$name = $record->findAll();
+            } else {
+                $this->$name = $record->find();
+            }
 
-//            $relation = $this->relations[$name];
-//            $record = wei()->$name()->find([$relation['foreignKey'] => $this[$relation['localKey']]]);
-//
-//            $this->$name = $record;
-
-            return $record;
+            return $this->$name;
         }
 
         return parent::__get($name);

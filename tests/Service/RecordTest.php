@@ -149,7 +149,6 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(1, $profile['test_user_id']);
 
         $queries = wei()->db->getQueries();
-
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1', $queries[1]);
         $this->assertCount(2, $queries);
@@ -382,7 +381,6 @@ class RecordTest extends BaseTestCase
         $articles = wei()->testArticle();
 
         $articles->findAll()->includes('tags');
-        $queries = wei()->db->getQueries();
 
         foreach ($articles as $article) {
             foreach ($article->tags as $tag) {
