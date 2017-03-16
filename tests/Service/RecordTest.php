@@ -385,6 +385,34 @@ class RecordTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
+    public function testCollBelongsToManyWithQuery()
+    {
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = wei()->testArticle();
+
+        $articles->findAll()->includes('customTags');
+
+        foreach ($articles as $article) {
+            foreach ($article->customTags as $tag) {
+                $this->assertInstanceOf(TestTag::className(), $tag);
+            }
+        }
+
+        $this->assertEquals('work', $articles[0]->customTags[0]['name']);
+        $this->assertEquals('life', $articles[0]->customTags[1]['name']);
+        $this->assertEquals('work', $articles[1]->customTags[0]['name']);
+        $this->assertEquals('life', $articles[2]->customTags[0]['name']);
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
+        $sql = 'SELECT test_tags.*, test_articles_test_tags.test_article_id FROM test_tags'
+            . ' INNER JOIN test_articles_test_tags'
+            . ' ON test_articles_test_tags.test_tag_id = test_tags.id'
+            . ' WHERE (test_articles_test_tags.test_article_id IN (?, ?, ?)) AND (test_tags.id > ?)';
+        $this->assertEquals($sql, $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
     public function testGetHasOneReturnFalse()
     {
         /** @var TestUser $user */

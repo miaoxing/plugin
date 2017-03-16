@@ -21,4 +21,9 @@ class TestArticle extends BaseModel
     {
         return $this->belongsToMany('testTag');
     }
+
+    public function customTags()
+    {
+        return $this->belongsToMany('testTag')->andWhere('test_tags.id > ?', 0);
+    }
 }
