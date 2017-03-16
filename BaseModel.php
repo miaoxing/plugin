@@ -83,6 +83,11 @@ class BaseModel extends Record implements JsonSerializable
     protected $relationValue;
 
     /**
+     * @var bool
+     */
+    protected $enableConflictLog = false;
+
+    /**
      * @return BaseModel|BaseModel[]
      */
     public function __invoke()
@@ -619,8 +624,8 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         // Receive field value
-        if (array_key_exists($name, $this->data)) {
-            //$this->logger->info(sprintf('Field "%s" conflicts with service name', $name));
+        if ($this->enableConflictLog && array_key_exists($name, $this->data)) {
+            $this->logger->info(sprintf('Field "%s" conflicts with service name', $name));
 //            return $this->get($name);
         }
 
