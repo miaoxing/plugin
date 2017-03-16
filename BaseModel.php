@@ -67,6 +67,13 @@ class BaseModel extends Record implements JsonSerializable
     protected $relations = [];
 
     /**
+     * The relations have been loaded
+     *
+     * @var array
+     */
+    protected $loadedRelations = [];
+
+    /**
      * The value for relation base query
      *
      * @var mixed
@@ -522,6 +529,10 @@ class BaseModel extends Record implements JsonSerializable
         foreach ((array) $names as $name) {
             // 1. Load relation config
             list($name, $next) = explode('.', $name, 2);
+            if (isset($this->loadedRelations[$name])) {
+                continue;
+            }
+
             /** @var BaseModel $related */
             $related = $this->$name();
             $isColl = $related->isColl();
@@ -552,7 +563,11 @@ class BaseModel extends Record implements JsonSerializable
             if ($records) {
                 $records->load($next);
             }
+
+            $this->loadedRelations[$name] = true;
         }
+
+        return $this;
     }
 
     protected function loadHasOne(Record $related = null, $relation, $name)

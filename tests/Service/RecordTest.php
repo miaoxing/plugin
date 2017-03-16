@@ -441,6 +441,19 @@ class RecordTest extends BaseTestCase
         $this->assertCount(3, $queries);
     }
 
+    public function testLoadCache()
+    {
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = wei()->testArticle();
+
+        $articles->findAll()->load('user')->load('user');
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals("SELECT * FROM test_articles", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_users WHERE id IN (?, ?)", $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
