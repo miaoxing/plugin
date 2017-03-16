@@ -423,6 +423,24 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(null, $user->profile);
     }
 
+    public function testNestedRelation()
+    {
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = wei()->testArticle();
+
+        $articles->findAll()->includes('user.profile');
+
+        $this->assertEquals(1, $articles[0]['id']);
+        $this->assertEquals(1, $articles[0]->user['id']);
+        $this->assertEquals(1, $articles[0]->user->profile['id']);
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals("SELECT * FROM test_articles", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_users WHERE id IN (?, ?)", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_profiles WHERE test_user_id IN (?, ?)", $queries[2]);
+        $this->assertCount(3, $queries);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache

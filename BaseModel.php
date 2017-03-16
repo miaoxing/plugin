@@ -521,6 +521,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         foreach ((array) $names as $name) {
             // 1. Load relation config
+            list($name, $next) = explode('.', $name, 2);
             /** @var BaseModel $related */
             $related = $this->$name();
             $isColl = $related->isColl();
@@ -540,11 +541,16 @@ class BaseModel extends Record implements JsonSerializable
 
             // 3. Load relation data
             if (isset($relation['junctionTable'])) {
-                $this->loadBelongsToMany($related, $relation, $name);
+                $records = $this->loadBelongsToMany($related, $relation, $name);
             } else if ($isColl) {
-                $this->loadHasMany($related, $relation, $name);
+                $records = $this->loadHasMany($related, $relation, $name);
             } else {
-                $this->loadHasOne($related, $relation, $name);
+                $records = $this->loadHasOne($related, $relation, $name);
+            }
+
+            // 4. Load nested relations
+            if ($records) {
+                $records->includes($next);
             }
         }
     }
@@ -559,6 +565,8 @@ class BaseModel extends Record implements JsonSerializable
         foreach ($this->data as $row) {
             $row->$name = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
         }
+
+        return $records;
     }
 
     protected function loadHasMany(Record $related = null, $relation, $name)
@@ -573,6 +581,8 @@ class BaseModel extends Record implements JsonSerializable
                 }
             }
         }
+
+        return $records;
     }
 
     protected function loadBelongsToMany(Record $related = null, $relation, $name)
@@ -580,7 +590,8 @@ class BaseModel extends Record implements JsonSerializable
         if ($related) {
             $related->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
         }
-        $this->loadHasMany($related, $relation, $name);
+
+        return $this->loadHasMany($related, $relation, $name);
     }
 
     public function __get($name)
