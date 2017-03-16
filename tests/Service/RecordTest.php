@@ -275,7 +275,7 @@ class RecordTest extends BaseTestCase
         $user = wei()->testUser();
 
         $user->findOneById(1);
-        $articles = $user->articles()->andWhere('id >= ?', 1)->desc('id');
+        $articles = $user->customArticles()->andWhere('id >= ?', 1)->desc('id');
 
         foreach ($articles as $article) {
             $this->assertEquals($article['test_user_id'], $user['id']);
@@ -286,32 +286,12 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(1, $articles[1]['id']);
 
         $queries = wei()->db->getQueries();
-        $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_articles WHERE (test_user_id = ?) AND (id >= ?) ORDER BY id DESC", $queries[1]);
+        $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
+        $this->assertEquals('SELECT * FROM test_articles WHERE ((test_user_id = ?) AND (title LIKE ?)) AND (id >= ?) ORDER BY id DESC, id DESC', $queries[1]);
         $this->assertCount(2, $queries);
     }
 
-    public function testCollHasMany()
-    {
-        /** @var TestUser|TestUser[] $users */
-        $users = wei()->testUser();
-
-        $users->findAll()->includes('articles');
-
-        foreach ($users as $user) {
-            foreach ($user->articles as $article) {
-                $this->assertEquals($article['test_user_id'], $user['id']);
-            }
-        }
-
-        $queries = wei()->db->getQueries();
-
-        $this->assertEquals("SELECT * FROM test_users", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?, ?)", $queries[1]);
-        $this->assertCount(2, $queries);
-    }
-
-    public function tes2tCollHasManyWithQuery()
+    public function testCollHasManyWithQuery()
     {
         /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
@@ -327,7 +307,7 @@ class RecordTest extends BaseTestCase
         $queries = wei()->db->getQueries();
 
         $this->assertEquals("SELECT * FROM test_users", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?) AND title LIKE ? ORDER BY id DESC", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?, ?) AND title LIKE ? ORDER BY id DESC", $queries[1]);
         $this->assertCount(2, $queries);
     }
 
