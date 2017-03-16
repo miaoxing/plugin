@@ -274,7 +274,7 @@ class RecordTest extends BaseTestCase
         $user = wei()->testUser();
 
         $user->findOneById(1);
-        $articles = $user->getArticles()->desc('id');
+        $articles = $user->getArticles()->andWhere('id >= ?', 1)->desc('id');
 
         foreach ($articles as $article) {
             $this->assertEquals($article['test_user_id'], $user['id']);
@@ -286,7 +286,7 @@ class RecordTest extends BaseTestCase
 
         $queries = wei()->db->getQueries();
         $this->assertEquals("SELECT * FROM test_users WHERE id = ? LIMIT 1", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id = ? ORDER BY id DESC", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE (test_user_id = ?) AND (id >= ?) ORDER BY id DESC", $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -307,6 +307,26 @@ class RecordTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM test_users", $queries[0]);
         $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?)", $queries[1]);
+        $this->assertCount(2, $queries);
+    }
+
+    public function tes2tCollHasManyWithQuery()
+    {
+        /** @var TestUser|TestUser[] $users */
+        $users = wei()->testUser();
+
+        $users->findAll()->includes('customArticles');
+
+        foreach ($users as $user) {
+            foreach ($user->getArticles() as $article) {
+                $this->assertEquals($article['test_user_id'], $user['id']);
+            }
+        }
+
+        $queries = wei()->db->getQueries();
+
+        $this->assertEquals("SELECT * FROM test_users", $queries[0]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?) AND title LIKE ? ORDER BY id DESC", $queries[1]);
         $this->assertCount(2, $queries);
     }
 

@@ -13,6 +13,13 @@ class TestUser extends BaseModel
         return $this->hasMany('testArticle');
     }
 
+    public function getCustomArticles()
+    {
+        return $this->hasMany('testArticle')
+            ->andWhere("title LIKE ?", 'Article%')
+            ->desc('id');
+    }
+
     public function getProfile()
     {
         return $this->hasOne('testProfile');

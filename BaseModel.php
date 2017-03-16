@@ -533,6 +533,8 @@ class BaseModel extends Record implements JsonSerializable
             $ids = $this->getAll($localKey);
             $ids = array_unique(array_filter($ids));
             if ($ids) {
+                /*$record->setParameters([]);
+                $records = $record->where([$foreignKey => $ids])->findAll();*/
                 $records = $this->wei->$serviceName()->findAll([$foreignKey => $ids]);
             } else {
                 $records = [];
