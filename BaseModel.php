@@ -614,7 +614,7 @@ class BaseModel extends Record implements JsonSerializable
     public function __get($name)
     {
         // Receive service that conflict with record method name
-        if (in_array($name, ['cache', 'lock'])) {
+        if (in_array($name, ['cache', 'lock', 'ret'])) {
             return parent::__get($name);
         }
 
