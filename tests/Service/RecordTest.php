@@ -307,7 +307,7 @@ class RecordTest extends BaseTestCase
         $queries = wei()->db->getQueries();
 
         $this->assertEquals("SELECT * FROM test_users", $queries[0]);
-        $this->assertEquals("SELECT * FROM test_articles WHERE test_user_id IN (?, ?, ?) AND title LIKE ? ORDER BY id DESC", $queries[1]);
+        $this->assertEquals("SELECT * FROM test_articles WHERE (test_user_id IN (?, ?, ?)) AND (title LIKE ?) ORDER BY id DESC", $queries[1]);
         $this->assertCount(2, $queries);
     }
 

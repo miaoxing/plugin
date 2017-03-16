@@ -432,6 +432,8 @@ class BaseModel extends Record implements JsonSerializable
 
     protected $isRelation = false;
 
+    protected $relationValue;
+
     /**
      * @param string $record
      * @param string|null $foreignKey
@@ -447,7 +449,7 @@ class BaseModel extends Record implements JsonSerializable
         $foreignKey || $foreignKey = $this->getForeignKey();
         $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
-        $related->setOption('isRelation', true)->where([$foreignKey => $this[$localKey]]);
+        $related->setOption('isRelation', true)->where([$foreignKey => $this->getRelationValue($localKey)]);
 
         return $related;
     }
@@ -481,7 +483,7 @@ class BaseModel extends Record implements JsonSerializable
         ];
 
         $related->setOption('isRelation', true)->beColl()->where([
-            $junctionTable . '.' . $foreignKey => $this['id'],
+            $junctionTable . '.' . $foreignKey => $this->getRelationValue($this->getPrimaryKey()),
         ]);
 
         $relatedTable = $related->getTable();
@@ -505,15 +507,13 @@ class BaseModel extends Record implements JsonSerializable
                 $ids = $this->getAll($relation['localKey']);
                 $ids = array_unique(array_filter($ids));
 
-                $originalId = $this['id'];
-                $this['id'] = $ids;
+                $this->relationValue = $ids;
                 $record = $this->$name();
-                $this['id'] = $originalId;
+                $this->relationValue = null;
+
+                // Add
+                $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
                 $records = $record->fetchAll();
-//                $record->setParameters([]);
-//                $records = $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey'])
-//                    ->where([$relation['junctionTable'] . '.' . $relation['foreignKey'] => $ids])
-//                    ->fetchAll();
 
                 $localKey = $relation['localKey'];
                 $foreignKey = $relation['foreignKey'];
@@ -536,14 +536,10 @@ class BaseModel extends Record implements JsonSerializable
             $ids = array_unique(array_filter($ids));
             if ($ids) {
 
-                $originalId = $this['id'];
-                $this['id'] = $ids;
+                $this->relationValue = $ids;
                 $record = $this->$name();
-                $this['id'] = $originalId;
+                $this->relationValue = null;
                 $records = $record->findAll();
-
-//                $record->setParameters([]);
-//                $records = $record->where([$foreignKey => $ids])->findAll();
             } else {
                 $records = [];
             }
@@ -610,5 +606,10 @@ class BaseModel extends Record implements JsonSerializable
         sort($tables);
 
         return implode('_', $tables);
+    }
+
+    protected function getRelationValue($field)
+    {
+        return $this->relationValue ?: $this[$field];
     }
 }
