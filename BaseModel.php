@@ -620,7 +620,7 @@ class BaseModel extends Record implements JsonSerializable
 
         // Receive field value
         if (array_key_exists($name, $this->data)) {
-            $this->logger->info(sprintf('Field "%s" conflicts with service name', $name));
+            //$this->logger->info(sprintf('Field "%s" conflicts with service name', $name));
 //            return $this->get($name);
         }
 
