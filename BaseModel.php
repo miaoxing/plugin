@@ -3,6 +3,7 @@
 namespace miaoxing\plugin;
 
 use JsonSerializable;
+use Wei\Logger;
 use Wei\Record;
 use Wei\RetTrait;
 
@@ -10,6 +11,7 @@ use Wei\RetTrait;
  * @method \miaoxing\plugin\BaseModel db($table = null) Create a new record object
  * @property \Wei\BaseCache $cache
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
+ * @property Logger $logger
  */
 class BaseModel extends Record implements JsonSerializable
 {
@@ -560,7 +562,7 @@ class BaseModel extends Record implements JsonSerializable
             }
 
             // 4. Load nested relations
-            if ($records) {
+            if ($next && $records) {
                 $records->load($next);
             }
 
@@ -624,15 +626,19 @@ class BaseModel extends Record implements JsonSerializable
 
         // Receive relation
         if (method_exists($this, $name)) {
-            /** @var BaseModel $record */
-            $record = $this->$name();
-            if ($record->isColl()) {
-                $this->$name = $record->findAll();
-            } else {
-                $this->$name = $record->find() ?: null;
+            /** @var BaseModel $related */
+            $related = $this->$name();
+            $serviceName = $this->getClassServiceName($related);
+            $relation = $this->relations[$serviceName];
+            if (!$this[$relation['localKey']]) {
+                return $this->$name = null;
             }
 
-            return $this->$name;
+            if ($related->isColl()) {
+                return $this->$name = $related->findAll();
+            }
+
+            return $this->$name = $related->find() ?: null;
         }
 
         // Receive service

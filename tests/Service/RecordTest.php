@@ -62,11 +62,11 @@ class RecordTest extends BaseTestCase
 
         wei()->db->insertBatch('test_profiles', [
             [
-                'test_user_id' => '1',
+                'test_user_id' => 1,
                 'description' => 'My name is twin',
             ],
             [
-                'test_user_id' => '2',
+                'test_user_id' => 2,
                 'description' => 'My name is admin',
             ]
         ]);
@@ -82,17 +82,17 @@ class RecordTest extends BaseTestCase
 
         wei()->db->insertBatch('test_articles', [
             [
-                'test_user_id' => '1',
+                'test_user_id' => 1,
                 'title' => 'Article 1',
                 'content' => 'Content 1',
             ],
             [
-                'test_user_id' => '2',
+                'test_user_id' => 2,
                 'title' => 'Article 2',
                 'content' => 'Content 2',
             ],
             [
-                'test_user_id' => '1',
+                'test_user_id' => 1,
                 'title' => 'Article 3',
                 'content' => 'Content 3',
             ]
@@ -452,6 +452,28 @@ class RecordTest extends BaseTestCase
         $this->assertEquals("SELECT * FROM test_articles", $queries[0]);
         $this->assertEquals("SELECT * FROM test_users WHERE id IN (?, ?)", $queries[1]);
         $this->assertCount(2, $queries);
+    }
+
+    public function testEmptyLocalKeyDoNotExecuteQuery()
+    {
+        wei()->db->insert('test_articles', [
+            'test_user_id' => 0,
+            'title' => 'Article 4',
+            'content' => 'Content 4',
+        ]);
+        $id = wei()->db->lastInsertId();
+        wei()->db->setOption('queries', []);
+
+        /** @var TestArticle $article */
+        $article = wei()->testArticle();
+
+        $article->findOneById($id);
+        $user = $article->user;
+        $this->assertNull($user);
+
+        $queries = wei()->db->getQueries();
+        $this->assertEquals('SELECT * FROM test_articles WHERE id = ? LIMIT 1', $queries[0]);
+        $this->assertCount(1, $queries);
     }
 
     protected function clearLogs()
