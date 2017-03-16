@@ -489,75 +489,78 @@ class BaseModel extends Record implements JsonSerializable
     public function includes($names)
     {
         foreach ((array) $names as $name) {
-            // load relations
+            // 1. Load relation config
             /** @var BaseModel $record */
             $record = $this->$name();
             $isColl = $record->isColl();
             $serviceName = $this->getClassServiceName($record);
 
+            // 2. Load relation record data
             $relation = $this->relations[$serviceName];
-            if (isset($relation['junctionTable'])) {
-                $ids = $this->getAll($relation['localKey']);
-                $ids = array_unique(array_filter($ids));
-
-                $this->relationValue = $ids;
-                $record = $this->$name();
-                $this->relationValue = null;
-
-                // Add
-                $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
-                $records = $record->fetchAll();
-
-                $localKey = $relation['localKey'];
-                $foreignKey = $relation['foreignKey'];
-                foreach ($this->data as $row) {
-                    $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
-                    foreach ($records as $record) {
-                        if ($record[$foreignKey] == $row[$localKey]) {
-                            $rowRelation[] = $this->wei->$serviceName()->fromArray($record);
-                        }
-                    }
-                }
-                return $this;
-            }
-
-            // fetch data
-            $localKey = $relation['localKey'];
-            $foreignKey = $relation['foreignKey'];
-
-            $ids = $this->getAll($localKey);
+            $ids = $this->getAll($relation['localKey']);
             $ids = array_unique(array_filter($ids));
             if ($ids) {
-
                 $this->relationValue = $ids;
                 $record = $this->$name();
                 $this->relationValue = null;
-                $records = $record->findAll();
             } else {
-                $records = [];
+                $record = null;
             }
 
-            // Connect records
-            if (!$isColl) {
-                if ($records) {
-                    $records->indexBy($foreignKey);
-                }
-
-                foreach ($this->data as $row) {
-                    $row->$name = isset($records[$row[$localKey]]) ? $records[$row[$localKey]] : null;
-                }
+            // 3.
+            if (isset($relation['junctionTable'])) {
+                $this->loadBelongsToMany($record, $relation, $name, $serviceName);
+            } else if ($isColl) {
+                $this->loadHasMany($record, $relation, $name, $serviceName);
             } else {
-                foreach ($this->data as $row) {
-                    $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
-                    foreach ($records as $record) {
-                        if ($record[$foreignKey] == $row[$localKey]) {
-                            $rowRelation[] = $record;
-                        }
-                    }
+                $this->loadHasOne($record, $relation, $name, $serviceName);
+            }
+        }
+    }
+
+    protected function loadHasOne(Record $record, $relation, $name, $serviceName)
+    {
+        if ($record) {
+            $records = $record->findAll();
+        } else {
+            $records = [];
+        }
+
+        if ($records) {
+            $records->indexBy($relation['foreignKey']);
+        }
+
+        foreach ($this->data as $row) {
+            $row->$name = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
+        }
+    }
+
+    protected function loadHasMany(Record $record, $relation, $name, $serviceName)
+    {
+        $records = $record->findAll();
+        foreach ($this->data as $row) {
+            $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
+            foreach ($records as $record) {
+                if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
+                    $rowRelation[] = $record;
                 }
             }
         }
+    }
 
+    protected function loadBelongsToMany(Record $record, $relation, $name, $serviceName)
+    {
+        $record->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
+        $records = $record->fetchAll();
+
+        foreach ($this->data as $row) {
+            $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
+            foreach ($records as $record) {
+                if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
+                    $rowRelation[] = $this->wei->$serviceName()->fromArray($record);
+                }
+            }
+        }
         return $this;
     }
 
