@@ -517,7 +517,7 @@ class BaseModel extends Record implements JsonSerializable
         return $related;
     }
 
-    public function includes($names)
+    public function load($names)
     {
         foreach ((array) $names as $name) {
             // 1. Load relation config
@@ -550,7 +550,7 @@ class BaseModel extends Record implements JsonSerializable
 
             // 4. Load nested relations
             if ($records) {
-                $records->includes($next);
+                $records->load($next);
             }
         }
     }

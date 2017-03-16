@@ -162,7 +162,7 @@ class RecordTest extends BaseTestCase
         /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
 
-        $users->findAll()->includes('profile');
+        $users->findAll()->load('profile');
 
         $this->assertEquals($users[0]['id'], $users[0]->profile['test_user_id']);
         $this->assertEquals($users[1]['id'], $users[1]->profile['test_user_id']);
@@ -218,7 +218,7 @@ class RecordTest extends BaseTestCase
         /** @var TestArticle|TestArticle[] $articles */
         $articles = wei()->testArticle();
 
-        $articles->findAll()->includes('user');
+        $articles->findAll()->load('user');
 
         foreach ($articles as  $article) {
             $user = $article->user;
@@ -296,7 +296,7 @@ class RecordTest extends BaseTestCase
         /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
 
-        $users->findAll()->includes('customArticles');
+        $users->findAll()->load('customArticles');
 
         foreach ($users as $user) {
             foreach ($user->customArticles as $article) {
@@ -362,7 +362,7 @@ class RecordTest extends BaseTestCase
         /** @var TestArticle|TestArticle[] $articles */
         $articles = wei()->testArticle();
 
-        $articles->findAll()->includes('tags');
+        $articles->findAll()->load('tags');
 
         foreach ($articles as $article) {
             foreach ($article->tags as $tag) {
@@ -390,7 +390,7 @@ class RecordTest extends BaseTestCase
         /** @var TestArticle|TestArticle[] $articles */
         $articles = wei()->testArticle();
 
-        $articles->findAll()->includes('customTags');
+        $articles->findAll()->load('customTags');
 
         foreach ($articles as $article) {
             foreach ($article->customTags as $tag) {
@@ -428,7 +428,7 @@ class RecordTest extends BaseTestCase
         /** @var TestArticle|TestArticle[] $articles */
         $articles = wei()->testArticle();
 
-        $articles->findAll()->includes('user.profile');
+        $articles->findAll()->load('user.profile');
 
         $this->assertEquals(1, $articles[0]['id']);
         $this->assertEquals(1, $articles[0]->user['id']);
