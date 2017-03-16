@@ -611,6 +611,18 @@ class BaseModel extends Record implements JsonSerializable
 
     public function __get($name)
     {
+        // Receive service that conflict with record method name
+        if (in_array($name, ['cache', 'lock'])) {
+            return parent::__get($name);
+        }
+
+        // Receive field value
+        if (array_key_exists($name, $this->data)) {
+            $this->logger->info(sprintf('Field "%s" conflicts with service name', $name));
+//            return $this->get($name);
+        }
+
+        // Receive relation
         if (method_exists($this, $name)) {
             /** @var BaseModel $record */
             $record = $this->$name();
@@ -623,6 +635,7 @@ class BaseModel extends Record implements JsonSerializable
             return $this->$name;
         }
 
+        // Receive service
         return parent::__get($name);
     }
 
