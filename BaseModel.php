@@ -399,12 +399,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        $data = $this->toArray();
-        if (!$data['id'] && $this->isRelation) {
-            return null;
-        } else {
-            return $data;
-        }
+        return $this->toArray();
     }
 
     /**
@@ -430,8 +425,6 @@ class BaseModel extends Record implements JsonSerializable
 
     protected $relations = [];
 
-    protected $isRelation = false;
-
     protected $relationValue;
 
     /**
@@ -449,7 +442,7 @@ class BaseModel extends Record implements JsonSerializable
         $foreignKey || $foreignKey = $this->getForeignKey();
         $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
-        $related->setOption('isRelation', true)->where([$foreignKey => $this->getRelationValue($localKey)]);
+        $related->where([$foreignKey => $this->getRelationValue($localKey)]);
 
         return $related;
     }
@@ -482,7 +475,7 @@ class BaseModel extends Record implements JsonSerializable
             'localKey' => 'id',
         ];
 
-        $related->setOption('isRelation', true)->beColl()->where([
+        $related->beColl()->where([
             $junctionTable . '.' . $foreignKey => $this->getRelationValue($this->getPrimaryKey()),
         ]);
 
