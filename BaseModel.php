@@ -442,7 +442,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function toArray($returnFields = array())
+    public function toArray($returnFields = [])
     {
         if (!$this->isLoaded()) {
             $this->loadData($this->isColl() ? 0 : 'id');
