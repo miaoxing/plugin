@@ -560,7 +560,7 @@ class BaseModel extends Record implements JsonSerializable
             // 3. Load relation data
             if (isset($relation['junctionTable'])) {
                 $records = $this->loadBelongsToMany($related, $relation, $name);
-            } else if ($isColl) {
+            } elseif ($isColl) {
                 $records = $this->loadHasMany($related, $relation, $name);
             } else {
                 $records = $this->loadHasOne($related, $relation, $name);

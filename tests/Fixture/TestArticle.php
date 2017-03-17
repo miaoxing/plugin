@@ -17,7 +17,12 @@ class TestArticle extends BaseModel
         return $this->belongsTo('testUser');
     }
 
-    public function tags()
+    /**
+     * NOTE: 使用参数是避免和父类方法冲突
+     *
+     * @link https://travis-ci.org/miaoxing/plugin/jobs/211982291
+     */
+    public function tags($tags = null)
     {
         return $this->belongsToMany('testTag');
     }
