@@ -644,4 +644,20 @@ class User extends BaseModel
 
         return $this->suc();
     }
+
+    /**
+     * 通过外部检查用户是否有某个权限
+     *
+     * @param string $permissionId
+     * @return bool
+     */
+    public function can($permissionId)
+    {
+        $result = $this->event->until('userCan', [$permissionId, $this]);
+        if ($result === null) {
+            $result = true;
+        }
+
+        return (bool) $result;
+    }
 }
