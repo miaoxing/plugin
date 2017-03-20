@@ -24,4 +24,5 @@ error_file="error.txt"
 count=`ls -1 reports/*.txt 2>/dev/null | wc -l`
 if [ ${count} != 0 ]; then
   cat reports/*.txt > ${error_file}
+  exit 1
 fi
