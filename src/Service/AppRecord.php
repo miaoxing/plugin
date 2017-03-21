@@ -2,11 +2,36 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\App\Constant;
+
 /**
  * @property \Wei\BaseCache $cache
  */
 class AppRecord extends \miaoxing\plugin\BaseModel
 {
+    use Constant;
+
+    const STATUS_ALL = 0;
+
+    const STATUS_ONLINE = 1;
+
+    const STATUS_OFFLINE = 2;
+
+    /**
+     * @var array
+     */
+    protected $statusTable = [
+        self::STATUS_ALL => [
+            'text' => '全部',
+        ],
+        self::STATUS_ONLINE => [
+            'text' => '正常',
+        ],
+        self::STATUS_OFFLINE => [
+            'text' => '下线',
+        ]
+    ];
+
     protected $table = 'apps';
 
     protected $providers = [
