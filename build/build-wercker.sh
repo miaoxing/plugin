@@ -23,6 +23,12 @@ php "${BASH_SOURCE[0]%/*}/check-migration.php"
 error_file="error.txt"
 count=`ls -1 reports/*.txt 2>/dev/null | wc -l`
 if [ ${count} != 0 ]; then
-  cat reports/*.txt > ${error_file}
-  exit 1
+  cat reports/*.txt > "$error_file"
+  detail=$(cat "$error_file")
+  if [[ "$detail" = "" ]]; then
+    echo "build passed"
+  else
+    echo "build failed"
+    exit 1
+  fi
 fi
