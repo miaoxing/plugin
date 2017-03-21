@@ -2,14 +2,14 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\App\Constant;
+use Miaoxing\Plugin\Constant;
 
 /**
  * @property \Wei\BaseCache $cache
  */
 class AppRecord extends \miaoxing\plugin\BaseModel
 {
-    use Constant;
+    use \Miaoxing\Plugin\Constant;
 
     const STATUS_ALL = 0;
 
