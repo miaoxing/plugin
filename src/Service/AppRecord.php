@@ -29,7 +29,7 @@ class AppRecord extends \miaoxing\plugin\BaseModel
         ],
         self::STATUS_OFFLINE => [
             'text' => '下线',
-        ]
+        ],
     ];
 
     protected $table = 'apps';
