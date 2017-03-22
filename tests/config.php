@@ -14,7 +14,7 @@ return [
         ],
         'providers' => [
             'cache' => 'memcache',
-            'queue' => 'dbQueue'
+            'queue' => 'dbQueue',
         ],
         'preload' => [
             'error',
@@ -74,4 +74,8 @@ return [
             'Mailer' => 'smtp',
         ],
     ],
+    'schema' => [
+        'charset' => 'utf8mb4',
+        'collate' => 'utf8mb4_unicode_ci',
+    ]
 ];
