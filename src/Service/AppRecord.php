@@ -2,8 +2,6 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\Constant;
-
 /**
  * @property \Wei\BaseCache $cache
  */
