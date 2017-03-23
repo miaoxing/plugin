@@ -125,8 +125,8 @@ class CliApp extends \miaoxing\plugin\BaseService
      */
     protected function parseArgs(array $argv)
     {
-        $out = array();
-        $skip = array();
+        $out = [];
+        $skip = [];
 
         foreach ($argv as $idx => $arg) {
             if (in_array($idx, $skip)) {
