@@ -19,7 +19,7 @@ class CliAppTest extends BaseTestCase
      */
     public function testArgs(array $argv, array $args)
     {
-        $_SERVER['argv'] = $argv;
+        wei()->request->setServer('argv', $argv);
 
         $cliApp = new CliApp([
            'wei' => $this->wei,

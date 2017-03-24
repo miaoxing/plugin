@@ -24,12 +24,13 @@ class CliApp extends \miaoxing\plugin\BaseService
     {
         parent::__construct($options);
 
-        if (isset($_SERVER['argv'][1])) {
-            $this->parseUri($_SERVER['argv'][1]);
+        $argv = $this->request->getServer('argv');
+        if (isset($argv[1])) {
+            $this->parseUri($argv[1]);
         }
 
-        if ($_SERVER['argv']) {
-            $this->parseArgs($_SERVER['argv']);
+        if ($argv) {
+            $this->parseArgs($argv);
         }
     }
 
@@ -100,12 +101,12 @@ class CliApp extends \miaoxing\plugin\BaseService
 
         $queryString = '';
         if (isset($components['query'])) {
-            parse_str(html_entity_decode($components['query']), $qs);
+            parse_str(html_entity_decode($components['query']), $queries);
             if ($query) {
-                $query = array_replace($qs, $query);
+                $query = array_replace($queries, $query);
                 $queryString = http_build_query($query, '', '&');
             } else {
-                $query = $qs;
+                $query = $queries;
                 $queryString = $components['query'];
             }
         } elseif ($query) {
@@ -122,6 +123,7 @@ class CliApp extends \miaoxing\plugin\BaseService
     /**
      * @param array $argv
      * @link https://gist.github.com/magnetik/2959619
+     * @codingStandardsIgnoreStart Ignore foreign function
      */
     protected function parseArgs(array $argv)
     {
@@ -178,5 +180,6 @@ class CliApp extends \miaoxing\plugin\BaseService
         }
 
         $this->request->set($out);
+        // @codingStandardsIgnoreEnd
     }
 }
