@@ -38,14 +38,9 @@ class Auth extends Base
         $isLogin = wei()->curUser->isLogin();
 
         if ($this->isAdminPage()) {
-            // 如果未登录,跳转到登录页面
-            if (!$isLogin) {
+            // 如果未登录或不是管理员,跳转到登录页面
+            if (!$isLogin || !wei()->curUser->isAdmin()) {
                 return $this->redirectLogin($this->getAdminLoginUrl());
-            }
-
-            // 后台登录无权限,跳转到登录页面,并展示提示
-            if (!wei()->curUser->isAdmin()) {
-                return $this->redirectLogin($this->getAdminLoginUrl('很抱歉,您没有权限查看当前页面'));
             }
 
             if (!$this->isBelongPages($page, $this->adminGuestPages)) {
