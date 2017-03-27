@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="<?= $asset([
     'comps/bootstrap-custom/css/bootstrap.min.css',
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
-    'assets/tips.css',
-    'assets/swipe.css',
+    'plugins/app/css/tips.css',
+    'plugins/app/css/swipe.css',
     'plugins/app/css/app.css',
   ]) ?>">
   <?php $event->trigger('prePageCss') ?>
@@ -32,16 +32,16 @@
   'comps/fastclick-custom/fastclick.js',
   'comps/requirejs/require.min.js',
   'comps/jquery/jquery.min.js',
-  'assets/require.js',
-  'comps/Swipe/swipe.js',
-  'assets/tips.js',
-  'assets/app.js',
   'comps/jquery-list/jquery-list.js',
   'comps/bootstrap-custom/js/bootstrap.min.js',
   'comps/bootstrap-mobile/dist/js/bootstrap-mobile.min.js',
+  'comps/Swipe/swipe.js',
   'comps/jquery-lazy/jquery-lazy.js',
-  'assets/bootstrapPopup.js',
-  'assets/bootstrapAjaxTips.js',
+  'plugins/app/js/app.js',
+  'plugins/app/js/require-config.js',
+  'plugins/app/js/tips.js',
+  'plugins/app/js/bootstrap-popup.js',
+  'plugins/app/js/bootstrap-ajax-tips.js',
 ]) ?>"></script>
 <script>window.requirejs || document.write('<script src="<?= $asset->fallback($mainJs) ?>"><\/script>')</script>
 <script>

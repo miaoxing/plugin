@@ -9,17 +9,17 @@
   <link rel="stylesheet" href="<?= $asset([
     'comps/bootstrap-custom/css/bootstrap.min.css',
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
-    'assets/tips.css',
-    'assets/swipe.css',
+    'plugins/app/css/tips.css',
+    'plugins/app/css/swipe.css',
     'plugins/app/css/app.css',
   ]) ?>">
   <?= $block->get('css') ?>
   <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
   <script src="<?= $asset([
     'comps/requirejs/require.js',
-    'assets/require.js',
     'comps/bootstrap/dist/js/bootstrap.min.js',
-    'assets/app.js',
+    'plugins/app/js/app.js',
+    'plugins/app/js/require-config.js',
   ]) ?>"></script>
   <script>
     $.extend($, <?= json_encode($app->getConfig()) ?>);

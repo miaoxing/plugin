@@ -9,7 +9,7 @@
   <title><?= $setting('site.title') ?></title>
   <link rel="stylesheet" href="//cdn.bootcss.com/jquery-mobile/1.4.0/jquery.mobile.min.css">
   <link rel="stylesheet" href="<?= $asset([
-    'assets/swipe.css',
+    'plugins/app/css/swipe.css',
     'plugins/app/css/jqm.css',
   ]) ?>">
   <?php $event->trigger('prePageCss') ?>
@@ -19,9 +19,9 @@
   <script src="//cdn.bootcss.com/jquery-mobile/1.4.0/jquery.mobile.min.js"></script>
   <script src="<?= $asset([
     'comps/requirejs/require.min.js',
-    'assets/require.js',
+    'plugins/app/js/require-config.js',
     'comps/Swipe/swipe.js',
-    'assets/app.js',
+    'plugins/app/js/app.js',
     'assets/popup.js',
     'assets/jqueryMobile.js',
   ]) ?>"></script>
