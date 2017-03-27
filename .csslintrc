@@ -1,4 +1,4 @@
---ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors,bulletproof-font-face,gradients,important,universal-selector,font-sizes
+--ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors,bulletproof-font-face,gradients,important,universal-selector,font-sizes,vendor-prefix
 --exclude-list=comps/,dist/,vendor/,public/comps,public/dist,public/libs,public/plugins
 --errors=known-properties,outline-none,display-property-grouping, \
 bulletproof-font-face,qualified-headings, \
@@ -7,5 +7,5 @@ selector-max-approaching,floats,font-faces, \
 shorthand,import,import-ie-limit,ids,text-indent, \
 rules-count,regex-selectors,overqualified-elements,selector-max, \
 selector-newline,star-property-hack,underscore-property-hack, \
-unique-headings,unqualified-attributes,vendor-prefix, \
+unique-headings,unqualified-attributes, \
 zero-units
