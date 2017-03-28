@@ -60,6 +60,13 @@ class App extends \Wei\App
     protected $appUrl = '';
 
     /**
+     * 默认的应用首页,以便首页不是404
+     *
+     * @var string
+     */
+    protected $defaultNamespace = 'app';
+
+    /**
      * {@inheritdoc}
      */
     public function __invoke(array $options = [])
@@ -83,6 +90,10 @@ class App extends \Wei\App
                 }
 
                 $request->setPathInfo('/' . $pathInfo);
+            }
+
+            if (!$namespace) {
+                $namespace = $this->defaultNamespace;
             }
 
             // 2. 检查应用名称是否存在
