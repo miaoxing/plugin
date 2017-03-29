@@ -18,7 +18,6 @@ class Setting extends \miaoxing\plugin\BaseModel
 
         'mall' => '微商城设置',
         'mall.cartTimeout' => '购物车超时时间',
-        'mall.payScoresRate' => '多少个积分抵用1元',
 
         'reserve' => '预约设置',
         'reserve.info' => '预约说明',
