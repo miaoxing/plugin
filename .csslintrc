@@ -1,6 +1,6 @@
---ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors,bulletproof-font-face,gradients,important,universal-selector,font-sizes,vendor-prefix
+--ignore=adjoining-classes,box-model,box-sizing,order-alphabetical,compatible-vendor-prefixes,fallback-colors,bulletproof-font-face,gradients,important,universal-selector,font-sizes,vendor-prefix,outline-none
 --exclude-list=comps/,dist/,vendor/,public/comps,public/dist,public/libs,public/plugins
---errors=known-properties,outline-none,display-property-grouping, \
+--errors=known-properties,display-property-grouping, \
 bulletproof-font-face,qualified-headings, \
 errors,duplicate-background-images,duplicate-properties,empty-rules, \
 selector-max-approaching,floats,font-faces, \
