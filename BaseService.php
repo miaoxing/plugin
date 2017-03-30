@@ -3,21 +3,16 @@
 namespace miaoxing\plugin {
 
     use Miaoxing\Region\Service\BaiduApi;
-    use Miaoxing\Queue\Service\BaseQueue;
-    use Miaoxing\Stat\Service\Chart;
     use Miaoxing\App\Service\Coll;
     use services\CsvExporter;
     use services\DataProvider;
     use services\dataProviders;
     use services\Excel;
     use services\Handlebars;
-    use services\Html;
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
-    use Miaoxing\Queue\Service\QueueWorker;
     use Miaoxing\Queue\Service\RedisQueue;
     use services\SafeUrl;
-    use Miaoxing\Queue\Service\SyncQueue;
     use services\Xml;
 
     /**
@@ -41,7 +36,6 @@ namespace miaoxing\plugin {
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
      * @property    \Miaoxing\Queue\Service\QueueWorker $queueWorker 队列后台服务
      * @property    Xml $xml XML服务
-     * @property    Html $html HTML服务
      * @property    \Miaoxing\App\Service\Random $random 随机数服务
      * @property    Coll $coll 组合服务
      * @property    Migration $migration 迁移服务
