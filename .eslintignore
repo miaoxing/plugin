@@ -1,6 +1,7 @@
-comps/*
-dist/*
-node_modules/*
-public/comps
-public/dist/*
+comps/**
+dist/**
+node_modules/**
+public/comps/**
+public/libs/**
+public/dist/**
 vendor/*
