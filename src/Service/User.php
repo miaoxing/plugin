@@ -397,8 +397,13 @@ class User extends BaseModel
     public function afterFind()
     {
         parent::afterFind();
-        $this['department'] = (array) json_decode($this['department'], true);
-        $this['extAttr'] = (array) json_decode($this['extAttr'], true);
+        if (!is_array($this['department'])) {
+            $this['department'] = (array) json_decode($this['department'], true);
+        }
+
+        if (!is_array($this['extAttr'])) {
+            $this['extAttr'] = (array) json_decode($this['extAttr'], true);
+        }
     }
 
     /**
