@@ -4,7 +4,7 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行检查
 standard=""
-if [ ! -e "phpcs.xml.dist" ]; then
+if [ -e "phpcs.xml.dist" ]; then
   standard="phpcs.xml.dist"
 else
   standard="Miaoxing"
