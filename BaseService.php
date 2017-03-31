@@ -8,7 +8,6 @@ namespace miaoxing\plugin {
     use services\DataProvider;
     use services\dataProviders;
     use services\Excel;
-    use services\Handlebars;
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
     use Miaoxing\Queue\Service\RedisQueue;
@@ -26,7 +25,6 @@ namespace miaoxing\plugin {
      * @property    CsvExporter $csvExporter Csv格式数据导出服务
      * @property    SafeUrl $safeUrl 生成带签名的安全URL
      * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
-     * @property    Handlebars $handlebars Handlebars模板引擎
      * @property    Excel $excel Excel操作的快捷服务
      * @property    \Miaoxing\Plugin\Service\\Miaoxing\Stat\Service\Chart $chart 构造图表数据的辅助服务
      * @property    Lbs $lbs 基于位置的服务
