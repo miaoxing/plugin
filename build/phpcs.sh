@@ -3,8 +3,15 @@
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行检查
+standard=""
+if [ ! -e "phpcs.xml.dist" ]; then
+  standard="phpcs.xml.dist"
+else
+  standard="Miaoxing"
+fi
+
 report="reports/phpcs.txt"
-command="phpcs --standard=Miaoxing --report-file=${report} -v ."
+command="phpcs --standard=${standard} --report-file=${report} -v ."
 info "${command}";
 
 ${command} || true
