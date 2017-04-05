@@ -43,6 +43,11 @@ abstract class BaseController extends \Wei\BaseController
     protected $controllerName;
 
     /**
+     * @var array
+     */
+    protected $actionPermissions = [];
+
+    /**
      * 未登录用户可以访问的页面前缀
      *
      * @var array
@@ -108,6 +113,7 @@ abstract class BaseController extends \Wei\BaseController
             'event' => $this->event,
             'plugin' => $this->plugin,
             'pageConfig' => $this->pageConfig,
+            'controllerInstance' => $this,
             // Strings
             'controller' => $controller,
             'action' => $this->app->getAction(),
@@ -147,5 +153,38 @@ abstract class BaseController extends \Wei\BaseController
     protected function json($message = '操作成功', $code = 1, array $append = [])
     {
         return $this->response->json(['message' => $message, 'code' => $code] + $append);
+    }
+
+    /**
+     * 获取当前控制器的名称
+     *
+     * @return string
+     */
+    public function getControllerName()
+    {
+        // 控制器名称如"图文管理(备注)",忽略括号中的备注内容
+        return explode('(', $this->controllerName)[0];
+    }
+
+    /**
+     * 从权限配置中获取当前操作的名称
+     *
+     * @return string|null
+     */
+    public function getActionName()
+    {
+        $action = $this->app->getAction();
+        if (isset($this->actionPermissions[$action])) {
+            return $this->actionPermissions[$action];
+        }
+
+        foreach ($this->actionPermissions as $actions => $name) {
+            $actions = explode(',', $actions);
+            if (in_array($action, $actions)) {
+                return $name;
+            }
+        }
+
+        return null;
     }
 }
