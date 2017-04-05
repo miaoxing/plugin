@@ -646,6 +646,8 @@ class User extends BaseModel
         $this->setPlainPassword($req['password']);
         $this->save();
 
+        wei()->curUser->logout();
+
         return $this->suc();
     }
 
