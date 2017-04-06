@@ -7,7 +7,7 @@ namespace miaoxing\plugin {
     use services\CsvExporter;
     use services\DataProvider;
     use services\dataProviders;
-    use services\Excel;
+    use Miaoxing\Excel\Service\Excel;
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
     use Miaoxing\Queue\Service\RedisQueue;
