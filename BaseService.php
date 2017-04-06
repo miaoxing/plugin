@@ -5,8 +5,6 @@ namespace miaoxing\plugin {
     use Miaoxing\Region\Service\BaiduApi;
     use Miaoxing\App\Service\Coll;
     use services\CsvExporter;
-    use services\DataProvider;
-    use services\dataProviders;
     use Miaoxing\Excel\Service\Excel;
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
@@ -37,8 +35,6 @@ namespace miaoxing\plugin {
      * @property    \Miaoxing\App\Service\Random $random 随机数服务
      * @property    Coll $coll 组合服务
      * @property    Migration $migration 迁移服务
-     * @property    DataProvider $dataProvider 创建新项目时,提供数据源的对象
-     * @method      dataProviders\Base dataProvider($type = 'common') 初始化数据源对象
      */
     class BaseService extends \Wei\Base
     {
