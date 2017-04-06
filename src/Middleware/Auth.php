@@ -6,7 +6,7 @@ namespace Miaoxing\Plugin\Middleware;
  * @property \Wei\Ret $ret
  * @property \Wei\Url $url
  * @method string url($url = '', $argsOrParams = array(), $params = array())
- * @property \services\Logger $logger
+ * @property \Miaoxing\App\Service\Logger $logger
  */
 class Auth extends Base
 {

@@ -6,7 +6,7 @@ namespace miaoxing\plugin;
  * @property \Wei\Env $env
  * @property \Wei\View $view
  * @property \Wei\Event $event
- * @property \services\Logger $logger
+ * @property \Miaoxing\App\Service\Logger $logger
  * @property \Wei\Request $request
  */
 class BasePlugin extends \miaoxing\plugin\BaseService
