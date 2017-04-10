@@ -25,6 +25,7 @@ if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
   bash "${BASH_SOURCE[0]%/*}/eslint.sh"
   bash "${BASH_SOURCE[0]%/*}/htmllint.sh"
   php "${BASH_SOURCE[0]%/*}/check-migration.php"
+  php "${BASH_SOURCE[0]%/*}/check-inline-script.php" $3
 else
   bash "${BASH_SOURCE[0]%/*}/phpunit.sh"
 fi
