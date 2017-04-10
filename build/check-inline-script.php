@@ -8,7 +8,7 @@ $err = false;
 $errFn = isset($argv[1]) ? 'err' : 'printText';
 
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('resources/views'));
-$files = array();
+$files = [];
 foreach ($rii as $file) {
     if ($file->isDir()) {
         continue;
@@ -34,6 +34,7 @@ foreach ($rii as $file) {
 
 echo '检查完毕,结果是' . ($err ? '不通过' : '通过') . "\n";
 
-function printText($text) {
-    print $text;
+function printText($text)
+{
+    echo $text;
 }
