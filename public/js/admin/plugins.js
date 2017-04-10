@@ -1,9 +1,9 @@
 define(['template', 'dataTable', 'form', 'jquery-deparam'], function (template) {
-  var Plugin = function () {
+  var Plugins = function () {
     // do nothing.
   };
 
-  Plugin.prototype.indexAction = function () {
+  Plugins.prototype.indexAction = function () {
     var recordTable = $('#record-table').dataTable({
       dom: 't<\'row\'<\'col-sm-12\'ir>>',
       displayLength: 99999,
@@ -52,5 +52,5 @@ define(['template', 'dataTable', 'form', 'jquery-deparam'], function (template) 
     });
   };
 
-  return new Plugin();
+  return new Plugins();
 });

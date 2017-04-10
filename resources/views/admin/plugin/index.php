@@ -49,8 +49,8 @@
 
 <?= $block('js') ?>
 <script>
-  require(['plugins/plugin/js/admin/plugins'], function (plugin) {
-    plugin.indexAction();
+  require(['plugins/plugin/js/admin/plugins'], function (plugins) {
+    plugins.indexAction();
   });
 </script>
 <?= $block->end() ?>
