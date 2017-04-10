@@ -49,53 +49,8 @@
 
 <?= $block('js') ?>
 <script>
-  require(['dataTable', 'form', 'jquery-deparam'], function () {
-    var recordTable = $('#record-table').dataTable({
-      dom: "t<'row'<'col-sm-12'ir>>",
-      displayLength: 99999,
-      ajax: {
-        url: $.queryUrl('admin/plugin.json')
-      },
-      columns: [
-        {
-          data: 'name',
-          render: function (data, type, full) {
-            return data || full.id
-          }
-        },
-        {
-          data: 'id'
-        },
-        {
-          data: 'version'
-        },
-        {
-          data: 'description'
-        },
-        {
-          data: 'installed',
-          render: function (data, type, full) {
-            return full.builtIn ? $('#built-in-tips-tpl').html() : template.render('checkbox-col-tpl', {
-              id: full.id,
-              name: 'installed',
-              value: data
-            });
-          }
-        }
-      ]
-    });
-
-    // 切换状态
-    recordTable.on('click', '.toggle-status', function () {
-      var $this = $(this);
-      var data = {};
-      data['id'] = $this.data('id');
-      data[$this.attr('name')] = +!$this.data('value');
-      $.post($.url('admin/plugin/update'), data, function (ret) {
-        $.msg(ret);
-        recordTable.reload();
-      }, 'json');
-    });
+  require(['plugins/plugin/js/admin/plugins'], function (plugin) {
+    plugin.indexAction();
   });
 </script>
 <?= $block->end() ?>
