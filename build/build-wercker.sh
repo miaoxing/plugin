@@ -18,6 +18,7 @@ bash "${BASH_SOURCE[0]%/*}/stylelint.sh"
 bash "${BASH_SOURCE[0]%/*}/eslint.sh"
 bash "${BASH_SOURCE[0]%/*}/htmllint.sh"
 php "${BASH_SOURCE[0]%/*}/check-migration.php"
+php "${BASH_SOURCE[0]%/*}/check-inline-script.php" $3
 
 # 3. 合并错误报告
 error_file="error.txt"
