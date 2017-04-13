@@ -7,7 +7,13 @@ require 'functions.php';
 $err = false;
 $errFn = isset($argv[1]) ? 'err' : 'printText';
 
-$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('resources/views'));
+try {
+    $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('resources/views'));
+} catch (UnexpectedValueException $e) {
+    echo '忽略目录不存在的情况: ' . $e;
+    exit;
+}
+
 $files = [];
 foreach ($rii as $file) {
     if ($file->isDir()) {
