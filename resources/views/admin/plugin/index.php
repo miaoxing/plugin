@@ -38,8 +38,7 @@
 
 <script id="table-actions" type="text/html">
   <div class="action-buttons">
-    <a href="<%= $.url('admin/plugin/show', {id: id}) %>"
-      target="_blank" title="查看">
+    <a href="<%= $.url('admin/plugin/show', {id: id}) %>" target="_blank" title="查看">
       <i class="fa fa-search-plus bigger-130"></i>
     </a>
   </div>
