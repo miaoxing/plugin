@@ -156,6 +156,15 @@ abstract class BaseController extends \Wei\BaseController
     }
 
     /**
+     * @param string $key
+     * @param $value
+     */
+    public function setPageConfig($key, $value)
+    {
+        $this->pageConfig[$key] = $value;
+    }
+
+    /**
      * 获取当前控制器的名称
      *
      * @return string
