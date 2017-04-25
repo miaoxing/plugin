@@ -7,7 +7,7 @@ standard=""
 if [ -e "phpcs.xml.dist" ]; then
   standard="phpcs.xml.dist"
 else
-  standard="Miaoxing"
+  standard="vendor/miaoxing/plugin/phpcs.xml.dist"
 fi
 
 report="reports/phpcs.txt"
