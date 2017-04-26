@@ -17,8 +17,6 @@ namespace miaoxing\plugin {
      * @property    \Wei\Event $event
      * @method      \miaoxing\plugin\BaseModel appDb($table = null)
      * @method      \miaoxing\plugin\BaseModel db($table = null)
-     * @property    \Wei\Logger $syncLogger 同步用户的日志
-     * @property    \Wei\Logger $tmpLogger 临时日志,记录在tmp.log文件,用于调试等
      * @property    \Miaoxing\Plugin\Service\App $app 应用管理服务
      * @property    CsvExporter $csvExporter Csv格式数据导出服务
      * @property    SafeUrl $safeUrl 生成带签名的安全URL
