@@ -27,10 +27,15 @@ foreach ($rii as $file) {
     libxml_use_internal_errors(false);
 
     $xpath = new DOMXpath($doc);
+    /** @var DOMElement $node */
     foreach ($xpath->query('//script[string-length(text()) > 1]') as $node) {
+        // 忽略模板
+        if ($node->getAttribute('type') === 'text/html') {
+            continue;
+        }
+
         $count = substr_count($node->nodeValue, "\n");
         if ($count > 10) {
-            $err = true;
             $errFn('代码超过10行,需写到js文件中' . "\n"
                 . '文件: ' . $file->getPathname() . "\n"
                 . '首行: ' . explode("\n", trim($node->nodeValue))[0] . "\n");
