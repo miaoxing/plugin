@@ -4,4 +4,4 @@ node_modules/**
 public/comps/**
 public/libs/**
 public/dist/**
-vendor/*
+vendor/**
