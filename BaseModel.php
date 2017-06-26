@@ -149,7 +149,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function mine()
     {
-        return $this->andWhere([$this->userIdColumn => wei()->curUser['id']]);
+        return $this->andWhere([$this->userIdColumn => (int) wei()->curUser['id']]);
     }
 
     /**
