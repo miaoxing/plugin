@@ -5,3 +5,4 @@ public/comps/**
 public/libs/**
 public/dist/**
 vendor/**
+../*/public
