@@ -11,6 +11,7 @@ fi
 
 if [ ! -e ".eslintignore" ]; then
   config+=" --ignore-path=vendor/miaoxing/plugin/.eslintignore"
+  echo "$(cat "vendor/miaoxing/plugin/.eslintignore")"
 fi
 
 report="reports/eslint.txt"
