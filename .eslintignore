@@ -6,3 +6,4 @@ public/libs/**
 public/dist/**
 vendor/**
 ../*/public
+../*/*/public/libs

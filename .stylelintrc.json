@@ -7,7 +7,7 @@
     "color-no-invalid-hex": true,
     "font-family-no-duplicate-names": true,
     "length-zero-no-unit": true,
-    "selector-no-id": true,
+    "selector-max-id": 0,
     "selector-no-universal": true,
     "selector-pseudo-class-case": "lower",
     "selector-pseudo-element-case": "lower",
