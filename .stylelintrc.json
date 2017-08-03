@@ -8,7 +8,7 @@
     "font-family-no-duplicate-names": true,
     "length-zero-no-unit": true,
     "selector-max-id": 0,
-    "selector-no-universal": true,
+    "selector-max-universal": 0,
     "selector-pseudo-class-case": "lower",
     "selector-pseudo-element-case": "lower",
     "selector-pseudo-element-colon-notation": "double",
