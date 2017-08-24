@@ -685,4 +685,17 @@ class BaseModel extends Record implements JsonSerializable
     {
         return $this->relationValue ?: $this[$field];
     }
+
+    /**
+     * 直接设置表名，用于子查询的情况
+     *
+     * @param string $table
+     * @return $this
+     */
+    public function setRawTable($table)
+    {
+        $this->table = $table;
+        $this->fullTable = $this->db->getTable($this->table);
+        return $this;
+    }
 }
