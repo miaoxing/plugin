@@ -696,6 +696,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         $this->table = $table;
         $this->fullTable = $this->db->getTable($this->table);
+
         return $this;
     }
 }
