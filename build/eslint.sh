@@ -4,13 +4,16 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 
 # 1. 执行命令
 
+# 如果没有忽略文件，拷贝默认配置
+copyIgnoreFile=false
+if [ ! -e ".eslintignore" ]; then
+  cp "vendor/miaoxing/plugin/.eslintignore" ".eslintignore"
+  copyIgnoreFile=true
+fi
+
 config=""
 if [ ! -e ".eslintrc.json" ]; then
   config=" --config=vendor/miaoxing/plugin/.eslintrc.json"
-fi
-
-if [ ! -e ".eslintignore" ]; then
-  config+=" --ignore-path=vendor/miaoxing/plugin/.eslintignore"
 fi
 
 report="reports/eslint.txt"
@@ -25,4 +28,8 @@ if [[ ${PIPESTATUS[0]} == 0 ]]; then
   rm -f ${report}
 else
   append_report "${report}" "${command}"
+fi
+
+if [ copyIgnoreFile ]; then
+  rm ".eslintignore"
 fi
