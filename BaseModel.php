@@ -665,7 +665,12 @@ class BaseModel extends Record implements JsonSerializable
 
     protected function getClassServiceName($object)
     {
-        return lcfirst(end(explode('\\', get_class($object))));
+        $name = lcfirst(end(explode('\\', get_class($object))));
+        if (substr($name, -6) == 'Record') {
+            $name = substr($name, 0, -6);
+        }
+
+        return $name;
     }
 
     protected function getForeignKey()
