@@ -2,8 +2,12 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Wei\RetTrait;
+
 class BasicAuth extends Base
 {
+    use RetTrait;
+
     protected $validUsers;
 
     public function __invoke($next)
@@ -23,23 +27,24 @@ class BasicAuth extends Base
         // 查找用户
         $user = wei()->user()->find(['username' => $username]);
         if (!$user) {
-            return $this->responseNotAuthorized();
+            return $this->responseNotAuthorized('用户名不存在或密码错误');
         }
 
         // 校验密码
         $validated = $user->verifyPassword($password);
         if (!$validated) {
-            return $this->responseNotAuthorized();
+            return $this->responseNotAuthorized('用户不存在或密码错误');
         }
 
         return $next();
     }
 
-    protected function responseNotAuthorized()
+    protected function responseNotAuthorized($message = 'Not authorized')
     {
-        return $this->response
+         $this->response
             ->setHeader('WWW-Authenticate', 'Basic realm="API Realm"')
-            ->setStatusCode(401)
-            ->setContent('Not authorized');
+            ->setStatusCode(401);
+
+        return $this->err($message);
     }
 }
