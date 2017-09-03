@@ -200,7 +200,7 @@ class Setting extends \miaoxing\plugin\BaseModel
     {
         $values = [];
         foreach ($this->getValues($ids) as $id => $value) {
-            $id = strtolower(preg_replace('/[A-Z]/', '-$0', strtr($id, ['.' => '-'])));
+            $id = strtolower(preg_replace('/[A-Z]/', '-$0', strtr($id, ['.' => '-', '_' => '-'])));
             $values['js-' . $id] = $value;
         }
 
