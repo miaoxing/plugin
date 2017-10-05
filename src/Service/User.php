@@ -584,6 +584,10 @@ class User extends BaseModel
         }
 
         if (!$isMobileVerified) {
+            // 手机号未认证时,检查手机号,根据配置检查是否重复
+            if (wei()->setting('user.check_mobile_unique') && $this->isMobileExists($data['mobile'])) {
+                return $this->err('手机号码已存在');
+            }
             $this['mobile'] = $data['mobile'];
         }
 
@@ -598,6 +602,14 @@ class User extends BaseModel
         ]);
 
         return $this->suc();
+    }
+
+    public function isMobileExists($mobile)
+    {
+        return (bool) wei()->user()
+            ->andWhere(['mobile' => $mobile])
+            ->andWhere('id != ?', $this['id'])
+            ->fetchColumn();
     }
 
     /**
