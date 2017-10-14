@@ -47,9 +47,9 @@ class BaseModel extends Record implements JsonSerializable
 
     protected $appIdColumn = 'appId';
 
-    protected $createAtColumn = 'createTime';
+    protected $createdAtColumn = 'createTime';
 
-    protected $updateAtColumn = 'updateTime';
+    protected $updatedAtColumn = 'updateTime';
 
     protected $createdByColumn = 'createUser';
 
@@ -108,8 +108,8 @@ class BaseModel extends Record implements JsonSerializable
 
         $fields = $this->getFields();
 
-        if (in_array($this->createAtColumn, $fields) && !$this[$this->createAtColumn]) {
-            $this[$this->createAtColumn] = date('Y-m-d H:i:s');
+        if (in_array($this->createdAtColumn, $fields) && !$this[$this->createdAtColumn]) {
+            $this[$this->createdAtColumn] = date('Y-m-d H:i:s');
         }
 
         if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
@@ -121,8 +121,8 @@ class BaseModel extends Record implements JsonSerializable
     {
         $fields = $this->getFields();
 
-        if (in_array($this->updateAtColumn, $fields)) {
-            $this[$this->updateAtColumn] = date('Y-m-d H:i:s');
+        if (in_array($this->updatedAtColumn, $fields)) {
+            $this[$this->updatedAtColumn] = date('Y-m-d H:i:s');
         }
 
         if (in_array($this->updatedByColumn, $fields)) {
