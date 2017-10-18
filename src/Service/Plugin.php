@@ -565,7 +565,11 @@ class Plugin extends BaseService
         foreach ($patterns as $i => $pattern) {
             $files = $this->globByDirs($dirs, $pattern);
             foreach ($files as $file) {
-                $class = $this->guessClassName($file);
+                $class = $this->guessClassName($file, true);
+                if (!$class) {
+                    continue;
+                }
+
                 $name = $this->getShortName($class, $types[$i]);
 
                 $this->addDuplicates($map, $name, $class);
@@ -606,10 +610,11 @@ class Plugin extends BaseService
      * Guest class name by file name
      *
      * @param string $file
+     * @param bool $ignoreProject
      * @return string
      * @throws Exception
      */
-    protected function guessClassName($file)
+    protected function guessClassName($file, $ignoreProject = false)
     {
         // 假设为根目录
         if ($file[0] === '.') {
@@ -632,6 +637,10 @@ class Plugin extends BaseService
             }
 
             $json = json_decode(file_get_contents($composerJson), true);
+            if ($ignoreProject && isset($json['type']) && $json['type'] == 'project') {
+                return false;
+            }
+
             if (!isset($json['autoload']['psr-4']) || !$json['autoload']['psr-4']) {
                 throw new Exception('Missing psr-4 autoload config');
             }
