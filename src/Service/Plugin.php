@@ -576,7 +576,7 @@ class Plugin extends BaseService
         ksort($map);
 
         // Display first type name
-        return $this->filterDuplicates($map, $type[0]);
+        return $this->filterDuplicates($map, lcfirst(is_array($type) ? current($type) : $type));
     }
 
     public function getPluginIdByClass($class)
