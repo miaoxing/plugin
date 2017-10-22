@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Service;
 use miaoxing\plugin\BaseService;
 
 /**
- * URL映射服务
+ * URL映射
  *
  * @property \Wei\Request $request
  * @property \Wei\StatsD $statsD

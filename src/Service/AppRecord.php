@@ -3,6 +3,8 @@
 namespace Miaoxing\Plugin\Service;
 
 /**
+ * 应用模型
+ *
  * @property \Wei\BaseCache $cache
  */
 class AppRecord extends \miaoxing\plugin\BaseModel

@@ -3,6 +3,8 @@
 namespace Miaoxing\Plugin\Service;
 
 /**
+ * CLI应用
+ *
  * @property \Wei\Request $request
  */
 class CliApp extends \miaoxing\plugin\BaseService

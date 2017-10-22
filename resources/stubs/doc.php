@@ -22,4 +22,6 @@ namespace {
     function wei()
     {
     }
+
+<?= $viewVars ?>
 }

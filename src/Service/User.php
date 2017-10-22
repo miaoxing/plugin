@@ -6,6 +6,8 @@ use miaoxing\plugin\BaseModel;
 use Miaoxing\User\Service\UserProfile;
 
 /**
+ * 用户
+ *
  * @property \Wei\Session $session
  * @property \Wei\Request $request
  * @property \Wei\Password $password

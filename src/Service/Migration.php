@@ -9,6 +9,8 @@ use Wei\RetTrait;
 use Wei\Schema;
 
 /**
+ * 数据库迁移
+ *
  * @property Db $db
  * @property Schema $schema
  * @property Cli $cli

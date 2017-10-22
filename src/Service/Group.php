@@ -2,6 +2,9 @@
 
 namespace Miaoxing\Plugin\Service;
 
+/**
+ * 用户分组
+ */
 class Group extends \miaoxing\plugin\BaseModel
 {
     protected $table = 'groups';

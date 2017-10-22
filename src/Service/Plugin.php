@@ -554,9 +554,11 @@ class Plugin extends BaseService
      * @param array $dirs
      * @param string|array $pattern
      * @param string|array $type
+     * @param bool $ignoreProject
      * @return array
+     * @throws Exception
      */
-    public function generateClassMap(array $dirs, $pattern, $type)
+    public function generateClassMap(array $dirs, $pattern, $type, $ignoreProject = true)
     {
         $patterns = (array) $pattern;
         $types = (array) $type;
@@ -565,7 +567,7 @@ class Plugin extends BaseService
         foreach ($patterns as $i => $pattern) {
             $files = $this->globByDirs($dirs, $pattern);
             foreach ($files as $file) {
-                $class = $this->guessClassName($file, true);
+                $class = $this->guessClassName($file, $ignoreProject);
                 if (!$class) {
                     continue;
                 }

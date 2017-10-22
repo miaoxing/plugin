@@ -36,10 +36,25 @@ class Docs extends BaseController
 
         $serviceMap = $this->getServerMap($plugin);
         $docBlock = $this->generateDocBlock($serviceMap);
+        $viewVars = $this->generateViewVars($serviceMap);
 
-        $this->createFile($file, $namespace, $class, $docBlock);
+        $this->createFile($file, $namespace, $class, $docBlock, $viewVars);
 
         return $this->suc();
+    }
+
+    protected function generateViewVars($serviceMap)
+    {
+        $var = '';
+        foreach ($serviceMap as $name => $class) {
+            if ($var) {
+                $var .= "\n";
+            }
+            $var .= sprintf('    /** @var %s $%s */' . "\n", $class, $name);
+            $var .= sprintf('    $%s = wei()->%1$s;' . "\n", $name);
+        }
+
+        return $var;
     }
 
     protected function generateDocBlock(array $serviceMap)
@@ -54,18 +69,58 @@ class Docs extends BaseController
             $ref = new ReflectionClass($class);
             $docName = $this->getDocCommentTitle($ref->getDocComment());
 
-            $docBlock .= sprintf("     * @property    \\%s \$%s %s\n", $ref->getName(), $name, $docName);
+            $docBlock .= sprintf("     * @property    \\%s \$%s %s\n", $class, $name, $docName);
 
             if (method_exists($class, '__invoke')) {
                 $method = $ref->getMethod('__invoke');
-                $return = $this->getMethodReturn($ref, $method);
+                $return = $this->getMethodReturn($ref, $method) ?: 'mixed';
                 $methodName = $this->getDocCommentTitle($method->getDocComment()) ?: '';
 
-                $docBlock .= sprintf("     * @method      %s %s() %s\n", $return, $name, $methodName);
+                $params = $this->geParam($method);
+
+                $docBlock .= sprintf("     * @method      %s %s(%s) %s\n", $return, $name, $params, $methodName);
+                // 可以快速导航到实际的方法
+                $docBlock .= sprintf("     * @see         \\%s::__invoke\n", $class);
             }
         }
 
         return $docBlock;
+    }
+
+    protected function geParam(ReflectionMethod $method)
+    {
+        $params = $method->getParameters();
+        if (!$params) {
+            return '';
+        }
+
+        $string = '';
+        foreach ($params as $param) {
+            if ($string) {
+                $string .= ', ';
+            }
+
+            $string .= '$' . $param->getName();
+            if ($param->isDefaultValueAvailable()) {
+                $string .= ' = ' . $this->convertParamValueToString($param->getDefaultValue());
+            }
+        }
+
+        return $string;
+    }
+
+    protected function convertParamValueToString($value)
+    {
+        switch (gettype($value)) {
+            case 'NULL':
+                return 'null';
+
+            case 'array':
+                return '[]';
+
+            default:
+                return var_export($value, true);
+        }
     }
 
     protected function getMethodReturn(ReflectionClass $class, ReflectionMethod $method)
@@ -76,12 +131,16 @@ class Docs extends BaseController
             return false;
         }
 
-        if ($matches[1] == 'BaseModel|BaseModel[]') {
-            $className = $class->getName();
-            return '\\' . $className . '|\\' . $className . '[]';
-        }
+        $return = $matches[1];
+        $className = '\\' . $class->getName();
 
-        return $matches[1];
+        $return = str_replace([
+            'BaseModel', '$this'
+        ], [
+            $className, $className
+        ], $return);
+
+        return $return ?: false;
     }
 
     protected function getDocCommentTitle($docComment)
@@ -138,7 +197,7 @@ class Docs extends BaseController
         }
     }
 
-    protected function createFile($file, $namespace, $class, $docBlock)
+    protected function createFile($file, $namespace, $class, $docBlock, $viewVars)
     {
         $this->writeln('生成文件 ' . $this->cli->success($file));
 
@@ -171,6 +230,6 @@ class Docs extends BaseController
     {
         $basePath = $plugin->getBasePath() . '/src';
 
-        return $this->plugin->generateClassMap([$basePath], '/Service/*.php', 'Service');
+        return $this->plugin->generateClassMap([$basePath], '/Service/*.php', 'Service', false);
     }
 }

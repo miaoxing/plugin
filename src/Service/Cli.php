@@ -4,6 +4,9 @@ namespace Miaoxing\Plugin\Service;
 
 use miaoxing\plugin\BaseService;
 
+/**
+ * CLI
+ */
 class Cli extends BaseService
 {
     const REST = 0;

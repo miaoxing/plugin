@@ -5,6 +5,8 @@ namespace Miaoxing\Plugin\Service;
 use Wei\Response;
 
 /**
+ * 应用
+ *
  * @method \miaoxing\plugin\BaseModel appDb($table)
  * @property \Wei\Event $event
  * @property \Miaoxing\Plugin\Service\Plugin $plugin

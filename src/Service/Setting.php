@@ -3,6 +3,8 @@
 namespace Miaoxing\Plugin\Service;
 
 /**
+ * 设置
+ *
  * @property \Wei\Cache $cache
  * @property \Wei\Validator\StartsWith $isStartsWith
  */
@@ -73,7 +75,7 @@ class Setting extends \miaoxing\plugin\BaseModel
     /**
      * @param string $id
      * @param mixed $default
-     * @return $this|$this[]
+     * @return string|$this|$this[]
      */
     public function __invoke($id = null, $default = null)
     {
