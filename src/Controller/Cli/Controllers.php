@@ -76,7 +76,10 @@ class Controllers extends BaseController
         }
 
         $name = array_pop($parts);
-        $namespace = $this->getPluginNamespace($plugin) . '\Controller\\' . implode('\\', $parts);
+        $namespace = $this->getPluginNamespace($plugin) . '\Controller';
+        if ($parts) {
+            $namespace .= '\\' . implode('\\', $parts);
+        }
 
         return [$name, $namespace];
     }

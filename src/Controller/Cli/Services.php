@@ -57,7 +57,7 @@ class Services extends BaseController
         $parts = explode('\\', $class);
         array_pop($parts);
 
-        return implode('\\', $parts);
+        return implode('\\', $parts) . '\Service';
     }
 
     protected function createFile($file, $namespace, $class)
