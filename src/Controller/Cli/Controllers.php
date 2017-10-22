@@ -27,7 +27,6 @@ class Controllers extends BaseController
             return $this->err('缺少控制器名称');
         }
 
-
         $file = $this->getFile($plugin, $req['name']);
         $this->createDir(dirname($file));
 
@@ -52,9 +51,9 @@ class Controllers extends BaseController
     /**
      * Camelizes a word
      *
-     * @param string $word The word to camelize.
+     * @param string $word The word to camelize
      *
-     * @return string The camelized word.
+     * @return string The camelized word
      */
     protected function camelize($word)
     {
