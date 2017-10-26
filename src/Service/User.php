@@ -321,7 +321,7 @@ class User extends BaseModel
             'email' => (string) $data['email'],
             'mobile' => (string) $data['mobile'],
             'username' => (string) $data['username'],
-            'source' => isset($data['source']) ? $data['source'] : 0,
+            'source' => isset($data['source']) ? $data['source'] : '',
         ]);
 
         return ['code' => 1, 'message' => '注册成功'];
