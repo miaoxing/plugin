@@ -72,6 +72,11 @@ abstract class BaseController extends \Wei\BaseController
     protected $pageConfig;
 
     /**
+     * @var array
+     */
+    protected $js = [];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(array $options = [])
@@ -119,6 +124,7 @@ abstract class BaseController extends \Wei\BaseController
             'action' => $this->app->getAction(),
             'pageId' => str_replace('/', '-', $this->app->getControllerAction()),
             'adminNavId' => $this->adminNavId,
+            'js' => &$this->js,
         ]);
 
         // TODO 移除依赖

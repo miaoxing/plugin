@@ -46,6 +46,7 @@
 <script>window.requirejs || document.write('<script src="<?= $asset->fallback($mainJs) ?>"><\/script>')</script>
 <script>
   $.extend($, <?= json_encode($app->getConfig()) ?>);
+  var wei = <?= json_encode($js) ?>;
 </script>
 <?php $event->trigger('inlineScript') ?>
 <?= $block->get('html') ?>
