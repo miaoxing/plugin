@@ -140,6 +140,12 @@ abstract class BaseController extends \Wei\BaseController
         if (!isset($this->view['controllerName'])) {
             $this->view['controllerName'] = $this->controllerName;
         }
+        $this->js += [
+            'page' => [
+                'controllerTitle' => $this->getControllerName(),
+                'actionTitle' => $this->getActionName(),
+            ],
+        ];
 
         // 为后台设置默认布局
         if (strpos($controller, 'admin') !== false && $this->plugin->has('admin')) {
