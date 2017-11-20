@@ -2,11 +2,15 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Traits\ModelQuery;
+
 /**
  * 用户分组
  */
 class Group extends \miaoxing\plugin\BaseModel
 {
+    use ModelQuery;
+
     protected $table = 'groups';
 
     protected $data = [
