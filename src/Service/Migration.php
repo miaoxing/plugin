@@ -77,7 +77,7 @@ class Migration extends BaseService
 
     protected function getMigrationClasses()
     {
-        $classMap = $this->plugin->generateClassMap($this->paths, '/Migration/*.php', 'Migration');
+        $classMap = $this->plugin->generateClassMap($this->paths, '/Migration/*.php', 'Migration', false);
 
         return $classMap;
     }
