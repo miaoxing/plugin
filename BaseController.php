@@ -145,6 +145,7 @@ abstract class BaseController extends \Wei\BaseController
                 'controllerTitle' => $this->getControllerName(),
                 'actionTitle' => $this->getActionName(),
             ],
+            'webpackPublicPath' => wei()->wpAsset->getRevPrefix(),
         ];
 
         // 为后台设置默认布局
