@@ -665,7 +665,7 @@ class Plugin extends BaseService
     protected function getShortName($class, $type)
     {
         // 获取类名中,类型之后的半段
-        // 如Miaoxing\User\Controller\Admin\User返回Admin\User
+        // 如Miaoxing\User\Controller\Admins\User返回Admin\User
         $name = explode('\\' . $type . '\\', $class, 2)[1];
 
         // 将名称转换为小写
