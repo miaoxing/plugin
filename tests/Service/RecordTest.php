@@ -502,6 +502,44 @@ class RecordTest extends BaseTestCase
         $this->assertInstanceOf(TestArticle::className(), $articles);
     }
 
+    public function testCamelFromArray()
+    {
+        $article = wei()->testCamelArticle();
+
+        $article->fromArray([
+            'testUserId' => 1,
+        ]);
+
+        $this->assertEquals(1, $article['testUserId']);
+    }
+
+    public function testCamelToArray()
+    {
+        $article = wei()->testCamelArticle();
+
+        $article->fromArray([
+            'testUserId' => 1,
+        ]);
+
+        $this->assertEquals([
+            'testUserId' => 1,
+            'id' => null,
+            'title' => null,
+            'content' => null,
+        ], $article->toArray());
+    }
+
+    public function testCamelGetSet()
+    {
+        $article = wei()->testCamelArticle();
+
+        $this->assertEquals(null, $article['testUserId']);
+
+        $article['testUserId'] = 1;
+
+        $this->assertEquals(1, $article['testUserId']);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
