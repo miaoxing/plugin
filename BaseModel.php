@@ -453,25 +453,12 @@ class BaseModel extends Record implements JsonSerializable
             $this->loadData($this->isColl() ? 0 : 'id');
         }
 
-        $result = parent::toArray($returnFields);
-        if ($this->camel) {
-            $result = $this->convertColumnNames($result);
+        $result = [];
+        foreach (parent::toArray($returnFields) as $column => $value) {
+            $result[$this->convertOutputColumn($column)] = $value;
         }
 
         return $result;
-    }
-
-    protected function convertColumnNames($data)
-    {
-        $newData = [];
-        foreach ($data as $key => $item) {
-            if (is_array($item)) {
-                $item = $this->convertColumnNames($item);
-            }
-            $newData[$this->camelize($key)] = $item;
-        }
-
-        return $newData;
     }
 
     /**
@@ -742,28 +729,26 @@ class BaseModel extends Record implements JsonSerializable
 
     public function get($name)
     {
-        if ($this->camel) {
-            $name = $this->snake($name);
-        }
-
-        return parent::get($name);
+        return parent::get($this->convertInputColumn($name));
     }
 
     public function set($name, $value = null)
     {
-        if ($this->camel) {
-            $name = $this->snake($name);
-        }
-
-        return parent::set($name, $value);
+        return parent::set($this->convertInputColumn($name), $value);
     }
 
     public function isFillable($field)
     {
-        if ($this->camel) {
-            $field = $this->snake($field);
-        }
+        return parent::isFillable($this->convertInputColumn($field));
+    }
 
-        return parent::isFillable($field);
+    protected function convertInputColumn($column)
+    {
+        return $this->camel ? $this->snake($column) : $column;
+    }
+
+    protected function convertOutputColumn($column)
+    {
+        return $this->camel ? $this->camelize($column) : $column;
     }
 }
