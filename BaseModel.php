@@ -88,6 +88,11 @@ class BaseModel extends Record implements JsonSerializable
     protected $enableConflictLog = false;
 
     /**
+     * @var bool
+     */
+    protected $camel = false;
+
+    /**
      * @return BaseModel|BaseModel[]
      */
     public function __invoke()
@@ -448,7 +453,25 @@ class BaseModel extends Record implements JsonSerializable
             $this->loadData($this->isColl() ? 0 : 'id');
         }
 
-        return parent::toArray($returnFields);
+        $result = parent::toArray($returnFields);
+        if ($this->camel) {
+            $result = $this->convertColumnNames($result);
+        }
+
+        return $result;
+    }
+
+    protected function convertColumnNames($data)
+    {
+        $newData = [];
+        foreach ($data as $key => $item) {
+            if (is_array($item)) {
+                $item = $this->convertColumnNames($item);
+            }
+            $newData[$this->camelize($key)] = $item;
+        }
+
+        return $newData;
     }
 
     /**
@@ -661,6 +684,18 @@ class BaseModel extends Record implements JsonSerializable
     protected function snake($input)
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+    }
+
+    /**
+     * Camelizes a word
+     *
+     * @param string $word The word to camelize
+     *
+     * @return string The camelized word
+     */
+    protected function camelize($word)
+    {
+        return lcfirst(str_replace(' ', '', ucwords(strtr($word, '_-', '  '))));
     }
 
     protected function getClassServiceName($object)
