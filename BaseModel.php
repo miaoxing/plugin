@@ -743,9 +743,6 @@ class BaseModel extends Record implements JsonSerializable
     public function get($name)
     {
         if ($this->camel) {
-            if (strpos($name, '_') !== false) {
-                throw new \Exception('Invalid naming:' . $name);
-            }
             $name = $this->snake($name);
         }
 
