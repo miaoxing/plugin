@@ -739,4 +739,34 @@ class BaseModel extends Record implements JsonSerializable
 
         return $this;
     }
+
+    public function get($name)
+    {
+        if ($this->camel) {
+            if (strpos($name, '_') !== false) {
+                throw new \Exception('Invalid naming:' . $name);
+            }
+            $name = $this->snake($name);
+        }
+
+        return parent::get($name);
+    }
+
+    public function set($name, $value = null)
+    {
+        if ($this->camel) {
+            $name = $this->snake($name);
+        }
+
+        return parent::set($name, $value);
+    }
+
+    public function isFillable($field)
+    {
+        if ($this->camel) {
+            $field = $this->snake($field);
+        }
+
+        return parent::isFillable($field);
+    }
 }
