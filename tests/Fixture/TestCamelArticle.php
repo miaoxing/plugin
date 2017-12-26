@@ -3,10 +3,11 @@
 namespace MiaoxingTest\Plugin\Fixture;
 
 use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\Traits\CamelCase;
 
 class TestCamelArticle extends BaseModel
 {
-    protected $table = 'test_articles';
+    use CamelCase;
 
-    protected $camel = true;
+    protected $table = 'test_articles';
 }

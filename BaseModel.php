@@ -92,6 +92,50 @@ class BaseModel extends Record implements JsonSerializable
      */
     protected $camel = false;
 
+    protected static $booted = [];
+
+    public function __construct(array $options = array())
+    {
+        parent::__construct($options);
+
+        $this->boot();
+    }
+
+    public function boot()
+    {
+        $class = get_called_class();
+        if (isset(static::$booted[$class])) {
+            return;
+        }
+
+        static::$booted[$class] = true;
+        foreach ($this->classUsesDeep($this) as $trait) {
+            $method = 'boot' . array_pop(explode('\\', $trait));
+            if (method_exists($class, $method)) {
+                $this->$method();
+            }
+        }
+    }
+
+    /**
+     * @param $class
+     * @param bool $autoload
+     * @return array
+     * @link http://php.net/manual/en/function.class-uses.php#110752
+     */
+    public function classUsesDeep($class, $autoload = true)
+    {
+        $traits = [];
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+
+        return array_unique($traits);
+    }
+
     /**
      * @return BaseModel|BaseModel[]
      */
@@ -455,7 +499,7 @@ class BaseModel extends Record implements JsonSerializable
 
         $result = [];
         foreach (parent::toArray($returnFields) as $column => $value) {
-            $result[$this->convertOutputColumn($column)] = $value;
+            $result[static::process('outputColumn', $column)] = $value;
         }
 
         return $result;
@@ -674,13 +718,13 @@ class BaseModel extends Record implements JsonSerializable
     }
 
     /**
-     * Camelizes a word
+     * camels a word
      *
-     * @param string $word The word to camelize
+     * @param string $word The word to camel
      *
-     * @return string The camelized word
+     * @return string The cameld word
      */
-    protected function camelize($word)
+    protected function camel($word)
     {
         return lcfirst(str_replace(' ', '', ucwords(strtr($word, '_-', '  '))));
     }
@@ -729,31 +773,38 @@ class BaseModel extends Record implements JsonSerializable
 
     public function get($name)
     {
-        return parent::get($this->convertInputColumn($name));
+        return parent::get(static::process('inputColumn', $name));
     }
 
     public function set($name, $value = null)
     {
-        return parent::set($this->convertInputColumn($name), $value);
+        return parent::set(static::process('inputColumn', $name), $value);
     }
 
     public function isFillable($field)
     {
-        // 填充的一般是用户传入的数据,避免使用两种格式造成混乱
-        if ($this->camel && strpos($field, '_') !== false) {
+        if (static::process('checkInputColumn', $field) === false) {
             return false;
         }
 
-        return parent::isFillable($this->convertInputColumn($field));
+        return parent::isFillable(static::process('inputColumn', $field));
     }
 
-    protected function convertInputColumn($column)
+    protected static $processors = [];
+
+    public static function process($event, $data)
     {
-        return $this->camel ? $this->snake($column) : $column;
+        if (isset(static::$processors[$event])) {
+            foreach (static::$processors[$event] as $processor) {
+                $data = call_user_func_array($processor, (array)$data);
+            }
+        }
+
+        return $data;
     }
 
-    protected function convertOutputColumn($column)
+    public static function on($event, $fn)
     {
-        return $this->camel ? $this->camelize($column) : $column;
+        static::$processors[$event][] = $fn;
     }
 }
