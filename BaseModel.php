@@ -93,6 +93,8 @@ class BaseModel extends Record implements JsonSerializable
 
     protected static $booted = [];
 
+    protected static $processors = [];
+
     public function __construct(array $options = array())
     {
         parent::__construct($options);
@@ -790,12 +792,12 @@ class BaseModel extends Record implements JsonSerializable
 
     public function get($name)
     {
-        return parent::get(static::process('inputColumn', $name));
+        return parent::get($this->processInputColumn($name));
     }
 
     public function set($name, $value = null)
     {
-        return parent::set(static::process('inputColumn', $name), $value);
+        return parent::set($this->processInputColumn($name), $value);
     }
 
     public function isFillable($field)
@@ -804,10 +806,18 @@ class BaseModel extends Record implements JsonSerializable
             return false;
         }
 
-        return parent::isFillable(static::process('inputColumn', $field));
+        return parent::isFillable($this->processInputColumn($field));
     }
 
-    protected static $processors = [];
+    protected function processInputColumn($column)
+    {
+        return static::process('inputColumn', $column);
+    }
+
+    protected function processOutputColumn($column)
+    {
+        return static::process('outputColumn', $column);
+    }
 
     public static function process($event, $data)
     {
