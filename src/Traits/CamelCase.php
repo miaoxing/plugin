@@ -13,18 +13,21 @@ trait CamelCase
 {
     public function bootCamelCase()
     {
-        static::on('inputColumn', ['static', 'snake']);
+        static::on('inputColumn', 'snake');
 
-        static::on('outputColumn', ['static', 'camel']);
+        static::on('outputColumn', 'camel');
 
-        static::on('checkInputColumn', function ($column) {
-            // 填充的一般是用户传入的数据,避免使用两种格式造成混乱
-            $pass = strpos($column, '_') === false;
-            if (!$pass && $this->wei->has('logger')) {
-                $this->logger->info('Ignore snake case column', ['column' => $column]);
-            }
+        static::on('checkInputColumn', 'checkCamelCaseColumn');
+    }
 
-            return $pass;
-        });
+    protected function checkCamelCaseColumn($column)
+    {
+        // 填充的一般是用户传入的数据,避免使用两种格式造成混乱
+        $pass = strpos($column, '_') === false;
+        if (!$pass && $this->wei->has('logger')) {
+            $this->logger->info('Ignore snake case column', ['column' => $column]);
+        }
+
+        return $pass;
     }
 }

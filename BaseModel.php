@@ -3,6 +3,7 @@
 namespace miaoxing\plugin;
 
 use JsonSerializable;
+use Miaoxing\Plugin\Traits\HasCast;
 use Wei\Logger;
 use Wei\Record;
 use Wei\RetTrait;
@@ -16,6 +17,7 @@ use Wei\RetTrait;
 class BaseModel extends Record implements JsonSerializable
 {
     use RetTrait;
+    use HasCast;
 
     protected $guarded = [
         //'id', 需要区分,象skuConfig表就要从外部设置id
@@ -86,6 +88,13 @@ class BaseModel extends Record implements JsonSerializable
      * @var bool
      */
     protected $enableConflictLog = false;
+
+    /**
+     *
+     *
+     * @var bool
+     */
+    protected $toArrayV2 = false;
 
     protected static $snakeCache = [];
 
@@ -498,9 +507,23 @@ class BaseModel extends Record implements JsonSerializable
             $this->loadData($this->isColl() ? 0 : 'id');
         }
 
-        $result = [];
-        foreach (parent::toArray($returnFields) as $column => $value) {
-            $result[static::process('outputColumn', $column)] = $value;
+        if ($this->toArrayV2 && !$this->isColl) {
+            $data = [];
+            $columns = $returnFields ?: $this->getFields();
+            foreach ($columns as $column) {
+                $data[$this->processOutputColumn($column)] = $this->get($column);
+            }
+            return $data;
+        }
+
+        $result = parent::toArray($returnFields);
+        if (!$this->toArrayV2) {
+            $newResult = [];
+            foreach ($result as $column => $value) {
+                $newResult[$this->process('outputColumn', $column)] = $value;
+            }
+
+            return $newResult;
         }
 
         return $result;
@@ -790,9 +813,17 @@ class BaseModel extends Record implements JsonSerializable
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \Exception
+     */
     public function get($name)
     {
-        return parent::get($this->processInputColumn($name));
+        $column = $this->processInputColumn($name);
+        $value = parent::get($column);
+
+        return $this->process('getValue', [$column, $value]);
     }
 
     public function set($name, $value = null)
@@ -802,7 +833,7 @@ class BaseModel extends Record implements JsonSerializable
 
     public function isFillable($field)
     {
-        if (static::process('checkInputColumn', $field) === false) {
+        if ($this->process('checkInputColumn', $field) === false) {
             return false;
         }
 
@@ -811,28 +842,28 @@ class BaseModel extends Record implements JsonSerializable
 
     protected function processInputColumn($column)
     {
-        return static::process('inputColumn', $column);
+        return $this->process('inputColumn', $column);
     }
 
     protected function processOutputColumn($column)
     {
-        return static::process('outputColumn', $column);
+        return $this->process('outputColumn', $column);
     }
 
-    public static function process($event, $data)
+    public function process($event, $data)
     {
         $class = get_called_class();
         if (isset(static::$processors[$class][$event])) {
-            foreach (static::$processors[$class][$event] as $processor) {
-                $data = call_user_func_array($processor, (array)$data);
+            foreach (static::$processors[$class][$event] as $method) {
+                $data = call_user_func_array([$this, $method], (array)$data);
             }
         }
 
         return $data;
     }
 
-    public static function on($event, $fn)
+    public static function on($event, $method)
     {
-        static::$processors[get_called_class()][$event][] = $fn;
+        static::$processors[get_called_class()][$event][] = $method;
     }
 }

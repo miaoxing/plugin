@@ -559,6 +559,24 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(1, $article['testUserId']);
     }
 
+    public function testCast()
+    {
+        $article = wei()->testCamelArticle();
+
+        $this->assertNull($article['id']);
+
+        $article->fromArray([
+            'id' => '1',
+            'testUserId' => '2',
+            'title' => 'title',
+        ]);
+
+        $this->assertSame(1, $article['id']);
+        $this->assertSame(2, $article['testUserId']);
+        $this->assertSame('title', $article['title']);
+        $this->assertNull($article['content']);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
