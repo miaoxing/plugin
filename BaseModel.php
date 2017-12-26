@@ -811,8 +811,9 @@ class BaseModel extends Record implements JsonSerializable
 
     public static function process($event, $data)
     {
-        if (isset(static::$processors[$event])) {
-            foreach (static::$processors[$event] as $processor) {
+        $class = get_called_class();
+        if (isset(static::$processors[$class][$event])) {
+            foreach (static::$processors[$class][$event] as $processor) {
                 $data = call_user_func_array($processor, (array)$data);
             }
         }
@@ -822,6 +823,6 @@ class BaseModel extends Record implements JsonSerializable
 
     public static function on($event, $fn)
     {
-        static::$processors[$event][] = $fn;
+        static::$processors[get_called_class()][$event][] = $fn;
     }
 }
