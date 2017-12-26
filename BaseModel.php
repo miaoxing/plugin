@@ -87,10 +87,9 @@ class BaseModel extends Record implements JsonSerializable
      */
     protected $enableConflictLog = false;
 
-    /**
-     * @var bool
-     */
-    protected $camel = false;
+    protected static $snakeCache = [];
+
+    protected static $camelCache = [];
 
     protected static $booted = [];
 
@@ -712,21 +711,39 @@ class BaseModel extends Record implements JsonSerializable
         return parent::__get($name);
     }
 
+    /**
+     * Convert a input to snake case
+     *
+     * @param string $input
+     * @return string
+     */
     protected function snake($input)
     {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+        if (isset(static::$snakeCache[$input])) {
+            return static::$snakeCache[$input];
+        }
+
+        $value = $input;
+        if (!ctype_lower($input)) {
+            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+        }
+
+        return static::$snakeCache[$input] = $value;
     }
 
     /**
-     * camels a word
+     * Convert a input to camel case
      *
-     * @param string $word The word to camel
-     *
-     * @return string The cameld word
+     * @param string $input
+     * @return string
      */
-    protected function camel($word)
+    protected function camel($input)
     {
-        return lcfirst(str_replace(' ', '', ucwords(strtr($word, '_-', '  '))));
+        if (isset(static::$camelCache[$input])) {
+            return static::$camelCache[$input];
+        }
+
+        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
     }
 
     protected function getClassServiceName($object)
