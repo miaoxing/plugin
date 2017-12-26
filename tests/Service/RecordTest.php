@@ -513,6 +513,25 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(1, $article['testUserId']);
     }
 
+    public function testCamelFromArrayIgnoreSnake()
+    {
+        $article = wei()->testCamelArticle();
+
+        $article->fromArray([
+            'test_user_id' => 1,
+        ]);
+
+        $this->assertNull($article['testUserId']);
+        $this->assertNull($article['test_user_id']);
+
+        $article->fromArray([
+            'test_user_id' => 1,
+            'testUserId' => 2,
+        ]);
+
+        $this->assertEquals(2, $article['testUserId']);
+    }
+
     public function testCamelToArray()
     {
         $article = wei()->testCamelArticle();

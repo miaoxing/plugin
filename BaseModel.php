@@ -739,6 +739,11 @@ class BaseModel extends Record implements JsonSerializable
 
     public function isFillable($field)
     {
+        // 填充的一般是用户传入的数据,避免使用两种格式造成混乱
+        if ($this->camel && strpos($field, '_') !== false) {
+            return false;
+        }
+
         return parent::isFillable($this->convertInputColumn($field));
     }
 
