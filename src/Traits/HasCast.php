@@ -22,7 +22,7 @@ trait HasCast
      */
     protected function castValue($value, $column)
     {
-        if ($value !== null && isset($this->casts[$column])) {
+        if ($value !== null && isset($this->casts) && isset($this->casts[$column])) {
             $value = $this->cast($this->casts[$column], $value);
         }
 
