@@ -4,10 +4,12 @@ namespace MiaoxingTest\Plugin\Fixture;
 
 use miaoxing\plugin\BaseModel;
 use Miaoxing\Plugin\Traits\CamelCase;
+use Miaoxing\Plugin\Traits\HasCast;
 
 class TestCamelArticle extends BaseModel
 {
     use CamelCase;
+    use HasCast;
 
     protected $table = 'test_articles';
 

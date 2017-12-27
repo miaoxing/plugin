@@ -2,24 +2,25 @@
 
 namespace Miaoxing\Plugin\Traits;
 
+/**
+ * @property-read array $casts
+ */
 trait HasCast
 {
-    protected $casts = [];
-
     protected $dateFormat = 'Y-m-d H:i:s';
 
     protected static function bootHasCast()
     {
-        static::on('getValue', 'castColumn');
+        static::on('getValue', 'castValue');
     }
 
     /**
-     * @param string $column
      * @param mixed $value
+     * @param string $column
      * @return mixed
      * @throws \Exception
      */
-    protected function castColumn($column, $value)
+    protected function castValue($value, $column)
     {
         if ($value !== null && isset($this->casts[$column])) {
             $value = $this->cast($this->casts[$column], $value);

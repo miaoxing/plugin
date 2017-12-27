@@ -3,7 +3,6 @@
 namespace miaoxing\plugin;
 
 use JsonSerializable;
-use Miaoxing\Plugin\Traits\HasCast;
 use Wei\Logger;
 use Wei\Record;
 use Wei\RetTrait;
@@ -17,7 +16,6 @@ use Wei\RetTrait;
 class BaseModel extends Record implements JsonSerializable
 {
     use RetTrait;
-    use HasCast;
 
     protected $guarded = [
         //'id', 需要区分,象skuConfig表就要从外部设置id
@@ -823,7 +821,7 @@ class BaseModel extends Record implements JsonSerializable
         $column = $this->processInputColumn($name);
         $value = parent::get($column);
 
-        return $this->process('getValue', [$column, $value]);
+        return $this->process('getValue', [$value, $column]);
     }
 
     public function set($name, $value = null)
@@ -855,11 +853,13 @@ class BaseModel extends Record implements JsonSerializable
         $class = get_called_class();
         if (isset(static::$processors[$class][$event])) {
             foreach (static::$processors[$class][$event] as $method) {
-                $data = call_user_func_array([$this, $method], (array)$data);
+                $result = call_user_func_array([$this, $method], (array)$data);
             }
+        } else {
+            $result = is_array($data) ? current($data) : $data;
         }
 
-        return $data;
+        return $result;
     }
 
     public static function on($event, $method)
