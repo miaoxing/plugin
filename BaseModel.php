@@ -818,15 +818,18 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function get($name)
     {
-        $column = $this->processInputColumn($name);
-        $value = parent::get($column);
+        $name = $this->processInputColumn($name);
+        $value = parent::get($name);
 
-        return $this->process('getValue', [$value, $column]);
+        return $this->process('getValue', [$value, $name]);
     }
 
     public function set($name, $value = null)
     {
-        return parent::set($this->processInputColumn($name), $value);
+        $name = $this->processInputColumn($name);
+        $value = $this->process('setValue', [$value, $name]);
+
+        return parent::set($name, $value);
     }
 
     public function isFillable($field)

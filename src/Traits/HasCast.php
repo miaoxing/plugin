@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Traits;
 
+use InvalidArgumentException;
+
 /**
  * @property-read array $casts
  */
@@ -12,6 +14,7 @@ trait HasCast
     protected static function bootHasCast()
     {
         static::on('getValue', 'castValue');
+        static::on('setValue', 'setValue');
     }
 
     /**
@@ -22,18 +25,31 @@ trait HasCast
      */
     protected function castValue($value, $column)
     {
-        if ($value !== null && isset($this->casts) && isset($this->casts[$column])) {
+        if ($value !== null && $this->hasCast($column)) {
             $value = $this->cast($this->casts[$column], $value);
         }
 
         return $value;
     }
 
+    protected function setValue($value, $column)
+    {
+        if ($this->hasCast($column)) {
+            $value = $this->castToDb($this->casts[$column], $value);
+        }
+
+        return $value;
+    }
+
+    protected function hasCast($name)
+    {
+        return isset($this->casts) && isset($this->casts[$name]);
+    }
+
     /**
      * @param string $type
      * @param mixed $value
      * @return mixed
-     * @throws \Exception
      */
     protected function cast($type, $value)
     {
@@ -60,7 +76,28 @@ trait HasCast
                 return (float) $value;
 
             default:
-                throw new \Exception('Unsupported cast type: ' . $type);
+                throw new InvalidArgumentException('Unsupported cast type: ' . $type);
+        }
+    }
+
+    protected function castToDb($type, $value)
+    {
+        switch ($type) {
+            case 'int':
+            case 'bool':
+                return (int) $value;
+
+            case 'string':
+            case 'datetime':
+            case 'date':
+            case 'float':
+                return (string) $value;
+
+            case 'json':
+                return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            default:
+                throw new InvalidArgumentException('Unsupported cast type: ' . $type);
         }
     }
 }
