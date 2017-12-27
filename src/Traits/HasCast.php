@@ -8,7 +8,7 @@ trait HasCast
 
     protected $dateFormat = 'Y-m-d H:i:s';
 
-    protected function bootHasCast()
+    protected static function bootHasCast()
     {
         static::on('getValue', 'castColumn');
     }

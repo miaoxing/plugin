@@ -11,7 +11,7 @@ use Wei\Wei;
  */
 trait CamelCase
 {
-    public function bootCamelCase()
+    public static function bootCamelCase()
     {
         static::on('inputColumn', 'snake');
 
