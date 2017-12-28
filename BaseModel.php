@@ -623,6 +623,12 @@ class BaseModel extends Record implements JsonSerializable
         return $related;
     }
 
+    /**
+     * Eager load relations
+     *
+     * @param string|array $names
+     * @return $this|$this[]
+     */
     public function load($names)
     {
         foreach ((array) $names as $name) {
