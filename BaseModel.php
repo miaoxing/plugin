@@ -83,6 +83,11 @@ class BaseModel extends Record implements JsonSerializable
     protected $relationValue;
 
     /**
+     * @var array
+     */
+    protected $virtual = [];
+
+    /**
      * @var bool
      */
     protected $enableConflictLog = false;
@@ -511,7 +516,8 @@ class BaseModel extends Record implements JsonSerializable
             foreach ($columns as $column) {
                 $data[$this->processOutputColumn($column)] = $this->get($column);
             }
-            return $data;
+
+            return $data + $this->virtualToArray();
         }
 
         $result = parent::toArray($returnFields);
@@ -525,6 +531,16 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return $result;
+    }
+
+    protected function virtualToArray()
+    {
+        $data = [];
+        foreach ($this->virtual as $column) {
+            $data[$this->processOutputColumn($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
+        }
+
+        return $data;
     }
 
     /**
