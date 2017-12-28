@@ -4,6 +4,7 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\TestArticle;
+use MiaoxingTest\Plugin\Fixture\TestCamelArticle;
 use MiaoxingTest\Plugin\Fixture\TestTag;
 use MiaoxingTest\Plugin\Fixture\TestUser;
 
@@ -559,7 +560,7 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(1, $article['testUserId']);
     }
 
-    public function testCast()
+    public function testCastGet()
     {
         $article = wei()->testCamelArticle();
 
@@ -575,6 +576,23 @@ class RecordTest extends BaseTestCase
         $this->assertSame(2, $article['testUserId']);
         $this->assertSame('title', $article['title']);
         $this->assertNull($article['content']);
+    }
+
+    public function testCastSet()
+    {
+        /** @var TestCamelArticle $article */
+        $article = wei()->testCamelArticle();
+
+        $article->fromArray([
+            'id' => '1',
+            'testUserId' => '2',
+            'title' => 'title',
+        ]);
+
+        $data = $article->getData();
+        $this->assertSame(1, $data['id']);
+        $this->assertSame(2, $data['test_user_id']);
+        $this->assertSame('title', $data['title']);
     }
 
     protected function clearLogs()
