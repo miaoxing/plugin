@@ -11,6 +11,8 @@ trait HasCast
 {
     protected $dateFormat = 'Y-m-d H:i:s';
 
+    protected static $castCache = [];
+
     protected static function bootHasCast()
     {
         static::on('getValue', 'castValue');
@@ -70,7 +72,7 @@ trait HasCast
                 return (bool) $value;
 
             case 'json':
-                return json_decode($value, true);
+                return $this->cacheJsonDecode($value, true);
 
             case 'float':
                 return (float) $value;
@@ -99,5 +101,14 @@ trait HasCast
             default:
                 throw new InvalidArgumentException('Unsupported cast type: ' . $type);
         }
+    }
+
+    protected function cacheJsonDecode($value, $assoc = false)
+    {
+        if (!isset(static::$castCache[$value][$assoc])) {
+            static::$castCache[$value][$assoc] = json_decode($value, $assoc);
+        }
+
+        return static::$castCache[$value][$assoc];
     }
 }
