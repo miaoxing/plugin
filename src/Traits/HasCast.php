@@ -88,10 +88,10 @@ trait HasCast
                 return (int) $value;
 
             case 'string':
-            case 'datetime':
+            case 'datetime': // Coverts by database
             case 'date':
             case 'float':
-                return (string) $value;
+                return $value;
 
             case 'json':
                 return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
