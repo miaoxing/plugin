@@ -819,6 +819,12 @@ class BaseModel extends Record implements JsonSerializable
     public function get($name)
     {
         $name = $this->processInputColumn($name);
+
+        $method = 'get' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+
         $value = parent::get($name);
 
         return $this->process('getValue', [$value, $name]);
@@ -827,6 +833,12 @@ class BaseModel extends Record implements JsonSerializable
     public function set($name, $value = null)
     {
         $name = $this->processInputColumn($name);
+
+        $method = 'set' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            return $this->$method($name);
+        }
+
         $value = $this->process('setValue', [$value, $name]);
 
         return parent::set($name, $value);
