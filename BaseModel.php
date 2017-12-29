@@ -3,6 +3,7 @@
 namespace miaoxing\plugin;
 
 use JsonSerializable;
+use Miaoxing\Plugin\Traits\DefaultScope;
 use Wei\Logger;
 use Wei\Record;
 use Wei\RetTrait;
@@ -16,6 +17,7 @@ use Wei\RetTrait;
 class BaseModel extends Record implements JsonSerializable
 {
     use RetTrait;
+    use DefaultScope;
 
     protected $guarded = [
         //'id', 需要区分,象skuConfig表就要从外部设置id
@@ -298,7 +300,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function softDelete()
     {
-        return $this->save([
+        return $this->saveData([
             $this->deletedAtColumn => date('Y-m-d H:i:s'),
             $this->deletedByColumn => (int) wei()->curUser['id'],
         ]);
@@ -902,5 +904,50 @@ class BaseModel extends Record implements JsonSerializable
     public static function on($event, $method)
     {
         static::$processors[get_called_class()][$event][] = $method;
+    }
+
+    protected $applyDefaultScope = false;
+
+    public function add($sqlPartName, $sqlPart, $append = false, $type = null)
+    {
+        // 忽略初始化时设置table使用了from
+        if ($sqlPartName !== 'from') {
+            if (!$this->applyDefaultScope) {
+                $this->applyDefaultScope = true;
+                $this->applyDefaultScope();
+            }
+        }
+
+        return parent::add($sqlPartName, $sqlPart, $append, $type);
+    }
+
+    /**
+     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+     *
+     * @param mixed $conditions
+     * @return $this
+     */
+    public function destroy($conditions = false)
+    {
+        $this->andWhere($conditions);
+        !$this->loaded && $this->loadData(0);
+
+        if (!$this->isColl) {
+            $this->triggerCallback('beforeDestroy');
+            $this->executeDestroy();
+            $this->isDestroyed = true;
+            $this->triggerCallback('afterDestroy');
+        } else {
+            foreach ($this->data as $record) {
+                $record->destroy();
+            }
+        }
+
+        return $this;
+    }
+
+    protected function executeDestroy()
+    {
+        $this->db->delete($this->table, array($this->primaryKey => $this->data[$this->primaryKey]));
     }
 }
