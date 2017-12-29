@@ -14,7 +14,7 @@ trait SoftDelete
     /**
      * @param BaseModel $initModel
      */
-    public static function bootSoftDeletes(BaseModel $initModel)
+    public static function bootSoftDelete(BaseModel $initModel)
     {
         $initModel->addDefaultScope('withoutDeleted');
     }
@@ -64,7 +64,7 @@ trait SoftDelete
      */
     public function onlyDeleted()
     {
-        return $this->unscoped('notDeleted')
+        return $this->unscoped('withoutDeleted')
             ->andWhere($this->deletedAtColumn . " != '0000-00-00 00:00:00'");
     }
 
@@ -73,7 +73,7 @@ trait SoftDelete
      */
     public function withDeleted()
     {
-        return $this->unscoped('notDeleted');
+        return $this->unscoped('withoutDeleted');
     }
 
     /**

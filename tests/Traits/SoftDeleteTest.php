@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Traits;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
-use MiaoxingTest\Plugin\Fixture\TestSoftDelete;
 
 class SoftDeleteTest extends BaseTestCase
 {
@@ -74,6 +73,18 @@ class SoftDeleteTest extends BaseTestCase
 
         $record->destroy();
         $this->assertTrue($record->isDeleted());
+    }
+
+    public function testDefaultScope()
+    {
+        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record->destroy();
+
+        $false = wei()->testSoftDelete()->findById($record['id']);
+        $this->assertFalse($false);
+
+        $record = wei()->testSoftDelete()->unscoped()->findById($record['id']);
+        $this->assertNotFalse($record);
     }
 
     public function testWithoutDeleted()

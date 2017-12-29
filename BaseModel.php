@@ -95,7 +95,7 @@ class BaseModel extends Record implements JsonSerializable
     protected $enableConflictLog = false;
 
     /**
-     *
+     * 返回数组时,通过get方法获取值
      *
      * @var bool
      */
@@ -245,6 +245,7 @@ class BaseModel extends Record implements JsonSerializable
      * QueryBuilder: 筛选未删除的数据
      *
      * @return $this
+     * @deprecated Use softDelete trait
      */
     public function notDeleted()
     {
@@ -255,6 +256,7 @@ class BaseModel extends Record implements JsonSerializable
      * QueryBuilder: 筛选已删除的数据
      *
      * @return $this
+     * @deprecated Use softDelete trait
      */
     public function deleted()
     {
@@ -297,6 +299,7 @@ class BaseModel extends Record implements JsonSerializable
      * 软删除
      *
      * @return $this
+     * @deprecated Use softDelete trait
      */
     public function softDelete()
     {
@@ -309,7 +312,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * Record: 检查该记录是否已经被删除了
      *
-     * @return bool
+     * @return bool Use softDelete trait
      */
     public function isSoftDeleted()
     {
