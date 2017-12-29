@@ -127,7 +127,7 @@ class BaseModel extends Record implements JsonSerializable
         foreach ($this->classUsesDeep($this) as $trait) {
             $method = 'boot' . array_pop(explode('\\', $trait));
             if (method_exists($class, $method)) {
-                $this->$method();
+                $this->$method($this);
             }
         }
     }

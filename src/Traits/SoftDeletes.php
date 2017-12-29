@@ -2,13 +2,15 @@
 
 namespace Miaoxing\Plugin\Traits;
 
+use miaoxing\plugin\BaseModel;
+
 trait SoftDeletes
 {
     protected $reallyDestroy = false;
 
-    public static function bootSoftDeletes()
+    public static function bootSoftDeletes(BaseModel $initModel)
     {
-        static::addDefaultScope('notDeleted');
+        $initModel->addDefaultScope('notDeleted');
     }
 
     /**
