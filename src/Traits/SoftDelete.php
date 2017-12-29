@@ -3,7 +3,13 @@
 namespace Miaoxing\Plugin\Traits;
 
 use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\Service\CurUser;
 
+/**
+ * @property-read string deletedAtColumn
+ * @property-read string deletedByColumn
+ * @property-read CurUser curUser
+ */
 trait SoftDelete
 {
     /**
@@ -35,7 +41,10 @@ trait SoftDelete
      */
     public function restore()
     {
-        return $this->saveData([$this->deletedAtColumn => '']);
+        return $this->saveData([
+            $this->deletedAtColumn => '',
+            $this->deletedByColumn => 0
+        ]);
     }
 
     /**
@@ -86,6 +95,7 @@ trait SoftDelete
         } else {
             $this->saveData([
                 $this->deletedAtColumn => date('Y-m-d H:i:s'),
+                $this->deletedByColumn => $this->curUser['id'],
             ]);
         }
     }
