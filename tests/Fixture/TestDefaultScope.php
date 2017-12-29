@@ -1,0 +1,32 @@
+<?php
+
+namespace MiaoxingTest\Plugin\Fixture;
+
+use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\Traits\DefaultScope;
+use Miaoxing\Plugin\Traits\SoftDelete;
+
+class TestDefaultScope extends BaseModel
+{
+    use DefaultScope;
+
+    protected $table = 'test_default_scopes';
+
+    public function __construct(array $options = array())
+    {
+        parent::__construct($options);
+
+        $this->addDefaultScope('active');
+        $this->addDefaultScope('typeA');
+    }
+
+    public function active()
+    {
+        return $this->andWhere(['active' => true]);
+    }
+
+    public function typeA()
+    {
+        return $this->andWhere(['type' => 'A']);
+    }
+}

@@ -911,6 +911,16 @@ class BaseModel extends Record implements JsonSerializable
 
     protected $applyDefaultScope = false;
 
+    public function execute()
+    {
+        if (!$this->applyDefaultScope) {
+            $this->applyDefaultScope = true;
+            $this->applyDefaultScope();
+        }
+
+        return parent::execute();
+    }
+
     public function add($sqlPartName, $sqlPart, $append = false, $type = null)
     {
         // 忽略初始化时设置table使用了from
