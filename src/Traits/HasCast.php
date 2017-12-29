@@ -97,7 +97,8 @@ trait HasCast
 
             case 'json':
                 // Ignore initial string
-                return is_string($value) ? $value : $this->cacheJsonDecode($value, true);
+                return is_string($value) ? $value : json_encode($value,
+                    JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
             default:
                 throw new InvalidArgumentException('Unsupported cast type: ' . $type);
