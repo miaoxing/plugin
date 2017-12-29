@@ -563,7 +563,7 @@ class BaseModel extends Record implements JsonSerializable
         $foreignKey || $foreignKey = $this->getForeignKey();
         $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
-        $related->where([$foreignKey => $this->getRelationValue($localKey)]);
+        $related->andWhere([$foreignKey => $this->getRelationValue($localKey)]);
 
         return $related;
     }
