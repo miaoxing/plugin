@@ -4,13 +4,19 @@ namespace Miaoxing\Plugin\Traits;
 
 use miaoxing\plugin\BaseModel;
 
-trait SoftDeletes
+trait SoftDelete
 {
+    /**
+     * @var bool
+     */
     protected $reallyDestroy = false;
 
+    /**
+     * @param BaseModel $initModel
+     */
     public static function bootSoftDeletes(BaseModel $initModel)
     {
-        $initModel->addDefaultScope('notDeleted');
+        $initModel->addDefaultScope('withoutDeleted');
     }
 
     /**
@@ -24,11 +30,18 @@ trait SoftDeletes
         return $value && $value !== '0000-00-00 00:00:00';
     }
 
+    /**
+     * @return $this
+     */
     public function restore()
     {
         return $this->saveData([$this->deletedAtColumn => '']);
     }
 
+    /**
+     * @param mixed $conditions
+     * @return $this
+     */
     public function reallyDestroy($conditions = false)
     {
         $this->reallyDestroy = true;
@@ -38,22 +51,34 @@ trait SoftDeletes
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function withoutDeleted()
     {
         return $this->andWhere([$this->fullTable . '.' . $this->deletedAtColumn => '0000-00-00 00:00:00']);
     }
 
+    /**
+     * @return $this
+     */
     public function onlyDeleted()
     {
         return $this->unscoped('notDeleted')
             ->andWhere($this->deletedAtColumn . " != '0000-00-00 00:00:00'");
     }
 
+    /**
+     * @return $this
+     */
     public function withDeleted()
     {
         return $this->unscoped('notDeleted');
     }
 
+    /**
+     * Overwrite original destroy logic.
+     */
     protected function executeDestroy()
     {
         if ($this->reallyDestroy) {
