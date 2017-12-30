@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Doc {
     use MiaoxingTest\Plugin\Fixture\TestArticle;
     use MiaoxingTest\Plugin\Fixture\TestCamelArticle;
     use MiaoxingTest\Plugin\Fixture\TestDefaultScope;
+    use MiaoxingTest\Plugin\Fixture\TestHasCast;
     use MiaoxingTest\Plugin\Fixture\TestSoftDelete;
 
     /**
@@ -12,6 +13,7 @@ namespace MiaoxingTest\Plugin\Doc {
      * @method TestCamelArticle|TestCamelArticle[] testCamelArticle()
      * @method TestSoftDelete|TestSoftDelete[] testSoftDelete()
      * @method TestDefaultScope|TestDefaultScope[] testDefaultScope()
+     * @method TestHasCast|TestHasCast[] testHasCast()
      */
     class AutoComplete
     {

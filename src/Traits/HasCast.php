@@ -9,8 +9,9 @@ use InvalidArgumentException;
  */
 trait HasCast
 {
-    protected $dateFormat = 'Y-m-d H:i:s';
-
+    /**
+     * @var array
+     */
     protected static $castCache = [];
 
     protected static function bootHasCast()
@@ -28,7 +29,7 @@ trait HasCast
     protected function castValue($value, $column)
     {
         if ($value !== null && $this->hasCast($column)) {
-            $value = $this->cast($this->casts[$column], $value);
+            $value = $this->toPhpType($this->casts[$column], $value);
         }
 
         return $value;
@@ -37,7 +38,7 @@ trait HasCast
     protected function setValue($value, $column)
     {
         if ($this->hasCast($column)) {
-            $value = $this->castToDb($this->casts[$column], $value);
+            $value = $this->toDbType($this->casts[$column], $value);
         }
 
         return $value;
@@ -53,7 +54,7 @@ trait HasCast
      * @param mixed $value
      * @return mixed
      */
-    protected function cast($type, $value)
+    protected function toPhpType($type, $value)
     {
         switch ($type) {
             case 'int':
@@ -82,18 +83,20 @@ trait HasCast
         }
     }
 
-    protected function castToDb($type, $value)
+    protected function toDbType($type, $value)
     {
         switch ($type) {
             case 'int':
-            case 'bool':
                 return (int) $value;
+
+            case 'bool':
+                return (bool) $value;
 
             case 'string':
             case 'datetime': // Coverts by database
             case 'date':
             case 'float':
-                return $value;
+                return (string) $value;
 
             case 'json':
                 // Ignore initial string
