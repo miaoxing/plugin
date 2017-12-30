@@ -101,6 +101,11 @@ class BaseModel extends Record implements JsonSerializable
      */
     protected $toArrayV2 = false;
 
+    /**
+     * @var array
+     */
+    protected $hidden = [];
+
     protected static $snakeCache = [];
 
     protected static $camelCache = [];
@@ -517,7 +522,7 @@ class BaseModel extends Record implements JsonSerializable
 
         if ($this->toArrayV2 && !$this->isColl) {
             $data = [];
-            $columns = $returnFields ?: $this->getFields();
+            $columns = $this->getToArrayColumns($returnFields ?: $this->getFields());
             foreach ($columns as $column) {
                 $data[$this->processOutputColumn($column)] = $this->get($column);
             }
@@ -536,6 +541,22 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return $result;
+    }
+
+    protected function getToArrayColumns(array $columns)
+    {
+        if ($this->hidden) {
+            $columns = array_diff($columns, $this->hidden);
+        }
+
+        return $columns;
+    }
+
+    public function setHidden($hidden)
+    {
+        $this->hidden = (array) $hidden;
+
+        return $this;
     }
 
     protected function virtualToArray()
@@ -895,7 +916,7 @@ class BaseModel extends Record implements JsonSerializable
         $class = get_called_class();
         if (isset(static::$processors[$class][$event])) {
             foreach (static::$processors[$class][$event] as $method) {
-                $result = call_user_func_array([$this, $method], (array)$data);
+                $result = call_user_func_array([$this, $method], (array) $data);
             }
         } else {
             $result = is_array($data) ? current($data) : $data;

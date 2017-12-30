@@ -595,6 +595,26 @@ class RecordTest extends BaseTestCase
         $this->assertSame('title', $data['title']);
     }
 
+    public function testSetHiddenByString()
+    {
+        $article = wei()->testCamelArticle();
+
+        $array = $article->setHidden('id')->toArray();
+
+        $this->assertArrayNotHasKey('id', $array);
+        $this->assertArrayHasKey('testUserId', $array);
+    }
+
+    public function testSetHiddenByArray()
+    {
+        $article = wei()->testCamelArticle();
+
+        $array = $article->setHidden(['id', 'test_user_id'])->toArray();
+
+        $this->assertArrayNotHasKey('id', $array);
+        $this->assertArrayNotHasKey('testUserId', $array);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
