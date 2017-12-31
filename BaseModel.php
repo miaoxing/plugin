@@ -913,6 +913,7 @@ class BaseModel extends Record implements JsonSerializable
 
     public function process($event, $data)
     {
+        $result = null;
         $class = get_called_class();
         if (isset(static::$processors[$class][$event])) {
             foreach (static::$processors[$class][$event] as $method) {
@@ -953,35 +954,5 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return parent::add($sqlPartName, $sqlPart, $append, $type);
-    }
-
-    /**
-     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
-     *
-     * @param mixed $conditions
-     * @return $this
-     */
-    public function destroy($conditions = false)
-    {
-        $this->andWhere($conditions);
-        !$this->loaded && $this->loadData(0);
-
-        if (!$this->isColl) {
-            $this->triggerCallback('beforeDestroy');
-            $this->executeDestroy();
-            $this->isDestroyed = true;
-            $this->triggerCallback('afterDestroy');
-        } else {
-            foreach ($this->data as $record) {
-                $record->destroy();
-            }
-        }
-
-        return $this;
-    }
-
-    protected function executeDestroy()
-    {
-        $this->db->delete($this->table, array($this->primaryKey => $this->data[$this->primaryKey]));
     }
 }
