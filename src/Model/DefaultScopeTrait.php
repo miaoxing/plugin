@@ -4,12 +4,26 @@ namespace Miaoxing\Plugin\Model;
 
 trait DefaultScopeTrait
 {
+    /**
+     * @var array
+     */
     protected static $defaultScopes = [];
+
+    /**
+     * @var bool
+     */
+    protected $applyDefaultScope = false;
 
     /**
      * @var array|true
      */
     protected $withoutScopes = [];
+
+    public static function bootDefaultScopeTrait()
+    {
+        static::on('preExecute', 'applyDefaultScope');
+        static::on('preBuildQuery', 'applyDefaultScopePreBuildQuery');
+    }
 
     /**
      * @param string $method
@@ -48,6 +62,11 @@ trait DefaultScopeTrait
 
     protected function applyDefaultScope()
     {
+        if ($this->applyDefaultScope) {
+            return;
+        }
+        $this->applyDefaultScope = true;
+
         if ($this->withoutScopes === true) {
             return;
         }
@@ -70,5 +89,16 @@ trait DefaultScopeTrait
         $this->paramTypes = array_merge($this->paramTypes, $temp[1]);
 
         return $this;
+    }
+
+    /**
+     * @param string $sqlPartName
+     */
+    protected function applyDefaultScopePreBuildQuery($sqlPartName)
+    {
+        // 忽略初始化时设置table使用了from
+        if ($sqlPartName !== 'from') {
+            $this->applyDefaultScope();
+        }
     }
 }

@@ -911,7 +911,7 @@ class BaseModel extends Record implements JsonSerializable
         return $this->process('outputColumn', $column);
     }
 
-    public function process($event, $data)
+    public function process($event, $data = [])
     {
         $result = null;
         $class = get_called_class();
@@ -931,27 +931,16 @@ class BaseModel extends Record implements JsonSerializable
         static::$processors[get_called_class()][$event][] = $method;
     }
 
-    protected $applyDefaultScope = false;
-
     public function execute()
     {
-        if (!$this->applyDefaultScope) {
-            $this->applyDefaultScope = true;
-            $this->applyDefaultScope();
-        }
+        $this->process('preExecute');
 
         return parent::execute();
     }
 
     public function add($sqlPartName, $sqlPart, $append = false, $type = null)
     {
-        // 忽略初始化时设置table使用了from
-        if ($sqlPartName !== 'from') {
-            if (!$this->applyDefaultScope) {
-                $this->applyDefaultScope = true;
-                $this->applyDefaultScope();
-            }
-        }
+        $this->process('preBuildQuery', [$sqlPartName]);
 
         return parent::add($sqlPartName, $sqlPart, $append, $type);
     }
