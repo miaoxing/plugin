@@ -2,14 +2,14 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\Traits\ModelQuery;
+use Miaoxing\Plugin\Model\QuickQueryTrait;
 
 /**
  * 用户分组
  */
 class Group extends \miaoxing\plugin\BaseModel
 {
-    use ModelQuery;
+    use QuickQueryTrait;
 
     protected $table = 'groups';
 

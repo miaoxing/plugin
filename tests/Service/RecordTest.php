@@ -560,41 +560,6 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(1, $article['testUserId']);
     }
 
-    public function testCastGet()
-    {
-        $article = wei()->testCamelArticle();
-
-        $this->assertNull($article['id']);
-
-        $article->fromArray([
-            'id' => '1',
-            'testUserId' => '2',
-            'title' => 'title',
-        ]);
-
-        $this->assertSame(1, $article['id']);
-        $this->assertSame(2, $article['testUserId']);
-        $this->assertSame('title', $article['title']);
-        $this->assertNull($article['content']);
-    }
-
-    public function testCastSet()
-    {
-        /** @var TestCamelArticle $article */
-        $article = wei()->testCamelArticle();
-
-        $article->fromArray([
-            'id' => '1',
-            'testUserId' => '2',
-            'title' => 'title',
-        ]);
-
-        $data = $article->getData();
-        $this->assertSame(1, $data['id']);
-        $this->assertSame(2, $data['test_user_id']);
-        $this->assertSame('title', $data['title']);
-    }
-
     public function testSetHiddenByString()
     {
         $article = wei()->testCamelArticle();

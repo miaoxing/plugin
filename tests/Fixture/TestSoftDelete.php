@@ -3,11 +3,11 @@
 namespace MiaoxingTest\Plugin\Fixture;
 
 use miaoxing\plugin\BaseModel;
-use Miaoxing\Plugin\Traits\SoftDelete;
+use Miaoxing\Plugin\Model\SoftDeleteTrait;
 
 class TestSoftDelete extends BaseModel
 {
-    use SoftDelete;
+    use SoftDeleteTrait;
 
     protected $table = 'test_soft_deletes';
 

@@ -3,12 +3,12 @@
 namespace MiaoxingTest\Plugin\Fixture;
 
 use miaoxing\plugin\BaseModel;
-use Miaoxing\Plugin\Traits\DefaultScope;
-use Miaoxing\Plugin\Traits\SoftDelete;
+use Miaoxing\Plugin\Model\DefaultScopeTrait;
+use Miaoxing\Plugin\Model\SoftDeleteTrait;
 
 class TestDefaultScope extends BaseModel
 {
-    use DefaultScope;
+    use DefaultScopeTrait;
 
     protected $table = 'test_default_scopes';
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace MiaoxingTest\Plugin\Traits;
+namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class DefaultScopeTest extends BaseTestCase
+class DefaultScopeTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass()
     {

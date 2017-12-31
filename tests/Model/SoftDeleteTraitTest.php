@@ -1,10 +1,10 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class SoftDeleteTest extends BaseTestCase
+class SoftDeleteTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass()
     {

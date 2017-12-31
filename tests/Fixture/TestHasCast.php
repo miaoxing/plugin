@@ -3,11 +3,11 @@
 namespace MiaoxingTest\Plugin\Fixture;
 
 use miaoxing\plugin\BaseModel;
-use Miaoxing\Plugin\Traits\HasCast;
+use Miaoxing\Plugin\Model\CastTrait;
 
 class TestHasCast extends BaseModel
 {
-    use HasCast;
+    use CastTrait;
 
     protected $table = 'test_has_casts';
 

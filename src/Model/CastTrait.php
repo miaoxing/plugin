@@ -1,20 +1,20 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Model;
 
 use InvalidArgumentException;
 
 /**
  * @property-read array $casts
  */
-trait HasCast
+trait CastTrait
 {
     /**
      * @var array
      */
     protected static $castCache = [];
 
-    protected static function bootHasCast()
+    protected static function bootHasCastTrait()
     {
         static::on('getValue', 'castValue');
         static::on('setValue', 'setValue');

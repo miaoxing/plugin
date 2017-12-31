@@ -1,8 +1,8 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Service;
 
-trait Option
+trait OptionTrait
 {
     /**
      * Constructor

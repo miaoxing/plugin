@@ -1,6 +1,6 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Model;
 
 use miaoxing\plugin\BaseModel;
 use Miaoxing\Plugin\Service\App;
@@ -12,9 +12,9 @@ use Wei\Record;
  * @see Record::$data
  * @property-read string appIdColumn
  */
-trait HasAppId
+trait HasAppIdTrait
 {
-    public static function bootHasAppId(BaseModel $initModel)
+    public static function bootHasAppIdTrait(BaseModel $initModel)
     {
         $initModel->addDefaultScope('curApp');
     }

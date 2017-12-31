@@ -1,8 +1,8 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Model;
 
-trait DefaultScope
+trait DefaultScopeTrait
 {
     protected static $defaultScopes = [];
 

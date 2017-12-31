@@ -3,7 +3,7 @@
 namespace miaoxing\plugin;
 
 use JsonSerializable;
-use Miaoxing\Plugin\Traits\DefaultScope;
+use Miaoxing\Plugin\Model\DefaultScopeTrait;
 use Wei\Logger;
 use Wei\Record;
 use Wei\RetTrait;
@@ -17,7 +17,7 @@ use Wei\RetTrait;
 class BaseModel extends Record implements JsonSerializable
 {
     use RetTrait;
-    use DefaultScope;
+    use DefaultScopeTrait;
 
     protected $guarded = [
         //'id', 需要区分,象skuConfig表就要从外部设置id

@@ -1,6 +1,6 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Model;
 
 use Wei\Logger;
 use Wei\Wei;
@@ -9,9 +9,9 @@ use Wei\Wei;
  * @property-read Wei $wei
  * @property-read Logger $logger
  */
-trait CamelCase
+trait CamelCaseTrait
 {
-    public static function bootCamelCase()
+    public static function bootCamelCaseTrait()
     {
         static::on('inputColumn', 'snake');
 

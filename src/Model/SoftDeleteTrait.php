@@ -1,6 +1,6 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Model;
 
 use miaoxing\plugin\BaseModel;
 use Miaoxing\Plugin\Service\CurUser;
@@ -10,7 +10,7 @@ use Miaoxing\Plugin\Service\CurUser;
  * @property-read string deletedByColumn
  * @property-read CurUser curUser
  */
-trait SoftDelete
+trait SoftDeleteTrait
 {
     /**
      * @var bool
@@ -20,7 +20,7 @@ trait SoftDelete
     /**
      * @param BaseModel $initModel
      */
-    public static function bootSoftDelete(BaseModel $initModel)
+    public static function bootSoftDeleteTrait(BaseModel $initModel)
     {
         $initModel->addDefaultScope('withoutDeleted');
     }

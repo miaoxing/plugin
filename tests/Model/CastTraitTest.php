@@ -1,10 +1,10 @@
 <?php
 
-namespace Miaoxing\Plugin\Traits;
+namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class HasCastTest extends BaseTestCase
+class CastTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass()
     {
