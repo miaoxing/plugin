@@ -14,7 +14,7 @@ trait CastTrait
      */
     protected static $castCache = [];
 
-    protected static function bootHasCastTrait()
+    protected static function bootCastTrait()
     {
         static::on('getValue', 'castValue');
         static::on('setValue', 'setValue');
