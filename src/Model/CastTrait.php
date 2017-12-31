@@ -16,45 +16,62 @@ trait CastTrait
 
     protected static function bootCastTrait()
     {
-        static::on('getValue', 'castValue');
-        static::on('setValue', 'setValue');
+        static::on('getValue', 'castToPhp');
+        static::on('setValue', 'castToDb');
     }
 
     /**
+     * Cast column value to PHP type
+     *
      * @param mixed $value
      * @param string $column
      * @return mixed
      * @throws \Exception
      */
-    protected function castValue($value, $column)
+    protected function castToPhp($value, $column)
     {
         if ($value !== null && $this->hasCast($column)) {
-            $value = $this->toPhpType($this->casts[$column], $value);
+            $value = $this->toPhpType($value, $this->casts[$column]);
         }
 
         return $value;
     }
 
-    protected function setValue($value, $column)
+    /**
+     * Cast column value for saving to database
+     *
+     * @param mixed $value
+     * @param string $column
+     * @return mixed
+     */
+    protected function castToDb($value, $column)
     {
         if ($this->hasCast($column)) {
-            $value = $this->toDbType($this->casts[$column], $value);
+            $value = $this->toDbType($value, $this->casts[$column]);
         }
 
         return $value;
     }
 
-    protected function hasCast($name)
+    /**
+     * Check if the specified column should be cast
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasCast($name)
     {
         return isset($this->casts) && isset($this->casts[$name]);
     }
 
     /**
+     * Cast value to PHP type
+     *
      * @param string $type
      * @param mixed $value
      * @return mixed
      */
-    protected function toPhpType($type, $value)
+    protected function toPhpType($value, $type)
     {
         switch ($type) {
             case 'int':
@@ -83,7 +100,14 @@ trait CastTrait
         }
     }
 
-    protected function toDbType($type, $value)
+    /**
+     * Cast value for saving to database
+     *
+     * @param mixed $value
+     * @param string $type
+     * @return mixed
+     */
+    protected function toDbType($value, $type)
     {
         switch ($type) {
             case 'int':
@@ -108,6 +132,13 @@ trait CastTrait
         }
     }
 
+    /**
+     * Cache json decode value
+     *
+     * @param string $value
+     * @param bool $assoc
+     * @return mixed
+     */
     protected function cacheJsonDecode($value, $assoc = false)
     {
         if (!isset(static::$castCache[$value][$assoc])) {
