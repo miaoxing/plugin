@@ -92,7 +92,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * @var bool
      */
-    protected $enableConflictLog = false;
+    protected $enableProperty = false;
 
     /**
      * 返回数组时,通过get方法获取值
@@ -740,6 +740,11 @@ class BaseModel extends Record implements JsonSerializable
         return $this->loadHasMany($related, $relation, $name);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \Exception
+     */
     public function __get($name)
     {
         // Receive service that conflict with record method name
@@ -748,9 +753,8 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         // Receive field value
-        if ($this->enableConflictLog && array_key_exists($name, $this->data)) {
-            $this->logger->info(sprintf('Field "%s" conflicts with service name', $name));
-//            return $this->get($name);
+        if ($this->enableProperty && $this->hasColumn($name)) {
+            return $this->get($name);
         }
 
         // Receive relation
@@ -890,6 +894,17 @@ class BaseModel extends Record implements JsonSerializable
         $value = $this->trigger('setValue', [$value, $name]);
 
         return parent::set($name, $value);
+    }
+
+    public function hasColumn($name)
+    {
+        $name = $this->filterInputColumn($name);
+        if (array_key_exists($name, $this->data)) {
+            return true;
+        }
+
+        $method = 'get' . $this->camel($name) . 'Attribute';
+        return method_exists($this, $method);
     }
 
     public function isFillable($field)
