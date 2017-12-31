@@ -916,8 +916,12 @@ class BaseModel extends Record implements JsonSerializable
         $result = null;
         $class = get_called_class();
         if (isset(static::$events[$class][$event])) {
-            foreach (static::$events[$class][$event] as $method) {
-                $result = call_user_func_array([$this, $method], (array) $data);
+            foreach (static::$events[$class][$event] as $callback) {
+                // 优先使用自身方法
+                if (method_exists($this, $callback)) {
+                    $callback = [$this, $callback];
+                }
+                $result = call_user_func_array($callback, (array) $data);
             }
         } else {
             $result = is_array($data) ? current($data) : $data;
