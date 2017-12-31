@@ -16,7 +16,7 @@ trait QuickQueryTrait
     public function like($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->processOutputColumn($column);
+            $name = $this->filterOutputColumn($column);
             if (isset($this->queryParams[$name]) && $this->queryParams[$name]) {
                 $this->andWhere($column . ' LIKE ?', '%' . $this->queryParams[$name] . '%');
             }
@@ -28,7 +28,7 @@ trait QuickQueryTrait
     public function equals($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->processOutputColumn($column);
+            $name = $this->filterOutputColumn($column);
             if (isset($this->queryParams[$name]) && wei()->isPresent($this->queryParams[$name])) {
                 $this->andWhere([$column => $this->queryParams[$name]]);
             }
@@ -40,12 +40,12 @@ trait QuickQueryTrait
     public function between($columns)
     {
         foreach ((array) $columns as $column) {
-            $min = $this->processOutputColumn($column . '_min');
+            $min = $this->filterOutputColumn($column . '_min');
             if (isset($this->queryParams[$min]) && $this->queryParams[$min]) {
                 $this->andWhere($column . ' >= ?', $this->queryParams[$min]);
             }
 
-            $max = $this->processOutputColumn($column . '_max');
+            $max = $this->filterOutputColumn($column . '_max');
             if (isset($this->queryParams[$max]) && $this->queryParams[$max]) {
                 $this->andWhere($column . ' <= ?', $this->queryParams[$max]);
             }

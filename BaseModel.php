@@ -112,7 +112,7 @@ class BaseModel extends Record implements JsonSerializable
 
     protected static $booted = [];
 
-    protected static $processors = [];
+    protected static $events = [];
 
     public function __construct(array $options = array())
     {
@@ -524,7 +524,7 @@ class BaseModel extends Record implements JsonSerializable
             $data = [];
             $columns = $this->getToArrayColumns($returnFields ?: $this->getFields());
             foreach ($columns as $column) {
-                $data[$this->processOutputColumn($column)] = $this->get($column);
+                $data[$this->filterOutputColumn($column)] = $this->get($column);
             }
 
             return $data + $this->virtualToArray();
@@ -534,7 +534,7 @@ class BaseModel extends Record implements JsonSerializable
         if (!$this->toArrayV2) {
             $newResult = [];
             foreach ($result as $column => $value) {
-                $newResult[$this->process('outputColumn', $column)] = $value;
+                $newResult[$this->trigger('outputColumn', $column)] = $value;
             }
 
             return $newResult;
@@ -563,7 +563,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         $data = [];
         foreach ($this->virtual as $column) {
-            $data[$this->processOutputColumn($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
+            $data[$this->filterOutputColumn($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
         }
 
         return $data;
@@ -866,7 +866,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function get($name)
     {
-        $name = $this->processInputColumn($name);
+        $name = $this->filterInputColumn($name);
 
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
@@ -875,48 +875,48 @@ class BaseModel extends Record implements JsonSerializable
 
         $value = parent::get($name);
 
-        return $this->process('getValue', [$value, $name]);
+        return $this->trigger('getValue', [$value, $name]);
     }
 
     public function set($name, $value = null)
     {
-        $name = $this->processInputColumn($name);
+        $name = $this->filterInputColumn($name);
 
         $method = 'set' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
             return $this->$method($name);
         }
 
-        $value = $this->process('setValue', [$value, $name]);
+        $value = $this->trigger('setValue', [$value, $name]);
 
         return parent::set($name, $value);
     }
 
     public function isFillable($field)
     {
-        if ($this->process('checkInputColumn', $field) === false) {
+        if ($this->trigger('checkInputColumn', $field) === false) {
             return false;
         }
 
-        return parent::isFillable($this->processInputColumn($field));
+        return parent::isFillable($this->filterInputColumn($field));
     }
 
-    protected function processInputColumn($column)
+    protected function filterInputColumn($column)
     {
-        return $this->process('inputColumn', $column);
+        return $this->trigger('inputColumn', $column);
     }
 
-    protected function processOutputColumn($column)
+    protected function filterOutputColumn($column)
     {
-        return $this->process('outputColumn', $column);
+        return $this->trigger('outputColumn', $column);
     }
 
-    public function process($event, $data = [])
+    public function trigger($event, $data = [])
     {
         $result = null;
         $class = get_called_class();
-        if (isset(static::$processors[$class][$event])) {
-            foreach (static::$processors[$class][$event] as $method) {
+        if (isset(static::$events[$class][$event])) {
+            foreach (static::$events[$class][$event] as $method) {
                 $result = call_user_func_array([$this, $method], (array) $data);
             }
         } else {
@@ -928,19 +928,19 @@ class BaseModel extends Record implements JsonSerializable
 
     public static function on($event, $method)
     {
-        static::$processors[get_called_class()][$event][] = $method;
+        static::$events[get_called_class()][$event][] = $method;
     }
 
     public function execute()
     {
-        $this->process('preExecute');
+        $this->trigger('preExecute');
 
         return parent::execute();
     }
 
     public function add($sqlPartName, $sqlPart, $append = false, $type = null)
     {
-        $this->process('preBuildQuery', [$sqlPartName]);
+        $this->trigger('preBuildQuery', func_get_args());
 
         return parent::add($sqlPartName, $sqlPart, $append, $type);
     }
