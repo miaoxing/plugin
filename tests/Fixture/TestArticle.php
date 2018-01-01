@@ -6,13 +6,17 @@ use miaoxing\plugin\BaseModel;
 
 /**
  * @property TestUser $user
- * @property TestTag|TestTag[] tags
+ * @property TestTag|TestTag[] $tags
+ * @property string $test_user_id
+ * @property string $title
  */
 class TestArticle extends BaseModel
 {
     protected $table = 'test_articles';
 
     protected $toArrayV2 = true;
+
+    protected $enableProperty = true;
 
     public function user()
     {

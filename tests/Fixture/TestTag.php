@@ -7,10 +7,13 @@ use miaoxing\plugin\BaseModel;
 
 /**
  * @property TestArticle|TestArticle[] $articles
+ * @property string $name
  */
 class TestTag extends BaseModel
 {
     protected $table = 'test_tags';
+
+    protected $enableProperty = true;
 
     public function articles()
     {

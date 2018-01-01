@@ -143,14 +143,13 @@ class RecordTest extends BaseTestCase
 
     public function testRecordHasOne()
     {
-        /** @var TestUser $user */
         $user = wei()->testUser();
 
         $user->findOneById(1);
 
         $profile = $user->profile;
 
-        $this->assertEquals(1, $profile['test_user_id']);
+        $this->assertEquals(1, $profile->test_user_id);
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
@@ -164,8 +163,8 @@ class RecordTest extends BaseTestCase
 
         $users->findAll()->load('profile');
 
-        $this->assertEquals($users[0]['id'], $users[0]->profile['test_user_id']);
-        $this->assertEquals($users[1]['id'], $users[1]->profile['test_user_id']);
+        $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
+        $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
         $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
@@ -177,13 +176,12 @@ class RecordTest extends BaseTestCase
 
     public function testCollHasOneLazyLoad()
     {
-        /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
 
         $users->findAll();
 
-        $this->assertEquals($users[0]['id'], $users[0]->profile['test_user_id']);
-        $this->assertEquals($users[1]['id'], $users[1]->profile['test_user_id']);
+        $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
+        $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
         $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
@@ -197,14 +195,13 @@ class RecordTest extends BaseTestCase
 
     public function testRecordBelongsTo()
     {
-        /** @var TestArticle $article */
         $article = wei()->testArticle();
 
         $article->findOneById(1);
 
         $user = $article->user;
 
-        $this->assertEquals(1, $user['id']);
+        $this->assertEquals(1, $user->id);
 
         $queries = wei()->db->getQueries();
 
@@ -215,14 +212,13 @@ class RecordTest extends BaseTestCase
 
     public function testCollBelongsTo()
     {
-        /** @var TestArticle|TestArticle[] $articles */
         $articles = wei()->testArticle();
 
         $articles->findAll()->load('user');
 
         foreach ($articles as $article) {
             $user = $article->user;
-            $this->assertEquals($article['test_user_id'], $user['id']);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $queries = wei()->db->getQueries();
@@ -233,14 +229,13 @@ class RecordTest extends BaseTestCase
 
     public function testCollBelongsToLazyLoad()
     {
-        /** @var TestArticle|TestArticle[] $articles */
         $articles = wei()->testArticle();
 
         $articles->findAll();
 
         foreach ($articles as $article) {
             $user = $article->user;
-            $this->assertEquals($article['test_user_id'], $user['id']);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $queries = wei()->db->getQueries();
@@ -253,14 +248,13 @@ class RecordTest extends BaseTestCase
 
     public function testRecordHasMany()
     {
-        /** @var TestUser $user */
         $user = wei()->testUser();
 
         $user->findOneById(1);
         $articles = $user->articles;
 
         foreach ($articles as $article) {
-            $this->assertEquals($article['test_user_id'], $user['id']);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $queries = wei()->db->getQueries();
@@ -271,19 +265,19 @@ class RecordTest extends BaseTestCase
 
     public function testRecordHasManyWithQuery()
     {
-        /** @var TestUser $user */
         $user = wei()->testUser();
 
         $user->findOneById(1);
+        /** @var TestArticle|TestArticle[] $articles */
         $articles = $user->customArticles()->andWhere('id >= ?', 1)->desc('id');
 
         foreach ($articles as $article) {
-            $this->assertEquals($article['test_user_id'], $user['id']);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $this->assertEquals(2, $articles->length());
-        $this->assertEquals(3, $articles[0]['id']);
-        $this->assertEquals(1, $articles[1]['id']);
+        $this->assertEquals(3, $articles[0]->id);
+        $this->assertEquals(1, $articles[1]->id);
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
@@ -295,14 +289,13 @@ class RecordTest extends BaseTestCase
 
     public function testCollHasManyWithQuery()
     {
-        /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
 
         $users->findAll()->load('customArticles');
 
         foreach ($users as $user) {
             foreach ($user->customArticles as $article) {
-                $this->assertEquals($article['test_user_id'], $user['id']);
+                $this->assertEquals($article->test_user_id, $user->id);
             }
         }
 
@@ -318,15 +311,14 @@ class RecordTest extends BaseTestCase
 
     public function testRecordBelongsToMany()
     {
-        /** @var TestArticle $article */
         $article = wei()->testArticle();
 
         $article->findOneById(1);
 
         $tags = $article->tags;
 
-        $this->assertEquals('work', $tags[0]['name']);
-        $this->assertEquals('life', $tags[1]['name']);
+        $this->assertEquals('work', $tags[0]->name);
+        $this->assertEquals('life', $tags[1]->name);
 
         $queries = wei()->db->getQueries();
 
@@ -341,15 +333,14 @@ class RecordTest extends BaseTestCase
 
     public function testRecordBelongsToMany2()
     {
-        /** @var TestTag $tag */
         $tag = wei()->testTag();
 
         $tag->findOneById(1);
 
         $articles = $tag->articles;
 
-        $this->assertEquals('Article 1', $articles[0]['title']);
-        $this->assertEquals('Article 2', $articles[1]['title']);
+        $this->assertEquals('Article 1', $articles[0]->title);
+        $this->assertEquals('Article 2', $articles[1]->title);
 
         $queries = wei()->db->getQueries();
 
@@ -375,10 +366,10 @@ class RecordTest extends BaseTestCase
             }
         }
 
-        $this->assertEquals('work', $articles[0]->tags[0]['name']);
-        $this->assertEquals('life', $articles[0]->tags[1]['name']);
-        $this->assertEquals('work', $articles[1]->tags[0]['name']);
-        $this->assertEquals('life', $articles[2]->tags[0]['name']);
+        $this->assertEquals('work', $articles[0]->tags[0]->name);
+        $this->assertEquals('life', $articles[0]->tags[1]->name);
+        $this->assertEquals('work', $articles[1]->tags[0]->name);
+        $this->assertEquals('life', $articles[2]->tags[0]->name);
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
@@ -403,10 +394,10 @@ class RecordTest extends BaseTestCase
             }
         }
 
-        $this->assertEquals('work', $articles[0]->customTags[0]['name']);
-        $this->assertEquals('life', $articles[0]->customTags[1]['name']);
-        $this->assertEquals('work', $articles[1]->customTags[0]['name']);
-        $this->assertEquals('life', $articles[2]->customTags[0]['name']);
+        $this->assertEquals('work', $articles[0]->customTags[0]->name);
+        $this->assertEquals('life', $articles[0]->customTags[1]->name);
+        $this->assertEquals('work', $articles[1]->customTags[0]->name);
+        $this->assertEquals('life', $articles[2]->customTags[0]->name);
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
@@ -435,9 +426,9 @@ class RecordTest extends BaseTestCase
 
         $articles->findAll()->load('user.profile');
 
-        $this->assertEquals(1, $articles[0]['id']);
-        $this->assertEquals(1, $articles[0]->user['id']);
-        $this->assertEquals(1, $articles[0]->user->profile['id']);
+        $this->assertEquals(1, $articles[0]->id);
+        $this->assertEquals(1, $articles[0]->user->id);
+        $this->assertEquals(1, $articles[0]->user->profile->id);
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
