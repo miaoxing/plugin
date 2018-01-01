@@ -5,13 +5,23 @@ namespace MiaoxingTest\Plugin\Fixture;
 use miaoxing\plugin\BaseModel;
 use Miaoxing\Plugin\Model\CastTrait;
 
-class TestHasCast extends BaseModel
+/**
+ * @property int int_column
+ * @property bool bool_column
+ * @property string string_column
+ * @property string datetime_column
+ * @property string date_column
+ * @property array json_column
+ */
+class TestCast extends BaseModel
 {
     use CastTrait;
 
-    protected $table = 'test_has_casts';
+    protected $table = 'test_casts';
 
     protected $primaryKey = 'int_column';
+
+    protected $enableProperty = true;
 
     protected $casts = [
         'int_column' => 'int',

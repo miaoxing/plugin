@@ -5,6 +5,10 @@ namespace MiaoxingTest\Plugin\Fixture;
 use miaoxing\plugin\BaseModel;
 use Miaoxing\Plugin\Model\SoftDeleteTrait;
 
+/**
+ * @property string id
+ * @property string deleted_at
+ */
 class TestSoftDelete extends BaseModel
 {
     use SoftDeleteTrait;
@@ -14,4 +18,6 @@ class TestSoftDelete extends BaseModel
     protected $deletedAtColumn = 'deleted_at';
 
     protected $deletedByColumn = 'deleted_by';
+
+    protected $enableProperty = true;
 }

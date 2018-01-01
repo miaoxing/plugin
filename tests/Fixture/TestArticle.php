@@ -12,6 +12,8 @@ class TestArticle extends BaseModel
 {
     protected $table = 'test_articles';
 
+    protected $toArrayV2 = true;
+
     public function user()
     {
         return $this->belongsTo('testUser');

@@ -748,13 +748,15 @@ class BaseModel extends Record implements JsonSerializable
     public function __get($name)
     {
         // Receive service that conflict with record method name
-        if (in_array($name, ['cache', 'lock', 'ret'])) {
+        if (in_array($name, ['db', 'cache', 'lock', 'ret'])) {
             return parent::__get($name);
         }
 
         // Receive field value
-        if ($this->enableProperty && $this->hasColumn($name)) {
-            return $this->get($name);
+        if ($this->enableProperty) {
+            if ($this->hasColumn($name)) {
+                return $this->get($name);
+            }
         }
 
         // Receive relation
@@ -899,7 +901,7 @@ class BaseModel extends Record implements JsonSerializable
     public function hasColumn($name)
     {
         $name = $this->filterInputColumn($name);
-        if (array_key_exists($name, $this->data)) {
+        if (in_array($name, $this->getFields())) {
             return true;
         }
 

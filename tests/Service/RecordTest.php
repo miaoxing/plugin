@@ -4,7 +4,7 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\TestArticle;
-use MiaoxingTest\Plugin\Fixture\TestCamelArticle;
+use MiaoxingTest\Plugin\Fixture\TestCamelCase;
 use MiaoxingTest\Plugin\Fixture\TestTag;
 use MiaoxingTest\Plugin\Fixture\TestUser;
 
@@ -160,7 +160,6 @@ class RecordTest extends BaseTestCase
 
     public function testCollHasOne()
     {
-        /** @var TestUser|TestUser[] $users */
         $users = wei()->testUser();
 
         $users->findAll()->load('profile');
@@ -503,81 +502,24 @@ class RecordTest extends BaseTestCase
         $this->assertInstanceOf(TestArticle::className(), $articles);
     }
 
-    public function testCamelFromArray()
-    {
-        $article = wei()->testCamelArticle();
-
-        $article->fromArray([
-            'testUserId' => 1,
-        ]);
-
-        $this->assertEquals(1, $article['testUserId']);
-    }
-
-    public function testCamelFromArrayIgnoreSnake()
-    {
-        $article = wei()->testCamelArticle();
-
-        $article->fromArray([
-            'test_user_id' => 1,
-        ]);
-
-        $this->assertNull($article['testUserId']);
-        $this->assertNull($article['test_user_id']);
-
-        $article->fromArray([
-            'test_user_id' => 1,
-            'testUserId' => 2,
-        ]);
-
-        $this->assertEquals(2, $article['testUserId']);
-    }
-
-    public function testCamelToArray()
-    {
-        $article = wei()->testCamelArticle();
-
-        $article->fromArray([
-            'testUserId' => 1,
-        ]);
-
-        $this->assertEquals([
-            'testUserId' => 1,
-            'id' => null,
-            'title' => null,
-            'content' => null,
-        ], $article->toArray());
-    }
-
-    public function testCamelGetSet()
-    {
-        $article = wei()->testCamelArticle();
-
-        $this->assertEquals(null, $article['testUserId']);
-
-        $article['testUserId'] = 1;
-
-        $this->assertEquals(1, $article['testUserId']);
-    }
-
     public function testSetHiddenByString()
     {
-        $article = wei()->testCamelArticle();
+        $article = wei()->testArticle();
 
         $array = $article->setHidden('id')->toArray();
 
         $this->assertArrayNotHasKey('id', $array);
-        $this->assertArrayHasKey('testUserId', $array);
+        $this->assertArrayHasKey('test_user_id', $array);
     }
 
     public function testSetHiddenByArray()
     {
-        $article = wei()->testCamelArticle();
+        $article = wei()->testArticle();
 
         $array = $article->setHidden(['id', 'test_user_id'])->toArray();
 
         $this->assertArrayNotHasKey('id', $array);
-        $this->assertArrayNotHasKey('testUserId', $array);
+        $this->assertArrayNotHasKey('test_user_id', $array);
     }
 
     protected function clearLogs()

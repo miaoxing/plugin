@@ -40,10 +40,10 @@ class SoftDeleteTraitTest extends BaseTestCase
     public function testDestroy()
     {
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
-        $this->assertEmpty($record['deleted_at']);
+        $this->assertEmpty($record->deleted_at);
 
         $record->destroy();
-        $this->assertNotEmpty($record['deleted_at']);
+        $this->assertNotEmpty($record->deleted_at);
     }
 
     public function testRestore()
@@ -52,7 +52,7 @@ class SoftDeleteTraitTest extends BaseTestCase
 
         $record->destroy();
         $record->restore();
-        $this->assertEmpty($record['deleted_at']);
+        $this->assertEmpty($record->deleted_at);
     }
 
     public function testReallyDestroy()
@@ -60,12 +60,15 @@ class SoftDeleteTraitTest extends BaseTestCase
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
 
         $record->reallyDestroy();
-        $this->assertEmpty($record['deleted_at']);
+        $this->assertEmpty($record->deleted_at);
 
         $record->reload();
-        $this->assertNull($record['id']);
+        $this->assertNull($record->id);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testIsDeleted()
     {
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
@@ -80,10 +83,10 @@ class SoftDeleteTraitTest extends BaseTestCase
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
         $record->destroy();
 
-        $false = wei()->testSoftDelete()->findById($record['id']);
+        $false = wei()->testSoftDelete()->findById($record->id);
         $this->assertFalse($false);
 
-        $record = wei()->testSoftDelete()->unscoped()->findById($record['id']);
+        $record = wei()->testSoftDelete()->unscoped()->findById($record->id);
         $this->assertNotFalse($record);
     }
 
@@ -91,11 +94,11 @@ class SoftDeleteTraitTest extends BaseTestCase
     {
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
 
-        $record = wei()->testSoftDelete()->withoutDeleted()->findById($record['id']);
+        $record = wei()->testSoftDelete()->withoutDeleted()->findById($record->id);
         $this->assertNotFalse($record);
 
         $record->destroy();
-        $record = wei()->testSoftDelete()->withoutDeleted()->findById($record['id']);
+        $record = wei()->testSoftDelete()->withoutDeleted()->findById($record->id);
         $this->assertFalse($record);
     }
 
@@ -103,11 +106,11 @@ class SoftDeleteTraitTest extends BaseTestCase
     {
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
 
-        $false = wei()->testSoftDelete()->onlyDeleted()->findById($record['id']);
+        $false = wei()->testSoftDelete()->onlyDeleted()->findById($record->id);
         $this->assertFalse($false);
 
         $record->destroy();
-        $record = wei()->testSoftDelete()->onlyDeleted()->findById($record['id']);
+        $record = wei()->testSoftDelete()->onlyDeleted()->findById($record->id);
         $this->assertNotFalse($record);
     }
 
@@ -115,31 +118,16 @@ class SoftDeleteTraitTest extends BaseTestCase
     {
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
 
-        $record = wei()->testSoftDelete()->withDeleted()->findById($record['id']);
+        $record = wei()->testSoftDelete()->withDeleted()->findById($record->id);
         $this->assertNotFalse($record);
 
         $record->destroy();
-        $record = wei()->testSoftDelete()->onlyDeleted()->findById($record['id']);
+        $record = wei()->testSoftDelete()->onlyDeleted()->findById($record->id);
         $this->assertNotFalse($record);
     }
 
     public static function dropTables()
     {
         wei()->schema->dropIfExists('test_soft_deletes');
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->clearLogs();
-    }
-
-    protected function clearLogs()
-    {
-        // preload fields cache
-        wei()->testSoftDelete()->getFields();
-
-        wei()->db->setOption('queries', []);
     }
 }

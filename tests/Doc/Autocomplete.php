@@ -3,17 +3,23 @@
 namespace MiaoxingTest\Plugin\Doc {
 
     use MiaoxingTest\Plugin\Fixture\TestArticle;
-    use MiaoxingTest\Plugin\Fixture\TestCamelArticle;
+    use MiaoxingTest\Plugin\Fixture\TestCamelCase;
     use MiaoxingTest\Plugin\Fixture\TestDefaultScope;
-    use MiaoxingTest\Plugin\Fixture\TestHasCast;
+    use MiaoxingTest\Plugin\Fixture\TestCast;
+    use MiaoxingTest\Plugin\Fixture\TestProfile;
     use MiaoxingTest\Plugin\Fixture\TestSoftDelete;
+    use MiaoxingTest\Plugin\Fixture\TestTag;
+    use MiaoxingTest\Plugin\Fixture\TestUser;
 
     /**
+     * @method TestUser|TestUser[] testUser()
      * @method TestArticle|TestArticle[] testArticle()
-     * @method TestCamelArticle|TestCamelArticle[] testCamelArticle()
+     * @method TestProfile|TestProfile[] testProfile()
+     * @method TestTag|TestTag[] testTag()
+     * @method TestCamelCase|TestCamelCase[] testCamelCase()
      * @method TestSoftDelete|TestSoftDelete[] testSoftDelete()
      * @method TestDefaultScope|TestDefaultScope[] testDefaultScope()
-     * @method TestHasCast|TestHasCast[] testHasCast()
+     * @method TestCast|TestCast[] testCast()
      */
     class AutoComplete
     {
