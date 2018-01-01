@@ -107,6 +107,18 @@ trait Constant
     }
 
     /**
+     * Returns the constant label by id
+     *
+     * @param string $prefix
+     * @param int $id
+     * @return string
+     */
+    public function getConstantLabel($prefix, $id)
+    {
+        return $this->getConstantValue($prefix, $id, 'label');
+    }
+
+    /**
      * Returns the name to id map
      *
      * @param string $prefix
