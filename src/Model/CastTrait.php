@@ -6,6 +6,7 @@ use InvalidArgumentException;
 
 /**
  * @property-read array $casts
+ * @property-read array $defaultCasts Helper for generating metadata
  */
 trait CastTrait
 {
