@@ -22,9 +22,9 @@ class BaseModelV2 extends BaseModel
 
     protected $createdAtColumn = 'created_at';
 
-    protected $updatedAtColumn = 'updated_at';
-
     protected $createdByColumn = 'created_by';
+
+    protected $updatedAtColumn = 'updated_at';
 
     protected $updatedByColumn = 'updated_by';
 
@@ -37,4 +37,15 @@ class BaseModelV2 extends BaseModel
     protected $toArrayV2 = true;
 
     protected $enableProperty = true;
+
+    protected $guarded = [
+        'id',
+        'app_id',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
+    ];
 }
