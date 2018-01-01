@@ -906,6 +906,7 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         $method = 'get' . $this->camel($name) . 'Attribute';
+
         return method_exists($this, $method);
     }
 
@@ -964,5 +965,11 @@ class BaseModel extends Record implements JsonSerializable
         $this->trigger('preBuildQuery', func_get_args());
 
         return parent::add($sqlPartName, $sqlPart, $append, $type);
+    }
+
+    public function triggerCallback($name)
+    {
+        $this->trigger($name);
+        parent::triggerCallback($name);
     }
 }

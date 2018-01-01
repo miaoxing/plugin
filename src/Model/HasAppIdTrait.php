@@ -8,8 +8,6 @@ use Wei\Record;
 
 /**
  * @property-read App app
- * @property-read array $data
- * @see Record::$data
  * @property-read string appIdColumn
  */
 trait HasAppIdTrait
@@ -17,9 +15,13 @@ trait HasAppIdTrait
     public static function bootHasAppIdTrait(BaseModel $initModel)
     {
         $initModel->addDefaultScope('curApp');
+
+        static::on('beforeCreate', 'setAppId');
     }
 
     /**
+     * Query: Filter by current app id
+     *
      * @return $this
      */
     public function curApp()
@@ -30,14 +32,13 @@ trait HasAppIdTrait
     }
 
     /**
-     * Overwrite
+     * Record: Set value for app id column
      *
-     * @todo 看怎么改为事件
+     * @param int|null $appId
+     * @return $this
      */
-    public function beforeCreate()
+    public function setAppId($appId = null)
     {
-        parent::beforeCreate();
-
-        $this[$this->appIdColumn] = $this->app->getId();
+        return $this->set($this->appIdColumn, $appId ?: wei()->app->getId());
     }
 }
