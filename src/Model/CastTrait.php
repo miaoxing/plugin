@@ -91,7 +91,7 @@ trait CastTrait
                 return (bool) $value;
 
             case 'json':
-                return $this->cacheJsonDecode($value, true);
+                return is_array($value) ? $value : $this->cacheJsonDecode($value, true);
 
             case 'float':
                 return (float) $value;

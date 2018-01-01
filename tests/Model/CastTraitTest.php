@@ -217,4 +217,11 @@ class CastTraitTest extends BaseTestCase
         $this->assertSame('2018-01-01', $data['date_column']);
         $this->assertSame('{"a":"b\\\\c","d":"中文"}', $data['json_column']);
     }
+
+    public function testGetNewModel()
+    {
+        $cast = wei()->testCast();
+
+        $this->assertSame([], $cast->json_column);
+    }
 }

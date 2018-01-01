@@ -31,4 +31,8 @@ class TestCast extends BaseModel
         'date_column' => 'date',
         'json_column' => 'json',
     ];
+
+    protected $data = [
+        'json_column' => []
+    ];
 }
