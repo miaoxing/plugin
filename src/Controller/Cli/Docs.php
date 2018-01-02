@@ -69,7 +69,7 @@ class Docs extends BaseController
             $ref = new ReflectionClass($class);
             $docName = $this->getDocCommentTitle($ref->getDocComment());
 
-            $docBlock .= sprintf("     * @property    \\%s \$%s %s\n", $class, $name, $docName);
+            $docBlock .= rtrim(sprintf("     * @property    \\%s \$%s %s", $class, $name, $docName)) . "\n";
 
             if (method_exists($class, '__invoke')) {
                 $method = $ref->getMethod('__invoke');
@@ -78,7 +78,7 @@ class Docs extends BaseController
 
                 $params = $this->geParam($method);
 
-                $docBlock .= sprintf("     * @method      %s %s(%s) %s\n", $return, $name, $params, $methodName);
+                $docBlock .= rtrim(sprintf("     * @method      %s %s(%s) %s", $return, $name, $params, $methodName)) . "\n";
                 // 可以快速导航到实际的方法
                 $docBlock .= sprintf("     * @see         \\%s::__invoke\n", $class);
             }
