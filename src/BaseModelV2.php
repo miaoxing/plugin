@@ -48,4 +48,10 @@ class BaseModelV2 extends BaseModel
         'deleted_at',
         'deleted_by',
     ];
+
+    protected $hidden = [
+        'app_id',
+        'deleted_at',
+        'deleted_by',
+    ];
 }
