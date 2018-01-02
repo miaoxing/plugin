@@ -21,7 +21,8 @@
     "wei": true
   },
   "plugins": [
-    "react"
+    "react",
+    "babel"
   ],
   "extends": [
     "eslint:recommended",
