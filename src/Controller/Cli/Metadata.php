@@ -62,13 +62,14 @@ class Metadata extends BaseController
 
         // 获取getXxxAttribute的定义
         $reflectionClass = new ReflectionClass(wei()->$model);
-//        print_r(implode(';', get_class_methods(wei()->$model)));die;
         preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods(wei()->$model)), $matches);
         foreach ($matches[1] as $key => $attr) {
             $propertyName = $camelCase ? lcfirst($attr) : $this->snake($attr);
             $method = rtrim($matches[0][$key], ';');
-            $return = $this->getMethodReturn($reflectionClass, $reflectionClass->getMethod($method));
-            $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, '')) . "\n";
+            $reflectionMethod = $reflectionClass->getMethod($method);
+            $name = $this->getDocCommentTitle($reflectionMethod->getDocComment());
+            $return = $this->getMethodReturn($reflectionClass, $reflectionMethod);
+            $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, $name)) . "\n";
         }
 
         $class = ucfirst(substr($model, 0, -strlen('Record'))) . 'Trait';
@@ -225,6 +226,25 @@ class Metadata extends BaseController
         }
 
         return $matches[1] ?: false;
+    }
+
+    protected function getDocCommentTitle($docComment)
+    {
+        /**
+         * Xxx
+         *
+         * xxx
+         * xxx
+         *
+         * @xxx xx
+         */
+        // 如上注释,返回 Xxx
+        preg_match('#\* ([^@]+?)\n#is', $docComment, $matches);
+        if ($matches) {
+            return $matches[1];
+        }
+
+        return false;
     }
 
     /**
