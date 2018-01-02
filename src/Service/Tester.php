@@ -226,7 +226,8 @@ class Tester extends \miaoxing\plugin\BaseService
     }
 
     /**
-     * @return string
+     * @return string|array
+     * @throws \Exception
      */
     public function response()
     {
