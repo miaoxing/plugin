@@ -226,14 +226,15 @@ class App extends \Wei\App
     /**
      * Record: 获取当前项目的编号
      *
-     * @return string
+     * @return int
+     * @throws \Exception
      */
     public function getId()
     {
         if (isset($this->ids[$this->namespace])) {
             return $this->ids[$this->namespace];
         } else {
-            return $this->getRecord()->get('id');
+            return (int) $this->getRecord()->get('id');
         }
     }
 

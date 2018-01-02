@@ -39,6 +39,6 @@ trait HasAppIdTrait
      */
     public function setAppId($appId = null)
     {
-        return $this->set($this->appIdColumn, $appId ?: wei()->app->getId());
+        return $this->set($this->appIdColumn, $appId ?: $this->app->getId());
     }
 }
