@@ -182,7 +182,6 @@
     "no-unsafe-finally": "error",
     "no-useless-computed-key": "error",
     "no-whitespace-before-property": "error",
-    "object-curly-spacing": ["error", "never"],
     "object-property-newline": "error",
     "one-var": "off",
     "operator-assignment": "error",
@@ -198,6 +197,10 @@
     "spaced-comment": "error",
     "space-infix-ops": "error",
     "space-in-parens": "error",
-    "space-unary-ops": "error"
+    "space-unary-ops": "error",
+    "babel/new-cap": "error",
+    "babel/object-curly-spacing": ["error", "never"],
+    "babel/no-invalid-this": "error",
+    "babel/semi": "error"
   }
 }
