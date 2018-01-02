@@ -5,6 +5,8 @@ namespace Miaoxing\Plugin\Controller\Cli;
 use miaoxing\plugin\BaseController;
 use miaoxing\plugin\BasePlugin;
 use Miaoxing\Plugin\CliDefinition;
+use ReflectionClass;
+use ReflectionMethod;
 
 class Metadata extends BaseController
 {
@@ -30,7 +32,7 @@ class Metadata extends BaseController
 
         $services = $this->plugin->generateClassMap([$plugin->getBasePath() . '/src'], '/Service/*Record.php', 'Service', false);
         foreach ($services as $name => $class) {
-            $uses = class_uses($class);
+            $uses = $this->classUsesDeep($class);
             $camelCase = isset($uses['Miaoxing\Plugin\Model\CamelCaseTrait']);
             $this->createClass($name, $plugin, $camelCase);
         }
@@ -56,6 +58,17 @@ class Metadata extends BaseController
 
             $propertyName = $camelCase ? $this->camelize($column['Field']) : $column['Field'];
             $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName, $column['Comment'])) . "\n";
+        }
+
+        // 获取getXxxAttribute的定义
+        $reflectionClass = new ReflectionClass(wei()->$model);
+//        print_r(implode(';', get_class_methods(wei()->$model)));die;
+        preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods(wei()->$model)), $matches);
+        foreach ($matches[1] as $key => $attr) {
+            $propertyName = $camelCase ? lcfirst($attr) : $this->snake($attr);
+            $method = rtrim($matches[0][$key], ';');
+            $return = $this->getMethodReturn($reflectionClass, $reflectionClass->getMethod($method));
+            $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, '')) . "\n";
         }
 
         $class = ucfirst(substr($model, 0, -strlen('Record'))) . 'Trait';
@@ -201,5 +214,35 @@ class Metadata extends BaseController
     protected function camelize($word)
     {
         return lcfirst(str_replace(' ', '', ucwords(strtr($word, '_-', '  '))));
+    }
+
+    protected function getMethodReturn(ReflectionClass $class, ReflectionMethod $method)
+    {
+        $doc = $method->getDocComment();
+        preg_match('/@return (.+?)\n/', $doc, $matches);
+        if (!$matches) {
+            return false;
+        }
+
+        return $matches[1] ?: false;
+    }
+
+    /**
+     * @param $class
+     * @param bool $autoload
+     * @return array
+     * @link http://php.net/manual/en/function.class-uses.php#110752
+     */
+    public function classUsesDeep($class, $autoload = true)
+    {
+        $traits = [];
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+
+        return array_unique($traits);
     }
 }
