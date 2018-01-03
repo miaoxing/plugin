@@ -4,7 +4,6 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\TestArticle;
-use MiaoxingTest\Plugin\Fixture\TestCamelCase;
 use MiaoxingTest\Plugin\Fixture\TestTag;
 use MiaoxingTest\Plugin\Fixture\TestUser;
 

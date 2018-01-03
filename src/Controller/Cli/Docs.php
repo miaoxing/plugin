@@ -69,7 +69,7 @@ class Docs extends BaseController
             $ref = new ReflectionClass($class);
             $docName = $this->getDocCommentTitle($ref->getDocComment());
 
-            $docBlock .= rtrim(sprintf("     * @property    \\%s \$%s %s", $class, $name, $docName)) . "\n";
+            $docBlock .= rtrim(sprintf('     * @property    \\%s $%s %s', $class, $name, $docName)) . "\n";
 
             if (method_exists($class, '__invoke')) {
                 $method = $ref->getMethod('__invoke');
@@ -78,9 +78,9 @@ class Docs extends BaseController
 
                 $params = $this->geParam($method);
 
-                $docBlock .= rtrim(sprintf("     * @method      %s %s(%s) %s", $return, $name, $params, $methodName));
+                $docBlock .= rtrim(sprintf('     * @method      %s %s(%s) %s', $return, $name, $params, $methodName));
                 $docBlock .= "\n";
-                
+
                 // 可以快速导航到实际的方法
                 $docBlock .= sprintf("     * @see         \\%s::__invoke\n", $class);
             }
@@ -150,13 +150,13 @@ class Docs extends BaseController
     protected function getDocCommentTitle($docComment)
     {
         /**
-         * Xxx
-         *
-         * xxx
-         * xxx
-         *
-         * @xxx xx
-         */
+ * Xxx
+ *
+ * xxx
+ * xxx
+ *
+ * @xxx xx
+ */
         // 如上注释,返回 Xxx
         preg_match('#\* ([^@]+?)\n#is', $docComment, $matches);
         if ($matches) {

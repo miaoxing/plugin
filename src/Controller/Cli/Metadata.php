@@ -236,13 +236,13 @@ class Metadata extends BaseController
     protected function getDocCommentTitle($docComment)
     {
         /**
-         * Xxx
-         *
-         * xxx
-         * xxx
-         *
-         * @xxx xx
-         */
+ * Xxx
+ *
+ * xxx
+ * xxx
+ *
+ * @xxx xx
+ */
         // 如上注释,返回 Xxx
         preg_match('#\* ([^@]+?)\n#is', $docComment, $matches);
         if ($matches) {

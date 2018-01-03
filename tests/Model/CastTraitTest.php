@@ -64,7 +64,7 @@ class CastTraitTest extends BaseTestCase
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
                     'json_column' => '{"a":"b\\\\c","d":"中文"}',
-                ]
+                ],
             ],
             [
                 [
@@ -82,7 +82,7 @@ class CastTraitTest extends BaseTestCase
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
                     'json_column' => '{"a":"b\\\\c","d":"中文"}',
-                ]
+                ],
             ],
             [
                 [
@@ -100,7 +100,7 @@ class CastTraitTest extends BaseTestCase
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
                     'json_column' => 'abc', // Ignore string
-                ]
+                ],
             ],
         ];
     }
@@ -144,7 +144,7 @@ class CastTraitTest extends BaseTestCase
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
                     'json_column' => ['a' => 'b\c', 'd' => '中文'],
-                ]
+                ],
             ],
             [
                 [
@@ -162,8 +162,8 @@ class CastTraitTest extends BaseTestCase
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
                     'json_column' => ['a' => 'b\c', 'd' => '中文'],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
