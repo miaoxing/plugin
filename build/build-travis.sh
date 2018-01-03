@@ -53,7 +53,8 @@ if [ "$detail" == "" ]; then
 fi
 
 # 如果允许失败则不创建issue
-if [ "$TRAVIS_PHP_VERSION" == "hhvm" ] || [ "$TRAVIS_PHP_VERSION" == "nightly" ]; then
+allow_failures=("7.0" "7.1" "7.2" "nightly")
+if [[ " ${allow_failures[@]} " =~ " ${TRAVIS_PHP_VERSION} " ]]; then
   exit 1
 fi
 
