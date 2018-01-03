@@ -13,7 +13,8 @@
     "browser": true,
     "amd": true,
     "jquery": true,
-    "mocha": true
+    "mocha": true,
+    "es6": true
   },
   "globals": {
     "casper": true,
