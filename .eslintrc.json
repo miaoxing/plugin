@@ -201,7 +201,6 @@
     "space-unary-ops": "error",
     "babel/new-cap": "error",
     "babel/object-curly-spacing": ["error", "never"],
-    "babel/no-invalid-this": "error",
     "babel/semi": "error"
   }
 }
