@@ -40,10 +40,14 @@ class SoftDeleteTraitTest extends BaseTestCase
     public function testDestroy()
     {
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        // @codingStandardsIgnoreStart
         $this->assertEmpty($record->deleted_at);
+        // @codingStandardsIgnoreEnd
 
         $record->destroy();
+        // @codingStandardsIgnoreStart
         $this->assertNotEmpty($record->deleted_at);
+        // @codingStandardsIgnoreEnd
     }
 
     public function testRestore()
@@ -52,7 +56,9 @@ class SoftDeleteTraitTest extends BaseTestCase
 
         $record->destroy();
         $record->restore();
+        // @codingStandardsIgnoreStart
         $this->assertEmpty($record->deleted_at);
+        // @codingStandardsIgnoreEnd
     }
 
     public function testReallyDestroy()
@@ -60,7 +66,9 @@ class SoftDeleteTraitTest extends BaseTestCase
         $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
 
         $record->reallyDestroy();
+        // @codingStandardsIgnoreStart
         $this->assertEmpty($record->deleted_at);
+        // @codingStandardsIgnoreEnd
 
         $record->reload();
         $this->assertNull($record->id);

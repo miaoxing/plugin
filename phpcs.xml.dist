@@ -3,6 +3,7 @@
   <description>The coding standard for Miaoxing.</description>
 
   <exclude-pattern>*/data/*</exclude-pattern>
+  <exclude-pattern>docs/AutoComplete.php</exclude-pattern>
 
   <rule ref="Miaoxing">
   </rule>

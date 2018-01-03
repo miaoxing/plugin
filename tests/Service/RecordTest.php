@@ -149,7 +149,9 @@ class RecordTest extends BaseTestCase
 
         $profile = $user->profile;
 
+        // @codingStandardsIgnoreStart
         $this->assertEquals(1, $profile->test_user_id);
+        // @codingStandardsIgnoreEnd
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
@@ -163,8 +165,10 @@ class RecordTest extends BaseTestCase
 
         $users->findAll()->load('profile');
 
+        // @codingStandardsIgnoreStart
         $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
         $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
+        // @codingStandardsIgnoreEnd
         $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
@@ -180,8 +184,10 @@ class RecordTest extends BaseTestCase
 
         $users->findAll();
 
+        // @codingStandardsIgnoreStart
         $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
         $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
+        // @codingStandardsIgnoreEnd
         $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
@@ -218,7 +224,9 @@ class RecordTest extends BaseTestCase
 
         foreach ($articles as $article) {
             $user = $article->user;
+            // @codingStandardsIgnoreStart
             $this->assertEquals($article->test_user_id, $user->id);
+            // @codingStandardsIgnoreEnd
         }
 
         $queries = wei()->db->getQueries();
@@ -235,7 +243,9 @@ class RecordTest extends BaseTestCase
 
         foreach ($articles as $article) {
             $user = $article->user;
+            // @codingStandardsIgnoreStart
             $this->assertEquals($article->test_user_id, $user->id);
+            // @codingStandardsIgnoreEnd
         }
 
         $queries = wei()->db->getQueries();
@@ -254,7 +264,9 @@ class RecordTest extends BaseTestCase
         $articles = $user->articles;
 
         foreach ($articles as $article) {
+            // @codingStandardsIgnoreStart
             $this->assertEquals($article->test_user_id, $user->id);
+            // @codingStandardsIgnoreEnd
         }
 
         $queries = wei()->db->getQueries();
@@ -272,7 +284,9 @@ class RecordTest extends BaseTestCase
         $articles = $user->customArticles()->andWhere('id >= ?', 1)->desc('id');
 
         foreach ($articles as $article) {
+            // @codingStandardsIgnoreStart
             $this->assertEquals($article->test_user_id, $user->id);
+            // @codingStandardsIgnoreEnd
         }
 
         $this->assertEquals(2, $articles->length());
@@ -295,7 +309,9 @@ class RecordTest extends BaseTestCase
 
         foreach ($users as $user) {
             foreach ($user->customArticles as $article) {
+                // @codingStandardsIgnoreStart
                 $this->assertEquals($article->test_user_id, $user->id);
+                // @codingStandardsIgnoreEnd
             }
         }
 

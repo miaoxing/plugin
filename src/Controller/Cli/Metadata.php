@@ -30,7 +30,12 @@ class Metadata extends BaseController
             return $this->err(sprintf('插件"%s"不存在', $req['plugin']));
         }
 
-        $services = $this->plugin->generateClassMap([$plugin->getBasePath() . '/src'], '/Service/*Record.php', 'Service', false);
+        $services = $this->plugin->generateClassMap(
+            [$plugin->getBasePath() . '/src'],
+            '/Service/*Record.php',
+            'Service',
+            false
+        );
         foreach ($services as $name => $class) {
             $uses = $this->classUsesDeep($class);
             $camelCase = isset($uses['Miaoxing\Plugin\Model\CamelCaseTrait']);
@@ -185,7 +190,7 @@ class Metadata extends BaseController
         $this->writeln('生成文件 ' . $this->cli->success($file));
 
         ob_start();
-        require $this->plugin->getById('plugin')->getBasePath() .'/resources/stubs/metadata.php';
+        require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/metadata.php';
         $content = ob_get_clean();
 
         file_put_contents($file, $content);

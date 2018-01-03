@@ -189,12 +189,14 @@ class CastTraitTest extends BaseTestCase
     {
         $record = wei()->testCast()->findById(1);
 
+        // @codingStandardsIgnoreStart
         $this->assertSame(1, $record->int_column);
         $this->assertSame(false, $record->bool_column);
         $this->assertSame('1', $record->string_column);
         $this->assertSame('2018-01-01 00:00:00', $record->datetime_column);
         $this->assertSame('2018-01-01', $record->date_column);
         $this->assertSame(['a' => 'b\c', 'd' => '中文'], $record->json_column);
+        // @codingStandardsIgnoreEnd
     }
 
     public function testSave()
@@ -222,6 +224,8 @@ class CastTraitTest extends BaseTestCase
     {
         $cast = wei()->testCast();
 
+        // @codingStandardsIgnoreStart
         $this->assertSame([], $cast->json_column);
+        // @codingStandardsIgnoreEnd
     }
 }

@@ -78,7 +78,9 @@ class Docs extends BaseController
 
                 $params = $this->geParam($method);
 
-                $docBlock .= rtrim(sprintf("     * @method      %s %s(%s) %s", $return, $name, $params, $methodName)) . "\n";
+                $docBlock .= rtrim(sprintf("     * @method      %s %s(%s) %s", $return, $name, $params, $methodName));
+                $docBlock .= "\n";
+                
                 // 可以快速导航到实际的方法
                 $docBlock .= sprintf("     * @see         \\%s::__invoke\n", $class);
             }
@@ -135,9 +137,11 @@ class Docs extends BaseController
         $className = '\\' . $class->getName();
 
         $return = str_replace([
-            'BaseModel', '$this'
+            'BaseModel',
+            '$this',
         ], [
-            $className, $className
+            $className,
+            $className,
         ], $return);
 
         return $return ?: false;
@@ -202,7 +206,7 @@ class Docs extends BaseController
         $this->writeln('生成文件 ' . $this->cli->success($file));
 
         ob_start();
-        require $this->plugin->getById('plugin')->getBasePath() .'/resources/stubs/doc.php';
+        require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/doc.php';
         $content = ob_get_clean();
 
         file_put_contents($file, $content);
