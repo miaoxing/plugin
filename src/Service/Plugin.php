@@ -140,11 +140,7 @@ class Plugin extends BaseService
      */
     protected function getWeiAliases()
     {
-        return $this->generateClassMap(
-            $this->dirs,
-            ['/Service/*.php', '/services/*.php'],
-            ['Service', 'services']
-        );
+        return $this->generateClassMap($this->dirs, '/Service/*.php', 'Service');
     }
 
     /**
@@ -609,34 +605,30 @@ class Plugin extends BaseService
         if ($file[0] === '.') {
             $file = '\\' . ltrim($file, './');
         }
-        $className = $file;
 
-        // TODO V2 处理V2的插件形式,如src/Plugin.php和vendor/*/*/src/Plugin.php
-        if (strpos($file, 'src/') !== false) {
-            list($dir, $className) = explode('src/', $file);
+        list($dir, $className) = explode('src/', $file);
 
-            // TODO V2 处理V2的插件形式
-            if ($dir == '\\') {
-                $dir = '';
-            }
-
-            $composerJson = ($dir ? ($dir . '/') : '') . 'composer.json';
-            if (!is_file($composerJson)) {
-                throw new Exception(sprintf('Composer file "%s" not found', $composerJson));
-            }
-
-            $json = json_decode(file_get_contents($composerJson), true);
-            if ($ignoreProject && isset($json['type']) && $json['type'] == 'project') {
-                return false;
-            }
-
-            if (!isset($json['autoload']['psr-4']) || !$json['autoload']['psr-4']) {
-                throw new Exception('Missing psr-4 autoload config');
-            }
-
-            $namespace = key($json['autoload']['psr-4']);
-            $className = rtrim($namespace, '\\') . '\\' . $className;
+        // TODO V2 处理V2的插件形式
+        if ($dir == '\\') {
+            $dir = '';
         }
+
+        $composerJson = ($dir ? ($dir . '/') : '') . 'composer.json';
+        if (!is_file($composerJson)) {
+            throw new Exception(sprintf('Composer file "%s" not found', $composerJson));
+        }
+
+        $json = json_decode(file_get_contents($composerJson), true);
+        if ($ignoreProject && isset($json['type']) && $json['type'] == 'project') {
+            return false;
+        }
+
+        if (!isset($json['autoload']['psr-4']) || !$json['autoload']['psr-4']) {
+            throw new Exception('Missing psr-4 autoload config');
+        }
+
+        $namespace = key($json['autoload']['psr-4']);
+        $className = rtrim($namespace, '\\') . '\\' . $className;
 
         // 移除结尾的.php扩展名,并替换目录为命名空间分隔符
         return strtr(substr($className, 0, -4), ['/' => '\\']);

@@ -21,11 +21,6 @@ class Assets extends BaseController
         foreach ($plugins as $plugin) {
             $path = $plugin->getBasePath();
 
-            // TODO V2 只处理vendor下的插件,直到迁移完毕
-            if (strpos($path, 'vendor/') !== 0) {
-                continue;
-            }
-
             $source = $path . '/public';
             if (!is_dir($source)) {
                 continue;

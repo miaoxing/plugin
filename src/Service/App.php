@@ -192,13 +192,8 @@ class App extends \Wei\App
             $classes = array_reverse($this->getControllerClasses($this->controller));
             foreach ($classes as $class) {
                 // 认为第二部分是插件名称
-                list(, $this->plugin) = explode('\\', $class, 3);
-                $this->plugin = lcfirst($this->plugin);
-
-                // TODO V2改为默认
-                if (substr($class, 0, 8) == 'Miaoxing') {
-                    $this->plugin = $this->dash($this->plugin);
-                }
+                list(, $plugin) = explode('\\', $class, 3);
+                $this->plugin = $this->dash($plugin);
 
                 break;
             }
