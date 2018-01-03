@@ -136,6 +136,7 @@ class Migration extends BaseService
 
         if (!$path) {
             $this->writeln($this->cli->error('Path should not be empty'));
+
             return $this->err('Path should not be empty');
         }
 
