@@ -30,17 +30,6 @@ namespace miaoxing\plugin {
      */
     class BaseService extends \Wei\Base
     {
-        /**
-         * Returns current class name
-         *
-         * 兼容5.5之前版本获取类名的方法
-         *
-         * @return string
-         */
-        public static function className()
-        {
-            return get_called_class();
-        }
     }
 }
 

@@ -377,7 +377,7 @@ class RecordTest extends BaseTestCase
 
         foreach ($articles as $article) {
             foreach ($article->tags as $tag) {
-                $this->assertInstanceOf(TestTag::className(), $tag);
+                $this->assertInstanceOf(TestTag::class, $tag);
             }
         }
 
@@ -405,7 +405,7 @@ class RecordTest extends BaseTestCase
 
         foreach ($articles as $article) {
             foreach ($article->customTags as $tag) {
-                $this->assertInstanceOf(TestTag::className(), $tag);
+                $this->assertInstanceOf(TestTag::class, $tag);
             }
         }
 
@@ -505,7 +505,7 @@ class RecordTest extends BaseTestCase
         $articles = $user->articles;
 
         $this->assertNotNull($articles);
-        $this->assertInstanceOf(TestArticle::className(), $articles);
+        $this->assertInstanceOf(TestArticle::class, $articles);
     }
 
     public function testSetHiddenByString()

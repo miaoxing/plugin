@@ -89,7 +89,7 @@ abstract class BaseController extends \Wei\BaseController
 
         $this->initViewVars();
 
-        $this->middleware(Auth::className(), [
+        $this->middleware(Auth::class, [
             'guestPages' => $this->guestPages,
             'adminGuestPages' => $this->adminGuestPages,
         ]);
