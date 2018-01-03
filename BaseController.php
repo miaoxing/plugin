@@ -2,6 +2,7 @@
 
 namespace miaoxing\plugin;
 
+use Miaoxing\Plugin\Service\Asset;
 use Wei\RetTrait;
 use Miaoxing\Plugin\Middleware\Auth;
 
@@ -23,6 +24,7 @@ use Miaoxing\Plugin\Middleware\Auth;
  * @property \Miaoxing\Plugin\Service\Setting $setting
  * @method   string setting($name, $default = null) 读取配置
  * @property \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
+ * @property Asset wpAsset
  */
 abstract class BaseController extends \Wei\BaseController
 {
@@ -145,7 +147,7 @@ abstract class BaseController extends \Wei\BaseController
                 'controllerTitle' => $this->getControllerName(),
                 'actionTitle' => $this->getActionName(),
             ],
-            'webpackPublicPath' => wei()->wpAsset->getRevPrefix(),
+            'webpackPublicPath' => $this->wpAsset->getRevPrefix(),
         ];
 
         // 为后台设置默认布局
