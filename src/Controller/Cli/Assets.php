@@ -17,6 +17,11 @@ class Assets extends BaseController
     {
         $cli = $this->cli;
 
+        if (!is_dir('plugins')) {
+            mkdir('plugins');
+            $this->writeln(sprintf('Create %s directory ', $cli->success('plugins')));
+        }
+
         $plugins = $this->plugin->getAll();
         foreach ($plugins as $plugin) {
             $path = $plugin->getBasePath();
