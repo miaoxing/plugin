@@ -40,7 +40,7 @@
   </rule>
   <rule ref="rulesets/naming.xml/ShortMethodName">
     <properties>
-      <property name="exceptions" value="id,up,to"/>
+      <property name="exceptions" value="id,up,to,on"/>
     </properties>
   </rule>
   <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
