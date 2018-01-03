@@ -17,7 +17,7 @@ use Miaoxing\Plugin\Middleware\Auth;
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\Plugin\Service\User $user 用户
  * @property \Miaoxing\Plugin\Service\CurUser $curUser 用户
- * @property \services\Url $url URL生成服务
+ * @property \Miaoxing\Order\Service\Url $url URL生成服务
  * @method   string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Wei\Ret $ret 返回值服务
  * @property \Miaoxing\Plugin\Service\Setting $setting
