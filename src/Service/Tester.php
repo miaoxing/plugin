@@ -366,45 +366,6 @@ class Tester extends \miaoxing\plugin\BaseService
     }
 
     /**
-     * Helper: 触发QQ回复
-     *
-     * @param string $content
-     * @return $this
-     * @todo 转到qq相关服务
-     */
-    public function qqReply($content)
-    {
-        $wei = wei();
-
-        $account = wei()->qqAccount->getCurrentAccount();
-        $account->setData([
-            'authed' => false,
-            'applicationId' => '200464349',
-            'token' => 'weixin',
-            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG',
-        ]);
-
-        // 模拟自定义回复
-        $wei->qqApp = new \plugins\qq\services\QqApp([
-            'wei' => $wei,
-            'query' => [
-                'signature' => 'c181f86196a54f1813399ddb4c36ae34af043415',
-                'timestamp' => '1366032735',
-                'nonce' => '136587223',
-            ],
-            'postData' => $content,
-        ]);
-
-        return $wei->tester()
-            ->login()
-            ->controller('qqReplies')
-            ->action('create')
-            ->request([])
-            ->exec()
-            ->response();
-    }
-
-    /**
      * 运行任务
      *
      * @param string $name

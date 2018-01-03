@@ -438,7 +438,7 @@ class BaseModel extends Record implements JsonSerializable
     protected function detectTable()
     {
         if (!$this->table) {
-            // 适合类名:plugins\editor\services\Page
+            // 适合类名: Miaoxing\Plugin\Service\User
             $parts = explode('\\', get_class($this));
             $this->table = lcfirst(end($parts));
         }
