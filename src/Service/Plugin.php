@@ -31,7 +31,6 @@ class Plugin extends BaseService
      */
     protected $dirs = [
         '.',
-        'plugins/*',
         'src',
         'vendor/*/*/src',
     ];
@@ -170,15 +169,8 @@ class Plugin extends BaseService
             foreach ($files as $file) {
                 $class = $this->guessClassName($file);
 
-                // TODO V2改为默认
-                if (substr($class, 0, 8) == 'Miaoxing') {
-                    $name = explode('\\', $class)[1];
-                    $name = $this->dash($name);
-                } else {
-                    $names = explode('\\', $class);
-                    $name = $names[count($names) - 2];
-                    $name = lcfirst($name);
-                }
+                $name = explode('\\', $class)[1];
+                $name = $this->dash($name);
 
                 $this->pluginClasses[$name] = $class;
             }
@@ -587,14 +579,9 @@ class Plugin extends BaseService
 
     public function getPluginIdByClass($class)
     {
-        // 类名如Miaoxing\App\Controller/Apps
+        // 类名如:Miaoxing\App\Controller/Apps
         $id = explode('\\', $class, 3)[1];
-
-        // TODO V2 全部都要转换
-        // 如果首字母是大写,认为是新版类名,转换为连接符格式
-        if (strtoupper($id[0]) == $id[0]) {
-            $id = $this->dash($id);
-        }
+        $id = $this->dash($id);
 
         return $id;
     }
