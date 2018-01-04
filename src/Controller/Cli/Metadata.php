@@ -30,9 +30,14 @@ class Metadata extends BaseController
             return $this->err(sprintf('插件"%s"不存在', $req['plugin']));
         }
 
+        $dir = $plugin->getBasePath() . '/src/Metadata/';
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+
         $services = $this->plugin->generateClassMap(
             [$plugin->getBasePath() . '/src'],
-            '/Service/*Record.php',
+            '/Service/*Model.php',
             'Service',
             false
         );
@@ -77,7 +82,7 @@ class Metadata extends BaseController
             $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, $name)) . "\n";
         }
 
-        $class = ucfirst(substr($model, 0, -strlen('Record'))) . 'Trait';
+        $class = ucfirst(substr($model, 0, -strlen('Model'))) . 'Trait';
         $file = $this->getFile($plugin, $class);
         $this->createFile($file, $this->getNamespace($plugin), $class, $docBlock, $casts);
     }
