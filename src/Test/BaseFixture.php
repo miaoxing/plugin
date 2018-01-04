@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Test;
 
-use miaoxing\plugin\BaseService;
+use Miaoxing\Plugin\BaseService;
 
 /**
  * @property BaseTestCase $testCase

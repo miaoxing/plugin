@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Service;
 /**
  * 测试
  */
-class Tester extends \miaoxing\plugin\BaseService
+class Tester extends \Miaoxing\Plugin\BaseService
 {
     /**
      * @var string

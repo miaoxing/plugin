@@ -9,7 +9,7 @@ namespace Miaoxing\Plugin;
  * @property \Miaoxing\App\Service\Logger $logger
  * @property \Wei\Request $request
  */
-class BasePlugin extends \miaoxing\plugin\BaseService
+class BasePlugin extends \Miaoxing\Plugin\BaseService
 {
     /**
      * 插件的简短名称

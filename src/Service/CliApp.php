@@ -7,7 +7,7 @@ namespace Miaoxing\Plugin\Service;
  *
  * @property \Wei\Request $request
  */
-class CliApp extends \miaoxing\plugin\BaseService
+class CliApp extends \Miaoxing\Plugin\BaseService
 {
     /**
      * 默认的地址,如http://example.com

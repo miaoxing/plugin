@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin {
+namespace Miaoxing\Plugin {
 
     use Miaoxing\Region\Service\BaiduApi;
     use Miaoxing\App\Service\Coll;
@@ -37,7 +37,7 @@ namespace {
 
     if (!function_exists('wei')) {
         /**
-         * @return \miaoxing\plugin\BaseService
+         * @return \Miaoxing\Plugin\BaseService
          */
         function wei()
         {

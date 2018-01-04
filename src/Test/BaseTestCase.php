@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Test;
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Wei\Wei|\miaoxing\plugin\BaseService
+     * @var \Wei\Wei|\Miaoxing\Plugin\BaseService
      */
     protected $wei;
 

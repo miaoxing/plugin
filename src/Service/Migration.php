@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use miaoxing\plugin\BaseService;
+use Miaoxing\Plugin\BaseService;
 use ReflectionClass;
 use Wei\RetTrait;
 use Wei\Schema;

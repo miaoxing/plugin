@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use miaoxing\plugin\BaseService;
+use Miaoxing\Plugin\BaseService;
 
 /**
  * URL映射

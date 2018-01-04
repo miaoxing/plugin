@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Exception;
-use miaoxing\plugin\BaseService;
+use Miaoxing\Plugin\BaseService;
 
 /**
  * 插件管理器
