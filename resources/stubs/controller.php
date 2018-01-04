@@ -2,7 +2,7 @@
 
 namespace <?= $namespace ?>;
 
-use miaoxing\plugin\BaseController;
+use Miaoxing\Plugin\BaseController;
 
 /**
  * <?= $class, "\n" ?>

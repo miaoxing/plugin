@@ -9,8 +9,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Miaoxing\\Plugin\\": "src",
-      "miaoxing\\plugin\\": ""
+      "Miaoxing\\Plugin\\": "src"
     }
   },
   "autoload-dev": {

@@ -9,7 +9,7 @@ use Wei\Record;
 use Wei\RetTrait;
 
 /**
- * @method \miaoxing\plugin\BaseModel db($table = null) Create a new record object
+ * @method \Miaoxing\Plugin\BaseModel db($table = null) Create a new record object
  * @property \Wei\BaseCache $cache
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property Logger $logger

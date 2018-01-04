@@ -160,7 +160,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getPluginName()
     {
-        // 类名如 miaoxing\app\tests\PluginTest
+        // 类名如 MiaoxingTest\App\PluginTest
         // 分为3部分取第2部分
         return explode('\\', get_class($this), 3)[1];
     }
