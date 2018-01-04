@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\BaseModel;
 use Miaoxing\User\Service\UserProfile;
 
 /**

@@ -12,8 +12,8 @@ namespace Miaoxing\Plugin {
     /**
      * @property    \Miaoxing\Plugin\Service\Db $appDb
      * @property    \Wei\Event $event
-     * @method      \miaoxing\plugin\BaseModel appDb($table = null)
-     * @method      \miaoxing\plugin\BaseModel db($table = null)
+     * @method      \Miaoxing\Plugin\BaseModel appDb($table = null)
+     * @method      \Miaoxing\Plugin\BaseModel db($table = null)
      * @property    \Miaoxing\Plugin\Service\App $app 应用管理服务
      * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
      * @property    Excel $excel Excel操作的快捷服务

@@ -7,7 +7,7 @@ use Miaoxing\Plugin\Model\QuickQueryTrait;
 /**
  * 用户分组
  */
-class Group extends \miaoxing\plugin\BaseModel
+class Group extends \Miaoxing\Plugin\BaseModel
 {
     use QuickQueryTrait;
 

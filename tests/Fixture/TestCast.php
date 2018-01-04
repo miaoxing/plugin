@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Model\CastTrait;
 
 /**

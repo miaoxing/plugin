@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin;
+namespace Miaoxing\Plugin;
 
 use JsonSerializable;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;

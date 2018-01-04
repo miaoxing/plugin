@@ -3,7 +3,7 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use miaoxing\plugin\BaseModel;
+use Miaoxing\Plugin\BaseModel;
 
 /**
  * @property TestArticle|TestArticle[] $articles

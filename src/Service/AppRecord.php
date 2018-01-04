@@ -7,7 +7,7 @@ namespace Miaoxing\Plugin\Service;
  *
  * @property \Wei\BaseCache $cache
  */
-class AppRecord extends \miaoxing\plugin\BaseModel
+class AppRecord extends \Miaoxing\Plugin\BaseModel
 {
     use \Miaoxing\Plugin\Constant;
 

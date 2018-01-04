@@ -32,7 +32,7 @@ return [
         'dbname' => '', // 留空,待启动脚本检测和创建数据库
         'charset' => 'utf8mb4',
         'password' => getenv('MYSQL_PASSWORD'),
-        'recordClass' => 'miaoxing\plugin\BaseModel',
+        'recordClass' => 'Miaoxing\Plugin\BaseModel',
     ],
     // 产品核心的数据库
     'app.db' => [
@@ -42,7 +42,7 @@ return [
         'dbname' => 'app',
         'charset' => 'utf8mb4',
         'password' => getenv('MYSQL_PASSWORD'),
-        'recordClass' => 'miaoxing\plugin\BaseModel',
+        'recordClass' => 'Miaoxing\Plugin\BaseModel',
     ],
     'router' => [
         'namespaces' => ['admin', 'api', 'cli'],

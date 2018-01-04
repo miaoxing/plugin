@@ -8,7 +8,7 @@ namespace Miaoxing\Plugin\Service;
  * @property \Wei\Cache $cache
  * @property \Wei\Validator\StartsWith $isStartsWith
  */
-class Setting extends \miaoxing\plugin\BaseModel
+class Setting extends \Miaoxing\Plugin\BaseModel
 {
     protected $table = 'setting';
 
