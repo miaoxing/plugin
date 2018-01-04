@@ -50,8 +50,15 @@ class Docs extends BaseController
             if ($var) {
                 $var .= "\n";
             }
+
+            if ($this->wei->isEndsWith($name, 'Model')) {
+                $varName = substr($name, 0, -5);
+            } else {
+                $varName = $name;
+            }
+
             $var .= sprintf('    /** @var %s $%s */' . "\n", $class, $name);
-            $var .= sprintf('    $%s = wei()->%1$s;' . "\n", $name);
+            $var .= sprintf('    $%s = wei()->%s;' . "\n", $varName, $name);
         }
 
         return $var;
@@ -80,9 +87,6 @@ class Docs extends BaseController
 
                 $docBlock .= rtrim(sprintf('     * @method      %s %s(%s) %s', $return, $name, $params, $methodName));
                 $docBlock .= "\n";
-
-                // 可以快速导航到实际的方法
-                $docBlock .= sprintf("     * @see         \\%s::__invoke\n", $class);
             }
         }
 
