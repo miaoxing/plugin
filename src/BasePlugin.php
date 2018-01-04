@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin;
+namespace Miaoxing\Plugin;
 
 /**
  * @property \Wei\Env $env

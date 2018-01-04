@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Controller\Cli;
 
 use miaoxing\plugin\BaseController;
-use miaoxing\plugin\BasePlugin;
+use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Plugin\CliDefinition;
 
 class Models extends BaseController

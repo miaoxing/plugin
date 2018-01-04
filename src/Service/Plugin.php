@@ -271,7 +271,7 @@ class Plugin extends BaseService
     /**
      * 获取插件目录下所有的插件对象
      *
-     * @return \miaoxing\plugin\BasePlugin[]
+     * @return \Miaoxing\Plugin\BasePlugin[]
      */
     public function getAll()
     {
@@ -290,7 +290,7 @@ class Plugin extends BaseService
      * 根据插件ID获取插件对象
      *
      * @param string $id
-     * @return \miaoxing\plugin\BasePlugin
+     * @return \Miaoxing\Plugin\BasePlugin
      * @throws Exception 当插件类不存在时
      */
     public function getOneById($id)
@@ -307,7 +307,7 @@ class Plugin extends BaseService
      * 根据插件ID获取插件对象
      *
      * @param string $id
-     * @return \miaoxing\plugin\BasePlugin|false
+     * @return \Miaoxing\Plugin\BasePlugin|false
      */
     public function getById($id)
     {
