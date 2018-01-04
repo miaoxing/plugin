@@ -1,6 +1,6 @@
 <?php
 
-namespace miaoxing\plugin;
+namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Service\Asset;
 use Wei\RetTrait;

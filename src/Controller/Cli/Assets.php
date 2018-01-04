@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Controller\Cli;
 
-use miaoxing\plugin\BaseController;
+use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\Service\Cli;
 
 /**

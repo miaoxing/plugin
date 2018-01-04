@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Controller\Admin;
 
-class Plugin extends \miaoxing\plugin\BaseController
+class Plugin extends \Miaoxing\Plugin\BaseController
 {
     protected $guestPages = ['admin/plugin/refreshCache'];
 
