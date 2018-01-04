@@ -4,14 +4,12 @@ namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Model\CamelCaseTrait;
 use Miaoxing\Plugin\Model\CastTrait;
-use Miaoxing\Plugin\Model\HasAppIdTrait;
 use Miaoxing\Plugin\Model\QuickQueryTrait;
 
 class BaseModelV2 extends BaseModel
 {
     use CamelCaseTrait;
     use CastTrait;
-    use HasAppIdTrait;
     use QuickQueryTrait;
 
     protected $providers = [
