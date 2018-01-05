@@ -18,7 +18,7 @@ class TestUser extends BaseModel
 
     public function articles()
     {
-        return $this->hasMany('testArticle');
+        return $this->hasMany(wei()->testArticle());
     }
 
     public function customArticles()

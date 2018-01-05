@@ -593,12 +593,12 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function hasOne($record, $foreignKey = null, $localKey = null)
     {
-        /** @var BaseModel $related */
-        $related = $this->wei->$record();
+        $related = $this->getRelatedModel($record);
+        $name = $related->getClassServiceName();
 
         $localKey || $localKey = $this->getPrimaryKey();
         $foreignKey || $foreignKey = $this->getForeignKey();
-        $this->relations[$record] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
+        $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
         $related->andWhere([$foreignKey => $this->getRelationValue($localKey)]);
 
@@ -624,10 +624,11 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
     {
+        $related = $this->getRelatedModel($record);
         $foreignKey || $foreignKey = $this->getPrimaryKey();
-        $localKey || $localKey = $this->snake($record) . '_' . $this->getPrimaryKey();
+        $localKey || $localKey = $this->snake($related->getClassServiceName()) . '_' . $this->getPrimaryKey();
 
-        return $this->hasOne($record, $foreignKey, $localKey);
+        return $this->hasOne($related, $foreignKey, $localKey);
     }
 
     /**
@@ -639,14 +640,14 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
     {
-        /** @var BaseModel $related */
-        $related = $this->wei->$record();
+        $related = $this->getRelatedModel($record);
+        $name = $this->getClassServiceName($related);
 
         $primaryKey = $this->getPrimaryKey();
         $junctionTable || $junctionTable = $this->getJunctionTable($related);
         $foreignKey || $foreignKey = $this->getForeignKey();
-        $relatedKey || $relatedKey = $this->snake($record) . '_' . $primaryKey;
-        $this->relations[$record] = [
+        $relatedKey || $relatedKey = $this->snake($name) . '_' . $primaryKey;
+        $this->relations[$name] = [
             'junctionTable' => $junctionTable,
             'relatedKey' => $relatedKey,
             'foreignKey' => $foreignKey,
@@ -663,6 +664,19 @@ class BaseModel extends Record implements JsonSerializable
             ->beColl();
 
         return $related;
+    }
+
+    /**
+     * @param string|object $model
+     * @return BaseModel
+     */
+    protected function getRelatedModel($model)
+    {
+        if ($model instanceof self) {
+            return $model;
+        } else {
+            return $this->wei->$model();
+        }
     }
 
     /**
@@ -839,11 +853,18 @@ class BaseModel extends Record implements JsonSerializable
         return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
     }
 
-    protected function getClassServiceName($object)
+    protected function getClassServiceName($object = null)
     {
+        !$object && $object = $this;
         $name = lcfirst(end(explode('\\', get_class($object))));
+
+        // TODO deprecated
         if (substr($name, -6) == 'Record') {
             $name = substr($name, 0, -6);
+        }
+
+        if (substr($name, -5) == 'Model') {
+            $name = substr($name, 0, -5);
         }
 
         return $name;
