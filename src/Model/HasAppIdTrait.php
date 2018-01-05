@@ -23,6 +23,7 @@ trait HasAppIdTrait
      * Query: Filter by current app id
      *
      * @return $this
+     * @deprecated Use HasAppIdTrait
      */
     public function curApp()
     {
