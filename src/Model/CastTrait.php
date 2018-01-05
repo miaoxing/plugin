@@ -91,6 +91,7 @@ trait CastTrait
                 return (bool) $value;
 
             case 'json':
+                // Ignore default array value
                 return is_array($value) ? $value : $this->cacheJsonDecode($value, true);
 
             case 'float':
@@ -124,11 +125,7 @@ trait CastTrait
                 return (string) $value;
 
             case 'json':
-                // Ignore initial string
-                return is_string($value) ? $value : json_encode(
-                    $value,
-                    JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-                );
+                return json_encode($value,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
             default:
                 throw new InvalidArgumentException('Unsupported cast type: ' . $type);

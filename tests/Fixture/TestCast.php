@@ -23,6 +23,8 @@ class TestCast extends BaseModel
 
     protected $tableV2 = true;
 
+    protected $initV2 = true;
+
     protected $casts = [
         'int_column' => 'int',
         'bool_column' => 'bool',

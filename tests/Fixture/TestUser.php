@@ -16,6 +16,8 @@ class TestUser extends BaseModel
 
     protected $tableV2 = true;
 
+    protected $initV2 = true;
+
     public function articles()
     {
         return $this->hasMany(wei()->testArticle());

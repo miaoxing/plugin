@@ -38,6 +38,8 @@ class BaseModelV2 extends BaseModel
 
     protected $tableV2 = true;
 
+    protected $initV2 = true;
+
     protected $guarded = [
         'id',
         'app_id',

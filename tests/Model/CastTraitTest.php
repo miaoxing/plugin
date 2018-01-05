@@ -99,7 +99,7 @@ class CastTraitTest extends BaseTestCase
                     'string_column' => '1',
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
-                    'json_column' => 'abc', // Ignore string
+                    'json_column' => '"abc"',
                 ],
             ],
         ];
@@ -153,7 +153,7 @@ class CastTraitTest extends BaseTestCase
                     'string_column' => 1,
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
-                    'json_column' => '{"a":"b\\\\c","d":"中文"}',
+                    'json_column' => '{"a":"b\\c","d":"中文"}',
                 ],
                 [
                     'int_column' => 0,
@@ -161,7 +161,7 @@ class CastTraitTest extends BaseTestCase
                     'string_column' => '1',
                     'datetime_column' => '2018-01-01 00:00:00',
                     'date_column' => '2018-01-01',
-                    'json_column' => ['a' => 'b\c', 'd' => '中文'],
+                    'json_column' => '{"a":"b\\c","d":"中文"}',
                 ],
             ],
         ];

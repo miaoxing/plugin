@@ -17,4 +17,6 @@ class TestCamelCase extends BaseModel
     protected $toArrayV2 = true;
 
     protected $tableV2 = true;
+
+    protected $initV2 = true;
 }

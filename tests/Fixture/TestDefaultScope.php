@@ -12,6 +12,8 @@ class TestDefaultScope extends BaseModel
 
     protected $tableV2 = true;
 
+    protected $initV2 = true;
+
     public function __construct(array $options = array())
     {
         parent::__construct($options);
