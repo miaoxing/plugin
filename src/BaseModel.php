@@ -240,6 +240,7 @@ class BaseModel extends Record implements JsonSerializable
      * QueryBuilder: 筛选属于当前应用的数据
      *
      * @return $this
+     * @deprecated Use HasAppIdTrait
      */
     public function curApp()
     {
@@ -255,6 +256,7 @@ class BaseModel extends Record implements JsonSerializable
      *
      * @param int $appId
      * @return $this
+     * @deprecated Use HasAppIdTrait
      */
     public function setAppId($appId = null)
     {
