@@ -97,6 +97,8 @@ class Metadata extends BaseController
 
             case 'varchar':
             case 'char':
+            case 'mediumtext':
+            case 'text':
                 return 'string';
 
             case 'timestamp':
@@ -105,9 +107,6 @@ class Metadata extends BaseController
 
             case 'date':
                 return 'date';
-
-            case 'text':
-                return 'string';
 
             case 'decimal':
                 return 'float';
