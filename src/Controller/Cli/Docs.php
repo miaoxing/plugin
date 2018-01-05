@@ -51,14 +51,21 @@ class Docs extends BaseController
                 $var .= "\n";
             }
 
-            if ($this->wei->isEndsWith($name, 'Model')) {
+            $isModel = $this->wei->isEndsWith($name, 'Model');
+            if ($isModel) {
                 $varName = substr($name, 0, -5);
             } else {
                 $varName = $name;
             }
 
             $var .= sprintf('    /** @var %s $%s */' . "\n", $class, $name);
-            $var .= sprintf('    $%s = wei()->%s;' . "\n", $varName, $name);
+            $var .= sprintf('    $%s = wei()->%s%s;' . "\n", $varName, $name, $isModel ? '()' : '');
+
+            if ($isModel) {
+                $var .= "\n";
+                $var .= sprintf('    /** @var %s|%s[] $%ss */' . "\n", $class, $class, $name);
+                $var .= sprintf('    $%ss = wei()->%s();' . "\n", $varName, $name);
+            }
         }
 
         return $var;
