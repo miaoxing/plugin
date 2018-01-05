@@ -11,9 +11,9 @@ use Miaoxing\Plugin\BaseModel;
  */
 class TestTag extends BaseModel
 {
-    protected $table = 'test_tags';
-
     protected $enableProperty = true;
+
+    protected $tableV2 = true;
 
     public function articles()
     {

@@ -17,11 +17,11 @@ class TestCast extends BaseModel
 {
     use CastTrait;
 
-    protected $table = 'test_casts';
-
     protected $primaryKey = 'int_column';
 
     protected $enableProperty = true;
+
+    protected $tableV2 = true;
 
     protected $casts = [
         'int_column' => 'int',

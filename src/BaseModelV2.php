@@ -36,6 +36,8 @@ class BaseModelV2 extends BaseModel
 
     protected $enableProperty = true;
 
+    protected $tableV2 = true;
+
     protected $guarded = [
         'id',
         'app_id',

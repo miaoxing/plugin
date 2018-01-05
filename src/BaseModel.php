@@ -102,6 +102,13 @@ class BaseModel extends Record implements JsonSerializable
     protected $toArrayV2 = false;
 
     /**
+     * 是否自动识别出复数的表名
+     *
+     * @var bool
+     */
+    protected $tableV2 = false;
+
+    /**
      * @var array
      */
     protected $hidden = [];
@@ -440,7 +447,16 @@ class BaseModel extends Record implements JsonSerializable
         if (!$this->table) {
             // 适合类名: Miaoxing\Plugin\Service\User
             $parts = explode('\\', get_class($this));
-            $this->table = lcfirst(end($parts));
+            $basename = end($parts);
+
+            // TODO V2 TODO plural
+            $endWiths = substr($basename, -5) === 'Model';
+            if ($this->tableV2 || $endWiths) {
+                $endWiths && $basename = substr($basename, 0, -5);
+                $this->table = $this->snake($basename) . 's';
+            } else {
+                $this->table = lcfirst($basename);
+            }
         }
     }
 

@@ -10,11 +10,11 @@ class TestCamelCase extends BaseModel
 {
     use CamelCaseTrait;
 
-    protected $table = 'test_camel_cases';
-
     protected $createdAtColumn = 'created_at';
 
     protected $updatedAtColumn = 'updated_at';
 
     protected $toArrayV2 = true;
+
+    protected $tableV2 = true;
 }

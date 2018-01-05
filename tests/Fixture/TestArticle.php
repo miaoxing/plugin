@@ -12,11 +12,11 @@ use Miaoxing\Plugin\BaseModel;
  */
 class TestArticle extends BaseModel
 {
-    protected $table = 'test_articles';
-
     protected $toArrayV2 = true;
 
     protected $enableProperty = true;
+
+    protected $tableV2 = true;
 
     public function user()
     {

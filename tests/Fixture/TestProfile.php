@@ -9,7 +9,7 @@ use Miaoxing\Plugin\BaseModel;
  */
 class TestProfile extends BaseModel
 {
-    protected $table = 'test_profiles';
-
     protected $enableProperty = true;
+
+    protected $tableV2 = true;
 }

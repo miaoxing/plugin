@@ -10,7 +10,7 @@ class TestDefaultScope extends BaseModel
 {
     use DefaultScopeTrait;
 
-    protected $table = 'test_default_scopes';
+    protected $tableV2 = true;
 
     public function __construct(array $options = array())
     {
