@@ -52,8 +52,9 @@ class Metadata extends BaseController
 
     protected function createClass($model, $plugin, $camelCase)
     {
-        $table = wei()->$model->getTable();
-        $defaultCasts = wei()->$model->getOption('defaultCasts') ?: [];
+        $modelObject = wei()->$model();
+        $table = $modelObject->getTable();
+        $defaultCasts = $modelObject->getOption('defaultCasts') ?: [];
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
 
         $casts = [];
@@ -71,8 +72,8 @@ class Metadata extends BaseController
         }
 
         // 获取getXxxAttribute的定义
-        $reflectionClass = new ReflectionClass(wei()->$model);
-        preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods(wei()->$model)), $matches);
+        $reflectionClass = new ReflectionClass($modelObject);
+        preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($modelObject)), $matches);
         foreach ($matches[1] as $key => $attr) {
             $propertyName = $camelCase ? lcfirst($attr) : $this->snake($attr);
             $method = rtrim($matches[0][$key], ';');
