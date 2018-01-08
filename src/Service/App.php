@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Config\Service\Config;
 use Wei\Response;
 
 /**
@@ -11,6 +12,7 @@ use Wei\Response;
  * @property \Wei\Event $event
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\Plugin\Service\AppRecord $appRecord 应用的数据库服务
+ * @property Config $config
  */
 class App extends \Wei\App
 {
@@ -73,6 +75,8 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
+        $this->config->load();
+
         // 1. 获取应用名称和请求路径
         $namespace = $this->getNamespaceFromDomain();
 
