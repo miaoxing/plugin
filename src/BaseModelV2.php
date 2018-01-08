@@ -56,4 +56,19 @@ class BaseModelV2 extends BaseModel
         'deleted_at',
         'deleted_by',
     ];
+
+    public function __set($name, $value = null)
+    {
+        // TODO service 和 column 混用容易出错
+        if (in_array($name, ['db'])) {
+            $this->$name = $value;
+            return;
+        }
+
+        if ($this->hasColumn($name)) {
+            $this->set($name, $value);
+        }
+
+        $this->$name = $value;
+    }
 }

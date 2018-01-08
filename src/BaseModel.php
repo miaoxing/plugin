@@ -933,14 +933,18 @@ class BaseModel extends Record implements JsonSerializable
 
     public function set($name, $value = null)
     {
-        $name = $this->filterInputColumn($name);
+        // Ignore $coll[] = $value
+        if ($name !== null) {
+            $name = $this->filterInputColumn($name);
 
-        $method = 'set' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            return $this->$method($name);
+            $method = 'set' . $this->camel($name) . 'Attribute';
+            if (method_exists($this, $method)) {
+                $this->setChanged($name);
+                return $this->$method($value);
+            }
+
+            $value = $this->trigger('setValue', [$value, $name]);
         }
-
-        $value = $this->trigger('setValue', [$value, $name]);
 
         return parent::set($name, $value);
     }
@@ -1035,5 +1039,11 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return $this;
+    }
+
+    protected function setChanged($name)
+    {
+        $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
+        $this->isChanged = true;
     }
 }

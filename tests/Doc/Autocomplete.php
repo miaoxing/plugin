@@ -6,6 +6,7 @@ namespace MiaoxingTest\Plugin\Doc {
     use MiaoxingTest\Plugin\Fixture\TestCamelCase;
     use MiaoxingTest\Plugin\Fixture\TestDefaultScope;
     use MiaoxingTest\Plugin\Fixture\TestCast;
+    use MiaoxingTest\Plugin\Fixture\TestMutator;
     use MiaoxingTest\Plugin\Fixture\TestProfile;
     use MiaoxingTest\Plugin\Fixture\TestSoftDelete;
     use MiaoxingTest\Plugin\Fixture\TestTag;
@@ -20,6 +21,7 @@ namespace MiaoxingTest\Plugin\Doc {
      * @method TestSoftDelete|TestSoftDelete[] testSoftDelete()
      * @method TestDefaultScope|TestDefaultScope[] testDefaultScope()
      * @method TestCast|TestCast[] testCast()
+     * @method TestMutator|TestMutator[] testMutator()
      */
     class AutoComplete
     {
