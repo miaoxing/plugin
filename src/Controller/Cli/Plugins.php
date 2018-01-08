@@ -15,4 +15,11 @@ class Plugins extends BaseController
 
         return $this->suc();
     }
+
+    public function refreshEventsAction()
+    {
+        $this->plugin->getEvents(true);
+
+        return $this->suc();
+    }
 }
