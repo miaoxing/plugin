@@ -13,6 +13,7 @@ use Wei\RetTrait;
  * @property \Wei\BaseCache $cache
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property Logger $logger
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength) 允许模型类较长
  */
 class BaseModel extends Record implements JsonSerializable
 {
