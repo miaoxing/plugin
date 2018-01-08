@@ -35,6 +35,6 @@ class TestCast extends BaseModel
     ];
 
     protected $data = [
-        'json_column' => []
+        'json_column' => [],
     ];
 }

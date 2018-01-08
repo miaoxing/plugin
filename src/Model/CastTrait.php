@@ -125,7 +125,7 @@ trait CastTrait
                 return (string) $value;
 
             case 'json':
-                return json_encode($value,JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
             default:
                 throw new InvalidArgumentException('Unsupported cast type: ' . $type);

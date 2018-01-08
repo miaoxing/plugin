@@ -1,6 +1,5 @@
 <?php
 
-
 namespace MiaoxingTest\Plugin\Fixture;
 
 use Miaoxing\Plugin\BaseModel;

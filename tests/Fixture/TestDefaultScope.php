@@ -4,7 +4,6 @@ namespace MiaoxingTest\Plugin\Fixture;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;
-use Miaoxing\Plugin\Model\SoftDeleteTrait;
 
 class TestDefaultScope extends BaseModel
 {
@@ -14,7 +13,7 @@ class TestDefaultScope extends BaseModel
 
     protected $initV2 = true;
 
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
 

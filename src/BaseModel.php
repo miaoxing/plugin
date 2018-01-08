@@ -123,7 +123,7 @@ class BaseModel extends Record implements JsonSerializable
 
     protected static $events = [];
 
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         // 通过设置到rawData,解决get/setXxxAttribute重复调用的问题
         if ($this->initV2 && isset($options['data'])) {
@@ -940,6 +940,7 @@ class BaseModel extends Record implements JsonSerializable
             $method = 'set' . $this->camel($name) . 'Attribute';
             if (method_exists($this, $method)) {
                 $this->setChanged($name);
+
                 return $this->$method($value);
             }
 

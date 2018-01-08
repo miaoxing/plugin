@@ -4,7 +4,6 @@ namespace MiaoxingTest\Plugin\Fixture;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
-use Miaoxing\Plugin\Model\CastTrait;
 
 class TestCamelCase extends BaseModel
 {
