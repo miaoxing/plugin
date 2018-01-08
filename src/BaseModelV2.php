@@ -58,7 +58,7 @@ class BaseModelV2 extends BaseModel
         'deleted_by',
     ];
 
-    public function __set2($name, $value = null)
+    public function __set($name, $value = null)
     {
         // TODO service 和 column 混用容易出错
         if (in_array($name, ['db'])) {
@@ -70,6 +70,12 @@ class BaseModelV2 extends BaseModel
         if ($this->hasColumn($name)) {
             $this->set($name, $value);
 
+            return;
+        }
+
+        // 模型关联
+        if (method_exists($this, $name)) {
+            $this->$name = $value;
             return;
         }
 
