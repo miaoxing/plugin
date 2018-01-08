@@ -38,18 +38,6 @@ class Models extends BaseController
         return $this->suc();
     }
 
-    protected function getTable($class)
-    {
-        if (wei()->isEndsWith($class, 'Record')) {
-            $class = substr($class, 0, -6);
-        }
-
-        $table = $this->snake($class);
-        $table .= 's';
-
-        return $table;
-    }
-
     protected function snake($input)
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
@@ -79,8 +67,6 @@ class Models extends BaseController
 
     protected function createFile($file, $namespace, $class)
     {
-        $table = $this->getTable($class);
-
         $this->writeln('生成文件 ' . $this->cli->success($file));
 
         ob_start();
