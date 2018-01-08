@@ -2,6 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Model;
 
+use InvalidArgumentException;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\TestMutator;
 
@@ -105,5 +106,20 @@ class MutatorTest extends BaseTestCase
         $mutator->setter = 'cbc';
 
         $this->assertTrue($mutator->isChanged('setter'));
+    }
+
+    public function testSetInvalid()
+    {
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid property: invalid');
+
+        wei()->testMutator()->invalid = 'xx';
+    }
+
+    public function testSetService()
+    {
+        $mutator = wei()->testMutator();
+        $mutator->cache = wei()->cache;
+
+        $this->assertEquals(wei()->cache, $mutator->cache);
     }
 }

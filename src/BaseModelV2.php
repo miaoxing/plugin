@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin;
 
+use InvalidArgumentException;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
 use Miaoxing\Plugin\Model\CastTrait;
 use Miaoxing\Plugin\Model\QuickQueryTrait;
@@ -67,8 +68,14 @@ class BaseModelV2 extends BaseModel
 
         if ($this->hasColumn($name)) {
             $this->set($name, $value);
+            return;
         }
 
-        $this->$name = $value;
+        if ($this->wei->has($name)) {
+            $this->$name = $value;
+            return;
+        }
+
+        throw new InvalidArgumentException('Invalid property: ' . $name);
     }
 }
