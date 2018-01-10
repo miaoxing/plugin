@@ -75,8 +75,6 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
-        $this->config->load();
-
         // 1. 获取应用名称和请求路径
         $namespace = $this->getNamespaceFromDomain();
 
