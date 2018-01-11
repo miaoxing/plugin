@@ -175,9 +175,11 @@ class App extends \Wei\App
     /**
      * {@inheritdoc}
      */
-    public function getDefaultTemplate()
+    public function getDefaultTemplate($controller = null, $action = null)
     {
-        $file = parent::getDefaultTemplate();
+        $file = lcfirst($controller ?: $this->controller) . '/' . ($action ?: $this->action)
+        . $this->view->getExtension();
+
         $plugin = $this->getPlugin();
 
         return $plugin ? '@' . $plugin . '/' . $file : $file;
