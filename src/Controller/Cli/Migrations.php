@@ -96,7 +96,7 @@ class Migrations extends BaseController
                 if (strpos($type, 'int') !== false) {
                     $default = $column['Default'];
                 } else {
-                    $default = json_encode($column['Default']);
+                    $default = '\'' . addcslashes($column['Default'], "\\\$\'\r\n\t\v\f") . '\'';
                 }
                 $code .= '->defaults(' . $default . ')';
             }
