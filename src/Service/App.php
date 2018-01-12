@@ -319,4 +319,9 @@ class App extends \Wei\App
     {
         return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
     }
+
+    public function isAdmin()
+    {
+        return $this->wei->isStartsWith($this->getController(), 'admin');
+    }
 }
