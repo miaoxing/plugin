@@ -76,6 +76,7 @@ class BaseModelV2 extends BaseModel
         // 模型关联
         if (method_exists($this, $name)) {
             $this->$name = $value;
+
             return;
         }
 
@@ -86,5 +87,17 @@ class BaseModelV2 extends BaseModel
         }
 
         throw new InvalidArgumentException('Invalid property: ' . $name);
+    }
+
+    public function res(array $data = null)
+    {
+        $req = $this->request;
+
+        return $this->suc([
+            'data' => $data === null ? $this : $data,
+            'page' => (int) $req['page'],
+            'rows' => $this->getSqlPart('limit'),
+            'records' => $this->count(),
+        ]);
     }
 }
