@@ -91,11 +91,15 @@ class BaseModelV2 extends BaseModel
 
     public function toRet(array $merge = [])
     {
-        return $this->suc($merge + [
-                'data' => $this,
-                'page' => $this->getSqlPart('page'),
-                'rows' => $this->getSqlPart('limit'),
-                'records' => $this->count(),
-            ]);
+        if ($this->isColl()) {
+            return $this->suc($merge + [
+                    'data' => $this,
+                    'page' => $this->getSqlPart('page'),
+                    'rows' => $this->getSqlPart('limit'),
+                    'records' => $this->count(),
+                ]);
+        } else {
+            return $this->suc(['data' => $this]);
+        }
     }
 }
