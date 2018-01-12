@@ -31,9 +31,8 @@
 <body>
 
 <div data-role="page" id="<?= $pageId ?>">
-  <?php $event->trigger('beforeContent', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
+  <?php $event->trigger('bodyStart', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
   <?= $content ?>
-  <?php $event->trigger('afterContent') ?>
 </div>
 
 <?php $event->trigger('script') ?>

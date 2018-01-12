@@ -21,7 +21,7 @@
 <body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
 
 <div id="<?= $pageId ?>">
-  <?php $event->trigger('beforeContent', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
+  <?php $event->trigger('bodyStart', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
   <?= $content ?>
 </div>
 
