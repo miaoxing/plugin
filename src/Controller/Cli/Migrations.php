@@ -93,7 +93,12 @@ class Migrations extends BaseController
 
             // 忽略 0 '' 等,会自动加上
             if ($column['Default'] && $column['Default'] !== '0000-00-00 00:00:00') {
-                $code .= '->defaults(' . json_encode($column['Default']) . ')';
+                if (strpos($type, 'int') !== false) {
+                    $default = $column['Default'];
+                } else {
+                    $default = json_encode($column['Default']);
+                }
+                $code .= '->defaults(' . $default . ')';
             }
 
             $code .= "\n";
@@ -101,7 +106,7 @@ class Migrations extends BaseController
 
         $code .= $space . '->exec();' . "\n\n";
 
-        $code .= $space . '$this->schema->dropIfExists(\'' . $req['table'] .'\');';
+        $code .= $space . '$this->schema->dropIfExists(\'' . $req['table'] .'\');' . "\n";
 
         return $code;
     }
