@@ -16,7 +16,6 @@
   <?php require $view->getFile('@plugin/layouts/default-css.php') ?>
   <?php $event->trigger('style') ?>
   <?= $block->get('css') ?>
-  <?php $event->trigger('appendHead') ?>
 </head>
 <body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
 

@@ -26,7 +26,6 @@
   <script>
     $.extend($, <?= json_encode($app->getConfig()) ?>);
   </script>
-  <?php $event->trigger('appendHead') ?>
 </head>
 <body>
 
