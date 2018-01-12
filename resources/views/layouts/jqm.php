@@ -12,7 +12,7 @@
     'plugins/app/css/swipe.css',
     'plugins/app/css/jqm.css',
   ]) ?>">
-  <?php $event->trigger('prePageCss') ?>
+  <?php $event->trigger('style') ?>
   <?= $block->get('css') ?>
   <?php $event->trigger('postPageCss') ?>
   <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
