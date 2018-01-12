@@ -49,7 +49,6 @@
   var wei = <?= json_encode($js) ?>;
 </script>
 <?= $block->get('html') ?>
-<?php $event->trigger('beforePageScript') ?>
 <?php $event->trigger('script') ?>
 <?= $block->get('js') ?>
 <?php $event->trigger('afterScript') ?>

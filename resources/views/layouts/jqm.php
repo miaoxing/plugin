@@ -39,7 +39,6 @@
 </div>
 
 <?php $event->trigger('script') ?>
-<?php $event->trigger('beforePageScript') ?>
 <?= $block->get('js') ?>
 <?php $event->trigger('afterScript') ?>
 </body>
