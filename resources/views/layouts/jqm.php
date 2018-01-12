@@ -33,9 +33,9 @@
 <body>
 
 <div data-role="page" id="<?= $pageId ?>">
-  <?php $event->trigger('preContent', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
+  <?php $event->trigger('beforeContent', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
   <?= $content ?>
-  <?php $event->trigger('postContent') ?>
+  <?php $event->trigger('afterContent') ?>
 </div>
 
 <?php $event->trigger('inlineScript') ?>
