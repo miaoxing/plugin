@@ -104,7 +104,11 @@ class Migrations extends BaseController
             }
 
             // 忽略 0 '' 等,会自动加上
-            if ($column['Default'] && $column['Default'] !== '0000-00-00 00:00:00') {
+            if ($column['Default']
+                && $column['Default'] !== '0000-00-00 00:00:00'
+                && $column['Default'] !== '0.00'
+                && $column['Default'] !== '0000-00-00'
+            ) {
                 if (strpos($type, 'int') !== false) {
                     $default = $column['Default'];
                 } else {
