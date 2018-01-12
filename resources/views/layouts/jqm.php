@@ -38,7 +38,7 @@
   <?php $event->trigger('afterContent') ?>
 </div>
 
-<?php $event->trigger('inlineScript') ?>
+<?php $event->trigger('script') ?>
 <?php $event->trigger('beforePageScript') ?>
 <?= $block->get('js') ?>
 <?php $event->trigger('afterScript') ?>
