@@ -52,11 +52,17 @@ class Migrations extends BaseController
     {
         $this->addArgument('table');
 
+        if (!$req['table']) {
+            return $this->err('Require table param');
+        }
+
         $code = '$this->schema->table(\'' . $req['table'] . '\')' . "\n";
 
         $typeMap = [
             'tinyint' => 'tinyInt',
+            'bigint' => 'bigInt',
             'varchar' => 'string',
+            'mediumtext' => 'mediumText',
         ];
         $defaultLengths = [
             'int' => 11,
@@ -83,6 +89,12 @@ class Migrations extends BaseController
                 $codeLength = ', ' . $length;
             } else {
                 $codeLength = false;
+            }
+
+            if ($type == 'decimal') {
+                // 忽略第二个,认为总是2
+                $length = explode(',', $length)[0];
+                $codeLength = ', ' . $length;
             }
 
             $code .= $space . '->' . $method . '(\'' . $column['Field'] . '\'' . $codeLength . ')';
