@@ -2,13 +2,21 @@
 
 namespace Miaoxing\Plugin\Model;
 
+use Miaoxing\Plugin\Service\Request;
+
+
+/**
+ * @property Request $request
+ */
 trait QuickQueryTrait
 {
-    protected $queryParams = [];
-
-    public function setQueryParams($queryParams)
+    /**
+     * @param array|\ArrayAccess $request
+     * @return $this
+     */
+    public function setRequest($request)
     {
-        $this->queryParams = $queryParams;
+        $this->request = $request;
 
         return $this;
     }
@@ -17,8 +25,8 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if (isset($this->queryParams[$name]) && $this->queryParams[$name]) {
-                $this->andWhere($column . ' LIKE ?', '%' . $this->queryParams[$name] . '%');
+            if (isset($this->request[$name]) && $this->request[$name]) {
+                $this->andWhere($column . ' LIKE ?', '%' . $this->request[$name] . '%');
             }
         }
 
@@ -29,8 +37,8 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if (isset($this->queryParams[$name]) && wei()->isPresent($this->queryParams[$name])) {
-                $this->andWhere([$column => $this->queryParams[$name]]);
+            if (isset($this->request[$name]) && wei()->isPresent($this->request[$name])) {
+                $this->andWhere([$column => $this->request[$name]]);
             }
         }
 
@@ -41,13 +49,13 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $min = $this->filterOutputColumn($column . '_min');
-            if (isset($this->queryParams[$min]) && $this->queryParams[$min]) {
-                $this->andWhere($column . ' >= ?', $this->queryParams[$min]);
+            if (isset($this->request[$min]) && $this->request[$min]) {
+                $this->andWhere($column . ' >= ?', $this->request[$min]);
             }
 
             $max = $this->filterOutputColumn($column . '_max');
-            if (isset($this->queryParams[$max]) && $this->queryParams[$max]) {
-                $this->andWhere($column . ' <= ?', $this->queryParams[$max]);
+            if (isset($this->request[$max]) && $this->request[$max]) {
+                $this->andWhere($column . ' <= ?', $this->request[$max]);
             }
         }
 
@@ -56,14 +64,14 @@ trait QuickQueryTrait
 
     public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
     {
-        if (isset($this->queryParams['sort']) && in_array($this->queryParams['sort'], $this->getFields())) {
-            $sort = $this->queryParams['sort'];
+        if (isset($this->request['sort']) && in_array($this->request['sort'], $this->getFields())) {
+            $sort = $this->request['sort'];
         } else {
             $sort = $defaultColumn;
         }
 
-        if (isset($this->queryParams['order'])) {
-            $order = strtoupper($this->queryParams['order']);
+        if (isset($this->request['order'])) {
+            $order = strtoupper($this->request['order']);
             if (!in_array($order, ['ASC', 'DESC'])) {
                 $order = $defaultOrder;
             }
