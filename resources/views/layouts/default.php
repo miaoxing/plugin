@@ -23,7 +23,6 @@
 <div id="<?= $pageId ?>">
   <?php $event->trigger('beforeContent', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
   <?= $content ?>
-  <?php $event->trigger('afterContent') ?>
 </div>
 
 <?= $block->get('html') ?>
@@ -50,6 +49,7 @@
 </script>
 <?php $event->trigger('script') ?>
 <?= $block->get('js') ?>
-<?php $event->trigger('afterScript') ?>
+
+<?php $event->trigger('bodyEnd') ?>
 </body>
 </html>
