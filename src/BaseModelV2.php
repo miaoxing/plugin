@@ -91,11 +91,9 @@ class BaseModelV2 extends BaseModel
 
     public function res(array $data = null)
     {
-        $req = $this->request;
-
         return $this->suc([
             'data' => $data === null ? $this : $data,
-            'page' => (int) $req['page'],
+            'page' => $this->getSqlPart('page'),
             'rows' => $this->getSqlPart('limit'),
             'records' => $this->count(),
         ]);

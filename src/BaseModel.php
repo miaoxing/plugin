@@ -1048,4 +1048,24 @@ class BaseModel extends Record implements JsonSerializable
         $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
         $this->isChanged = true;
     }
+
+    public function page($page)
+    {
+        $page = max(1, (int) $page);
+        $this->add('page', $page);
+
+        return parent::page($page);
+    }
+
+    public function limit($limit)
+    {
+        parent::limit($limit);
+
+        // 计算出新的offset
+        if ($page = $this->getSqlPart('page')) {
+            $this->page($page);
+        }
+
+        return $this;
+    }
 }
