@@ -89,13 +89,13 @@ class BaseModelV2 extends BaseModel
         throw new InvalidArgumentException('Invalid property: ' . $name);
     }
 
-    public function res(array $data = null)
+    public function toRet(array $merge = [])
     {
-        return $this->suc([
-            'data' => $data === null ? $this : $data,
-            'page' => $this->getSqlPart('page'),
-            'rows' => $this->getSqlPart('limit'),
-            'records' => $this->count(),
-        ]);
+        return $this->suc($merge + [
+                'data' => $this,
+                'page' => $this->getSqlPart('page'),
+                'rows' => $this->getSqlPart('limit'),
+                'records' => $this->count(),
+            ]);
     }
 }
