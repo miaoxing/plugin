@@ -83,4 +83,14 @@ trait QuickQueryTrait
 
         return $this;
     }
+
+    public function paginate()
+    {
+        $limit = isset($this->request['rows']) ?: 10;
+        $page = isset($this->request['page']) ?: 1;
+
+        $this->limit($limit)->page($page);
+
+        return $this;
+    }
 }
