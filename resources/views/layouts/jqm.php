@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
-  <?php $event->trigger('prependHead') ?>
   <title><?= $setting('site.title') ?></title>
   <link rel="stylesheet" href="//cdn.bootcss.com/jquery-mobile/1.4.0/jquery.mobile.min.css">
   <link rel="stylesheet" href="<?= $asset([

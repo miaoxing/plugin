@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
-  <?php $event->trigger('prependHead') ?>
   <title><?= $e(isset($htmlTitle) ? $htmlTitle : $setting('site.title')) ?></title>
   <link rel="stylesheet" href="<?= $asset([
     'comps/bootstrap-custom/css/bootstrap.min.css',
@@ -27,6 +26,8 @@
   <?php $event->trigger('afterContent') ?>
 </div>
 
+<?= $block->get('html') ?>
+
 <script src="<?= $mainJs = $asset([
   'comps/fastclick-custom/fastclick.js',
   'comps/requirejs/require.min.js',
@@ -47,7 +48,6 @@
   $.extend($, <?= json_encode($app->getConfig()) ?>);
   var wei = <?= json_encode($js) ?>;
 </script>
-<?= $block->get('html') ?>
 <?php $event->trigger('script') ?>
 <?= $block->get('js') ?>
 <?php $event->trigger('afterScript') ?>
