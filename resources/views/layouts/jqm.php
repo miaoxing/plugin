@@ -14,7 +14,6 @@
   ]) ?>">
   <?php $event->trigger('style') ?>
   <?= $block->get('css') ?>
-  <?php $event->trigger('postPageCss') ?>
   <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/jquery-mobile/1.4.0/jquery.mobile.min.js"></script>
   <script src="<?= $asset([
