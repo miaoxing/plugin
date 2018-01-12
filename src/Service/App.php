@@ -322,6 +322,6 @@ class App extends \Wei\App
 
     public function isAdmin()
     {
-        return $this->wei->isStartsWith($this->getController(), 'admin');
+        return substr($this->getController(), 0, 5) === 'admin';
     }
 }
