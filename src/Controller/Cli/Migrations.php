@@ -48,6 +48,64 @@ class Migrations extends BaseController
         return $this->suc();
     }
 
+    public function createFromTableAction($req)
+    {
+        $this->addArgument('table');
+
+        $code = '$this->schema->table(\'' . $req['table'] . '\')' . "\n";
+
+        $typeMap = [
+            'tinyint' => 'tinyInt',
+            'varchar' => 'string',
+        ];
+        $defaultLengths = [
+            'int' => 11,
+            'varchar' => 255,
+            'tinyint' => 3,
+        ];
+
+        $space = str_repeat(' ', 12);
+
+        $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $req['table']);
+        foreach ($columns as $column) {
+            if ($column['Field'] === 'id') {
+                $code .= $space . '->id()' . "\n";
+                continue;
+            }
+
+            list($type, $length) = explode('(', $column['Type']);
+            $length = rtrim($length, ')');
+
+            $type = explode('(', $column['Type'])[0];
+            $method = (isset($typeMap[$type]) ? $typeMap[$type] : $type);
+
+            if (isset($defaultLengths[$type]) && $length != $defaultLengths[$type]) {
+                $codeLength = ', ' . $length;
+            } else {
+                $codeLength = false;
+            }
+
+            $code .= $space . '->' . $method . '(\'' . $column['Field'] . '\'' . $codeLength . ')';
+
+            if ($column['Comment']) {
+                $code .= '->comment(\'' . $column['Comment'] . '\')';
+            }
+
+            // 忽略 0 '' 等,会自动加上
+            if ($column['Default'] && $column['Default'] !== '0000-00-00 00:00:00') {
+                $code .= '->defaults(' . json_encode($column['Default']) . ')';
+            }
+
+            $code .= "\n";
+        }
+
+        $code .= $space . '->exec();' . "\n\n";
+
+        $code .= $space . '$this->schema->dropIfExists(\'' . $req['table'] .'\');';
+
+        return $code;
+    }
+
     protected function rollbackDefinition()
     {
         $this->addOption('target', 't');
