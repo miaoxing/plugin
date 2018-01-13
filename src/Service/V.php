@@ -13,6 +13,8 @@ use Wei\Validate;
  * @method $this callback(callable $fn)
  * @method $this mobileCn()
  * @method $this notEqualTo($value)
+ * @method $this digit()
+ * @method $this between($min, $max)
  * @link Inspired by https://github.com/Respect/Validation/tree/1.1
  */
 class V extends BaseService
@@ -36,7 +38,7 @@ class V extends BaseService
     /**
      * @var string
      */
-    protected $lastKey = 'default';
+    protected $lastKey = '';
 
     /**
      * @var string
@@ -121,7 +123,7 @@ class V extends BaseService
      * @param mixed $data
      * @return Validate
      */
-    public function validate($data = [])
+    public function validate($data = null)
     {
         return $this->getValidator($data);
     }
@@ -129,10 +131,10 @@ class V extends BaseService
     /**
      * Returns the validation result
      *
-     * @param array $data
+     * @param mixed $data
      * @return bool
      */
-    public function isValid($data = [])
+    public function isValid($data = null)
     {
         return $this->getValidator($data)->isValid();
     }
@@ -143,7 +145,7 @@ class V extends BaseService
      * @param mixed $data
      * @return array
      */
-    public function check($data = [])
+    public function check($data = null)
     {
         $validator = $this->getValidator($data);
 
@@ -166,15 +168,42 @@ class V extends BaseService
     }
 
     /**
+     * Set data for validation
+     *
+     * @param mixed $data
+     * @return $this
+     */
+    public function data($data)
+    {
+        if (!$data) {
+            return $this;
+        }
+
+        // Validate without key
+        if (!$this->lastKey) {
+            $data = ['' => $data];
+        }
+
+        $this->options['data'] = $data;
+
+        return $this;
+    }
+
+    /**
      * Instance validate object
      *
-     * @param array $data
+     * @param mixed $data
      * @return Validate
      */
-    protected function getValidator($data = [])
+    protected function getValidator($data = null)
     {
         if (!$this->validator) {
             if ($data) {
+                // Validate without key
+                if (!$this->lastKey) {
+                    $data = ['' => $data];
+                }
+
                 $this->options['data'] = $data;
             }
 

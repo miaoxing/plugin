@@ -90,4 +90,38 @@ class VTest extends BaseTestCase
 
         $this->assertFalse($result);
     }
+
+    public function testWithoutKeyRetErr()
+    {
+        $ret = wei()->v()
+            ->mobileCn()
+            ->label('手机')
+            ->check('123');
+
+        $this->assertRetErr($ret, -1, '手机必须是11位长度的数字,以13,14,15,17或18开头');
+    }
+
+    public function testWithoutKeyRetSuc()
+    {
+        $ret = wei()->v()
+            ->mobileCn()
+            ->label('手机')
+            ->check('13800138000');
+
+        $this->assertRetSuc($ret);
+    }
+
+    public function testWithoutKeyValidate()
+    {
+        $validator = wei()->v()
+            ->digit()
+            ->between(1, 150)
+            ->label('年龄')
+            ->validate('ab');
+        $this->assertFalse($validator->isValid());
+
+        $messages = $validator->getSummaryMessages();
+        $this->assertEquals('年龄只能由数字(0-9)组成', $messages[''][0]);
+        $this->assertEquals('年龄必须在1到150之间', $messages[''][1]);
+    }
 }
