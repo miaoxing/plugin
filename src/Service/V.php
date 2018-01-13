@@ -9,6 +9,7 @@ use Wei\RetTrait;
  * 链式校验
  *
  * @method $this string()
+ * @method $this callback(callable $fn)
  * @link Inspired by https://github.com/Respect/Validation/tree/1.1
  */
 class V extends BaseService
@@ -54,6 +55,20 @@ class V extends BaseService
     public function label($label)
     {
         $this->options['names'][$this->lastKey] = $label;
+
+        return $this;
+    }
+
+    /**
+     * Set rule message for current field
+     *
+     * @param string $rule
+     * @param string $message
+     * @return $this
+     */
+    public function message($rule, $message)
+    {
+        $this->options['messages'][$this->lastKey][$rule] = $message;
 
         return $this;
     }
