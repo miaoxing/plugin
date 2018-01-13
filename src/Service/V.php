@@ -8,7 +8,6 @@ use Wei\RetTrait;
 /**
  * 链式校验
  *
- * @method $this required($required)
  * @method $this string()
  * @link Inspired by https://github.com/Respect/Validation/tree/1.1
  */
@@ -41,6 +40,10 @@ class V extends BaseService
     {
         $this->lastKey = $name;
 
+        if (!isset($this->options['rules'][$name])) {
+            $this->options['rules'][$name] = [];
+        }
+
         if (isset($label)) {
             $this->label($label);
         }
@@ -55,22 +58,35 @@ class V extends BaseService
         return $this;
     }
 
+    protected function getValidator($data = [])
+    {
+        if (!$this->validator) {
+            if ($data) {
+                $this->options['data'] = $data;
+            }
+
+            $this->validator = wei()->validate($this->options);
+        }
+
+        return $this->validator;
+    }
+
     public function validate($data)
     {
         $this->options['data'] = $data;
 
         $validator = $this->validator = wei()->validate($this->options);
+    }
+
+    public function check($data)
+    {
+        $validator = $this->getValidator($data);
 
         if ($validator->isValid()) {
             return $this->suc();
         } else {
             return $this->err($validator->getFirstMessage());
         }
-    }
-
-    public function check()
-    {
-        return $this;
     }
 
     public function assert()
@@ -83,9 +99,24 @@ class V extends BaseService
 
     }
 
-    public function __call($name, $args)
+    /**
+     * Required特殊处理
+     *
+     * @param bool $required
+     */
+    public function required($required = true)
+    {
+        $this->addRule('required', $required);
+    }
+
+    protected function addRule($name, $args)
     {
         $this->options['rules'][$this->lastKey][$name] = $args;
+    }
+
+    public function __call($name, $args)
+    {
+        $this->addRule($name, $args);
 
         return $this;
     }
