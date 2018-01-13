@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use Wei\Validate;
 
 class VTest extends BaseTestCase
 {
@@ -66,8 +67,27 @@ class VTest extends BaseTestCase
         $ret = wei()->v()
             ->key('mobile', '手机')->mobileCn()
             ->check([
-                'mobile' => '123'
+                'mobile' => '123',
             ]);
         $this->assertRetErr($ret, -1, '手机必须是11位长度的数字,以13,14,15,17或18开头');
+    }
+
+    public function testValidate()
+    {
+        $validator = wei()->v()
+            ->key('mobile')->mobileCn()
+            ->validate(['mobile' => '123']);
+
+        $this->assertInstanceOf(Validate::class, $validator);
+        $this->assertFalse($validator->isValid());
+    }
+
+    public function testIsValid()
+    {
+        $result = wei()->v()
+            ->key('mobile')->mobileCn()
+            ->isValid(['mobile' => '123']);
+
+        $this->assertFalse($result);
     }
 }

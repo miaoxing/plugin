@@ -4,9 +4,10 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
 use Wei\RetTrait;
+use Wei\Validate;
 
 /**
- * 链式校验
+ * A chaining validator
  *
  * @method $this string()
  * @method $this callback(callable $fn)
@@ -18,8 +19,14 @@ class V extends BaseService
 {
     use RetTrait;
 
+    /**
+     * @var Validate
+     */
     protected $validator;
 
+    /**
+     * @var array
+     */
     protected $options = [
         'data' => [],
         'rules' => [],
@@ -37,6 +44,8 @@ class V extends BaseService
     protected $lastRule;
 
     /**
+     * Create a new validator
+     *
      * @param array $options
      * @return $this
      */
@@ -47,6 +56,13 @@ class V extends BaseService
         return $validator;
     }
 
+    /**
+     * Add a new field
+     *
+     * @param string $name
+     * @param string|null $label
+     * @return $this
+     */
     public function key($name, $label = null)
     {
         $this->lastKey = $name;
@@ -65,6 +81,12 @@ class V extends BaseService
         return $this;
     }
 
+    /**
+     * Add name for current field
+     *
+     * @param string $label
+     * @return $this
+     */
     public function label($label)
     {
         $this->options['names'][$this->lastKey] = $label;
@@ -93,27 +115,35 @@ class V extends BaseService
         return $this;
     }
 
-    protected function getValidator($data = [])
+    /**
+     * Returns the \Wei\Validate object
+     *
+     * @param mixed $data
+     * @return Validate
+     */
+    public function validate($data = [])
     {
-        if (!$this->validator) {
-            if ($data) {
-                $this->options['data'] = $data;
-            }
-
-            $this->validator = wei()->validate($this->options);
-        }
-
-        return $this->validator;
+        return $this->getValidator($data);
     }
 
-    public function validate($data)
+    /**
+     * Returns the validation result
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function isValid($data = [])
     {
-        $this->options['data'] = $data;
-
-        $validator = $this->validator = wei()->validate($this->options);
+        return $this->getValidator($data)->isValid();
     }
 
-    public function check($data)
+    /**
+     * Validate the data and return the ret array
+     *
+     * @param mixed $data
+     * @return array
+     */
+    public function check($data = [])
     {
         $validator = $this->getValidator($data);
 
@@ -124,18 +154,8 @@ class V extends BaseService
         }
     }
 
-    public function assert()
-    {
-        return $this;
-    }
-
-    public function toRet()
-    {
-
-    }
-
     /**
-     * Required特殊处理
+     * Custom handler for required rule
      *
      * @param bool $required
      * @return $this
@@ -146,7 +166,26 @@ class V extends BaseService
     }
 
     /**
-     * Add rule to last field
+     * Instance validate object
+     *
+     * @param array $data
+     * @return Validate
+     */
+    protected function getValidator($data = [])
+    {
+        if (!$this->validator) {
+            if ($data) {
+                $this->options['data'] = $data;
+            }
+
+            $this->validator = $this->wei->validate($this->options);
+        }
+
+        return $this->validator;
+    }
+
+    /**
+     * Add rule for current field
      *
      * @param string $name
      * @param mixed $args
@@ -161,14 +200,14 @@ class V extends BaseService
     }
 
     /**
+     * Add rule for current field
+     *
      * @param string $name
      * @param array $args
      * @return $this
      */
     public function __call($name, $args)
     {
-        $this->addRule($name, $args);
-
-        return $this;
+        return $this->addRule($name, $args);
     }
 }
