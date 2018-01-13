@@ -51,4 +51,14 @@ class VTest extends BaseTestCase
             ->check(['name' => 'hi']);
         $this->assertRetSuc($ret);
     }
+
+    public function testMobileCn()
+    {
+        $ret = wei()->v()
+            ->key('mobile', '手机')->mobileCn()
+            ->check([
+                'mobile' => '123'
+            ]);
+        $this->assertRetErr($ret, -1, '手机必须是11位长度的数字,以13,14,15,17或18开头');
+    }
 }
