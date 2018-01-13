@@ -11,6 +11,7 @@ use Wei\RetTrait;
  * @method $this string()
  * @method $this callback(callable $fn)
  * @method $this mobileCn()
+ * @method $this notEqualTo($value)
  * @link Inspired by https://github.com/Respect/Validation/tree/1.1
  */
 class V extends BaseService
