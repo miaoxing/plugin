@@ -26,10 +26,19 @@ class VTest extends BaseTestCase
         $this->assertRetSuc($ret);
     }
 
-    public function testCustomMessage()
+    public function testMessage()
     {
         $ret = wei()->v()
             ->key('name', '名称')->message('required', '请填写%name%')
+            ->check([]);
+
+        $this->assertRetErr($ret, -1, '请填写名称');
+    }
+
+    public function testMessageWithoutRule()
+    {
+        $ret = wei()->v()
+            ->key('name', '名称')->required()->message('请填写%name%')
             ->check([]);
 
         $this->assertRetErr($ret, -1, '请填写名称');
