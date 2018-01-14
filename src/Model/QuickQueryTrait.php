@@ -86,8 +86,8 @@ trait QuickQueryTrait
 
     public function paginate()
     {
-        $limit = isset($this->request['rows']) ?: 10;
-        $page = isset($this->request['page']) ?: 1;
+        $limit = isset($this->request['rows']) ? $this->request['rows'] : 10;
+        $page = isset($this->request['page']) ? $this->request['page'] : 1;
 
         $this->limit($limit)->page($page);
 
