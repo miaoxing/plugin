@@ -195,6 +195,24 @@ class Asset extends \Wei\Asset
     }
 
     /**
+     * Add rev map from file
+     *
+     * @param string $file
+     * @return $this
+     */
+    public function addRevFile($file)
+    {
+        // Load default rev file
+        $this->getRevMap();
+
+        if (is_file($file)) {
+            $this->revMap += json_decode(file_get_contents($file));
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns the file path contains revision
      *
      * eg 'assets/article.js' => 'assets/article-a123b456.js'
