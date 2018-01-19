@@ -140,19 +140,15 @@ class BasePlugin extends \Miaoxing\Plugin\BaseService
      */
     protected function display($data = [])
     {
-        $this->view->display($this->getEventTemplate(), $data);
-    }
-
-    /**
-     * Get the view template file for current event and plugin
-     *
-     * @return string
-     */
-    protected function getEventTemplate()
-    {
+        // eg onScript
+        $function = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
+        $event = lcfirst(substr($function, 2));
         $id = $this->getId();
+        
+        // eg @plugin/plugin/script.php
+        $name = '@' . $id . '/' . $id . '/' . $event . $this->view->getExtension();
 
-        return $id . ':' . $id . '/' . $this->event->getCurName() . $this->view->getExtension();
+        $this->view->display($name, $data);
     }
 
     /**
