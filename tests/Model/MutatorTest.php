@@ -23,7 +23,7 @@ class MutatorTest extends BaseTestCase
             ->string('mutator')
             ->exec();
 
-        wei()->db->insertBatch($table, [
+        wei()->db->batchInsert($table, [
             [
                 'getter' => base64_encode('getter'),
                 'setter' => base64_encode('setter'),

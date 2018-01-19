@@ -20,7 +20,7 @@ class DefaultScopeTraitTest extends BaseTestCase
             ->bool('active')
             ->exec();
 
-        wei()->db->insertBatch('test_default_scopes', [
+        wei()->db->batchInsert('test_default_scopes', [
             [
                 'name' => 'first',
                 'type' => 'A',

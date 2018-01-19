@@ -48,7 +48,7 @@ class RecordTest extends BaseTestCase
             ->int('test_tag_id')
             ->exec();
 
-        wei()->db->insertBatch('test_users', [
+        wei()->db->batchInsert('test_users', [
             [
                 'name' => 'twin',
             ],
@@ -60,7 +60,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->insertBatch('test_profiles', [
+        wei()->db->batchInsert('test_profiles', [
             [
                 'test_user_id' => 1,
                 'description' => 'My name is twin',
@@ -71,7 +71,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->insertBatch('test_tags', [
+        wei()->db->batchInsert('test_tags', [
             [
                 'name' => 'work',
             ],
@@ -80,7 +80,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->insertBatch('test_articles', [
+        wei()->db->batchInsert('test_articles', [
             [
                 'test_user_id' => 1,
                 'title' => 'Article 1',
@@ -98,7 +98,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->insertBatch('test_articles_test_tags', [
+        wei()->db->batchInsert('test_articles_test_tags', [
             [
                 'test_article_id' => 1,
                 'test_tag_id' => 1,

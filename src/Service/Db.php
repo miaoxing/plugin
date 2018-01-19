@@ -25,4 +25,12 @@ class Db extends \Wei\Db
             );
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function batchInsert($table, array $data, $extra = null)
+    {
+        return parent::insertBatch($table, $data, $extra);
+    }
 }

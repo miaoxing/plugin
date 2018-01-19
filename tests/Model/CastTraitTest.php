@@ -22,7 +22,7 @@ class CastTraitTest extends BaseTestCase
             ->string('json_column')
             ->exec();
 
-        wei()->db->insertBatch('test_casts', [
+        wei()->db->batchInsert('test_casts', [
             [
                 'int_column' => 1,
                 'bool_column' => false,

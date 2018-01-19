@@ -19,7 +19,7 @@ class SoftDeleteTraitTest extends BaseTestCase
             ->softDeletable()
             ->exec();
 
-        wei()->db->insertBatch('test_soft_deletes', [
+        wei()->db->batchInsert('test_soft_deletes', [
             [
                 'name' => 'normal',
                 'deleted_at' => '',
