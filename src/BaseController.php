@@ -118,7 +118,6 @@ abstract class BaseController extends \Wei\BaseController
             'url' => $this->url,
             'asset' => $this->asset,
             'event' => $this->event,
-            'plugin' => $this->plugin,
             'pageConfig' => $this->pageConfig,
             'controllerInstance' => $this,
             // Strings
