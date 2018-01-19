@@ -91,9 +91,7 @@ class BasePlugin extends \Miaoxing\Plugin\BaseService
     {
         $class = get_class($this);
         $id = lcfirst(explode('\\', $class)[1]);
-        if (substr($class, 0, 8) == 'Miaoxing') {
-            $id = $this->dash($id);
-        }
+        $id = $this->dash($id);
 
         return $id;
     }
@@ -144,7 +142,7 @@ class BasePlugin extends \Miaoxing\Plugin\BaseService
         $function = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
         $event = lcfirst(substr($function, 2));
         $id = $this->getId();
-        
+
         // eg @plugin/plugin/script.php
         $name = '@' . $id . '/' . $id . '/' . $event . $this->view->getExtension();
 
