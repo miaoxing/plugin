@@ -206,7 +206,7 @@ class Asset extends \Wei\Asset
         $this->getRevMap();
 
         if (is_file($file)) {
-            $this->revMap += json_decode(file_get_contents($file));
+            $this->revMap += json_decode(file_get_contents($file), true);
         }
 
         return $this;
