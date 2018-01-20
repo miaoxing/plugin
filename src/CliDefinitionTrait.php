@@ -7,7 +7,7 @@ use Wei\Request;
 /**
  * @property Request $request
  */
-trait CliDefinition
+trait CliDefinitionTrait
 {
     /**
      * @var int
@@ -17,7 +17,7 @@ trait CliDefinition
     /**
      * @param string $name
      * @param int|null $index
-     * @return CliDefinition
+     * @return CliDefinitionTrait
      */
     protected function addArgument($name, $index = null)
     {

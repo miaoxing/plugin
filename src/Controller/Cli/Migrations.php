@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Controller\Cli;
 
 use Miaoxing\Plugin\BaseController;
-use Miaoxing\Plugin\CliDefinition;
+use Miaoxing\Plugin\CliDefinitionTrait;
 use Miaoxing\Plugin\Service\Migration;
 
 /**
@@ -11,7 +11,7 @@ use Miaoxing\Plugin\Service\Migration;
  */
 class Migrations extends BaseController
 {
-    use CliDefinition;
+    use CliDefinitionTrait;
 
     public function indexAction()
     {

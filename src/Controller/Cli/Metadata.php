@@ -4,13 +4,13 @@ namespace Miaoxing\Plugin\Controller\Cli;
 
 use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Plugin\CliDefinition;
+use Miaoxing\Plugin\CliDefinitionTrait;
 use ReflectionClass;
 use ReflectionMethod;
 
 class Metadata extends BaseController
 {
-    use CliDefinition;
+    use CliDefinitionTrait;
 
     /**
      * @param $req

@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Controller\Cli;
 
 use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Plugin\CliDefinition;
+use Miaoxing\Plugin\CliDefinitionTrait;
 use Miaoxing\Plugin\Service\Cli;
 use ReflectionClass;
 use ReflectionMethod;
@@ -14,7 +14,7 @@ use ReflectionMethod;
  */
 class Docs extends BaseController
 {
-    use CliDefinition;
+    use CliDefinitionTrait;
 
     public function createAction($req)
     {
