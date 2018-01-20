@@ -16,6 +16,8 @@ namespace MiaoxingDoc\Plugin {
      *
      * @property    \Miaoxing\Plugin\Service\CliApp $cliApp CLI应用
      *
+     * @property    \Miaoxing\Plugin\Service\Convention $convention
+     *
      * @property    \Miaoxing\Plugin\Service\CurUser $curUser 当前用户
      * @method      \Miaoxing\Plugin\Service\CurUser|\Miaoxing\Plugin\Service\CurUser[] curUser()
      *
@@ -39,6 +41,8 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\Setting $setting 设置
      * @method      string|\Miaoxing\Plugin\Service\Setting|\Miaoxing\Plugin\Service\Setting[] setting($id = null, $default = null)
      *
+     * @property    \Miaoxing\Plugin\Service\Str $str 字符串操作服务
+     *
      * @property    \Miaoxing\Plugin\Service\Tester $tester 测试
      * @method      \Miaoxing\Plugin\Service\Tester tester($controller = null, $action = null)
      *
@@ -48,8 +52,8 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\User $user 用户
      * @method      \Miaoxing\Plugin\Service\User|\Miaoxing\Plugin\Service\User[] user()
      *
-     * @property    \Miaoxing\Plugin\Service\V $v 链式校验
-     * @method      \Miaoxing\Plugin\Service\V v()
+     * @property    \Miaoxing\Plugin\Service\V $v A chaining validator
+     * @method      \Miaoxing\Plugin\Service\V v($options = []) Create a new validator
      */
     class AutoComplete
     {
@@ -80,6 +84,9 @@ namespace {
     /** @var Miaoxing\Plugin\Service\CliApp $cliApp */
     $cliApp = wei()->cliApp;
 
+    /** @var Miaoxing\Plugin\Service\Convention $convention */
+    $convention = wei()->convention;
+
     /** @var Miaoxing\Plugin\Service\CurUser $curUser */
     $curUser = wei()->curUser;
 
@@ -106,6 +113,9 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\Setting $setting */
     $setting = wei()->setting;
+
+    /** @var Miaoxing\Plugin\Service\Str $str */
+    $str = wei()->str;
 
     /** @var Miaoxing\Plugin\Service\Tester $tester */
     $tester = wei()->tester;

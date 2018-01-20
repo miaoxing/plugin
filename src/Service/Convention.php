@@ -6,7 +6,7 @@ use Miaoxing\Plugin\BaseModelV2;
 use Miaoxing\Plugin\BaseService;
 
 /**
- * @todo 更合适的名称
+ * @property Str $str
  */
 class Convention extends BaseService
 {
@@ -16,12 +16,8 @@ class Convention extends BaseService
      */
     public function getModelName($object)
     {
-        $parts = explode('\\', get_class($object));
-        $basename = lcfirst(end($parts));
-
-        // TODO 复数转单数
-        // 如果是控制器,去掉复数
-        $name = rtrim($basename, 's');
+        $basename = lcfirst($this->str->baseName($object));
+        $name = $this->str->singularize($basename);
 
         return $name;
     }
