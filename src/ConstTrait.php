@@ -2,22 +2,22 @@
 
 namespace Miaoxing\Plugin;
 
-trait Constant
+trait ConstTrait
 {
     /**
      * @var array
      */
-    protected static $constants = [];
+    protected static $consts = [];
 
     /**
      * @var array
      */
-    protected static $constantNameToIds = [];
+    protected static $constNameToIds = [];
 
     /**
      * @var array
      */
-    protected $constantExcludes = [
+    protected $constExcludes = [
         'STATE_DIRTY',
         'STATE_CLEAN',
     ];
@@ -28,15 +28,15 @@ trait Constant
      * @param string $prefix
      * @return array
      */
-    public function getConstants($prefix)
+    public function getConsts($prefix)
     {
-        if (isset(self::$constants[$prefix])) {
-            return self::$constants[$prefix];
+        if (isset(self::$consts[$prefix])) {
+            return self::$consts[$prefix];
         }
 
         // 1. Get all class constants
         $class = new \ReflectionClass($this);
-        $constants = $class->getConstants();
+        $consts = $class->getConstants();
 
         // 2. Use exiting constant configs
         $property = lcfirst(str_replace('_', '', ucwords($prefix, '_'))) . 'Table';
@@ -49,18 +49,18 @@ trait Constant
         // 3. Generate id and name
         $prefix .= '_';
         $length = strlen($prefix);
-        foreach ($constants as $name => $id) {
+        foreach ($consts as $name => $id) {
             if (stripos($name, $prefix) !== 0) {
                 continue;
             }
-            if (in_array($name, $this->constantExcludes)) {
+            if (in_array($name, $this->constExcludes)) {
                 continue;
             }
             $data[$id]['id'] = $id;
             $data[$id]['name'] = strtolower(strtr(substr($name, $length), ['_' => '-']));
         }
 
-        self::$constants[$prefix] = $data;
+        self::$consts[$prefix] = $data;
 
         return $data;
     }
@@ -73,11 +73,11 @@ trait Constant
      * @param string $key
      * @return mixed
      */
-    public function getConstantValue($prefix, $id, $key)
+    public function getConstValue($prefix, $id, $key)
     {
-        $constants = $this->getConstants($prefix);
+        $consts = $this->getConsts($prefix);
 
-        return isset($constants[$id][$key]) ? $constants[$id][$key] : null;
+        return isset($consts[$id][$key]) ? $consts[$id][$key] : null;
     }
 
     /**
@@ -87,23 +87,9 @@ trait Constant
      * @param int $id
      * @return mixed
      */
-    public function getConstantNameById($prefix, $id)
+    public function getConstName($prefix, $id)
     {
-        return $this->getConstantValue($prefix, $id, 'name');
-    }
-
-    /**
-     * Returns the constant id by name
-     *
-     * @param string $prefix
-     * @param string $name
-     * @return int
-     */
-    public function getConstantIdByName($prefix, $name)
-    {
-        $nameToIds = $this->getConstantNameToIds($prefix);
-
-        return isset($nameToIds[$name]) ? $nameToIds[$name] : null;
+        return $this->getConstValue($prefix, $id, 'name');
     }
 
     /**
@@ -113,9 +99,23 @@ trait Constant
      * @param int $id
      * @return string
      */
-    public function getConstantLabel($prefix, $id)
+    public function getConstLabel($prefix, $id)
     {
-        return $this->getConstantValue($prefix, $id, 'label');
+        return $this->getConstValue($prefix, $id, 'label');
+    }
+
+    /**
+     * Returns the constant id by name
+     *
+     * @param string $prefix
+     * @param string $name
+     * @return int
+     */
+    public function getConstIdByName($prefix, $name)
+    {
+        $nameToIds = $this->getConstNameToIds($prefix);
+
+        return isset($nameToIds[$name]) ? $nameToIds[$name] : null;
     }
 
     /**
@@ -124,14 +124,14 @@ trait Constant
      * @param string $prefix
      * @return array
      */
-    protected function getConstantNameToIds($prefix)
+    protected function getConstNameToIds($prefix)
     {
-        if (!isset(self::$constantNameToIds[$prefix])) {
-            $constants = $this->getConstants($prefix);
-            $nameToIds = array_flip(wei()->coll->column($constants, 'name'));
-            self::$constantNameToIds[$prefix] = $nameToIds;
+        if (!isset(self::$constNameToIds[$prefix])) {
+            $consts = $this->getConsts($prefix);
+            $nameToIds = array_flip(wei()->coll->column($consts, 'name'));
+            self::$constNameToIds[$prefix] = $nameToIds;
         }
 
-        return self::$constantNameToIds[$prefix];
+        return self::$constNameToIds[$prefix];
     }
 }

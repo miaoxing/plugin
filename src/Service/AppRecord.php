@@ -9,7 +9,7 @@ namespace Miaoxing\Plugin\Service;
  */
 class AppRecord extends \Miaoxing\Plugin\BaseModel
 {
-    use \Miaoxing\Plugin\Constant;
+    use \Miaoxing\Plugin\ConstTrait;
 
     const STATUS_ALL = 0;
 
