@@ -4,7 +4,6 @@ namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Service\Request;
 
-
 /**
  * @property Request $request
  */
