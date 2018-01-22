@@ -20,9 +20,4 @@ class TestTag extends BaseModel
     {
         return $this->belongsToMany('testArticle');
     }
-
-    public static function className()
-    {
-        return get_called_class();
-    }
 }

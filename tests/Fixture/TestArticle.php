@@ -39,9 +39,4 @@ class TestArticle extends BaseModel
     {
         return $this->belongsToMany('testTag')->andWhere('test_tags.id > ?', 0);
     }
-
-    public static function className()
-    {
-        return get_called_class();
-    }
 }
