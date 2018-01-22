@@ -112,7 +112,6 @@
     "no-octal": "error",
     "no-octal-escape": "error",
     "no-param-reassign": "off",
-    "no-process-env": "error",
     "no-proto": "error",
     "no-redeclare": "error",
     "no-return-assign": "error",
