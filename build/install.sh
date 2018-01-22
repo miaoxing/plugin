@@ -12,7 +12,7 @@ curl -L https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v1.12.1/p
     && mv php-cs-fixer ~/.composer/vendor/bin/php-cs-fixer
 
 # Install PHP_CodeSniffer, Miaoxing Coding standards
-composer global require miaoxing/coding-standards:0.9.3 \
+composer global require miaoxing/coding-standards:0.9.5 \
     && ~/.composer/vendor/bin/phpcs --config-set installed_paths ~/.composer/vendor/miaoxing/coding-standards \
     && ~/.composer/vendor/bin/phpcs -i
 
