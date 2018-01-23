@@ -102,4 +102,13 @@ class BaseModelV2 extends BaseModel
             return $this->suc(['data' => $this]);
         }
     }
+
+    public function &offsetGet($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        parent::offsetGet($name);
+
+        return $this->data[$name];
+    }
 }
