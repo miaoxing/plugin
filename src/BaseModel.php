@@ -146,7 +146,8 @@ class BaseModel extends Record implements JsonSerializable
 
         static::$booted[$class] = true;
         foreach ($this->classUsesDeep($this) as $trait) {
-            $method = 'boot' . array_pop(explode('\\', $trait));
+            $parts = explode('\\', $trait);
+            $method = 'boot' . array_pop($parts);
             if (method_exists($class, $method)) {
                 $this->$method($this);
             }
@@ -867,7 +868,8 @@ class BaseModel extends Record implements JsonSerializable
     protected function getClassServiceName($object = null)
     {
         !$object && $object = $this;
-        $name = lcfirst(end(explode('\\', get_class($object))));
+        $parts = explode('\\', get_class($object));
+        $name = lcfirst(end($parts));
 
         // TODO deprecated
         if (substr($name, -6) == 'Record') {
@@ -896,7 +898,7 @@ class BaseModel extends Record implements JsonSerializable
 
     protected function getRelationValue($field)
     {
-        return $this->relationValue ?: $this[$field];
+        return $this->relationValue ?: $this->get($field);
     }
 
     /**
