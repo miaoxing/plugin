@@ -111,4 +111,57 @@ class BaseModelV2 extends BaseModel
 
         return $this->data[$name];
     }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \Exception
+     */
+    public function &__get($name)
+    {
+        // Receive service that conflict with record method name
+        if (in_array($name, ['db', 'cache', 'lock', 'ret'])) {
+            parent::__get($name);
+
+            return $this->$name;
+        }
+
+        // Receive field value
+        if ($this->enableProperty) {
+            if ($this->hasColumn($name)) {
+                $this->get($name);
+                $name = $this->filterInputColumn($name);
+
+                return $this->data[$name];
+            }
+        }
+
+        // Receive relation
+        if (method_exists($this, $name)) {
+            /** @var BaseModel $related */
+            $related = $this->$name();
+            $serviceName = $this->getClassServiceName($related);
+            $relation = $this->relations[$serviceName];
+            $localValue = $this[$relation['localKey']];
+
+            if ($related->isColl()) {
+                if ($localValue) {
+                    $this->$name = $related->findAll();
+                } else {
+                    $this->$name = $related;
+                }
+            } else {
+                if ($localValue) {
+                    $this->$name = $related->find() ?: null;
+                } else {
+                    $this->$name = null;
+                }
+            }
+
+            return $this->$name;
+        }
+
+        // Receive service
+        return parent::__get($name);
+    }
 }

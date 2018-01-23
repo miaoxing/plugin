@@ -94,18 +94,18 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('a', $model['json']['next']);
     }
 
-    public function dtestPropIncrementOperator()
+    public function testPropIncrementOperator()
     {
         $model = $this->getModel();
 
         $model->id = 1;
         $model->id++;
 
-        $this->assertEquals(2, $model->test);
+        $this->assertEquals(2, $model->id);
         $this->assertEquals(2, $model->toArray()['id']);
     }
 
-    public function dtestNullPropIncrementOperator()
+    public function testNullPropIncrementOperator()
     {
         $model = $this->getModel();
 
@@ -115,18 +115,18 @@ class ModelTest extends BaseTestCase
         $this->assertEquals(1, $model->toArray()['id']);
     }
 
-    public function dtestPropNestedSet()
+    public function testPropNestedSet()
     {
         $model = $this->getModel();
 
-        $model->json = [];
-        $model->json['next'] = 'a';
+        $model->mixed = [];
+        $model->mixed['next'] = 'a';
 
-        $this->assertEquals('a', $model->json['next']);
-        $this->assertEquals('a', $model->toArray()['json']['next']);
+        $this->assertEquals('a', $model->mixed['next']);
+        $this->assertEquals('a', $model->toArray()['mixed']['next']);
     }
 
-    public function dtestNullPropNestedSet()
+    public function testNullPropNestedSet()
     {
         $model = $this->getModel();
 
