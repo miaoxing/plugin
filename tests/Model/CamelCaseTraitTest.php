@@ -84,4 +84,16 @@ class CamelCaseTraitTest extends BaseTestCase
 
         $this->assertEquals(1, $camelCase['testUserId']);
     }
+
+    public function testNoExtraKey()
+    {
+        $camelCase = wei()->testCamelCase();
+
+        $camelCase['testUserId'] = 2;
+        $this->assertEquals(2, $camelCase['testUserId']);
+
+        $data = $camelCase->getData();
+        $this->assertArrayHasKey('test_user_id', $data);
+        $this->assertArrayNotHasKey('testUserId', $data);
+    }
 }
