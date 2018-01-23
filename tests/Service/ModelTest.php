@@ -134,28 +134,50 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('a', $model->toArray()['json']['next']);
     }
 
-    public function testArrayGetRefCourseNullSave()
+    public function testArrayGetRefBecomeNull()
     {
-        // TODO 加入 extraKey 处理
         $this->setExpectedException('PDOException');
 
         $model = $this->getModel();
 
-        // 会导致 Column 'mixed' cannot be null
-        $model['mixed'];
+        // 会导致 mixed=null
+        $isset = (bool) $model['mixed'];
+        $this->assertFalse($isset);
 
         $model->save();
     }
 
-    public function testPropGetRefCourseNullSave()
+    public function testArrayCheckRefWontBecomeNull()
     {
-        // TODO 加入 extraKey 处理
+        $model = $this->getModel();
+
+        // 获取前判断,不会产生null值
+        $isset = isset($model['mixed']);
+        $this->assertFalse($isset);
+
+        $model->save();
+    }
+
+    public function testPropGetRefBecomeNull()
+    {
         $this->setExpectedException('PDOException');
 
         $model = $this->getModel();
 
-        // 会导致 Column 'mixed' cannot be null
-        $model->mixed;
+        // 会导致 mixed=null
+        $isset = (bool) $model->mixed;
+        $this->assertFalse($isset);
+
+        $model->save();
+    }
+
+    public function testPropCheckRefWontBecomeNull()
+    {
+        $model = $this->getModel();
+
+        // 获取前判断,不会产生null值
+        $isset = isset($model->mixed);
+        $this->assertFalse($isset);
 
         $model->save();
     }
