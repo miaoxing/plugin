@@ -67,7 +67,7 @@ class ModelTest extends BaseTestCase
     {
         $model = $this->getModel();
 
-        $model['json'] = []; // => json等于字符串'[]'
+        $model['json'] = [];
         $model['json']['next'] = 'a';
 
         $this->assertEquals('a', $model['json']['next']);

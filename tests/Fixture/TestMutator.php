@@ -13,7 +13,7 @@ class TestMutator extends BaseModelV2
 {
     protected function getGetterAttribute()
     {
-        return base64_decode($this->data['getter']);
+        return base64_decode($this->rawData['getter']);
     }
 
     protected function setSetterAttribute($value)
@@ -23,7 +23,7 @@ class TestMutator extends BaseModelV2
 
     protected function getMutatorAttribute()
     {
-        return base64_decode($this->data['getter']);
+        return base64_decode($this->rawData['mutator']);
     }
 
     protected function setMutatorAttribute($value)

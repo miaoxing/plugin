@@ -54,7 +54,7 @@ class MutatorTest extends BaseTestCase
         $mutator->set('setter', 'abc');
 
         $data = $mutator->getData();
-        $this->assertEquals(base64_encode('abc'), $data['setter']);
+        $this->assertEquals('abc', $data['setter'], 'Set不会直接更改数据,保存时才改');
     }
 
     public function testMagicGet()
@@ -68,7 +68,7 @@ class MutatorTest extends BaseTestCase
         $mutator->setter = 'abc';
 
         $data = $mutator->getData();
-        $this->assertEquals(base64_encode('abc'), $data['setter']);
+        $this->assertEquals('abc', $data['setter']);
     }
 
     public function testSetColl()

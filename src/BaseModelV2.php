@@ -81,6 +81,26 @@ class BaseModelV2 extends BaseModel
         return $this;
     }
 
+    /**
+     * Executes the generated SQL and returns the found record object or false
+     *
+     * @param mixed $conditions
+     * @return $this|false
+     */
+    public function find($conditions = false)
+    {
+        $this->isColl = false;
+        $data = $this->fetch($conditions);
+        if ($data) {
+            $this->rawData = $data + $this->rawData;
+            $this->data = [];
+            $this->triggerCallback('afterFind');
+            return $this;
+        } else {
+            return false;
+        }
+    }
+
     public function set($name, $value = null)
     {
         // 直接设置就行
@@ -92,7 +112,7 @@ class BaseModelV2 extends BaseModel
         $name = $this->filterInputColumn($name);
 
         // 如果有处理好的数据,直接返回
-        if (isset($this->data[$name])) {
+        if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
         }
 
@@ -121,11 +141,12 @@ class BaseModelV2 extends BaseModel
 
         // 将数据转换为数据库数据
         $origData = $this->data;
-        $data = [];
+        $data = $this->rawData;
         foreach ($this->data as $name => $value) {
             $method = 'set' . $this->camel($name) . 'Attribute';
             if (method_exists($this, $method)) {
-                $data[$name] = $this->$method($value);
+                $this->$method($value);
+                $data[$name] = $this->data[$name];
             } else {
                 $data[$name] = $this->trigger('setValue', [$value, $name]);
             }
@@ -136,7 +157,7 @@ class BaseModelV2 extends BaseModel
         parent::save();
 
         // 还原原来的数据
-        $this->data = $origData;
+        $this->data = $origData + $this->data;
 
         return $data;
     }
