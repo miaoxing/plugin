@@ -701,7 +701,9 @@ class BaseModel extends Record implements JsonSerializable
     {
         foreach ((array) $names as $name) {
             // 1. Load relation config
-            list($name, $next) = explode('.', $name, 2);
+            $parts = explode('.', $name, 2);
+            $name = $parts[0];
+            $next = isset($parts[1]) ? $parts[1] : null;
             if (isset($this->loadedRelations[$name])) {
                 continue;
             }
