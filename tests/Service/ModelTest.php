@@ -65,11 +65,8 @@ class ModelTest extends BaseTestCase
 
     public function testArrayNestedSetWithCast()
     {
-        $this->setExpectedException('ErrorException', 'Illegal string offset \'next\'');
-
         $model = $this->getModel();
 
-        // TODO 需要改造cast逻辑
         $model['json'] = []; // => json等于字符串'[]'
         $model['json']['next'] = 'a';
 
@@ -144,8 +141,8 @@ class ModelTest extends BaseTestCase
 
         $model = $this->getModel();
 
-        // 会导致 Column 'json' cannot be null
-        $model['json'];
+        // 会导致 Column 'mixed' cannot be null
+        $model['mixed'];
 
         $model->save();
     }

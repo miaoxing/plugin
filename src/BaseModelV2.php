@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
 use Miaoxing\Plugin\Model\CastTrait;
 use Miaoxing\Plugin\Model\QuickQueryTrait;
+use Wei\Record;
 
 class BaseModelV2 extends BaseModel
 {
@@ -57,6 +58,88 @@ class BaseModelV2 extends BaseModel
         'deleted_at',
         'deleted_by',
     ];
+
+    /**
+     * @var array
+     */
+    protected $rawData = [];
+
+    /**
+     * 设置原生数据,如从数据库读出的数据
+     *
+     * @param array $rawData
+     * @return BaseModel
+     */
+    public function setRawData(array $rawData)
+    {
+        $this->rawData = $rawData;
+
+        if ($rawData) {
+            $this->loaded = true;
+        }
+
+        return $this;
+    }
+
+    public function set($name, $value = null)
+    {
+        // 直接设置就行
+        return Record::set($name, $value);
+    }
+
+    public function get($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        // 如果有处理好的数据,直接返回
+        if (isset($this->data[$name])) {
+            return $this->data[$name];
+        }
+
+        // 通过getXxx处理数据
+        $method = 'get' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            $this->data[$name] = $this->$method();
+
+            return $this->data[$name];
+        }
+
+        // 通过rawData处理
+        if (array_key_exists($name, $this->rawData)) {
+            $this->data[$name] = $this->trigger('getValue', [$this->rawData[$name], $name]);
+        }
+
+        $this->data[$name] = Record::get($name);
+
+        return $this->data[$name];
+    }
+
+    public function save($data = array())
+    {
+        // 1. Merges data from parameters
+        $data && $this->fromArray($data);
+
+        // 将数据转换为数据库数据
+        $origData = $this->data;
+        $data = [];
+        foreach ($this->data as $name => $value) {
+            $method = 'set' . $this->camel($name) . 'Attribute';
+            if (method_exists($this, $method)) {
+                $data[$name] = $this->$method($value);
+            } else {
+                $data[$name] = $this->trigger('setValue', [$value, $name]);
+            }
+        }
+
+        $this->data = $data;
+
+        parent::save();
+
+        // 还原原来的数据
+        $this->data = $origData;
+
+        return $data;
+    }
 
     public function __set($name, $value = null)
     {

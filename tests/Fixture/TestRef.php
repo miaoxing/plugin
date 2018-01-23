@@ -10,4 +10,8 @@ class TestRef extends BaseModelV2
         'id' => 'int',
         'json' => 'json',
     ];
+
+    protected $data = [
+        'json' => []
+    ];
 }
