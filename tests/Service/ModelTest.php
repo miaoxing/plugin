@@ -3,6 +3,7 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use Wei\Request;
 
 class ModelTest extends BaseTestCase
 {
@@ -180,6 +181,16 @@ class ModelTest extends BaseTestCase
         $this->assertFalse($isset);
 
         $model->save();
+    }
+
+    public function testGetService()
+    {
+        $model = $this->getModel();
+
+        // 通过&__get获取服务不会返回Only variable references should be returned by reference错误
+        $model->request;
+
+        $this->assertInstanceOf(Request::class, $model->request);
     }
 
     protected function getModel()

@@ -266,6 +266,8 @@ class BaseModelV2 extends BaseModel
         }
 
         // Receive service
-        return parent::__get($name);
+        parent::__get($name);
+
+        return $this->$name;
     }
 }
