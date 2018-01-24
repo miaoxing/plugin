@@ -45,7 +45,9 @@ class MutatorTest extends BaseTestCase
 
     public function testGet()
     {
-        $this->assertEquals('getter', wei()->testMutator()->findById(1)->get('getter'));
+        $mutator = wei()->testMutator()->findById(1);
+
+        $this->assertEquals('getter', $mutator->get('getter'));
     }
 
     public function testSet()

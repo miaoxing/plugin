@@ -65,23 +65,6 @@ class BaseModelV2 extends BaseModel
     protected $rawData = [];
 
     /**
-     * 设置原生数据,如从数据库读出的数据
-     *
-     * @param array $rawData
-     * @return BaseModel
-     */
-    public function setRawData(array $rawData)
-    {
-        $this->rawData = $rawData;
-
-        if ($rawData) {
-            $this->loaded = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param mixed $conditions
@@ -89,34 +72,43 @@ class BaseModelV2 extends BaseModel
      */
     public function find($conditions = false)
     {
-        $this->isColl = false;
-        $data = $this->fetch($conditions);
-        if ($data) {
-            $this->rawData = $data + $this->rawData;
-            $this->data = [];
-            $this->triggerCallback('afterFind');
-            return $this;
-        } else {
-            return false;
+        $result = parent::find($conditions);
+
+        // 清空原来都的数据
+        if ($result) {
+            $this->rawData = [];
         }
+
+        return $result;
     }
 
     public function set($name, $value = null)
     {
         // 直接设置就行
-        return Record::set($name, $value);
+        Record::set($name, $value);
+
+        // 清理原始数据,待保存时自动生成
+        if ($name) {
+            $name = $this->filterInputColumn($name);
+            unset($this->rawData[$name]);
+        }
+
+        return $this;
     }
 
     public function get($name)
     {
         $name = $this->filterInputColumn($name);
+        $value = isset($this->data[$name]) ? $this->data[$name] : null;
 
-        // 如果有处理好的数据,直接返回
-        if (array_key_exists($name, $this->data)) {
-            return $this->data[$name];
+        // TODO check column, coll Record::get
+
+        // 记录原始数据
+        if (!array_key_exists($name, $this->rawData)) {
+            $this->rawData[$name] = $value;
         }
 
-        // 通过getXxx处理数据
+        // 通过getter处理数据
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
             $this->data[$name] = $this->$method();
@@ -124,14 +116,31 @@ class BaseModelV2 extends BaseModel
             return $this->data[$name];
         }
 
-        // 通过rawData处理
-        if (array_key_exists($name, $this->rawData)) {
-            $this->data[$name] = $this->trigger('getValue', [$this->rawData[$name], $name]);
-        }
-
-        $this->data[$name] = Record::get($name);
+        // 通过事件处理数据
+        $this->data[$name] = $this->trigger('getValue', [$value, $name]);
 
         return $this->data[$name];
+    }
+
+    protected function generateRawData()
+    {
+        $rawData = [];
+        foreach ($this->data as $name => $value) {
+            if (array_key_exists($name, $this->rawData)) {
+                $rawData[$name] = $this->rawData[$name];
+                continue;
+            }
+
+            $method = 'set' . $this->camel($name) . 'Attribute';
+            if (method_exists($this, $method)) {
+                $this->$method($value);
+                $rawData[$name] = $this->data[$name];
+            } else {
+                $rawData[$name] = $this->trigger('setValue', [$value, $name]);
+            }
+        }
+
+        return $rawData;
     }
 
     public function save($data = array())
@@ -141,22 +150,11 @@ class BaseModelV2 extends BaseModel
 
         // 将数据转换为数据库数据
         $origData = $this->data;
-        $data = $this->rawData;
-        foreach ($this->data as $name => $value) {
-            $method = 'set' . $this->camel($name) . 'Attribute';
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-                $data[$name] = $this->data[$name];
-            } else {
-                $data[$name] = $this->trigger('setValue', [$value, $name]);
-            }
-        }
-
-        $this->data = $data;
+        $this->data = $this->generateRawData();
 
         parent::save();
 
-        // 还原原来的数据
+        // 还原原来的数据+save过程中生成的主键数据
         $this->data = $origData + $this->data;
 
         return $data;
