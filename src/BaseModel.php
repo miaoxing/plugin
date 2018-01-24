@@ -805,27 +805,7 @@ class BaseModel extends Record implements JsonSerializable
 
         // Receive relation
         if (method_exists($this, $name)) {
-            /** @var BaseModel $related */
-            $related = $this->$name();
-            $serviceName = $this->getClassServiceName($related);
-            $relation = $this->relations[$serviceName];
-            $localValue = $this[$relation['localKey']];
-
-            if ($related->isColl()) {
-                if ($localValue) {
-                    $this->$name = $related->findAll();
-                } else {
-                    $this->$name = $related;
-                }
-            } else {
-                if ($localValue) {
-                    $this->$name = $related->find() ?: null;
-                } else {
-                    $this->$name = null;
-                }
-            }
-
-            return $this->$name;
+            return $this->getRelation($name);
         }
 
         // Receive service
@@ -1071,5 +1051,30 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return $this;
+    }
+
+    protected function getRelation($name)
+    {
+        /** @var BaseModel $related */
+        $related = $this->$name();
+        $serviceName = $this->getClassServiceName($related);
+        $relation = $this->relations[$serviceName];
+        $localValue = $this[$relation['localKey']];
+
+        if ($related->isColl()) {
+            if ($localValue) {
+                $this->$name = $related->findAll();
+            } else {
+                $this->$name = $related;
+            }
+        } else {
+            if ($localValue) {
+                $this->$name = $related->find() ?: null;
+            } else {
+                $this->$name = null;
+            }
+        }
+
+        return $this->$name;
     }
 }

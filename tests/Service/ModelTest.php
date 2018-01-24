@@ -28,7 +28,7 @@ class ModelTest extends BaseTestCase
             [
                 'id' => 1,
                 'json' => json_encode(['a' => 'b']),
-                'mixed' => '["a":"b"]'
+                'mixed' => '["a":"b"]',
             ],
         ]);
     }
