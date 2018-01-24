@@ -10,6 +10,10 @@ use Miaoxing\Plugin\BaseService;
  */
 class Str extends BaseService
 {
+    protected static $snakeCache = [];
+
+    protected static $camelCache = [];
+
     /**
      * @param string $word
      * @return string
@@ -26,6 +30,41 @@ class Str extends BaseService
     public function singularize($word)
     {
         return Inflector::singularize($word);
+    }
+
+    /**
+     * Convert a input to snake case
+     *
+     * @param string $input
+     * @return string
+     */
+    public function snake($input)
+    {
+        if (isset(static::$snakeCache[$input])) {
+            return static::$snakeCache[$input];
+        }
+
+        $value = $input;
+        if (!ctype_lower($input)) {
+            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+        }
+
+        return static::$snakeCache[$input] = $value;
+    }
+
+    /**
+     * Convert a input to camel case
+     *
+     * @param string $input
+     * @return string
+     */
+    public function camel($input)
+    {
+        if (isset(static::$camelCache[$input])) {
+            return static::$camelCache[$input];
+        }
+
+        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
     }
 
     /**

@@ -50,56 +50,56 @@ class CastTraitTest extends BaseTestCase
         return [
             [
                 [
-                    'int_column' => 1,
-                    'bool_column' => true,
-                    'string_column' => 'string',
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => ['a' => 'b\c', 'd' => '中文'],
+                    'intColumn' => 2,
+                    'boolColumn' => true,
+                    'stringColumn' => 'string',
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
                 ],
                 [
-                    'int_column' => 1,
-                    'bool_column' => true,
-                    'string_column' => 'string',
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => '{"a":"b\\\\c","d":"中文"}',
-                ],
-            ],
-            [
-                [
-                    'int_column' => '1',
-                    'bool_column' => '0',
-                    'string_column' => 1,
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => ['a' => 'b\c', 'd' => '中文'],
-                ],
-                [
-                    'int_column' => 1,
-                    'bool_column' => false,
-                    'string_column' => '1',
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => '{"a":"b\\\\c","d":"中文"}',
+                    'intColumn' => 2,
+                    'boolColumn' => true,
+                    'stringColumn' => 'string',
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
                 ],
             ],
             [
                 [
-                    'int_column' => 'abc',
-                    'bool_column' => 'bool',
-                    'string_column' => true,
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => 'abc',
+                    'intColumn' => '3',
+                    'boolColumn' => '0',
+                    'stringColumn' => 1,
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
                 ],
                 [
-                    'int_column' => 0,
-                    'bool_column' => true,
-                    'string_column' => '1',
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => '"abc"',
+                    'intColumn' => 3,
+                    'boolColumn' => false,
+                    'stringColumn' => '1',
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+                ],
+            ],
+            [
+                [
+                    'intColumn' => '4.1',
+                    'boolColumn' => 'bool',
+                    'stringColumn' => true,
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => 'abc',
+                ],
+                [
+                    'intColumn' => 4,
+                    'boolColumn' => true,
+                    'stringColumn' => '1',
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => 'abc',
                 ],
             ],
         ];
@@ -118,10 +118,17 @@ class CastTraitTest extends BaseTestCase
 
         $record->fromArray($from);
 
+        // data中的数据不变
         $data = $record->getData();
+        foreach ($from as $key => $value) {
+            $this->assertSame($value, $data[wei()->str->snake($key)]);
+        }
 
+        // 重新加载,数据会改变
+        $record->save();
+        $record = wei()->testCast()->findById($record->intColumn);
         foreach ($result as $key => $value) {
-            $this->assertSame($value, $data[$key]);
+            $this->assertSame($value, $record->$key);
         }
     }
 
@@ -130,38 +137,38 @@ class CastTraitTest extends BaseTestCase
         return [
             [
                 [
-                    'int_column' => '1',
-                    'bool_column' => '0',
-                    'string_column' => 1,
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => ['a' => 'b\c', 'd' => '中文'],
+                    'intColumn' => '1',
+                    'boolColumn' => '0',
+                    'stringColumn' => 1,
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
                 ],
                 [
-                    'int_column' => 1,
-                    'bool_column' => false,
-                    'string_column' => '1',
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => ['a' => 'b\c', 'd' => '中文'],
+                    'intColumn' => 1,
+                    'boolColumn' => false,
+                    'stringColumn' => '1',
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
                 ],
             ],
             [
                 [
-                    'int_column' => 'abc',
-                    'bool_column' => '2',
-                    'string_column' => 1,
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => '{"a":"b\\c","d":"中文"}',
+                    'intColumn' => 'abc',
+                    'boolColumn' => '2',
+                    'stringColumn' => 1,
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => '{"a":"b\\c","d":"中文"}', // 不能被json_decode,会变成null
                 ],
                 [
-                    'int_column' => 0,
-                    'bool_column' => true,
-                    'string_column' => '1',
-                    'datetime_column' => '2018-01-01 00:00:00',
-                    'date_column' => '2018-01-01',
-                    'json_column' => '{"a":"b\\c","d":"中文"}',
+                    'intColumn' => 0,
+                    'boolColumn' => true,
+                    'stringColumn' => '1',
+                    'datetimeColumn' => '2018-01-01 00:00:00',
+                    'dateColumn' => '2018-01-01',
+                    'jsonColumn' => null,
                 ],
             ],
         ];
@@ -189,30 +196,28 @@ class CastTraitTest extends BaseTestCase
     {
         $record = wei()->testCast()->findById(1);
 
-        // @codingStandardsIgnoreStart
-        $this->assertSame(1, $record->int_column);
-        $this->assertSame(false, $record->bool_column);
-        $this->assertSame('1', $record->string_column);
-        $this->assertSame('2018-01-01 00:00:00', $record->datetime_column);
-        $this->assertSame('2018-01-01', $record->date_column);
-        $this->assertSame(['a' => 'b\c', 'd' => '中文'], $record->json_column);
-        // @codingStandardsIgnoreEnd
+        $this->assertSame(1, $record->intColumn);
+        $this->assertSame(false, $record->boolColumn);
+        $this->assertSame('1', $record->stringColumn);
+        $this->assertSame('2018-01-01 00:00:00', $record->datetimeColumn);
+        $this->assertSame('2018-01-01', $record->dateColumn);
+        $this->assertSame(['a' => 'b\c', 'd' => '中文'], $record->jsonColumn);
     }
 
     public function testSave()
     {
         wei()->testCast()->save([
-            'int_column' => '2',
-            'bool_column' => '0',
-            'string_column' => 1,
-            'datetime_column' => '2018-01-01 00:00:00',
-            'date_column' => '2018-01-01',
-            'json_column' => ['a' => 'b\c', 'd' => '中文'],
+            'intColumn' => '5',
+            'boolColumn' => '0',
+            'stringColumn' => 1,
+            'datetimeColumn' => '2018-01-01 00:00:00',
+            'dateColumn' => '2018-01-01',
+            'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
         ]);
 
-        $data = wei()->db->select('test_casts', ['int_column' => 2]);
+        $data = wei()->db->select('test_casts', ['int_column' => 5]);
 
-        $this->assertSame('2', $data['int_column']);
+        $this->assertSame('5', $data['int_column']);
         $this->assertSame('0', $data['bool_column']);
         $this->assertSame('1', $data['string_column']);
         $this->assertSame('2018-01-01 00:00:00', $data['datetime_column']);
@@ -224,8 +229,6 @@ class CastTraitTest extends BaseTestCase
     {
         $cast = wei()->testCast();
 
-        // @codingStandardsIgnoreStart
-        $this->assertSame([], $cast->json_column);
-        // @codingStandardsIgnoreEnd
+        $this->assertSame([], $cast->jsonColumn);
     }
 }

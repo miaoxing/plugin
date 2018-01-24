@@ -2,28 +2,19 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\BaseModel;
-use Miaoxing\Plugin\Model\CastTrait;
+use Miaoxing\Plugin\BaseModelV2;
 
 /**
- * @property int int_column
- * @property bool bool_column
- * @property string string_column
- * @property string datetime_column
- * @property string date_column
- * @property array json_column
+ * @property int $intColumn
+ * @property bool $boolColumn
+ * @property string $stringColumn
+ * @property string $datetimeColumn
+ * @property string $dateColumn
+ * @property array $jsonColumn
  */
-class TestCast extends BaseModel
+class TestCast extends BaseModelV2
 {
-    use CastTrait;
-
     protected $primaryKey = 'int_column';
-
-    protected $enableProperty = true;
-
-    protected $tableV2 = true;
-
-    protected $initV2 = true;
 
     protected $casts = [
         'int_column' => 'int',

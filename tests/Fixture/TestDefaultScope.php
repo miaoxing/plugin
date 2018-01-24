@@ -7,8 +7,6 @@ use Miaoxing\Plugin\Model\DefaultScopeTrait;
 
 class TestDefaultScope extends BaseModelV2
 {
-    use DefaultScopeTrait;
-
     public function __construct(array $options = [])
     {
         parent::__construct($options);
