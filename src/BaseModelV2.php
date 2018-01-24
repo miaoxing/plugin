@@ -102,16 +102,24 @@ class BaseModelV2 extends BaseModel
 
     public function get($name)
     {
-        $name = $this->filterInputColumn($name);
-        $value = isset($this->data[$name]) ? $this->data[$name] : null;
-
         // TODO check column, coll Record::get
+        $name = $this->filterInputColumn($name);
 
-        // 记录原始数据
-        if (!array_key_exists($name, $this->rawData)) {
-            $this->rawData[$name] = $value;
+        $hasData = array_key_exists($name, $this->data);
+        $hasRawData = array_key_exists($name, $this->rawData);
+        if ($hasData && $hasRawData) {
+            return $this->data[$name];
         }
 
+        $value = $hasData ? $this->data[$name] : null;
+
+        // 没有原始数据的情况,通过现有数据生成原始数据
+        if (!$hasRawData) {
+            $this->rawData[$name] = $this->getSetValue($name, $value);
+            $this->data[$name] = $this->rawData[$name];
+        }
+
+        // 再转换为符合要求的数据
         // 通过getter处理数据
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
@@ -126,6 +134,19 @@ class BaseModelV2 extends BaseModel
         return $this->data[$name];
     }
 
+    protected function getSetValue($name, $value)
+    {
+        $method = 'set' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            $this->$method($value);
+            $value = $this->data[$name];
+        } else {
+            $value = $this->trigger('setValue', [$value, $name]);
+        }
+
+        return $value;
+    }
+
     protected function generateRawData()
     {
         $rawData = [];
@@ -135,13 +156,7 @@ class BaseModelV2 extends BaseModel
                 continue;
             }
 
-            $method = 'set' . $this->camel($name) . 'Attribute';
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-                $rawData[$name] = $this->data[$name];
-            } else {
-                $rawData[$name] = $this->trigger('setValue', [$value, $name]);
-            }
+            $rawData[$name] = $this->getSetValue($name, $value);
         }
 
         return $rawData;

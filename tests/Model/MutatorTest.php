@@ -124,4 +124,21 @@ class MutatorTest extends BaseTestCase
 
         $this->assertEquals(wei()->cache, $mutator->cache);
     }
+
+    public function testSetGet()
+    {
+        $mutator = wei()->testMutator();
+
+        // 转换为内部数据
+        $mutator->mutator = 'abc';
+
+        // 还原为外部数据
+        $this->assertEquals('abc', $mutator->mutator);
+
+        // 转换为别的内外数据
+        $mutator->mutator = 'bbc';
+
+        // 还原为别的外部数据
+        $this->assertEquals('bbc', $mutator->mutator);
+    }
 }
