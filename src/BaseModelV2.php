@@ -74,7 +74,7 @@ class BaseModelV2 extends BaseModel
     {
         $result = parent::find($conditions);
 
-        // 清空原来都的数据
+        // 清空原来的数据
         if ($result) {
             $this->rawData = [];
         }
@@ -84,12 +84,16 @@ class BaseModelV2 extends BaseModel
 
     public function set($name, $value = null)
     {
+        // Ignore $coll[] = $value
+        if ($name !== null) {
+            $name = $this->filterInputColumn($name);
+        }
+
         // 直接设置就行
         Record::set($name, $value);
 
         // 清理原始数据,待保存时自动生成
-        if ($name) {
-            $name = $this->filterInputColumn($name);
+        if ($name !== null) {
             unset($this->rawData[$name]);
         }
 

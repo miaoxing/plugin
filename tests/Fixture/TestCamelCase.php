@@ -2,20 +2,10 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Plugin\BaseModelV2;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
 
-class TestCamelCase extends BaseModel
+class TestCamelCase extends BaseModelV2
 {
     use CamelCaseTrait;
-
-    protected $createdAtColumn = 'created_at';
-
-    protected $updatedAtColumn = 'updated_at';
-
-    protected $toArrayV2 = true;
-
-    protected $tableV2 = true;
-
-    protected $initV2 = true;
 }

@@ -2,16 +2,12 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Plugin\BaseModelV2;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;
 
-class TestDefaultScope extends BaseModel
+class TestDefaultScope extends BaseModelV2
 {
     use DefaultScopeTrait;
-
-    protected $tableV2 = true;
-
-    protected $initV2 = true;
 
     public function __construct(array $options = [])
     {
