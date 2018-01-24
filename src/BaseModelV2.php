@@ -161,7 +161,7 @@ class BaseModelV2 extends BaseModel
         // 还原原来的数据+save过程中生成的主键数据
         $this->data = $origData + $this->data;
 
-        return $data;
+        return $this;
     }
 
     public function __set($name, $value = null)
