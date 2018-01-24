@@ -12,6 +12,4 @@ class TestProfile extends BaseModel
     protected $enableProperty = true;
 
     protected $tableV2 = true;
-
-    protected $initV2 = true;
 }

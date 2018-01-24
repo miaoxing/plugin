@@ -14,8 +14,6 @@ class TestTag extends BaseModel
 
     protected $tableV2 = true;
 
-    protected $initV2 = true;
-
     public function articles()
     {
         return $this->belongsToMany('testArticle');

@@ -109,8 +109,6 @@ class BaseModel extends Record implements JsonSerializable
      */
     protected $tableV2 = false;
 
-    protected $initV2 = false;
-
     /**
      * @var array
      */
@@ -126,12 +124,6 @@ class BaseModel extends Record implements JsonSerializable
 
     public function __construct(array $options = [])
     {
-        // 通过设置到rawData,解决get/setXxxAttribute重复调用的问题
-        if ($this->initV2 && isset($options['data'])) {
-            $options['rawData'] = $options['data'];
-            unset($options['data']);
-        }
-
         parent::__construct($options);
 
         $this->boot();
