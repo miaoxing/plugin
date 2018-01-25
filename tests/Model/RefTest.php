@@ -12,8 +12,6 @@ class RefTest extends BaseTestCase
     {
         parent::setUpBeforeClass();
 
-        error_reporting(-1);
-
         wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Plugin\Fixture');
 
         static::dropTables();

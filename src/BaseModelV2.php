@@ -128,13 +128,6 @@ class BaseModelV2 extends BaseModel
     {
         // TODO check column, coll Record::get
         $name = $this->filterInputColumn($name);
-        if (!in_array($name, $this->getFields())) {
-            // 虚拟列
-            $method = 'get' . $this->camel($name) . 'Attribute';
-            if (method_exists($this, $method)) {
-                return $this->$method();
-            }
-        }
 
         $value = Record::get($name);
 
@@ -186,9 +179,7 @@ class BaseModelV2 extends BaseModel
 
         // Receive virtual column value
         if ($this->isVirtual($name)) {
-            $this->getVirtual($name);
-
-            return $this->virtualData[$name];
+            return $this->getVirtual($name);
         }
 
         // Receive relation
@@ -240,9 +231,7 @@ class BaseModelV2 extends BaseModel
         $name = $this->filterInputColumn($name);
 
         if ($this->isVirtual($name)) {
-            $this->getVirtual($name);
-
-            return $this->virtualData[$name];
+            return $this->getVirtual($name);
         }
 
         parent::offsetGet($name);
@@ -353,14 +342,22 @@ class BaseModelV2 extends BaseModel
         return $dbData;
     }
 
-    protected function getVirtual($name)
+    /**
+     * Returns the virtual column value
+     *
+     * @param string $name
+     * @return mixed
+     */
+    protected function &getVirtual($name)
     {
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
-            return $this->virtualData[$name] = $this->$method();
+            $this->virtualData[$name] = $this->$method();
+
+            return $this->virtualData[$name];
         }
 
-        return null;
+        throw new InvalidArgumentException('Invalid virtual column: ' . $name);
     }
 
     protected function isVirtual($name)

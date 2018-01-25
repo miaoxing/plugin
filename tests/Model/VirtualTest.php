@@ -36,7 +36,6 @@ class VirtualTest extends BaseTestCase
         $virtual = wei()->testVirtual();
 
         $this->assertNull($virtual->getVirtualColumnValue());
-        $this->assertNull($virtual->get('virtualColumn'));
         $this->assertNull($virtual['virtualColumn']);
         $this->assertNull($virtual->virtualColumn);
     }
@@ -48,7 +47,6 @@ class VirtualTest extends BaseTestCase
         $virtual->virtualColumn = 'something';
 
         $this->assertEquals('something', $virtual->getVirtualColumnValue());
-        $this->assertEquals('something', $virtual->get('virtualColumn'));
         $this->assertEquals('something', $virtual['virtualColumn']);
         $this->assertEquals('something', $virtual->virtualColumn);
     }
