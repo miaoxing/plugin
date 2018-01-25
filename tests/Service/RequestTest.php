@@ -155,10 +155,10 @@ class RequestTest extends BaseTestCase
 
         $this->assertEquals('value', $wei->request('key'), 'string param');
 
-        $wei->fromArray(array(
+        $wei->fromArray([
             'key1' => 'value1',
             'key2' => 'value2',
-        ));
+        ]);
 
         $this->assertEquals('value2', $wei->request('key2'), 'array param');
     }
@@ -189,11 +189,11 @@ class RequestTest extends BaseTestCase
      */
     public function testErrorParameterTypeWhenFromGlobalIsFalse()
     {
-        $request = new \Wei\Request(array(
-            'fromGlobal' => false
-        ));
+        $request = new \Wei\Request([
+            'fromGlobal' => false,
+        ]);
 
-        foreach (array('get', 'cookie', 'server', 'file') as $option) {
+        foreach (['get', 'cookie', 'server', 'file'] as $option) {
             $this->assertInternalType('array', $request->getParameterReference($option));
         }
     }
@@ -202,10 +202,10 @@ class RequestTest extends BaseTestCase
     {
         $request = $this->object;
 
-        $request->fromArray(array(
+        $request->fromArray([
             'string' => 'value',
-            1 => 2
-        ));
+            1 => 2,
+        ]);
 
         $this->assertEquals('value', $request('string'));
 
@@ -221,15 +221,16 @@ class RequestTest extends BaseTestCase
         $this->assertCount(10, $wei);
     }
 
-    public function testFromArray() {
+    public function testFromArray()
+    {
         $wei = $this->object;
 
         $wei['key2'] = 'value2';
 
-        $wei->fromArray(array(
+        $wei->fromArray([
             'key1' => 'value1',
             'key2' => 'value changed',
-        ));
+        ]);
 
         $this->assertEquals('value1', $wei['key1']);
 
@@ -240,16 +241,17 @@ class RequestTest extends BaseTestCase
     {
         $wei = $this->object;
 
-        $wei->fromArray(array(
+        $wei->fromArray([
             'key' => 'other value',
-        ));
+        ]);
 
         $arr = $wei->toArray();
 
         $this->assertContains('other value', $arr);
     }
 
-    public function testOffsetExists() {
+    public function testOffsetExists()
+    {
         $wei = $this->object;
 
         $wei['key'] = 'value';
@@ -257,7 +259,8 @@ class RequestTest extends BaseTestCase
         $this->assertTrue(isset($wei['key']));
     }
 
-    public function testOffsetGet() {
+    public function testOffsetGet()
+    {
         $wei = $this->object;
 
         $wei['key'] = 'value1';
@@ -265,7 +268,8 @@ class RequestTest extends BaseTestCase
         $this->assertEquals('value1', $wei['key']);
     }
 
-    public function testOffsetUnset() {
+    public function testOffsetUnset()
+    {
         $wei = $this->object;
 
         unset($wei['key']);
@@ -276,26 +280,27 @@ class RequestTest extends BaseTestCase
     public function createParameterObject($type, $class)
     {
         // create request wei from custom parameter
-        $request = new \Wei\Request(array(
+        $request = new \Wei\Request([
             'wei' => $this->wei,
             'fromGlobal' => false,
-            $type => array(
+            $type => [
                 'key' => 'value',
                 'key2' => 'value2',
                 'int' => '5',
-                'array' => array(
-                    'item' => 'value'
-                )
-            )
-        ));
+                'array' => [
+                    'item' => 'value',
+                ],
+            ],
+        ]);
+
         return $request;
     }
 
     public function testGetter()
     {
-        $parameters = array(
-            'data' => 'request'
-        );
+        $parameters = [
+            'data' => 'request',
+        ];
 
         foreach ($parameters as $type => $class) {
             $parameter = $this->createParameterObject($type, $class);
@@ -307,10 +312,10 @@ class RequestTest extends BaseTestCase
             $this->assertEquals('', $parameter->get('notFound'));
 
             // int => 5, not in specified array
-            $this->assertEquals('firstValue', $parameter->getInArray('int', array(
+            $this->assertEquals('firstValue', $parameter->getInArray('int', [
                 'firstKey' => 'firstValue',
-                'secondKey' => 'secondValue'
-            )));
+                'secondKey' => 'secondValue',
+            ]));
 
             // int => 5
             $this->assertEquals(6, $parameter->getInt('int', 6));
@@ -323,36 +328,36 @@ class RequestTest extends BaseTestCase
 
     public function testOverwriteAjax()
     {
-        $request = new Request(array(
+        $request = new Request([
             'wei' => $this->wei,
-            'data' => array()
-        ));
+            'data' => [],
+        ]);
         $this->assertFalse($request->isAjax());
 
-        $request = new Request(array(
+        $request = new Request([
             'wei' => $this->wei,
-            'data' => array(
-                '_ajax' => true
-            )
-        ));
+            'data' => [
+                '_ajax' => true,
+            ],
+        ]);
         $this->assertFalse($request->isAjax());
     }
 
     public function testOverwriteMethod()
     {
-        $request = new Request(array(
+        $request = new Request([
             'wei' => $this->wei,
             'fromGlobal' => false,
-            'data' => array(
-                '_method' => 'PUT'
-            )
-        ));
+            'data' => [
+                '_method' => 'PUT',
+            ],
+        ]);
         $this->assertTrue($request->isMethod('PUT'));
     }
 
     public function testArrayAccess()
     {
-        $this->assertArrayBehaviour(array());
+        $this->assertArrayBehaviour([]);
         $this->assertArrayBehaviour($this->request);
     }
 
@@ -384,7 +389,7 @@ class RequestTest extends BaseTestCase
         $this->assertFalse(isset($arr['b']), 'Access undefined index won\'t create key');
 
         // Behaviour 3
-        $arr['c'] = array();
+        $arr['c'] = [];
         $arr['c']['d'] = 'e';
         $this->assertEquals('e', $arr['c']['d'], 'Allow to create next level array');
 
