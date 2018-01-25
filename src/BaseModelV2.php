@@ -163,15 +163,12 @@ class BaseModelV2 extends BaseModel
 
         // Receive field value
         if ($this->hasColumn($name)) {
-            $this->get($name);
-            $column = $this->filterInputColumn($name);
-
-            return $this->data[$column];
+            return $this->getColumnValue($name);
         }
 
         // Receive virtual column value
         if ($this->hasVirtual($name)) {
-            return $this->getVirtual($name);
+            return $this->getVirtualValue($name);
         }
 
         // Receive relation
@@ -202,11 +199,11 @@ class BaseModelV2 extends BaseModel
         }
 
         if ($this->hasVirtual($name)) {
-            return $this->setVirtual($name, $value);
+            return $this->setVirtualValue($name, $value);
         }
 
         if ($this->hasRelation($name)) {
-            return $this->setRelation($name, $value);
+            return $this->setRelationValue($name, $value);
         }
 
         if ($this->wei->has($name)) {
@@ -224,7 +221,7 @@ class BaseModelV2 extends BaseModel
         $name = $this->filterInputColumn($name);
 
         if ($this->hasVirtual($name)) {
-            return $this->getVirtual($name);
+            return $this->getVirtualValue($name);
         }
 
         parent::offsetGet($name);
@@ -340,13 +337,20 @@ class BaseModelV2 extends BaseModel
         return $dbData;
     }
 
+    protected function &getColumnValue($name)
+    {
+        $this->get($name);
+
+        return $this->data[$this->filterInputColumn($name)];
+    }
+
     /**
      * Returns the virtual column value
      *
      * @param string $name
      * @return mixed
      */
-    protected function &getVirtual($name)
+    protected function &getVirtualValue($name)
     {
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
@@ -365,7 +369,7 @@ class BaseModelV2 extends BaseModel
      * @param mixed $value
      * @return mixed
      */
-    protected function setVirtual($name, $value)
+    protected function setVirtualValue($name, $value)
     {
         $method = 'set' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
@@ -394,7 +398,7 @@ class BaseModelV2 extends BaseModel
      * @param string $name
      * @param mixed $value
      */
-    protected function setRelation($name, $value)
+    protected function setRelationValue($name, $value)
     {
         $this->$name = $value;
     }
