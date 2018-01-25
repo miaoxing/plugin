@@ -126,7 +126,7 @@ class CastTraitTest extends BaseTestCase
 
         // 重新加载,数据会改变
         $record->save();
-        $record = wei()->testCast()->findById($record->intColumn);
+        $record = wei()->testCast()->findById((int) $record->intColumn);
         foreach ($result as $key => $value) {
             $this->assertSame($value, $record->$key);
         }

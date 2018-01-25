@@ -141,4 +141,11 @@ class MutatorTest extends BaseTestCase
         // 还原为别的外部数据
         $this->assertEquals('bbc', $mutator->mutator);
     }
+
+    public function testFind()
+    {
+        $mutator = wei()->testMutator()->findById(1);
+
+        $this->assertEquals('mutator', $mutator->mutator);
+    }
 }

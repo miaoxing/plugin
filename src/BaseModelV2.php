@@ -57,10 +57,37 @@ class BaseModelV2 extends BaseModel
         'deleted_by',
     ];
 
-    /**
-     * @var array
-     */
-    protected $rawData = [];
+    protected $raws = [
+        '*' => false,
+    ];
+
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+
+        if (!$this->isNew) {
+            $this->initRaws();
+        }
+    }
+
+    protected function isRaw($name)
+    {
+        if (!isset($this->raws[$name])) {
+            return $this->raws['*'];
+        }
+
+        return $this->raws[$name];
+    }
+
+    protected function initRaws()
+    {
+        $this->raws = ['*' => true];
+    }
+
+    protected function setRaw($name, $flag)
+    {
+        $this->raws[$name] = $flag;
+    }
 
     /**
      * Executes the generated SQL and returns the found record object or false
@@ -74,7 +101,7 @@ class BaseModelV2 extends BaseModel
 
         // 清空原来的数据
         if ($result) {
-            $this->rawData = [];
+            $this->initRaws();
         }
 
         return $result;
@@ -90,9 +117,8 @@ class BaseModelV2 extends BaseModel
         // 直接设置就行
         Record::set($name, $value);
 
-        // 清理原始数据,待保存时自动生成
         if ($name !== null) {
-            unset($this->rawData[$name]);
+            $this->setRaw($name, false);
         }
 
         return $this;
@@ -102,19 +128,11 @@ class BaseModelV2 extends BaseModel
     {
         // TODO check column, coll Record::get
         $name = $this->filterInputColumn($name);
+        $value = Record::get($name);
 
-        $hasData = array_key_exists($name, $this->data);
-        $hasRawData = array_key_exists($name, $this->rawData);
-        if ($hasData && $hasRawData) {
-            return $this->data[$name];
-        }
-
-        $value = $hasData ? $this->data[$name] : null;
-
-        // 没有原始数据的情况,通过现有数据生成原始数据
-        if (!$hasRawData) {
-            $this->rawData[$name] = $this->getSetValue($name, $value);
-            $this->data[$name] = $this->rawData[$name];
+        if (!$this->isRaw($name)) {
+            // 先通过set转换为raw数据
+            $this->data[$name] = $this->getSetValue($name, $value);
         }
 
         // 再转换为符合要求的数据
@@ -122,12 +140,14 @@ class BaseModelV2 extends BaseModel
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
             $this->data[$name] = $this->$method();
+            $this->setRaw($name, false);
 
             return $this->data[$name];
         }
 
         // 通过事件处理数据
         $this->data[$name] = $this->trigger('getValue', [$value, $name]);
+        $this->setRaw($name, false);
 
         return $this->data[$name];
     }
@@ -149,12 +169,11 @@ class BaseModelV2 extends BaseModel
     {
         $rawData = [];
         foreach ($this->data as $name => $value) {
-            if (array_key_exists($name, $this->rawData)) {
-                $rawData[$name] = $this->rawData[$name];
-                continue;
+            if (!$this->isRaw($name)) {
+                $rawData[$name] = $this->getSetValue($name, $value);
+            } else {
+                $rawData[$name] = $value;
             }
-
-            $rawData[$name] = $this->getSetValue($name, $value);
         }
 
         return $rawData;
