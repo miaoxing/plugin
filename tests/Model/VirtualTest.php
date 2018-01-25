@@ -15,6 +15,8 @@ class VirtualTest extends BaseTestCase
 
         wei()->schema->table('test_virtual')
             ->id()
+            ->string('first_name')
+            ->string('last_name')
             ->exec();
     }
 
@@ -49,5 +51,25 @@ class VirtualTest extends BaseTestCase
         $this->assertEquals('something', $virtual->get('virtualColumn'));
         $this->assertEquals('something', $virtual['virtualColumn']);
         $this->assertEquals('something', $virtual->virtualColumn);
+    }
+
+    public function testGetFullName()
+    {
+        $virtual = wei()->testVirtual();
+
+        $virtual->firstName = 'Hello';
+        $virtual->lastName = 'World';
+
+        $this->assertEquals('Hello World', $virtual->fullName);
+    }
+
+    public function testSetFullName()
+    {
+        $virtual = wei()->testVirtual();
+
+        $virtual->fullName = 'Hello World';
+
+        $this->assertEquals('Hello', $virtual->firstName);
+        $this->assertEquals('World', $virtual->lastName);
     }
 }

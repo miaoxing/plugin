@@ -6,6 +6,9 @@ use Miaoxing\Plugin\BaseModelV2;
 
 /**
  * @property mixed $virtualColumn
+ * @property string $firstName
+ * @property string $lastName
+ * @property string $fullName
  */
 class TestVirtual extends BaseModelV2
 {
@@ -13,6 +16,7 @@ class TestVirtual extends BaseModelV2
 
     protected $virtual = [
         'virtual_column',
+        'full_name'
     ];
 
     protected $virtualColumnValue;
@@ -30,5 +34,15 @@ class TestVirtual extends BaseModelV2
     public function getVirtualColumnValue()
     {
         return $this->virtualColumnValue;
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function setFullNameAttribute($fullName)
+    {
+        list($this->firstName, $this->lastName) = explode(' ', $fullName);
     }
 }
