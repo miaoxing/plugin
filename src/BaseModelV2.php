@@ -183,10 +183,8 @@ class BaseModelV2 extends BaseModel
         }
 
         // Receive relation
-        if (method_exists($this, $name)) {
-            $this->getRelation($name);
-
-            return $this->$name;
+        if ($this->hasRelation($name)) {
+            return $this->getRelation($name);
         }
 
         // Receive service
@@ -211,8 +209,7 @@ class BaseModelV2 extends BaseModel
             return $this->set($name, $value);
         }
 
-        // 模型关联
-        if (method_exists($this, $name)) {
+        if ($this->hasRelation($name)) {
             return $this->$name = $value;
         }
 
@@ -328,6 +325,11 @@ class BaseModelV2 extends BaseModel
         return $value;
     }
 
+    /**
+     * Generates data for saving to database
+     *
+     * @return array
+     */
     protected function generateDbData()
     {
         $dbData = [];
@@ -360,10 +362,27 @@ class BaseModelV2 extends BaseModel
         throw new InvalidArgumentException('Invalid virtual column: ' . $name);
     }
 
+    /**
+     * Check if the name is virtual column
+     *
+     * @param string $name
+     * @return bool
+     */
     protected function isVirtual($name)
     {
         $name = $this->filterInputColumn($name);
 
         return in_array($name, $this->virtual);
+    }
+
+    /**
+     * Check if model has specified relation
+     *
+     * @param string $name
+     * @return bool
+     */
+    protected function hasRelation($name)
+    {
+        return method_exists($this, $name);
     }
 }

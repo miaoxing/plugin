@@ -1057,7 +1057,7 @@ class BaseModel extends Record implements JsonSerializable
         return $this;
     }
 
-    protected function getRelation($name)
+    protected function &getRelation($name)
     {
         /** @var BaseModel $related */
         $related = $this->$name();
