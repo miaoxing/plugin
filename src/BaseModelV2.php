@@ -70,25 +70,28 @@ class BaseModelV2 extends BaseModel
         }
     }
 
+    /**
+     * @param string $name
+     * @param string $source
+     */
     protected function setDataSource($name, $source)
     {
         $this->dataSources[$name] = $source;
     }
 
+    /**
+     * Returns the data source of specified column name
+     *
+     * @param string $name
+     * @return string
+     */
     protected function getDataSource($name)
     {
-        if (!isset($this->dataSources[$name])) {
-            return $this->dataSources['*'];
-        }
-
-        return $this->dataSources[$name];
+        return isset($this->dataSources[$name]) ? $this->dataSources[$name] : $this->dataSources['*'];
     }
 
     /**
-     * Executes the generated SQL and returns the found record object or false
-     *
-     * @param mixed $conditions
-     * @return $this|false
+     * {@inheritdoc}
      */
     public function find($conditions = false)
     {
@@ -305,13 +308,6 @@ class BaseModelV2 extends BaseModel
         $name = $this->filterInputColumn($name);
 
         return in_array($name, $this->virtual);
-    }
-
-    public function hasColumn($name)
-    {
-        $name = $this->filterInputColumn($name);
-
-        return in_array($name, $this->getFields());
     }
 
     /**

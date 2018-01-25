@@ -91,11 +91,6 @@ class BaseModel extends Record implements JsonSerializable
     protected $virtual = [];
 
     /**
-     * @var bool
-     */
-    protected $enableProperty = false;
-
-    /**
      * 返回数组时,通过get方法获取值
      *
      * @var bool
@@ -802,13 +797,6 @@ class BaseModel extends Record implements JsonSerializable
             return parent::__get($name);
         }
 
-        // Receive field value
-        if ($this->enableProperty) {
-            if ($this->hasColumn($name)) {
-                return $this->get($name);
-            }
-        }
-
         // Receive relation
         if (method_exists($this, $name)) {
             return $this->getRelation($name);
@@ -941,16 +929,17 @@ class BaseModel extends Record implements JsonSerializable
         return parent::set($name, $value);
     }
 
+    /**
+     * Check if column name exists
+     *
+     * @param string $name
+     * @return bool
+     */
     public function hasColumn($name)
     {
         $name = $this->filterInputColumn($name);
-        if (in_array($name, $this->getFields())) {
-            return true;
-        }
 
-        $method = 'get' . $this->camel($name) . 'Attribute';
-
-        return method_exists($this, $method);
+        return in_array($name, $this->getFields());
     }
 
     public function isFillable($field)
