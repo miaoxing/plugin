@@ -107,13 +107,21 @@ class BaseModelV2 extends BaseModel
         // Ignore $coll[] = $value
         if ($name !== null) {
             $name = $this->filterInputColumn($name);
-        }
 
-        // 直接设置就行
-        Record::set($name, $value);
+            if (in_array($name, $this->getFields())) {
+                // 直接设置就行
+                Record::set($name, $value);
+            } else {
+                // 虚拟列
+                $method = 'set' . $this->camel($name) . 'Attribute';
+                if (method_exists($this, $method)) {
+                    return $this->$method($value);
+                }
+            }
 
-        if ($name !== null) {
             $this->setDataSource($name, 'user');
+        } else {
+            Record::set($name, $value);
         }
 
         return $this;
@@ -123,6 +131,14 @@ class BaseModelV2 extends BaseModel
     {
         // TODO check column, coll Record::get
         $name = $this->filterInputColumn($name);
+        if (!in_array($name, $this->getFields())) {
+            // 虚拟列
+            $method = 'get' . $this->camel($name) . 'Attribute';
+            if (method_exists($this, $method)) {
+                return $this->$method();
+            }
+        }
+
         $value = Record::get($name);
 
         $source = $this->getDataSource($name);
@@ -204,7 +220,7 @@ class BaseModelV2 extends BaseModel
             return;
         }
 
-        if ($this->hasColumn($name)) {
+        if ($this->hasColumn($name) || $this->isVirtual($name)) {
             $this->set($name, $value);
 
             return;
@@ -240,13 +256,45 @@ class BaseModelV2 extends BaseModel
         }
     }
 
+    protected $virtualData = [];
+
     public function &offsetGet($name)
     {
         $name = $this->filterInputColumn($name);
 
+        if ($this->isVirtual($name)) {
+            $this->getVirtual($name);
+
+            return $this->virtualData[$name];
+        }
+
         parent::offsetGet($name);
 
         return $this->data[$name];
+    }
+
+    protected function getVirtual($name)
+    {
+        $method = 'get' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            return $this->virtualData[$name] = $this->$method();
+        }
+
+        return null;
+    }
+
+    protected function isVirtual($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        return in_array($name, $this->virtual);
+    }
+
+    public function hasColumn($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        return in_array($name, $this->getFields());
     }
 
     /**
@@ -266,9 +314,16 @@ class BaseModelV2 extends BaseModel
         // Receive field value
         if ($this->hasColumn($name)) {
             $this->get($name);
-            $name = $this->filterInputColumn($name);
+            $column = $this->filterInputColumn($name);
 
-            return $this->data[$name];
+            return $this->data[$column];
+        }
+
+        // Receive virtual column value
+        if ($this->isVirtual($name)) {
+            $this->getVirtual($name);
+
+            return $this->virtualData[$name];
         }
 
         // Receive relation

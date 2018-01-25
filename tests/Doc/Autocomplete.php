@@ -12,6 +12,7 @@ namespace MiaoxingTest\Plugin\Doc {
     use MiaoxingTest\Plugin\Fixture\TestSoftDelete;
     use MiaoxingTest\Plugin\Fixture\TestTag;
     use MiaoxingTest\Plugin\Fixture\TestUser;
+    use MiaoxingTest\Plugin\Fixture\TestVirtual;
 
     /**
      * @method TestUser|TestUser[] testUser()
@@ -24,6 +25,7 @@ namespace MiaoxingTest\Plugin\Doc {
      * @method TestCast|TestCast[] testCast()
      * @method TestMutator|TestMutator[] testMutator()
      * @method TestRef|TestRef[] testRef()
+     * @method TestVirtual|TestVirtual[] testVirtual()
      */
     class AutoComplete
     {

@@ -1,0 +1,53 @@
+<?php
+
+namespace MiaoxingTest\Plugin\Model;
+
+use Miaoxing\Plugin\Test\BaseTestCase;
+
+class VirtualTest extends BaseTestCase
+{
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        static::dropTables();
+        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Plugin\Fixture');
+
+        wei()->schema->table('test_virtual')
+            ->id()
+            ->exec();
+    }
+
+    public static function tearDownAfterClass()
+    {
+        static::dropTables();
+        parent::tearDownAfterClass();
+    }
+
+    public static function dropTables()
+    {
+        wei()->schema->dropIfExists('test_virtual');
+    }
+
+    public function testGetNew()
+    {
+        $virtual = wei()->testVirtual();
+
+        $this->assertNull($virtual->getVirtualColumnValue());
+        $this->assertNull($virtual->get('virtualColumn'));
+        $this->assertNull($virtual['virtualColumn']);
+        $this->assertNull($virtual->virtualColumn);
+    }
+
+    public function testGetAfterSet()
+    {
+        $virtual = wei()->testVirtual();
+
+        $virtual->virtualColumn = 'something';
+
+        $this->assertEquals('something', $virtual->getVirtualColumnValue());
+        $this->assertEquals('something', $virtual->get('virtualColumn'));
+        $this->assertEquals('something', $virtual['virtualColumn']);
+        $this->assertEquals('something', $virtual->virtualColumn);
+    }
+}
