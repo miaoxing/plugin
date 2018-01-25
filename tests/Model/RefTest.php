@@ -3,6 +3,7 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Fixture\TestRef;
 use Wei\Request;
 
 class RefTest extends BaseTestCase
@@ -191,6 +192,21 @@ class RefTest extends BaseTestCase
         $model->request;
 
         $this->assertInstanceOf(Request::class, $model->request);
+    }
+
+    public function testCollGet()
+    {
+        $models = wei()->testRef()->beColl();
+
+        $models[] = wei()->testRef();
+        $models[0]->id = 2;
+
+        $models[] = wei()->testRef();
+
+        $this->assertInstanceOf(TestRef::class, $models[0]);
+        $this->assertEquals(2, $models[0]->id);
+
+        $this->assertInstanceOf(TestRef::class, $models[1]);
     }
 
     protected function getModel()
