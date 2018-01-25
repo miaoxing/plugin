@@ -160,7 +160,7 @@ class CastTraitTest extends BaseTestCase
                     'stringColumn' => 1,
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
-                    'jsonColumn' => '{"a":"b\\c","d":"中文"}', // 不能被json_decode,会变成null
+                    'jsonColumn' => '{"a":"b\\c","d":"中文"}',
                 ],
                 [
                     'intColumn' => 0,
@@ -168,7 +168,7 @@ class CastTraitTest extends BaseTestCase
                     'stringColumn' => '1',
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
-                    'jsonColumn' => null,
+                    'jsonColumn' => '{"a":"b\c","d":"中文"}',
                 ],
             ],
         ];

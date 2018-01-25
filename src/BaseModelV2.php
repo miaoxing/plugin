@@ -113,7 +113,7 @@ class BaseModelV2 extends BaseModel
         Record::set($name, $value);
 
         if ($name !== null) {
-            $this->setDataSource('*', 'user');
+            $this->setDataSource($name, 'user');
         }
 
         return $this;
@@ -145,7 +145,7 @@ class BaseModelV2 extends BaseModel
         }
 
         // 通过事件处理数据
-        $this->data[$name] = $this->trigger('getValue', [$value, $name]);
+        $this->data[$name] = $this->trigger('getValue', [$this->data[$name], $name]);
         $this->setDataSource($name, 'php');
 
         return $this->data[$name];

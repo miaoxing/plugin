@@ -29,6 +29,11 @@ class MutatorTest extends BaseTestCase
                 'setter' => base64_encode('setter'),
                 'mutator' => base64_encode('mutator'),
             ],
+            [
+                'getter' => base64_encode('getter'),
+                'setter' => base64_encode('setter'),
+                'mutator' => base64_encode('mutator'),
+            ],
         ]);
     }
 
@@ -171,8 +176,18 @@ class MutatorTest extends BaseTestCase
 
     public function testFind()
     {
-        $mutator = wei()->testMutator()->findById(1);
+        $mutator = wei()->testMutator()->findById(2);
 
         $this->assertEquals('mutator', $mutator->mutator);
+        $this->assertEquals('getter', $mutator->getter);
+        $this->assertEquals(base64_encode('setter'), $mutator->setter);
+
+        $mutator->mutator = 'mutator2';
+        $mutator->getter = base64_encode('getter2');
+        $mutator->setter = 'setter2';
+
+        $this->assertEquals('mutator2', $mutator->mutator);
+        $this->assertEquals('getter2', $mutator->getter);
+        $this->assertEquals(base64_encode('setter2'), $mutator->setter);
     }
 }
