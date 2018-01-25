@@ -102,16 +102,8 @@ class BaseModelV2 extends BaseModel
         if ($name !== null) {
             $name = $this->filterInputColumn($name);
 
-            if (in_array($name, $this->getFields())) {
-                // 直接设置就行
-                Record::set($name, $value);
-            } else {
-                // 虚拟列
-                $method = 'set' . $this->camel($name) . 'Attribute';
-                if (method_exists($this, $method)) {
-                    return $this->$method($value);
-                }
-            }
+            // 直接设置就行
+            Record::set($name, $value);
 
             $this->setDataSource($name, 'user');
         } else {
@@ -178,7 +170,7 @@ class BaseModelV2 extends BaseModel
         }
 
         // Receive virtual column value
-        if ($this->isVirtual($name)) {
+        if ($this->hasVirtual($name)) {
             return $this->getVirtual($name);
         }
 
@@ -205,12 +197,16 @@ class BaseModelV2 extends BaseModel
             return $this->$name = $value;
         }
 
-        if ($this->hasColumn($name) || $this->isVirtual($name)) {
+        if ($this->hasColumn($name)) {
             return $this->set($name, $value);
         }
 
+        if ($this->hasVirtual($name)) {
+            return $this->setVirtual($name, $value);
+        }
+
         if ($this->hasRelation($name)) {
-            return $this->$name = $value;
+            return $this->setRelation($name, $value);
         }
 
         if ($this->wei->has($name)) {
@@ -227,7 +223,7 @@ class BaseModelV2 extends BaseModel
     {
         $name = $this->filterInputColumn($name);
 
-        if ($this->isVirtual($name)) {
+        if ($this->hasVirtual($name)) {
             return $this->getVirtual($name);
         }
 
@@ -363,16 +359,44 @@ class BaseModelV2 extends BaseModel
     }
 
     /**
+     * Sets the virtual column value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function setVirtual($name, $value)
+    {
+        $method = 'set' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            return $this->$method($value);
+        }
+
+        throw new InvalidArgumentException('Invalid virtual column: ' . $name);
+    }
+
+    /**
      * Check if the name is virtual column
      *
      * @param string $name
      * @return bool
      */
-    protected function isVirtual($name)
+    protected function hasVirtual($name)
     {
         $name = $this->filterInputColumn($name);
 
         return in_array($name, $this->virtual);
+    }
+
+    /**
+     * Sets relation value
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    protected function setRelation($name, $value)
+    {
+        $this->$name = $value;
     }
 
     /**
