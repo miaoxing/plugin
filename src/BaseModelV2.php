@@ -102,6 +102,23 @@ class BaseModelV2 extends BaseModel
         return $result;
     }
 
+    public function findAll($conditions = false)
+    {
+        $this->isColl = true;
+        $data = $this->fetchAll($conditions);
+
+        $records = array();
+        foreach ($data as $key => $row) {
+            /** @var $records BaseModelV2[] */
+            $records[$key] = $this->db->init($this->table, [], false);
+            $records[$key]->setRawData($row);
+            $records[$key]->triggerCallback('afterFind');
+        }
+
+        $this->data = $records;
+        return $this;
+    }
+
     public function set($name, $value = null)
     {
         // Ignore $coll[] = $value
