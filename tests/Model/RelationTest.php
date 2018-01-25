@@ -1,6 +1,6 @@
 <?php
 
-namespace MiaoxingTest\Plugin\Service;
+namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\TestArticle;
@@ -8,9 +8,9 @@ use MiaoxingTest\Plugin\Fixture\TestTag;
 use MiaoxingTest\Plugin\Fixture\TestUser;
 
 /**
- * 数据库记录测试
+ * 数据库关联测试
  */
-class RecordTest extends BaseTestCase
+class RelationTest extends BaseTestCase
 {
     public static function setUpBeforeClass()
     {

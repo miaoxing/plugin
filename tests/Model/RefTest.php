@@ -1,11 +1,11 @@
 <?php
 
-namespace MiaoxingTest\Plugin\Service;
+namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Wei\Request;
 
-class ModelTest extends BaseTestCase
+class RefTest extends BaseTestCase
 {
     public static function setUpBeforeClass()
     {
