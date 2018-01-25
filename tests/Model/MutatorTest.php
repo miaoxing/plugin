@@ -190,4 +190,42 @@ class MutatorTest extends BaseTestCase
         $this->assertEquals('getter2', $mutator->getter);
         $this->assertEquals(base64_encode('setter2'), $mutator->setter);
     }
+
+    public function testNew()
+    {
+        $mutator = wei()->testMutator();
+
+        $this->assertNull($mutator->mutator);
+        $this->assertNull($mutator->getter);
+        $this->assertNull($mutator->setter);
+
+        $mutator->mutator = 'mutator2';
+        $mutator->getter = base64_encode('getter2');
+        $mutator->setter = 'setter2';
+
+        $this->assertEquals('mutator2', $mutator->mutator);
+        $this->assertEquals('getter2', $mutator->getter);
+        $this->assertEquals(base64_encode('setter2'), $mutator->setter);
+    }
+
+    public function testSave()
+    {
+        $mutator = wei()->testMutator()->save([
+            'mutator' => 'mutator2',
+            'getter' => base64_encode('getter2'),
+            'setter' => 'setter2',
+        ]);
+
+        $this->assertEquals('mutator2', $mutator->mutator);
+        $this->assertEquals('getter2', $mutator->getter);
+        $this->assertEquals(base64_encode('setter2'), $mutator->setter);
+
+        $mutator->mutator = 'mutator3';
+        $mutator->getter = base64_encode('getter3');
+        $mutator->setter = 'setter3';
+
+        $this->assertEquals('mutator3', $mutator->mutator);
+        $this->assertEquals('getter3', $mutator->getter);
+        $this->assertEquals(base64_encode('setter3'), $mutator->setter);
+    }
 }
