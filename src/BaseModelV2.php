@@ -57,8 +57,8 @@ class BaseModelV2 extends BaseModel
         'deleted_by',
     ];
 
-    protected $raws = [
-        '*' => false,
+    protected $dataSources = [
+        '*' => 'php',
     ];
 
     public function __construct(array $options = [])
@@ -66,27 +66,22 @@ class BaseModelV2 extends BaseModel
         parent::__construct($options);
 
         if (!$this->isNew) {
-            $this->initRaws();
+            $this->setDataSource('*', 'db');
         }
     }
 
-    protected function isRaw($name)
+    protected function setDataSource($name, $source)
     {
-        if (!isset($this->raws[$name])) {
-            return $this->raws['*'];
+        $this->dataSources[$name] = $source;
+    }
+
+    protected function getDataSource($name)
+    {
+        if (!isset($this->dataSources[$name])) {
+            return $this->dataSources['*'];
         }
 
-        return $this->raws[$name];
-    }
-
-    protected function initRaws()
-    {
-        $this->raws = ['*' => true];
-    }
-
-    protected function setRaw($name, $flag)
-    {
-        $this->raws[$name] = $flag;
+        return $this->dataSources[$name];
     }
 
     /**
@@ -101,7 +96,7 @@ class BaseModelV2 extends BaseModel
 
         // 清空原来的数据
         if ($result) {
-            $this->initRaws();
+            $this->setDataSource('*', 'db');
         }
 
         return $result;
@@ -118,7 +113,7 @@ class BaseModelV2 extends BaseModel
         Record::set($name, $value);
 
         if ($name !== null) {
-            $this->setRaw($name, false);
+            $this->setDataSource('*', 'user');
         }
 
         return $this;
@@ -130,24 +125,28 @@ class BaseModelV2 extends BaseModel
         $name = $this->filterInputColumn($name);
         $value = Record::get($name);
 
-        if (!$this->isRaw($name)) {
-            // 先通过set转换为raw数据
+        $source = $this->getDataSource($name);
+        if ($source === 'php') {
+            return $value;
+        }
+
+        // 先通过set转换为db数据
+        if ($source === 'user') {
             $this->data[$name] = $this->getSetValue($name, $value);
         }
 
-        // 再转换为符合要求的数据
         // 通过getter处理数据
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
             $this->data[$name] = $this->$method();
-            $this->setRaw($name, false);
+            $this->setDataSource($name, 'php');
 
             return $this->data[$name];
         }
 
         // 通过事件处理数据
         $this->data[$name] = $this->trigger('getValue', [$value, $name]);
-        $this->setRaw($name, false);
+        $this->setDataSource($name, 'php');
 
         return $this->data[$name];
     }
@@ -165,18 +164,18 @@ class BaseModelV2 extends BaseModel
         return $value;
     }
 
-    protected function generateRawData()
+    protected function generateDbData()
     {
-        $rawData = [];
+        $dbData = [];
         foreach ($this->data as $name => $value) {
-            if (!$this->isRaw($name)) {
-                $rawData[$name] = $this->getSetValue($name, $value);
+            if ($this->getDataSource($name) !== 'db') {
+                $dbData[$name] = $this->getSetValue($name, $value);
             } else {
-                $rawData[$name] = $value;
+                $dbData[$name] = $value;
             }
         }
 
-        return $rawData;
+        return $dbData;
     }
 
     public function save($data = array())
@@ -186,7 +185,7 @@ class BaseModelV2 extends BaseModel
 
         // 将数据转换为数据库数据
         $origData = $this->data;
-        $this->data = $this->generateRawData();
+        $this->data = $this->generateDbData();
 
         parent::save();
 

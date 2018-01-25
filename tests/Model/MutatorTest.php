@@ -142,6 +142,33 @@ class MutatorTest extends BaseTestCase
         $this->assertEquals('bbc', $mutator->mutator);
     }
 
+    public function testGetTwice()
+    {
+        $mutator = wei()->testMutator();
+
+        // 转换为内部数据
+        $mutator->mutator = 'abc';
+
+        // 还原为外部数据
+        $this->assertEquals('abc', $mutator->mutator);
+
+        // 再次获得外部数据
+        $this->assertEquals('abc', $mutator->mutator);
+    }
+
+    public function testGetterGetTwice()
+    {
+        $mutator = wei()->testMutator();
+
+        $mutator->getter = 'abc';
+
+        // 只有Getter没有Setter,所以返回值是直接对abc做decode
+        $this->assertEquals(base64_decode('abc'), $mutator->getter);
+
+        // 再次调用也是一样的结果
+        $this->assertEquals(base64_decode('abc'), $mutator->getter);
+    }
+
     public function testFind()
     {
         $mutator = wei()->testMutator()->findById(1);
