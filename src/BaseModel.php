@@ -122,6 +122,20 @@ class BaseModel extends Record implements JsonSerializable
 
     protected static $events = [];
 
+    protected $sqlParts = array(
+        'select' => array(),
+        'from' => null,
+        'join' => array(),
+        'set' => array(),
+        'where' => null,
+        'groupBy' => array(),
+        'having' => null,
+        'orderBy' => array(),
+        'limit' => null,
+        'offset' => null,
+        'page' => null,
+    );
+
     public function __construct(array $options = [])
     {
         parent::__construct($options);
