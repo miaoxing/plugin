@@ -117,19 +117,28 @@ class BaseModel extends Record implements JsonSerializable
 
     protected static $events = [];
 
-    protected $sqlParts = array(
-        'select' => array(),
+    protected $sqlParts = [
+        'select' => [],
         'from' => null,
-        'join' => array(),
-        'set' => array(),
+        'join' => [],
+        'set' => [],
         'where' => null,
-        'groupBy' => array(),
+        'groupBy' => [],
         'having' => null,
-        'orderBy' => array(),
+        'orderBy' => [],
         'limit' => null,
         'offset' => null,
         'page' => null,
-    );
+    ];
+
+    /**
+     * @var array
+     */
+    protected $requiredServices = [
+        'db',
+        'logger',
+        'ret',
+    ];
 
     public function __construct(array $options = [])
     {
@@ -793,7 +802,7 @@ class BaseModel extends Record implements JsonSerializable
     public function __get($name)
     {
         // Receive service that conflict with record method name
-        if (in_array($name, ['db', 'cache', 'lock', 'ret'])) {
+        if (in_array($name, $this->requiredServices)) {
             return parent::__get($name);
         }
 

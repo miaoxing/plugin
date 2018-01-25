@@ -36,8 +36,6 @@ class BaseModelV2 extends BaseModel
 
     protected $toArrayV2 = true;
 
-    protected $enableProperty = true;
-
     protected $tableV2 = true;
 
     protected $guarded = [
@@ -61,6 +59,11 @@ class BaseModelV2 extends BaseModel
         '*' => 'php',
     ];
 
+    protected $virtualData = [];
+
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(array $options = [])
     {
         parent::__construct($options);
@@ -71,57 +74,28 @@ class BaseModelV2 extends BaseModel
     }
 
     /**
-     * @param string $name
-     * @param string $source
-     */
-    protected function setDataSource($name, $source)
-    {
-        $this->dataSources[$name] = $source;
-    }
-
-    /**
-     * Returns the data source of specified column name
+     * Returns the success result with model data
      *
-     * @param string $name
-     * @return string
+     * @param array $merge
+     * @return array
      */
-    protected function getDataSource($name)
+    public function toRet(array $merge = [])
     {
-        return isset($this->dataSources[$name]) ? $this->dataSources[$name] : $this->dataSources['*'];
+        if ($this->isColl()) {
+            return $this->suc($merge + [
+                    'data' => $this,
+                    'page' => $this->getSqlPart('page'),
+                    'rows' => $this->getSqlPart('limit'),
+                    'records' => $this->count(),
+                ]);
+        } else {
+            return $this->suc($merge + ['data' => $this]);
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function find($conditions = false)
-    {
-        $result = parent::find($conditions);
-
-        // 清空原来的数据
-        if ($result) {
-            $this->setDataSource('*', 'db');
-        }
-
-        return $result;
-    }
-
-    public function findAll($conditions = false)
-    {
-        $this->isColl = true;
-        $data = $this->fetchAll($conditions);
-
-        $records = array();
-        foreach ($data as $key => $row) {
-            /** @var $records BaseModelV2[] */
-            $records[$key] = $this->db->init($this->table, [], false);
-            $records[$key]->setRawData($row);
-            $records[$key]->triggerCallback('afterFind');
-        }
-
-        $this->data = $records;
-        return $this;
-    }
-
     public function set($name, $value = null)
     {
         // Ignore $coll[] = $value
@@ -147,6 +121,9 @@ class BaseModelV2 extends BaseModel
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function get($name)
     {
         // TODO check column, coll Record::get
@@ -187,138 +164,13 @@ class BaseModelV2 extends BaseModel
         return $this->data[$name];
     }
 
-    protected function getSetValue($name, $value)
-    {
-        $method = 'set' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            $this->$method($value);
-            $value = $this->data[$name];
-        } else {
-            $value = $this->trigger('setValue', [$value, $name]);
-        }
-
-        return $value;
-    }
-
-    protected function generateDbData()
-    {
-        $dbData = [];
-        foreach ($this->data as $name => $value) {
-            if ($this->getDataSource($name) !== 'db') {
-                $dbData[$name] = $this->getSetValue($name, $value);
-            } else {
-                $dbData[$name] = $value;
-            }
-        }
-
-        return $dbData;
-    }
-
-    public function save($data = array())
-    {
-        // 1. Merges data from parameters
-        $data && $this->fromArray($data);
-
-        // 将数据转换为数据库数据
-        $origData = $this->data;
-        $this->data = $this->generateDbData();
-
-        parent::save();
-
-        // 还原原来的数据+save过程中生成的主键数据
-        $this->data = $origData + $this->data;
-
-        return $this;
-    }
-
-    public function __set($name, $value = null)
-    {
-        // TODO service 和 column 混用容易出错
-        if (in_array($name, ['db'])) {
-            $this->$name = $value;
-
-            return;
-        }
-
-        if ($this->hasColumn($name) || $this->isVirtual($name)) {
-            $this->set($name, $value);
-
-            return;
-        }
-
-        // 模型关联
-        if (method_exists($this, $name)) {
-            $this->$name = $value;
-
-            return;
-        }
-
-        if ($this->wei->has($name)) {
-            $this->$name = $value;
-
-            return;
-        }
-
-        throw new InvalidArgumentException('Invalid property: ' . $name);
-    }
-
-    public function toRet(array $merge = [])
-    {
-        if ($this->isColl()) {
-            return $this->suc($merge + [
-                    'data' => $this,
-                    'page' => $this->getSqlPart('page'),
-                    'rows' => $this->getSqlPart('limit'),
-                    'records' => $this->count(),
-                ]);
-        } else {
-            return $this->suc(['data' => $this]);
-        }
-    }
-
-    protected $virtualData = [];
-
-    public function &offsetGet($name)
-    {
-        $name = $this->filterInputColumn($name);
-
-        if ($this->isVirtual($name)) {
-            $this->getVirtual($name);
-
-            return $this->virtualData[$name];
-        }
-
-        parent::offsetGet($name);
-
-        return $this->data[$name];
-    }
-
-    protected function getVirtual($name)
-    {
-        $method = 'get' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            return $this->virtualData[$name] = $this->$method();
-        }
-
-        return null;
-    }
-
-    protected function isVirtual($name)
-    {
-        $name = $this->filterInputColumn($name);
-
-        return in_array($name, $this->virtual);
-    }
-
     /**
-     * @param string $name
-     * @return mixed
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function &__get($name)
     {
         // Receive service that conflict with record method name
-        if (in_array($name, ['db', 'cache', 'lock', 'ret'])) {
+        if (in_array($name, ['db', 'cache', 'ret'])) {
             parent::__get($name);
 
             return $this->$name;
@@ -350,5 +202,171 @@ class BaseModelV2 extends BaseModel
         parent::__get($name);
 
         return $this->$name;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
+    public function __set($name, $value = null)
+    {
+        // Required services first
+        if (in_array($name, $this->requiredServices)) {
+            return $this->$name = $value;
+        }
+
+        if ($this->hasColumn($name) || $this->isVirtual($name)) {
+            return $this->set($name, $value);
+        }
+
+        // 模型关联
+        if (method_exists($this, $name)) {
+            return $this->$name = $value;
+        }
+
+        if ($this->wei->has($name)) {
+            return $this->$name = $value;
+        }
+
+        throw new InvalidArgumentException('Invalid property: ' . $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function &offsetGet($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        if ($this->isVirtual($name)) {
+            $this->getVirtual($name);
+
+            return $this->virtualData[$name];
+        }
+
+        parent::offsetGet($name);
+
+        return $this->data[$name];
+    }
+
+    /**
+     * @param string $name
+     * @param string $source
+     */
+    protected function setDataSource($name, $source)
+    {
+        $this->dataSources[$name] = $source;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find($conditions = false)
+    {
+        $result = parent::find($conditions);
+
+        // 清空原来的数据
+        if ($result) {
+            $this->setDataSource('*', 'db');
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAll($conditions = false)
+    {
+        $this->isColl = true;
+        $data = $this->fetchAll($conditions);
+
+        $records = array();
+        foreach ($data as $key => $row) {
+            /** @var $records BaseModelV2[] */
+            $records[$key] = $this->db->init($this->table, [], false);
+            $records[$key]->setRawData($row);
+            $records[$key]->triggerCallback('afterFind');
+        }
+
+        $this->data = $records;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save($data = array())
+    {
+        // 1. Merges data from parameters
+        $data && $this->fromArray($data);
+
+        // 将数据转换为数据库数据
+        $origData = $this->data;
+        $this->data = $this->generateDbData();
+
+        parent::save();
+
+        // 还原原来的数据+save过程中生成的主键数据
+        $this->data = $origData + $this->data;
+
+        return $this;
+    }
+
+    /**
+     * Returns the data source of specified column name
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function getDataSource($name)
+    {
+        return isset($this->dataSources[$name]) ? $this->dataSources[$name] : $this->dataSources['*'];
+    }
+
+    protected function getSetValue($name, $value)
+    {
+        $method = 'set' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            $this->$method($value);
+            $value = $this->data[$name];
+        } else {
+            $value = $this->trigger('setValue', [$value, $name]);
+        }
+
+        return $value;
+    }
+
+    protected function generateDbData()
+    {
+        $dbData = [];
+        foreach ($this->data as $name => $value) {
+            if ($this->getDataSource($name) !== 'db') {
+                $dbData[$name] = $this->getSetValue($name, $value);
+            } else {
+                $dbData[$name] = $value;
+            }
+        }
+
+        return $dbData;
+    }
+
+    protected function getVirtual($name)
+    {
+        $method = 'get' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            return $this->virtualData[$name] = $this->$method();
+        }
+
+        return null;
+    }
+
+    protected function isVirtual($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        return in_array($name, $this->virtual);
     }
 }
