@@ -2,22 +2,16 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Plugin\BaseModelV2;
 
 /**
  * @property TestUser $user
  * @property TestTag|TestTag[] $tags
- * @property string $test_user_id
+ * @property string $testUserId
  * @property string $title
  */
-class TestArticle extends BaseModel
+class TestArticle extends BaseModelV2
 {
-    protected $toArrayV2 = true;
-
-    protected $enableProperty = true;
-
-    protected $tableV2 = true;
-
     public function user()
     {
         return $this->belongsTo('testUser');

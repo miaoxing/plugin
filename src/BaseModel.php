@@ -773,7 +773,7 @@ class BaseModel extends Record implements JsonSerializable
             $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
             foreach ($records as $record) {
                 if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
-                    $rowRelation[] = $this->wei->$serviceName()->fromArray($record);
+                    $rowRelation[] = $this->wei->$serviceName()->setData($record);
                 }
             }
         }

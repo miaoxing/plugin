@@ -2,18 +2,14 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Plugin\BaseModelV2;
 
 /**
  * @property TestArticle|TestArticle[] $articles
  * @property string $name
  */
-class TestTag extends BaseModel
+class TestTag extends BaseModelV2
 {
-    protected $enableProperty = true;
-
-    protected $tableV2 = true;
-
     public function articles()
     {
         return $this->belongsToMany('testArticle');

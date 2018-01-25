@@ -48,7 +48,7 @@ class RecordTest extends BaseTestCase
             ->int('test_tag_id')
             ->exec();
 
-        wei()->db->batchInsert('test_users', [
+        wei()->appDb->batchInsert('test_users', [
             [
                 'name' => 'twin',
             ],
@@ -60,7 +60,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->batchInsert('test_profiles', [
+        wei()->appDb->batchInsert('test_profiles', [
             [
                 'test_user_id' => 1,
                 'description' => 'My name is twin',
@@ -71,7 +71,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->batchInsert('test_tags', [
+        wei()->appDb->batchInsert('test_tags', [
             [
                 'name' => 'work',
             ],
@@ -80,7 +80,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->batchInsert('test_articles', [
+        wei()->appDb->batchInsert('test_articles', [
             [
                 'test_user_id' => 1,
                 'title' => 'Article 1',
@@ -98,7 +98,7 @@ class RecordTest extends BaseTestCase
             ],
         ]);
 
-        wei()->db->batchInsert('test_articles_test_tags', [
+        wei()->appDb->batchInsert('test_articles_test_tags', [
             [
                 'test_article_id' => 1,
                 'test_tag_id' => 1,
@@ -148,11 +148,9 @@ class RecordTest extends BaseTestCase
 
         $profile = $user->profile;
 
-        // @codingStandardsIgnoreStart
-        $this->assertEquals(1, $profile->test_user_id);
-        // @codingStandardsIgnoreEnd
+        $this->assertEquals(1, $profile->testUserId);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1', $queries[1]);
         $this->assertCount(2, $queries);
@@ -164,13 +162,11 @@ class RecordTest extends BaseTestCase
 
         $users->findAll()->load('profile');
 
-        // @codingStandardsIgnoreStart
-        $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
-        $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
-        // @codingStandardsIgnoreEnd
+        $this->assertEquals($users[0]->id, $users[0]->profile->testUserId);
+        $this->assertEquals($users[1]->id, $users[1]->profile->testUserId);
         $this->assertNull($users[2]->profile);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
 
         $this->assertEquals('SELECT * FROM test_users', $queries[0]);
         $this->assertEquals('SELECT * FROM test_profiles WHERE test_user_id IN (?, ?, ?)', $queries[1]);
@@ -183,13 +179,11 @@ class RecordTest extends BaseTestCase
 
         $users->findAll();
 
-        // @codingStandardsIgnoreStart
-        $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
-        $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
-        // @codingStandardsIgnoreEnd
+        $this->assertEquals($users[0]->id, $users[0]->profile->testUserId);
+        $this->assertEquals($users[1]->id, $users[1]->profile->testUserId);
         $this->assertNull($users[2]->profile);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
 
         $this->assertEquals('SELECT * FROM test_users', $queries[0]);
         $this->assertEquals('SELECT * FROM test_profiles WHERE test_user_id = ? LIMIT 1', $queries[1]);
@@ -208,7 +202,7 @@ class RecordTest extends BaseTestCase
 
         $this->assertEquals(1, $user->id);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
 
         $this->assertEquals('SELECT * FROM test_articles WHERE id = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[1]);
@@ -223,12 +217,10 @@ class RecordTest extends BaseTestCase
 
         foreach ($articles as $article) {
             $user = $article->user;
-            // @codingStandardsIgnoreStart
-            $this->assertEquals($article->test_user_id, $user->id);
-            // @codingStandardsIgnoreEnd
+            $this->assertEquals($article->testUserId, $user->id);
         }
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
         $this->assertEquals('SELECT * FROM test_users WHERE id IN (?, ?)', $queries[1]);
         $this->assertCount(2, $queries);
@@ -242,12 +234,10 @@ class RecordTest extends BaseTestCase
 
         foreach ($articles as $article) {
             $user = $article->user;
-            // @codingStandardsIgnoreStart
-            $this->assertEquals($article->test_user_id, $user->id);
-            // @codingStandardsIgnoreEnd
+            $this->assertEquals($article->testUserId, $user->id);
         }
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[1]);
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[1]);
@@ -263,12 +253,10 @@ class RecordTest extends BaseTestCase
         $articles = $user->articles;
 
         foreach ($articles as $article) {
-            // @codingStandardsIgnoreStart
-            $this->assertEquals($article->test_user_id, $user->id);
-            // @codingStandardsIgnoreEnd
+            $this->assertEquals($article->testUserId, $user->id);
         }
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM test_articles WHERE test_user_id = ?', $queries[1]);
         $this->assertCount(2, $queries);
@@ -283,16 +271,14 @@ class RecordTest extends BaseTestCase
         $articles = $user->customArticles()->andWhere('id >= ?', 1)->desc('id');
 
         foreach ($articles as $article) {
-            // @codingStandardsIgnoreStart
-            $this->assertEquals($article->test_user_id, $user->id);
-            // @codingStandardsIgnoreEnd
+            $this->assertEquals($article->testUserId, $user->id);
         }
 
         $this->assertEquals(2, $articles->length());
         $this->assertEquals(3, $articles[0]->id);
         $this->assertEquals(1, $articles[1]->id);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_users WHERE id = ? LIMIT 1', $queries[0]);
         $sql = 'SELECT * FROM test_articles';
         $sql .= ' WHERE ((test_user_id = ?) AND (title LIKE ?)) AND (id >= ?) ORDER BY id DESC, id DESC';
@@ -308,13 +294,11 @@ class RecordTest extends BaseTestCase
 
         foreach ($users as $user) {
             foreach ($user->customArticles as $article) {
-                // @codingStandardsIgnoreStart
-                $this->assertEquals($article->test_user_id, $user->id);
-                // @codingStandardsIgnoreEnd
+                $this->assertEquals($article->testUserId, $user->id);
             }
         }
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
 
         $this->assertEquals('SELECT * FROM test_users', $queries[0]);
         $this->assertEquals(
@@ -335,7 +319,7 @@ class RecordTest extends BaseTestCase
         $this->assertEquals('work', $tags[0]->name);
         $this->assertEquals('life', $tags[1]->name);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
 
         $this->assertEquals('SELECT * FROM test_articles WHERE id = ? LIMIT 1', $queries[0]);
         $sql = 'SELECT test_tags.* FROM test_tags';
@@ -357,7 +341,7 @@ class RecordTest extends BaseTestCase
         $this->assertEquals('Article 1', $articles[0]->title);
         $this->assertEquals('Article 2', $articles[1]->title);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
 
         $this->assertEquals('SELECT * FROM test_tags WHERE id = ? LIMIT 1', $queries[0]);
         $sql = 'SELECT test_articles.* FROM test_articles';
@@ -386,7 +370,7 @@ class RecordTest extends BaseTestCase
         $this->assertEquals('work', $articles[1]->tags[0]->name);
         $this->assertEquals('life', $articles[2]->tags[0]->name);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
         $sql = 'SELECT test_tags.*, test_articles_test_tags.test_article_id FROM test_tags';
         $sql .= ' INNER JOIN test_articles_test_tags';
@@ -414,7 +398,7 @@ class RecordTest extends BaseTestCase
         $this->assertEquals('work', $articles[1]->customTags[0]->name);
         $this->assertEquals('life', $articles[2]->customTags[0]->name);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
         $sql = 'SELECT test_tags.*, test_articles_test_tags.test_article_id FROM test_tags';
         $sql .= ' INNER JOIN test_articles_test_tags';
@@ -445,7 +429,7 @@ class RecordTest extends BaseTestCase
         $this->assertEquals(1, $articles[0]->user->id);
         $this->assertEquals(1, $articles[0]->user->profile->id);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
         $this->assertEquals('SELECT * FROM test_users WHERE id IN (?, ?)', $queries[1]);
         $this->assertEquals('SELECT * FROM test_profiles WHERE test_user_id IN (?, ?)', $queries[2]);
@@ -459,7 +443,7 @@ class RecordTest extends BaseTestCase
 
         $articles->findAll()->load('user')->load('user');
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_articles', $queries[0]);
         $this->assertEquals('SELECT * FROM test_users WHERE id IN (?, ?)', $queries[1]);
         $this->assertCount(2, $queries);
@@ -467,13 +451,13 @@ class RecordTest extends BaseTestCase
 
     public function testEmptyLocalKeyDoNotExecuteQuery()
     {
-        wei()->db->insert('test_articles', [
+        wei()->appDb->insert('test_articles', [
             'test_user_id' => 0,
             'title' => 'Article 4',
             'content' => 'Content 4',
         ]);
-        $id = wei()->db->lastInsertId();
-        wei()->db->setOption('queries', []);
+        $id = wei()->appDb->lastInsertId();
+        wei()->appDb->setOption('queries', []);
 
         /** @var TestArticle $article */
         $article = wei()->testArticle();
@@ -482,7 +466,7 @@ class RecordTest extends BaseTestCase
         $user = $article->user;
         $this->assertNull($user);
 
-        $queries = wei()->db->getQueries();
+        $queries = wei()->appDb->getQueries();
         $this->assertEquals('SELECT * FROM test_articles WHERE id = ? LIMIT 1', $queries[0]);
         $this->assertCount(1, $queries);
     }
@@ -515,7 +499,7 @@ class RecordTest extends BaseTestCase
         $array = $article->setHidden('id')->toArray();
 
         $this->assertArrayNotHasKey('id', $array);
-        $this->assertArrayHasKey('test_user_id', $array);
+        $this->assertArrayHasKey('testUserId', $array);
     }
 
     public function testSetHiddenByArray()
@@ -536,6 +520,6 @@ class RecordTest extends BaseTestCase
         wei()->testProfile()->getFields();
         wei()->testTag()->getFields();
 
-        wei()->db->setOption('queries', []);
+        wei()->appDb->setOption('queries', []);
     }
 }

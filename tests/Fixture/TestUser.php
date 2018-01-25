@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Plugin\BaseModelV2;
 
 /**
  * @property TestProfile $profile
@@ -10,12 +10,8 @@ use Miaoxing\Plugin\BaseModel;
  * @property TestArticle|TestArticle[] $customArticles
  * @property string $id
  */
-class TestUser extends BaseModel
+class TestUser extends BaseModelV2
 {
-    protected $enableProperty = true;
-
-    protected $tableV2 = true;
-
     public function articles()
     {
         return $this->hasMany(wei()->testArticle());

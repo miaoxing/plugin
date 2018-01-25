@@ -2,14 +2,11 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Plugin\BaseModelV2;
 
 /**
- * @property string test_user_id
+ * @property string $testUserId
  */
-class TestProfile extends BaseModel
+class TestProfile extends BaseModelV2
 {
-    protected $enableProperty = true;
-
-    protected $tableV2 = true;
 }
