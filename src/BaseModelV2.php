@@ -152,10 +152,8 @@ class BaseModelV2 extends BaseModel
     public function &__get($name)
     {
         // Receive service that conflict with record method name
-        if (in_array($name, ['db', 'cache', 'ret'])) {
-            parent::__get($name);
-
-            return $this->$name;
+        if (in_array($name, $this->requiredServices)) {
+            return $this->getServiceValue($name);
         }
 
         // Receive field value
@@ -173,10 +171,8 @@ class BaseModelV2 extends BaseModel
             return $this->getRelation($name);
         }
 
-        // Receive service
-        parent::__get($name);
-
-        return $this->$name;
+        // Receive other services
+        return $this->getServiceValue($name);
     }
 
     /**
@@ -302,11 +298,15 @@ class BaseModelV2 extends BaseModel
         return isset($this->dataSources[$name]) ? $this->dataSources[$name] : $this->dataSources['*'];
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
     protected function getSetValue($name, $value)
     {
-        $method = 'set' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            $this->$method($value);
+        $result = $this->callSetter($name, $value);
+        if ($result) {
             $value = $this->data[$name];
         } else {
             $value = $this->trigger('setValue', [$value, $name]);
@@ -342,6 +342,20 @@ class BaseModelV2 extends BaseModel
     }
 
     /**
+     * Returns the service object
+     *
+     * @param string $name
+     * @return BaseService
+     * @throws \Exception
+     */
+    protected function &getServiceValue($name)
+    {
+        parent::__get($name);
+
+        return $this->$name;
+    }
+
+    /**
      * Returns the virtual column value
      *
      * @param string $name
@@ -362,16 +376,13 @@ class BaseModelV2 extends BaseModel
      *
      * @param string $name
      * @param mixed $value
-     * @return mixed
      */
     protected function setVirtualValue($name, $value)
     {
-        $method = 'set' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            return $this->$method($value);
+        $result = $this->callSetter($name, $value);
+        if (!$result) {
+            throw new InvalidArgumentException('Invalid virtual column: ' . $name);
         }
-
-        throw new InvalidArgumentException('Invalid virtual column: ' . $name);
     }
 
     /**
@@ -419,6 +430,21 @@ class BaseModelV2 extends BaseModel
         $method = 'get' . $this->camel($name) . 'Attribute';
         if ($result = method_exists($this, $method)) {
             $value = $this->$method();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    protected function callSetter($name, $value)
+    {
+        $method = 'set' . $this->camel($name) . 'Attribute';
+        if ($result = method_exists($this, $method)) {
+            $this->$method($value);
         }
 
         return $result;
