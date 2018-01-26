@@ -49,6 +49,7 @@ class VirtualTest extends BaseTestCase
         $this->assertEquals('something', $virtual->getVirtualColumnValue());
         $this->assertEquals('something', $virtual['virtualColumn']);
         $this->assertEquals('something', $virtual->virtualColumn);
+        $this->assertEquals('something', $virtual->get('virtualColumn'));
     }
 
     public function testOffsetSet()
@@ -60,6 +61,7 @@ class VirtualTest extends BaseTestCase
         $this->assertEquals('something', $virtual->getVirtualColumnValue());
         $this->assertEquals('something', $virtual['virtualColumn']);
         $this->assertEquals('something', $virtual->virtualColumn);
+        $this->assertEquals('something', $virtual->get('virtualColumn'));
     }
 
     public function testSetMethod()
@@ -71,6 +73,7 @@ class VirtualTest extends BaseTestCase
         $this->assertEquals('something', $virtual->getVirtualColumnValue());
         $this->assertEquals('something', $virtual['virtualColumn']);
         $this->assertEquals('something', $virtual->virtualColumn);
+        $this->assertEquals('something', $virtual->get('virtualColumn'));
     }
 
     public function testGetFullName()
