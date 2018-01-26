@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin;
 
 use JsonSerializable;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;
+use Miaoxing\Plugin\Service\Str;
 use Wei\Logger;
 use Wei\Record;
 use Wei\RetTrait;
@@ -13,6 +14,7 @@ use Wei\RetTrait;
  * @property \Wei\BaseCache $cache
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property Logger $logger
+ * @property Str $str
  * @SuppressWarnings(PHPMD.ExcessiveClassLength) 允许模型类较长
  */
 class BaseModel extends Record implements JsonSerializable
@@ -139,6 +141,7 @@ class BaseModel extends Record implements JsonSerializable
         'cache',
         'logger',
         'ret',
+        'str',
     ];
 
     public function __construct(array $options = [])
@@ -472,11 +475,11 @@ class BaseModel extends Record implements JsonSerializable
             $parts = explode('\\', get_class($this));
             $basename = end($parts);
 
-            // TODO V2 TODO plural
+            // TODO V2
             $endWiths = substr($basename, -5) === 'Model';
             if ($this->tableV2 || $endWiths) {
                 $endWiths && $basename = substr($basename, 0, -5);
-                $this->table = $this->snake($basename) . 's';
+                $this->table = $this->str->pluralize($this->snake($basename));
             } else {
                 $this->table = lcfirst($basename);
             }
