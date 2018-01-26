@@ -78,6 +78,19 @@ class BaseModelV2 extends BaseModel
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function fromArray($data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_int($key) || $this->isFillable($key)) {
+                $this->set($key, $value, false);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Set raw data to model
      *
      * @param array $data

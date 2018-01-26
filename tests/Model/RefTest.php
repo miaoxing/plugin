@@ -221,6 +221,18 @@ class RefTest extends BaseTestCase
         wei()->testRef()->set('notExists', 'abc');
     }
 
+    public function testFromArray()
+    {
+        $ref = wei()->testRef()->fromArray([
+            'json' => ['a' => 'b'],
+            'mixed' => 'mixed',
+            'notExists' => 'notExists'
+        ]);
+
+        $this->assertEquals(['a' => 'b'], $ref->json);
+        $this->assertEquals('mixed', $ref->mixed);
+    }
+
     protected function getModel()
     {
         return wei()->testRef();
