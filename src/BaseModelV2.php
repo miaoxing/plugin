@@ -118,10 +118,34 @@ class BaseModelV2 extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function set($name, $value = null)
+    public function set($name, $value = null, $throwException = true)
     {
+        if ($this->isCollKey($name) || $this->hasColumn($name)) {
+            return $this->setColumnValue($name, $value);
+        }
 
+        if ($this->hasVirtual($name)) {
+            return $this->setVirtualValue($name, $value);
+        }
 
+        if ($this->hasRelation($name)) {
+            return $this->setRelationValue($name, $value);
+        }
+
+        if ($throwException) {
+            throw new InvalidArgumentException('Invalid property: ' . $name);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     */
+    protected function setColumnValue($name, $value)
+    {
         // Ignore $coll[] = $value
         if ($name !== null) {
             $name = $this->filterInputColumn($name);
@@ -203,16 +227,9 @@ class BaseModelV2 extends BaseModel
             return $this->$name = $value;
         }
 
-        if ($this->hasColumn($name)) {
-            return $this->set($name, $value);
-        }
-
-        if ($this->hasVirtual($name)) {
-            return $this->setVirtualValue($name, $value);
-        }
-
-        if ($this->hasRelation($name)) {
-            return $this->setRelationValue($name, $value);
+        $result = $this->set($name, $value, false);
+        if ($result) {
+            return;
         }
 
         if ($this->wei->has($name)) {
@@ -384,6 +401,7 @@ class BaseModelV2 extends BaseModel
      *
      * @param string $name
      * @param mixed $value
+     * @return $this
      */
     protected function setVirtualValue($name, $value)
     {
@@ -391,6 +409,8 @@ class BaseModelV2 extends BaseModel
         if (!$result) {
             throw new InvalidArgumentException('Invalid virtual column: ' . $name);
         }
+
+        return $this;
     }
 
     /**
@@ -411,10 +431,13 @@ class BaseModelV2 extends BaseModel
      *
      * @param string $name
      * @param mixed $value
+     * @return $this
      */
     protected function setRelationValue($name, $value)
     {
         $this->$name = $value;
+
+        return $this;
     }
 
     /**
@@ -456,5 +479,14 @@ class BaseModelV2 extends BaseModel
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    protected function isCollKey($key)
+    {
+        return $key === null || is_int($key);
     }
 }

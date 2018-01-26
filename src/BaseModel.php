@@ -770,7 +770,7 @@ class BaseModel extends Record implements JsonSerializable
         return $records;
     }
 
-    protected function loadHasMany(Record $related = null, $relation, $name)
+    protected function loadHasMany(BaseModel $related = null, $relation, $name)
     {
         $serviceName = $this->getClassServiceName($related);
         $records = $related ? $related->fetchAll() : [];
@@ -778,6 +778,10 @@ class BaseModel extends Record implements JsonSerializable
             $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
             foreach ($records as $record) {
                 if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
+                    // Remove external data
+                    if (!$related->hasColumn($relation['foreignKey'])) {
+                        unset($record[$relation['foreignKey']]);
+                    }
                     $rowRelation[] = $this->wei->$serviceName()->setData($record);
                 }
             }
