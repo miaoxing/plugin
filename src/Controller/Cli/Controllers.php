@@ -5,7 +5,11 @@ namespace Miaoxing\Plugin\Controller\Cli;
 use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Plugin\CliDefinitionTrait;
+use Miaoxing\Plugin\Service\Str;
 
+/**
+ * @property Str $str
+ */
 class Controllers extends BaseController
 {
     use CliDefinitionTrait;
@@ -41,23 +45,11 @@ class Controllers extends BaseController
     {
         $parts = explode('/', $name);
         foreach ($parts as $i => $part) {
-            $parts[$i] = $this->camelize($part);
+            $parts[$i] = $this->str->camel($part);
         }
         $name = implode('/', $parts);
 
         return $plugin->getBasePath() . '/src/Controller/' . $name . '.php';
-    }
-
-    /**
-     * Camelizes a word
-     *
-     * @param string $word The word to camelize
-     *
-     * @return string The camelized word
-     */
-    protected function camelize($word)
-    {
-        return ucfirst(str_replace(' ', '', ucwords(strtr($word, '_-', '  '))));
     }
 
     protected function createDir($dir)
@@ -72,7 +64,7 @@ class Controllers extends BaseController
     {
         $parts = explode('/', $name);
         foreach ($parts as $i => $part) {
-            $parts[$i] = $this->camelize($part);
+            $parts[$i] = $this->str->camel($part);
         }
 
         $name = array_pop($parts);

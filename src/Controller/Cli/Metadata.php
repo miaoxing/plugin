@@ -5,9 +5,13 @@ namespace Miaoxing\Plugin\Controller\Cli;
 use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Plugin\CliDefinitionTrait;
+use Miaoxing\Plugin\Service\Str;
 use ReflectionClass;
 use ReflectionMethod;
 
+/**
+ * @property Str $str
+ */
 class Metadata extends BaseController
 {
     use CliDefinitionTrait;
@@ -67,7 +71,7 @@ class Metadata extends BaseController
             }
             $phpType = $this->getPhpType($casts[$column['Field']]);
 
-            $propertyName = $camelCase ? $this->camelize($column['Field']) : $column['Field'];
+            $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
             $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName, $column['Comment'])) . "\n";
         }
 
@@ -213,18 +217,6 @@ class Metadata extends BaseController
     protected function writeln($message)
     {
         fwrite(STDERR, $message . "\n");
-    }
-
-    /**
-     * Camelizes a word
-     *
-     * @param string $word The word to camelize
-     *
-     * @return string The camelized word
-     */
-    protected function camelize($word)
-    {
-        return lcfirst(str_replace(' ', '', ucwords(strtr($word, '_-', '  '))));
     }
 
     protected function getMethodReturn(ReflectionClass $class, ReflectionMethod $method)
