@@ -118,7 +118,7 @@ class BaseModelV2 extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function &get($name, &$exists = null)
+    public function &get($name, &$exists = null, $throwException = true)
     {
         $exists = true;
 
@@ -138,8 +138,11 @@ class BaseModelV2 extends BaseModel
         }
 
         $exists = false;
-
-        return $exists;
+        if ($throwException) {
+            throw new InvalidArgumentException('Invalid property: ' . $name);
+        } else {
+            return $exists;
+        }
     }
 
     /**
@@ -176,7 +179,7 @@ class BaseModelV2 extends BaseModel
             return $this->getServiceValue($name);
         }
 
-        $value = &$this->get($name, $exists);
+        $value = &$this->get($name, $exists, false);
         if ($exists) {
             return $value;
         }

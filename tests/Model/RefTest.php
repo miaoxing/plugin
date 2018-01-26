@@ -207,6 +207,20 @@ class RefTest extends BaseTestCase
         $this->assertInstanceOf(TestRef::class, $models[1]);
     }
 
+    public function testGetInvalid()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid property: notExists');
+
+        wei()->testRef()->get('notExists');
+    }
+
+    public function testSetInvalid()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid property: notExists');
+
+        wei()->testRef()->set('notExists', 'abc');
+    }
+
     protected function getModel()
     {
         return wei()->testRef();
