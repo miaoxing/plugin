@@ -231,4 +231,17 @@ class CastTraitTest extends BaseTestCase
 
         $this->assertSame([], $cast->jsonColumn);
     }
+
+    public function testIncr()
+    {
+        $cast = wei()->testCast()->save([
+            'stringColumn' => 6
+        ]);
+
+        $cast->incr('string_column', 1)->save();
+
+        $cast = wei()->testCast()->desc('int_column')->find();
+
+        $this->assertEquals(7, $cast->stringColumn);
+    }
 }

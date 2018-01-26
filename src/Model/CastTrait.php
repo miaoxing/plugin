@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Model;
 
 use InvalidArgumentException;
+use stdClass;
 
 /**
  * @property-read array $casts
@@ -31,7 +32,7 @@ trait CastTrait
      */
     protected function castToPhp($value, $column)
     {
-        if ($value !== null && $this->hasCast($column)) {
+        if ($value !== null && $this->hasCast($column) && !$this->isIgnoreCast($value)) {
             $value = $this->toPhpType($value, $this->casts[$column]);
         }
 
@@ -47,7 +48,7 @@ trait CastTrait
      */
     protected function castToDb($value, $column)
     {
-        if ($this->hasCast($column)) {
+        if ($this->hasCast($column) && !$this->isIgnoreCast($value)) {
             $value = $this->toDbType($value, $this->casts[$column]);
         }
 
@@ -146,5 +147,15 @@ trait CastTrait
         }
 
         return static::$castCache[$value][$assoc];
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     * @todo object操作移到单独区域
+     */
+    protected function isIgnoreCast($value)
+    {
+        return $value instanceof stdClass && isset($value->scalar);
     }
 }
