@@ -83,7 +83,7 @@ class BaseModel extends Record implements JsonSerializable
      *
      * @var mixed
      */
-    protected $relationValue;
+    protected $relatedValue;
 
     /**
      * @var array
@@ -622,7 +622,7 @@ class BaseModel extends Record implements JsonSerializable
         $foreignKey || $foreignKey = $this->getForeignKey();
         $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
-        $related->andWhere([$foreignKey => $this->getRelationValue($localKey)]);
+        $related->andWhere([$foreignKey => $this->getRelatedValue($localKey)]);
 
         return $related;
     }
@@ -678,7 +678,7 @@ class BaseModel extends Record implements JsonSerializable
 
         $relatedTable = $related->getTable();
         $related->select($relatedTable . '.*')
-            ->where([$junctionTable . '.' . $foreignKey => $this->getRelationValue($primaryKey)])
+            ->where([$junctionTable . '.' . $foreignKey => $this->getRelatedValue($primaryKey)])
             ->innerJoin(
                 $junctionTable,
                 sprintf('%s.%s = %s.%s', $junctionTable, $relatedKey, $relatedTable, $primaryKey)
@@ -728,9 +728,9 @@ class BaseModel extends Record implements JsonSerializable
             $ids = $this->getAll($relation['localKey']);
             $ids = array_unique(array_filter($ids));
             if ($ids) {
-                $this->relationValue = $ids;
+                $this->relatedValue = $ids;
                 $related = $this->$name();
-                $this->relationValue = null;
+                $this->relatedValue = null;
             } else {
                 $related = null;
             }
@@ -808,7 +808,7 @@ class BaseModel extends Record implements JsonSerializable
 
         // Receive relation
         if (method_exists($this, $name)) {
-            return $this->getRelation($name);
+            return $this->getRelationValue($name);
         }
 
         // Receive service
@@ -881,9 +881,9 @@ class BaseModel extends Record implements JsonSerializable
         return implode('_', $tables);
     }
 
-    protected function getRelationValue($field)
+    protected function getRelatedValue($field)
     {
-        return $this->relationValue ?: $this->get($field);
+        return $this->relatedValue ?: $this->get($field);
     }
 
     /**
@@ -1057,7 +1057,7 @@ class BaseModel extends Record implements JsonSerializable
         return $this;
     }
 
-    protected function &getRelation($name)
+    protected function &getRelationValue($name)
     {
         /** @var BaseModel $related */
         $related = $this->$name();

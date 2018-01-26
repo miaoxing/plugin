@@ -168,7 +168,7 @@ class BaseModelV2 extends BaseModel
 
         // Receive relation
         if ($this->hasRelation($name)) {
-            return $this->getRelation($name);
+            return $this->getRelationValue($name);
         }
 
         // Receive other services
