@@ -98,6 +98,8 @@ class BaseModelV2 extends BaseModel
      */
     public function set($name, $value = null)
     {
+
+
         // Ignore $coll[] = $value
         if ($name !== null) {
             $name = $this->filterInputColumn($name);
@@ -120,27 +122,19 @@ class BaseModelV2 extends BaseModel
     {
         $name = $this->filterInputColumn($name);
         $value = Record::get($name);
-        $source = $this->getDataSource($name);
 
+        $source = $this->getDataSource($name);
         if ($source === 'php') {
             return $value;
         }
 
-        // 先通过setter转换为db数据
+        // 用户数据则先转换为db数据
         if ($source === 'user') {
             $value = $this->getSetValue($name, $value);
         }
 
         // 通过getter处理数据
-        $result = $this->callGetter($name, $this->data[$name]);
-        if ($result) {
-            $this->setDataSource($name, 'php');
-
-            return $this->data[$name];
-        }
-
-        // 通过事件处理数据
-        $this->data[$name] = $this->trigger('getValue', [$value, $name]);
+        $this->data[$name] = $this->getGetValue($name, $value);
         $this->setDataSource($name, 'php');
 
         return $this->data[$name];
@@ -296,6 +290,21 @@ class BaseModelV2 extends BaseModel
     protected function getDataSource($name)
     {
         return isset($this->dataSources[$name]) ? $this->dataSources[$name] : $this->dataSources['*'];
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function getGetValue($name, $value)
+    {
+        $result = $this->callGetter($name, $value);
+        if ($result) {
+            return $value;
+        } else {
+            return $this->trigger('getValue', [$value, $name]);
+        }
     }
 
     /**
