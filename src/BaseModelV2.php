@@ -87,6 +87,7 @@ class BaseModelV2 extends BaseModel
                 $this->set($key, $value, false);
             }
         }
+
         return $this;
     }
 
@@ -306,7 +307,7 @@ class BaseModelV2 extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function save($data = array())
+    public function save($data = [])
     {
         // 1. Merges data from parameters
         $data && $this->fromArray($data);

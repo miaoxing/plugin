@@ -235,7 +235,7 @@ class CastTraitTest extends BaseTestCase
     public function testIncr()
     {
         $cast = wei()->testCast()->save([
-            'stringColumn' => 6
+            'stringColumn' => 6,
         ]);
 
         $cast->incr('string_column', 1)->save();

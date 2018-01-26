@@ -48,7 +48,7 @@ class RefTest extends BaseTestCase
         $model = $this->getModel();
 
         $model['id'] = 1;
-        $model['id']++;
+        ++$model['id'];
 
         $this->assertEquals(2, $model['id']);
     }
@@ -77,7 +77,7 @@ class RefTest extends BaseTestCase
     {
         $model = $this->getModel();
 
-        $model['id']++;
+        ++$model['id'];
 
         $this->assertEquals(1, $model['id']);
     }
@@ -96,7 +96,7 @@ class RefTest extends BaseTestCase
         $model = $this->getModel();
 
         $model->id = 1;
-        $model->id++;
+        ++$model->id;
 
         $this->assertEquals(2, $model->id);
         $this->assertEquals(2, $model->toArray()['id']);
@@ -106,7 +106,7 @@ class RefTest extends BaseTestCase
     {
         $model = $this->getModel();
 
-        $model->id++;
+        ++$model->id;
 
         $this->assertEquals(1, $model->id);
         $this->assertEquals(1, $model->toArray()['id']);
@@ -226,7 +226,7 @@ class RefTest extends BaseTestCase
         $ref = wei()->testRef()->fromArray([
             'json' => ['a' => 'b'],
             'mixed' => 'mixed',
-            'notExists' => 'notExists'
+            'notExists' => 'notExists',
         ]);
 
         $this->assertEquals(['a' => 'b'], $ref->json);
