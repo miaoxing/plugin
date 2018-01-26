@@ -118,6 +118,33 @@ class BaseModelV2 extends BaseModel
     /**
      * {@inheritdoc}
      */
+    public function &get($name, &$exists = null)
+    {
+        $exists = true;
+
+        // Receive field value
+        if ($this->isCollKey($name) || $this->hasColumn($name)) {
+            return $this->getColumnValue($name);
+        }
+
+        // Receive virtual column value
+        if ($this->hasVirtual($name)) {
+            return $this->getVirtualValue($name);
+        }
+
+        // Receive relation
+        if ($this->hasRelation($name)) {
+            return $this->getRelationValue($name);
+        }
+
+        $exists = false;
+
+        return $exists;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set($name, $value = null, $throwException = true)
     {
         if ($this->isCollKey($name) || $this->hasColumn($name)) {
@@ -140,53 +167,6 @@ class BaseModelV2 extends BaseModel
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
-     * @return $this
-     */
-    protected function setColumnValue($name, $value)
-    {
-        // Ignore $coll[] = $value
-        if ($name !== null) {
-            $name = $this->filterInputColumn($name);
-
-            // 直接设置就行
-            Record::set($name, $value);
-
-            $this->setDataSource($name, 'user');
-        } else {
-            Record::set($name, $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($name)
-    {
-        $name = $this->filterInputColumn($name);
-        $value = Record::get($name);
-
-        $source = $this->getDataSource($name);
-        if ($source === 'php') {
-            return $value;
-        }
-
-        // 用户数据则先转换为db数据
-        if ($source === 'user') {
-            $value = $this->getSetValue($name, $value);
-        }
-
-        // 通过getter处理数据
-        $this->data[$name] = $this->getGetValue($name, $value);
-        $this->setDataSource($name, 'php');
-
-        return $this->data[$name];
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function &__get($name)
@@ -196,19 +176,9 @@ class BaseModelV2 extends BaseModel
             return $this->getServiceValue($name);
         }
 
-        // Receive field value
-        if ($this->hasColumn($name)) {
-            return $this->getColumnValue($name);
-        }
-
-        // Receive virtual column value
-        if ($this->hasVirtual($name)) {
-            return $this->getVirtualValue($name);
-        }
-
-        // Receive relation
-        if ($this->hasRelation($name)) {
-            return $this->getRelationValue($name);
+        $value = &$this->get($name, $exists);
+        if ($exists) {
+            return $value;
         }
 
         // Receive other services
@@ -240,19 +210,59 @@ class BaseModelV2 extends BaseModel
     }
 
     /**
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     */
+    protected function setColumnValue($name, $value)
+    {
+        // Ignore $coll[] = $value
+        if ($name !== null) {
+            $name = $this->filterInputColumn($name);
+
+            // 直接设置就行
+            Record::set($name, $value);
+
+            $this->setDataSource($name, 'user');
+        } else {
+            Record::set($name, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    protected function &getColumnValue($name)
+    {
+        $name = $this->filterInputColumn($name);
+        $value = Record::get($name);
+
+        $source = $this->getDataSource($name);
+        if ($source === 'php') {
+            return $this->data[$name];
+        }
+
+        // 用户数据则先转换为db数据
+        if ($source === 'user') {
+            $value = $this->getSetValue($name, $value);
+        }
+
+        // 通过getter处理数据
+        $this->data[$name] = $this->getGetValue($name, $value);
+        $this->setDataSource($name, 'php');
+
+        return $this->data[$name];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function &offsetGet($name)
     {
-        $name = $this->filterInputColumn($name);
-
-        if ($this->hasVirtual($name)) {
-            return $this->getVirtualValue($name);
-        }
-
-        parent::offsetGet($name);
-
-        return $this->data[$name];
+        return $this->get($name);
     }
 
     /**
@@ -357,13 +367,6 @@ class BaseModelV2 extends BaseModel
         }
 
         return $dbData;
-    }
-
-    protected function &getColumnValue($name)
-    {
-        $this->get($name);
-
-        return $this->data[$this->filterInputColumn($name)];
     }
 
     /**
@@ -482,11 +485,13 @@ class BaseModelV2 extends BaseModel
     }
 
     /**
+     * Check if collection key
+     *
      * @param string $key
      * @return bool
      */
     protected function isCollKey($key)
     {
-        return $key === null || is_int($key);
+        return $key === null || is_numeric($key);
     }
 }

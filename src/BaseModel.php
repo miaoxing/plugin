@@ -888,7 +888,7 @@ class BaseModel extends Record implements JsonSerializable
 
     protected function getRelatedValue($field)
     {
-        return $this->relatedValue ?: $this->get($field);
+        return $this->relatedValue ?: (array_key_exists($field, $this->data) ? $this->get($field) : null);
     }
 
     /**
