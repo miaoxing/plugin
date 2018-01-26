@@ -136,6 +136,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     protected $requiredServices = [
         'db',
+        'cache',
         'logger',
         'ret',
     ];
@@ -1012,23 +1013,6 @@ class BaseModel extends Record implements JsonSerializable
     {
         $this->trigger($name);
         parent::triggerCallback($name);
-    }
-
-    /**
-     * 设置原生数据,如从数据库读出的数据
-     *
-     * @param array $data
-     * @return BaseModel
-     */
-    public function setRawData(array $data)
-    {
-        $this->data = $data + $this->data;
-
-        if ($data) {
-            $this->loaded = true;
-        }
-
-        return $this;
     }
 
     protected function setChanged($name)

@@ -59,6 +59,9 @@ class BaseModelV2 extends BaseModel
         '*' => 'php',
     ];
 
+    /**
+     * @var array
+     */
     protected $virtualData = [];
 
     /**
@@ -66,11 +69,30 @@ class BaseModelV2 extends BaseModel
      */
     public function __construct(array $options = [])
     {
-        parent::__construct($options);
+        if (isset($options['isNew']) && $options['isNew'] === false) {
+            $this->setRawData($options['data']);
+            unset($options['data']);
+        }
 
-        if (!$this->isNew) {
+        parent::__construct($options);
+    }
+
+    /**
+     * Set raw data to model
+     *
+     * @param array $data
+     * @return BaseModel
+     */
+    public function setRawData(array $data)
+    {
+        $this->data = $data + $this->data;
+
+        if ($data) {
+            $this->loaded = true;
             $this->setDataSource('*', 'db');
         }
+
+        return $this;
     }
 
     /**
@@ -231,34 +253,11 @@ class BaseModelV2 extends BaseModel
     public function find($conditions = false)
     {
         $result = parent::find($conditions);
-
-        // 清空原来的数据
         if ($result) {
             $this->setDataSource('*', 'db');
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findAll($conditions = false)
-    {
-        $this->isColl = true;
-        $data = $this->fetchAll($conditions);
-
-        $records = array();
-        foreach ($data as $key => $row) {
-            /** @var $records BaseModelV2[] */
-            $records[$key] = $this->db->init($this->table, [], false);
-            $records[$key]->setRawData($row);
-            $records[$key]->triggerCallback('afterFind');
-        }
-
-        $this->data = $records;
-
-        return $this;
     }
 
     /**
