@@ -51,6 +51,28 @@ class VirtualTest extends BaseTestCase
         $this->assertEquals('something', $virtual->virtualColumn);
     }
 
+    public function testOffsetSet()
+    {
+        $virtual = wei()->testVirtual();
+
+        $virtual['virtualColumn'] = 'something';
+
+        $this->assertEquals('something', $virtual->getVirtualColumnValue());
+        $this->assertEquals('something', $virtual['virtualColumn']);
+        $this->assertEquals('something', $virtual->virtualColumn);
+    }
+
+    public function testSetMethod()
+    {
+        $virtual = wei()->testVirtual();
+
+        $virtual->set('virtualColumn', 'something');
+
+        $this->assertEquals('something', $virtual->getVirtualColumnValue());
+        $this->assertEquals('something', $virtual['virtualColumn']);
+        $this->assertEquals('something', $virtual->virtualColumn);
+    }
+
     public function testGetFullName()
     {
         $virtual = wei()->testVirtual();
