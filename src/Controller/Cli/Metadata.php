@@ -79,7 +79,7 @@ class Metadata extends BaseController
         $reflectionClass = new ReflectionClass($modelObject);
         preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($modelObject)), $matches);
         foreach ($matches[1] as $key => $attr) {
-            $propertyName = $camelCase ? lcfirst($attr) : $this->snake($attr);
+            $propertyName = $camelCase ? lcfirst($attr) : $this->str->snake($attr);
             $method = rtrim($matches[0][$key], ';');
             $reflectionMethod = $reflectionClass->getMethod($method);
             $name = $this->getDocCommentTitle($reflectionMethod->getDocComment());
@@ -159,15 +159,10 @@ class Metadata extends BaseController
             $class = substr($class, 0, -6);
         }
 
-        $table = $this->snake($class);
-        $table .= 's';
+        $table = $this->str->snake($class);
+        $table = $this->str->pluralize($table);
 
         return $table;
-    }
-
-    protected function snake($input)
-    {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
     }
 
     protected function getFile(BasePlugin $plugin, $name)

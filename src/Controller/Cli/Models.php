@@ -38,11 +38,6 @@ class Models extends BaseController
         return $this->suc();
     }
 
-    protected function snake($input)
-    {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
-    }
-
     protected function getFile(BasePlugin $plugin, $name)
     {
         return $plugin->getBasePath() . '/src/Service/' . ucfirst($name) . '.php';
