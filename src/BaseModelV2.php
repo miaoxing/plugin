@@ -118,7 +118,6 @@ class BaseModelV2 extends BaseModel
      */
     public function get($name)
     {
-        // TODO check column, coll Record::get
         $name = $this->filterInputColumn($name);
 
         $value = Record::get($name);
@@ -130,7 +129,7 @@ class BaseModelV2 extends BaseModel
 
         // 先通过set转换为db数据
         if ($source === 'user') {
-            $this->data[$name] = $this->getSetValue($name, $value);
+            $value = $this->getSetValue($name, $value);
         }
 
         // 通过getter处理数据
@@ -143,7 +142,7 @@ class BaseModelV2 extends BaseModel
         }
 
         // 通过事件处理数据
-        $this->data[$name] = $this->trigger('getValue', [$this->data[$name], $name]);
+        $this->data[$name] = $this->trigger('getValue', [$value, $name]);
         $this->setDataSource($name, 'php');
 
         return $this->data[$name];
