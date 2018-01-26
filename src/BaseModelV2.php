@@ -119,23 +119,21 @@ class BaseModelV2 extends BaseModel
     public function get($name)
     {
         $name = $this->filterInputColumn($name);
-
         $value = Record::get($name);
-
         $source = $this->getDataSource($name);
+
         if ($source === 'php') {
             return $value;
         }
 
-        // 先通过set转换为db数据
+        // 先通过setter转换为db数据
         if ($source === 'user') {
             $value = $this->getSetValue($name, $value);
         }
 
         // 通过getter处理数据
-        $method = 'get' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            $this->data[$name] = $this->$method();
+        $result = $this->callGetter($name, $this->data[$name]);
+        if ($result) {
             $this->setDataSource($name, 'php');
 
             return $this->data[$name];
@@ -351,10 +349,8 @@ class BaseModelV2 extends BaseModel
      */
     protected function &getVirtualValue($name)
     {
-        $method = 'get' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            $this->virtualData[$name] = $this->$method();
-
+        $result = $this->callGetter($name, $this->virtualData[$name]);
+        if ($result) {
             return $this->virtualData[$name];
         }
 
@@ -411,5 +407,20 @@ class BaseModelV2 extends BaseModel
     protected function hasRelation($name)
     {
         return method_exists($this, $name);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    protected function callGetter($name, &$value)
+    {
+        $method = 'get' . $this->camel($name) . 'Attribute';
+        if ($result = method_exists($this, $method)) {
+            $value = $this->$method();
+        }
+
+        return $result;
     }
 }
