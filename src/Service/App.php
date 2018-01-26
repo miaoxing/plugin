@@ -178,11 +178,33 @@ class App extends \Wei\App
     public function getDefaultTemplate($controller = null, $action = null)
     {
         $file = lcfirst($controller ?: $this->controller) . '/' . ($action ?: $this->action)
-        . $this->view->getExtension();
+            . $this->view->getExtension();
 
         $plugin = $this->getPlugin();
 
         return $plugin ? '@' . $plugin . '/' . $file : $file;
+    }
+
+    /**
+     * 获取当前插件下的视图文件,即可省略当前插件名称不写
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getPluginFile($name)
+    {
+        return $this->view->getFile('@' . $this->getPlugin() . '/' . $name);
+    }
+
+    /**
+     * 获取当前控制器下的视图文件,即可省略当前插件和控制器名称不写
+     *
+     * @param string $action
+     * @return string
+     */
+    public function getControllerFile($action)
+    {
+        return $this->view->getFile($this->getDefaultTemplate(null, $action));
     }
 
     /**
@@ -283,7 +305,7 @@ class App extends \Wei\App
      * 转换Ret结构为response
      *
      * @param array $ret
-     * @return $this
+     * @return Response
      * @throws \Exception
      */
     protected function handleRet(array $ret)
@@ -307,8 +329,8 @@ class App extends \Wei\App
     protected function isRet($response)
     {
         return is_array($response)
-        && array_key_exists('code', $response)
-        && array_key_exists('message', $response);
+            && array_key_exists('code', $response)
+            && array_key_exists('message', $response);
     }
 
     /**
