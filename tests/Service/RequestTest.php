@@ -131,22 +131,6 @@ class RequestTest extends BaseTestCase
     /**
      * NOTE 以下为额外的\Wei\Request的测试,待合并
      */
-    public function testInvoke()
-    {
-        $wei = $this->object;
-
-        $name = $wei->request('name');
-        $source = isset($_REQUEST['name']) ? $_REQUEST['name'] : null;
-
-        $this->assertEquals($name, $source);
-
-        $default = 'default';
-        $name2 = $wei->request('name', $default);
-        $source = isset($_REQUEST['name']) ? $_REQUEST['name'] : $default;
-
-        $this->assertEquals($name2, $default);
-    }
-
     public function testSet()
     {
         $wei = $this->object;
