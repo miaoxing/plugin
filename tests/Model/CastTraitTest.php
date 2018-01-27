@@ -240,7 +240,7 @@ class CastTraitTest extends BaseTestCase
 
         $cast->incr('string_column', 1)->save();
 
-        $cast = wei()->testCast()->desc('int_column')->find();
+        $cast->reload();
 
         $this->assertEquals(7, $cast->stringColumn);
     }
