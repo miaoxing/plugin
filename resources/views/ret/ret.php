@@ -1,6 +1,6 @@
 <?php $view->layout() ?>
 
-<?= $block('css') ?>
+<?= $block->css() ?>
 <link rel="stylesheet" href="<?= $asset('plugins/plugin/css/ret.css') ?>">
 <?= $block->end() ?>
 

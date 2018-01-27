@@ -46,7 +46,7 @@
 
 <?php require $view->getFile('plugin:admin/plugin/checkboxCol.php') ?>
 
-<?= $block('js') ?>
+<?= $block->js() ?>
 <script>
   require(['plugins/plugin/js/admin/plugins'], function (plugins) {
     plugins.indexAction();
