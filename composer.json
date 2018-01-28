@@ -5,7 +5,8 @@
   ],
   "license": "MIT",
   "require": {
-    "wei/wei": "dev-master@dev"
+    "wei/wei": "dev-master@dev",
+    "doctrine/inflector": "v1.1.0"
   },
   "autoload": {
     "psr-4": {
