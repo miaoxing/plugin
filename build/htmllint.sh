@@ -2,7 +2,7 @@
 
 source "${BASH_SOURCE[0]%/*}/base.sh"
 
-# 1. 忽略没有视图目录的情况,否则csslint会返回错误
+# 1. 忽略没有视图目录的情况,否则htmllint会返回错误
 dir="resources/views"
 if [ ! -d "${dir}" ]; then
   echo "No ${dir} directory, exit."
