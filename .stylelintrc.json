@@ -1,5 +1,7 @@
 {
+  "extends": "stylelint-config-recommended",
   "rules": {
+    "font-family-no-missing-generic-family-keyword": 0,
     "block-no-empty": null,
     "block-opening-brace-newline-after": "always",
     "block-closing-brace-newline-before": "always",

@@ -22,4 +22,4 @@ npm install -g eslint babel-eslint eslint-plugin-react eslint-plugin-babel
 
 npm install -g htmllint-cli@0.0.5
 
-npm install -g stylelint
+npm install -g stylelint stylelint-config-recommended
