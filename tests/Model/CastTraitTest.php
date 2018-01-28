@@ -197,7 +197,7 @@ class CastTraitTest extends BaseTestCase
         $record = wei()->testCast()->findById(1);
 
         $this->assertSame(1, $record->intColumn);
-        $this->assertSame(false, $record->boolColumn);
+        $this->assertFalse($record->boolColumn);
         $this->assertSame('1', $record->stringColumn);
         $this->assertSame('2018-01-01 00:00:00', $record->datetimeColumn);
         $this->assertSame('2018-01-01', $record->dateColumn);
