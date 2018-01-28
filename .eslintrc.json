@@ -6,7 +6,8 @@
     "sourceType": "module",
     "ecmaFeatures": {
       "modules": true
-    }
+    },
+    "allowImportExportEverywhere": true
   },
   "env": {
     "node": true,
