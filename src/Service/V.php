@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
+use Wei\Record;
 use Wei\RetTrait;
 use Wei\Validate;
 
@@ -15,7 +16,8 @@ use Wei\Validate;
  * @method $this notEqualTo($value)
  * @method $this digit()
  * @method $this between($min, $max)
- * @link Inspired by https://github.com/Respect/Validation/tree/1.1
+ * @method $this notRecordExists(string|Record $table, string $field = null)
+ * @see Inspired by https://github.com/Respect/Validation/tree/1.1
  */
 class V extends BaseService
 {
@@ -105,7 +107,7 @@ class V extends BaseService
      */
     public function message($ruleOrMessage, $message = null)
     {
-        if (func_num_args() === 1) {
+        if (1 === func_num_args()) {
             $rule = $this->lastRule;
             $message = $ruleOrMessage;
         } else {
