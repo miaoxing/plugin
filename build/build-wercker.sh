@@ -7,6 +7,8 @@ if [[ "$message" == *"[skip fix]"* ]]; then
   exit 0
 fi
 
+npm install -g eslint-plugin-react eslint-plugin-babel stylelint-config-recommended
+
 # 2. 执行各类检查
 php "${BASH_SOURCE[0]%/*}/install.php"
 php "${BASH_SOURCE[0]%/*}/create-tests.php"
