@@ -155,19 +155,24 @@ class Docs extends BaseController
             $className,
         ], $return);
 
+        // 忽略空格后面的辅助说明
+        if ($return) {
+            $return = explode(' ', $return)[0];
+        }
+
         return $return ?: false;
     }
 
     protected function getDocCommentTitle($docComment)
     {
         /**
- * Xxx
- *
- * xxx
- * xxx
- *
- * @xxx xx
- */
+         * Xxx
+         *
+         * xxx
+         * xxx
+         *
+         * @xxx xx
+         */
         // 如上注释,返回 Xxx
         preg_match('#\* ([^@]+?)\n#is', $docComment, $matches);
         if ($matches) {
