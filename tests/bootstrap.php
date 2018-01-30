@@ -15,6 +15,9 @@ foreach ($wei->plugin->getAll() as $plugin) {
         continue;
     }
     $composer = json_decode(file_get_contents($file), true);
+    if (!isset($composer['autoload-dev'])) {
+        continue;
+    }
     foreach ($composer['autoload-dev'] as $autoload) {
         foreach ($autoload as $prefix => $path) {
             $loader->addPsr4($prefix, $plugin->getBasePath() . '/' . $path);
