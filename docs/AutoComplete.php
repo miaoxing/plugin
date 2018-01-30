@@ -27,6 +27,12 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\Group $group 用户分组
      * @method      \Miaoxing\Plugin\Service\Group|\Miaoxing\Plugin\Service\Group[] group()
      *
+     * @property    \Miaoxing\Plugin\Service\Http $http
+     * @method      \Miaoxing\Plugin\Service\Http http($url = null, $options = []) Create a new HTTP object and execute
+     *
+     * @property    \Miaoxing\Plugin\Service\IsRecordExists $isRecordExists
+     * @method      bool isRecordExists($input = null, $table = null, $field = 'id') Check if the input is existing table record
+     *
      * @property    \Miaoxing\Plugin\Service\Migration $migration 数据库迁移
      *
      * @property    \Miaoxing\Plugin\Service\OptionTrait $optionTrait
@@ -34,7 +40,10 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
      *
      * @property    \Miaoxing\Plugin\Service\Request $request
-     * @method      string|null  The parameter value request($name, $default = '') Returns a *stringify* or user defined($default) parameter value
+     * @method      string|null request($name, $default = '') Returns a *stringify* or user defined($default) parameter value
+     *
+     * @property    \Miaoxing\Plugin\Service\Ret $ret
+     * @method      mixed ret($message, $code = 1, $type = 'success')
      *
      * @property    \Miaoxing\Plugin\Service\ServiceTrait $serviceTrait
      *
@@ -96,6 +105,12 @@ namespace {
     /** @var Miaoxing\Plugin\Service\Group $group */
     $group = wei()->group;
 
+    /** @var Miaoxing\Plugin\Service\Http $http */
+    $http = wei()->http;
+
+    /** @var Miaoxing\Plugin\Service\IsRecordExists $isRecordExists */
+    $isRecordExists = wei()->isRecordExists;
+
     /** @var Miaoxing\Plugin\Service\Migration $migration */
     $migration = wei()->migration;
 
@@ -107,6 +122,9 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\Request $request */
     $request = wei()->request;
+
+    /** @var Miaoxing\Plugin\Service\Ret $ret */
+    $ret = wei()->ret;
 
     /** @var Miaoxing\Plugin\Service\ServiceTrait $serviceTrait */
     $serviceTrait = wei()->serviceTrait;
