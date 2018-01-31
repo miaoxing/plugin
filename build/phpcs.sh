@@ -11,7 +11,7 @@ else
 fi
 
 report="reports/phpcs.txt"
-command="phpcs --standard=${standard} --report-file=${report} -v ."
+command="vendor/bin/phpcs --standard=${standard} --report-file=${report} -v ."
 info "${command}";
 
 ${command} || true

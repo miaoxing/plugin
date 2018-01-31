@@ -10,7 +10,7 @@ if [ ! -e "phpmd.xml" ]; then
 fi
 
 report="reports/phpmd.txt"
-command="phpmd . text $config \
+command="vendor/bin/phpmd . text $config \
 --reportfile-text ${report} \
 --exclude vendor,src/Lib,public/comps,public/libs \
 --ignore-violations-on-exit"

@@ -1,12 +1,17 @@
 {
   "name": "miaoxing/plugin",
   "keywords": [
-    "miaoxing", "plugin"
+    "miaoxing",
+    "plugin"
   ],
   "license": "MIT",
   "require": {
     "wei/wei": "dev-master@dev",
     "doctrine/inflector": "v1.1.0"
+  },
+  "require-dev": {
+    "miaoxing/coding-standards": "0.9.5",
+    "mi-schi/phpmd-extension": "4.*"
   },
   "autoload": {
     "psr-4": {
