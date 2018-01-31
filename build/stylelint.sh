@@ -20,7 +20,7 @@ files=`find ${dir} -type f`
 files=${files//
 / }
 report="reports/stylelint.txt"
-command="stylelint$config ${files[@]}"
+command="node_modules/.bin/stylelint$config ${files[@]}"
 info "${command}";
 
 ${command} | tee ${report}

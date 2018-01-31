@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Install yarn
+curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
+export PATH=$HOME/.yarn/bin:$PATH
+
 # Install PHPMD with --ignore-violations-on-exit flag support
 composer global require "phpmd/phpmd:dev-master#f2467d1729dc12af79a8a834417ed15e7a14f485@dev"
 
@@ -22,4 +26,4 @@ npm install -g eslint babel-eslint eslint-plugin-react eslint-plugin-babel
 
 npm install -g htmllint-cli@0.0.5
 
-npm install -g stylelint stylelint-config-recommended
+yarn

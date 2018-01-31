@@ -15,6 +15,7 @@ services:
   - memcached
 
 cache:
+  yarn: true
   directories:
     - $HOME/.composer/cache
     - node_modules
