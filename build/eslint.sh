@@ -17,7 +17,7 @@ if [ ! -e ".eslintrc.json" ]; then
 fi
 
 report="reports/eslint.txt"
-command="eslint$config ."
+command="node_modules/.bin/eslint$config ."
 info "${command}";
 
 ${command} | tee ${report}

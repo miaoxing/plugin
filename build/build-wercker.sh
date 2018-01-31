@@ -7,9 +7,10 @@ if [[ "$message" == *"[skip fix]"* ]]; then
   exit 0
 fi
 
-npm install -g eslint stylelint eslint-plugin-react eslint-plugin-babel stylelint-config-recommended
+# 2. 安装相关依赖
+bash "${BASH_SOURCE[0]%/*}/install.sh"
 
-# 2. 执行各类检查
+# 3. 执行各类检查
 php "${BASH_SOURCE[0]%/*}/install.php"
 php "${BASH_SOURCE[0]%/*}/create-tests.php"
 bash "${BASH_SOURCE[0]%/*}/phpunit.sh" $@
@@ -21,7 +22,7 @@ bash "${BASH_SOURCE[0]%/*}/htmllint.sh"
 php "${BASH_SOURCE[0]%/*}/check-migration.php"
 php "${BASH_SOURCE[0]%/*}/check-inline-script.php" $3
 
-# 3. 合并错误报告
+# 4. 合并错误报告
 error_file="error.txt"
 count=`ls -1 reports/*.txt 2>/dev/null | wc -l`
 if [ ${count} != 0 ]; then

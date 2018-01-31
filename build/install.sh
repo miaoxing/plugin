@@ -22,8 +22,6 @@ composer global require miaoxing/coding-standards:0.9.5 \
 
 PATH=~/.composer/vendor/bin:$PATH
 
-npm install -g eslint babel-eslint eslint-plugin-react eslint-plugin-babel
-
-npm install -g htmllint-cli@0.0.5
-
 yarn
+
+yarn add -g htmllint-cli@0.0.5
