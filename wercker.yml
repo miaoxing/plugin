@@ -8,6 +8,7 @@ services:
 build:
   steps:
     - mbrevda/composer-install@1.0.1
+    - asux/yarn@2.0.5
     - script:
         name: wait for mysql connection
         code: |
