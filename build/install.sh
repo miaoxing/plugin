@@ -4,4 +4,7 @@
 vendor/bin/phpcs --config-set installed_paths vendor/miaoxing/coding-standards
 vendor/bin/phpcs -i
 
-PATH=~/.composer/vendor/bin:$PATH
+# Make sure package.json exists
+if [ ! -e "package.json" ]; then
+  cp vendor/miaoxing/plugin/package.json package.json
+fi
