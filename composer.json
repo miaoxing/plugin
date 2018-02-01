@@ -10,8 +10,7 @@
     "doctrine/inflector": "v1.1.0"
   },
   "require-dev": {
-    "miaoxing/coding-standards": "0.9.5",
-    "mi-schi/phpmd-extension": "4.*"
+    "miaoxing/coding-standards": "0.9.6"
   },
   "autoload": {
     "psr-4": {
