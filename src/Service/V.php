@@ -16,7 +16,11 @@ use Wei\Validate;
  * @method $this notEqualTo($value)
  * @method $this digit()
  * @method $this between($min, $max)
+ * @method $this recordExists(string|Record $table, string $field = null)
  * @method $this notRecordExists(string|Record $table, string $field = null)
+ * @method $this type($type)
+ * @method $this positiveInteger()
+ * @method $this greaterThanOrEqual($value)
  * @see Inspired by https://github.com/Respect/Validation/tree/1.1
  */
 class V extends BaseService
