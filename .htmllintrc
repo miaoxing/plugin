@@ -19,5 +19,6 @@
   ],
   "tag-close": true,
   "tag-name-lowercase": true,
-  "tag-name-match": true
+  "tag-name-match": true,
+  "head-req-title": false
 }
