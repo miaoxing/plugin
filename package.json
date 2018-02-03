@@ -5,6 +5,7 @@
   "repository": "https://github.com/miaoxing/plugin",
   "license": "MIT",
   "devDependencies": {
+    "gulp-htmllint": "^0.0.15",
     "miaoxing-coding-standards": "^1.0.0"
   }
 }

@@ -1,5 +1,6 @@
 {
-  "plugins": [],
+  "raw-ignore-regex": "\/\\<\\?.*?\\?\\>\/",
+  "spec-char-escape": false,
   "attr-name-style": "dash",
   "attr-req-value": true,
   "class-no-dup": true,
