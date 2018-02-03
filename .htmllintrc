@@ -6,7 +6,7 @@
   "class-no-dup": true,
   "doctype-html5": true,
   "id-class-no-ad": true,
-  "id-class-style": "/^[a-z][a-z\\d]*([-a-z\\d]+)*$/",
+  "id-class-style": "/^([a-z][a-z\\d]*([-a-z\\d]+)*)?$/",
   "id-no-dup": true,
   "img-req-alt": false,
   "indent-style": "spaces",
