@@ -2,9 +2,8 @@
 <html>
 <head>
   <?php $event->trigger('head') ?>
-  <meta charset="utf-8"/>
-  <meta name="description" content=""/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= $setting('site.title') ?></title>
   <link rel="stylesheet" href="<?= $asset([
     'comps/bootstrap-custom/css/bootstrap.min.css',

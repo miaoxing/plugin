@@ -19,7 +19,7 @@ files=`find ${dir} -path resources/views/mailers -prune -o -type f -print`
 files=${files//
 / }
 report="reports/htmllint.txt"
-command="node_modules/.bin/htmllint$config ${files[@]}"
+command="node_modules/.bin/miaoxing-htmllint$config ${files[@]}"
 info "${command}";
 
 ${command} | tee ${report}
