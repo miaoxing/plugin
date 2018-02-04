@@ -9,6 +9,7 @@
   "id-class-style": "/^([a-z][a-z\\d]*([-a-z\\d]+)*)?$/",
   "id-no-dup": true,
   "img-req-alt": false,
+  "img-req-src": false,
   "indent-style": "spaces",
   "indent-width": 2,
   "label-req-for": false,
