@@ -92,13 +92,18 @@ class Metadata extends BaseController
         $this->createFile($file, $this->getNamespace($plugin), $class, $docBlock, $casts);
     }
 
-    protected function getCastType($type)
+    protected function getCastType($columnType)
     {
-        $type = explode('(', $type)[0];
+        $parts = explode('(', $columnType);
+        $type = $parts[0];
+        $length = (int) $parts[1];
+
         switch ($type) {
             case 'int':
-            case 'tinyint':
                 return 'int';
+
+            case 'tinyint':
+                return $length === 1 ? 'bool' : 'int';
 
             case 'varchar':
             case 'char':
@@ -228,13 +233,13 @@ class Metadata extends BaseController
     protected function getDocCommentTitle($docComment)
     {
         /**
- * Xxx
- *
- * xxx
- * xxx
- *
- * @xxx xx
- */
+         * Xxx
+         *
+         * xxx
+         * xxx
+         *
+         * @xxx xx
+         */
         // 如上注释,返回 Xxx
         preg_match('#\* ([^@]+?)\n#is', $docComment, $matches);
         if ($matches) {
@@ -248,7 +253,7 @@ class Metadata extends BaseController
      * @param $class
      * @param bool $autoload
      * @return array
-     * @link http://php.net/manual/en/function.class-uses.php#110752
+     * @see http://php.net/manual/en/function.class-uses.php#110752
      */
     public function classUsesDeep($class, $autoload = true)
     {
