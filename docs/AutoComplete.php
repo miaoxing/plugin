@@ -55,6 +55,9 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\Tester $tester 测试
      * @method      \Miaoxing\Plugin\Service\Tester tester($controller = null, $action = null)
      *
+     * @property    \Miaoxing\Plugin\Service\Time $time 时间日期
+     * @method      string time()
+     *
      * @property    \Miaoxing\Plugin\Service\UrlMapper $urlMapper URL映射
      * @method      mixed urlMapper()
      *
@@ -137,6 +140,9 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\Tester $tester */
     $tester = wei()->tester;
+
+    /** @var Miaoxing\Plugin\Service\Time $time */
+    $time = wei()->time;
 
     /** @var Miaoxing\Plugin\Service\UrlMapper $urlMapper */
     $urlMapper = wei()->urlMapper;
