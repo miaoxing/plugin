@@ -28,7 +28,7 @@
   </script>
 </head>
 <body>
-<?php $event->trigger('bodyStart', [isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
+<?php $event->trigger('bodyStart', [$headerTitle]) ?>
 
 <?= $content ?>
 

@@ -12,6 +12,11 @@ class Layout extends BaseService
     protected $header = true;
 
     /**
+     * @var string
+     */
+    protected $headerTitle = '';
+
+    /**
      * @var bool
      */
     protected $footer = true;
@@ -66,5 +71,23 @@ class Layout extends BaseService
     {
         $this->footer = false;
         return $this;
+    }
+
+    /**
+     * @param string $title
+     * @return $this
+     */
+    public function setHeaderTitle($title)
+    {
+        $this->headerTitle = $title;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderTitle()
+    {
+        return $this->headerTitle;
     }
 }
