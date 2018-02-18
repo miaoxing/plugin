@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Service\Asset;
+use Miaoxing\Plugin\Service\Layout;
 use Wei\RetTrait;
 use Miaoxing\Plugin\Middleware\Auth;
 
@@ -25,6 +26,7 @@ use Miaoxing\Plugin\Middleware\Auth;
  * @method   string setting($name, $default = null) 读取配置
  * @property \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
  * @property Asset wpAsset
+ * @property Layout $layout
  */
 abstract class BaseController extends \Wei\BaseController
 {
@@ -67,13 +69,6 @@ abstract class BaseController extends \Wei\BaseController
     protected $adminGuestPages = [];
 
     /**
-     * 页面配置
-     *
-     * @var \ArrayObject
-     */
-    protected $pageConfig;
-
-    /**
      * @var array
      */
     protected $js = [];
@@ -103,14 +98,7 @@ abstract class BaseController extends \Wei\BaseController
      */
     protected function initViewVars()
     {
-        // TODO 待理清,抽象为页面服务
-        $this->pageConfig = new \ArrayObject([
-            'displayHeader' => true,
-            'displayFooter' => true,
-        ]);
-
         $this->view->assign([
-            'pageConfig' => $this->pageConfig,
             'controllerInstance' => $this,
             'js' => &$this->js,
         ]);
@@ -145,15 +133,6 @@ abstract class BaseController extends \Wei\BaseController
     protected function json($message = '操作成功', $code = 1, array $append = [])
     {
         return $this->response->json(['message' => $message, 'code' => $code] + $append);
-    }
-
-    /**
-     * @param string $key
-     * @param $value
-     */
-    public function setPageConfig($key, $value)
-    {
-        $this->pageConfig[$key] = $value;
     }
 
     /**

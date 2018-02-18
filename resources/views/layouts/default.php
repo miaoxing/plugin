@@ -18,7 +18,7 @@
   <?= $block->get('css') ?>
 </head>
 <body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
-<?php $event->trigger('bodyStart', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
+<?php $event->trigger('bodyStart', [isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
 
 <?= $content ?>
 <?= $block->get('html') ?>

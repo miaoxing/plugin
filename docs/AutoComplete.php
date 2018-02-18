@@ -33,6 +33,8 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\IsRecordExists $isRecordExists
      * @method      bool isRecordExists($input = null, $table = null, $field = 'id') Check if the input is existing table record
      *
+     * @property    \Miaoxing\Plugin\Service\Layout $layout
+     *
      * @property    \Miaoxing\Plugin\Service\Migration $migration 数据库迁移
      *
      * @property    \Miaoxing\Plugin\Service\OptionTrait $optionTrait
@@ -66,6 +68,9 @@ namespace MiaoxingDoc\Plugin {
      *
      * @property    \Miaoxing\Plugin\Service\V $v A chaining validator
      * @method      \Miaoxing\Plugin\Service\V v($options = []) Create a new validator
+     *
+     * @property    \Miaoxing\Plugin\Service\View $view
+     * @method      string view($name = null, $data = []) Render a PHP template
      */
     class AutoComplete
     {
@@ -114,6 +119,9 @@ namespace {
     /** @var Miaoxing\Plugin\Service\IsRecordExists $isRecordExists */
     $isRecordExists = wei()->isRecordExists;
 
+    /** @var Miaoxing\Plugin\Service\Layout $layout */
+    $layout = wei()->layout;
+
     /** @var Miaoxing\Plugin\Service\Migration $migration */
     $migration = wei()->migration;
 
@@ -152,4 +160,7 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\V $v */
     $v = wei()->v;
+
+    /** @var Miaoxing\Plugin\Service\View $view */
+    $view = wei()->view;
 }
