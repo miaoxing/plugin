@@ -16,7 +16,8 @@ class View extends \Wei\View
         'url',
         'asset',
         'event',
-        'curUser'
+        'curUser',
+        'setting', // deprecated
     ];
 
     /**
@@ -29,7 +30,7 @@ class View extends \Wei\View
     /**
      * {@inheritdoc}
      */
-    public function render($name, $data = array())
+    public function render($name, $data = [])
     {
         if (!$this->autoloaded) {
             $this->autoloaded = true;
