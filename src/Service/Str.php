@@ -36,20 +36,21 @@ class Str extends BaseService
      * Convert a input to snake case
      *
      * @param string $input
+     * @param string $delimiter
      * @return string
      */
-    public function snake($input)
+    public function snake($input, $delimiter = '_')
     {
-        if (isset(static::$snakeCache[$input])) {
-            return static::$snakeCache[$input];
+        if (isset(static::$snakeCache[$input][$delimiter])) {
+            return static::$snakeCache[$input][$delimiter];
         }
 
         $value = $input;
         if (!ctype_lower($input)) {
-            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', $delimiter . '$0', $input));
         }
 
-        return static::$snakeCache[$input] = $value;
+        return static::$snakeCache[$input][$delimiter] = $value;
     }
 
     /**
@@ -65,6 +66,17 @@ class Str extends BaseService
         }
 
         return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
+    }
+
+    /**
+     * Convert a input to dash case
+     *
+     * @param string $input
+     * @return string
+     */
+    public function dash($input)
+    {
+        return $this->snake($input, '-');
     }
 
     /**
