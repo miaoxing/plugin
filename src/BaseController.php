@@ -109,15 +109,7 @@ abstract class BaseController extends \Wei\BaseController
             'displayFooter' => true,
         ]);
 
-        $controller = $this->app->getController();
         $this->view->assign([
-            // Services
-            'e' => $this->e,
-            'block' => $this->block,
-            'app' => $this->app,
-            'url' => $this->url,
-            'asset' => $this->asset,
-            'event' => $this->event,
             'pageConfig' => $this->pageConfig,
             'controllerInstance' => $this,
             'js' => &$this->js,
@@ -125,7 +117,7 @@ abstract class BaseController extends \Wei\BaseController
 
         // TODO 移除依赖
         // 非自带服务先改为按需加载,便于测试
-        $customServices = ['curUser', 'setting'];
+        $customServices = ['setting'];
         foreach ($customServices as $service) {
             if ($this->wei->has($service)) {
                 $this->view->assign($service, $this->$service);
@@ -145,7 +137,7 @@ abstract class BaseController extends \Wei\BaseController
         ];
 
         // 为后台设置默认布局
-        if (strpos($controller, 'admin') !== false && $this->plugin->has('admin')) {
+        if ($this->app->isAdmin() && $this->plugin->has('admin')) {
             $this->view->setDefaultLayout('admin:admin/layout.php');
         }
     }
