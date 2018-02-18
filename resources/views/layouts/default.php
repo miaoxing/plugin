@@ -14,8 +14,7 @@
     'plugins/app/css/app.css',
   ]) ?>">
   <?php require $view->getFile('@plugin/layouts/default-css.php') ?>
-  <?php $event->trigger('style') ?>
-  <?= $block->get('css') ?>
+  <?= $wei->layout->renderHead() ?>
 </head>
 <body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
 <?php $event->trigger('bodyStart', [$headerTitle]) ?>
@@ -43,9 +42,6 @@
   $.extend($, <?= json_encode($app->getConfig()) ?>);
   var wei = <?= json_encode($js) ?>;
 </script>
-<?php $event->trigger('script') ?>
-<?= $block->get('js') ?>
-
-<?php $event->trigger('bodyEnd') ?>
+<?= $wei->layout->renderFooter() ?>
 </body>
 </html>

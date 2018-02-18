@@ -3,7 +3,11 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
+use Wei\Block;
 
+/**
+ * @property-read Block $block
+ */
 class Layout extends BaseService
 {
     /**
@@ -20,6 +24,10 @@ class Layout extends BaseService
      * @var bool
      */
     protected $footer = true;
+
+    protected $jsFiles = [];
+
+    protected $cssFiles = [];
 
     /**
      * @return bool
@@ -89,5 +97,32 @@ class Layout extends BaseService
     public function getHeaderTitle()
     {
         return $this->headerTitle;
+    }
+
+    public function addJs($src)
+    {
+        $this->jsFiles[] = $src;
+
+        return $this;
+    }
+
+    public function addCss($href)
+    {
+        $this->cssFiles[] = $href;
+
+        return $this;
+    }
+
+    public function renderHead()
+    {
+        $this->event->trigger('style');
+        echo $this->block->get('css');
+    }
+
+    public function renderFooter()
+    {
+        $this->event->trigger('script');
+        echo $this->block->get('js');
+        $this->event->trigger('bodyEnd');
     }
 }

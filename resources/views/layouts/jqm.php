@@ -11,8 +11,7 @@
     'plugins/app/css/swipe.css',
     'plugins/app/css/jqm.css',
   ]) ?>">
-  <?php $event->trigger('style') ?>
-  <?= $block->get('css') ?>
+  <?= $wei->layout->renderHead() ?>
   <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/jquery-mobile/1.4.0/jquery.mobile.min.js"></script>
   <script src="<?= $asset([
@@ -32,9 +31,6 @@
 
 <?= $content ?>
 
-<?php $event->trigger('script') ?>
-<?= $block->get('js') ?>
-
-<?php $event->trigger('bodyEnd') ?>
+<?= $wei->layout->renderFooter() ?>
 </body>
 </html>
