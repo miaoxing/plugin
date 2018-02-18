@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
-  <title><?= $e(isset($htmlTitle) ? $htmlTitle : $setting('site.title')) ?></title>
+  <title><?= $e($wei->page->getTitle()) ?></title>
   <link rel="stylesheet" href="<?= $asset([
     'comps/bootstrap-custom/css/bootstrap.min.css',
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
@@ -16,7 +16,7 @@
   <?php require $view->getFile('@plugin/layouts/default-css.php') ?>
   <?= $wei->page->renderHead() ?>
 </head>
-<body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
+<body>
 <?php $event->trigger('bodyStart', [$headerTitle]) ?>
 
 <?= $content ?>

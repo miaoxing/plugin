@@ -15,6 +15,11 @@ use Wei\Block;
 class Page extends BaseService
 {
     /**
+     * @var string
+     */
+    protected $title;
+
+    /**
      * @var bool
      */
     protected $header = true;
@@ -29,9 +34,34 @@ class Page extends BaseService
      */
     protected $footer = true;
 
+    /**
+     * @var array
+     */
     protected $jsFiles = [];
 
+    /**
+     * @var array
+     */
     protected $cssFiles = [];
+
+    /**
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        // TODO setting 转为 config
+        return $this->title ?: wei()->setting('site.title');
+    }
 
     /**
      * @return bool
