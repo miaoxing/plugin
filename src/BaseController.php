@@ -55,7 +55,7 @@ abstract class BaseController extends \Wei\BaseController
      * @var array
      */
     protected $guestPages = [
-        'mall', 'cli',
+        'cli',
         // 非多级控制器在子类中配置
     ];
 
