@@ -120,8 +120,6 @@ abstract class BaseController extends \Wei\BaseController
             'event' => $this->event,
             'pageConfig' => $this->pageConfig,
             'controllerInstance' => $this,
-            // Strings
-            'pageId' => str_replace('/', '-', $this->app->getControllerAction()),
             'js' => &$this->js,
         ]);
 

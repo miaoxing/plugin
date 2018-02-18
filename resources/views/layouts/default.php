@@ -18,12 +18,9 @@
   <?= $block->get('css') ?>
 </head>
 <body class="<?= isset($bodyClass) ? $bodyClass : '' ?>">
+<?php $event->trigger('bodyStart', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
 
-<div id="<?= $pageId ?>">
-  <?php $event->trigger('bodyStart', [$pageConfig, isset($menuTitle) ? $menuTitle : $headerTitle]) ?>
-  <?= $content ?>
-</div>
-
+<?= $content ?>
 <?= $block->get('html') ?>
 
 <script src="<?= $mainJs = $asset([
