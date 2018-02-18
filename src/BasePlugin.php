@@ -2,12 +2,15 @@
 
 namespace Miaoxing\Plugin;
 
+use Miaoxing\Plugin\Service\Str;
+
 /**
  * @property \Wei\Env $env
  * @property \Wei\View $view
  * @property \Wei\Event $event
  * @property \Miaoxing\App\Service\Logger $logger
  * @property \Wei\Request $request
+ * @property Str $str
  */
 class BasePlugin extends \Miaoxing\Plugin\BaseService
 {
@@ -22,7 +25,7 @@ class BasePlugin extends \Miaoxing\Plugin\BaseService
      * 插件的版本号
      *
      * @var string
-     * @link http://semver.org/lang/zh-CN/ 语义化版本2.0.0
+     * @see http://semver.org/lang/zh-CN/ 语义化版本2.0.0
      */
     protected $version = '1.0.0';
 
@@ -91,14 +94,9 @@ class BasePlugin extends \Miaoxing\Plugin\BaseService
     {
         $class = get_class($this);
         $id = lcfirst(explode('\\', $class)[1]);
-        $id = $this->dash($id);
+        $id = $this->str->dash($id);
 
         return $id;
-    }
-
-    protected function dash($name)
-    {
-        return strtolower(preg_replace('/([A-Z])/', '-$1', $name));
     }
 
     /**

@@ -16,6 +16,7 @@ use Miaoxing\Plugin\BaseService;
  * @property \Wei\Event $event
  * @property \Wei\Request $request
  * @property \Miaoxing\Plugin\Service\App $app
+ * @property Str $str
  */
 class Plugin extends BaseService
 {
@@ -575,20 +576,11 @@ class Plugin extends BaseService
 
     public function getPluginIdByClass($class)
     {
-        // 类名如:Miaoxing\App\Controller/Apps
+        // 类名如:Miaoxing\App\Controller\Apps
         $id = explode('\\', $class, 3)[1];
-        $id = $this->dash($id);
+        $id = $this->str->dash($id);
 
         return $id;
-    }
-
-    /**
-     * @param string $name
-     * @return string
-     */
-    protected function dash($name)
-    {
-        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
     }
 
     /**

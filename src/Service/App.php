@@ -13,6 +13,7 @@ use Wei\Response;
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\Plugin\Service\AppRecord $appRecord 应用的数据库服务
  * @property Config $config
+ * @property Str $str
  */
 class App extends \Wei\App
 {
@@ -219,7 +220,7 @@ class App extends \Wei\App
             foreach ($classes as $class) {
                 // 认为第二部分是插件名称
                 list(, $plugin) = explode('\\', $class, 3);
-                $this->plugin = $this->dash($plugin);
+                $this->plugin = $this->str->dash($plugin);
 
                 break;
             }
@@ -331,15 +332,6 @@ class App extends \Wei\App
         return is_array($response)
             && array_key_exists('code', $response)
             && array_key_exists('message', $response);
-    }
-
-    /**
-     * @param string $name
-     * @return string
-     */
-    protected function dash($name)
-    {
-        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
     }
 
     public function isAdmin()
