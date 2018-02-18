@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Service\Asset;
-use Miaoxing\Plugin\Service\Layout;
+use Miaoxing\Plugin\Service\Page;
 use Wei\RetTrait;
 use Miaoxing\Plugin\Middleware\Auth;
 
@@ -26,7 +26,7 @@ use Miaoxing\Plugin\Middleware\Auth;
  * @method   string setting($name, $default = null) 读取配置
  * @property \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
  * @property Asset wpAsset
- * @property Layout $layout
+ * @property Page $page
  */
 abstract class BaseController extends \Wei\BaseController
 {

@@ -11,7 +11,7 @@
     'plugins/app/css/swipe.css',
     'plugins/app/css/jqm.css',
   ]) ?>">
-  <?= $wei->layout->renderHead() ?>
+  <?= $wei->page->renderHead() ?>
   <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/jquery-mobile/1.4.0/jquery.mobile.min.js"></script>
   <script src="<?= $asset([
@@ -31,6 +31,6 @@
 
 <?= $content ?>
 
-<?= $wei->layout->renderFooter() ?>
+<?= $wei->page->renderFooter() ?>
 </body>
 </html>
