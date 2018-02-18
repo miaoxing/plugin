@@ -115,14 +115,34 @@ class Layout extends BaseService
 
     public function renderHead()
     {
+        echo $this->renderCss();
         $this->event->trigger('style');
         echo $this->block->get('css');
     }
 
     public function renderFooter()
     {
+        echo $this->renderJs();
         $this->event->trigger('script');
         echo $this->block->get('js');
         $this->event->trigger('bodyEnd');
+    }
+
+    public function renderCss()
+    {
+        $html = '';
+        foreach ($this->cssFiles as $file) {
+            $html .= ' <link rel="stylesheet" href="' . $file . '" />' . "\n";
+        }
+        return $html;
+    }
+
+    public function renderJs()
+    {
+        $html = '';
+        foreach ($this->jsFiles as $file) {
+            $html .= '<script src="' . $file . '"></script>' . "\n";
+        }
+        return $html;
     }
 }
