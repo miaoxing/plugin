@@ -143,7 +143,7 @@ abstract class BaseController extends \Wei\BaseController
     public function getControllerName()
     {
         // 控制器名称如"图文管理(备注)",忽略括号中的备注内容
-        return explode('(', $this->controllerName)[0];
+        return explode('(', $this->controllerName)[0] ?: null;
     }
 
     /**
