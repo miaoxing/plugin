@@ -127,9 +127,9 @@ trait ConstTrait
     protected function getConstNameToIds($prefix)
     {
         if (!isset(self::$constNameToIds[$prefix])) {
-            $consts = $this->getConsts($prefix);
-            $nameToIds = array_flip(wei()->coll->column($consts, 'name'));
-            self::$constNameToIds[$prefix] = $nameToIds;
+            foreach ($this->getConsts($prefix) as $const) {
+                self::$constNameToIds[$prefix][$const['name']] = $const['id'];
+            }
         }
 
         return self::$constNameToIds[$prefix];
