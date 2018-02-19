@@ -8,9 +8,11 @@ use Wei\Block;
 /**
  * @property-read Block $block
  * @property-read View $view
- * @property-read Asset $wpAsset
  * @property-read Str $str
- * @method string wpAsset($file)
+ * @property-read Asset $asset
+ * @method string asset(string $file)
+ * @property-read Asset $wpAsset
+ * @method string wpAsset(string $file)
  */
 class Page extends BaseService
 {
@@ -149,6 +151,20 @@ class Page extends BaseService
     {
         $this->cssFiles[] = $href;
         return $this;
+    }
+
+    public function addAsset($asset)
+    {
+        $asset = $this->asset($asset);
+        $ext = pathinfo($asset, PATHINFO_EXTENSION);
+        switch ($ext) {
+            case 'css':
+                return $this->addCss($asset);
+
+            case 'js':
+            default:
+                return $this->addJs($asset);
+        }
     }
 
     public function renderHead()

@@ -9,7 +9,6 @@
     'comps/bootstrap-custom/css/bootstrap.min.css',
     'comps/bootstrap-mobile/dist/css/bootstrap-mobile.css',
     'plugins/app/css/tips.css',
-    'plugins/app/css/swipe.css',
     'plugins/app/css/app.css',
   ]) ?>">
   <?php require $view->getFile('@plugin/layouts/default-css.php') ?>
@@ -28,7 +27,6 @@
   'comps/jquery-list/jquery-list.js',
   'comps/bootstrap-custom/js/bootstrap.min.js',
   'comps/bootstrap-mobile/dist/js/bootstrap-mobile.min.js',
-  'comps/Swipe/swipe.js',
   'plugins/app/js/app.js',
   'plugins/app/js/require-config.js',
   'plugins/app/js/tips.js',
