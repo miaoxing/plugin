@@ -25,6 +25,7 @@
 <?php $event->trigger('bodyStart', [$headerTitle]) ?>
 
 <?= $content ?>
+<?= $block->get('html') ?>
 
 <?= $wei->page->renderFooter() ?>
 </body>
