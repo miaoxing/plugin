@@ -29,7 +29,6 @@
   'comps/bootstrap-custom/js/bootstrap.min.js',
   'comps/bootstrap-mobile/dist/js/bootstrap-mobile.min.js',
   'comps/Swipe/swipe.js',
-  'comps/jquery-lazy/jquery-lazy.js',
   'plugins/app/js/app.js',
   'plugins/app/js/require-config.js',
   'plugins/app/js/tips.js',
