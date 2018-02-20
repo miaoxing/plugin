@@ -68,7 +68,7 @@ class Page extends BaseService
     /**
      * @return bool
      */
-    public function getHeader()
+    public function hasHeader()
     {
         return $this->header;
     }
@@ -76,7 +76,7 @@ class Page extends BaseService
     /**
      * @return bool
      */
-    public function getFooter()
+    public function hasFooter()
     {
         return $this->footer;
     }
