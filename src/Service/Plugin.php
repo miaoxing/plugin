@@ -167,7 +167,7 @@ class Plugin extends BaseService
                 $class = $this->guessClassName($file);
 
                 $name = explode('\\', $class)[1];
-                $name = $this->dash($name);
+                $name = $this->str->dash($name);
 
                 $this->pluginClasses[$name] = $class;
             }
