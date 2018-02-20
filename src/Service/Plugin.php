@@ -718,7 +718,7 @@ class Plugin extends BaseService
      */
     protected function dash($name)
     {
-        return strtolower(preg_replace('/([A-Z])/', '-$1', $name));
+        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
     }
 
     /**
