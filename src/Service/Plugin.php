@@ -16,7 +16,6 @@ use Miaoxing\Plugin\BaseService;
  * @property \Wei\Event $event
  * @property \Wei\Request $request
  * @property \Miaoxing\Plugin\Service\App $app
- * @property Str $str
  */
 class Plugin extends BaseService
 {
@@ -167,7 +166,7 @@ class Plugin extends BaseService
                 $class = $this->guessClassName($file);
 
                 $name = explode('\\', $class)[1];
-                $name = $this->str->dash($name);
+                $name = $this->dash($name);
 
                 $this->pluginClasses[$name] = $class;
             }
@@ -578,7 +577,7 @@ class Plugin extends BaseService
     {
         // 类名如:Miaoxing\App\Controller\Apps
         $id = explode('\\', $class, 3)[1];
-        $id = $this->str->dash($id);
+        $id = $this->dash($id);
 
         return $id;
     }
@@ -711,6 +710,15 @@ class Plugin extends BaseService
         }
 
         return $map;
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    protected function dash($name)
+    {
+        return strtolower(preg_replace('/([A-Z])/', '-$1', $name));
     }
 
     /**
