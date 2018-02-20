@@ -48,3 +48,6 @@ foreach ($wei->plugin->getAll() as $plugin) {
 
 // 6. 执行迁移语句
 $wei->migration->migrate();
+
+// 7. 尝试移除缓存
+$wei->cache->remove('tableFieldsapp.apps');
