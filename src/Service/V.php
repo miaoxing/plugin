@@ -20,6 +20,7 @@ use Wei\Validate;
  * @method $this notRecordExists(string|Record $table, string $field = null)
  * @method $this type($type)
  * @method $this positiveInteger()
+ * @method $this greaterThan($value)
  * @method $this greaterThanOrEqual($value)
  * @see Inspired by https://github.com/Respect/Validation/tree/1.1
  */
