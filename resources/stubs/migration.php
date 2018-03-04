@@ -3,6 +3,7 @@
 echo '<?php';
 ?>
 
+
 namespace <?= $namespace ?>;
 
 use Miaoxing\Plugin\BaseMigration;
