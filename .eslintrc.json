@@ -115,7 +115,6 @@
     "no-proto": "error",
     "no-redeclare": "error",
     "no-return-assign": "error",
-    "no-script-url": "error",
     "no-self-compare": "error",
     "no-sequences": "error",
     "no-throw-literal": "error",
