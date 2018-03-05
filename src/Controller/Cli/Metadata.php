@@ -100,6 +100,8 @@ class Metadata extends BaseController
 
         switch ($type) {
             case 'int':
+            case 'smallint':
+            case 'mediumint':
                 return 'int';
 
             case 'tinyint':
