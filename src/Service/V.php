@@ -22,6 +22,7 @@ use Wei\Validate;
  * @method $this positiveInteger()
  * @method $this greaterThan($value)
  * @method $this greaterThanOrEqual($value)
+ * @method $this lessThanOrEqual($value)
  * @see Inspired by https://github.com/Respect/Validation/tree/1.1
  */
 class V extends BaseService
