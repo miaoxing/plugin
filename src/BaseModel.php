@@ -172,7 +172,7 @@ class BaseModel extends Record implements JsonSerializable
      * @param $class
      * @param bool $autoload
      * @return array
-     * @link http://php.net/manual/en/function.class-uses.php#110752
+     * @see http://php.net/manual/en/function.class-uses.php#110752
      */
     public function classUsesDeep($class, $autoload = true)
     {
@@ -773,7 +773,7 @@ class BaseModel extends Record implements JsonSerializable
         return $records;
     }
 
-    protected function loadHasMany(BaseModel $related = null, $relation, $name)
+    protected function loadHasMany(self $related = null, $relation, $name)
     {
         $serviceName = $this->getClassServiceName($related);
         $records = $related ? $related->fetchAll() : [];
@@ -881,7 +881,7 @@ class BaseModel extends Record implements JsonSerializable
         return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
     }
 
-    protected function getJunctionTable(BaseModel $related)
+    protected function getJunctionTable(self $related)
     {
         $tables = [$this->getTable(), $related->getTable()];
         sort($tables);
@@ -959,9 +959,9 @@ class BaseModel extends Record implements JsonSerializable
         return in_array($name, $this->getFields());
     }
 
-    public function isFillable($field)
+    public function isFillable($field, $data = null)
     {
-        if ($this->trigger('checkInputColumn', $field) === false) {
+        if ($this->trigger('checkInputColumn', [$field, $data]) === false) {
             return false;
         }
 

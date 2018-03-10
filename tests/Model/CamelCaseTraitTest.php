@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use Wei\Request;
 
 class CamelCaseTraitTest extends BaseTestCase
 {
@@ -41,7 +42,30 @@ class CamelCaseTraitTest extends BaseTestCase
         $this->assertEquals(1, $camelCase['testUserId']);
     }
 
-    public function testFromArrayIgnoreSnake()
+    public function testFromArrayReqIgnoreSnake()
+    {
+        $camelCase = wei()->testCamelCase();
+
+        /** @var Request $request */
+        $request = wei()->newInstance('request');
+        $request->fromArray([
+            'test_user_id' => 1,
+        ]);
+        $camelCase->fromArray($request);
+
+        $this->assertNull($camelCase['testUserId']);
+        $this->assertNull($camelCase['test_user_id']);
+
+        $request->fromArray([
+            'test_user_id' => 1,
+            'testUserId' => 2,
+        ]);
+        $camelCase->fromArray($request);
+
+        $this->assertEquals(2, $camelCase['testUserId']);
+    }
+
+    public function testFromArrayArrayAllowSnake()
     {
         $camelCase = wei()->testCamelCase();
 
@@ -49,8 +73,8 @@ class CamelCaseTraitTest extends BaseTestCase
             'test_user_id' => 1,
         ]);
 
-        $this->assertNull($camelCase['testUserId']);
-        $this->assertNull($camelCase['test_user_id']);
+        $this->assertEquals(1, $camelCase['testUserId']);
+        $this->assertEquals(1, $camelCase['test_user_id']);
 
         $camelCase->fromArray([
             'test_user_id' => 1,

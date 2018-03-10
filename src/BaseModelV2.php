@@ -83,7 +83,7 @@ class BaseModelV2 extends BaseModel
     public function fromArray($data)
     {
         foreach ($data as $key => $value) {
-            if (is_int($key) || $this->isFillable($key)) {
+            if (is_int($key) || $this->isFillable($key, $data)) {
                 $this->set($key, $value, false);
             }
         }
