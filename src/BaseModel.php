@@ -1072,4 +1072,35 @@ class BaseModel extends Record implements JsonSerializable
 
         return $this->$name;
     }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     */
+    public function toRet(array $merge = [])
+    {
+        if ($this->isColl()) {
+            return $this->suc($merge + [
+                    'data' => $this,
+                    'page' => $this->getSqlPart('page'),
+                    'rows' => $this->getSqlPart('limit'),
+                    'records' => $this->count(),
+                ]);
+        } else {
+            return $this->suc($merge + ['data' => $this]);
+        }
+    }
+
+    /**
+     * Check if collection key
+     *
+     * @param string $key
+     * @return bool
+     */
+    protected function isCollKey($key)
+    {
+        return $key === null || is_numeric($key);
+    }
 }
