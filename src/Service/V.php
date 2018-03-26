@@ -54,8 +54,8 @@ use Wei\Validate;
  * @method $this notUppercase()
  *
  * Length
- * @method $this length($length, $max = null) Check if the length (or size) of input is equals specified length or in specified length range
- * @method $this notLength($length, $max = null)
+ * @method $this length($length, $min = null, $max = null) Check if the length (or size) is equals or in specified range
+ * @method $this notLength($length, $min = null, $max = null)
  * @method $this charLength($length) Check if the characters length of input is equals specified length
  * @method $this notCharLength($length)
  * @method $this minLength($min) Check if the length (or size) of input is greater than specified length
