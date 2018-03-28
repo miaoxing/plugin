@@ -248,7 +248,7 @@ class Plugin extends BaseService
     {
         return $this->wei->isDebug()
             && $this->request->getServer('HTTP_PRAGMA') == 'no-cache'
-            && strpos($this->request->getServer('HTTP_USER_AGENT'), 'wechatdevtools') !== false;
+            && strpos($this->request->getServer('HTTP_USER_AGENT'), 'wechatdevtools') === false;
     }
 
     /**
