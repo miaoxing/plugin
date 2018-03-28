@@ -44,10 +44,11 @@ class Controllers extends BaseController
     protected function getFile(BasePlugin $plugin, $name)
     {
         $parts = explode('/', $name);
+
         foreach ($parts as $i => $part) {
             $parts[$i] = $this->str->camel($part);
         }
-        $name = implode('/', $parts);
+        $name = ucfirst(implode('/', $parts));
 
         return $plugin->getBasePath() . '/src/Controller/' . $name . '.php';
     }
@@ -67,7 +68,7 @@ class Controllers extends BaseController
             $parts[$i] = $this->str->camel($part);
         }
 
-        $name = array_pop($parts);
+        $name = ucfirst(array_pop($parts));
         $namespace = $this->getPluginNamespace($plugin) . '\Controller';
         if ($parts) {
             $namespace .= '\\' . implode('\\', $parts);
@@ -90,7 +91,7 @@ class Controllers extends BaseController
         $this->writeln('生成文件 ' . $this->cli->success($file));
 
         ob_start();
-        require $this->plugin->getById('plugin')->getBasePath() .'/resources/stubs/controller.php';
+        require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/controller.php';
         $content = ob_get_clean();
 
         file_put_contents($file, $content);
