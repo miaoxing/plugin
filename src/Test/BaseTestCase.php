@@ -71,13 +71,15 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function getModelServiceMock($name, $methods = [], array $arguments = [])
     {
+        $table = wei()->$name()->getTable();
+
         // TODO PHPUnit?空方法会导致其他方法都返回null,
         $methods || $methods = ['__fake'];
 
         $model = $this->getServiceMock($name, $methods, $arguments);
 
         // TODO 通过db服务调用getTableFields会出现错误 Illegal offset type in isset or empty in services/Db.php on line 16
-        $fields = wei()->appDb->getTableFields($model->getTable());
+        $fields = wei()->appDb->getTableFields($table);
         $model->setOption('fields', $fields);
 
         return $model;
