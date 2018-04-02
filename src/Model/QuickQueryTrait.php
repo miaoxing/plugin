@@ -63,8 +63,13 @@ trait QuickQueryTrait
 
     public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
     {
-        if (isset($this->request['sort']) && in_array($this->request['sort'], $this->getFields())) {
-            $sort = $this->request['sort'];
+        if (isset($this->request['sort'])) {
+            $name = $this->filterInputColumn($this->request['sort']);
+            if (in_array($name, $this->getFields())) {
+                $sort = $name;
+            } else {
+                $sort = $defaultColumn;
+            }
         } else {
             $sort = $defaultColumn;
         }
