@@ -18,18 +18,6 @@ class Setting extends \Miaoxing\Plugin\BaseModel
         'site.title' => '站点标题',
         'site.announcements' => '站点公告',
 
-        'mall' => '微商城设置',
-        'mall.cartTimeout' => '购物车超时时间',
-
-        'reserve' => '预约设置',
-        'reserve.info' => '预约说明',
-        'reserve.phone' => '预约电话',
-        'reserve.reserveAddress' => '预约地址',
-
-        'phone' => '电话设置',
-        'phone.sellPhone' => '销售电话',
-        'phone.servicePhone' => '服务电话',
-
         'orders' => '订单设置',
         'orders.confirmText' => '确认支付的提示',
         'orders.enableWechatAddress' => '是否启用"从微信选择地址"功能',
@@ -51,18 +39,13 @@ class Setting extends \Miaoxing\Plugin\BaseModel
         'products.listLayout' => '列表默认布局',
         //'products.tagQueryType' => '商品标签的查询类型',
 
-        'dealer' => '分销商设置',
-        'dealer.rule' => '佣金规则',
-
-        'shakeRace' => '摇一摇竞赛',
-        'shakeRace.qr_code' => '摇一摇竞赛二维码',
-        //'wallet' => '账户配置',
-        //'wallet.recharge' => '充值配置' // 不在站点设置显示
+        'dist' => '分销商设置',
+        'dist.rule' => '佣金规则',
     ];
 
     protected $editorFields = [
         'wechatQrcodes.description',
-        'dealer.rule',
+        'dist.rule',
     ];
 
     /**
