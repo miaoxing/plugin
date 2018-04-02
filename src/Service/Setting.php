@@ -51,7 +51,7 @@ class Setting extends \Miaoxing\Plugin\BaseModel
         'products.listLayout' => '列表默认布局',
         //'products.tagQueryType' => '商品标签的查询类型',
 
-        'dealer' => '经销商设置',
+        'dealer' => '分销商设置',
         'dealer.rule' => '佣金规则',
 
         'shakeRace' => '摇一摇竞赛',
