@@ -222,16 +222,18 @@ class Page extends BaseService
      * 增加插件的资源
      *
      * @param string|null $action
+     * @param string|null $plugin
      * @return $this
+     * @todo 移除plugin参数,解决项目插件获取的名称错误
      */
-    public function addPluginAsset($action = null)
+    public function addPluginAsset($action = null, $plugin = null)
     {
         // 1. 设置路由
         $this->initRoute($action);
 
         // 2. 加载插件的版本映射表
         // 目前正常只会加载一次，不用缓存
-        $plugin = $this->app->getPlugin();
+        $plugin || $plugin = $this->app->getPlugin();
         $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
 
         // 3. 加载css和js文件
