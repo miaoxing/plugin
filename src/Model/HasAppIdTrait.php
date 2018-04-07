@@ -28,7 +28,7 @@ trait HasAppIdTrait
     {
         $appId = $this->app->getId();
 
-        return $this->andWhere([$this->appIdColumn => $appId]);
+        return $this->andWhere([$this->fullTable . '.' . $this->appIdColumn => $appId]);
     }
 
     /**
