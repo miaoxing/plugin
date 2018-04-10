@@ -59,7 +59,7 @@ class Metadata extends BaseController
         $modelObject = wei()->$model();
         $table = $modelObject->getTable();
         $defaultCasts = $modelObject->getOption('defaultCasts') ?: [];
-        $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
+        $columns = wei()->appDb->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
 
         $casts = [];
         $docBlock = '';
