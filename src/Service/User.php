@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseModel;
+use Miaoxing\User\Job\UserCreate;
 use Miaoxing\User\Service\UserProfile;
 
 /**
@@ -364,6 +365,8 @@ class User extends BaseModel
         parent::afterCreate();
 
         $this->isCreated = true;
+
+        wei()->queue->push(UserCreate::class, ['id' => $this['id']], wei()->app->getNamespace());
 
         // TODO 移到插件中
         if ($this['wechatOpenId']) {
