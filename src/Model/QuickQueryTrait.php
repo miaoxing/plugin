@@ -61,7 +61,7 @@ trait QuickQueryTrait
         return $this;
     }
 
-    public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
+    public function sort($defaultColumn = 'id', $defaultOrder = 'DESC', $tableName = false)
     {
         if (isset($this->request['sort'])) {
             $name = $this->filterInputColumn($this->request['sort']);
@@ -81,6 +81,10 @@ trait QuickQueryTrait
             }
         } else {
             $order = $defaultOrder;
+        }
+
+        if ($tableName) {
+            $sort = $this->fullTable . '.' . $sort;
         }
 
         $this->orderBy($sort, $order);
