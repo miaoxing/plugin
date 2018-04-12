@@ -20,7 +20,7 @@ class IsRecordExists extends RecordExists
             $this->table->andWhere([$this->field => $input]);
         }
 
-        if (!$this->table->fetchColumn()) {
+        if (!$this->table->find()) {
             $this->addError('notFound');
             return false;
         } else {
