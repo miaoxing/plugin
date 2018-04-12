@@ -14,39 +14,10 @@ class Setting extends \Miaoxing\Plugin\BaseModel
 
     protected $labels = [
         'site' => '官网设置',
-        'site.logo' => '站点LOGO',
         'site.title' => '站点标题',
-        'site.announcements' => '站点公告',
-
-        'orders' => '订单设置',
-        'orders.confirmText' => '确认支付的提示',
-        'orders.enableWechatAddress' => '是否启用"从微信选择地址"功能',
-
-        'orderMailer' => '订单邮件',
-        'orderMailer.newOrderEmail' => '下单提醒的邮件接收地址',
-
-        'refundMailer' => '退款邮件',
-        'refundMailer.newRefundEmail' => '退款提醒的邮件接收地址',
-
-        'questionMailer' => '提问邮件',
-        'questionMailer.newQuestionEmail' => '提问提醒的邮件接收地址',
-
-        'wechatQrcodes' => '微信二维码',
-        'wechatQrcodes.description' => '用户二维码说明',
-
-        'products' => '商品设置',
-        'products.categoryLevel' => '商品分类层级',
-        'products.listLayout' => '列表默认布局',
-        //'products.tagQueryType' => '商品标签的查询类型',
-
-        'dist' => '分销商设置',
-        'dist.rule' => '佣金规则',
     ];
 
-    protected $editorFields = [
-        'wechatQrcodes.description',
-        'dist.rule',
-    ];
+    protected $editorFields = [];
 
     /**
      * {@inheritdoc}
