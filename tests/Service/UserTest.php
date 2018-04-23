@@ -20,7 +20,7 @@ class UserTest extends BaseTestCase
         $this->assertEquals('', $user->getNickName());
 
         $user['isValid'] = true;
-        $this->assertEquals('游客', $user->getNickName());
+        $this->assertEquals('', $user->getNickName());
 
         $user['name'] = 'name';
         $this->assertEquals('name', $user->getNickName());

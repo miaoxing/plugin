@@ -133,7 +133,7 @@ class User extends BaseModel
             }
         }
 
-        return $this['isValid'] ? '游客' : '';
+        return '';
     }
 
     /**
