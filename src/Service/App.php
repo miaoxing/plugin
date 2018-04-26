@@ -314,7 +314,7 @@ class App extends \Wei\App
         if ($this->request->acceptJson() || php_sapi_name() == 'cli') {
             return $this->response->json($ret);
         } else {
-            $type = $ret['code'] === 1 ? 'success' : 'warning';
+            $type = isset($ret['retType']) ? $ret['retType'] : ($ret['code'] === 1 ? 'success' : 'warning');
             $content = $this->view->render('@plugin/ret/ret.php', $ret + ['type' => $type]);
 
             return $this->response->setContent($content);
