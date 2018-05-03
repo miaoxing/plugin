@@ -127,7 +127,7 @@ class Plugin extends BaseService
                     'controllerMap' => $this->getAppControllerMap(),
                 ],
                 'plugin' => [
-                    'pluginClasses' => $this->getPluginClasses(),
+                    'pluginClasses' => $this->getPluginClasses(true),
                 ],
             ];
         });
@@ -156,11 +156,14 @@ class Plugin extends BaseService
     /**
      * Get all plugin classes
      *
+     * @param bool $refresh
      * @return array
+     * @throws Exception
      */
-    protected function getPluginClasses()
+    protected function getPluginClasses($refresh = false)
     {
-        if (!$this->pluginClasses) {
+        if ($refresh || !$this->pluginClasses) {
+            $this->pluginClasses = [];
             $files = $this->globByDirs($this->dirs, '/Plugin.php');
             foreach ($files as $file) {
                 $class = $this->guessClassName($file);
