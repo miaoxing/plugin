@@ -623,15 +623,24 @@ class User extends BaseModel
      */
     public function updatePassword($req)
     {
+        if (wei()->setting('user.enablePinCode')) {
+            $rule = [
+                'digit' => true,
+                'length' => 6,
+            ];
+        } else {
+            $rule = [
+                'minLength' => 6,
+            ];
+        }
+
         // 1. 校验
         $validator = wei()->validate([
             'data' => $req,
             'rules' => [
                 'oldPassword' => [
                 ],
-                'password' => [
-                    'minLength' => 6,
-                ],
+                'password' => $rule,
                 'passwordConfirm' => [
                     'equalTo' => $req['password'],
                 ],
