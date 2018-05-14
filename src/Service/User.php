@@ -180,6 +180,17 @@ class User extends BaseModel
         return $this['headImg'] ?: '/assets/images/head/default-light.jpg';
     }
 
+    public function getBackendDisplayName()
+    {
+        if ($this['name'] && $this['nickName']) {
+            return $this['name'] . '(' . $this['nickName'] . ')';
+        } elseif ($this['name']) {
+            return $this['name'];
+        } else {
+            return $this['nickName'];
+        }
+    }
+
     /**
      * Repo: 根据用户编号,从缓存中获取用户名
      *
