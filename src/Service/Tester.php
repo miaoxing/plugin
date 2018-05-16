@@ -416,4 +416,13 @@ class Tester extends \Miaoxing\Plugin\BaseService
             ->exec()
             ->response();
     }
+
+    public function req($data)
+    {
+        return $this->login()
+            ->request($data)
+            ->json()
+            ->exec()
+            ->response();
+    }
 }
