@@ -178,6 +178,23 @@ class Tester extends \Miaoxing\Plugin\BaseService
         return $this->dataType('json');
     }
 
+    protected function getControllerByClass($class)
+    {
+        $parts = explode('Controller\\', $class);
+        $controller = substr($parts[1], 0, -4);
+        return implode('/', array_map('lcfirst', explode('\\', $controller)));
+    }
+
+    protected function getActionByMethod($method)
+    {
+        preg_match('/^test(.+?)Action/', $method, $match);
+        if (isset($match[1])) {
+            return lcfirst($match[1]);
+        }
+
+        return null;
+    }
+
     /**
      * 调用指定的控制器盒方法
      *
@@ -186,6 +203,18 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     public function exec()
     {
+        if (!$this->controller) {
+            $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+            if (isset($traces[1]['class']) && $traces[1]['class'] !== get_class()) {
+                $match = $traces[1];
+            } else {
+                $match = $traces[2];
+            }
+            $this->controller = $this->getControllerByClass($match['class']);
+            $this->action = $this->getActionByMethod($match['function']);
+        }
+
+
         $wei = $this->wei;
 
         // 1. 注入各种配置
