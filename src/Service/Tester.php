@@ -417,7 +417,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
             ->response();
     }
 
-    public function req($data)
+    public function req($data = [])
     {
         return $this->login()
             ->request($data)
