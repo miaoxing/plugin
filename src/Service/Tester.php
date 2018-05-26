@@ -214,7 +214,6 @@ class Tester extends \Miaoxing\Plugin\BaseService
             $this->action = $this->getActionByMethod($match['function']);
         }
 
-
         $wei = $this->wei;
 
         // 1. 注入各种配置
