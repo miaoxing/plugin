@@ -418,8 +418,11 @@ class Tester extends \Miaoxing\Plugin\BaseService
 
     public function req($data = [])
     {
-        return $this->login()
-            ->request($data)
+        if (!isset($this->session['user'])) {
+            $this->login();
+        }
+
+        return $this->request($data)
             ->json()
             ->exec()
             ->response();
