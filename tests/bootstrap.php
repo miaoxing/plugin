@@ -4,9 +4,13 @@ require 'init.php';
 
 $wei = wei();
 
-// 初始化数据库
-$db = $wei->db;
-$db->useDb('app');
+$app = isset($_SERVER['WEI_APP']) ? $_SERVER['WEI_APP'] : 'app';
+
+$wei->setNamespace($app);
+$wei->app->setNamespace($app);
+$wei->setConfig('session:namespace', $app);
+$wei->db->setOption('dbname', $app);
+$wei->event->trigger('appInit');
 
 // 动态加载所有插件的dev类,用于主项目中测试子插件
 foreach ($wei->plugin->getAll() as $plugin) {
