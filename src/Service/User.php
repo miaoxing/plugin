@@ -13,6 +13,7 @@ use Miaoxing\User\Service\UserProfile;
  * @property \Wei\Request $request
  * @property \Wei\Password $password
  * @property \Wei\Event $event
+ * @property Setting $setting
  */
 class User extends BaseModel
 {
@@ -717,6 +718,6 @@ class User extends BaseModel
 
     public function getDefaultHeadImg()
     {
-        return '/plugins/user/images/head.jpg';
+        return $this->setting->getValue('user.defaultHeadImg') ?: '/plugins/user/images/head.jpg';
     }
 }
