@@ -174,10 +174,11 @@ class User extends BaseModel
      * Record: 获取用户头像,没有设置头像则使用默认头像
      *
      * @return string
+     * @deprecated
      */
     public function getHeadImg()
     {
-        return $this['headImg'] ?: '/assets/images/head/default-light.jpg';
+        return $this['headImg'];
     }
 
     public function getBackendDisplayName()
@@ -410,6 +411,10 @@ class User extends BaseModel
         if (is_array($this['extAttr'])) {
             $this['extAttr'] = json_encode($this['extAttr'], JSON_UNESCAPED_SLASHES);
         }
+
+        if ($this['headImg'] == wei()->user->getDefaultHeadImg()) {
+            $this['headImg'] = '';
+        }
     }
 
     public function afterFind()
@@ -421,6 +426,10 @@ class User extends BaseModel
 
         if (!is_array($this['extAttr'])) {
             $this['extAttr'] = (array) json_decode($this['extAttr'], true);
+        }
+
+        if (!$this['headImg']) {
+            $this['headImg'] = wei()->user->getDefaultHeadImg();
         }
     }
 
@@ -704,5 +713,10 @@ class User extends BaseModel
         }
 
         return (bool) $result;
+    }
+
+    public function getDefaultHeadImg()
+    {
+        return '/plugins/user/images/head.jpg';
     }
 }

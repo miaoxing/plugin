@@ -44,7 +44,7 @@ class UserTest extends BaseTestCase
     public function testGetHeadImg()
     {
         $user = wei()->user();
-        $this->assertEquals('/assets/images/head/default-light.jpg', $user->getHeadImg());
+        $this->assertEquals(wei()->user->getDefaultHeadImg(), $user->getHeadImg());
 
         $user['headImg'] = 'test.jpg';
         $this->assertEquals('test.jpg', $user->getHeadImg());
