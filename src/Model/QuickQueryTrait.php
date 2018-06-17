@@ -61,6 +61,18 @@ trait QuickQueryTrait
         return $this;
     }
 
+    public function reqHas($columns)
+    {
+        foreach ((array) $columns as $column) {
+            $name = $this->filterOutputColumn($column);
+            if (isset($this->request[$name]) && wei()->isPresent($this->request[$name])) {
+                $this->whereHas($column, $this->request[$name]);
+            }
+        }
+
+        return $this;
+    }
+
     public function sort($defaultColumn = 'id', $defaultOrder = 'DESC', $tableName = false)
     {
         if (isset($this->request['sort'])) {

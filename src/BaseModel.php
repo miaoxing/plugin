@@ -146,7 +146,7 @@ class BaseModel extends Record implements JsonSerializable
 
     protected $defaultValues = [
         'date' => '0000-00-00',
-        'datetime' => '0000-00-00',
+        'datetime' => '0000-00-00 00:00:00',
     ];
 
     public function __construct(array $options = [])
@@ -1135,6 +1135,6 @@ class BaseModel extends Record implements JsonSerializable
             $default = '';
         }
         $op = $value === '1' ? '!=' : '=';
-        $this->andWhere($column  . ' ' . $op . ' ?', $default);
+        $this->andWhere($column  . ' ' . $op . ' \'' . $default . '\'');
     }
 }
