@@ -36,6 +36,8 @@ class Models extends BaseController
         $this->createFile($file, $namespace, $class);
 
         $this->plugin->getConfig(true);
+        $this->app->dispatch('cli/docs', 'create');
+        $this->app->dispatch('cli/metadata', 'create');
 
         return $this->suc();
     }

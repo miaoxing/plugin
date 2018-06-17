@@ -36,6 +36,7 @@ class Services extends BaseController
         $this->createFile($file, $namespace, $class);
 
         $this->plugin->getConfig(true);
+        $this->app->dispatch('cli/docs', 'create');
 
         return $this->suc();
     }
