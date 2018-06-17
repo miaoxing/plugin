@@ -80,14 +80,46 @@ trait ConstV2Trait
         return $consts;
     }
 
-    public function getConstId($prefix, $reqStatus)
+    /**
+     * 将请求的key(字母)转换为id(数字)
+     *
+     * 用法
+     * $curStatus = wei()->xxx->getConstId('status', $req['status']);
+     *
+     * @param string $prefix
+     * @param string $reqKey
+     * @return string
+     */
+    public function getConstId($prefix, $reqKey)
     {
         $consts = $this->getConsts($prefix);
         $keys = array_column($consts, 'id', 'key');
-        if (isset($keys[$reqStatus])) {
-            return $keys[$reqStatus];
+        if (isset($keys[$reqKey])) {
+            return $keys[$reqKey];
         }
 
         return '';
+    }
+
+    /**
+     * 将请求的key(字母)转换为key并用于查询
+     *
+     * @param string $prefix
+     * @param string $reqKey
+     * @return $this
+     */
+    public function whereConstKey($prefix, $reqKey)
+    {
+        $id = $this->getConstId($prefix, $reqKey);
+        if ($id !== '') {
+            $this->andWhere([$prefix => $id]);
+        }
+
+        // OR
+//        if (wei()->isPresent($curStatus)) {
+//            $jthPatients->andWhere(['status' => $curStatus]);
+//        }
+
+        return $this;
     }
 }
