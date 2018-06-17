@@ -144,6 +144,11 @@ class BaseModel extends Record implements JsonSerializable
         'str',
     ];
 
+    protected $defaultValues = [
+        'date' => '0000-00-00',
+        'datetime' => '0000-00-00',
+    ];
+
     public function __construct(array $options = [])
     {
         parent::__construct($options);
@@ -1105,15 +1110,31 @@ class BaseModel extends Record implements JsonSerializable
     }
 
     /**
-     * 简化LIKE搜索
+     * 搜索字段是否包含某个值
      *
      * @param string $column
      * @param string $value
      * @return $this
-     * @todo 整理命名
      */
-    public function contains($column, $value)
+    public function whereContains($column, $value)
     {
         return $this->andWhere($column . ' LIKE ?', '%' . $value . '%');
+    }
+
+    /**
+     * 搜索某一列是否有值
+     *
+     * @param string $column
+     * @param mixed $value
+     */
+    public function whereHas($column, $value)
+    {
+        if (isset($this->defaultValues[$this->casts[$column]])) {
+            $default = $this->defaultValues[$this->casts[$column]];
+        } else {
+            $default = '';
+        }
+        $op = $value === '1' ? '!=' : '=';
+        $this->andWhere($column  . ' ' . $op . ' ?', $default);
     }
 }
