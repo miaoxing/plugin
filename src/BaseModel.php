@@ -1103,4 +1103,17 @@ class BaseModel extends Record implements JsonSerializable
     {
         return $key === null || is_numeric($key);
     }
+
+    /**
+     * 简化LIKE搜索
+     *
+     * @param string $column
+     * @param string $value
+     * @return $this
+     * @todo 整理命名
+     */
+    public function contains($column, $value)
+    {
+        return $this->andWhere($column . ' LIKE ?', '%' . $value . '%');
+    }
 }
