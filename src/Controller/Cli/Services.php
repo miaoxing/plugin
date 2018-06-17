@@ -35,6 +35,8 @@ class Services extends BaseController
 
         $this->createFile($file, $namespace, $class);
 
+        $this->plugin->getConfig(true);
+
         return $this->suc();
     }
 
