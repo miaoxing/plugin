@@ -18,6 +18,7 @@
 <?php $event->trigger('bodyStart', [$headerTitle]) ?>
 
 <?= $content ?>
+<div id="root"></div>
 <?= $block->get('html') ?>
 
 <script src="<?= $mainJs = $asset([
