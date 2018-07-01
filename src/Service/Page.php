@@ -237,7 +237,10 @@ class Page extends BaseService
         $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
 
         // 3. 加载css和js文件
-        $this->addCss($this->wpAsset($plugin . '.css'));
+        $revMap = $this->wpAsset->getRevMap();
+        if (isset($revMap[$plugin . '.css'])) {
+            $this->addCss($this->wpAsset($plugin . '.css'));
+        }
         $this->addJs($this->wpAsset($plugin . '.js'));
 
         return $this;
