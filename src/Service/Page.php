@@ -223,10 +223,11 @@ class Page extends BaseService
      *
      * @param string|null $action
      * @param string|null $plugin
+     * @param bool $hasCss
      * @return $this
      * @todo 移除plugin参数,解决项目插件获取的名称错误
      */
-    public function addPluginAsset($action = null, $plugin = null)
+    public function addPluginAsset($action = null, $plugin = null, $hasCss = true)
     {
         // 1. 设置路由
         $this->initRoute($action);
@@ -237,10 +238,7 @@ class Page extends BaseService
         $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
 
         // 3. 加载css和js文件
-        $revMap = $this->wpAsset->getRevMap();
-        if (isset($revMap[$plugin . '.css'])) {
-            $this->addCss($this->wpAsset($plugin . '.css'));
-        }
+        $hasCss && $this->addCss($this->wpAsset($plugin . '.css'));
         $this->addJs($this->wpAsset($plugin . '.js'));
 
         return $this;
