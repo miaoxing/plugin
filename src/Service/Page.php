@@ -244,6 +244,11 @@ class Page extends BaseService
         return $this;
     }
 
+    public function addAppAsset()
+    {
+        return $this->addPluginAsset(null, 'app', false);
+    }
+
     protected function initRoute($action)
     {
         $route = $this->app->getController() . '/' . ($action ?: $this->app->getAction());
