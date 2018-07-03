@@ -246,7 +246,14 @@ class Page extends BaseService
 
     public function addAppAsset()
     {
-        return $this->addPluginAsset(null, 'app', false);
+        $this->addPluginAsset(null, 'app', false);
+        return $this->addJs($this->wpAsset('app-manifest.js'));
+    }
+
+    public function addAdminAsset()
+    {
+        $this->addPluginAsset(null, 'admin2', false);
+        return $this->addJs($this->wpAsset('admin2-manifest.js'));
     }
 
     protected function initRoute($action)
