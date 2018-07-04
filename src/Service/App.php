@@ -72,6 +72,11 @@ class App extends \Wei\App
     protected $defaultNamespace = 'app';
 
     /**
+     * @var string
+     */
+    protected $defaultViewFile = '@app/_default.php';
+
+    /**
      * {@inheritdoc}
      */
     public function __invoke(array $options = [])
@@ -292,11 +297,17 @@ class App extends \Wei\App
      *
      * @param mixed $response
      * @return Response
+     * @throws \Exception
      */
     public function handleResponse($response)
     {
         if ($this->isRet($response)) {
             return $this->handleRet($response);
+        } elseif (is_array($response)) {
+            $template = $this->getDefaultTemplate();
+            $file = $this->view->resolveFile($template) ? $template : $this->defaultViewFile;
+            $content = $this->view->render($file, $response);
+            return $this->response->setContent($content);
         } else {
             return parent::handleResponse($response);
         }
