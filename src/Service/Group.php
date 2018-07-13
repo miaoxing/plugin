@@ -14,7 +14,7 @@ class Group extends \Miaoxing\Plugin\BaseModel
     protected $table = 'groups';
 
     protected $data = [
-        'sort' => 50
+        'sort' => 50,
     ];
 
     protected $customerServiceGroups;
@@ -42,7 +42,7 @@ class Group extends \Miaoxing\Plugin\BaseModel
     {
         $group = wei()->group()->setData([
             'id' => 0,
-            'name' => '未分组'
+            'name' => '未分组',
         ]);
         array_unshift($this->data, $group);
         return $this;
@@ -51,8 +51,29 @@ class Group extends \Miaoxing\Plugin\BaseModel
     public function getCustomerServiceGroups()
     {
         $this->customerServiceGroups ||
-        $this->customerServiceGroups = wei()->group()->findAll(['isCustomerService' => Group::CUSTOMER_SERVICE]);
+        $this->customerServiceGroups = wei()->group()->findAll(['isCustomerService' => self::CUSTOMER_SERVICE]);
 
         return $this->customerServiceGroups;
+    }
+
+    public function getTreeToArray($groups = [])
+    {
+        /** @var $group Group */
+        foreach ($this as $group) {
+            $groups[] = $group->toArray();
+            $groups = $group->getChildren()->desc('sort')->findAll()->getTreeToArray($groups);
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Record: 获取当前分组的子分组
+     *
+     * @return $this|$this[]
+     */
+    public function getChildren()
+    {
+        return wei()->group()->notDeleted()->andWhere(['parentId' => $this['id']])->desc('sort')->desc('id');
     }
 }
