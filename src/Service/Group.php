@@ -93,4 +93,15 @@ class Group extends \Miaoxing\Plugin\BaseModel
     {
         return wei()->group()->notDeleted()->andWhere(['parentId' => $this['id']])->desc('sort')->desc('id');
     }
+
+    public function getNameWithPrefix()
+    {
+        if ($this['level'] == '0') {
+            $prefix = '';
+        } else {
+            $prefix = '|' . str_repeat('--', $this['level']);
+        }
+
+        return $prefix . $this['name'];
+    }
 }
