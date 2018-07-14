@@ -56,6 +56,23 @@ class Group extends \Miaoxing\Plugin\BaseModel
         return $this->customerServiceGroups;
     }
 
+    /**
+     * Collection
+     *
+     * @param array $groups
+     * @return array
+     */
+    public function getTree($groups = [])
+    {
+        /** @var $group Group */
+        foreach ($this as $group) {
+            $groups[] = $group;
+            $groups = $group->getChildren()->findAll()->getTree($groups);
+        }
+
+        return $groups;
+    }
+
     public function getTreeToArray($groups = [])
     {
         /** @var $group Group */
@@ -70,7 +87,7 @@ class Group extends \Miaoxing\Plugin\BaseModel
     /**
      * Record: 获取当前分组的子分组
      *
-     * @return $this|$this[]
+     * @return Group|Group[]
      */
     public function getChildren()
     {
