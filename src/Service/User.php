@@ -413,7 +413,7 @@ class User extends BaseModel
             $this['extAttr'] = json_encode($this['extAttr'], JSON_UNESCAPED_SLASHES);
         }
 
-        if ($this['headImg'] == wei()->user->getDefaultHeadImg()) {
+        if (isset($this['headImg']) && $this['headImg'] == wei()->user->getDefaultHeadImg()) {
             $this['headImg'] = '';
         }
     }
