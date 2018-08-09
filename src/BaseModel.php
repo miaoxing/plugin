@@ -1137,4 +1137,15 @@ class BaseModel extends Record implements JsonSerializable
         $op = $value === '1' ? '!=' : '=';
         $this->andWhere($column  . ' ' . $op . ' \'' . $default . '\'');
     }
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     */
+    public function setRawValue($column, $value)
+    {
+        $this->data[$column] = $value;
+        return $this;
+    }
 }
