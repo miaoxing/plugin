@@ -1,10 +1,11 @@
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `outId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '外部编号',
   `appUserId` int(11) NOT NULL DEFAULT '0' COMMENT 'app应用的用户编号',
-  `wechatOpenId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '微信服务号的OpenID',
-  `wechatUnionId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '微信多账号的GroupId',
-  `qqOpenId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `wechatOpenId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '微信的OpenID',
+  `wechatUnionId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `wechatUserId` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '微信UserId',
   `status` mediumint(6) NOT NULL DEFAULT '0' COMMENT '二进制状态位,表示手机等是否已验证',
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `nickName` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -27,29 +28,24 @@ CREATE TABLE `user` (
   `department` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '部门',
   `position` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '职位',
   `extAttr` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '额外参数',
-  `weixinId` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '微信号',
   `money` decimal(16,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '账户余额',
   `rechargeMoney` decimal(16,2) NOT NULL DEFAULT '0.00' COMMENT '充值账户余额',
   `score` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
   `regTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '注册时间',
   `lastLoginTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `unsubscribeTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '取关时间',
-  `isQqValid` tinyint(1) NOT NULL DEFAULT '1',
   `isValid` tinyint(1) NOT NULL DEFAULT '1',
   `enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用',
   `shopId` int(11) NOT NULL DEFAULT '0' COMMENT '所属门店',
-  `staffNo` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '工号',
   `source` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' COMMENT '用户来源',
   `createUser` int(11) NOT NULL DEFAULT '0',
   `createTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '用户创建时间',
   `updateUser` int(11) NOT NULL DEFAULT '0',
   `updateTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `wechatUserId` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '微信UserId',
-  PRIMARY KEY (`id`),
-  KEY `wechatOpenId` (`wechatOpenId`),
-  KEY `isValid` (`isValid`),
-  KEY `qqOpenId` (`qqOpenId`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `weChatOpenId` (`wechatOpenId`) USING BTREE,
+  KEY `isValid` (`isValid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
 
 BEGIN;
 INSERT INTO `user` VALUES ('1', '1', '', '', '', '0', '1', 'admin', '', 'admin', '', '', '', '', '', '', '1', '', '', '', '', '', '', '0', '', '', '', '', '0.00', '0.00', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1', '1', '1', '0', '', '', '0', '0000-00-00 00:00:00', '0', '0000-00-00 00:00:00', '');
