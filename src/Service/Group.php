@@ -61,14 +61,21 @@ class Group extends \Miaoxing\Plugin\BaseModel
      * Collection
      *
      * @param array $groups
+     * @param int $deep
      * @return array
      */
-    public function getTree($groups = [])
+    public function getTree($groups = [], $deep = 0)
     {
+        $deep = (int) $deep;
+        $deep--;
+
         /** @var $group Group */
         foreach ($this as $group) {
             $groups[] = $group;
-            $groups = $group->getChildren()->findAll()->getTree($groups);
+            // 参数为0时,当前为-1,则一直获取下去
+            if ($deep) {
+                $groups = $group->getChildren()->findAll()->getTree($groups, $deep);
+            }
         }
 
         return $groups;
