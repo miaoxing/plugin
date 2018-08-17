@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Model\QuickQueryTrait;
+use Miaoxing\User\Service\GroupModel;
 
 /**
  * 用户分组
@@ -103,5 +104,20 @@ class Group extends \Miaoxing\Plugin\BaseModel
         }
 
         return $prefix . $this['name'];
+    }
+
+    /**
+     * @return GroupModel|GroupModel[]
+     * @throws \Exception
+     */
+    public function getGroupsFromCache()
+    {
+        return wei()->groupModel()
+            ->desc('sort')
+            ->cache(86400)
+            ->tags(false)
+            ->setCacheKey('groups:' . wei()->app->getId())
+            ->indexBy('id')
+            ->findAll();
     }
 }
