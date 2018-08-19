@@ -330,6 +330,9 @@ class BaseModel extends Record implements JsonSerializable
         return $this->isNew ? 'POST' : 'PUT';
     }
 
+    /**
+     * @return $this|$this[]
+     */
     public function beColl()
     {
         $this->data = [];
