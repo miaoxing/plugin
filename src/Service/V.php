@@ -11,8 +11,8 @@ use Wei\Validate;
  * A chaining validator
  *
  * Data type and composition
- * @method $this album() Check if the input contains letters (a-z) and digits (0-9)
- * @method $this notAlbum()
+ * @method $this alnum() Check if the input contains letters (a-z) and digits (0-9)
+ * @method $this notAlnum()
  * @method $this alpha() Check if the input contains only letters (a-z)
  * @method $this notAlpha()
  * @method $this blank() Check if the input is blank
