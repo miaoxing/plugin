@@ -2,6 +2,11 @@
 
 namespace Miaoxing\Plugin;
 
+use Wei\Request;
+
+/**
+ * @property Request $request
+ */
 trait ConstV2Trait
 {
     /**
