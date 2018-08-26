@@ -75,7 +75,7 @@ trait ConstV2Trait
         array_unshift($consts, [
             'id' => '',
             'key' => 'all',
-            'name' => '全部'
+            'name' => '全部',
         ]);
         return $consts;
     }
@@ -108,8 +108,12 @@ trait ConstV2Trait
      * @param string $reqKey
      * @return $this
      */
-    public function whereConstKey($prefix, $reqKey)
+    public function whereConstKey($prefix, $reqKey = null)
     {
+        if (func_num_args() === 1) {
+            $reqKey = $this->request->get($prefix);
+        }
+
         $id = $this->getConstId($prefix, $reqKey);
         if ($id !== '') {
             $this->andWhere([$prefix => $id]);
