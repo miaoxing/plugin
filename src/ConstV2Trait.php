@@ -53,7 +53,7 @@ trait ConstV2Trait
 
         // 3. Generate id and name
         $prefix .= '_';
-        $data[] = [];
+        $data = [];
         $length = strlen($prefix);
         foreach ($consts as $name => $id) {
             if (stripos($name, $prefix) !== 0) {
