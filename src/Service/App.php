@@ -93,6 +93,11 @@ class App extends \Wei\App
                 $parts = explode('/', $pathInfo, 3);
                 list(, $namespace, $pathInfo) = $parts;
 
+                // FIXME 临时映射
+                if ($namespace === 'ald') {
+                    $namespace = 'pas';
+                }
+
                 // 可能是微信第三方平台的通知,转为应用名称
                 $wechatNamespace = $this->getNamespaceFromWechatAppId($namespace);
                 if ($wechatNamespace) {
