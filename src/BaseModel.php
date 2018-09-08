@@ -1129,6 +1129,7 @@ class BaseModel extends Record implements JsonSerializable
      *
      * @param string $column
      * @param mixed $value
+     * @return $this
      */
     public function whereHas($column, $value)
     {
@@ -1139,6 +1140,8 @@ class BaseModel extends Record implements JsonSerializable
         }
         $op = $value === '1' ? '!=' : '=';
         $this->andWhere($column  . ' ' . $op . ' \'' . $default . '\'');
+
+        return $this;
     }
 
     /**
