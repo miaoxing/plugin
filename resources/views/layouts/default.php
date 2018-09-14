@@ -22,7 +22,6 @@
 <?= $block->get('html') ?>
 
 <script src="<?= $mainJs = $asset([
-  'comps/fastclick-custom/fastclick.js',
   'comps/requirejs/require.min.js',
   'comps/jquery/jquery.min.js',
   'comps/jquery-list/jquery-list.js',
