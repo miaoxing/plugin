@@ -12,7 +12,7 @@
     'plugins/app/css/app.css',
   ]) ?>">
   <?= $block->get('css') ?>
-  <script src="//cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="<?= $asset([
     'comps/requirejs/require.js',
     'comps/bootstrap/dist/js/bootstrap.min.js',
