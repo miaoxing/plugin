@@ -257,6 +257,12 @@ trait GetSetTrait
         return $this;
     }
 
+    public function reload()
+    {
+        $this->dataSources = ['*' => 'db'];
+        return parent::reload();
+    }
+
     /**
      * Returns the data source of specified column name
      *

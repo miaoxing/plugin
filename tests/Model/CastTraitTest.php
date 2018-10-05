@@ -244,4 +244,17 @@ class CastTraitTest extends BaseTestCase
 
         $this->assertEquals(7, $cast->stringColumn);
     }
+
+    public function testReloadJson()
+    {
+        $cast = wei()->testCast()->save([
+            'json_column' => [
+                'a' => 'b',
+            ]
+        ]);
+        $this->assertEquals(['a' => 'b'], $cast->jsonColumn);
+
+        $cast->reload();
+        $this->assertEquals(['a' => 'b'], $cast->jsonColumn);
+    }
 }
