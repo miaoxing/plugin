@@ -24,7 +24,7 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if (isset($this->request[$name]) && $this->request[$name]) {
+            if ($this->request->has($name)) {
                 $this->andWhere($column . ' LIKE ?', '%' . $this->request[$name] . '%');
             }
         }
@@ -36,7 +36,7 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if (isset($this->request[$name]) && wei()->isPresent($this->request[$name])) {
+            if ($this->request->has($name)) {
                 $this->andWhere([$column => $this->request[$name]]);
             }
         }
@@ -48,12 +48,12 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $min = $this->filterOutputColumn($column . '_min');
-            if (isset($this->request[$min]) && $this->request[$min]) {
+            if ($this->request->has($min)) {
                 $this->andWhere($column . ' >= ?', $this->request[$min]);
             }
 
             $max = $this->filterOutputColumn($column . '_max');
-            if (isset($this->request[$max]) && $this->request[$max]) {
+            if ($this->request->has($max)) {
                 $this->andWhere($column . ' <= ?', $this->request[$max]);
             }
         }
@@ -65,7 +65,7 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if (isset($this->request[$name]) && wei()->isPresent($this->request[$name])) {
+            if ($this->request->has($column)) {
                 $this->whereHas($column, $this->request[$name]);
             }
         }
@@ -75,7 +75,7 @@ trait QuickQueryTrait
 
     public function sort($defaultColumn = 'id', $defaultOrder = 'DESC', $tableName = false)
     {
-        if (isset($this->request['sort'])) {
+        if ($this->request->has('sort')) {
             $name = $this->filterInputColumn($this->request['sort']);
             if (in_array($name, $this->getFields())) {
                 $sort = $name;
@@ -86,7 +86,7 @@ trait QuickQueryTrait
             $sort = $defaultColumn;
         }
 
-        if (isset($this->request['order'])) {
+        if ($this->request->has('order')) {
             $order = strtoupper($this->request['order']);
             if (!in_array($order, ['ASC', 'DESC'])) {
                 $order = $defaultOrder;
@@ -106,8 +106,8 @@ trait QuickQueryTrait
 
     public function paginate()
     {
-        $limit = isset($this->request['rows']) ? $this->request['rows'] : 10;
-        $page = isset($this->request['page']) ? $this->request['page'] : 1;
+        $limit = $this->request['rows'] ?: 10;
+        $page = $this->request['page'] ?: 1;
 
         $this->limit($limit)->page($page);
 
