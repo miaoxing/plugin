@@ -238,7 +238,7 @@ class CastTraitTest extends BaseTestCase
             'stringColumn' => 6,
         ]);
 
-        $cast->incr('string_column', 1)->save();
+        $cast->incr('string_column')->save();
 
         $cast->reload();
 
