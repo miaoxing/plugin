@@ -242,14 +242,20 @@ trait GetSetTrait
      */
     public function save($data = [])
     {
-        // 1. Merges data from parameters
         $data && $this->fromArray($data);
 
         // 将数据转换为数据库数据
         $origData = $this->data;
         $this->data = $this->generateDbData();
+        $isNew = $this->isNew;
 
         parent::save();
+
+        // 解决保存之前调用了$this->id导致变为null的问题
+        if ($isNew && array_key_exists($this->primaryKey, $origData)) {
+            $origData[$this->primaryKey] = $this->data[$this->primaryKey];
+            $this->setDataSource($this->primaryKey, 'db');
+        }
 
         // 还原原来的数据+save过程中生成的主键数据
         $this->data = $origData + $this->data;

@@ -50,4 +50,17 @@ class GetSetTraitTest extends BaseTestCase
         // 可直接判断
         $this->assertTrue((bool) $test->id);
     }
+
+    public function testGetIdBecomeNull()
+    {
+        $test = wei()->testGetSet();
+        // receive id
+        $test->id;
+
+        $test->save();
+
+        $this->assertNotNull($test->id);
+
+        $this->assertInternalType('int', $test->id);
+    }
 }
