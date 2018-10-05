@@ -4,7 +4,6 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\User\Job\UserCreate;
-use Miaoxing\User\Service\UserProfile;
 
 /**
  * 用户
@@ -79,23 +78,6 @@ class User extends BaseModel
         $this->profile || $this->profile = wei()->userProfile()->findOrInit(['userId' => $this['id']]);
 
         return $this->profile;
-    }
-
-    /**
-     * Record: 根据条件查找或创建用户
-     *
-     * @param mixed $conditions
-     * @param array $data
-     * @return $this
-     */
-    public function findOrCreate($conditions, $data = [])
-    {
-        $this->findOrInit($conditions, $data);
-        if ($this->isNew()) {
-            $this->save();
-        }
-
-        return $this;
     }
 
     /**

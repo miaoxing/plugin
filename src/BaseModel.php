@@ -1154,4 +1154,20 @@ class BaseModel extends Record implements JsonSerializable
         $this->data[$column] = $value;
         return $this;
     }
+
+    /**
+     * 根据条件查找记录,如果是新记录则保存
+     *
+     * @param mixed $conditions
+     * @param array $data
+     * @return $this
+     */
+    public function findOrCreate($conditions, $data = array())
+    {
+        $this->findOrInit($conditions, $data);
+        if ($this->isNew) {
+            $this->save();
+        }
+        return $this;
+    }
 }
