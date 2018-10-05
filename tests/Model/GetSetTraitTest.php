@@ -21,6 +21,7 @@ class GetSetTraitTest extends BaseTestCase
         wei()->db->batchInsert('test_get_sets', [
             [
                 'id' => 1,
+                'name' => 'abc'
             ],
         ]);
     }
@@ -62,5 +63,14 @@ class GetSetTraitTest extends BaseTestCase
         $this->assertNotNull($test->id);
 
         $this->assertInternalType('int', $test->id);
+    }
+
+    public function testIndexBy()
+    {
+        $tests = wei()->testGetSet()
+            ->indexBy('name')
+            ->findAll(['name' => 'abc']);
+
+        $this->assertEquals('abc', $tests['abc']->name);
     }
 }

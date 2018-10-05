@@ -70,7 +70,7 @@ trait GetSetTrait
         $exists = true;
 
         // Receive field value
-        if ($this->isCollKey($name) || $this->hasColumn($name)) {
+        if ($this->isCollKey($name) || $this->hasColumn($name) || array_key_exists($name, $this->data)) {
             return $this->getColumnValue($name);
         }
 
