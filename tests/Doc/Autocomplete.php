@@ -4,8 +4,9 @@ namespace MiaoxingTest\Plugin\Doc {
 
     use MiaoxingTest\Plugin\Fixture\TestArticle;
     use MiaoxingTest\Plugin\Fixture\TestCamelCase;
-    use MiaoxingTest\Plugin\Fixture\TestDefaultScope;
     use MiaoxingTest\Plugin\Fixture\TestCast;
+    use MiaoxingTest\Plugin\Fixture\TestDefaultScope;
+    use MiaoxingTest\Plugin\Fixture\TestGetSet;
     use MiaoxingTest\Plugin\Fixture\TestMutator;
     use MiaoxingTest\Plugin\Fixture\TestProfile;
     use MiaoxingTest\Plugin\Fixture\TestRef;
@@ -26,6 +27,7 @@ namespace MiaoxingTest\Plugin\Doc {
      * @method TestMutator|TestMutator[] testMutator()
      * @method TestRef|TestRef[] testRef()
      * @method TestVirtual|TestVirtual[] testVirtual()
+     * @method TestGetSet|TestGetSet[] testGetSet()
      */
     class AutoComplete
     {

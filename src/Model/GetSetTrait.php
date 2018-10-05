@@ -88,7 +88,7 @@ trait GetSetTrait
         if ($throwException) {
             throw new InvalidArgumentException('Invalid property: ' . $name);
         } else {
-            return $exists;
+            return null;
         }
     }
 
