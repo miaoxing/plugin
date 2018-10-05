@@ -213,6 +213,7 @@ class Plugin extends BaseService
 
         // @deprecated
         if (strpos($resource, ':') !== false) {
+            wei()->logger->warning('deprecated view', $resource);
             list($pluginId, $file) = explode(':', $resource, 2);
         }
 
