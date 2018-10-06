@@ -38,6 +38,10 @@ trait ReqQueryTrait
 
             if (is_array($value)) {
                 foreach ($value as $subName => $subValue) {
+                    if (!$isPresent($subValue)) {
+                        continue;
+                    }
+
                     $this->processRelationQuery($name, $subName, $subValue);
                 }
             } else {
