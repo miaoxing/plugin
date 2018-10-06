@@ -245,7 +245,7 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function sort($defaultColumn = 'id', $defaultOrder = 'DESC', $tableName = false)
+    public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
     {
         if ($this->request->has('sort')) {
             $name = $this->filterInputColumn($this->request['sort']);
@@ -267,8 +267,8 @@ trait ReqQueryTrait
             $order = $defaultOrder;
         }
 
-        if ($tableName) {
-            $sort = $this->fullTable . '.' . $sort;
+        if ($this->getSqlPart('join')) {
+            $sort = $this->getTable() . '.' . $sort;
         }
 
         $this->orderBy($sort, $order);
