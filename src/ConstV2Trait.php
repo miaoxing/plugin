@@ -121,7 +121,8 @@ trait ConstV2Trait
 
         $id = $this->getConstId($prefix, $reqKey);
         if ($id !== '') {
-            $this->andWhere([$prefix => $id]);
+            list($column) = $this->parseReqColumn($prefix);
+            $this->andWhere([$column => $id]);
         }
 
         // OR

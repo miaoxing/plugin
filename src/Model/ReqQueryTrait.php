@@ -60,13 +60,7 @@ trait ReqQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if (strpos($name, '.') !== false) {
-                list($relation, $column) = explode('.', $name, 2);
-                $value = $this->request[$relation][$column];
-            } else {
-                $value = $this->request[$name];
-                $relation = null;
-            }
+            list($column, $value, $relation) = $this->parseReqColumn($name);
             if (!wei()->isPresent($value)) {
                 continue;
             }
@@ -74,7 +68,7 @@ trait ReqQueryTrait
             if ($relation) {
                 $this->reqJoin($relation);
             }
-            $this->andWhere($name . ' LIKE ?', '%' . $value . '%');
+            $this->whereContains($column, $value);
         }
 
         return $this;
@@ -177,5 +171,25 @@ trait ReqQueryTrait
         $this->limit($limit)->page($page);
 
         return $this;
+    }
+
+    protected function parseReqColumn($column)
+    {
+        if (strpos($column, '.') === false) {
+            // 查询当前表
+            $value = $this->request[$column];
+            $relation = null;
+
+            // 有连表查询,加上表名
+            if ($this->getSqlPart('join')) {
+                $column = $this->getTable() . '.' . $column;
+            }
+        } else {
+            // 查询关联表
+            list($relation, $relationColumn) = explode('.', $column, 2);
+            $value = $this->request[$relation][$relationColumn];
+        }
+
+        return [$column, $value, $relation];
     }
 }
