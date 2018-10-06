@@ -94,15 +94,21 @@ trait ReqQueryTrait
 
     public function between($columns)
     {
+        if ($this->getSqlPart('join')) {
+            $prefix = $this->getTable() . '.';
+        } else {
+            $prefix = '';
+        }
+
         foreach ((array) $columns as $column) {
             $min = $this->filterOutputColumn($column . '_min');
             if ($this->request->has($min)) {
-                $this->andWhere($column . ' >= ?', $this->request[$min]);
+                $this->andWhere($prefix . $column . ' >= ?', $this->request[$min]);
             }
 
             $max = $this->filterOutputColumn($column . '_max');
             if ($this->request->has($max)) {
-                $this->andWhere($column . ' <= ?', $this->processMaxDate($column, $this->request[$max]));
+                $this->andWhere($prefix . $column . ' <= ?', $this->processMaxDate($column, $this->request[$max]));
             }
         }
 
