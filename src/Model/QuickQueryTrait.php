@@ -24,9 +24,16 @@ trait QuickQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if ($this->request->has($name)) {
-                $this->andWhere($column . ' LIKE ?', '%' . $this->request[$name] . '%');
+            if (strpos($name, '.') !== false) {
+                list($table, $column) = explode('.', $name, 2);
+                $value = $this->request[$table][$column];
+            } else {
+                $value = $this->request[$name];
             }
+            if (!wei()->isPresent($value)) {
+                continue;
+            }
+            $this->andWhere($name . ' LIKE ?', '%' . $value . '%');
         }
 
         return $this;
