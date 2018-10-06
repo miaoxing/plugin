@@ -23,6 +23,114 @@ trait ReqQueryTrait
         return $this;
     }
 
+    /**
+     * 根据请求参数,自动执行查询
+     *
+     * @return $this
+     */
+    public function reqQuery()
+    {
+        $isPresent = wei()->isPresent;
+        foreach ($this->request as $name => $value) {
+            if (!$isPresent($value)) {
+                continue;
+            }
+
+            if (is_array($value)) {
+                foreach ($value as $subName => $subValue) {
+                    $this->processRelationQuery($name, $subName, $subValue);
+                }
+            } else {
+                $this->processColumnQuery($name, $value);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 查询当前模型的值
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    protected function processColumnQuery($name, $value)
+    {
+        // 提取出操作
+        list($name, $op) = $this->parseNameAndOp($name);
+
+        // 检查字段是否存在
+        $column = $this->filterInputColumn($name);
+        if (!$this->hasColumn($column)) {
+            return;
+        }
+
+        $this->queryByOp($column, $op, $value);
+    }
+
+    /**
+     * 查询关联模型的值
+     *
+     * @param string $relation
+     * @param string $name
+     * @param mixed $value
+     */
+    protected function processRelationQuery($relation, $name, $value)
+    {
+        if (!$this->hasRelation($relation)) {
+            return;
+        }
+
+        $this->reqJoin($relation);
+
+        list($name, $op) = $this->parseNameAndOp($name);
+
+        /** @var BaseModelV2 $related */
+        $related = $this->$relation();
+        if (!$related->hasColumn($name)) {
+            return;
+        }
+
+        $this->queryByOp($related->getTable() . '.' . $name, $op, $value);
+    }
+
+    /**
+     * 从请求名称中解析出字段名称和操作符
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function parseNameAndOp($name)
+    {
+        if (strpos($name, '$') === false) {
+            return [$name, 'eq'];
+        } else {
+            return explode('$', $name, 2);
+        }
+    }
+
+    /**
+     * 根据操作符执行查询
+     *
+     * @param string $column
+     * @param string $op
+     * @param mixed $value
+     */
+    protected function queryByOp($column, $op, $value)
+    {
+        switch ($op) {
+            case 'eq':
+                $this->andWhere($column . ' = ?', $value);
+                return;
+
+            case 'ct':
+                $this->whereContains($column, $value);
+                return;
+
+            default:
+                return;
+        }
+    }
+
     public function reqJoin($relations)
     {
         foreach ((array) $relations as $relation) {
