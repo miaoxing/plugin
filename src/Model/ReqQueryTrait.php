@@ -118,20 +118,22 @@ trait ReqQueryTrait
      * @param string $column
      * @param string $op
      * @param mixed $value
+     * @return $this
      */
     protected function queryByOp($column, $op, $value)
     {
         switch ($op) {
             case 'eq':
-                $this->andWhere($column . ' = ?', $value);
-                return;
+                return $this->andWhere($column . ' = ?', $value);
 
             case 'ct':
-                $this->whereContains($column, $value);
-                return;
+                return $this->whereContains($column, $value);
+
+            case 'hs':
+                return $this->whereHas($column, $value);
 
             default:
-                return;
+                return $this;
         }
     }
 
