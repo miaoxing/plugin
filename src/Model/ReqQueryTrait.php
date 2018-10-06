@@ -26,12 +26,24 @@ trait ReqQueryTrait
     /**
      * 根据请求参数,自动执行查询
      *
+     * @param array $options
      * @return $this
      */
-    public function reqQuery()
+    public function reqQuery(array $options = [])
     {
+        // 允许传索引数组表示常见的only选项
+        if (isset($options[0])) {
+            $options['only'] = $options;
+        }
+
+        if (isset($options['only'])) {
+            $req = array_intersect_key($this->request->getData(), array_flip($options['only']));
+        } else {
+            $req = $this->request;
+        }
+
         $isPresent = wei()->isPresent;
-        foreach ($this->request as $name => $value) {
+        foreach ($req as $name => $value) {
             if (!$isPresent($value)) {
                 continue;
             }
