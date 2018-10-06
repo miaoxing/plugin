@@ -10,6 +10,8 @@ use Miaoxing\Plugin\Service\Request;
  */
 trait ReqQueryTrait
 {
+    protected $joins = [];
+
     /**
      * @param array|\ArrayAccess $request
      * @return $this
@@ -24,10 +26,14 @@ trait ReqQueryTrait
     public function reqJoin($relations)
     {
         foreach ((array) $relations as $relation) {
-            if (!$this->request->has($relation) || !$this->hasRelation($relation)) {
+            if (isset($this->joins[$relation])
+                || !$this->request->has($relation)
+                || !$this->hasRelation($relation)
+            ) {
                 continue;
             }
 
+            $this->joins[$relation] = true;
             $this->selectMain();
 
             /** @var BaseModelV2 $related */
@@ -55,13 +61,18 @@ trait ReqQueryTrait
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
             if (strpos($name, '.') !== false) {
-                list($table, $column) = explode('.', $name, 2);
-                $value = $this->request[$table][$column];
+                list($relation, $column) = explode('.', $name, 2);
+                $value = $this->request[$relation][$column];
             } else {
                 $value = $this->request[$name];
+                $relation = null;
             }
             if (!wei()->isPresent($value)) {
                 continue;
+            }
+
+            if ($relation) {
+                $this->reqJoin($relation);
             }
             $this->andWhere($name . ' LIKE ?', '%' . $value . '%');
         }
