@@ -102,11 +102,22 @@ trait ReqQueryTrait
 
             $max = $this->filterOutputColumn($column . '_max');
             if ($this->request->has($max)) {
-                $this->andWhere($column . ' <= ?', $this->request[$max]);
+                $this->andWhere($column . ' <= ?', $this->processMaxDate($column, $this->request[$max]));
             }
         }
 
         return $this;
+    }
+
+    protected function processMaxDate($column, $value)
+    {
+        if (isset($this->casts[$column])
+            && $this->casts[$column] == 'datetime'
+            && wei()->isDate($value)
+        ) {
+            return $value . ' 23:59:59';
+        }
+        return $value;
     }
 
     public function reqHas($columns)
