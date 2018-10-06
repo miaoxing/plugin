@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Model;
 
+use Miaoxing\Plugin\BaseModelV2;
 use Miaoxing\Plugin\Service\Request;
 
 /**
@@ -22,11 +23,31 @@ trait QuickQueryTrait
 
     public function reqJoin($relations)
     {
-        foreach ($relations as $relation) {
-            if (!$this->hasRelation($relation)) {
+        foreach ((array) $relations as $relation) {
+            if (!$this->request->has($relation) || !$this->hasRelation($relation)) {
                 continue;
             }
+
+            $this->selectMain();
+
+            /** @var BaseModelV2 $related */
+            $related = $this->$relation();
+            $config = $this->relations[$relation];
+
+            $table = $related->getTable();
+
+            // 处理跨数据库的情况
+            if ($related->db != $this->db) {
+                $table = $related->db->getDbname() . '.' . $table;
+            }
+
+            $this->leftJoin(
+                $table,
+                $table . '.' . $config['foreignKey'] . ' = ' . $this->getTable() . '.' . $config['localKey']
+            );
         }
+
+        return $this;
     }
 
     public function like($columns)
