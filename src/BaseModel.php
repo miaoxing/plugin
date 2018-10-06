@@ -1170,4 +1170,9 @@ class BaseModel extends Record implements JsonSerializable
         }
         return $this;
     }
+
+    public function selectMain($column = '*')
+    {
+        return $this->select($this->getTable() . '.' . $column);
+    }
 }

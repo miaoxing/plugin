@@ -20,6 +20,15 @@ trait QuickQueryTrait
         return $this;
     }
 
+    public function reqJoin($relations)
+    {
+        foreach ($relations as $relation) {
+            if (!$this->hasRelation($relation)) {
+                continue;
+            }
+        }
+    }
+
     public function like($columns)
     {
         foreach ((array) $columns as $column) {
