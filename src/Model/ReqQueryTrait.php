@@ -38,7 +38,8 @@ trait ReqQueryTrait
 
             /** @var BaseModelV2 $related */
             $related = $this->$relation();
-            $config = $this->relations[$relation];
+            $name = $related->getClassServiceName();
+            $config = $this->relations[$name];
 
             $table = $related->getTable();
 
@@ -188,6 +189,10 @@ trait ReqQueryTrait
             // 查询关联表
             list($relation, $relationColumn) = explode('.', $column, 2);
             $value = $this->request[$relation][$relationColumn];
+
+            /** @var BaseModelV2 $related */
+            $related = $this->$relation();
+            $column = $related->getTable() . '.' . $relationColumn;
         }
 
         return [$column, $value, $relation];

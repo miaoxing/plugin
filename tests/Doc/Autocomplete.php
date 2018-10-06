@@ -10,6 +10,8 @@ namespace MiaoxingTest\Plugin\Doc {
     use MiaoxingTest\Plugin\Fixture\TestMutator;
     use MiaoxingTest\Plugin\Fixture\TestProfile;
     use MiaoxingTest\Plugin\Fixture\TestRef;
+    use MiaoxingTest\Plugin\Fixture\TestReqQuery;
+    use MiaoxingTest\Plugin\Fixture\TestReqQueryDetail;
     use MiaoxingTest\Plugin\Fixture\TestSoftDelete;
     use MiaoxingTest\Plugin\Fixture\TestTag;
     use MiaoxingTest\Plugin\Fixture\TestUser;
@@ -28,6 +30,8 @@ namespace MiaoxingTest\Plugin\Doc {
      * @method TestRef|TestRef[] testRef()
      * @method TestVirtual|TestVirtual[] testVirtual()
      * @method TestGetSet|TestGetSet[] testGetSet()
+     * @method TestReqQuery|TestReqQuery[] testReqQuery()
+     * @method TestReqQueryDetail|TestReqQueryDetail[] testReqQueryDetail()
      */
     class AutoComplete
     {
