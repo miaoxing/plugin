@@ -129,6 +129,18 @@ trait ReqQueryTrait
             case 'ct':
                 return $this->whereContains($column, $value);
 
+            case 'ge':
+                return $this->andWhere($column . ' >= ?', $value);
+
+            case 'le':
+                return $this->andWhere($column . ' <= ?', $this->processMaxDate($column, $value));
+
+            case 'gt':
+                return $this->andWhere($column . ' > ?', $value);
+
+            case 'lt':
+                return $this->andWhere($column . ' < ?', $this->processMaxDate($column, $value));
+
             case 'hs':
                 return $this->whereHas($column, $value);
 
