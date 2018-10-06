@@ -5,13 +5,13 @@ namespace Miaoxing\Plugin;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
 use Miaoxing\Plugin\Model\CastTrait;
 use Miaoxing\Plugin\Model\GetSetTrait;
-use Miaoxing\Plugin\Model\QuickQueryTrait;
+use Miaoxing\Plugin\Model\ReqQueryTrait;
 
 class BaseModelV2 extends BaseModel
 {
     use CamelCaseTrait;
     use CastTrait;
-    use QuickQueryTrait;
+    use ReqQueryTrait;
     use GetSetTrait;
 
     protected $providers = [

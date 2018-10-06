@@ -8,7 +8,7 @@ use Miaoxing\Plugin\Service\Request;
 /**
  * @property Request $request
  */
-trait QuickQueryTrait
+trait ReqQueryTrait
 {
     /**
      * @param array|\ArrayAccess $request

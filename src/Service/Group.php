@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\Model\QuickQueryTrait;
+use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Miaoxing\User\Service\GroupModel;
 
 /**
@@ -10,7 +10,7 @@ use Miaoxing\User\Service\GroupModel;
  */
 class Group extends \Miaoxing\Plugin\BaseModel
 {
-    use QuickQueryTrait;
+    use ReqQueryTrait;
 
     protected $table = 'groups';
 
