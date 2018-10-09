@@ -97,13 +97,23 @@ trait ConstV2Trait
      */
     public function getConstId($prefix, $reqKey)
     {
-        $consts = $this->getConsts($prefix);
-        $keys = array_column($consts, 'id', 'key');
-        if (isset($keys[$reqKey])) {
-            return $keys[$reqKey];
+        $keyToIds = $this->getConstKeyToIds($prefix);
+        if (isset($keyToIds[$reqKey])) {
+            return $keyToIds[$reqKey];
         }
 
         return '';
+    }
+
+    /**
+     * 获取key和id关联数组
+     *
+     * @param $prefix
+     * @return array
+     */
+    public function getConstKeyToIds($prefix)
+    {
+        return array_column($this->getConsts($prefix), 'id', 'key');
     }
 
     /**
