@@ -2,10 +2,10 @@
 
 namespace Miaoxing\Plugin;
 
+use Miaoxing\Plugin\Middleware\Auth;
 use Miaoxing\Plugin\Service\Asset;
 use Miaoxing\Plugin\Service\Page;
 use Wei\RetTrait;
-use Miaoxing\Plugin\Middleware\Auth;
 
 /**
  * @property \Miaoxing\Plugin\Service\App $app
@@ -101,6 +101,7 @@ abstract class BaseController extends \Wei\BaseController
     {
         $this->view->assign([
             'controllerInstance' => $this,
+            'adminNavId' => $this->adminNavId,
             'js' => &$this->js,
         ]);
 
