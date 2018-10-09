@@ -12,6 +12,8 @@ trait ReqQueryTrait
 {
     protected $joins = [];
 
+    protected $reqMaps = [];
+
     /**
      * @param array|\ArrayAccess $request
      * @return $this
@@ -64,6 +66,19 @@ trait ReqQueryTrait
     }
 
     /**
+     * 指定请求值映射
+     *
+     * @param string $name
+     * @param array $values
+     * @return $this
+     */
+    public function reqMap($name, array $values)
+    {
+        $this->reqMaps[$name] = $values;
+        return $this;
+    }
+
+    /**
      * 查询当前模型的值
      *
      * @param string $name
@@ -71,6 +86,10 @@ trait ReqQueryTrait
      */
     protected function processColumnQuery($name, $value)
     {
+        if (isset($this->reqMaps[$name][$value])) {
+            $value = $this->reqMaps[$name][$value];
+        }
+
         // 提取出操作
         list($name, $op) = $this->parseNameAndOp($name);
 
