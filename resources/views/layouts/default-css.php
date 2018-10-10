@@ -37,5 +37,9 @@
     color: <?= $color ?>;
     border-color: <?= $color ?>;
   }
+  .ios,
+  .ios * {
+    cursor: pointer;
+  }
 </style>
 <!-- htmllint tag-bans="$previous" -->
