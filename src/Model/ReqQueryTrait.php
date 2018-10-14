@@ -38,10 +38,12 @@ trait ReqQueryTrait
             $options['only'] = $options;
         }
 
+        $req = $this->request->getData();
         if (isset($options['only'])) {
-            $req = array_intersect_key($this->request->getData(), array_flip($options['only']));
-        } else {
-            $req = $this->request;
+            $req = array_intersect_key($req, array_flip((array) $options['only']));
+        }
+        if (isset($options['except'])) {
+            $req = array_diff_key($req, array_flip((array) $options['except']));
         }
 
         $isPresent = wei()->isPresent;
