@@ -101,6 +101,10 @@ trait ReqQueryTrait
             return;
         }
 
+        if ($this->getSqlPart('join')) {
+            $column = $this->getTable() . '.' . $column;
+        }
+
         $this->queryByOp($column, $op, $value);
     }
 
