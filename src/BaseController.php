@@ -120,7 +120,7 @@ abstract class BaseController extends \Wei\BaseController
 
         // 为后台设置默认布局
         if ($this->app->isAdmin() && $this->plugin->has('admin')) {
-            $this->view->setDefaultLayout('admin:admin/layout.php');
+            $this->view->setDefaultLayout('@admin/admin/layout.php');
         }
     }
 
