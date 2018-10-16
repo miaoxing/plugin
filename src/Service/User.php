@@ -702,4 +702,15 @@ class User extends BaseModel
     {
         return $this->setting->getValue('user.defaultHeadImg') ?: '/plugins/user/images/head.jpg';
     }
+
+    public function getTags()
+    {
+        $userTags = wei()->userTag->getAll();
+        $tags = [];
+        $relations = wei()->userTagsUserModel()->findAll(['user_id' => $this['id']]);
+        foreach ($relations as $relation) {
+            $tags[] = $userTags[$relation->tagId];
+        }
+        return $tags;
+    }
 }
