@@ -50,7 +50,7 @@ return [
     ],
     // 视图
     'view' => [
-        'defaultLayout' => 'plugin:layouts/default.php',
+        'defaultLayout' => '@plugin/layouts/default.php',
     ],
     // 语言翻译
     't' => [
