@@ -1139,7 +1139,7 @@ class BaseModel extends Record implements JsonSerializable
             $default = '';
         }
         $op = $value === '1' ? '!=' : '=';
-        $this->andWhere($column  . ' ' . $op . ' \'' . $default . '\'');
+        $this->andWhere($column . ' ' . $op . ' \'' . $default . '\'');
 
         return $this;
     }
@@ -1174,5 +1174,11 @@ class BaseModel extends Record implements JsonSerializable
     public function selectMain($column = '*')
     {
         return $this->select($this->getTable() . '.' . $column);
+    }
+
+    public function incrSave($name, $offset = 1)
+    {
+        $name = $this->filterInputColumn($name);
+        return $this->incr($name, $offset)->save();
     }
 }
