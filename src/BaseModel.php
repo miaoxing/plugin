@@ -1128,17 +1128,17 @@ class BaseModel extends Record implements JsonSerializable
      * 搜索某一列是否有值
      *
      * @param string $column
-     * @param mixed $value
+     * @param bool $value
      * @return $this
      */
-    public function whereHas($column, $value)
+    public function whereHas($column, $value = true)
     {
         if (isset($this->defaultValues[$this->casts[$column]])) {
             $default = $this->defaultValues[$this->casts[$column]];
         } else {
             $default = '';
         }
-        $op = $value === '1' ? '!=' : '=';
+        $op = $value ? '!=' : '=';
         $this->andWhere($column . ' ' . $op . ' \'' . $default . '\'');
 
         return $this;
