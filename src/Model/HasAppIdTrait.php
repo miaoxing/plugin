@@ -4,10 +4,8 @@ namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Service\App;
-use Wei\Record;
 
 /**
- * @property-read App app
  * @property-read string appIdColumn
  */
 trait HasAppIdTrait
@@ -26,7 +24,9 @@ trait HasAppIdTrait
      */
     public function curApp()
     {
-        $appId = $this->app->getId();
+        /** @var App $app */
+        $app = $this->wei->app;
+        $appId = $app->getId();
 
         return $this->andWhere([$this->fullTable . '.' . $this->appIdColumn => $appId]);
     }
@@ -39,6 +39,8 @@ trait HasAppIdTrait
      */
     public function setAppId($appId = null)
     {
-        return $this->set($this->appIdColumn, $appId ?: $this->app->getId());
+        /** @var App $app */
+        $app = $this->wei->app;
+        return $this->set($this->appIdColumn, $appId ?: $app->getId());
     }
 }
