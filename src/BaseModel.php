@@ -1178,7 +1178,22 @@ class BaseModel extends Record implements JsonSerializable
 
     public function incrSave($name, $offset = 1)
     {
-        $name = $this->filterInputColumn($name);
         return $this->incr($name, $offset)->save();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function incr($name, $offset = 1)
+    {
+        return parent::incr($this->filterInputColumn($name), $offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function decr($name, $offset = -1)
+    {
+        return parent::decr($this->filterInputColumn($name), $offset);
     }
 }
