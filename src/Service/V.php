@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
-use Wei\Record;
 use Wei\RetTrait;
 use Wei\Validate;
 
@@ -362,7 +361,7 @@ class V extends BaseService
      * @param mixed $args
      * @return $this
      */
-    protected function addRule($name, $args)
+    public function addRule($name, $args)
     {
         $this->options['rules'][$this->lastKey][$name] = $args;
         $this->lastRule = $name;
