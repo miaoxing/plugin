@@ -341,7 +341,7 @@ class V extends BaseService
         if (!$this->validator) {
             if ($data) {
                 // Validate without key
-                if (!$this->lastKey) {
+                if ($this->lastKey === '') {
                     $data = ['' => $data];
                 }
 
