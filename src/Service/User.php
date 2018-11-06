@@ -707,7 +707,7 @@ class User extends BaseModel
     {
         $userTags = wei()->userTag->getAll();
         $tags = [];
-        $relations = wei()->userTagsUserModel()->desc('id')->findAll(['user_id' => $this['id']]);
+        $relations = wei()->userTagsUserModel()->asc('id')->findAll(['user_id' => $this['id']]);
         foreach ($relations as $relation) {
             $tags[] = $userTags[$relation->tagId];
         }
