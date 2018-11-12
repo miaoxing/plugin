@@ -41,13 +41,6 @@ class Asset extends \Wei\Asset
     protected $revMap = null;
 
     /**
-     * The JSON file that contains the concat config
-     *
-     * @var string
-     */
-    protected $concatFile = 'data/rev/concat.json';
-
-    /**
      * @var callable
      */
     protected $locateFile;
@@ -67,9 +60,6 @@ class Asset extends \Wei\Asset
                 $this->enableRev = (bool) $this->wei->request['rev'];
             }
         }
-
-        // 根据应用地址生成
-        $this->concatUrl = $this->wei->url('minify');
     }
 
     /**
@@ -77,10 +67,6 @@ class Asset extends \Wei\Asset
      */
     public function __invoke($file, $version = true)
     {
-        if (is_array($file)) {
-            return $this->concat($file);
-        }
-
         $origFile = $file;
         if ($this->enableRev) {
             $file = $this->getRevFile($file);
@@ -98,58 +84,6 @@ class Asset extends \Wei\Asset
         }
 
         return $file;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function concat(array $files)
-    {
-        $name = substr(md5(implode(',', $files)), 0, 8);
-        $ext = pathinfo($files[0], PATHINFO_EXTENSION);
-        $file = 'concat/' . $name . '.' . $ext;
-
-        $revFile = $this->getRevFile($file);
-
-        if ($this->enableRev && $revFile != $file) {
-            return $revFile;
-        }
-
-        if (count($files) > 1 && $this->wei->isDebug()) {
-            $config = $this->getConcatConfig();
-            if (!isset($config['revs'][$name]) && $config['revs'][$name] != $files) {
-                $config['revs'][$name] = $files;
-                foreach ($files as $file) {
-                    $config['files'][$file][] = $name;
-                    $config['files'][$file] = array_unique($config['files'][$file]);
-                }
-                $this->setConcatConfig($config);
-            }
-        }
-
-        $url = $this->concatUrl . '?f=' . implode(',', $files);
-        $baseUrl = trim($this->baseUrl, '/');
-
-        return $baseUrl ? $url . '&b=' . $baseUrl : $url;
-    }
-
-    protected function getConcatConfig()
-    {
-        if (!is_file($this->concatFile)) {
-            $dir = dirname($this->concatFile);
-            if (!is_dir($dir)) {
-                mkdir($dir, 0777, true);
-            }
-
-            return [];
-        }
-
-        return json_decode(file_get_contents($this->concatFile), true);
-    }
-
-    protected function setConcatConfig($config)
-    {
-        file_put_contents($this->concatFile, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
     /**
