@@ -10,13 +10,11 @@
   <?= $wei->page->renderHead() ?>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.0/jquery.mobile.min.js"></script>
-  <script src="<?= $asset([
-    'comps/requirejs/require.min.js',
-    'plugins/app/js/require-config.js',
-    'plugins/app/js/app.js',
-    'assets/popup.js',
-    'assets/jqueryMobile.js',
-  ]) ?>"></script>
+  <script src="<?= $asset('comps/requirejs/require.min.js') ?>"></script>
+  <script src="<?= $asset('plugins/app/js/require-config.js') ?>"></script>
+  <script src="<?= $asset('plugins/app/js/app.js') ?>"></script>
+  <script src="<?= $asset('assets/popup.js') ?>"></script>
+  <script src="<?= $asset('assets/jqueryMobile.js') ?>"></script>
   <script>
     $.extend($, <?= json_encode($app->getConfig()) ?>);
   </script>
