@@ -20,7 +20,7 @@
   </script>
 </head>
 <body>
-<?php $event->trigger('bodyStart', [$headerTitle]) ?>
+<?php $event->trigger('bodyStart') ?>
 
 <?= $content ?>
 <?= $block->get('html') ?>

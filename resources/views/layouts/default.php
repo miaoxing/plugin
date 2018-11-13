@@ -14,7 +14,7 @@ wei()->wpAsset->addRevFile('dist2/app-v1-assets-hash.json');
   <?= $wei->page->renderHead() ?>
 </head>
 <body>
-<?php $event->trigger('bodyStart', [$headerTitle]) ?>
+<?php $event->trigger('bodyStart') ?>
 
 <?= $content ?>
 <div id="root"></div>
