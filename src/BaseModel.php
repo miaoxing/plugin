@@ -1192,7 +1192,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function decr($name, $offset = -1)
+    public function decr($name, $offset = 1)
     {
         return parent::decr($this->filterInputColumn($name), $offset);
     }
