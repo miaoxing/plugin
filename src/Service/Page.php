@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Config\ConfigTrait;
 use Miaoxing\Plugin\BaseService;
 use Wei\Block;
 
@@ -13,9 +14,18 @@ use Wei\Block;
  * @method string asset(string $file)
  * @property-read Asset $wpAsset
  * @method string wpAsset(string $file)
+ * @property bool $showTitleInHeader
  */
 class Page extends BaseService
 {
+    use ConfigTrait;
+
+    protected $configs = [
+        'showTitleInHeader' => [
+            'default' => false,
+        ],
+    ];
+
     /**
      * @var string
      */
@@ -62,7 +72,7 @@ class Page extends BaseService
     public function getTitle()
     {
         // TODO setting 转为 config
-        return $this->title ?: wei()->setting('site.title');
+        return $this->showTitleInHeader ? wei()->setting('site.title') : ($this->title ?: wei()->setting('site.title'));
     }
 
     /**
@@ -132,7 +142,7 @@ class Page extends BaseService
      */
     public function getHeaderTitle()
     {
-        return $this->headerTitle;
+        return $this->headerTitle ?: ($this->showTitleInHeader ? $this->title : '');
     }
 
     public function addJs($src)
