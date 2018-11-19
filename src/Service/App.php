@@ -345,6 +345,11 @@ class App extends \Wei\App
             && array_key_exists('message', $response);
     }
 
+    /**
+     * 判断是否请求到后台页面
+     *
+     * @return bool
+     */
     public function isAdmin()
     {
         return substr($this->getController(), 0, 5) === 'admin';
