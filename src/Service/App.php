@@ -354,4 +354,16 @@ class App extends \Wei\App
     {
         return substr($this->getController(), 0, 5) === 'admin';
     }
+
+    /**
+     * 设置默认视图文件
+     *
+     * @param string $defaultViewFile
+     * @return $this
+     */
+    public function setDefaultViewFile($defaultViewFile)
+    {
+        $this->defaultViewFile = $defaultViewFile;
+        return $this;
+    }
 }
