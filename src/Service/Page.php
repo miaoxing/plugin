@@ -211,24 +211,6 @@ class Page extends BaseService
     }
 
     /**
-     * @param string|null $action
-     * @return Page
-     * @todo 逐步改为react-router来加载
-     */
-    public function addReactJs($action = null)
-    {
-        $this->initRoute($action);
-
-        // TODO 完善后再移到布局中
-        //$this->addCss($this->wpAsset('admin.css'));
-
-        return $this->addJs([
-            $this->wpAsset('manifest.js'),
-            $this->wpAsset('admin.js'),
-        ]);
-    }
-
-    /**
      * 增加插件的资源
      *
      * @param string|null $action
