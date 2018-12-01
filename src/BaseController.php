@@ -114,7 +114,6 @@ abstract class BaseController extends \Wei\BaseController
                 'controllerTitle' => $this->getControllerName(),
                 'actionTitle' => $this->getActionName(),
             ],
-            'webpackPublicPath' => $this->wpAsset->getRevPrefix(),
             'pluginIds' => $this->app->getRecord()['pluginIds'],
         ];
 
