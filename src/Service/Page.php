@@ -217,7 +217,6 @@ class Page extends BaseService
      * @param string|null $plugin
      * @param bool $hasCss
      * @return $this
-     * @todo 移除plugin参数,解决项目插件获取的名称错误
      * @deprecated
      */
     public function addPluginAsset($action = null, $plugin = null, $hasCss = true)
@@ -237,10 +236,10 @@ class Page extends BaseService
         return $this;
     }
 
-    public function addPluginAssets($plugin = 'app', $hasCss = false)
+    public function addPluginAssets($plugin = 'app')
     {
         $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
-        $hasCss && $this->addCss($this->wpAsset($plugin . '.css'));
+        $this->addCss($this->wpAsset($plugin . '.css'));
         return $this->addJs([
             $this->wpAsset($plugin . '-manifest.js'),
             $this->wpAsset($plugin . '.js'),

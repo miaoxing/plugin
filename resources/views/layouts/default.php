@@ -1,6 +1,6 @@
 <?php
 
-$wei->page->addPluginAssets('app', true);
+$wei->page->addPluginAssets('app');
 ?>
 <!DOCTYPE html>
 <html<?= $wei->ua->isIOS() ? ' class="ios"' : '' ?>>
