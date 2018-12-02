@@ -237,9 +237,10 @@ class Page extends BaseService
         return $this;
     }
 
-    public function addPluginAssets($plugin = 'app')
+    public function addPluginAssets($plugin = 'app', $hasCss = false)
     {
         $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
+        $hasCss && $this->addCss($this->wpAsset($plugin . '.css'));
         return $this->addJs([
             $this->wpAsset($plugin . '-manifest.js'),
             $this->wpAsset($plugin . '.js'),
