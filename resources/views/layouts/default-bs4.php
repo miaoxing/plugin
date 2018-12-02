@@ -1,3 +1,7 @@
+<?php
+
+$wei->page->addPluginAssets('app-bs4');
+?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
