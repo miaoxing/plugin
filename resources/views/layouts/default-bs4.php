@@ -10,6 +10,7 @@ $wei->page->addPluginAssets('app-bs4');
   <meta name="format-detection" content="telephone=no">
   <title><?= $e($wei->page->getTitle()) ?></title>
   <?= $wei->page->renderHead() ?>
+  <?php require $view->getFile('@plugin/layouts/default-css.php') ?>
 </head>
 <body>
 <?php $event->trigger('bodyStart') ?>
