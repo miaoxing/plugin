@@ -9,7 +9,7 @@ use Miaoxing\Plugin\Service\View;
  * @property View $view
  * @property App $app
  */
-trait Bs4Layout
+trait Bs4LayoutTrait
 {
     public function __construct(array $options = [])
     {
