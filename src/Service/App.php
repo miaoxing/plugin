@@ -287,7 +287,6 @@ class App extends \Wei\App
     public function getConfig()
     {
         return [
-            'baseUrl' => $this->request->getBaseUrl(),
             'appUrl' => $this->appUrl,
         ];
     }
