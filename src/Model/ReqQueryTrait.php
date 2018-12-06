@@ -348,6 +348,8 @@ trait ReqQueryTrait
             if ($this->getSqlPart('join')) {
                 $column = $this->getTable() . '.' . $column;
             }
+
+            $column = $this->filterInputColumn($column);
         } else {
             // 查询关联表
             list($relation, $relationColumn) = explode('.', $column, 2);
