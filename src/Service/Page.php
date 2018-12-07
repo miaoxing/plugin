@@ -163,6 +163,12 @@ class Page extends BaseService
         return $this;
     }
 
+    public function prependCss($href)
+    {
+        array_unshift($this->cssFiles, $href);
+        return $this;
+    }
+
     public function addAsset($asset)
     {
         $asset = $this->asset($asset);
@@ -239,7 +245,7 @@ class Page extends BaseService
     public function addPluginAssets($plugin = 'app')
     {
         $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
-        $this->addCss($this->wpAsset($plugin . '.css'));
+        $this->prependCss($this->wpAsset($plugin . '.css'));
         return $this->addJs([
             $this->wpAsset($plugin . '-manifest.js'),
             $this->wpAsset($plugin . '.js'),
