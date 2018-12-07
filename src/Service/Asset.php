@@ -118,7 +118,7 @@ class Asset extends \Wei\Asset
     public function getRevMap()
     {
         if ($this->revMap === null) {
-            if (is_file($this->revFile)) {
+            if ($this->revFile && is_file($this->revFile)) {
                 $this->revMap = (array) json_decode(file_get_contents($this->revFile));
             } else {
                 $this->revMap = [];
