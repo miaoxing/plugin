@@ -9,7 +9,7 @@ class Request extends \Wei\Request
         parent::__construct($options);
 
         if (strpos($this->getServer('HTTP_CONTENT_TYPE'), 'application/json') !== false) {
-            $this->data += json_decode($this->getContent(), true);
+            $this->data += (array) json_decode($this->getContent(), true);
         }
     }
 
