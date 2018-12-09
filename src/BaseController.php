@@ -114,6 +114,9 @@ abstract class BaseController extends \Wei\BaseController
                     'controllerTitle' => $this->getControllerName(),
                     'actionTitle' => $this->getActionName(),
                 ],
+                'theme' => [
+                    'primary' => $this->setting('theme.brandPrimary', '#f28c48'),
+                ],
                 'pluginIds' => $this->app->getRecord()['pluginIds'],
             ];
 
