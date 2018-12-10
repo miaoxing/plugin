@@ -157,6 +157,12 @@ class Page extends BaseService
         return $this;
     }
 
+    public function prependJs($src)
+    {
+        array_unshift($this->jsFiles, $src);
+        return $this;
+    }
+
     public function addCss($href)
     {
         $this->cssFiles[] = $href;
@@ -245,11 +251,9 @@ class Page extends BaseService
     public function addPluginAssets($plugin = 'app')
     {
         $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
-        $this->prependCss($this->wpAsset($plugin . '.css'));
-        return $this->addJs([
-            $this->wpAsset($plugin . '-manifest.js'),
-            $this->wpAsset($plugin . '.js'),
-        ]);
+        return $this->prependCss($this->wpAsset($plugin . '.css'))
+            ->prependJs($this->wpAsset($plugin . '-manifest.js'))
+            ->prependJs($this->wpAsset($plugin . '.js'));
     }
 
     protected function initRoute($action)
