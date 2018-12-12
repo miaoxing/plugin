@@ -288,7 +288,7 @@ trait ReqQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            if ($this->request->has($column)) {
+            if ($this->request->has($name)) {
                 $this->whereHas($column, $this->request[$name]);
             }
         }
