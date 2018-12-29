@@ -24,9 +24,7 @@ $wei->page->addPluginAssets('app');
 </script>
 <?= $wei->page->renderFooter() ?>
 <script>
-  var wechatInfo = navigator.userAgent.match(/MicroMessenger\/([\d\.]+)/i);
-  var wechatVersion = wechatInfo ? wechatInfo[1] : '';
-  if (/iphone|ipod|ipad/i.test(navigator.appVersion) && wechatVersion == '6.7.4') {
+  if (/iphone|ipod|ipad/i.test(navigator.appVersion)) {
     var event = function (e) {
       ['input', 'textarea', 'select'].includes(e.target.localName) && document.body.scrollIntoView(false)
     };
