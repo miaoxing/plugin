@@ -20,6 +20,8 @@ class Group extends \Miaoxing\Plugin\BaseModel
 
     protected $customerServiceGroups;
 
+    protected $groupCaches = [];
+
     /**
      * 是否是客服小组
      */
@@ -119,12 +121,15 @@ class Group extends \Miaoxing\Plugin\BaseModel
      */
     public function getGroupsFromCache()
     {
-        return wei()->groupModel()
-            ->desc('sort')
-            ->cache(86400)
-            ->tags(false)
-            ->setCacheKey('groups:' . wei()->app->getId())
-            ->indexBy('id')
-            ->findAll();
+        if (!$this->groupCaches) {
+            $this->groupCaches = wei()->groupModel()
+                ->desc('sort')
+                ->cache(86400)
+                ->tags(false)
+                ->setCacheKey('groups:' . wei()->app->getId())
+                ->indexBy('id')
+                ->findAll();
+        }
+        return $this->groupCaches;
     }
 }
