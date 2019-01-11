@@ -2,6 +2,11 @@
 
 <?= $block->css() ?>
 <link rel="stylesheet" href="<?= $asset('plugins/plugin/css/ret.css') ?>">
+<style>
+  #root {
+    display: none;
+  }
+</style>
 <?= $block->end() ?>
 
 <div class="ret ret-<?= $type ?>">
