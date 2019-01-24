@@ -321,7 +321,7 @@ class App extends \Wei\App
      */
     protected function handleRet(array $ret)
     {
-        if ($this->request->acceptJson() || php_sapi_name() == 'cli') {
+        if ($this->request->acceptJson() || php_sapi_name() == 'cli' || $this->isApi()) {
             return $this->response->json($ret);
         } else {
             $type = isset($ret['retType']) ? $ret['retType'] : ($ret['code'] === 1 ? 'success' : 'warning');
@@ -352,6 +352,16 @@ class App extends \Wei\App
     public function isAdmin()
     {
         return substr($this->getController(), 0, 5) === 'admin';
+    }
+
+    /**
+     * 判断是否为API接口
+     *
+     * @return bool
+     */
+    public function isApi()
+    {
+        return substr($this->getController(), 0, 3) === 'api';
     }
 
     /**
