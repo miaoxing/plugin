@@ -127,6 +127,7 @@ trait CastTrait
                 return (string) $value;
 
             case 'array':
+            case 'json':
                 return json_encode((array) $value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
             default:
