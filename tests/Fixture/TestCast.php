@@ -22,7 +22,7 @@ class TestCast extends BaseModelV2
         'string_column' => 'string',
         'datetime_column' => 'datetime',
         'date_column' => 'date',
-        'json_column' => 'json',
+        'json_column' => 'array',
     ];
 
     protected $data = [

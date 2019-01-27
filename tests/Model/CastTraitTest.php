@@ -99,7 +99,7 @@ class CastTraitTest extends BaseTestCase
                     'stringColumn' => '1',
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
-                    'jsonColumn' => 'abc',
+                    'jsonColumn' => ['abc'],
                 ],
             ],
         ];
@@ -168,7 +168,7 @@ class CastTraitTest extends BaseTestCase
                     'stringColumn' => '1',
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
-                    'jsonColumn' => '{"a":"b\c","d":"中文"}',
+                    'jsonColumn' => [0 => '{"a":"b\c","d":"中文"}'],
                 ],
             ],
         ];
@@ -250,11 +250,22 @@ class CastTraitTest extends BaseTestCase
         $cast = wei()->testCast()->save([
             'json_column' => [
                 'a' => 'b',
-            ]
+            ],
         ]);
         $this->assertEquals(['a' => 'b'], $cast->jsonColumn);
 
         $cast->reload();
         $this->assertEquals(['a' => 'b'], $cast->jsonColumn);
+    }
+
+    public function testSetJsonNotArrayValue()
+    {
+        $cast = wei()->testCast()->save([
+            'json_column' => null,
+        ]);
+        $this->assertEquals([], $cast->jsonColumn);
+
+        $cast->reload();
+        $this->assertEquals([], $cast->jsonColumn);
     }
 }
