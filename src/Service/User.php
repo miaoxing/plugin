@@ -362,7 +362,7 @@ class User extends BaseModel
         $this->isCreated = true;
 
         if (wei()->has('queue')) {
-            wei()->queue->push(UserCreate::class, ['id' => $this['id']], wei()->app->getNamespace());
+            wei()->queue->push(UserCreate::class, ['id' => $this['id']]);
         }
 
         // TODO 移到插件中
