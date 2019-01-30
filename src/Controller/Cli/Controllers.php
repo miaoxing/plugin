@@ -48,7 +48,7 @@ class Controllers extends BaseController
         $parts = explode('/', $name);
 
         foreach ($parts as $i => $part) {
-            $parts[$i] = $this->str->camel($part);
+            $parts[$i] = ucfirst($this->str->camel($part));
         }
         $name = ucfirst(implode('/', $parts));
 
@@ -67,7 +67,7 @@ class Controllers extends BaseController
     {
         $parts = explode('/', $name);
         foreach ($parts as $i => $part) {
-            $parts[$i] = $this->str->camel($part);
+            $parts[$i] = ucfirst($this->str->camel($part));
         }
 
         $name = ucfirst(array_pop($parts));
