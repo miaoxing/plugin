@@ -1208,4 +1208,19 @@ class BaseModel extends Record implements JsonSerializable
         }
         return $this;
     }
+
+    /**
+     * @param bool $bool
+     * @param mixed $conditions
+     * @param array $params
+     * @param array $types
+     * @return $this
+     */
+    public function whenWhere($bool, $conditions, $params = array(), $types = array())
+    {
+        if ($bool) {
+            return $this->andWhere($conditions, $params, $types);
+        }
+        return $this;
+    }
 }
