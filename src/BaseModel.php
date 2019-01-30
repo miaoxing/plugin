@@ -1196,4 +1196,16 @@ class BaseModel extends Record implements JsonSerializable
     {
         return parent::decr($this->filterInputColumn($name), $offset);
     }
+
+    /**
+     * @return $this
+     * @throws \Exception
+     */
+    public function existOrFail()
+    {
+        if ($this->isNew) {
+            throw new \Exception('Record not found', 404);
+        }
+        return $this;
+    }
 }
