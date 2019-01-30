@@ -41,6 +41,8 @@ namespace MiaoxingDoc\Plugin {
      *
      * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
      *
+     * @property    \Miaoxing\Plugin\Service\Queue $queue
+     *
      * @property    \Miaoxing\Plugin\Service\Request $request
      * @method      string|null request($name, $default = '') Returns a *stringify* or user defined($default) parameter value
      *
@@ -59,6 +61,9 @@ namespace MiaoxingDoc\Plugin {
      *
      * @property    \Miaoxing\Plugin\Service\Time $time 时间日期
      * @method      string time()
+     *
+     * @property    \Miaoxing\Plugin\Service\Url $url
+     * @method      string url($url = '', $argsOrParams = [], $params = []) Generate the URL by specified URL and parameters
      *
      * @property    \Miaoxing\Plugin\Service\UrlMapper $urlMapper URL映射
      * @method      mixed urlMapper()
@@ -131,6 +136,9 @@ namespace {
     /** @var Miaoxing\Plugin\Service\Plugin $plugin */
     $plugin = wei()->plugin;
 
+    /** @var Miaoxing\Plugin\Service\Queue $queue */
+    $queue = wei()->queue;
+
     /** @var Miaoxing\Plugin\Service\Request $request */
     $request = wei()->request;
 
@@ -151,6 +159,9 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\Time $time */
     $time = wei()->time;
+
+    /** @var Miaoxing\Plugin\Service\Url $url */
+    $url = wei()->url;
 
     /** @var Miaoxing\Plugin\Service\UrlMapper $urlMapper */
     $urlMapper = wei()->urlMapper;
