@@ -65,6 +65,15 @@ class GetSetTraitTest extends BaseTestCase
         $this->assertInternalType('int', $test->id);
     }
 
+    public function testSaveIdShouldBeInt()
+    {
+        $test = wei()->testGetSet();
+
+        $test->save();
+
+        $this->assertInternalType('int', $test->id);
+    }
+
     public function testIndexBy()
     {
         $tests = wei()->testGetSet()
