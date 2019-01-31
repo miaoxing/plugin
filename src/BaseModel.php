@@ -1036,6 +1036,34 @@ class BaseModel extends Record implements JsonSerializable
         $this->isChanged = true;
     }
 
+    protected function resetChanged($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        if (array_key_exists($name, $this->changedData)) {
+            unset($this->changedData[$name]);
+        }
+        if (!$this->changedData) {
+            $this->isChanged = false;
+        }
+        return $this;
+    }
+
+    /**
+     * Check if the record's data or specified field is changed
+     *
+     * @param string $field
+     * @return bool
+     */
+    public function isChanged($field = null)
+    {
+        if ($field) {
+            $field = $this->filterInputColumn($field);
+            return array_key_exists($field, $this->changedData);
+        }
+        return $this->isChanged;
+    }
+
     public function page($page)
     {
         $page = max(1, (int) $page);
@@ -1178,7 +1206,12 @@ class BaseModel extends Record implements JsonSerializable
 
     public function incrSave($name, $offset = 1)
     {
-        return $this->incr($name, $offset)->save();
+        $value = $this->get($name) + $offset;
+        $this->incr($name, $offset)->save();
+        $this->set($name, $value);
+        $this->resetChanged($name);
+
+        return $this;
     }
 
     /**

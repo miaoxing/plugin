@@ -16,6 +16,7 @@ class GetSetTraitTest extends BaseTestCase
         wei()->schema->table('test_get_sets')
             ->id('id')
             ->string('name')
+            ->int('user_count')
             ->exec();
 
         wei()->db->batchInsert('test_get_sets', [
@@ -81,5 +82,21 @@ class GetSetTraitTest extends BaseTestCase
             ->findAll(['name' => 'abc']);
 
         $this->assertEquals('abc', $tests['abc']->name);
+    }
+
+    public function testIncrSave()
+    {
+        $getSet = wei()->testGetSet();
+        $getSet->incrSave('userCount', 2);
+        $this->assertEquals(2, $getSet->userCount);
+        $this->assertFalse($getSet->isChanged('userCount'));
+        $this->assertFalse($getSet->isChanged());
+
+        $getSet->incrSave('userCount', 3);
+        $getSet->name = 'test';
+        $this->assertEquals(5, $getSet->userCount);
+        $this->assertFalse($getSet->isChanged('userCount'));
+        $this->assertTrue($getSet->isChanged('name'));
+        $this->assertTrue($getSet->isChanged());
     }
 }
