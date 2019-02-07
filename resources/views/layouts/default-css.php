@@ -12,7 +12,7 @@
     color: <?= $color ?> !important;
   }
   .bg-primary {
-    background-color: <?= $color ?>;
+    background-color: <?= $color ?> !important;
   }
   .btn-primary,
   .btn-primary:hover,
