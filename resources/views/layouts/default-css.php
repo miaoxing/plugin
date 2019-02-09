@@ -20,19 +20,23 @@
   .btn-primary.disabled,
   .btn-primary[disabled],
   .btn-primary:not(:disabled):not(.disabled):active,
-  .btn-primary:not(:disabled):not(.disabled).active {
+  .btn-primary:not(:disabled):not(.disabled).active,
+  .btn-outline-primary:hover,
+  .btn-outline-primary:focus,
+  .btn-outline-primary:not(:disabled):not(.disabled):active,
+  .btn-outline-primary:not(:disabled):not(.disabled).active {
     background-color: <?= $color ?>;
     border-color: <?= $color ?>;
   }
-  @media screen and (-webkit-min-device-pixel-ratio: 2) {
-    .btn-primary.hairline::before {
-      border-color: <?= $color ?>;
-    }
-  }
+  .btn-primary::after,
+  .btn-outline-primary:after,
   .border-primary,
   .active.border-active-primary {
     border-color: <?= $color ?> !important;
   }
+  .btn-outline-primary,
+  .btn-outline-primary.disabled,
+  .btn-outline-primary[disabled],
   .active.after-active-primary::after,
   .after-primary::after {
     color: <?= $color ?>;
