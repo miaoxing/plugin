@@ -16,10 +16,11 @@
   }
   .btn-primary,
   .btn-primary:hover,
-  .btn-primary:active,
   .btn-primary:focus,
   .btn-primary.disabled,
-  .btn-primary[disabled] {
+  .btn-primary[disabled],
+  .btn-primary:not(:disabled):not(.disabled):active,
+  .btn-primary:not(:disabled):not(.disabled).active {
     background-color: <?= $color ?>;
     border-color: <?= $color ?>;
   }
