@@ -1,4 +1,4 @@
-define(['template', 'plugins/admin/js/data-table', 'form', 'jquery-deparam'], function (template) {
+define(['template', 'plugins/admin/js/data-table', 'form', 'jquery-unparam'], function (template) {
   var Plugins = function () {
     // do nothing.
   };
