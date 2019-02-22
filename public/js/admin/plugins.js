@@ -1,4 +1,4 @@
-define(['template', 'plugins/admin/js/data-table', 'form'], function (template) {
+define([plugins/app/libs/artTemplate/template.min, 'plugins/admin/js/data-table', 'form'], function (template) {
   var Plugins = function () {
     // do nothing.
   };
