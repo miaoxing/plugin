@@ -20,11 +20,7 @@
   .btn-primary.disabled,
   .btn-primary[disabled],
   .btn-primary:not(:disabled):not(.disabled):active,
-  .btn-primary:not(:disabled):not(.disabled).active,
-  .btn-outline-primary:hover,
-  .btn-outline-primary:focus,
-  .btn-outline-primary:not(:disabled):not(.disabled):active,
-  .btn-outline-primary:not(:disabled):not(.disabled).active {
+  .btn-primary:not(:disabled):not(.disabled).active {
     background-color: <?= $color ?>;
     border-color: <?= $color ?>;
   }
@@ -37,6 +33,9 @@
   .btn-outline-primary,
   .btn-outline-primary.disabled,
   .btn-outline-primary[disabled],
+  .btn-outline-primary:hover,
+  .btn-outline-primary:not(:disabled):not(.disabled):active,
+  .btn-outline-primary:not(:disabled):not(.disabled).active,
   .active.after-active-primary::after,
   .after-primary::after {
     color: <?= $color ?>;
