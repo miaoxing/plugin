@@ -25,7 +25,9 @@
     border-color: <?= $color ?>;
   }
   .btn-primary::after,
-  .btn-outline-primary:after,
+  .btn-outline-primary:after {
+    border-color: <?= $color ?>;
+  }
   .border-primary,
   .active.border-active-primary {
     border-color: <?= $color ?> !important;
