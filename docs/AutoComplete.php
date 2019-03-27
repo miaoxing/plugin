@@ -33,6 +33,8 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\IsRecordExists $isRecordExists
      * @method      bool isRecordExists($input = null, $table = null, $field = 'id') Check if the input is existing table record
      *
+     * @property    \Miaoxing\Plugin\Service\Laravel $laravel
+     *
      * @property    \Miaoxing\Plugin\Service\Migration $migration 数据库迁移
      *
      * @property    \Miaoxing\Plugin\Service\OptionTrait $optionTrait
@@ -123,6 +125,9 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\IsRecordExists $isRecordExists */
     $isRecordExists = wei()->isRecordExists;
+
+    /** @var Miaoxing\Plugin\Service\Laravel $laravel */
+    $laravel = wei()->laravel;
 
     /** @var Miaoxing\Plugin\Service\Migration $migration */
     $migration = wei()->migration;
