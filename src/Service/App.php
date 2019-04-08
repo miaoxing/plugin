@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Config\ConfigTrait;
 use Miaoxing\Config\Service\Config;
 use Wei\Response;
 
@@ -14,9 +15,12 @@ use Wei\Response;
  * @property \Miaoxing\Plugin\Service\AppRecord $appRecord 应用的数据库服务
  * @property Config $config
  * @property Str $str
+ * @property array pageMap
  */
 class App extends \Wei\App
 {
+    use ConfigTrait;
+
     /**
      * 插件控制器不使用该格式,留空可减少类查找
      *
@@ -75,6 +79,15 @@ class App extends \Wei\App
      * @var string
      */
     protected $defaultViewFile = '@app/_default.php';
+
+    /**
+     * @var array
+     */
+    protected $configs = [
+        'pageMap' => [
+            'default' => [],
+        ],
+    ];
 
     /**
      * {@inheritdoc}

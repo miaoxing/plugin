@@ -118,6 +118,7 @@ abstract class BaseController extends \Wei\BaseController
                     'primary' => $this->setting('theme.brandPrimary', '#f28c48'),
                 ],
                 'pluginIds' => $this->app->getRecord()['pluginIds'],
+                'pageMap' => $this->app->pageMap,
             ];
 
         // 为后台设置默认布局
