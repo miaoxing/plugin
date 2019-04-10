@@ -58,7 +58,7 @@ class CurUser extends User
         switch (true) {
             case wei()->isMobileCn($data['username']):
                 $field = 'mobile';
-                $user->withStatus(static::STATUS_MOBILE_VERIFIED);
+                $user->mobileVerified();
                 break;
 
             case wei()->isEmail($data['username']):

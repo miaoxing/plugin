@@ -69,16 +69,16 @@ class UserTest extends BaseTestCase
 
     public function testWithStatus()
     {
-        $user = wei()->user()->withStatus(User::STATUS_MOBILE_VERIFIED);
+        $user = wei()->user()->withStatus(User::STATUS_REGION_LOCKED);
 
-        $this->assertContains('status & 1 = 1', $user->getSqlPart('where'));
+        $this->assertContains('status & 3 = 1', $user->getSqlPart('where'));
     }
 
     public function testWithoutStatus()
     {
-        $user = wei()->user()->withoutStatus(User::STATUS_MOBILE_VERIFIED);
+        $user = wei()->user()->withoutStatus(User::STATUS_REGION_LOCKED);
 
-        $this->assertContains('status & 1 = 0', $user->getSqlPart('where'));
+        $this->assertContains('status & 3 = 0', $user->getSqlPart('where'));
     }
 
     /**
@@ -101,7 +101,7 @@ class UserTest extends BaseTestCase
         $this->assertRetSuc($ret, '手机号码可以绑定');
 
         $this->step('存在认证手机号码的用户,不能绑定');
-        $user->setStatus(User::STATUS_MOBILE_VERIFIED, true)->save();
+        $user->setMobileVerified()->save();
         $ret = $testUser->checkMobile($testMobile);
         $this->assertRetErr($ret, -1, '已存在认证该手机号码的用户');
     }

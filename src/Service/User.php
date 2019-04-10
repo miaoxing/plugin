@@ -17,11 +17,6 @@ use Miaoxing\User\Job\UserCreate;
 class User extends BaseModel
 {
     /**
-     * 手机号码是否已验证
-     */
-    const STATUS_MOBILE_VERIFIED = 1;
-
-    /**
      * 省市是否锁定(第三方平台不可更改)
      */
     const STATUS_REGION_LOCKED = 3;
@@ -295,7 +290,7 @@ class User extends BaseModel
         }
 
         if ($data['mobile']) {
-            $user = wei()->user()->withStatus(self::STATUS_MOBILE_VERIFIED)->find(['mobile' => $data['mobile']]);
+            $user = wei()->user()->mobileVerified()->find(['mobile' => $data['mobile']]);
             if ($user) {
                 return ['code' => -8, 'message' => '手机号码已存在'];
             }
@@ -310,7 +305,7 @@ class User extends BaseModel
         $this->setPlainPassword($data['password']);
 
         if ($data['mobile']) {
-            $this->setStatus(static::STATUS_MOBILE_VERIFIED, true);
+            $this->setMobileVerified();
         }
 
         $this->save([
@@ -495,6 +490,33 @@ class User extends BaseModel
     }
 
     /**
+     * QueryBuilder: 查询手机号码验证过
+     *
+     * @return $this
+     */
+    public function mobileVerified()
+    {
+        return $this->andWhere("mobileVerifiedAt != '0000-00-00 00:00:00'");
+    }
+
+    /**
+     * @param bool $verified
+     * @return User
+     */
+    public function setMobileVerified($verified = true)
+    {
+        return $this->set('mobileVerifiedAt', $verified ? wei()->time() : '0000-00-00 00:00:00');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMobileVerified()
+    {
+        return $this['mobileVerifiedAt'] !== '0000-00-00 00:00:00';
+    }
+
+    /**
      * Record: 检查当前记录是否刚创建
      *
      * @return bool
@@ -513,7 +535,7 @@ class User extends BaseModel
     public function checkMobile($mobile)
     {
         // 1. 检查是否已存在认证该手机号码的用户
-        $mobileUser = wei()->user()->withStatus(self::STATUS_MOBILE_VERIFIED)->find(['mobile' => $mobile]);
+        $mobileUser = wei()->user()->mobileVerified()->find(['mobile' => $mobile]);
         if ($mobileUser && $mobileUser['id'] != $this['id']) {
             return $this->err('已存在认证该手机号码的用户');
         }
@@ -549,7 +571,7 @@ class User extends BaseModel
 
         // 3. 记录手机信息
         $this['mobile'] = $data['mobile'];
-        $this->setStatus(self::STATUS_MOBILE_VERIFIED, true);
+        $this->setMobileVerified();
 
         $this->event->trigger('preUserMobileVerify', [$data, $this]);
 
@@ -566,7 +588,7 @@ class User extends BaseModel
      */
     public function updateData($data)
     {
-        $isMobileVerified = $this->isStatus(static::STATUS_MOBILE_VERIFIED);
+        $isMobileVerified = $this->isMobileVerified();
 
         $validator = wei()->validate([
             'data' => $data,
