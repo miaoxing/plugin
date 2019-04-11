@@ -735,16 +735,4 @@ class User extends BaseModel
         }
         return $tags;
     }
-
-    /**
-     * 增加版本号,解决增加mobileVerifiedAt字段后数据缓存不对
-     *
-     * {@inheritdoc}
-     *
-     * @todo 30min后下线
-     */
-    public function getRecordCacheKey($id = null)
-    {
-        return 'v2:' . parent::getRecordCacheKey($id);
-    }
 }
