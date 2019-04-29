@@ -32,13 +32,13 @@ class Assets extends BaseController
             }
 
             $id = $plugin->getId();
-            $target = 'plugins/' . $id;
+            $target = 'public/plugins/' . $id;
             if (is_dir($target)) {
                 $this->writeln(sprintf('Remove %s', $cli->success($target)));
                 $this->remove($target);
             }
 
-            $source = '../' . $source;
+            $source = '../../' . $source;
             $this->writeln(sprintf('Symlink %s to %s', $cli->success($source), $cli->success($target)));
             symlink($source, $target);
         }
