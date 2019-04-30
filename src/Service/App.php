@@ -81,6 +81,11 @@ class App extends \Wei\App
     protected $defaultViewFile = '@app/_default.php';
 
     /**
+     * @var string
+     */
+    protected $basePath;
+
+    /**
      * @var array
      */
     protected $configs = [
@@ -387,5 +392,13 @@ class App extends \Wei\App
     {
         $this->defaultViewFile = $defaultViewFile;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
     }
 }
