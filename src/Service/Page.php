@@ -239,7 +239,7 @@ class Page extends BaseService
         // 2. 加载插件的版本映射表
         // 目前正常只会加载一次，不用缓存
         $plugin || $plugin = $this->app->getPlugin();
-        $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
+        $this->wpAsset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
 
         // 3. 加载css和js文件
         $hasCss && $this->addCss($this->wpAsset($plugin . '.css'));
@@ -250,7 +250,7 @@ class Page extends BaseService
 
     public function addPluginAssets($plugin = 'app')
     {
-        $this->wpAsset->addRevFile('dist2/' . $plugin . '-assets-hash.json');
+        $this->wpAsset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
         return $this->prependCss($this->wpAsset($plugin . '.css'))
             ->prependJs($this->wpAsset($plugin . '-manifest.js'))
             ->prependJs($this->wpAsset($plugin . '.js'));
