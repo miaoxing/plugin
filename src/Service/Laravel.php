@@ -11,6 +11,6 @@ class Laravel extends BaseService
 {
     public function bootstrap()
     {
-        require 'laravel/bootstrap.php';
+        require 'bootstrap.php';
     }
 }
