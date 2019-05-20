@@ -97,6 +97,8 @@ class App extends \Wei\App
         // 1. 获取应用名称和请求路径
         $namespace = $this->getNamespaceFromDomain();
 
+        wei()->laravel->bootstrap();
+
         if (!$namespace) {
             $request = $this->request;
             $pathInfo = $request->getPathInfo();
