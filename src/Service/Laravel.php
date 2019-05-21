@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\BaseService;
 
 /**
- * @todo 成熟后作为一个插件？
+ * @todo 成熟后直接从入口加载
  */
 class Laravel extends BaseService
 {
