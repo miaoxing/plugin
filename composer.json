@@ -1,5 +1,7 @@
 {
   "name": "miaoxing/plugin",
+  "type": "miaoxing-plugin",
+  "description": "Miaoxing Plugin Core",
   "keywords": [
     "miaoxing",
     "plugin"
