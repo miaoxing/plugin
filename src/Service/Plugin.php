@@ -29,10 +29,9 @@ class Plugin extends BaseService
      *
      * @var array
      */
-    protected $dirs = [
-        '.',
+    protected $basePaths = [
         'src',
-        'vendor/*/*/src',
+        'plugins/*/src',
     ];
 
     /**
@@ -140,7 +139,7 @@ class Plugin extends BaseService
      */
     protected function getWeiAliases()
     {
-        return $this->generateClassMap($this->dirs, '/Service/*.php', 'Service');
+        return $this->generateClassMap($this->basePaths, '/Service/*.php', 'Service');
     }
 
     /**
@@ -150,7 +149,7 @@ class Plugin extends BaseService
      */
     protected function getAppControllerMap()
     {
-        return $this->generateClassMap($this->dirs, '/Controller/{*,*/*}.php', 'Controller');
+        return $this->generateClassMap($this->basePaths, '/Controller/{*,*/*}.php', 'Controller');
     }
 
     /**
@@ -164,7 +163,7 @@ class Plugin extends BaseService
     {
         if ($refresh || !$this->pluginClasses) {
             $this->pluginClasses = [];
-            $files = $this->globByDirs($this->dirs, '/Plugin.php');
+            $files = $this->globByDirs($this->basePaths, '/Plugin.php');
             foreach ($files as $file) {
                 $class = $this->guessClassName($file);
 
@@ -586,6 +585,14 @@ class Plugin extends BaseService
         $id = $this->dash($id);
 
         return $id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBasePaths()
+    {
+        return $this->basePaths;
     }
 
     /**
