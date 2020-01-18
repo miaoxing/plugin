@@ -12,8 +12,6 @@ use Wei\Block;
  * @property-read Str $str
  * @property-read Asset $asset
  * @method string asset(string $file)
- * @property-read Asset $wpAsset
- * @method string wpAsset(string $file)
  * @property bool $showTitleInHeader
  */
 class Page extends BaseService
@@ -239,21 +237,21 @@ class Page extends BaseService
         // 2. 加载插件的版本映射表
         // 目前正常只会加载一次，不用缓存
         $plugin || $plugin = $this->app->getPlugin();
-        $this->wpAsset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
+        $this->asset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
 
         // 3. 加载css和js文件
-        $hasCss && $this->addCss($this->wpAsset($plugin . '.css'));
-        $this->addJs($this->wpAsset($plugin . '.js'));
+        $hasCss && $this->addCss($this->asset($plugin . '.css'));
+        $this->addJs($this->asset($plugin . '.js'));
 
         return $this;
     }
 
     public function addPluginAssets($plugin = 'app')
     {
-        $this->wpAsset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
-        return $this->prependCss($this->wpAsset($plugin . '.css'))
-            ->prependJs($this->wpAsset($plugin . '-manifest.js'))
-            ->prependJs($this->wpAsset($plugin . '.js'));
+        $this->asset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
+        return $this->prependCss($this->asset($plugin . '.css'))
+            ->prependJs($this->asset($plugin . '-manifest.js'))
+            ->prependJs($this->asset($plugin . '.js'));
     }
 
     protected function initRoute($action)

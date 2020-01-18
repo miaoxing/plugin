@@ -5,7 +5,7 @@ require 'functions.php';
 // 1. 加载配置,初始化服务容器
 $dirs = [
     '.',
-    'vendor/miaoxing/plugin',
+    'plugins/plugin',
 ];
 foreach ($dirs as $dir) {
     if (is_file($dir . '/tests/init.php')) {

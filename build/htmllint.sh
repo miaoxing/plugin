@@ -12,7 +12,7 @@ fi
 # 2. 执行命令
 config=""
 if [ ! -e ".htmllintrc" ]; then
-  config=" --rc=vendor/miaoxing/plugin/.htmllintrc"
+  config=" --rc=plugins/plugin/.htmllintrc"
 fi
 
 files=`find ${dir} -path resources/views/mailers -prune -o -type f -print`

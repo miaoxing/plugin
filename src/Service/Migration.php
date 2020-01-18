@@ -146,7 +146,7 @@ class Migration extends BaseService
         }
 
         ob_start();
-        require  'vendor/miaoxing/plugin/resources/stubs/migration.php';
+        require  'plugins/plugin/resources/stubs/migration.php';
         $content = ob_get_clean();
 
         $file = $path . '/' . $class . '.php';

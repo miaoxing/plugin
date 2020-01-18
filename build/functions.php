@@ -57,7 +57,7 @@ function init()
 {
     $dirs = [
         '.',
-        'vendor/miaoxing/plugin',
+        'plugins/plugin',
     ];
     foreach ($dirs as $dir) {
         if (is_file($dir . '/tests/init.php')) {

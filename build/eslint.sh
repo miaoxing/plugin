@@ -7,13 +7,13 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 # 如果没有忽略文件，拷贝默认配置
 copyIgnoreFile=false
 if [ ! -e ".eslintignore" ]; then
-  cp "vendor/miaoxing/plugin/.eslintignore" ".eslintignore"
+  cp "plugins/plugin/.eslintignore" ".eslintignore"
   copyIgnoreFile=true
 fi
 
 config=""
 if [ ! -e ".eslintrc.json" ]; then
-  config=" --config=vendor/miaoxing/plugin/.eslintrc.json"
+  config=" --config=plugins/plugin/.eslintrc.json"
 fi
 
 report="reports/eslint.txt"

@@ -6,7 +6,7 @@ source "${BASH_SOURCE[0]%/*}/base.sh"
 
 config="phpmd.xml"
 if [ ! -e "phpmd.xml" ]; then
-  config="vendor/miaoxing/plugin/build/phpmd-for-vendors.xml"
+  config="plugins/plugin/build/phpmd-for-vendors.xml"
 fi
 
 report="reports/phpmd.txt"

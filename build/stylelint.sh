@@ -12,7 +12,7 @@ fi
 if [ -e ".stylelintrc.json" ]; then
   config=""
 else
-  config=" --config vendor/miaoxing/plugin/.stylelintrc.json"
+  config=" --config plugins/plugin/.stylelintrc.json"
 fi
 
 # 2. 执行命令

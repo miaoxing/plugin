@@ -50,11 +50,11 @@
   <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod" />
   <!--<rule ref="rulesets/unusedcode.xml/UnusedFormalParameter" />-->
 
-  <rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/cleancode.xml/ConstructorNewOperator" />
-  <rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/cleancode.xml/PublicFieldDeclaration" />
-  <!--<rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/cleancode.xml/ReturnStatement" />-->
+  <rule ref="plugins/plugin/resources/rulesets/phpmd-extension/cleancode.xml/ConstructorNewOperator" />
+  <rule ref="plugins/plugin/resources/rulesets/phpmd-extension/cleancode.xml/PublicFieldDeclaration" />
+  <!--<rule ref="plugins/plugin/resources/rulesets/phpmd-extension/cleancode.xml/ReturnStatement" />-->
 
-  <rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/naming.xml/ClassNameSuffix" />
-  <!--<rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/naming.xml/ControllerMethodName" />-->
-  <!--<rule ref="vendor/miaoxing/plugin/resources/rulesets/phpmd-extension/naming.xml/MethodName" />-->
+  <rule ref="plugins/plugin/resources/rulesets/phpmd-extension/naming.xml/ClassNameSuffix" />
+  <!--<rule ref="plugins/plugin/resources/rulesets/phpmd-extension/naming.xml/ControllerMethodName" />-->
+  <!--<rule ref="plugins/plugin/resources/rulesets/phpmd-extension/naming.xml/MethodName" />-->
 </ruleset>
