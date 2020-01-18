@@ -94,52 +94,28 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
-        // 1. 获取应用名称和请求路径
-        $namespace = $this->getNamespaceFromDomain();
-
+        $request = $this->request;
         wei()->laravel->bootstrap();
 
+        // TODO 整理逻辑 域名 > 参数 > 默认
+        // 1. 获取应用名称和请求路径
+        $namespace = $this->getNamespaceFromDomain();
         if (!$namespace) {
-            $request = $this->request;
-            $pathInfo = $request->getPathInfo();
-            if (isset($request['app'])) {
+            if ($request['app']) {
                 $namespace = $request['app'];
             } else {
-                $parts = explode('/', $pathInfo, 3);
-                list(, $namespace, $pathInfo) = $parts;
-
-                // 可能是微信第三方平台的通知,转为应用名称
-                $wechatNamespace = $this->getNamespaceFromWechatAppId($namespace);
-                if ($wechatNamespace) {
-                    $namespace = $wechatNamespace;
-                }
-
-                $request->setPathInfo('/' . $pathInfo);
-            }
-
-            if (!$namespace) {
                 $namespace = $this->defaultNamespace;
             }
-
-            // 2. 检查应用名称是否存在
-            if (!$this->isNamespaceAvailable($namespace)) {
-                throw new \Exception('应用不存在', 404);
-            }
-            $request->setBaseUrl('/' . $namespace);
-            $this->appUrl = '/' . $namespace;
         }
+
         $this->setNamespace($namespace);
 
-        // 3. 设置namespace,让后面初始化的服务,都注入namespace
+        // 2. 设置namespace,让后面初始化的服务,都注入namespace
         $wei = $this->wei;
         $wei->setNamespace($namespace);
         $wei->setConfig('session:namespace', $namespace);
-        $wei->db->setOption('dbname', $namespace);
 
         $this->event->trigger('appInit');
-
-        // 4. 启用URL映射
-        wei()->urlMapper();
 
         return parent::__invoke($options);
     }
