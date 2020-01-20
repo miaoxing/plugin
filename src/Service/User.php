@@ -722,7 +722,7 @@ class User extends BaseModel
 
     public function getDefaultHeadImg()
     {
-        return $this->setting->getValue('user.defaultHeadImg') ?: '/plugins/user/images/head.jpg';
+        return $this->setting->getValue('user.defaultHeadImg') ?: '/images/head.jpg';
     }
 
     public function getTags()
