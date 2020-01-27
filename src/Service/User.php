@@ -356,9 +356,10 @@ class User extends BaseModel
 
         $this->isCreated = true;
 
+        /* TODO queue
         if (wei()->has('queue')) {
             wei()->queue->push(UserCreate::class, ['id' => $this['id']]);
-        }
+        }*/
 
         // TODO 移到插件中
         if ($this['wechatOpenId']) {
