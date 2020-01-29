@@ -81,6 +81,20 @@ class App extends \Wei\App
     protected $defaultViewFile = '@app/_default.php';
 
     /**
+     * 当页面不存在时，加载该控制器
+     *
+     * @var string
+     */
+    protected $fallbackController = 'app';
+
+    /**
+     * 当页面不存在时，加载该方法
+     *
+     * @var string
+     */
+    protected $fallbackAction = 'index';
+
+    /**
      * @var array
      */
     protected $configs = [
@@ -117,7 +131,34 @@ class App extends \Wei\App
 
         $this->event->trigger('appInit');
 
-        return parent::__invoke($options);
+        return $this->invokeApp($options);
+    }
+
+    protected function invokeApp(array $options = array())
+    {
+        $options && $this->setOption($options);
+
+        // Parse the path info to parameter set
+        $request = $this->request;
+        $paramSet = $this->router->matchParamSet($request->getPathInfo(), $request->getMethod());
+
+        // 当控制器不存在时，回退到该控制器，适用于前后端分离的情况
+        $paramSet[] = [
+            'controller' => $this->fallbackController,
+            'action' => $this->fallbackAction,
+        ];
+
+        // Find out exiting controller action and execute
+        $notFound = array();
+        foreach ($paramSet as $params) {
+            $response = $this->dispatch($params['controller'], $params['action'], $params, false);
+            if (is_array($response)) {
+                $notFound = array_merge($notFound, $response);
+            } else {
+                return $response;
+            }
+        }
+        throw $this->buildException($notFound);
     }
 
     /**
@@ -342,7 +383,8 @@ class App extends \Wei\App
      */
     public function isAdmin()
     {
-        return substr($this->getController(), 0, 5) === 'admin';
+        // NOTE: 控制器不存在时，回退的控制器不带有 admin
+        return strpos($this->request->getPathInfo(), '/admin/') === 0;
     }
 
     /**
