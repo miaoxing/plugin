@@ -384,7 +384,7 @@ class App extends \Wei\App
     public function isAdmin()
     {
         // NOTE: 控制器不存在时，回退的控制器不带有 admin
-        return strpos($this->request->getPathInfo(), '/admin/') === 0;
+        return strpos($this->request->getPathInfo(), '/admin') === 0;
     }
 
     /**
