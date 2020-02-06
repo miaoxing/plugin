@@ -100,20 +100,10 @@ abstract class BaseController extends \Wei\BaseController
     protected function initViewVars()
     {
         $this->view->assign([
-            'controllerInstance' => $this,
-            'adminNavId' => $this->adminNavId,
             'js' => &$this->js,
         ]);
 
-        // 设置页面名称
-        if (!isset($this->view['controllerName'])) {
-            $this->view['controllerName'] = $this->controllerName;
-        }
         $this->js += $this->app->getConfig() + [
-                'page' => [
-                    'controllerTitle' => $this->getControllerName(),
-                    'actionTitle' => $this->getActionName(),
-                ],
                 'theme' => [
                     'primary' => $this->setting('theme.brandPrimary', '#f28c48'),
                 ],
