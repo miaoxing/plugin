@@ -65,8 +65,6 @@ return [
             'back' => 'cache',
         ],
     ],
-    'js.raven' => [
-    ],
     'error.logger' => [
 
     ],
