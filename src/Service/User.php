@@ -2,8 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\App\Service\Setting;
 use Miaoxing\Plugin\BaseModel;
-use Miaoxing\User\Job\UserCreate;
 
 /**
  * 用户
@@ -12,7 +12,6 @@ use Miaoxing\User\Job\UserCreate;
  * @property \Wei\Request $request
  * @property \Wei\Password $password
  * @property \Wei\Event $event
- * @property Setting $setting
  */
 class User extends BaseModel
 {
@@ -57,6 +56,12 @@ class User extends BaseModel
      * @var bool
      */
     protected $isCreated = false;
+
+    protected $enablePinCode = false;
+
+    protected $checkMobileUnique = false;
+
+    protected $defaultHeadImg = '/images/head.jpg';
 
     /**
      * QueryBuilder:
@@ -618,7 +623,7 @@ class User extends BaseModel
 
         if (!$isMobileVerified) {
             // 手机号未认证时,检查手机号,根据配置检查是否重复
-            if (wei()->setting('user.check_mobile_unique') && $this->isMobileExists($data['mobile'])) {
+            if (wei()->user->checkMobileUnique && $this->isMobileExists($data['mobile'])) {
                 return $this->err('手机号码已存在');
             }
             $this['mobile'] = $data['mobile'];
@@ -651,7 +656,7 @@ class User extends BaseModel
      */
     public function updatePassword($req)
     {
-        if (wei()->setting('user.enablePinCode')) {
+        if (wei()->user->enablePinCode) {
             $rule = [
                 'digit' => true,
                 'length' => 6,
@@ -723,7 +728,7 @@ class User extends BaseModel
 
     public function getDefaultHeadImg()
     {
-        return $this->setting->getValue('user.defaultHeadImg') ?: '/images/head.jpg';
+        return wei()->user->defaultHeadImg;
     }
 
     public function getTags()

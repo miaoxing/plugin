@@ -23,7 +23,7 @@ use Wei\RetTrait;
  * @property \Miaoxing\Order\Service\Url $url URL生成服务
  * @method   string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Wei\Ret $ret 返回值服务
- * @property \Miaoxing\Plugin\Service\Setting $setting
+ * @property \Miaoxing\App\Service\Setting $setting
  * @method   string setting($name, $default = null) 读取配置
  * @property \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
  * @property Asset wpAsset
@@ -104,9 +104,7 @@ abstract class BaseController extends \Wei\BaseController
         ]);
 
         $this->js += $this->app->getConfig() + [
-                'theme' => [
-                    'primary' => $this->setting('theme.brandPrimary', '#f28c48'),
-                ],
+                'theme' => $this->page->theme,
                 'pluginIds' => $this->app->getRecord()['pluginIds'],
                 'pageMap' => $this->app->pageMap,
             ];

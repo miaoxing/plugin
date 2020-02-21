@@ -17,7 +17,6 @@ class View extends \Wei\View
         'asset',
         'event',
         'curUser',
-        'setting', // deprecated
     ];
 
     /**

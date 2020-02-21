@@ -13,6 +13,7 @@ use Wei\Block;
  * @property-read Asset $asset
  * @method string asset(string $file)
  * @property bool $showTitleInHeader
+ * @property array $theme
  */
 class Page extends BaseService
 {
@@ -21,6 +22,9 @@ class Page extends BaseService
     protected $configs = [
         'showTitleInHeader' => [
             'default' => false,
+        ],
+        'theme' => [
+            'default' => [],
         ],
     ];
 
@@ -69,8 +73,7 @@ class Page extends BaseService
      */
     public function getTitle()
     {
-        // TODO setting 转为 config
-        return $this->showTitleInHeader ? wei()->setting('site.title') : ($this->title ?: wei()->setting('site.title'));
+        return $this->title;
     }
 
     /**

@@ -53,9 +53,6 @@ namespace MiaoxingDoc\Plugin {
      *
      * @property    \Miaoxing\Plugin\Service\ServiceTrait $serviceTrait
      *
-     * @property    \Miaoxing\Plugin\Service\Setting $setting 设置
-     * @method      string|\Miaoxing\Plugin\Service\Setting|\Miaoxing\Plugin\Service\Setting[] setting($id = null, $default = null)
-     *
      * @property    \Miaoxing\Plugin\Service\Str $str 字符串操作服务
      *
      * @property    \Miaoxing\Plugin\Service\Tester $tester 测试
@@ -149,9 +146,6 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\ServiceTrait $serviceTrait */
     $serviceTrait = wei()->serviceTrait;
-
-    /** @var Miaoxing\Plugin\Service\Setting $setting */
-    $setting = wei()->setting;
 
     /** @var Miaoxing\Plugin\Service\Str $str */
     $str = wei()->str;
