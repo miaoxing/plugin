@@ -67,9 +67,6 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\Url $url
      * @method      string url($url = '', $argsOrParams = [], $params = []) Generate the URL by specified URL and parameters
      *
-     * @property    \Miaoxing\Plugin\Service\UrlMapper $urlMapper URL映射
-     * @method      mixed urlMapper()
-     *
      * @property    \Miaoxing\Plugin\Service\User $user 用户
      * @method      \Miaoxing\Plugin\Service\User|\Miaoxing\Plugin\Service\User[] user()
      *
@@ -167,9 +164,6 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\Url $url */
     $url = wei()->url;
-
-    /** @var Miaoxing\Plugin\Service\UrlMapper $urlMapper */
-    $urlMapper = wei()->urlMapper;
 
     /** @var Miaoxing\Plugin\Service\User $user */
     $user = wei()->user;
