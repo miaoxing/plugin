@@ -1,34 +1,37 @@
 <?php
 
-namespace Miaoxing\Plugin\Controller\Admin;
+namespace Miaoxing\Plugin\Controller\AdminApi;
 
-class Plugin extends \Miaoxing\Plugin\BaseController
+use Miaoxing\Plugin\BaseController;
+
+class Plugins extends BaseController
 {
-    protected $guestPages = ['admin/plugin/refreshCache'];
+    protected $controllerName = '插件';
+
+    protected $actionPermissions = [
+        'index' => '列表',
+        'update' => '安装/卸载'
+    ];
+
+    protected $guestPages = ['adminApi/plugin/refreshCache'];
 
     public function indexAction($req)
     {
-        switch ($req['_format']) {
-            case 'json':
-                $repo = wei()->plugin;
-                $plugins = $repo->getAll();
+        $repo = wei()->plugin;
+        $plugins = $repo->getAll();
 
-                $data = [];
-                foreach ($plugins as $plugin) {
-                    $data[] = $plugin->toArray() + [
-                            'installed' => (string) $repo->isInstalled($plugin->getId()),
-                        ];
-                }
-
-                return $this->suc([
-                    'message' => '读取列表成功',
-                    'data' => $data,
-                    'records' => count($data),
-                ]);
-
-            default:
-                return [];
+        $data = [];
+        foreach ($plugins as $plugin) {
+            $data[] = $plugin->toArray() + [
+                    'installed' => (string) $repo->isInstalled($plugin->getId()),
+                ];
         }
+
+        return $this->suc([
+            'message' => '读取列表成功',
+            'data' => $data,
+            'records' => count($data),
+        ]);
     }
 
     public function updateAction($req)
