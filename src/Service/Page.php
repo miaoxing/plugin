@@ -223,48 +223,11 @@ class Page extends BaseService
         return $html;
     }
 
-    /**
-     * 增加插件的资源
-     *
-     * @param string|null $action
-     * @param string|null $plugin
-     * @param bool $hasCss
-     * @return $this
-     * @deprecated
-     */
-    public function addPluginAsset($action = null, $plugin = null, $hasCss = true)
-    {
-        // 1. 设置路由
-        $this->initRoute($action);
-
-        // 2. 加载插件的版本映射表
-        // 目前正常只会加载一次，不用缓存
-        $plugin || $plugin = $this->app->getPlugin();
-        $this->asset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
-
-        // 3. 加载css和js文件
-        $hasCss && $this->addCss($this->asset($plugin . '.css'));
-        $this->addJs($this->asset($plugin . '.js'));
-
-        return $this;
-    }
-
     public function addPluginAssets($plugin = 'app')
     {
         $this->asset->addRevFile('public/dist/' . $plugin . '-assets-hash.json');
         return $this->prependCss($this->asset($plugin . '.css'))
             ->prependJs($this->asset($plugin . '-manifest.js'))
             ->prependJs($this->asset($plugin . '.js'));
-    }
-
-    protected function initRoute($action)
-    {
-        $route = $this->app->getController() . '/' . ($action ?: $this->app->getAction());
-        $route = $this->str->dash($route);
-
-        // 配合admin.js加载对应的容器
-        $js = $this->view->get('js');
-        $js['route'] = $route;
-        $this->view->assign('js', $js);
     }
 }
