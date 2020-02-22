@@ -2,12 +2,13 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Services\Middleware\BaseMiddleware;
 use Wei\RetTrait;
 
 /**
  * 对请求用户或IP加锁,控制页面只能由一个请求访问
  */
-class Lock extends Base
+class Lock extends BaseMiddleware
 {
     use RetTrait;
 

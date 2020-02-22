@@ -2,9 +2,10 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Services\Middleware\BaseMiddleware;
 use Wei\RetTrait;
 
-class BasicAuth extends Base
+class BasicAuth extends BaseMiddleware
 {
     use RetTrait;
 

@@ -2,13 +2,15 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Services\Middleware\BaseMiddleware;
+
 /**
  * @property \Wei\Ret $ret
  * @property \Wei\Url $url
  * @method string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Miaoxing\App\Service\Logger $logger
  */
-class Auth extends Base
+class Auth extends BaseMiddleware
 {
     protected $guestPages = [];
 

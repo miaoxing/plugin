@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Middleware;
 /**
  * 如果请求地址包含其他应用的ID,加载该应用的配置
  */
-class LoadAppConfig extends \Miaoxing\Plugin\Middleware\Base
+class LoadAppConfig extends \Miaoxing\Services\Middleware\BaseMiddleware
 {
     /**
      * {@inheritdoc}

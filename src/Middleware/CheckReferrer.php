@@ -2,10 +2,12 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Services\Middleware\BaseMiddleware;
+
 /**
  * 检查来源是否为当前域名或在白名单中
  */
-class CheckReferrer extends Base
+class CheckReferrer extends BaseMiddleware
 {
     /**
      * 白名单域名

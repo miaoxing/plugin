@@ -2,10 +2,12 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Services\Middleware\BaseMiddleware;
+
 /**
  * 限制用户在一段请求时间内(如每分钟,每小时,每天)最多的请求次数
  */
-class RateLimit extends Base
+class RateLimit extends BaseMiddleware
 {
     /**
      * 每分钟作为一个时间窗口

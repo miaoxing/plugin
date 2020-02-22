@@ -2,7 +2,9 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
-class CheckRedirectUrl extends Base
+use Miaoxing\Services\Middleware\BaseMiddleware;
+
+class CheckRedirectUrl extends BaseMiddleware
 {
     /**
      * 白名单域名
