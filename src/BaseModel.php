@@ -39,13 +39,6 @@ class BaseModel extends Record implements JsonSerializable
     protected $autoId = false;
 
     /**
-     * 是否启用垃圾箱,启用后,删除的记录将会被转移到trash表
-     *
-     * @var bool
-     */
-    protected $enableTrash = false;
-
-    /**
      * {@inheritdoc}
      */
     protected $defaultCacheTime = 1800;
@@ -232,18 +225,6 @@ class BaseModel extends Record implements JsonSerializable
 
         if (in_array($this->updatedByColumn, $fields)) {
             $this[$this->updatedByColumn] = (int) wei()->curUser['id'];
-        }
-    }
-
-    public function beforeDestroy()
-    {
-        if ($this->enableTrash) {
-            $this->db->insert('trash', [
-                'tableName' => $this->fullTable,
-                'data' => json_encode($this->data),
-                'deleteTime' => date('Y-m-d H:i:s'),
-                'deleteUser' => (int) wei()->curUser['id'],
-            ]);
         }
     }
 
