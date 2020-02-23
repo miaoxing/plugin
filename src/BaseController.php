@@ -23,8 +23,6 @@ use Wei\RetTrait;
  * @property \Miaoxing\Order\Service\Url $url URL生成服务
  * @method   string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Wei\Ret $ret 返回值服务
- * @property \Miaoxing\App\Service\Setting $setting
- * @method   string setting($name, $default = null) 读取配置
  * @property \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
  * @property Asset wpAsset
  * @property Page $page

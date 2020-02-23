@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\App\Service\Setting;
+use Miaoxing\Config\ConfigTrait;
 use Miaoxing\Plugin\BaseModel;
 
 /**
@@ -12,9 +13,24 @@ use Miaoxing\Plugin\BaseModel;
  * @property \Wei\Request $request
  * @property \Wei\Password $password
  * @property \Wei\Event $event
+ * @property bool enableRegister
+ * @property string disableRegisterTips
+ * @property bool enableLoginCaptcha
+ * @property int defaultGroupId
+ * @property bool enablePasswordRest
+ * @property bool enableMobileVerify
+ * @property bool enableLogin
+ * @property string disableLoginTips
+ * @property string bgImage
+ * @property int defaultTagId
+ * @property int agreementArticleId
+ * @property bool enableExport
+ * @property bool enableCreate
  */
 class User extends BaseModel
 {
+    use ConfigTrait;
+
     /**
      * 省市是否锁定(第三方平台不可更改)
      */
@@ -62,6 +78,30 @@ class User extends BaseModel
     protected $checkMobileUnique = false;
 
     protected $defaultHeadImg = '/images/head.jpg';
+
+    protected $enableRegister = true;
+
+    protected $disableRegisterTips = '注册功能未启用';
+
+    protected $enableLoginCaptcha = false;
+
+    protected $defaultGroupId = 0;
+
+    protected $enablePasswordRest = false;
+
+    protected $enableMobileVerify = false;
+
+    protected $disableLoginTips = '登录功能未启用';
+
+    protected $bgImage = '';
+
+    protected $defaultTagId;
+
+    protected $agreementArticleId;
+
+    protected $enableExport = false;
+
+    protected $enableCreate = false;
 
     /**
      * QueryBuilder:

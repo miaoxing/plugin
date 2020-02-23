@@ -2,15 +2,19 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Config\ConfigTrait;
 use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Miaoxing\User\Service\GroupModel;
 
 /**
  * 用户分组
+ *
+ * @property string defaultName
  */
 class Group extends \Miaoxing\Plugin\BaseModel
 {
     use ReqQueryTrait;
+    use ConfigTrait;
 
     protected $table = 'groups';
 
@@ -21,6 +25,8 @@ class Group extends \Miaoxing\Plugin\BaseModel
     protected $customerServiceGroups;
 
     protected $groupCaches = [];
+
+    protected $defaultName = '未分组';
 
     /**
      * 是否是客服小组
