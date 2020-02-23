@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Services\ConstTrait;
+
 /**
  * 应用模型
  *
@@ -9,7 +11,7 @@ namespace Miaoxing\Plugin\Service;
  */
 class AppRecord extends \Miaoxing\Plugin\BaseModel
 {
-    use \Miaoxing\Services\ConstTrait;
+    use ConstTrait;
 
     const STATUS_ALL = 0;
 
@@ -20,16 +22,10 @@ class AppRecord extends \Miaoxing\Plugin\BaseModel
     /**
      * @var array
      */
-    protected $statusTable = [
-        self::STATUS_ALL => [
-            'text' => '全部',
-        ],
-        self::STATUS_ONLINE => [
-            'text' => '正常',
-        ],
-        self::STATUS_OFFLINE => [
-            'text' => '下线',
-        ],
+    protected $statusNames = [
+        self::STATUS_ALL => '全部',
+        self::STATUS_ONLINE => '正常',
+        self::STATUS_OFFLINE => '下线',
     ];
 
     protected $table = 'apps';
