@@ -114,20 +114,6 @@ abstract class BaseController extends \Wei\BaseController
     }
 
     /**
-     * 返回指定格式的JSON响应
-     *
-     * @param string $message
-     * @param int $code
-     * @param array $append
-     * @return \Wei\Response
-     * @deprecated 成功使用suc,失败使用err
-     */
-    protected function json($message = '操作成功', $code = 1, array $append = [])
-    {
-        return $this->response->json(['message' => $message, 'code' => $code] + $append);
-    }
-
-    /**
      * 获取当前控制器的名称
      *
      * @return string
