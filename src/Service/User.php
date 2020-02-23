@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\App\Service\Setting;
 use Miaoxing\Config\ConfigTrait;
 use Miaoxing\Plugin\BaseModel;
 
