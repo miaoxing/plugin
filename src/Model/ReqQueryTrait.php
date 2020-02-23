@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\BaseModelV2;
-use Miaoxing\Plugin\Service\Request;
+use Miaoxing\Services\Service\Request;
 
 /**
  * @property Request $request

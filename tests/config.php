@@ -11,7 +11,7 @@ return [
         ],
         'aliases' => [
             'plugin' => \Miaoxing\Plugin\Service\Plugin::class,
-            'request' => \Miaoxing\Plugin\Service\Request::class,
+            'request' => \Miaoxing\Services\Service\Request::class,
         ],
         'providers' => [
             'cache' => 'memcache',

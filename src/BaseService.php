@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin {
 
     use Miaoxing\Region\Service\BaiduApi;
-    use Miaoxing\App\Service\Coll;
+    use Miaoxing\Services\Service\Coll;
     use Miaoxing\Excel\Service\Excel;
     use Miaoxing\Region\Service\Lbs;
     use Miaoxing\Plugin\Service\Migration;
@@ -24,7 +24,7 @@ namespace Miaoxing\Plugin {
      * @property    \Miaoxing\Queue\Service\SyncQueue $syncQueue 同步的队列服务
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
      * @property    \Miaoxing\Queue\Service\QueueWorker $queueWorker 队列后台服务
-     * @property    \Miaoxing\App\Service\Random $random 随机数服务
+     * @property    \Miaoxing\Services\Service\Random $random 随机数服务
      * @property    Coll $coll 组合服务
      * @property    Migration $migration 迁移服务
      */

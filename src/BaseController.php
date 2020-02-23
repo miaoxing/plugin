@@ -3,8 +3,8 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Middleware\Auth;
-use Miaoxing\Plugin\Service\Asset;
-use Miaoxing\Plugin\Service\Page;
+use Miaoxing\Services\Service\Asset;
+use Miaoxing\Services\Service\Page;
 use Wei\RetTrait;
 
 /**

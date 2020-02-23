@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Plugin\Service\Str;
+use Miaoxing\Services\Service\Str;
 
 /**
  * @property \Wei\Env $env
