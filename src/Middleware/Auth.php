@@ -8,7 +8,7 @@ use Miaoxing\Services\Middleware\BaseMiddleware;
  * @property \Wei\Ret $ret
  * @property \Wei\Url $url
  * @method string url($url = '', $argsOrParams = array(), $params = array())
- * @property \Miaoxing\App\Service\Logger $logger
+ * @property \Miaoxing\Services\Service\Logger $logger
  */
 class Auth extends BaseMiddleware
 {

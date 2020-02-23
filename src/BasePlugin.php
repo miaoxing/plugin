@@ -8,7 +8,7 @@ use Miaoxing\Services\Service\Str;
  * @property \Wei\Env $env
  * @property \Wei\View $view
  * @property \Wei\Event $event
- * @property \Miaoxing\App\Service\Logger $logger
+ * @property \Miaoxing\Services\Service\Logger $logger
  * @property \Wei\Request $request
  * @property Str $str
  */
