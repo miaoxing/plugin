@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Controller\Cli;
 
 use Miaoxing\Plugin\BaseController;
-use Miaoxing\Plugin\CliDefinitionTrait;
+use Miaoxing\Services\CliDefinitionTrait;
 use Miaoxing\Plugin\Service\Migration;
 
 /**

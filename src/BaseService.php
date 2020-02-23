@@ -10,7 +10,7 @@ namespace Miaoxing\Plugin {
     use Miaoxing\Queue\Service\RedisQueue;
 
     /**
-     * @property    \Miaoxing\Plugin\Service\Db $appDb
+     * @property    \Miaoxing\Services\Service\Db $appDb
      * @property    \Wei\Event $event
      * @method      \Miaoxing\Plugin\BaseModel appDb($table = null)
      * @method      \Miaoxing\Plugin\BaseModel db($table = null)

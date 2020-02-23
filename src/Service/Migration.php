@@ -3,6 +3,8 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Services\Service\Cli;
+use Miaoxing\Services\Service\Db;
 use ReflectionClass;
 use Wei\RetTrait;
 use Wei\Schema;

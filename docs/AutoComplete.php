@@ -12,16 +12,16 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Services\Service\Asset $asset
      * @method      mixed asset($file, $version = true)
      *
-     * @property    \Miaoxing\Plugin\Service\Cli $cli CLI
+     * @property    \Miaoxing\Services\Service\Cli $cli CLI
      *
-     * @property    \Miaoxing\Plugin\Service\CliApp $cliApp CLI应用
+     * @property    \Miaoxing\Services\Service\CliApp $cliApp CLI应用
      *
-     * @property    \Miaoxing\Plugin\Service\Convention $convention
+     * @property    \Miaoxing\Services\Service\Convention $convention
      *
      * @property    \Miaoxing\Plugin\Service\CurUser $curUser 当前用户
      * @method      \Miaoxing\Plugin\Service\CurUser|\Miaoxing\Plugin\Service\CurUser[] curUser()
      *
-     * @property    \Miaoxing\Plugin\Service\Db $db
+     * @property    \Miaoxing\Services\Service\Db $db
      * @method      Record db($table = null) Create a new instance of a SQL query builder with specified table name
      *
      * @property    \Miaoxing\Plugin\Service\Group $group 用户分组
@@ -70,7 +70,7 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Services\Service\V $v A chaining validator
      * @method      \Miaoxing\Services\Service\V v($options = []) Create a new validator
      *
-     * @property    \Miaoxing\Plugin\Service\View $view
+     * @property    \Miaoxing\Services\Service\View $view
      * @method      string view($name = null, $data = []) Render a PHP template
      */
     class AutoComplete
@@ -96,19 +96,19 @@ namespace {
     /** @var \Miaoxing\Services\Service\Asset $asset */
     $asset = wei()->asset;
 
-    /** @var Miaoxing\Plugin\Service\Cli $cli */
+    /** @var \Miaoxing\Services\Service\Cli $cli */
     $cli = wei()->cli;
 
-    /** @var Miaoxing\Plugin\Service\CliApp $cliApp */
+    /** @var \Miaoxing\Services\Service\CliApp $cliApp */
     $cliApp = wei()->cliApp;
 
-    /** @var Miaoxing\Plugin\Service\Convention $convention */
+    /** @var \Miaoxing\Services\Service\Convention $convention */
     $convention = wei()->convention;
 
     /** @var Miaoxing\Plugin\Service\CurUser $curUser */
     $curUser = wei()->curUser;
 
-    /** @var Miaoxing\Plugin\Service\Db $db */
+    /** @var \Miaoxing\Services\Service\Db $db */
     $db = wei()->db;
 
     /** @var Miaoxing\Plugin\Service\Group $group */
@@ -165,6 +165,6 @@ namespace {
     /** @var \Miaoxing\Services\Service\V $v */
     $v = wei()->v;
 
-    /** @var Miaoxing\Plugin\Service\View $view */
+    /** @var \Miaoxing\Services\Service\View $view */
     $view = wei()->view;
 }

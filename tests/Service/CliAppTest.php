@@ -3,7 +3,7 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
-use Miaoxing\Plugin\Service\CliApp;
+use Miaoxing\Services\Service\CliApp;
 
 /**
  * 命令行服务
