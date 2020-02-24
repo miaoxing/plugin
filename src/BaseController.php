@@ -23,13 +23,6 @@ abstract class BaseController extends \Wei\BaseController
     use RetTrait;
 
     /**
-     * 后台当前头部导航的编号
-     *
-     * @var string
-     */
-    protected $adminNavId;
-
-    /**
      * 当前控制器名称
      *
      * @var string
