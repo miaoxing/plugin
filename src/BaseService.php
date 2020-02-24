@@ -20,7 +20,7 @@ namespace Miaoxing\Plugin {
      * @property    \Miaoxing\Plugin\Service\\Miaoxing\Stat\Service\Chart $chart 构造图表数据的辅助服务
      * @property    Lbs $lbs 基于位置的服务
      * @property    BaiduApi $baiduApi 百度Web服务API
-     * @property    \Miaoxing\Plugin\Service\Queue $queue 队列服务
+     * @property    \Miaoxing\Queue\Service\Queue $queue 队列服务
      * @property    \Miaoxing\Queue\Service\SyncQueue $syncQueue 同步的队列服务
      * @property    RedisQueue $redisQueue 基于Redis的队列服务
      * @property    \Miaoxing\Queue\Service\QueueWorker $queueWorker 队列后台服务
