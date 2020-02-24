@@ -3,28 +3,19 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Middleware\Auth;
-use Miaoxing\Services\Service\Asset;
 use Miaoxing\Services\Service\Page;
 use Wei\RetTrait;
 
 /**
  * @property \Miaoxing\Plugin\Service\App $app
- * @property \Wei\Request $request
- * @method   string request($name, $default = '')
- * @property \Wei\Response $response
  * @property \Wei\Session $session
  * @property \Wei\View $view
  * @property \Wei\Logger $logger
  * @property \Wei\Event $event
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
- * @property \Miaoxing\Plugin\Service\User $user 用户
  * @property \Miaoxing\Plugin\Service\CurUser $curUser 用户
  * @property \Miaoxing\User\Service\CurUserV2 $curUserV2 用户
- * @property \Miaoxing\Order\Service\Url $url URL生成服务
- * @method   string url($url = '', $argsOrParams = array(), $params = array())
  * @property \Wei\Ret $ret 返回值服务
- * @property \Miaoxing\Queue\Service\BaseQueue $queue 队列服务
- * @property Asset wpAsset
  * @property Page $page
  */
 abstract class BaseController extends \Wei\BaseController
