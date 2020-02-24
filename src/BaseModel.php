@@ -32,13 +32,6 @@ class BaseModel extends Record implements JsonSerializable
     ];
 
     /**
-     * 插入时是否自动生成递增的数字编号
-     *
-     * @var bool
-     */
-    protected $autoId = false;
-
-    /**
      * {@inheritdoc}
      */
     protected $defaultCacheTime = 1800;
@@ -200,10 +193,6 @@ class BaseModel extends Record implements JsonSerializable
 
     public function beforeCreate()
     {
-        if ($this->autoId && !$this['id']) {
-            $this['id'] = wei()->seq();
-        }
-
         $fields = $this->getFields();
 
         if (in_array($this->createdAtColumn, $fields) && !$this[$this->createdAtColumn]) {
