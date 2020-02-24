@@ -106,11 +106,6 @@ abstract class BaseController extends \Wei\BaseController
                 'pluginIds' => $this->app->getRecord()['pluginIds'],
                 'pageMap' => $this->app->pageMap,
             ];
-
-        // 为后台设置默认布局
-        if ($this->app->isAdmin() && $this->plugin->has('admin')) {
-            $this->view->setDefaultLayout('@admin/layouts/default.php');
-        }
     }
 
     /**
