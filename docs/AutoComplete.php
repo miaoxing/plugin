@@ -24,7 +24,7 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\Tester $tester 测试
      * @method      \Miaoxing\Plugin\Service\Tester tester($controller = null, $action = null)
      *
-     * @property    \Miaoxing\Plugin\Service\Url $url
+     * @property    \Miaoxing\Services\Service\Url $url
      * @method      string url($url = '', $argsOrParams = [], $params = []) Generate the URL by specified URL and parameters
      *
      * @property    \Miaoxing\Plugin\Service\User $user 用户
@@ -68,7 +68,7 @@ namespace {
     /** @var Miaoxing\Plugin\Service\Tester $tester */
     $tester = wei()->tester;
 
-    /** @var Miaoxing\Plugin\Service\Url $url */
+    /** @var \Miaoxing\Services\Service\Url $url */
     $url = wei()->url;
 
     /** @var Miaoxing\Plugin\Service\User $user */
