@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Controller\Cli;
 
 use Miaoxing\Plugin\BaseController;
 use Miaoxing\Services\CliDefinitionTrait;
-use Miaoxing\Plugin\Service\Migration;
+use Miaoxing\Services\Service\Migration;
 
 /**
  * @property Migration $migration

@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Migration;
 
-use Miaoxing\Plugin\BaseMigration;
+use Miaoxing\Services\Migration\BaseMigration;
 
 class V20170406112858UpdateGroupsTable extends BaseMigration
 {

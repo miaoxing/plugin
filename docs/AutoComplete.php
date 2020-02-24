@@ -17,7 +17,7 @@ namespace MiaoxingDoc\Plugin {
      *
      * @property    \Miaoxing\Plugin\Service\Laravel $laravel
      *
-     * @property    \Miaoxing\Plugin\Service\Migration $migration 数据库迁移
+     * @property    \Miaoxing\Services\Service\Migration $migration 数据库迁移
      *
      * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
      *
@@ -59,7 +59,7 @@ namespace {
     /** @var Miaoxing\Plugin\Service\Laravel $laravel */
     $laravel = wei()->laravel;
 
-    /** @var Miaoxing\Plugin\Service\Migration $migration */
+    /** @var \Miaoxing\Services\Service\Migration $migration */
     $migration = wei()->migration;
 
     /** @var Miaoxing\Plugin\Service\Plugin $plugin */
