@@ -26,10 +26,11 @@ before_install:
 
 install:
   - composer install --no-interaction
-  - bash build/install-travis.sh
+  - bash plugins/build/bin/install-travis.sh
 
 script:
-  - bash build/build-travis.sh --coverage 1 1
+  - php bin/install.php
+  - bash plugins/build/bin/build-travis.sh --coverage 1 1
 
 after_success:
   - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar

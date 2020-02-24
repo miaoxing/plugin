@@ -12,6 +12,7 @@
     "doctrine/inflector": "^v1.1.0"
   },
   "require-dev": {
+    "miaoxing/build": "dev-master@dev",
     "miaoxing/coding-standards": "0.9.6"
   },
   "autoload": {
