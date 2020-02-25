@@ -41,11 +41,6 @@ abstract class BaseController extends \Wei\BaseController
      */
     public function init()
     {
-        $this->event->trigger('preControllerInit', [$this]);
-
-        $this->middleware(Auth::class);
-
-        // 触发控制器初始化事件
         $this->event->trigger('controllerInit', [$this]);
     }
 
