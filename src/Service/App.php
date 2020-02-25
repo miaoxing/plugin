@@ -61,15 +61,6 @@ class App extends \Wei\App
     protected $domains = [];
 
     /**
-     * 应用的地址
-     *
-     * 如果是默认域名,则为应用名称,如果是自定义域名,则为空
-     *
-     * @var string
-     */
-    protected $appUrl = '';
-
-    /**
      * 默认的应用首页,以便首页不是404
      *
      * @var string
@@ -94,15 +85,6 @@ class App extends \Wei\App
      * @var string
      */
     protected $fallbackAction = 'index';
-
-    /**
-     * @var array
-     */
-    protected $configs = [
-        'pageMap' => [
-            'default' => [],
-        ],
-    ];
 
     /**
      * {@inheritdoc}
@@ -312,16 +294,6 @@ class App extends \Wei\App
         }
 
         return $this->dbNames[$id];
-    }
-
-    /**
-     * @return array
-     */
-    public function getConfig()
-    {
-        return [
-            'appUrl' => $this->appUrl,
-        ];
     }
 
     /**

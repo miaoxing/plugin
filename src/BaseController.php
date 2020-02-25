@@ -52,11 +52,6 @@ abstract class BaseController extends \Wei\BaseController
     protected $adminGuestPages = [];
 
     /**
-     * @var array
-     */
-    protected $js = [];
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(array $options = [])
@@ -65,8 +60,6 @@ abstract class BaseController extends \Wei\BaseController
 
         $this->event->trigger('preControllerInit', [$this]);
 
-        $this->initViewVars();
-
         $this->middleware(Auth::class, [
             'guestPages' => $this->guestPages,
             'adminGuestPages' => $this->adminGuestPages,
@@ -74,22 +67,6 @@ abstract class BaseController extends \Wei\BaseController
 
         // 触发控制器初始化事件
         $this->event->trigger('controllerInit', [$this]);
-    }
-
-    /**
-     * 初始化常用的视图变量
-     */
-    protected function initViewVars()
-    {
-        $this->view->assign([
-            'js' => &$this->js,
-        ]);
-
-        $this->js += $this->app->getConfig() + [
-                'theme' => $this->page->theme,
-                'pluginIds' => $this->app->getRecord()['pluginIds'],
-                'pageMap' => $this->app->pageMap,
-            ];
     }
 
     /**
