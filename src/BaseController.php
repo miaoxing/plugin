@@ -37,12 +37,10 @@ abstract class BaseController extends \Wei\BaseController
     protected $actionPermissions = [];
 
     /**
-     * {@inheritdoc}
+     * 初始化控制器，可用于注册 middleware
      */
-    public function __construct(array $options = [])
+    public function init()
     {
-        parent::__construct($options);
-
         $this->event->trigger('preControllerInit', [$this]);
 
         $this->middleware(Auth::class);

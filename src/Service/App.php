@@ -154,6 +154,8 @@ class App extends \Wei\App
         $middleware = $this->getMiddleware($instance, $action);
 
         $callback = function () use ($instance, $action, $app) {
+            $instance->init();
+
             $instance->before($app->request, $app->response);
 
             $method = $app->getActionMethod($action);
