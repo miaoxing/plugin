@@ -13,7 +13,9 @@ class Plugins extends BaseController
         'update' => '安装/卸载'
     ];
 
-    protected $guestPages = ['adminApi/plugin/refreshCache'];
+    protected $actionAuths = [
+        'refreshCache' => false,
+    ];
 
     public function indexAction($req)
     {

@@ -72,35 +72,52 @@ class User extends BaseModel
      */
     protected $isCreated = false;
 
-    protected $enablePinCode = false;
-
-    protected $checkMobileUnique = false;
-
-    protected $defaultHeadImg = '/images/head.jpg';
-
-    protected $enableRegister = true;
-
-    protected $disableRegisterTips = '注册功能未启用';
-
-    protected $enableLoginCaptcha = false;
-
-    protected $defaultGroupId = 0;
-
-    protected $enablePasswordRest = false;
-
-    protected $enableMobileVerify = false;
-
-    protected $disableLoginTips = '登录功能未启用';
-
-    protected $bgImage = '';
-
-    protected $defaultTagId;
-
-    protected $agreementArticleId;
-
-    protected $enableExport = false;
-
-    protected $enableCreate = false;
+    protected $configs = [
+        'enablePinCode' => [
+            'default' => false,
+        ],
+        'checkMobileUnique' => [
+            'default' => false,
+        ],
+        'defaultHeadImg' => [
+            'default' => '/images/head.jpg',
+        ],
+        'enableLogin' => [
+            'default' => true,
+        ],
+        'enableRegister' => [
+            'default' => true,
+        ],
+        'disableRegisterTips' => [
+            'default' => '注册功能未启用',
+        ],
+        'enableLoginCaptcha' => [
+            'default' => false,
+        ],
+        'defaultGroupId' => [
+            'default' => 0,
+        ],
+        'enablePasswordRest' => [
+            'default' => false,
+        ],
+        'enableMobileVerify' => [
+            'default' => false,
+        ],
+        'disableLoginTips' => [
+            'default' => '登录功能未启用',
+        ],
+        'bgImage' => [
+            'default' => '',
+        ],
+        'defaultTagId' => [],
+        'agreementArticleId' => [],
+        'enableExport' => [
+            'default' => false,
+        ],
+        'enableCreate' => [
+            'default' => false,
+        ],
+    ];
 
     /**
      * QueryBuilder:

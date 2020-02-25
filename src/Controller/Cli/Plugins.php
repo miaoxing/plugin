@@ -9,6 +9,8 @@ use Miaoxing\Plugin\BaseController;
  */
 class Plugins extends BaseController
 {
+    protected $controllerAuth = false;
+
     public function refreshAction()
     {
         $this->plugin->getConfig(true);

@@ -145,6 +145,42 @@ class App extends \Wei\App
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function execute($instance, $action)
+    {
+        $app = $this;
+        $wei = $this->wei;
+        $middleware = $this->getMiddleware($instance, $action);
+
+        $callback = function () use ($instance, $action, $app) {
+            $instance->before($app->request, $app->response);
+
+            $method = $app->getActionMethod($action);
+            $response = $instance->$method($app->request, $app->response);
+
+            $instance->after($app->request, $response);
+
+            return $response;
+        };
+
+        $next = function () use (&$middleware, &$next, $callback, $wei, $instance) {
+            $config = array_splice($middleware, 0, 1);
+            if ($config) {
+                $class = key($config);
+                $service = new $class(array('wei' => $wei) + $config[$class]);
+                $result = $service($next, $instance);
+            } else {
+                $result = $callback();
+            }
+
+            return $result;
+        };
+
+        return $this->handleResponse($next())->send();
+    }
+
+    /**
      * @return string|false
      */
     protected function getNamespaceFromDomain()

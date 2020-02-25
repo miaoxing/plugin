@@ -17,13 +17,15 @@ use Wei\RetTrait;
  * @property \Miaoxing\User\Service\CurUserV2 $curUserV2 用户
  * @property \Wei\Ret $ret 返回值服务
  * @property Page $page
+ * @property bool controllerAuth
+ * @property array actionAuths
  */
 abstract class BaseController extends \Wei\BaseController
 {
     use RetTrait;
 
     /**
-     * 当前控制器名称
+     * 控制器名称
      *
      * @var string
      */
@@ -35,23 +37,6 @@ abstract class BaseController extends \Wei\BaseController
     protected $actionPermissions = [];
 
     /**
-     * 未登录用户可以访问的页面前缀
-     *
-     * @var array
-     */
-    protected $guestPages = [
-        'cli',
-        // 非多级控制器在子类中配置
-    ];
-
-    /**
-     * 后台不受权限管理控制的页面
-     *
-     * @var array
-     */
-    protected $adminGuestPages = [];
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(array $options = [])
@@ -60,10 +45,7 @@ abstract class BaseController extends \Wei\BaseController
 
         $this->event->trigger('preControllerInit', [$this]);
 
-        $this->middleware(Auth::class, [
-            'guestPages' => $this->guestPages,
-            'adminGuestPages' => $this->adminGuestPages,
-        ]);
+        $this->middleware(Auth::class);
 
         // 触发控制器初始化事件
         $this->event->trigger('controllerInit', [$this]);

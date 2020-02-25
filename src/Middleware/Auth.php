@@ -2,100 +2,54 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Plugin\BaseController;
 use Miaoxing\Services\Middleware\BaseMiddleware;
 
 /**
- * @property \Wei\Ret $ret
  * @property \Wei\Url $url
  * @method string url($url = '', $argsOrParams = array(), $params = array())
- * @property \Miaoxing\Services\Service\Logger $logger
  */
 class Auth extends BaseMiddleware
 {
-    protected $guestPages = [];
-
-    protected $adminGuestPages = [];
-
     /**
      * {@inheritdoc}
      */
-    public function __invoke($next)
+    public function __invoke($next, BaseController $controller = null)
     {
-        // 1. 游客页面一律不用登录
-        $page = $this->app->getControllerAction();
-        if ($this->isBelongPages($page, $this->guestPages)) {
+        // 检查控制器是否需要登录
+        if ($controller->getOption('controllerAuth') === false) {
             return $next();
         }
 
-        // 2. 触发用户初始化事件,允许插件初始化用户
-        $res = wei()->event->until('userInit');
-        /** @var \Wei\Response $res */
-        if ($res) {
-            $this->logger->info('Got response after user init, response header is', $res->getHeaderString());
-
-            return $res;
+        // 检查操作是否需要登录
+        $action = $this->app->getAction();
+        $auths = $controller->getOption('actionAuths');
+        if (isset($auths[$action]) && $auths[$action] === false) {
+            return $next();
         }
 
-        // 3. 如果是后台页面,验证登录态和用户权限
-        $isLogin = wei()->curUser->isLogin();
-
-        if ($this->isAdminPage()) {
-            // 如果未登录或不是管理员,跳转到登录页面
-            if (!$isLogin || !wei()->curUser->isAdmin()) {
-                return $this->redirectLogin($this->getAdminLoginUrl());
-            }
-
-            if (!$this->isBelongPages($page, $this->adminGuestPages)) {
-                // 触发后台权限检查事件
-                $res = wei()->event->until('adminAuth', [$page, wei()->curUser]);
-                if ($res) {
-                    return $res;
-                }
-            }
+        if (wei()->curUser->isLogin()) {
+            return $next();
         }
 
-        // 3. 跳转到登录页面
-        if (!$isLogin) {
-            return $this->redirectLogin($this->url('users/login'));
-        }
-
-        return $next();
-    }
-
-    /**
-     * 通过控制器中是否包含admin,判断是否为后台控制器
-     *
-     * @return bool
-     */
-    protected function isAdminPage()
-    {
-        return strpos($this->app->getController(), 'admin') !== false;
-    }
-
-    /**
-     * 获取登录地址
-     *
-     * @param string $message 附带的提示信息
-     * @return string
-     */
-    public function getAdminLoginUrl($message = '')
-    {
-        return $this->url('admin/login', ['message' => $message]);
+        // 跳转到相应的登录页面
+        $url = wei()->event->until('loginUrl') ?: $this->url('users/login');
+        return $this->redirectLogin($url);
     }
 
     /**
      * 跳转到登录地址,或者返回包含登录信息的JSON
      *
      * @param string $url
-     * @return \Wei\Response
+     * @return array|\Wei\Response
      */
     protected function redirectLogin($url)
     {
         if ($this->request->acceptJson()) {
             $url = $this->url->append($url, ['next' => $this->request->getReferer()]);
 
-            return $this->response->json([
-                'code' => -401,
+            return $this->err([
+                'code' => 401,
                 'message' => '您好,请登录',
                 'redirect' => $url,
             ]);
@@ -104,23 +58,5 @@ class Auth extends BaseMiddleware
 
             return $this->response->redirect($url);
         }
-    }
-
-    /**
-     * 检查指定页面是否在某组页面中
-     *
-     * @param string $page
-     * @param array $allowPages
-     * @return bool
-     */
-    protected function isBelongPages($page, array $allowPages)
-    {
-        foreach ($allowPages as $guestPage) {
-            if (strpos($page, $guestPage) === 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
