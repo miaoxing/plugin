@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Plugin\Middleware\Auth;
 use Miaoxing\Services\Service\Page;
 use Wei\RetTrait;
 
