@@ -35,6 +35,13 @@ class Plugin extends BaseService
     ];
 
     /**
+     * Whether enable plugin class autoload or not
+     *
+     * @var bool
+     */
+    protected $autoload = true;
+
+    /**
      * A List of build-in plugins
      *
      * @var array
@@ -89,6 +96,11 @@ class Plugin extends BaseService
      */
     public function __construct(array $options)
     {
+        // Trigger setAutoload
+        if (!isset($options['autoload'])) {
+            $options['autoload'] = $this->autoload;
+        }
+
         parent::__construct($options);
 
         $config = $this->getConfig();
@@ -107,6 +119,22 @@ class Plugin extends BaseService
                     'parseResource' => [$this, 'parseViewResource'],
                 ],
             ]);
+    }
+
+    /**
+     * Whether enable autoload or not
+     *
+     * @param bool $autoload
+     * @return $this
+     */
+    public function setAutoload($autoload)
+    {
+        $this->autoload = (bool) $autoload;
+        call_user_func(
+            $autoload ? 'spl_autoload_register' : 'spl_autoload_unregister',
+            array($this, 'autoload')
+        );
+        return $this;
     }
 
     /**
@@ -732,6 +760,29 @@ class Plugin extends BaseService
     protected function dash($name)
     {
         return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '-$1', $name));
+    }
+
+    /**
+     * @param string $class
+     * @return bool
+     */
+    protected function autoload($class)
+    {
+        if (strpos($class, 'Miaoxing\\') !== 0) {
+            return false;
+        }
+
+        // Ignore prefix namespace
+        [, $name, $path] = explode('\\', $class, 3);
+
+        $ds = DIRECTORY_SEPARATOR;
+        $file = implode($ds, ['plugins', $this->dash($name), 'src', strtr($path, ['\\' => $ds])]) . '.php';
+        if (file_exists($file)) {
+            require_once $file;
+            return true;
+        }
+
+        return false;
     }
 
     /**
