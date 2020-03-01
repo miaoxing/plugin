@@ -9,7 +9,7 @@ use Miaoxing\Services\Service\Migration;
 /**
  * @property Migration $migration
  */
-class Migrations extends BaseController
+class MigrationsController extends BaseController
 {
     use CliDefinitionTrait;
 

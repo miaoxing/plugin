@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Controller\AdminApi;
 
 use Miaoxing\Plugin\BaseController;
 
-class Plugins extends BaseController
+class PluginsController extends BaseController
 {
     protected $controllerName = '插件';
 

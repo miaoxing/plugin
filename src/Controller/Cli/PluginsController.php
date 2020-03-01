@@ -7,7 +7,7 @@ use Miaoxing\Plugin\BaseController;
 /**
  * 插件
  */
-class Plugins extends BaseController
+class PluginsController extends BaseController
 {
     protected $controllerAuth = false;
 
