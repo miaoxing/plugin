@@ -174,10 +174,11 @@ class Plugin extends BaseService
      * Get controllers defined in plugins
      *
      * @return array
+     * @todo v3 要求以 Controller 结尾
      */
     protected function getAppControllerMap()
     {
-        return $this->generateClassMap($this->basePaths, '/Controller/{*,*/*}.php', 'Controller');
+        return $this->generateClassMap($this->basePaths, '/Controller/{*,*/*}.php', 'Controller', true, true);
     }
 
     /**
@@ -576,10 +577,11 @@ class Plugin extends BaseService
      * @param string|array $pattern
      * @param string|array $type
      * @param bool $ignoreProject
+     * @param bool $ignoreType
      * @return array
      * @throws Exception
      */
-    public function generateClassMap(array $dirs, $pattern, $type, $ignoreProject = true)
+    public function generateClassMap(array $dirs, $pattern, $type, $ignoreProject = true, $ignoreType = false)
     {
         $patterns = (array) $pattern;
         $types = (array) $type;
@@ -593,7 +595,7 @@ class Plugin extends BaseService
                     continue;
                 }
 
-                $name = $this->getShortName($class, $types[$i]);
+                $name = $this->getShortName($class, $types[$i], $ignoreType);
 
                 $this->addDuplicates($map, $name, $class);
                 $map[$name] = $class;
@@ -671,9 +673,10 @@ class Plugin extends BaseService
      *
      * @param string $class
      * @param string $type
+     * @param bool $ignoreType
      * @return string
      */
-    protected function getShortName($class, $type)
+    protected function getShortName($class, $type, $ignoreType = false)
     {
         // 获取类名中,类型之后的半段
         // 如Miaoxing\User\Controller\Admins\User返回Admin\User
@@ -684,6 +687,14 @@ class Plugin extends BaseService
         $pos = $pos === false ? 0 : $pos + 1;
         $name[$pos] = lcfirst($name[$pos]);
         $name = lcfirst($name);
+
+        // 忽略结尾的类型
+        if ($ignoreType) {
+            $pos = strrpos($name, $type);
+            if ($pos !== false) {
+                $name = substr($name, 0, $pos);
+            }
+        }
 
         return $name;
     }
