@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Test;
 
-use Miaoxing\Plugin\Service\Tester;
+use Miaoxing\Services\Service\Tester;
 
 class BaseControllerTestCase extends BaseTestCase
 {

@@ -21,8 +21,8 @@ namespace MiaoxingDoc\Plugin {
      *
      * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
      *
-     * @property    \Miaoxing\Plugin\Service\Tester $tester 测试
-     * @method      \Miaoxing\Plugin\Service\Tester tester($controller = null, $action = null)
+     * @property    \Miaoxing\Services\Service\Tester $tester 测试
+     * @method      \Miaoxing\Services\Service\Tester tester($controller = null, $action = null)
      *
      * @property    \Miaoxing\Services\Service\Url $url
      * @method      string url($url = '', $argsOrParams = [], $params = []) Generate the URL by specified URL and parameters
@@ -65,7 +65,7 @@ namespace {
     /** @var Miaoxing\Plugin\Service\Plugin $plugin */
     $plugin = wei()->plugin;
 
-    /** @var Miaoxing\Plugin\Service\Tester $tester */
+    /** @var \Miaoxing\Services\Service\Tester $tester */
     $tester = wei()->tester;
 
     /** @var \Miaoxing\Services\Service\Url $url */
