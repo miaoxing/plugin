@@ -38,6 +38,9 @@ class V20161030000000CreateUsersTable extends BaseMigration
 
         $table->string('headImg', 256)
             ->int('groupId')->comment('用户组')
+            ->text('department')->comment('部门')
+            ->string('position', 32)->comment('职位')
+            ->text('extAttr')->comment('额外参数')
             ->decimal('money', 16, 2)->comment('账户余额')
             ->decimal('rechargeMoney', 16, 2)->comment('充值账户余额')
             ->int('score')->comment('积分')
