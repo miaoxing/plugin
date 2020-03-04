@@ -4,15 +4,16 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Services\ConfigTrait;
 use Miaoxing\Services\Service\Str;
+use WeiDoc\EventMixin;
 use Wei\Response;
 
 /**
  * 应用
  *
- * @property \Wei\Event $event
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\Plugin\Service\AppRecord $appRecord 应用的数据库服务
  * @property Str $str
+ * @mixin EventMixin
  */
 class App extends \Wei\App
 {
@@ -91,7 +92,7 @@ class App extends \Wei\App
         wei()->laravel->bootstrap();
 
         $namespace = $this->getNamespace();
-        wei()->setConfig('session:namespace', $namespace);
+        $this->wei->setConfig('session:namespace', $namespace);
 
         $this->event->trigger('appInit');
 
