@@ -353,7 +353,7 @@ class App extends \Wei\App
             return $this->response->json($ret);
         } else {
             $type = isset($ret['retType']) ? $ret['retType'] : ($ret['code'] === 1 ? 'success' : 'warning');
-            $content = $this->view->render('@plugin/ret/ret.php', $ret + ['type' => $type]);
+            $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
 
             return $this->response->setContent($content);
         }
