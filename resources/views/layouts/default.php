@@ -1,6 +1,7 @@
 <?php
 
 $wei->page->addPluginAssets('app');
+$content || $content = '<div id="root"></div>';
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,7 +16,6 @@ $wei->page->addPluginAssets('app');
 <?php $event->trigger('bodyStart') ?>
 
 <?= $content ?>
-<div id="root"></div>
 <?= $block->get('html') ?>
 
 <?= $wei->page->renderFooter() ?>
