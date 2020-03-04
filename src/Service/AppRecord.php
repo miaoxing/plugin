@@ -30,10 +30,6 @@ class AppRecord extends \Miaoxing\Plugin\BaseModel
 
     protected $table = 'apps';
 
-    protected $providers = [
-        'db' => 'app.db',
-    ];
-
     protected $data = [
         'configs' => [],
         'pluginIds' => [],

@@ -14,10 +14,6 @@ class BaseModelV2 extends BaseModel
     use ReqQueryTrait;
     use GetSetTrait;
 
-    protected $providers = [
-        'db' => 'app.db',
-    ];
-
     protected $appIdColumn = 'app_id';
 
     protected $createdAtColumn = 'created_at';

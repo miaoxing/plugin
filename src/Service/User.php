@@ -400,7 +400,7 @@ class User extends BaseModel
             $data['ret'] = json_encode($data['ret'], JSON_UNESCAPED_UNICODE);
         }
 
-        wei()->appDb->insert('userLogs', $data + [
+        wei()->db->insert('userLogs', $data + [
                 'appId' => $app->getId(),
                 'userId' => (int) $curUser['id'],
                 'nickName' => $curUser->getNickName(),

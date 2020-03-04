@@ -35,16 +35,6 @@ return [
         'password' => getenv('MYSQL_PASSWORD'),
         'recordClass' => 'Miaoxing\Plugin\BaseModel',
     ],
-    // 产品核心的数据库
-    'app.db' => [
-        'host' => 'mysql',
-        'port' => 3306,
-        'user' => 'root',
-        'dbname' => 'app',
-        'charset' => 'utf8mb4',
-        'password' => getenv('MYSQL_PASSWORD'),
-        'recordClass' => 'Miaoxing\Plugin\BaseModel',
-    ],
     'router' => [
         'namespaces' => ['admin', 'api', 'cli'],
     ],
