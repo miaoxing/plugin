@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Config\ConfigTrait;
+use Miaoxing\Services\ConfigTrait;
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\User\Service\Group;
 

@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Config\ConfigTrait;
+use Miaoxing\Services\ConfigTrait;
 use Miaoxing\Services\Service\Str;
 use Wei\Response;
 
