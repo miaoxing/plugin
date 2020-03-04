@@ -65,7 +65,7 @@ class App extends \Wei\App
     /**
      * @var string
      */
-    protected $defaultViewFile = '@app/_default.php';
+    protected $defaultViewFile = '@plugin/_default.php';
 
     /**
      * 当页面不存在时，加载该控制器
