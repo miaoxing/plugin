@@ -37,11 +37,6 @@ class App extends \Wei\App
     protected $plugin = false;
 
     /**
-     * @var \Miaoxing\Plugin\BaseModel
-     */
-    protected $record;
-
-    /**
      * @var array
      */
     protected $ids = [];
@@ -85,6 +80,11 @@ class App extends \Wei\App
      * @var string
      */
     protected $fallbackAction = 'index';
+
+    /**
+     * @var \Miaoxing\Plugin\Service\AppRecord[]
+     */
+    protected $records = [];
 
     /**
      * {@inheritdoc}
@@ -269,13 +269,16 @@ class App extends \Wei\App
      */
     public function getRecord()
     {
-        $this->record || $this->record = wei()->appRecord()
-            ->tags(false)
-            ->setCacheKey('appName:' . $this->namespace)
-            ->cache(86400)
-            ->find(['name' => $this->namespace]);
+        $namespace = $this->getNamespace();
+        if (!isset($this->records[$namespace])) {
+            $this->records[$namespace] = wei()->appRecord()
+                ->tags(false)
+                ->setCacheKey('appName:' . $namespace)
+                ->cache(86400)
+                ->find(['name' => $namespace]);
+        }
 
-        return $this->record;
+        return $this->records[$namespace];
     }
 
     /**
