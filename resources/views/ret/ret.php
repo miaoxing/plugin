@@ -1,11 +1,8 @@
 <?php $view->layout() ?>
 
 <?= $block->css() ?>
-<link rel="stylesheet" href="<?= $asset('plugins/plugin/css/ret.css') ?>">
 <style>
-  #root {
-    display: none;
-  }
+  <?= file_get_contents('plugins/plugin/resources/css/ret.css') ?>
 </style>
 <?= $block->end() ?>
 
