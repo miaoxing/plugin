@@ -12,8 +12,8 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\CurUser $curUser 当前用户
      * @method      \Miaoxing\Plugin\Service\CurUser|\Miaoxing\Plugin\Service\CurUser[] curUser()
      *
-     * @property    \Miaoxing\Plugin\Service\Group $group 用户分组
-     * @method      \Miaoxing\Plugin\Service\Group|\Miaoxing\Plugin\Service\Group[] group()
+     * @property    \Miaoxing\User\Service\Group $group 用户分组
+     * @method      \Miaoxing\User\Service\Group|\Miaoxing\User\Service\Group[] group()
      *
      * @property    \Miaoxing\Plugin\Service\Laravel $laravel
      *
@@ -53,7 +53,7 @@ namespace {
     /** @var Miaoxing\Plugin\Service\CurUser $curUser */
     $curUser = wei()->curUser;
 
-    /** @var Miaoxing\Plugin\Service\Group $group */
+    /** @var \Miaoxing\User\Service\Group $group */
     $group = wei()->group;
 
     /** @var Miaoxing\Plugin\Service\Laravel $laravel */
