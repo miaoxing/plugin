@@ -3,20 +3,16 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Config\ConfigTrait;
-use Miaoxing\Config\Service\Config;
 use Miaoxing\Services\Service\Str;
 use Wei\Response;
 
 /**
  * 应用
  *
- * @method \Miaoxing\Plugin\BaseModel appDb($table)
  * @property \Wei\Event $event
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\Plugin\Service\AppRecord $appRecord 应用的数据库服务
- * @property Config $config
  * @property Str $str
- * @property array pageMap
  */
 class App extends \Wei\App
 {
@@ -91,26 +87,11 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
-        $request = $this->request;
+        // TODO 调整到合适的位置
         wei()->laravel->bootstrap();
 
-        // TODO 整理逻辑 域名 > 参数 > 默认
-        // 1. 获取应用名称和请求路径
-        $namespace = $this->getNamespaceFromDomain();
-        if (!$namespace) {
-            if ($request['app']) {
-                $namespace = $request['app'];
-            } else {
-                $namespace = $this->defaultNamespace;
-            }
-        }
-
-        $this->setNamespace($namespace);
-
-        // 2. 设置namespace,让后面初始化的服务,都注入namespace
-        $wei = $this->wei;
-        $wei->setNamespace($namespace);
-        $wei->setConfig('session:namespace', $namespace);
+        $namespace = $this->getNamespace();
+        wei()->setConfig('session:namespace', $namespace);
 
         $this->event->trigger('appInit');
 
@@ -180,6 +161,31 @@ class App extends \Wei\App
         };
 
         return $this->handleResponse($next())->send();
+    }
+
+    public function getNamespace()
+    {
+        if (!$this->namespace) {
+            $this->namespace = $this->detectNamespace();
+        }
+
+        return $this->namespace;
+    }
+
+    protected function detectNamespace()
+    {
+        // 1. 域名
+        if ($namespace = $this->getNamespaceFromDomain()) {
+            return $namespace;
+        }
+
+        // 2. 请求参数
+        if ($namespace = parent::getNamespace()) {
+            return $namespace;
+        }
+
+        // 3. 默认
+        return $this->defaultNamespace;
     }
 
     /**
