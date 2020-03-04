@@ -140,22 +140,6 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return BaseFixture
-     */
-    protected function getFixture()
-    {
-        if (!$this->fixture) {
-            $class = sprintf('plugins\%s\tests\Fixture', $this->getPluginName());
-            $this->fixture = new $class([
-                'wei' => $this->wei,
-                'test' => $this,
-            ]);
-        }
-
-        return $this->fixture;
-    }
-
-    /**
      * 获取当前测试类所在的插件名称
      *
      * @return string
@@ -178,6 +162,6 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
             array_shift($args);
             $message = vsprintf($message, $args);
         }
-        ResultPrinter::addMessage($message);
+        echo $message;
     }
 }
