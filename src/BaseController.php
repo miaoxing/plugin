@@ -3,14 +3,12 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Services\Service\Page;
-use Wei\RetTrait;
 
 /**
  * @property \Miaoxing\Plugin\Service\App $app
  * @property \Wei\Session $session
  * @property \Wei\View $view
  * @property \Wei\Logger $logger
- * @property \Wei\Event $event
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\Plugin\Service\CurUser $curUser 用户
  * @property \Miaoxing\User\Service\CurUserV2 $curUserV2 用户
@@ -19,34 +17,19 @@ use Wei\RetTrait;
  * @property bool controllerAuth
  * @property array actionAuths
  */
-abstract class BaseController extends \Wei\BaseController
+abstract class BaseController extends \Miaoxing\Services\App\BaseController
 {
-    use RetTrait;
-
-    /**
-     * 控制器名称
-     *
-     * @var string
-     */
-    protected $controllerName;
-
     /**
      * @var array
+     * @deprecated
      */
     protected $actionPermissions = [];
-
-    /**
-     * 初始化控制器，可用于注册 middleware
-     */
-    public function init()
-    {
-        $this->event->trigger('controllerInit', [$this]);
-    }
 
     /**
      * 获取当前控制器的名称
      *
      * @return string
+     * @deprecated
      */
     public function getControllerName()
     {
@@ -58,6 +41,7 @@ abstract class BaseController extends \Wei\BaseController
      * 从权限配置中获取当前操作的名称
      *
      * @return string|null
+     * @deprecated
      */
     public function getActionName()
     {
