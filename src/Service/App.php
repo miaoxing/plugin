@@ -196,31 +196,6 @@ class App extends \Wei\App
     }
 
     /**
-     * 通过微信AppID获取应用的名称
-     *
-     * @param string $namespace
-     * @return string|false
-     */
-    protected function getNamespaceFromWechatAppId($namespace)
-    {
-        if (substr($namespace, 0, 2) != 'wx') {
-            return false;
-        }
-
-        wei()->logger->debug('Got wechat appId', ['appId' => $namespace]);
-
-        $appId = wei()->wechatAccount()->select('appId')->fetchColumn(['applicationId' => $namespace]);
-        if (!$appId) {
-            return false;
-        }
-
-        $namespace = wei()->appRecord()->select('name')->fetchColumn(['id' => $appId]);
-        wei()->logger->debug('Convert wechat appId to namespace', ['namespace' => $namespace]);
-
-        return $namespace;
-    }
-
-    /**
      * Check if the namespace is available
      *
      * @param string $namespace
