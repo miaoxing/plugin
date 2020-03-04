@@ -91,9 +91,6 @@ class App extends \Wei\App
         // TODO 调整到合适的位置
         wei()->laravel->bootstrap();
 
-        $namespace = $this->getNamespace();
-        $this->wei->setConfig('session:namespace', $namespace);
-
         $this->event->trigger('appInit');
 
         return $this->invokeApp($options);
@@ -296,8 +293,9 @@ class App extends \Wei\App
      */
     public function getId()
     {
-        if (isset($this->ids[$this->namespace])) {
-            return $this->ids[$this->namespace];
+        $namespace = $this->getNamespace();
+        if (isset($this->ids[$namespace])) {
+            return $this->ids[$namespace];
         } else {
             return (int) $this->getRecord()->get('id');
         }
