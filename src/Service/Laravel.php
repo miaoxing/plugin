@@ -3,11 +3,13 @@
 namespace Miaoxing\Plugin\Service;
 
 use Illuminate\Config\Repository;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Support\Facades\Config;
 use Miaoxing\Plugin\BaseService;
 use Illuminate\Support\Facades\Facade;
+use Miaoxing\Plugin\Laravel\ConsoleKernel;
 use Miaoxing\Services\Service\StaticTrait;
 use Wei\Db;
 
@@ -22,7 +24,9 @@ class Laravel extends BaseService
 
     public function bootstrap()
     {
-        if (php_sapi_name() !== 'cli') {
+        if (php_sapi_name() === 'cli') {
+            $this->bootstrapConsole();
+        } else {
             $this->bootstrapHttp();
         }
 
@@ -75,7 +79,7 @@ class Laravel extends BaseService
 
         $app->singleton(
             \Illuminate\Contracts\Console\Kernel::class,
-            \Miaoxing\Plugin\Laravel\ConsoleKernel::class
+            ConsoleKernel::class
         );
 
         $app->singleton(
@@ -113,7 +117,11 @@ class Laravel extends BaseService
 
     protected function bootstrapConsole()
     {
-        // todo
+        $app = $this->getApp();
+
+        /** @var ConsoleKernel $kernel */
+        $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
+        $kernel->bootstrap();
     }
 
     protected function shareConfig()
