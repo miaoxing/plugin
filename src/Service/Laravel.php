@@ -2,10 +2,18 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Illuminate\Config\Repository;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\MySqlConnection;
+use Illuminate\Support\Facades\Config;
 use Miaoxing\Plugin\BaseService;
 use Illuminate\Support\Facades\Facade;
 use Miaoxing\Services\Service\StaticTrait;
+use Wei\Db;
 
+/**
+ * @property Db db
+ */
 class Laravel extends BaseService
 {
     use StaticTrait;
@@ -14,10 +22,11 @@ class Laravel extends BaseService
 
     public function bootstrap()
     {
-        $app = $this->getApp();
         if (php_sapi_name() !== 'cli') {
-            $this->bootstrapHttp($app);
+            $this->bootstrapHttp();
         }
+
+        $this->shareConfig();
     }
 
     /**
@@ -88,8 +97,10 @@ class Laravel extends BaseService
         return $app;
     }
 
-    protected function bootstrapHttp($app)
+    protected function bootstrapHttp()
     {
+        $app = $this->getApp();
+
         /** @var \Illuminate\Foundation\Http\Kernel $kernel */
         $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
 
@@ -98,12 +109,33 @@ class Laravel extends BaseService
         Facade::clearResolvedInstance('request');
 
         $kernel->bootstrap();
-
-        $app['db']->setPdo(wei()->db->getPdo());
     }
 
     protected function bootstrapConsole()
     {
         // todo
+    }
+
+    protected function shareConfig()
+    {
+        $app = $this->getApp();
+
+        // Database
+        /** @var Repository $config */
+        $config = $app['config'];
+        $config->set('database', [
+            'default' => 'mysql',
+            'connections' => [
+                'mysql' => [
+
+                ],
+            ],
+        ]);
+        $app->extend(DatabaseManager::class, function (DatabaseManager $manager) {
+            $manager->extend('mysql', function () {
+                return new MySqlConnection($this->db->getPdo(), $this->db->getDbname(), $this->db->getTablePrefix());
+            });
+            return $manager;
+        });
     }
 }
