@@ -4,15 +4,31 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
 use Illuminate\Support\Facades\Facade;
+use Miaoxing\Services\Service\StaticTrait;
 
 class Laravel extends BaseService
 {
+    use StaticTrait;
+
+    protected $app;
+
     public function bootstrap()
     {
-        $app = $this->createApp();
+        $app = $this->getApp();
         if (php_sapi_name() !== 'cli') {
             $this->bootstrapHttp($app);
         }
+    }
+
+    /**
+     * @api
+     */
+    protected function getApp()
+    {
+        if (!$this->app) {
+            $this->app = $this->createApp();
+        }
+        return $this->app;
     }
 
     protected function createApp()
