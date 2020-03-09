@@ -6,14 +6,19 @@ use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Queue\QueueManager;
+use Illuminate\Redis\Connections\PhpRedisConnection;
+use Illuminate\Redis\Connectors\PhpRedisConnector;
+use Illuminate\Redis\RedisManager;
 use Miaoxing\Plugin\BaseService;
 use Illuminate\Support\Facades\Facade;
 use Miaoxing\Plugin\Laravel\ConsoleKernel;
+use Miaoxing\Queue\Service\Queue;
 use Miaoxing\Services\Service\StaticTrait;
 use Wei\Db;
 
 /**
  * @property Db db
+ * @property Queue queue
  */
 class Laravel extends BaseService
 {
@@ -86,11 +91,6 @@ class Laravel extends BaseService
             \App\Exceptions\Handler::class
         );
 
-        // TODO 1. autoload 失效
-        $app->afterResolving(QueueManager::class, function () {
-            wei()->queue->setConfig();
-        });
-
         /*
         |--------------------------------------------------------------------------
         | Return The Application
@@ -138,18 +138,10 @@ class Laravel extends BaseService
         $config->set('database', [
             'default' => 'mysql',
             'connections' => [
-                'mysql' => [
-
-                ],
+                'mysql' => [],
             ],
             'redis' => [
-                'client' => 'phpredis',
-                'default' => [
-                    'host' => 'redis',
-                    'password' => 'password',
-                    'port' => env('REDIS_PORT', 6379),
-                    'database' => env('REDIS_DB', 0),
-                ],
+                'default' => [],
             ],
         ]);
         $app->extend(DatabaseManager::class, function (DatabaseManager $manager) {
@@ -157,6 +149,23 @@ class Laravel extends BaseService
                 return new MySqlConnection($this->db->getPdo(), $this->db->getDbname(), $this->db->getTablePrefix());
             });
             return $manager;
+        });
+        $app->extend(RedisManager::class, function (RedisManager $manager) {
+            $manager->extend('phpredis', function () {
+                return new class extends PhpRedisConnector
+                {
+                    public function connect(array $config, array $options)
+                    {
+                        return new PhpRedisConnection(wei()->redis->getObject());
+                    }
+                };
+            });
+            return $manager;
+        });
+
+        // Queue
+        $app->afterResolving(QueueManager::class, function () {
+            $this->queue->setConfig();
         });
     }
 }
