@@ -3,10 +3,9 @@
 namespace Miaoxing\Plugin\Service;
 
 use Illuminate\Config\Repository;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Queue\QueueManager;
 use Miaoxing\Plugin\BaseService;
 use Illuminate\Support\Facades\Facade;
 use Miaoxing\Plugin\Laravel\ConsoleKernel;
@@ -87,6 +86,11 @@ class Laravel extends BaseService
             \App\Exceptions\Handler::class
         );
 
+        // TODO 1. autoload 失效
+        $app->afterResolving(QueueManager::class, function () {
+            wei()->queue->setConfig();
+        });
+
         /*
         |--------------------------------------------------------------------------
         | Return The Application
@@ -136,6 +140,15 @@ class Laravel extends BaseService
             'connections' => [
                 'mysql' => [
 
+                ],
+            ],
+            'redis' => [
+                'client' => 'phpredis',
+                'default' => [
+                    'host' => 'redis',
+                    'password' => 'password',
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => env('REDIS_DB', 0),
                 ],
             ],
         ]);
