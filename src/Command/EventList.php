@@ -4,21 +4,21 @@ namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Services\Command\BaseCommand;
 
-class PluginEvents extends BaseCommand
+class EventList extends BaseCommand
 {
     /**
      * The console command signature.
      *
      * @var string
      */
-    protected $signature = 'plugin:events {app=app : The name of the app}';
+    protected $signature = 'event:list {app=app : The name of the app}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Install the plugin';
+    protected $description = 'List the available events';
 
     /**
      * Execute the console command.
