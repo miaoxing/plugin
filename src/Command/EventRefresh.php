@@ -11,7 +11,7 @@ class EventRefresh extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'event:cache {app=app : The name of the app}';
+    protected $signature = 'event:refresh {app=app : The name of the app}';
 
     /**
      * The console command description.
