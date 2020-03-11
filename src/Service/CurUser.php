@@ -8,6 +8,18 @@ namespace Miaoxing\Plugin\Service;
 class CurUser extends User
 {
     /**
+     * @var array
+     */
+    protected $requiredServices = [
+        'db',
+        'cache',
+        'logger',
+        'ret',
+        'str',
+        'session',
+    ];
+
+    /**
      * 缓存在session中的字段
      *
      * @var array
