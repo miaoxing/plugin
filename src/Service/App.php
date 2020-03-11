@@ -88,9 +88,6 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
-        // TODO 调整到合适的位置
-        wei()->laravel->bootstrap();
-
         $this->event->trigger('appInit');
 
         return $this->invokeApp($options);
