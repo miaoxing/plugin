@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use Exception;
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Services\Service\ClassMap;
 
 /**
  * 插件管理器
@@ -16,6 +17,7 @@ use Miaoxing\Plugin\BaseService;
  * @property \Wei\Event $event
  * @property \Wei\Request $request
  * @property \Miaoxing\Plugin\Service\App $app
+ * @property ClassMap $classMap
  */
 class Plugin extends BaseService
 {
@@ -160,7 +162,7 @@ class Plugin extends BaseService
      */
     protected function getWeiAliases()
     {
-        return wei()->classMap->generate($this->basePaths, '/Service/*.php', 'Service');
+        return $this->classMap->generate($this->basePaths, '/Service/*.php', 'Service');
     }
 
     /**
@@ -171,7 +173,7 @@ class Plugin extends BaseService
      */
     protected function getAppControllerMap()
     {
-        return wei()->classMap->generate($this->basePaths, '/Controller/{*,*/*}.php', 'Controller', true, true);
+        return $this->classMap->generate($this->basePaths, '/Controller/{*,*/*}.php', 'Controller', true, true);
     }
 
     /**
@@ -185,16 +187,13 @@ class Plugin extends BaseService
     {
         if ($refresh || !$this->pluginClasses) {
             $this->pluginClasses = [];
-            $files = $this->globByDirs($this->basePaths, '/Plugin.php');
-            foreach ($files as $file) {
-                $class = $this->guessClassName($file);
-
-                $name = explode('\\', $class)[1];
+            $classes = $this->classMap->generate($this->basePaths, '/*Plugin.php', '', false, true);
+            foreach ($classes as $class) {
+                $name = last(explode('\\', $class));
+                $name = substr($name, 0, -6 /* length of "Plugin" */);
                 $name = $this->dash($name);
-
                 $this->pluginClasses[$name] = $class;
             }
-            ksort($this->pluginClasses);
         }
 
         return $this->pluginClasses;
@@ -573,7 +572,7 @@ class Plugin extends BaseService
      */
     public function generateClassMap(...$args)
     {
-        return wei()->classMap->generate(...$args);
+        return $this->classMap->generate(...$args);
     }
 
     public function getPluginIdByClass($class)

@@ -12,7 +12,7 @@ use Miaoxing\Services\Service\Str;
  * @property \Wei\Request $request
  * @property Str $str
  */
-class BasePlugin extends \Miaoxing\Plugin\BaseService
+abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
 {
     /**
      * 插件的简短名称

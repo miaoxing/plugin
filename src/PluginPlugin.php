@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin;
 
-class Plugin extends BasePlugin
+class PluginPlugin extends BasePlugin
 {
     protected $name = '插件核心';
 
