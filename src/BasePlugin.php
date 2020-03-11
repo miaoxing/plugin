@@ -174,6 +174,6 @@ class BasePlugin extends \Miaoxing\Plugin\BaseService
     {
         $basePath = $this->getBasePath() . '/src';
 
-        return $this->plugin->generateClassMap([$basePath], '/Controller/{*,*/*}.php', 'Controller', false);
+        return wei()->classMap->generate([$basePath], '/Controller/{*,*/*}.php', 'Controller', false);
     }
 }
