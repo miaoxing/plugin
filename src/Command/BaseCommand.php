@@ -34,6 +34,12 @@ abstract class BaseCommand extends Command
     {
         $this->wei = wei();
 
+        // Convert class name to command name if not provided
+        if (null === $name && null === static::getDefaultName()) {
+            $str = $this->wei->str;
+            $name = $str->snake($str->baseName($this), ':');
+        }
+
         parent::__construct($name);
     }
 

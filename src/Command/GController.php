@@ -7,8 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class GController extends BaseCommand
 {
-    protected static $defaultName = 'g:controller';
-
     protected function configure()
     {
         $this
