@@ -6,6 +6,9 @@ namespace MiaoxingDoc\Plugin {
      * @property    \Miaoxing\Plugin\Service\App $app 应用
      * @method      mixed app($options = [])
      *
+     * @property    \Miaoxing\Plugin\Service\AppModel $appModel AppModel
+     * @method      \Miaoxing\Plugin\Service\AppModel|\Miaoxing\Plugin\Service\AppModel[] appModel()
+     *
      * @property    \Miaoxing\Plugin\Service\AppRecord $appRecord 应用模型
      * @method      \Miaoxing\Plugin\Service\AppRecord|\Miaoxing\Plugin\Service\AppRecord[] appRecord()
      *
@@ -36,6 +39,12 @@ namespace {
 
     /** @var Miaoxing\Plugin\Service\App $app */
     $app = wei()->app;
+
+    /** @var Miaoxing\Plugin\Service\AppModel $appModel */
+    $app = wei()->appModel();
+
+    /** @var Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] $appModels */
+    $apps = wei()->appModel();
 
     /** @var Miaoxing\Plugin\Service\AppRecord $appRecord */
     $appRecord = wei()->appRecord;

@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Services\Service\ServiceTrait;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wei\Wei;
@@ -84,5 +85,17 @@ abstract class BaseCommand extends Command
     {
         $this->output->writeln('<info>' . $message . '</info>');
         return $code;
+    }
+
+    /**
+     * @param string $command
+     * @param array $input
+     * @return int
+     * @throws \Exception
+     */
+    protected function runCommand(string $command, array $input)
+    {
+        $command = $this->getApplication()->find($command);
+        return $command->run(new ArrayInput($input), $this->output);
     }
 }
