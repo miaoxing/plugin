@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 
 class GService extends BaseCommand
@@ -35,8 +36,11 @@ class GService extends BaseCommand
 
         $this->plugin->getConfig(true);
 
-        // TODO
-        //$this->app->dispatch('cli/docs', 'create');
+        $command = $this->getApplication()->find('g:doc');
+        $command->run(new ArrayInput([
+            'command' => 'g:doc',
+            'plugin-id' => $id,
+        ]), $this->output);
 
         return $this->suc('创建成功');
     }
