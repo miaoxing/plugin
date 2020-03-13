@@ -32,6 +32,14 @@ class GDoc extends BaseCommand
     {
         $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
 
+        $this->generateAutoComplete($plugin);
+        $this->generateType($plugin);
+
+        return $this->suc('创建成功');
+    }
+
+    protected function generateAutoComplete($plugin)
+    {
         $file = $this->getDocFile($plugin);
         $this->createDir(dirname($file));
 
@@ -42,10 +50,6 @@ class GDoc extends BaseCommand
         $viewVars = $this->generateViewVars($serviceMap);
 
         $this->createFile($file, $namespace, $class, $docBlock, $viewVars);
-
-        $this->generateType($plugin);
-
-        return $this->suc('创建成功');
     }
 
     protected function generateViewVars($serviceMap)
@@ -295,7 +299,9 @@ class GDoc extends BaseCommand
         $content = $printer->printFile($file) . "\n" . $content;
 
         $this->createDir($dir . '/docs');
-        file_put_contents($dir . '/docs/type.php', $content);
+        $file = $dir . '/docs/type.php';
+        file_put_contents($file, $content);
+        $this->suc('生成文件 ' . $file);
     }
 
     protected function intent($content, $space = '    ')
