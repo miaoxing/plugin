@@ -87,6 +87,30 @@ abstract class BaseCommand extends Command
     }
 
     /**
+     * Returns all the given options merged with the default values.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return $this->input->getOptions();
+    }
+
+    /**
+     * Returns the option value for a given option name.
+     *
+     * @param string $name The option name
+     *
+     * @return string|string[]|bool|null The option value
+     *
+     * @throws InvalidArgumentException When option given doesn't exist
+     */
+    protected function getOption(string $name)
+    {
+        return $this->input->getOption($name);
+    }
+
+    /**
      * Writes a error message
      *
      * @param string $message
