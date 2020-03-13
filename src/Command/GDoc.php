@@ -4,13 +4,14 @@ namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Services\Service\Cli;
+use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\Method;
+use Nette\PhpGenerator\PhpFile;
+use Nette\PhpGenerator\PsrPrinter;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 
-/**
- * @property Cli $cli
- */
 class GDoc extends BaseCommand
 {
     /**
@@ -18,7 +19,8 @@ class GDoc extends BaseCommand
      */
     protected function configure()
     {
-        $this->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
+        $this->setDescription('Generate doc for specified plugin')
+            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
     }
 
     /**
@@ -40,6 +42,8 @@ class GDoc extends BaseCommand
         $viewVars = $this->generateViewVars($serviceMap);
 
         $this->createFile($file, $namespace, $class, $docBlock, $viewVars);
+
+        $this->generateType($plugin);
 
         return $this->suc('创建成功');
     }
@@ -239,5 +243,72 @@ class GDoc extends BaseCommand
         $basePath = $plugin->getBasePath() . '/src';
 
         return wei()->classMap->generate([$basePath], '/Service/*.php', 'Service', false);
+    }
+
+    public function generateType(BasePlugin $plugin)
+    {
+        $dir = $plugin->getBasePath();
+        $services = wei()->classMap->generate($dir . '/src', '/Service/*.php', 'Service');
+
+        $file = new PhpFile();
+        $printer = new PsrPrinter;
+        $content = '';
+
+        foreach ($services as $name => $serviceClass) {
+            $refClass = new ReflectionClass($serviceClass);
+
+            $file->addNamespace($refClass->getNamespaceName());
+
+            $class = new ClassType($refClass->getShortName());
+            $class->setInterface();
+
+            $staticClass = clone $class;
+
+            $methods = [];
+            $staticMethods = [];
+            foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
+                if ($this->isApi($refMethod)) {
+                    $method = Method::from([$serviceClass, $refMethod->getName()])
+                        ->setBody(null)
+                        ->setPublic();
+
+                    $methods[] = $method;
+                    $staticMethods[] = (clone $method)->setStatic();
+                }
+            }
+            $class->setMethods($methods);
+            $staticClass->setMethods($staticMethods);
+
+            if ($methods) {
+                $content .= $printer->printClass($class);
+            }
+            if ($staticMethods) {
+                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass))) . "\n}\n";
+            }
+        }
+
+        if (!$content) {
+            $this->suc('API method not found!');
+            return;
+        }
+
+        $content = $printer->printFile($file) . "\n" . $content;
+
+        $this->createDir($dir . '/docs');
+        file_put_contents($dir . '/docs/type.php', $content);
+    }
+
+    protected function intent($content, $space = '    ')
+    {
+        $array = [];
+        foreach (explode("\n", $content) as $line) {
+            $array[] = $space . $line;
+        }
+        return implode("\n", $array);
+    }
+
+    protected function isApi(ReflectionMethod $method)
+    {
+        return strpos($method->getDocComment(), '* @api');
     }
 }
