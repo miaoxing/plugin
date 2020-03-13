@@ -2,24 +2,16 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Services\Command\BaseCommand;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 
 class PluginList extends BaseCommand
 {
-    /**
-     * The console command signature.
-     *
-     * @var string
-     */
-    protected $signature = 'plugin:list {app=app }';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'List the plugins';
+    protected function configure()
+    {
+        $this->setDescription('List the plugins')
+            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
+    }
 
     /**
      * Execute the console command.
@@ -28,7 +20,7 @@ class PluginList extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->argument('app'));
+        wei()->app->setNamespace($this->getArgument('app'));
 
         $table = new Table($this->output);
         $table->setHeaders(['ID', 'Name', 'Version', 'Description', 'Installed']);

@@ -2,24 +2,16 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Services\Command\BaseCommand;
+use Symfony\Component\Console\Input\InputArgument;
 
 class PluginInstall extends BaseCommand
 {
-    /**
-     * The console command signature.
-     *
-     * @var string
-     */
-    protected $signature = 'plugin:install {id : The id of the plugin}
-        {app=app : The name of the app}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Install the plugin';
+    protected function configure()
+    {
+        $this->setDescription('Install the plugin')
+            ->addArgument('id', InputArgument::REQUIRED, 'The id of the plugin')
+            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
+    }
 
     /**
      * Execute the console command.
@@ -30,6 +22,6 @@ class PluginInstall extends BaseCommand
     {
         wei()->app->setNamespace($this->argument('app'));
         $ret = wei()->plugin->install($this->argument('id'));
-        $this->writeRet($ret);
+        $this->ret($ret);
     }
 }

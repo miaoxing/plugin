@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Services\Service\ServiceTrait;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -62,6 +63,30 @@ abstract class BaseCommand extends Command
     }
 
     /**
+     * Returns all the given arguments merged with the default values.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return $this->input->getArguments();
+    }
+
+    /**
+     * Returns the argument value for a given argument name.
+     *
+     * @param string $name The argument name
+     *
+     * @return string|string[]|null The argument value
+     *
+     * @throws InvalidArgumentException When argument given doesn't exist
+     */
+    protected function getArgument(string $name)
+    {
+        return $this->input->getArgument($name);
+    }
+
+    /**
      * Writes a error message
      *
      * @param string $message
@@ -85,6 +110,18 @@ abstract class BaseCommand extends Command
     {
         $this->output->writeln('<info>' . $message . '</info>');
         return $code;
+    }
+
+    /**
+     * Writes a message base on result data
+     *
+     * @param array $ret
+     * @return int
+     */
+    protected function ret(array $ret): int
+    {
+        $type = $ret['code'] === 1 ? 'suc' : 'err';
+        return $this->$type($ret['message'], $ret['code']);
     }
 
     /**

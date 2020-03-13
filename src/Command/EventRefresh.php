@@ -2,23 +2,15 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Services\Command\BaseCommand;
+use Symfony\Component\Console\Input\InputArgument;
 
 class EventRefresh extends BaseCommand
 {
-    /**
-     * The console command signature.
-     *
-     * @var string
-     */
-    protected $signature = 'event:refresh {app=app : The name of the app}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate the event cache';
+    protected function configure()
+    {
+        $this->setDescription('Refreshed the event cache');
+        $this->addArgument('app', InputArgument::OPTIONAL, 'Then name of the app', 'app');
+    }
 
     /**
      * Execute the console command.
@@ -27,8 +19,8 @@ class EventRefresh extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->argument('app'));
+        wei()->app->setNamespace($this->getArgument('app'));
         wei()->plugin->getEvents(true);
-        $this->info('Refreshed the event cache!');
+        $this->suc('Refreshed the event cache!');
     }
 }

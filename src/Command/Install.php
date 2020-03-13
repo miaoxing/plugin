@@ -2,23 +2,12 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Services\Command\BaseCommand;
-
 class Install extends BaseCommand
 {
-    /**
-     * The console command signature.
-     *
-     * @var string
-     */
-    protected $signature = 'install';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Install the application';
+    protected function configure()
+    {
+        $this->setDescription('Install the application');
+    }
 
     /**
      * Execute the console command.
@@ -41,9 +30,9 @@ class Install extends BaseCommand
         foreach ($wei->plugin->getAll() as $plugin) {
             $ret = $wei->plugin->install($plugin->getId());
             $this->output->write($plugin->getId() . ': ');
-            $this->writeRet($ret);
+            $this->ret($ret);
         }
 
-        $this->info('Install successfully');
+        $this->suc('Install successfully');
     }
 }

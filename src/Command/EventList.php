@@ -2,23 +2,15 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Services\Command\BaseCommand;
+use Symfony\Component\Console\Input\InputArgument;
 
 class EventList extends BaseCommand
 {
-    /**
-     * The console command signature.
-     *
-     * @var string
-     */
-    protected $signature = 'event:list {app=app : The name of the app}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'List the available events';
+    protected function configure()
+    {
+        $this->setDescription('List the available events');
+        $this->addArgument('app', InputArgument::OPTIONAL, 'Then name of the app', 'app');
+    }
 
     /**
      * Execute the console command.
@@ -27,7 +19,7 @@ class EventList extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->argument('app'));
+        wei()->app->setNamespace($this->getArgument('app'));
         $events = wei()->plugin->getEvents();
         dump($events);
     }
