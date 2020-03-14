@@ -132,6 +132,9 @@ PHP;
             $staticClass->setMethods($staticMethods);
 
             if ($methods) {
+                if ($content) {
+                    $content .= "\n";
+                }
                 $content .= $printer->printClass($class);
             }
             if ($staticMethods) {
