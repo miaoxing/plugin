@@ -11,14 +11,16 @@ use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 
-class GDoc extends BaseCommand
+class GAutoCompletion extends BaseCommand
 {
+    protected static $defaultName = 'g:auto-completion';
+
     /**
      * @inheritDoc
      */
     protected function configure()
     {
-        $this->setDescription('Generate doc for specified plugin')
+        $this->setDescription('Generate code auto completion for specified plugin')
             ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
     }
 
@@ -30,18 +32,25 @@ class GDoc extends BaseCommand
     {
         $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
 
-        // NOTE: 需生成两个文件，mixin 里的类才能正确跳转到源文件
-        $this->generateMixin($plugin);
-        $this->generateType($plugin);
+        // NOTE: 需生成两个文件，services.php 里的类才能正确跳转到源文件
+        $this->generateServices($plugin);
+        $this->generateStaticCalls($plugin);
 
         return $this->suc('创建成功');
     }
 
     /**
+     * Generate services' auto completion
+     *
+     * Including
+     * 1. Mixin classes
+     * 2. Function calls, that is wei()->xxx
+     * 3. Global variables
+     *
      * @param BasePlugin $plugin
      * @throws \ReflectionException
      */
-    protected function generateMixin(BasePlugin $plugin)
+    protected function generateServices(BasePlugin $plugin)
     {
         $services = $this->getServerMap($plugin);
         $content = "<?php\n\n";
@@ -56,15 +65,15 @@ class GDoc extends BaseCommand
             $autoComplete .= ' * @mixin ' . $className . "\n";
         }
 
-        $content .= $this->generateClass('AutoComplete', rtrim($autoComplete));
+        $content .= $this->generateClass('AutoCompletion', rtrim($autoComplete));
         $content .= <<<PHP
 
 /**
- * @return AutoComplete
+ * @return AutoCompletion
  */
 function wei()
 {
-    return new AutoComplete;
+    return new AutoCompletion;
 }
 
 
@@ -72,26 +81,16 @@ PHP;
 
         $content .= $this->generateViewVars($services);
 
-        $this->createFile($plugin->getBasePath() . '/docs/mixins.php', $content);
-    }
-
-    protected function generateClass($class, $comment)
-    {
-        return <<<PHP
-/**
-$comment
- */
-class $class {
-}
-
-PHP;
+        $this->createFile($plugin->getBasePath() . '/docs/auto-completion.php', $content);
     }
 
     /**
+     * Generate static calls code completion
+     *
      * @param BasePlugin $plugin
      * @throws \ReflectionException
      */
-    public function generateType(BasePlugin $plugin)
+    public function generateStaticCalls(BasePlugin $plugin)
     {
         $dir = $plugin->getBasePath();
         $services = wei()->classMap->generate($dir . '/src', '/Service/*.php', 'Service');
@@ -141,7 +140,7 @@ PHP;
 
         $content = $printer->printFile($file) . "\n" . $content;
 
-        $this->createFile($plugin->getBasePath() . '/docs/types.php', $content);
+        $this->createFile($plugin->getBasePath() . '/docs/auto-completion-static.php', $content);
     }
 
     /**
@@ -321,5 +320,17 @@ PHP;
     protected function isApi(ReflectionMethod $method)
     {
         return strpos($method->getDocComment(), '* @api');
+    }
+
+    protected function generateClass($class, $comment)
+    {
+        return <<<PHP
+/**
+$comment
+ */
+class $class {
+}
+
+PHP;
     }
 }
