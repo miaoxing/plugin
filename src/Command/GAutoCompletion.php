@@ -108,7 +108,7 @@ PHP;
         foreach ($services as $name => $serviceClass) {
             $refClass = new ReflectionClass($serviceClass);
 
-            $file->addNamespace($refClass->getNamespaceName());
+            $namespace = $file->addNamespace($refClass->getNamespaceName());
 
             $class = new ClassType($refClass->getShortName());
             $class->setInterface();
@@ -135,10 +135,10 @@ PHP;
                 if ($content) {
                     $content .= "\n";
                 }
-                $content .= $printer->printClass($class);
+                $content .= $printer->printClass($class, $namespace);
             }
             if ($staticMethods) {
-                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass))) . "\n}\n";
+                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass, $namespace))) . "\n}\n";
             }
         }
 
