@@ -30,6 +30,7 @@ class GDoc extends BaseCommand
     {
         $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
 
+        // NOTE: 需生成两个文件，mixin 里的类才能正确跳转到源文件
         $this->generateMixin($plugin);
         $this->generateType($plugin);
 
@@ -47,6 +48,7 @@ class GDoc extends BaseCommand
         $autoComplete = '';
 
         foreach ($services as $name => $class) {
+            // 使用 @property 和 @method，PHPStorm 会识别出是动态调用，加粗调用的代码
             $docBlock = rtrim($this->generateDocBlock($name, $class));
             $className = ucfirst($name) . 'Mixin';
             $content .= $this->generateClass($className, $docBlock) . "\n";
@@ -112,6 +114,7 @@ PHP;
             $staticMethods = [];
             foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
                 if ($this->isApi($refMethod)) {
+                    // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
                     $method = Method::from([$serviceClass, $refMethod->getName()])
                         ->setBody(null)
                         ->setPublic();
