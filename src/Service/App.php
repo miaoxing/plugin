@@ -3,17 +3,14 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Services\ConfigTrait;
-use Miaoxing\Services\Service\Str;
-use WeiDoc\EventMixin;
 use Wei\Response;
 
 /**
  * 应用
  *
- * @property \Miaoxing\Plugin\Service\Plugin $plugin
  * @property \Miaoxing\Plugin\Service\AppRecord $appRecord 应用的数据库服务
- * @property Str $str
- * @mixin EventMixin
+ * @mixin \EventMixin
+ * @mixin \StrMixin
  */
 class App extends \Wei\App
 {

@@ -11,6 +11,10 @@ use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \PluginMixin
+ * @mixin \ClassMapMixin
+ */
 class GAutoCompletion extends BaseCommand
 {
     protected static $defaultName = 'g:auto-completion';
@@ -27,6 +31,7 @@ class GAutoCompletion extends BaseCommand
     /**
      * @return int
      * @throws \ReflectionException
+     * @throws \Exception
      */
     protected function handle()
     {
@@ -89,11 +94,12 @@ PHP;
      *
      * @param BasePlugin $plugin
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function generateStaticCalls(BasePlugin $plugin)
     {
         $dir = $plugin->getBasePath();
-        $services = wei()->classMap->generate($dir . '/src', '/Service/*.php', 'Service');
+        $services = $this->classMap->generate($dir . '/src', '/Service/*.php', 'Service');
 
         $file = new PhpFile();
         $printer = new PsrPrinter;
