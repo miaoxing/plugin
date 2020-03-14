@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Services\Service\Cli;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpFile;
@@ -24,32 +23,150 @@ class GDoc extends BaseCommand
     }
 
     /**
-     * Executes the current command
-     *
      * @return int
+     * @throws \ReflectionException
      */
     protected function handle()
     {
         $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
 
-        $this->generateAutoComplete($plugin);
+        $this->generateMixin($plugin);
         $this->generateType($plugin);
 
         return $this->suc('创建成功');
     }
 
-    protected function generateAutoComplete($plugin)
+    /**
+     * @param BasePlugin $plugin
+     * @throws \ReflectionException
+     */
+    protected function generateMixin(BasePlugin $plugin)
     {
-        $file = $this->getDocFile($plugin);
-        $this->createDir(dirname($file));
+        $services = $this->getServerMap($plugin);
+        $content = "<?php\n\n";
+        $autoComplete = '';
 
-        list($namespace, $class) = $this->getDocClass($plugin);
+        foreach ($services as $name => $class) {
+            $docBlock = rtrim($this->generateDocBlock($name, $class));
+            $className = ucfirst($name) . 'Mixin';
+            $content .= $this->generateClass($className, $docBlock) . "\n";
 
-        $serviceMap = $this->getServerMap($plugin);
-        $docBlock = $this->generateDocBlock($serviceMap);
-        $viewVars = $this->generateViewVars($serviceMap);
+            $autoComplete .= ' * @mixin ' . $className . "\n";
+        }
 
-        $this->createFile($file, $namespace, $class, $docBlock, $viewVars);
+        $content .= $this->generateClass('AutoComplete', rtrim($autoComplete));
+        $content .= <<<PHP
+
+/**
+ * @return AutoComplete
+ */
+function wei()
+{
+    return new AutoComplete;
+}
+
+
+PHP;
+
+        $content .= $this->generateViewVars($services);
+
+        $this->createFile($plugin->getBasePath() . '/docs/mixins.php', $content);
+    }
+
+    protected function generateClass($class, $comment)
+    {
+        return <<<PHP
+/**
+$comment
+ */
+class $class {
+}
+
+PHP;
+    }
+
+    /**
+     * @param BasePlugin $plugin
+     * @throws \ReflectionException
+     */
+    public function generateType(BasePlugin $plugin)
+    {
+        $dir = $plugin->getBasePath();
+        $services = wei()->classMap->generate($dir . '/src', '/Service/*.php', 'Service');
+
+        $file = new PhpFile();
+        $printer = new PsrPrinter;
+        $content = '';
+
+        foreach ($services as $name => $serviceClass) {
+            $refClass = new ReflectionClass($serviceClass);
+
+            $file->addNamespace($refClass->getNamespaceName());
+
+            $class = new ClassType($refClass->getShortName());
+            $class->setInterface();
+
+            $staticClass = clone $class;
+
+            $methods = [];
+            $staticMethods = [];
+            foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
+                if ($this->isApi($refMethod)) {
+                    $method = Method::from([$serviceClass, $refMethod->getName()])
+                        ->setBody(null)
+                        ->setPublic();
+
+                    $methods[] = $method;
+                    $staticMethods[] = (clone $method)->setStatic();
+                }
+            }
+            $class->setMethods($methods);
+            $staticClass->setMethods($staticMethods);
+
+            if ($methods) {
+                $content .= $printer->printClass($class);
+            }
+            if ($staticMethods) {
+                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass))) . "\n}\n";
+            }
+        }
+
+        if (!$content) {
+            $this->suc('API method not found!');
+            return;
+        }
+
+        $content = $printer->printFile($file) . "\n" . $content;
+
+        $this->createFile($plugin->getBasePath() . '/docs/types.php', $content);
+    }
+
+    /**
+     * @param string $name
+     * @param string $class
+     * @return string
+     * @throws \ReflectionException
+     */
+    protected function generateDocBlock(string $name, string $class)
+    {
+        $docBlock = '';
+        $ref = new ReflectionClass($class);
+        $docName = $this->getDocCommentTitle($ref->getDocComment());
+
+        $docBlock .= rtrim(sprintf(' * @property    %s $%s %s', $class, $name, $docName)) . "\n";
+
+        if (method_exists($class, '__invoke')) {
+            $method = $ref->getMethod('__invoke');
+            $return = $this->getMethodReturn($ref, $method) ?: 'mixed';
+            $methodName = $this->getDocCommentTitle($method->getDocComment()) ?: '';
+
+            $params = $this->geParam($method);
+
+            $docBlock .= rtrim(sprintf(' * @method      %s %s(%s) %s', $return, $name, $params, $methodName));
+            $docBlock .= "\n";
+        }
+
+        return $docBlock;
     }
 
     protected function generateViewVars($serviceMap)
@@ -67,46 +184,17 @@ class GDoc extends BaseCommand
                 $varName = $name;
             }
 
-            $var .= sprintf('    /** @var %s $%s */' . "\n", $class, $name);
-            $var .= sprintf('    $%s = wei()->%s%s;' . "\n", $varName, $name, $isModel ? '()' : '');
+            $var .= sprintf('/** @var %s $%s */' . "\n", $class, $name);
+            $var .= sprintf('$%s = wei()->%s%s;' . "\n", $varName, $name, $isModel ? '()' : '');
 
             if ($isModel) {
                 $var .= "\n";
-                $var .= sprintf('    /** @var %s|%s[] $%ss */' . "\n", $class, $class, $name);
-                $var .= sprintf('    $%ss = wei()->%s();' . "\n", $varName, $name);
+                $var .= sprintf('/** @var %s|%s[] $%ss */' . "\n", $class, $class, $name);
+                $var .= sprintf('$%ss = wei()->%s();' . "\n", $varName, $name);
             }
         }
 
         return $var;
-    }
-
-    protected function generateDocBlock(array $serviceMap)
-    {
-        $docBlock = '';
-        foreach ($serviceMap as $name => $class) {
-            // 留空一行
-            if ($docBlock) {
-                $docBlock .= "     *\n";
-            }
-
-            $ref = new ReflectionClass($class);
-            $docName = $this->getDocCommentTitle($ref->getDocComment());
-
-            $docBlock .= rtrim(sprintf('     * @property    \\%s $%s %s', $class, $name, $docName)) . "\n";
-
-            if (method_exists($class, '__invoke')) {
-                $method = $ref->getMethod('__invoke');
-                $return = $this->getMethodReturn($ref, $method) ?: 'mixed';
-                $methodName = $this->getDocCommentTitle($method->getDocComment()) ?: '';
-
-                $params = $this->geParam($method);
-
-                $docBlock .= rtrim(sprintf('     * @method      %s %s(%s) %s', $return, $name, $params, $methodName));
-                $docBlock .= "\n";
-            }
-        }
-
-        return $docBlock;
     }
 
     protected function geParam(ReflectionMethod $method)
@@ -191,31 +279,12 @@ class GDoc extends BaseCommand
         return false;
     }
 
-    protected function getDocFile(BasePlugin $plugin)
+    protected function createFile($file, $content)
     {
-        // Remove vendorName/packageName
-        $parts = explode('\\', get_class($plugin));
-        array_shift($parts);
-        array_shift($parts);
-
-        $file = $plugin->getBasePath() . '/docs/AutoComplete.php';
-
-        return $file;
-    }
-
-    /**
-     * 类名如 Miaoxing\Xxx\Plugin
-     * 转换为 [MiaoxingDoc\Xxx, AutoComplete]
-     *
-     * @param BasePlugin $plugin
-     * @return array
-     */
-    protected function getDocClass(BasePlugin $plugin)
-    {
-        $class = get_class($plugin);
-        $parts = explode('\\', $class);
-
-        return [$parts[0] . 'Doc\\' . $parts[1], 'AutoComplete'];
+        $this->suc('生成文件 ' . $file);
+        $this->createDir(dirname($file));
+        file_put_contents($file, $content);
+        chmod($file, 0777);
     }
 
     protected function createDir($dir)
@@ -224,18 +293,6 @@ class GDoc extends BaseCommand
             mkdir($dir, 0777, true);
             chmod($dir, 0777);
         }
-    }
-
-    protected function createFile($file, $namespace, $class, $docBlock, $viewVars)
-    {
-        $this->suc('生成文件 ' . $file);
-
-        ob_start();
-        require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/doc.php';
-        $content = ob_get_clean();
-
-        file_put_contents($file, $content);
-        chmod($file, 0777);
     }
 
     /**
@@ -247,61 +304,6 @@ class GDoc extends BaseCommand
         $basePath = $plugin->getBasePath() . '/src';
 
         return wei()->classMap->generate([$basePath], '/Service/*.php', 'Service', false);
-    }
-
-    public function generateType(BasePlugin $plugin)
-    {
-        $dir = $plugin->getBasePath();
-        $services = wei()->classMap->generate($dir . '/src', '/Service/*.php', 'Service');
-
-        $file = new PhpFile();
-        $printer = new PsrPrinter;
-        $content = '';
-
-        foreach ($services as $name => $serviceClass) {
-            $refClass = new ReflectionClass($serviceClass);
-
-            $file->addNamespace($refClass->getNamespaceName());
-
-            $class = new ClassType($refClass->getShortName());
-            $class->setInterface();
-
-            $staticClass = clone $class;
-
-            $methods = [];
-            $staticMethods = [];
-            foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
-                if ($this->isApi($refMethod)) {
-                    $method = Method::from([$serviceClass, $refMethod->getName()])
-                        ->setBody(null)
-                        ->setPublic();
-
-                    $methods[] = $method;
-                    $staticMethods[] = (clone $method)->setStatic();
-                }
-            }
-            $class->setMethods($methods);
-            $staticClass->setMethods($staticMethods);
-
-            if ($methods) {
-                $content .= $printer->printClass($class);
-            }
-            if ($staticMethods) {
-                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass))) . "\n}\n";
-            }
-        }
-
-        if (!$content) {
-            $this->suc('API method not found!');
-            return;
-        }
-
-        $content = $printer->printFile($file) . "\n" . $content;
-
-        $this->createDir($dir . '/docs');
-        $file = $dir . '/docs/type.php';
-        file_put_contents($file, $content);
-        $this->suc('生成文件 ' . $file);
     }
 
     protected function intent($content, $space = '    ')
