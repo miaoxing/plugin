@@ -98,6 +98,11 @@ class App extends \Wei\App
         $request = $this->request;
         $paramSet = $this->router->matchParamSet($request->getPathInfo(), $request->getMethod());
 
+        // TODO router 负责转换为 camel?
+        foreach ($paramSet as $i => $params) {
+            $paramSet[$i]['controller'] = $this->str->camel($params['controller']);
+        }
+
         // 当控制器不存在时，回退到该控制器，适用于前后端分离的情况
         $paramSet[] = [
             'controller' => $this->fallbackController,
