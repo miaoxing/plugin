@@ -6,9 +6,7 @@ $wei = wei();
 
 $app = isset($_SERVER['WEI_APP']) ? $_SERVER['WEI_APP'] : 'app';
 
-$wei->setNamespace($app);
 $wei->app->setNamespace($app);
-$wei->setConfig('session:namespace', $app);
 $wei->db->setOption('dbname', $app);
 $wei->event->trigger('appInit');
 

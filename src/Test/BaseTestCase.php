@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Test;
 
-class BaseTestCase extends \PHPUnit_Framework_TestCase
+class BaseTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Wei\Wei|\Miaoxing\Plugin\BaseService
@@ -19,7 +19,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $fixture;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wei = wei();
 
@@ -27,7 +27,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         $this->wei->set('testCase', $this);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $wei = $this->wei;
 

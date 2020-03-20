@@ -14,8 +14,7 @@ return [
             'request' => \Miaoxing\Services\Service\Request::class,
         ],
         'providers' => [
-            'cache' => 'memcache',
-            'queue' => 'dbQueue',
+            'cache' => 'arrayCache',
         ],
         'preload' => [
             'error',
@@ -32,7 +31,7 @@ return [
         'user' => 'root',
         'dbname' => '', // 留空,待启动脚本检测和创建数据库
         'charset' => 'utf8mb4',
-        'password' => getenv('MYSQL_PASSWORD'),
+        'password' => getenv('MYSQL_PASSWORD') ?: 'password',
         'recordClass' => 'Miaoxing\Plugin\BaseModel',
     ],
     'router' => [
@@ -66,8 +65,5 @@ return [
     'schema' => [
         'charset' => 'utf8mb4',
         'collate' => 'utf8mb4_unicode_ci',
-    ],
-    'wp.asset' => [
-
     ],
 ];
