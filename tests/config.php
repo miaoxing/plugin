@@ -66,4 +66,8 @@ return [
         'charset' => 'utf8mb4',
         'collate' => 'utf8mb4_unicode_ci',
     ],
+    'config' => [
+        // TODO 测试时不用写入配置
+        'version' => '2200-01-01',
+    ]
 ];
