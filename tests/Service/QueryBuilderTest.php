@@ -142,16 +142,9 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testAddSelect()
     {
-        $sql = wei()->queryBuilder('users')->select('name')->addSelect('email')->getSql();
+        $sql = wei()->queryBuilder('users')->select('name')->select('email')->getSql();
 
         $this->assertEquals('SELECT `name`, `email` FROM `users`', $sql);
-    }
-
-    public function testAddSelectMultipleByArguments()
-    {
-        $sql = wei()->queryBuilder('users')->select('name')->addSelect('email', 'address')->getSql();
-
-        $this->assertEquals('SELECT name, email, address FROM users', $sql);
     }
 
     public function testSelectRaw()

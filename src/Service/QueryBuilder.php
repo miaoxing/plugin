@@ -1134,7 +1134,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
 
         $columns = is_array($columns) ? $columns : func_get_args();
 
-        return $this->add('select', (array) $columns);
+        return $this->add('select', (array) $columns, true);
     }
 
     /**
@@ -1150,21 +1150,6 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
     {
         $this->distinct(true);
         return $this->select(func_get_args());
-    }
-
-    /**
-     * Adds an item that is to be returned in the query result.
-     *
-     * @param string|array $columns The selection expression.
-     * @return $this
-     */
-    public function addSelect($columns)
-    {
-        $this->type = self::SELECT;
-
-        $columns = is_array($columns) ? $columns : func_get_args();
-
-        return $this->add('select', (array) $columns, true);
     }
 
     public function selectRaw($expression)
@@ -1802,9 +1787,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
                     $this->sqlParts[$sqlPartName] = $sqlPart;
                 }
             } elseif ($sqlPartName == 'orderBy' || $sqlPartName == 'groupBy' || $sqlPartName == 'select' || $sqlPartName == 'set') {
-                foreach ($sqlPart as $part) {
-                    $this->sqlParts[$sqlPartName][] = $part;
-                }
+                $this->sqlParts[$sqlPartName] = array_merge($this->sqlParts[$sqlPartName], $sqlPart);
             } elseif ($isMultiple) {
                 $this->sqlParts[$sqlPartName][] = $sqlPart;
             }
