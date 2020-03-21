@@ -1155,19 +1155,16 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
     /**
      * Adds an item that is to be returned in the query result.
      *
-     * @param mixed $select The selection expression.
+     * @param string|array $columns The selection expression.
      * @return $this
      */
-    public function addSelect($select = null)
+    public function addSelect($columns)
     {
         $this->type = self::SELECT;
 
-        if (empty($select)) {
-            return $this;
-        }
+        $columns = is_array($columns) ? $columns : func_get_args();
 
-        $selects = is_array($select) ? $select : func_get_args();
-        return $this->add('select', $selects, true);
+        return $this->add('select', (array) $columns, true);
     }
 
     /**

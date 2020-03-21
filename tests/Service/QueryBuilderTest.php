@@ -140,6 +140,20 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('SELECT DISTINCT name FROM users', $sql);
     }
 
+    public function testAddSelect()
+    {
+        $sql = wei()->queryBuilder('users')->select('name')->addSelect('email')->getSql();
+
+        $this->assertEquals('SELECT name, email FROM users', $sql);
+    }
+
+    public function testAddSelectMultipleByArguments()
+    {
+        $sql = wei()->queryBuilder('users')->select('name')->addSelect('email', 'address')->getSql();
+
+        $this->assertEqualsIgnoringCase('SELECT name, email, address FROM users', $sql);
+    }
+
     public function testWhereEqual()
     {
         $sql = wei()->queryBuilder('users')->where('name', '=', 'value')->getSql();
