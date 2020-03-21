@@ -28,6 +28,13 @@ class PluginMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\QueryBuilder $queryBuilder A SQL query builder class
+ * @method      \Miaoxing\Plugin\Service\QueryBuilder queryBuilder($table = null)
+ */
+class QueryBuilderMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Session $session
  * @method      mixed session($key, $value = null) Get or set session
  */
@@ -46,6 +53,7 @@ class UserMixin {
  * @mixin AppRecordMixin
  * @mixin CurUserMixin
  * @mixin PluginMixin
+ * @mixin QueryBuilderMixin
  * @mixin SessionMixin
  * @mixin UserMixin
  */
@@ -71,6 +79,9 @@ $curUser = wei()->curUser;
 
 /** @var Miaoxing\Plugin\Service\Plugin $plugin */
 $plugin = wei()->plugin;
+
+/** @var Miaoxing\Plugin\Service\QueryBuilder $queryBuilder */
+$queryBuilder = wei()->queryBuilder;
 
 /** @var Miaoxing\Plugin\Service\Session $session */
 $session = wei()->session;
