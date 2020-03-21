@@ -154,6 +154,13 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('SELECT name, email, address FROM users', $sql);
     }
 
+    public function testSelectRaw()
+    {
+        $sql = wei()->queryBuilder('users')->selectRaw('UPPER(name)')->getSql();
+
+        $this->assertEqualsIgnoringCase('SELECT UPPER(name) FROM `users`', $sql);
+    }
+
     public function testWhereEqual()
     {
         $sql = wei()->queryBuilder('users')->where('name', '=', 'value')->getSql();

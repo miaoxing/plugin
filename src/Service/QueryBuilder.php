@@ -1167,6 +1167,28 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->add('select', (array) $columns, true);
     }
 
+    public function selectRaw($expression)
+    {
+        $this->type = self::SELECT;
+
+        return $this->add('select', $this->raw($expression));
+    }
+
+    public function raw($expression)
+    {
+        return (object) $expression;
+    }
+
+    protected function getRawValue($expression)
+    {
+        return $expression->scalar;
+    }
+
+    protected function isRaw($expression)
+    {
+        return $expression instanceof \stdClass && isset($expression->scalar);
+    }
+
     /**
      * Sets table for FROM query
      *
@@ -1605,7 +1627,9 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
 
         $selects = [];
         foreach ($parts['select'] as $as => $select) {
-            if (is_string($as)) {
+            if ($this->isRaw($select)) {
+                $selects[] = $this->getRawValue($select);
+            } elseif (is_string($as)) {
                 $selects[] = $this->wrap($as) . ' AS ' . $this->wrap($select);
             } else {
                 $selects[] = $this->wrap($select);
