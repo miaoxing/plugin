@@ -1606,14 +1606,14 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         $selects = [];
         foreach ($parts['select'] as $as => $select) {
             if (is_string($as)) {
-                $selects[] = $as . ' AS ' . $select;
+                $selects[] = $this->wrap($as) . ' AS ' . $this->wrap($select);
             } else {
-                $selects[] = $select;
+                $selects[] = $this->wrap($select);
             }
         }
         $query .= implode(', ', $selects);
 
-        $query .= ' FROM ' . $this->getFrom();
+        $query .= ' FROM ' . $this->wrap($this->getFrom());
 
         // JOIN
         foreach ($parts['join'] as $join) {
@@ -2063,5 +2063,10 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      */
     public function afterDestroy()
     {
+    }
+
+    protected function wrap($value)
+    {
+        return '`' . $value . '`';
     }
 }

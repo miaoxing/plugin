@@ -100,58 +100,58 @@ class QueryBuilderTest extends BaseTestCase
     {
         $sql = wei()->queryBuilder('users')->select('name')->getSql();
 
-        $this->assertEquals('SELECT name FROM users', $sql);
+        $this->assertEquals('SELECT `name` FROM `users`', $sql);
     }
 
     public function testSelectMultipleByArray()
     {
         $sql = wei()->queryBuilder('users')->select(['name', 'email'])->getSql();
 
-        $this->assertEquals('SELECT name, email FROM users', $sql);
+        $this->assertEquals('SELECT `name`, `email` FROM `users`', $sql);
     }
 
     public function testSelectMultipleByArguments()
     {
         $sql = wei()->queryBuilder('users')->select('name', 'email')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT name, email FROM users', $sql);
+        $this->assertEqualsIgnoringCase('SELECT `name`, `email` FROM `users`', $sql);
     }
 
     public function testSelectAlias()
     {
         $sql = wei()->queryBuilder('users')->select(['name' => 'user_name'])->getSql();
 
-        $this->assertEquals('SELECT name AS user_name FROM users', $sql);
+        $this->assertEquals('SELECT `name` AS `user_name` FROM `users`', $sql);
     }
 
     public function testDistinct()
     {
         $qb = wei()->queryBuilder('users')->select('name')->distinct();
 
-        $this->assertEquals('SELECT DISTINCT name FROM users', $qb->getSql());
+        $this->assertEquals('SELECT DISTINCT `name` FROM `users`', $qb->getSql());
 
-        $this->assertEquals('SELECT name FROM users', $qb->distinct(false)->getSql());
+        $this->assertEquals('SELECT `name` FROM `users`', $qb->distinct(false)->getSql());
     }
 
     public function testSelectDistinct()
     {
         $sql = wei()->queryBuilder('users')->selectDistinct('name')->getSql();
 
-        $this->assertEquals('SELECT DISTINCT name FROM users', $sql);
+        $this->assertEquals('SELECT DISTINCT `name` FROM `users`', $sql);
     }
 
     public function testAddSelect()
     {
         $sql = wei()->queryBuilder('users')->select('name')->addSelect('email')->getSql();
 
-        $this->assertEquals('SELECT name, email FROM users', $sql);
+        $this->assertEquals('SELECT `name`, `email` FROM `users`', $sql);
     }
 
     public function testAddSelectMultipleByArguments()
     {
         $sql = wei()->queryBuilder('users')->select('name')->addSelect('email', 'address')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT name, email, address FROM users', $sql);
+        $this->assertEquals('SELECT name, email, address FROM users', $sql);
     }
 
     public function testWhereEqual()
