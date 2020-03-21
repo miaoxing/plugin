@@ -1134,7 +1134,22 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
 
         $columns = is_array($columns) ? $columns : func_get_args();
 
-        return $this->add('select', (array) $columns, false);
+        return $this->add('select', (array) $columns);
+    }
+
+    /**
+     * @param bool $distinct
+     * @return $this
+     */
+    public function distinct(bool $distinct = true)
+    {
+        return $this->add('distinct', $distinct);
+    }
+
+    public function selectDistinct($columns)
+    {
+        $this->distinct(true);
+        return $this->select(func_get_args());
     }
 
     /**
@@ -1587,6 +1602,10 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
 
         $query = 'SELECT ';
 
+        if (isset($parts['distinct']) && $parts['distinct']) {
+            $query .= 'DISTINCT ';
+        }
+
         $selects = [];
         foreach ($parts['select'] as $as => $select) {
             if (is_string($as)) {
@@ -1745,10 +1764,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
     protected function add($sqlPartName, $sqlPart, $append = false, $type = null)
     {
         $this->isNew = false;
-
-        if (!$sqlPart) {
-            return $this;
-        }
+        $this->state = self::STATE_DIRTY;
 
         $isArray = is_array($sqlPart);
         $isMultiple = is_array($this->sqlParts[$sqlPartName]);
@@ -1756,8 +1772,6 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         if ($isMultiple && !$isArray) {
             $sqlPart = array($sqlPart);
         }
-
-        $this->state = self::STATE_DIRTY;
 
         if ($append) {
             if ($sqlPartName == 'where' || $sqlPartName == 'having') {

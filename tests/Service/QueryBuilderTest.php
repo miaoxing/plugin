@@ -96,42 +96,58 @@ class QueryBuilderTest extends BaseTestCase
         ));
     }
 
-    public function testSelect(): void
+    public function testSelect()
     {
         $sql = wei()->queryBuilder('users')->select('name')->getSql();
 
         $this->assertEquals('SELECT name FROM users', $sql);
     }
 
-    public function testSelectMultipleByArray(): void
+    public function testSelectMultipleByArray()
     {
         $sql = wei()->queryBuilder('users')->select(['name', 'email'])->getSql();
 
         $this->assertEquals('SELECT name, email FROM users', $sql);
     }
 
-    public function testSelectMultipleByArguments(): void
+    public function testSelectMultipleByArguments()
     {
         $sql = wei()->queryBuilder('users')->select('name', 'email')->getSql();
 
         $this->assertEqualsIgnoringCase('SELECT name, email FROM users', $sql);
     }
 
-    public function testSelectAlias(): void
+    public function testSelectAlias()
     {
         $sql = wei()->queryBuilder('users')->select(['name' => 'user_name'])->getSql();
 
         $this->assertEquals('SELECT name AS user_name FROM users', $sql);
     }
 
-    public function testWhereEqual(): void
+    public function testDistinct()
+    {
+        $qb = wei()->queryBuilder('users')->select('name')->distinct();
+
+        $this->assertEquals('SELECT DISTINCT name FROM users', $qb->getSql());
+
+        $this->assertEquals('SELECT name FROM users', $qb->distinct(false)->getSql());
+    }
+
+    public function testSelectDistinct()
+    {
+        $sql = wei()->queryBuilder('users')->selectDistinct('name')->getSql();
+
+        $this->assertEquals('SELECT DISTINCT name FROM users', $sql);
+    }
+
+    public function testWhereEqual()
     {
         $sql = wei()->queryBuilder('users')->where('name', '=', 'value')->getSql();
 
         $this->assertEquals('SELECT * FROM users WHERE name = ?', $sql);
     }
 
-    public function testWhereEqualShorthand(): void
+    public function testWhereEqualShorthand()
     {
         $sql = wei()->queryBuilder('users')->where('name', 'value')->getSql();
 
