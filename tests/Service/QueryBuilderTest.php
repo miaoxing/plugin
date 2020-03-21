@@ -156,15 +156,25 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereEqual()
     {
-        $sql = wei()->queryBuilder('users')->where('name', '=', 'value')->getSql();
+        $sql = wei()->queryBuilder('users')->where('name', '=', 'twin')->getSql();
 
         $this->assertEquals('SELECT * FROM users WHERE name = ?', $sql);
     }
 
     public function testWhereEqualShorthand()
     {
-        $sql = wei()->queryBuilder('users')->where('name', 'value')->getSql();
+        $sql = wei()->queryBuilder('users')->where('name', 'twin')->getSql();
 
         $this->assertEquals('SELECT * FROM users WHERE name = ?', $sql);
+    }
+
+    public function testWhereArray()
+    {
+        $sql = wei()->queryBuilder('users')->where([
+            ['name', 'twin'],
+            ['email', '!=', 'twin@example.com']
+        ])->getSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `name` = ? AND `email` != ?', $sql);
     }
 }

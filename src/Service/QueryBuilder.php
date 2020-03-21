@@ -1251,19 +1251,26 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string $column
+     * @param string|array $column
      * @param null $operator
      * @param null $value
      * @return $this
      */
     public function where($column, $operator = null, $value = null)
     {
+        if (is_array($column)) {
+            foreach ($column as $arg) {
+                $this->where(...$arg);
+            }
+            return $this;
+        }
+
         if (func_num_args() === 2) {
             $value = $operator;
             $operator = '=';
         }
 
-        return $this->addWhere($column, $operator, $value);
+        return $this->addWhere($column, $operator, $value, 'AND');
     }
 
     /**
@@ -1617,7 +1624,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
             } elseif (is_string($as)) {
                 $selects[] = $this->wrap($as) . ' AS ' . $this->wrap($select);
             } else {
-                $selects[] = $this->wrap($select);
+                $selects[] = $select === '*' ? '*' : $this->wrap($select);
             }
         }
         $query .= implode(', ', $selects);
@@ -1633,9 +1640,12 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
 
         if ($parts['where']) {
             $query .= ' WHERE ';
-            foreach ($parts['where'] as $where) {
-                $query .= $this->processCondition($where['column'] . ' ' . $where['operator'] . ' ?', $where['value'],
-                    []);
+            foreach ($parts['where'] as $i => $where) {
+                if ($i !== 0) {
+                    $query .= ' ' . $where['type'] . ' ';
+                }
+                $column = $this->wrap($where['column']);
+                $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ?', $where['value'], []);
             }
         }
 
@@ -1843,9 +1853,9 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $conditions;
     }
 
-    protected function addWhere($column, $operator, $value)
+    protected function addWhere($column, $operator, $value, $type = 'AND')
     {
-        $this->sqlParts['where'][] = compact('column', 'operator', 'value');
+        $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'type');
         return $this;
     }
 
