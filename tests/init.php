@@ -2,6 +2,16 @@
 
 use Composer\Autoload\ClassLoader;
 
+// NOTE：解决 PHPStorm 2019.2 的 PHPUnit 在测试目录下运行导致加载不到类错误
+$dir = getcwd();
+while ($dir !== '/') {
+    if (is_file($dir . '/vendor/autoload.php')) {
+        chdir($dir);
+        break;
+    }
+    $dir = dirname($dir);
+}
+
 /** @var ClassLoader $loader */
 $loader = require 'vendor/autoload.php';
 
