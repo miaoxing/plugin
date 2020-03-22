@@ -1301,10 +1301,14 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * @param array $types The parameter types
      * @return $this
      */
-    public function orWhere($conditions, $params = array(), $types = array())
+    public function orWhere($column, $operator = null, $value = null)
     {
-        $conditions = $this->processCondition($conditions, $params, $types);
-        return $this->add('where', $conditions, true, 'OR');
+        if (func_num_args() === 2) {
+            $value = $operator;
+            $operator = '=';
+        }
+
+        return $this->addWhere($column, $operator, $value, 'OR');
     }
 
     /**

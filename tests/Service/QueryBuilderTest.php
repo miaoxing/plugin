@@ -177,4 +177,25 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals('SELECT * FROM `users` WHERE `name` = ? AND `email` != ?', $sql);
     }
+
+    public function testOrWhere()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhere('email',  '!=', 'twin@example.com')
+            ->getSql();
+
+        $this->assertEqualsIgnoringCase('SELECT * FROM `users` WHERE `name` = ? OR `email` != ?', $sql);
+    }
+
+    public function testMultipleOrWhere()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhere('email', 'twin@example.com')
+            ->orWhere('first_name', '=', 'twin')
+            ->getSql();
+
+        $this->assertEqualsIgnoringCase('SELECT * FROM `users` WHERE `name` = ? OR `email` = ? OR `first_name` = ?', $sql);
+    }
 }
