@@ -1304,6 +1304,13 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      */
     public function orWhere($column, $operator = null, $value = null)
     {
+        if (is_array($column)) {
+            foreach ($column as $arg) {
+                $this->orWhere(...$arg);
+            }
+            return $this;
+        }
+
         if (func_num_args() === 2) {
             $value = $operator;
             $operator = '=';
