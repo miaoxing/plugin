@@ -1620,6 +1620,38 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
     }
 
     /**
+     * Returns the interpolated query.
+     *
+     * @return string
+     * @link https://stackoverflow.com/a/8403150
+     */
+    public function getRawSql()
+    {
+        $query = $this->getSql();
+        $keys = [];
+        $values = $this->params;
+
+        // build a regular expression for each parameter
+        foreach ($this->params as $key => $value) {
+            if (is_string($key)) {
+                $keys[] = '/:' . $key . '/';
+            } else {
+                $keys[] = '/[?]/';
+            }
+
+            if (is_string($value)) {
+                $values[$key] = "'" . $value . "'";
+            } elseif (is_array($value)) {
+                $values[$key] = "'" . implode("','", $value) . "'";
+            } elseif ($value === null) {
+                $values[$key] = 'NULL';
+            }
+        }
+
+        return preg_replace($keys, $values, $query, 1);
+    }
+
+    /**
      * Converts this instance into an SELECT string in SQL
      *
      * @param bool $count
@@ -1688,6 +1720,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
 
             if ($this->isRaw($where['column'])) {
                 $query .= $this->getRawValue($where['column']);
+                $this->addParams($where['value']);
                 continue;
             }
 
@@ -1704,6 +1737,17 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         }
 
         return $query;
+    }
+
+    protected function addParams($params)
+    {
+        if ($params !== false) {
+            if (is_array($params)) {
+                $this->params = array_merge($this->params, $params);
+            } else {
+                $this->params[] = $params;
+            }
+        }
     }
 
     /**
@@ -1881,17 +1925,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
             $conditions = implode(' AND ', $where);
         }
 
-        if ($params !== false) {
-            if (is_array($params)) {
-                $this->params = array_merge($this->params, $params);
-                $this->paramTypes = array_merge($this->paramTypes, $types);
-            } else {
-                $this->params[] = $params;
-                if ($types) {
-                    $this->paramTypes[] = $types;
-                }
-            }
-        }
+        $this->addParams($params);
 
         return $conditions;
     }
