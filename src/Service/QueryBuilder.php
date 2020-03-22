@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Closure;
 use Miaoxing\Services\Service\StaticTrait;
 use Wei\Base;
 
@@ -1643,14 +1644,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         }
 
         if ($parts['where']) {
-            $query .= ' WHERE ';
-            foreach ($parts['where'] as $i => $where) {
-                if ($i !== 0) {
-                    $query .= ' ' . $where['type'] . ' ';
-                }
-                $column = $this->wrap($where['column']);
-                $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ?', $where['value'], []);
-            }
+            $query .= ' WHERE ' . $this->buildWhere($parts['where']);
         }
 
         $query .= ($parts['groupBy'] ? ' GROUP BY ' . implode(', ', $parts['groupBy']) : '')
@@ -1663,6 +1657,29 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         }
 
         $query .= $this->generateLockSql();
+
+        return $query;
+    }
+
+    protected function buildWhere(array $wheres)
+    {
+        $query = '';
+        foreach ($wheres as $i => $where) {
+            if ($i !== 0) {
+                $query .= ' ' . $where['type'] . ' ';
+            }
+
+            if ($where['column'] instanceof Closure) {
+                $prevCount = count($this->sqlParts['where']);
+                $where['column']($this);
+                $newWhere = array_slice($this->sqlParts['where'], $prevCount);
+                $query .= '(' . $this->buildWhere($newWhere) . ')';
+                continue;
+            }
+
+            $column = $this->wrap($where['column']);
+            $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ?', $where['value'], []);
+        }
 
         return $query;
     }
@@ -1882,10 +1899,10 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
     /**
      * Filters elements of the collection using a callback function
      *
-     * @param \Closure $fn
+     * @param Closure $fn
      * @return $this
      */
-    public function filter(\Closure $fn)
+    public function filter(Closure $fn)
     {
         $data = array_filter($this->data, $fn);
         $records = $this->db->init($this->table, array(), $this->isNew);

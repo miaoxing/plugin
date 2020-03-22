@@ -2,6 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
+use Miaoxing\Plugin\Service\QueryBuilder;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Miaoxing\Services\Service\ServiceTrait;
 use PDO;
@@ -172,17 +173,29 @@ class QueryBuilderTest extends BaseTestCase
     {
         $sql = wei()->queryBuilder('users')->where([
             ['name', 'twin'],
-            ['email', '!=', 'twin@example.com']
+            ['email', '!=', 'twin@example.com'],
         ])->getSql();
 
         $this->assertEquals('SELECT * FROM `users` WHERE `name` = ? AND `email` != ?', $sql);
+    }
+
+    public function testWhereClosure()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->where(function (QueryBuilder $qb) {
+                $qb->where('email', '=', 'twin@example.com')
+                    ->orWhere('score', '>', 100);
+            })
+            ->getSql();
+        $this->assertEquals('SELECT * FROM `users` WHERE `name` = ? AND (`email` = ? OR `score` > ?)', $sql);
     }
 
     public function testOrWhere()
     {
         $sql = wei()->queryBuilder('users')
             ->where('name', 'twin')
-            ->orWhere('email',  '!=', 'twin@example.com')
+            ->orWhere('email', '!=', 'twin@example.com')
             ->getSql();
 
         $this->assertEqualsIgnoringCase('SELECT * FROM `users` WHERE `name` = ? OR `email` != ?', $sql);
@@ -196,6 +209,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhere('first_name', '=', 'twin')
             ->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT * FROM `users` WHERE `name` = ? OR `email` = ? OR `first_name` = ?', $sql);
+        $this->assertEqualsIgnoringCase('SELECT * FROM `users` WHERE `name` = ? OR `email` = ? OR `first_name` = ?',
+            $sql);
     }
 }
