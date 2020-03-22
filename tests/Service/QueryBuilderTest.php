@@ -191,6 +191,13 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `users` WHERE `name` = ? AND (`email` = ? OR `score` > ?)', $sql);
     }
 
+    public function testWhereRaw()
+    {
+        $qb = wei()->queryBuilder('users')->whereRaw('name = ?', 'twin');
+
+        $this->assertEquals('SELECT * FROM `users` WHERE name = ?', $qb->getSql());
+    }
+
     public function testOrWhere()
     {
         $sql = wei()->queryBuilder('users')
@@ -232,5 +239,14 @@ class QueryBuilderTest extends BaseTestCase
             })
             ->getSql();
         $this->assertEquals('SELECT * FROM `users` WHERE `name` = ? OR (`email` = ? OR `score` > ?)', $sql);
+    }
+
+    public function testOrWhereRaw()
+    {
+        $qb = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereRaw('email = ?', 'twin@example.com');
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `name` = ? OR email = ?', $qb->getSql());
     }
 }

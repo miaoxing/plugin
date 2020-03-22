@@ -1274,6 +1274,11 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->addWhere($column, $operator, $value, 'AND');
     }
 
+    public function whereRaw($expression, $params = [])
+    {
+        return $this->where($this->raw($expression), null, $params);
+    }
+
     /**
      * Adds one or more restrictions to the query results, forming a logical
      * conjunction with any previously specified restrictions
@@ -1317,6 +1322,11 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         }
 
         return $this->addWhere($column, $operator, $value, 'OR');
+    }
+
+    public function orWhereRaw($expression, $params = null)
+    {
+        return $this->orWhere($this->raw($expression), null, $params);
     }
 
     /**
@@ -1674,6 +1684,11 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         foreach ($wheres as $i => $where) {
             if ($i !== 0) {
                 $query .= ' ' . $where['type'] . ' ';
+            }
+
+            if ($this->isRaw($where['column'])) {
+                $query .= $this->getRawValue($where['column']);
+                continue;
             }
 
             if ($where['column'] instanceof Closure) {
