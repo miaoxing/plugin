@@ -318,4 +318,36 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` NOT IN (1, 10)", $sql);
     }
+
+    public function testWhereNull()
+    {
+        $sql = wei()->queryBuilder('users')->whereNull('age')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `age` IS NULL', $sql);
+    }
+
+    public function testOrWhereNull()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereNull('age')->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` IS NULL", $sql);
+    }
+
+    public function testWhereNotNull()
+    {
+        $sql = wei()->queryBuilder('users')->whereNotNULL('age')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `age` IS NOT NULL', $sql);
+    }
+
+    public function testOrWhereNotNull()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereNotNull('age')->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` IS NOT NULL", $sql);
+    }
 }

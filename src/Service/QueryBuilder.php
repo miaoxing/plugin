@@ -1369,6 +1369,26 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->addWhere($column, 'NOT IN', $params, 'OR');
     }
 
+    public function whereNull($column)
+    {
+        return $this->addWhere($column, 'NULL');
+    }
+
+    public function orWhereNull($column)
+    {
+        return $this->addWhere($column, 'NULL', null, 'OR');
+    }
+
+    public function whereNotNULL($column)
+    {
+        return $this->addWhere($column, 'NOT NULL');
+    }
+
+    public function orWhereNotNull($column)
+    {
+        return $this->addWhere($column, 'NOT NULL', null, 'OR');
+    }
+
     /**
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
@@ -1786,6 +1806,11 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
                         . ' (' . implode(', ', array_pad([], count($where['value']), '?')) . ')', $where['value']);
                     break;
 
+                case 'NULL':
+                case 'NOT NULL':
+                    $query .= $this->processCondition($column . ' IS ' . $where['operator']);
+                    break;
+
                 default:
                     $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ?', $where['value']);
             }
@@ -1958,7 +1983,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * @param array $types
      * @return string
      */
-    protected function processCondition($conditions, $params)
+    protected function processCondition($conditions, $params = [])
     {
         // Regard numeric and null as primary key value
         if (is_numeric($conditions) || empty($conditions)) {
@@ -1985,7 +2010,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $conditions;
     }
 
-    protected function addWhere($column, $operator, $value, $type = 'AND')
+    protected function addWhere($column, $operator, $value = null, $type = 'AND')
     {
         $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'type');
         return $this;
