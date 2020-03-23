@@ -286,4 +286,36 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` NOT BETWEEN 1 AND 10", $sql);
     }
+
+    public function testWhereIn()
+    {
+        $sql = wei()->queryBuilder('users')->whereIn('age', [1, 10])->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `age` IN (1, 10)', $sql);
+    }
+
+    public function testOrWhereIn()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereIn('age', [1, 10])->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` IN (1, 10)", $sql);
+    }
+
+    public function testWhereNotIn()
+    {
+        $sql = wei()->queryBuilder('users')->whereNotIn('age', [1, 10])->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `age` NOT IN (1, 10)', $sql);
+    }
+
+    public function testOrWhereNotIn()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereNotIn('age', [1, 10])->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` NOT IN (1, 10)", $sql);
+    }
 }

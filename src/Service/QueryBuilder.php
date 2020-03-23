@@ -1349,6 +1349,26 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->addWhere($column, 'NOT BETWEEN', $params, 'OR');
     }
 
+    public function whereIn($column, array $params)
+    {
+        return $this->addWhere($column, 'IN', $params);
+    }
+
+    public function orWhereIn($column, array $params)
+    {
+        return $this->addWhere($column, 'IN', $params, 'OR');
+    }
+
+    public function whereNotIn($column, array $params)
+    {
+        return $this->addWhere($column, 'NOT IN', $params);
+    }
+
+    public function orWhereNotIn($column, array $params)
+    {
+        return $this->addWhere($column, 'NOT IN', $params, 'OR');
+    }
+
     /**
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
@@ -1758,6 +1778,12 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
                 case 'NOT BETWEEN':
                     $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ? AND ?',
                         $where['value']);
+                    break;
+
+                case 'IN':
+                case 'NOT IN':
+                    $query .= $this->processCondition($column . ' ' . $where['operator']
+                        . ' (' . implode(', ', array_pad([], count($where['value']), '?')) . ')', $where['value']);
                     break;
 
                 default:
