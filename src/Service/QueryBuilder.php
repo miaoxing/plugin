@@ -1329,6 +1329,26 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->orWhere($this->raw($expression), null, $params);
     }
 
+    public function whereBetween($column, array $params)
+    {
+        return $this->addWhere($column, 'BETWEEN', $params);
+    }
+
+    public function orWhereBetween($column, array $params)
+    {
+        return $this->addWhere($column, 'BETWEEN', $params, 'OR');
+    }
+
+    public function whereNotBetween($column, array $params)
+    {
+        return $this->addWhere($column, 'NOT BETWEEN', $params);
+    }
+
+    public function orWhereNotBetween($column, array $params)
+    {
+        return $this->addWhere($column, 'NOT BETWEEN', $params, 'OR');
+    }
+
     /**
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
@@ -1733,7 +1753,16 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
             }
 
             $column = $this->wrap($where['column']);
-            $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ?', $where['value'], []);
+            switch ($where['operator']) {
+                case 'BETWEEN':
+                case 'NOT BETWEEN':
+                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ? AND ?',
+                        $where['value']);
+                    break;
+
+                default:
+                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ?', $where['value']);
+            }
         }
 
         return $query;
@@ -1903,7 +1932,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * @param array $types
      * @return string
      */
-    protected function processCondition($conditions, $params, $types)
+    protected function processCondition($conditions, $params)
     {
         // Regard numeric and null as primary key value
         if (is_numeric($conditions) || empty($conditions)) {

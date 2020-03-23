@@ -254,4 +254,36 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR email = 'twin@example.com'",
             $qb->getRawSql());
     }
+
+    public function testWhereBetween()
+    {
+        $sql = wei()->queryBuilder('users')->whereBetween('age', [1, 10])->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `age` BETWEEN 1 AND 10', $sql);
+    }
+
+    public function testOrWhereBetween()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereBetween('age', [1, 10])->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` BETWEEN 1 AND 10", $sql);
+    }
+
+    public function testWhereNotBetween()
+    {
+        $sql = wei()->queryBuilder('users')->whereNotBetween('age', [1, 10])->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `age` NOT BETWEEN 1 AND 10', $sql);
+    }
+
+    public function testOrWhereNotBetween()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereNotBetween('age', [1, 10])->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` NOT BETWEEN 1 AND 10", $sql);
+    }
 }
