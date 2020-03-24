@@ -1530,25 +1530,18 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $sort The ordering expression.
+     * @param string $column The ordering expression.
      * @param string $order The ordering direction.
      * @return $this
      */
-    public function orderBy($sort, $order = 'ASC')
+    public function orderBy($column, $order = 'ASC')
     {
-        return $this->add('orderBy', $sort . ' ' . ($order ?: 'ASC'), false);
-    }
+        $order = strtoupper($order);
+        if (!in_array($order, ['ASC', 'DESC'])) {
+            throw new \InvalidArgumentException('Parameter for "order" must be "ASC" or "DESC".');
+        }
 
-    /**
-     * Adds an ordering to the query results.
-     *
-     * @param string $sort The ordering expression.
-     * @param string $order The ordering direction.
-     * @return $this
-     */
-    public function addOrderBy($sort, $order = 'ASC')
-    {
-        return $this->add('orderBy', $sort . ' ' . ($order ?: 'ASC'), true);
+        return $this->add('orderBy', [compact('column', 'order')], true);
     }
 
     /**
@@ -1559,7 +1552,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      */
     public function desc($field)
     {
-        return $this->addOrderBy($field, 'DESC');
+        return $this->orderBy($field, 'DESC');
     }
 
     /**
@@ -1570,7 +1563,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      */
     public function asc($field)
     {
-        return $this->addOrderBy($field, 'ASC');
+        return $this->orderBy($field, 'ASC');
     }
 
     /**
@@ -1820,8 +1813,16 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
             . ($parts['having'] !== null ? ' HAVING ' . ((string) $parts['having']) : '');
 
         if (false === $count) {
-            $query .= ($parts['orderBy'] ? ' ORDER BY ' . implode(', ', $parts['orderBy']) : '')
-                . ($parts['limit'] !== null ? ' LIMIT ' . $parts['limit'] : '')
+            if ($parts['orderBy']) {
+                $query .= ' ORDER BY ';
+                $orderBys = [];
+                foreach ($parts['orderBy'] as $orderBy) {
+                    $orderBys[] = $this->wrap($orderBy['column']) . ' ' . $orderBy['order'];
+                }
+                $query .= implode(', ', $orderBys);
+            }
+
+            $query .= ($parts['limit'] !== null ? ' LIMIT ' . $parts['limit'] : '')
                 . ($parts['offset'] !== null ? ' OFFSET ' . $parts['offset'] : '');
         }
 

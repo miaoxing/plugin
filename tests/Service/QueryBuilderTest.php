@@ -455,4 +455,49 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `created_at` = `updated_at`", $sql);
     }
+
+    public function testOrderBy()
+    {
+        $sql = wei()->queryBuilder('users')->orderBy('id')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` ASC', $sql);
+    }
+
+    public function testOrderByDesc()
+    {
+        $sql = wei()->queryBuilder('users')->orderBy('id', 'DESC')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` DESC', $sql);
+    }
+
+    public function testOrderByMultiple()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('id', 'ASC')
+            ->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` ORDER BY `created_at` DESC, `id` ASC', $sql);
+    }
+
+    public function testAsc()
+    {
+        $sql = wei()->queryBuilder('users')->asc('id')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` ASC', $sql);
+    }
+
+    public function testDesc()
+    {
+        $sql = wei()->queryBuilder('users')->desc('id')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` DESC', $sql);
+    }
+
+    public function testInvalidOrder()
+    {
+        $this->expectExceptionObject(new \InvalidArgumentException('Parameter for "order" must be "ASC" or "DESC".'));
+
+        wei()->queryBuilder('users')->orderBy('id', 'as');
+    }
 }
