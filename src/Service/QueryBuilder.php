@@ -2248,6 +2248,26 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         }
     }
 
+    public function when($value, $callback, Closure $default = null)
+    {
+        if ($value) {
+            $callback($this, $value);
+        } elseif ($default) {
+            $default($this, $value);
+        }
+        return $this;
+    }
+
+    public function unless($value, $callback, $default = null)
+    {
+        if (!$value) {
+            $callback($this, $value);
+        } elseif ($default) {
+            $default($this, $value);
+        }
+        return $this;
+    }
+
     /**
      * The method called after load a record
      */

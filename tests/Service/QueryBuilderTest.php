@@ -581,4 +581,62 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals('SELECT * FROM `users` LIMIT 3 OFFSET 6', $sql);
     }
+
+    public function testWhen()
+    {
+        $sql = wei()->queryBuilder('users')->when('twin', function (QueryBuilder $qb, $value) {
+            $qb->where('name', $value);
+        })->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin'", $sql);
+    }
+
+    public function testWhenFalse()
+    {
+        $sql = wei()->queryBuilder('users')->when(false, function (QueryBuilder $qb, $value) {
+            $qb->where('name', $value);
+        })->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users`', $sql);
+    }
+
+    public function testWhenDefault()
+    {
+        $sql = wei()->queryBuilder('users')->when(false, function (QueryBuilder $qb, $value) {
+            $qb->where('name', $value);
+        }, function (QueryBuilder $qb, $value) {
+            $qb->where('type', 0);
+        })->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `type` = 0', $sql);
+    }
+
+    public function testUnless()
+    {
+        $sql = wei()->queryBuilder('users')->unless(false, function (QueryBuilder $qb, $value) {
+            $qb->where('name', 'twin');
+        })->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin'", $sql);
+    }
+
+    public function testUnlessTrue()
+    {
+        $sql = wei()->queryBuilder('users')->unless(true, function (QueryBuilder $qb, $value) {
+            $qb->where('name', $value);
+        })->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users`', $sql);
+    }
+
+    public function testUnlessDefault()
+    {
+        $sql = wei()->queryBuilder('users')->unless(true, function (QueryBuilder $qb, $value) {
+            $qb->where('name', $value);
+        }, function (QueryBuilder $qb, $value) {
+            $qb->where('type', 0);
+        })->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` WHERE `type` = 0', $sql);
+    }
 }
