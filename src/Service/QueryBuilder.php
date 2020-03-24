@@ -1389,52 +1389,52 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->addWhere($column, 'NOT NULL', null, 'OR');
     }
 
-    public function whereDate($column, $operator, $value = null)
+    public function whereDate($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'DATE');
     }
 
-    public function orWhereDate($column, $operator, $value = null)
+    public function orWhereDate($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'DATE');
     }
 
-    public function whereMonth($column, $operator, $value = null)
+    public function whereMonth($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'MONTH');
     }
 
-    public function orWhereMonth($column, $operator, $value = null)
+    public function orWhereMonth($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'MONTH');
     }
 
-    public function whereDay($column, $operator, $value = null)
+    public function whereDay($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'DAY');
     }
 
-    public function orWhereDay($column, $operator, $value = null)
+    public function orWhereDay($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'DAY');
     }
 
-    public function whereYear($column, $operator, $value = null)
+    public function whereYear($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'YEAR');
     }
 
-    public function orWhereYear($column, $operator, $value = null)
+    public function orWhereYear($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'YEAR');
     }
 
-    public function whereTime($column, $operator, $value = null)
+    public function whereTime($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'TIME');
     }
 
-    public function orWhereTime($column, $operator, $value = null)
+    public function orWhereTime($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'TIME');
     }
