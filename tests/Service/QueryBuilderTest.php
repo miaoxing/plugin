@@ -500,4 +500,18 @@ class QueryBuilderTest extends BaseTestCase
 
         wei()->queryBuilder('users')->orderBy('id', 'as');
     }
+
+    public function testGroupBy()
+    {
+        $sql = wei()->queryBuilder('users')->groupBy('group_id')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id`', $sql);
+    }
+
+    public function testGroupByMultiply()
+    {
+        $sql = wei()->queryBuilder('users')->groupBy('group_id', 'type')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id`, `type`', $sql);
+    }
 }

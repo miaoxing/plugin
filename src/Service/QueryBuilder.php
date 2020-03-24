@@ -1453,32 +1453,13 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $groupBy The grouping expression.
+     * @param mixed $column The grouping column.
      * @return $this
      */
-    public function groupBy($groupBy)
+    public function groupBy($column)
     {
-        if (empty($groupBy)) {
-            return $this;
-        }
-
-        $groupBy = is_array($groupBy) ? $groupBy : func_get_args();
-        return $this->add('groupBy', $groupBy, false);
-    }
-
-    /**
-     * Adds a grouping expression to the query.
-     *
-     * @param mixed $groupBy The grouping expression.
-     * @return $this
-     */
-    public function addGroupBy($groupBy)
-    {
-        if (empty($groupBy)) {
-            return $this;
-        }
-        $groupBy = is_array($groupBy) ? $groupBy : func_get_args();
-        return $this->add('groupBy', $groupBy, true);
+        $column = is_array($column) ? $column : func_get_args();
+        return $this->add('groupBy', $column, true);
     }
 
     /**
@@ -1809,8 +1790,16 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
             $query .= ' WHERE ' . $this->buildWhere($parts['where']);
         }
 
-        $query .= ($parts['groupBy'] ? ' GROUP BY ' . implode(', ', $parts['groupBy']) : '')
-            . ($parts['having'] !== null ? ' HAVING ' . ((string) $parts['having']) : '');
+        if ($parts['groupBy']) {
+            $query .= ' GROUP BY ';
+            $groupBys = [];
+            foreach ($parts['groupBy'] as $groupBy) {
+                $groupBys[] = $this->wrap($groupBy);
+            }
+            $query .= implode(', ', $groupBys);
+        }
+
+        $query .= ($parts['having'] !== null ? ' HAVING ' . ((string) $parts['having']) : '');
 
         if (false === $count) {
             if ($parts['orderBy']) {
