@@ -1439,6 +1439,16 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->addWhereArgs(func_get_args(), 'OR', 'TIME');
     }
 
+    public function whereColumn($column, $opOrColumn2, $column2 = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'AND', 'COLUMN');
+    }
+
+    public function orWhereColumn($column, $opOrColumn2, $column2 = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'COLUMN');
+    }
+
     /**
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
@@ -1851,6 +1861,11 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
                 case 'TIME':
                     $column = $where['type'] . '(' . $column . ')';
                     break;
+
+                case 'COLUMN':
+                    $query .= $column . ' ' . $where['operator'] . ' ' . $this->wrap($where['value']);
+                    // TODO refactor
+                    continue 2;
 
                 default:
                     break;

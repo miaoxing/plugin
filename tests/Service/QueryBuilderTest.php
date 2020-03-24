@@ -436,4 +436,23 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'", $sql);
     }
+
+    public function testWhereColumn()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->whereColumn('created_at', 'updated_at')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `created_at` = `updated_at`", $sql);
+    }
+
+    public function testOrWhereColumn()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereColumn('created_at', 'updated_at')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `created_at` = `updated_at`", $sql);
+    }
 }
