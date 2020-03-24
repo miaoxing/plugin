@@ -22,6 +22,13 @@ class CurUserMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Model $model
+ * @method      \Miaoxing\Plugin\Service\Model model($table = null)
+ */
+class ModelMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
  */
 class PluginMixin {
@@ -52,6 +59,7 @@ class UserMixin {
  * @mixin AppMixin
  * @mixin AppRecordMixin
  * @mixin CurUserMixin
+ * @mixin ModelMixin
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
  * @mixin SessionMixin
@@ -76,6 +84,12 @@ $appRecord = wei()->appRecord;
 
 /** @var Miaoxing\Plugin\Service\CurUser $curUser */
 $curUser = wei()->curUser;
+
+/** @var Miaoxing\Plugin\Service\Model $model */
+$ = wei()->model();
+
+/** @var Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] $models */
+$s = wei()->model();
 
 /** @var Miaoxing\Plugin\Service\Plugin $plugin */
 $plugin = wei()->plugin;

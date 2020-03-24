@@ -5,7 +5,6 @@ namespace MiaoxingTest\Plugin\Service;
 use Miaoxing\Plugin\Service\QueryBuilder;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Miaoxing\Services\Service\ServiceTrait;
-use PDO;
 
 /**
  * @property \Wei\Db db
