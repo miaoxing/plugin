@@ -1471,25 +1471,19 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * @param array $types The parameter types
      * @return $this
      */
-    public function having($conditions, $params = array(), $types = array())
+    public function having($column, $operator, $value = null, $condition = 'AND')
     {
-        $conditions = $this->processCondition($conditions, $params, $types);
-        return $this->add('having', $conditions);
+        if (func_num_args() === 2) {
+            $value = $operator;
+            $operator = '=';
+        }
+        $this->sqlParts['having'][] = compact('column', 'operator', 'value', 'condition');
+        return $this;
     }
 
-    /**
-     * Adds a restriction over the groups of the query, forming a logical
-     * conjunction with any existing having restrictions.
-     *
-     * @param string $conditions The HAVING conditions to append
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
-     * @return $this
-     */
-    public function andHaving($conditions, $params = array(), $types = array())
+    public function havingRaw($expression, $params = [])
     {
-        $conditions = $this->processCondition($conditions, $params, $types);
-        return $this->add('having', $conditions, true, 'AND');
+        return $this->having($this->raw($expression), null, $params);
     }
 
     /**
@@ -1501,10 +1495,13 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
      * @param array $types The parameter types
      * @return $this
      */
-    public function orHaving($conditions, $params = array(), $types = array())
+    public function orHaving($column, $operator, $value = null)
     {
-        $conditions = $this->processCondition($conditions, $params, $types);
-        return $this->add('having', $conditions, true, 'OR');
+        if (func_num_args() === 2) {
+            $value = $operator;
+            $operator = '=';
+        }
+        return $this->having($column, $operator, $value, 'OR');
     }
 
     /**
@@ -1799,7 +1796,9 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
             $query .= implode(', ', $groupBys);
         }
 
-        $query .= ($parts['having'] !== null ? ' HAVING ' . ((string) $parts['having']) : '');
+        if ($parts['having']) {
+            $query .= ' HAVING ' . $this->buildWhere($parts['having']);
+        }
 
         if (false === $count) {
             if ($parts['orderBy']) {

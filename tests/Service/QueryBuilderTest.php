@@ -514,4 +514,43 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id`, `type`', $sql);
     }
+
+    public function testHaving()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->groupBy('group_id')
+            ->having('id', '>', 1)
+            ->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id` HAVING `id` > 1', $sql);
+    }
+
+    public function testHavingMultiply()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->groupBy('group_id')
+            ->having('id', '>', 1)
+            ->having('type', 1)
+            ->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id` HAVING `id` > 1 AND `type` = 1', $sql);
+    }
+
+    public function testHavingRaw()
+    {
+        $qb = wei()->queryBuilder('users')->havingRaw('name = ?', 'twin');
+
+        $this->assertEquals("SELECT * FROM `users` HAVING name = 'twin'", $qb->getRawSql());
+    }
+
+    public function testOrHaving()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->having('name', 'twin')
+            ->orHaving('email', '!=', 'twin@example.com')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
+            $sql);
+    }
 }
