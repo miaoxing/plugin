@@ -1352,7 +1352,13 @@ class QueryBuilder extends Base
         }
     }
 
-    public function when($value, $callback, Closure $default = null)
+    /**
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
+     * @return $this
+     */
+    public function when($value, $callback, callable $default = null)
     {
         if ($value) {
             $callback($this, $value);
@@ -1362,7 +1368,13 @@ class QueryBuilder extends Base
         return $this;
     }
 
-    public function unless($value, $callback, $default = null)
+    /**
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
+     * @return $this
+     */
+    public function unless($value, callable $callback, callable $default = null)
     {
         if (!$value) {
             $callback($this, $value);
