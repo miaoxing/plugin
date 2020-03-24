@@ -350,4 +350,90 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` IS NOT NULL", $sql);
     }
+
+    public function testWhereDate()
+    {
+        $sql = wei()->queryBuilder('users')->whereDate('created_at', '2020-02-02')->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE DATE(`created_at`) = '2020-02-02'", $sql);
+    }
+
+    public function testOrWhereDate()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereDate('created_at', '2020-02-02')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR DATE(`created_at`) = '2020-02-02'", $sql);
+    }
+
+    public function testWhereMonth()
+    {
+        $sql = wei()->queryBuilder('users')->whereMonth('created_at', '2')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE MONTH(`created_at`) = '2'", $sql);
+    }
+
+    public function testOrWhereMonth()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereMonth('created_at', '2')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR MONTH(`created_at`) = '2'", $sql);
+    }
+
+    public function testWhereDay()
+    {
+        $sql = wei()->queryBuilder('users')->whereDay('created_at', '2')->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE DAY(`created_at`) = '2'", $sql);
+    }
+
+    public function testOrWhereDay()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereDay('created_at', '2')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR DAY(`created_at`) = '2'", $sql);
+    }
+
+    public function testWhereYear()
+    {
+        $sql = wei()->queryBuilder('users')->whereYear('created_at', '2020')->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE YEAR(`created_at`) = '2020'", $sql);
+    }
+
+    public function testOrWhereYear()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereYear('created_at', '2020')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR YEAR(`created_at`) = '2020'", $sql);
+    }
+
+    public function testWhereTime()
+    {
+        $sql = wei()->queryBuilder('users')->whereTime('created_at', '20:20:20')->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE TIME(`created_at`) = '20:20:20'", $sql);
+    }
+
+    public function testOrWhereTime()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->where('name', 'twin')
+            ->orWhereTime('created_at', '20:20:20')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'", $sql);
+    }
 }

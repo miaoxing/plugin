@@ -1389,6 +1389,56 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $this->addWhere($column, 'NOT NULL', null, 'OR');
     }
 
+    public function whereDate($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'AND', 'DATE');
+    }
+
+    public function orWhereDate($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'DATE');
+    }
+
+    public function whereMonth($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'AND', 'MONTH');
+    }
+
+    public function orWhereMonth($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'MONTH');
+    }
+
+    public function whereDay($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'AND', 'DAY');
+    }
+
+    public function orWhereDay($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'DAY');
+    }
+
+    public function whereYear($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'AND', 'YEAR');
+    }
+
+    public function orWhereYear($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'YEAR');
+    }
+
+    public function whereTime($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'AND', 'TIME');
+    }
+
+    public function orWhereTime($column, $operator, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'TIME');
+    }
+
     /**
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
@@ -1775,7 +1825,7 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         $query = '';
         foreach ($wheres as $i => $where) {
             if ($i !== 0) {
-                $query .= ' ' . $where['type'] . ' ';
+                $query .= ' ' . $where['condition'] . ' ';
             }
 
             if ($this->isRaw($where['column'])) {
@@ -1793,6 +1843,19 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
             }
 
             $column = $this->wrap($where['column']);
+            switch ($where['type']) {
+                case 'DATE':
+                case 'MONTH':
+                case 'DAY':
+                case 'YEAR':
+                case 'TIME':
+                    $column = $where['type'] . '(' . $column . ')';
+                    break;
+
+                default:
+                    break;
+            }
+
             switch ($where['operator']) {
                 case 'BETWEEN':
                 case 'NOT BETWEEN':
@@ -1812,7 +1875,8 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
                     break;
 
                 default:
-                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ?', $where['value']);
+                    $query .= $this->processCondition($column . ' ' . ($where['operator'] ?: '=') . ' ?',
+                        $where['value']);
             }
         }
 
@@ -2010,10 +2074,21 @@ class QueryBuilder extends Base implements \ArrayAccess, \IteratorAggregate, \Co
         return $conditions;
     }
 
-    protected function addWhere($column, $operator, $value = null, $type = 'AND')
+    protected function addWhere($column, $operator, $value = null, $condition = 'AND', $type = null)
     {
-        $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'type');
+        $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
         return $this;
+    }
+
+    protected function addWhereArgs($args, $condition = 'AND', $type = null)
+    {
+        if (count($args) === 2) {
+            $operator = '=';
+            [$column, $value] = $args;
+        } else {
+            [$column, $operator, $value] = $args;
+        }
+        return $this->addWhere($column, $operator, $value, $condition, $type);
     }
 
     /**
