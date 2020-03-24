@@ -553,4 +553,32 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals("SELECT * FROM `users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
             $sql);
     }
+
+    public function testLimit()
+    {
+        $sql = wei()->queryBuilder('users')->limit(1)->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` LIMIT 1', $sql);
+    }
+
+    public function testOffset()
+    {
+        $sql = wei()->queryBuilder('users')->offset(1)->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` OFFSET 1', $sql);
+    }
+
+    public function testLimitOffset()
+    {
+        $sql = wei()->queryBuilder('users')->limit(2)->offset(1)->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` LIMIT 2 OFFSET 1', $sql);
+    }
+
+    public function testPageLimit()
+    {
+        $sql = wei()->queryBuilder('users')->limit(3)->page(3)->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` LIMIT 3 OFFSET 6', $sql);
+    }
 }
