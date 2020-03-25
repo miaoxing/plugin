@@ -24,7 +24,7 @@ class V20161030182708CreateAppsTable extends BaseMigration
             ->string('description')
             ->string('industry', 16)
             ->tinyInt('status')->defaults(1)
-            ->string('configs')
+            ->string('configs')->defaults('[]')
             ->timestamps()
             ->userstamps()
             ->exec();

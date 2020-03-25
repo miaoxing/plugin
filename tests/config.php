@@ -24,12 +24,11 @@ return [
     'app' => [
         'namespace' => 'app',
     ],
-    // 各项目的数据库
     'db' => [
         'host' => 'mysql',
         'port' => 3306,
         'user' => 'root',
-        'dbname' => '', // 留空,待启动脚本检测和创建数据库
+        'dbname' => 'miaoxing',
         'charset' => 'utf8mb4',
         'password' => getenv('MYSQL_PASSWORD') ?: 'password',
         'recordClass' => 'Miaoxing\Plugin\BaseModel',
@@ -69,5 +68,5 @@ return [
     'config' => [
         // TODO 测试时不用写入配置
         'version' => '2200-01-01',
-    ]
+    ],
 ];

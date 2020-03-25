@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Metadata\AppTrait;
 use Miaoxing\Services\ConstTrait;
 
 /**
@@ -12,12 +13,18 @@ use Miaoxing\Services\ConstTrait;
 class AppModel extends Model
 {
     use ConstTrait;
+    use AppTrait;
 
     const STATUS_ALL = 0;
 
     const STATUS_ONLINE = 1;
 
     const STATUS_OFFLINE = 2;
+
+    protected $defaultCasts = [
+        'plugin_ids' => 'array',
+        'configs' => 'json',
+    ];
 
     /**
      * @var array
@@ -77,20 +84,6 @@ class AppModel extends Model
 
             return $app ? $app['name'] : false;
         });
-    }
-
-    public function afterFind()
-    {
-        parent::afterFind();
-        $this['configs'] = (array) json_decode($this['configs'], true);
-        $this['pluginIds'] = explode(',', $this['pluginIds']);
-    }
-
-    public function beforeSave()
-    {
-        parent::beforeSave();
-        $this['configs'] = json_encode((array) $this['configs']);
-        $this['pluginIds'] = implode(',', $this['pluginIds']);
     }
 
     public function afterSave()
