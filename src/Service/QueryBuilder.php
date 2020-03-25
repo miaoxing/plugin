@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Closure;
+use Miaoxing\Plugin\Model\QueryBuilderCacheTrait;
 use Miaoxing\Services\Service\StaticTrait;
 use Wei\Base;
 
@@ -15,6 +16,7 @@ use Wei\Base;
 class QueryBuilder extends Base
 {
     use StaticTrait;
+    use QueryBuilderCacheTrait;
 
     /* The query types. */
     const SELECT = 0;
