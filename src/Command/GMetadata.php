@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
+use Miaoxing\Services\Model\CamelCaseTrait;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,7 +40,7 @@ class GMetadata extends BaseCommand
 
         foreach ($services as $name => $class) {
             $uses = $this->classUsesDeep($class);
-            $camelCase = isset($uses['Miaoxing\Plugin\Model\CamelCaseTrait']);
+            $camelCase = isset($uses[CamelCaseTrait::class]);
             $this->createClass($name, $plugin, $camelCase);
         }
 
