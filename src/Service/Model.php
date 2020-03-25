@@ -1157,16 +1157,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * QueryBuilder: 筛选属于当前登录用户的记录
-     *
-     * @return $this
-     */
-    public function mine()
-    {
-        return $this->where([$this->userIdColumn => (int) wei()->curUser['id']]);
-    }
-
-    /**
      * @return string
      * @todo 移到视图hepler?
      */
@@ -1189,20 +1179,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $this->isColl = true;
 
         return $this;
-    }
-
-    /**
-     * 软删除
-     *
-     * @return $this
-     * @deprecated Use softDelete trait
-     */
-    public function softDelete()
-    {
-        return $this->saveData([
-            $this->deletedAtColumn => date('Y-m-d H:i:s'),
-            $this->deletedByColumn => (int) wei()->curUser['id'],
-        ]);
     }
 
     /**
