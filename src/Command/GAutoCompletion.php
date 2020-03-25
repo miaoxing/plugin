@@ -138,7 +138,8 @@ PHP;
                 $content .= $printer->printClass($class, $namespace);
             }
             if ($staticMethods) {
-                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass, $namespace))) . "\n}\n";
+                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass,
+                        $namespace))) . "\n}\n";
             }
         }
 
@@ -188,7 +189,8 @@ PHP;
                 $var .= "\n";
             }
 
-            $isModel = $this->wei->isEndsWith($name, 'Model');
+            // 排除 wei()->model 服务
+            $isModel = $this->wei->isEndsWith($name, 'Model', true);
             if ($isModel) {
                 $varName = substr($name, 0, -5);
             } else {
@@ -253,7 +255,7 @@ PHP;
         }
 
         $return = $matches[1];
-        $className = '\\' . $class->getName();
+        $className = $class->getName();
 
         $return = str_replace([
             'BaseModel',

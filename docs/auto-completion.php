@@ -9,21 +9,21 @@ class AppMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\AppModel $appModel 应用模型
- * @method      \Miaoxing\Plugin\Service\AppModel|\Miaoxing\Plugin\Service\AppModel[] appModel($table = null)
+ * @method      Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] appModel($table = null)
  */
 class AppModelMixin {
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\CurUser $curUser 当前用户
- * @method      \Miaoxing\Plugin\Service\CurUser|\Miaoxing\Plugin\Service\CurUser[] curUser()
+ * @method      Miaoxing\Plugin\Service\CurUser|Miaoxing\Plugin\Service\CurUser[] curUser()
  */
 class CurUserMixin {
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Model $model
- * @method      \Miaoxing\Plugin\Service\Model|\Miaoxing\Plugin\Service\Model[] model($table = null)
+ * @method      Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] model($table = null)
  */
 class ModelMixin {
 }
@@ -36,7 +36,7 @@ class PluginMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\QueryBuilder $queryBuilder A SQL query builder class
- * @method      \Miaoxing\Plugin\Service\QueryBuilder queryBuilder($table = null)
+ * @method      Miaoxing\Plugin\Service\QueryBuilder queryBuilder($table = null)
  */
 class QueryBuilderMixin {
 }
@@ -50,7 +50,7 @@ class SessionMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\User $user 用户
- * @method      \Miaoxing\Plugin\Service\User|\Miaoxing\Plugin\Service\User[] user()
+ * @method      Miaoxing\Plugin\Service\User|Miaoxing\Plugin\Service\User[] user()
  */
 class UserMixin {
 }
@@ -89,10 +89,7 @@ $apps = wei()->appModel();
 $curUser = wei()->curUser;
 
 /** @var Miaoxing\Plugin\Service\Model $model */
-$ = wei()->model();
-
-/** @var Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] $models */
-$s = wei()->model();
+$model = wei()->model;
 
 /** @var Miaoxing\Plugin\Service\Plugin $plugin */
 $plugin = wei()->plugin;
