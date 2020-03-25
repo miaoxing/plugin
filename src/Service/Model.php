@@ -182,20 +182,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     protected static $events = [];
 
-    protected $sqlParts = [
-        'select' => [],
-        'from' => null,
-        'join' => [],
-        'set' => [],
-        'where' => null,
-        'groupBy' => [],
-        'having' => null,
-        'orderBy' => [],
-        'limit' => null,
-        'offset' => null,
-        'page' => null,
-    ];
-
     /**
      * @var array
      */
@@ -734,11 +720,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function fetchFromCache()
     {
         $cache = $this->cacheTags === false ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
-        $that = $this;
-        $params = $this->params;
-        $paramTypes = $this->paramTypes;
-        return $cache->get($this->getCacheKey(), $this->cacheTime, function () use ($that, $params, $paramTypes) {
-            return $that->db->fetchAll($that->getSql(), $params, $paramTypes);
+        return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
+            return $this->db->fetchAll($this->getSql(), $this->params, $this->paramTypes);
         });
     }
 
@@ -762,7 +745,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function find($conditions = false)
     {
         $this->isColl = false;
-        $data = $this->fetch($conditions);
+        $data = $this->fetch(...func_get_args());
         if ($data) {
             $this->data = $data + $this->data;
             $this->triggerCallback('afterFind');
@@ -1824,26 +1807,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             return array_key_exists($field, $this->changedData);
         }
         return $this->isChanged;
-    }
-
-    public function page($page)
-    {
-        $page = max(1, (int) $page);
-        $this->add('page', $page);
-
-        return parent::page($page);
-    }
-
-    public function limit($limit)
-    {
-        parent::limit($limit);
-
-        // 计算出新的offset
-        if ($page = $this->getSqlPart('page')) {
-            $this->page($page);
-        }
-
-        return $this;
     }
 
     protected function &getRelationValue($name)

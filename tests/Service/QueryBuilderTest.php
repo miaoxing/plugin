@@ -576,6 +576,13 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testPageLimit()
     {
+        $sql = wei()->queryBuilder('users')->page(3)->limit(3)->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `users` LIMIT 3 OFFSET 6', $sql);
+    }
+
+    public function testLimitPage()
+    {
         $sql = wei()->queryBuilder('users')->limit(3)->page(3)->getRawSql();
 
         $this->assertEquals('SELECT * FROM `users` LIMIT 3 OFFSET 6', $sql);

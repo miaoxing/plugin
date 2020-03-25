@@ -60,18 +60,19 @@ class QueryBuilder extends Base
      *
      * @var array
      */
-    protected $sqlParts = array(
-        'select' => array(),
+    protected $sqlParts = [
+        'select' => [],
         'from' => null,
-        'join' => array(),
-        'set' => array(),
+        'join' => [],
+        'set' => [],
         'where' => null,
-        'groupBy' => array(),
+        'groupBy' => [],
         'having' => null,
-        'orderBy' => array(),
+        'orderBy' => [],
         'limit' => null,
         'offset' => null,
-    );
+        'page' => null,
+    ];
 
     /**
      * A field to be the key of the fetched array, if not provided, return
@@ -367,9 +368,15 @@ class QueryBuilder extends Base
      */
     public function limit($limit)
     {
-        $limit = (int) $limit;
-        $limit < 1 && $limit = 1;
-        return $this->add('limit', $limit);
+        $limit = max(1, (int) $limit);
+        $this->add('limit', $limit);
+
+        // 计算出新的offset
+        if ($page = $this->getSqlPart('page')) {
+            $this->page($page);
+        }
+
+        return $this;
     }
 
     /**
@@ -380,6 +387,9 @@ class QueryBuilder extends Base
      */
     public function page($page)
     {
+        $page = max(1, (int) $page);
+        $this->add('page', $page);
+
         $limit = $this->getSqlPart('limit');
         if (!$limit) {
             $limit = 10;
