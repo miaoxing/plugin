@@ -15,31 +15,31 @@ class V20161030182708CreateAppsTable extends BaseMigration
     {
         $this->schema->table($this->table)
             ->id()
-            ->int('userId')
-            ->text('pluginIds')
+            ->int('user_id')
+            ->text('plugin_ids')
             ->string('name', 16)
             ->string('title', 32)
             ->char('secret', 32)
             ->string('domain', 128)
-            ->string('description', 255)
+            ->string('description')
             ->string('industry', 16)
             ->tinyInt('status')->defaults(1)
-            ->string('configs', 255)
-            ->timestampsV1()
-            ->userstampsV1()
+            ->string('configs')
+            ->timestamps()
+            ->userstamps()
             ->exec();
 
         $now = date('Y-m-d H:i:s');
         $this->db->batchInsert($this->table, [
             [
-                'userId' => 1,
+                'user_id' => 1,
                 'name' => 'app',
                 'title' => 'app',
-                'pluginIds' => '',
-                'createTime' => $now,
-                'createUser' => 1,
-                'updateTime' => $now,
-                'updateUser' => 1,
+                'plugin_ids' => '',
+                'created_at' => $now,
+                'created_by' => 1,
+                'updated_at' => $now,
+                'updated_by' => 1,
             ],
         ]);
     }

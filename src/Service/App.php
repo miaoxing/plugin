@@ -8,7 +8,7 @@ use Wei\Response;
 /**
  * 应用
  *
- * @property \Miaoxing\Plugin\Service\AppRecord $appRecord 应用的数据库服务
+ * @property \Miaoxing\Plugin\Service\AppModel $appModel 应用的数据库服务
  * @mixin \EventMixin
  * @mixin \StrMixin
  */
@@ -76,7 +76,7 @@ class App extends \Wei\App
     protected $fallbackAction = 'index';
 
     /**
-     * @var \Miaoxing\Plugin\Service\AppRecord[]
+     * @var \Miaoxing\Plugin\Service\AppModel[]
      */
     protected $records = [];
 
@@ -195,7 +195,7 @@ class App extends \Wei\App
             return false;
         }
 
-        return $this->appRecord->getIdByDomain($domain);
+        return $this->appModel->getIdByDomain($domain);
     }
 
     /**
@@ -206,7 +206,7 @@ class App extends \Wei\App
      */
     public function isNamespaceAvailable($namespace)
     {
-        return $this->appRecord->isExists($namespace);
+        return $this->appModel->isExists($namespace);
     }
 
     /**
@@ -268,17 +268,17 @@ class App extends \Wei\App
     /**
      * 获取App数据表对象
      *
-     * @return \Miaoxing\Plugin\Service\AppRecord
+     * @return \Miaoxing\Plugin\Service\AppModel
      */
-    public function getRecord()
+    public function getModel()
     {
         $namespace = $this->getNamespace();
         if (!isset($this->records[$namespace])) {
-            $this->records[$namespace] = wei()->appRecord()
+            $this->records[$namespace] = wei()->appModel()
                 ->tags(false)
                 ->setCacheKey('appName:' . $namespace)
                 ->cache(86400)
-                ->find(['name' => $namespace]);
+                ->find('name', $namespace);
         }
 
         return $this->records[$namespace];
@@ -296,7 +296,7 @@ class App extends \Wei\App
         if (isset($this->ids[$namespace])) {
             return $this->ids[$namespace];
         } else {
-            return (int) $this->getRecord()->get('id');
+            return (int) $this->getModel()->get('id');
         }
     }
 
@@ -309,7 +309,7 @@ class App extends \Wei\App
     public function getDbName($id)
     {
         if (!$this->dbNames[$id]) {
-            $record = wei()->appRecord()->findById($id);
+            $record = wei()->appModel()->findById($id);
             $this->dbNames[$id] = $record['name'];
         }
 

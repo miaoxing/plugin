@@ -9,7 +9,7 @@ use Miaoxing\Services\ConstTrait;
  *
  * @property \Wei\BaseCache $cache
  */
-class AppRecord extends \Miaoxing\Plugin\BaseModel
+class AppModel extends Model
 {
     use ConstTrait;
 
@@ -27,8 +27,6 @@ class AppRecord extends \Miaoxing\Plugin\BaseModel
         self::STATUS_ONLINE => '正常',
         self::STATUS_OFFLINE => '下线',
     ];
-
-    protected $table = 'apps';
 
     protected $data = [
         'configs' => [],
@@ -60,7 +58,7 @@ class AppRecord extends \Miaoxing\Plugin\BaseModel
         }
 
         return $this->cache->get('appExists' . $name, 86400, function () use ($name) {
-            $app = wei()->appRecord()->select('name')->fetch(['name' => $name]);
+            $app = wei()->appModel()->select('name')->fetch('name', $name);
 
             return $app && $app['name'] === $name;
         });
@@ -75,7 +73,7 @@ class AppRecord extends \Miaoxing\Plugin\BaseModel
     public function getIdByDomain($domain)
     {
         return $this->cache->get('appDomain' . $domain, 86400, function () use ($domain) {
-            $app = wei()->appRecord()->select('name')->fetch(['domain' => $domain]);
+            $app = wei()->appModel()->select('name')->fetch('domain', $domain);
 
             return $app ? $app['name'] : false;
         });

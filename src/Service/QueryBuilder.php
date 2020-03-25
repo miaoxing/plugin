@@ -223,9 +223,9 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return array|false
      */
-    public function fetch($conditions = false)
+    public function fetch($column, $operator = null, $value = null)
     {
-        $this->andWhere($conditions);
+        $this->where(...func_get_args());
         $this->limit(1);
         $data = $this->execute();
         return $data ? $data[0] : false;
@@ -237,9 +237,9 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return array|false
      */
-    public function fetchColumn($conditions = false)
+    public function fetchColumn($column, $operator = null, $value = null)
     {
-        $data = $this->fetch($conditions);
+        $data = $this->fetch(...func_get_args());
         return $data ? current($data) : false;
     }
 
@@ -249,9 +249,9 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return array|false
      */
-    public function fetchAll($conditions = false)
+    public function fetchAll($column, $operator = null, $value = null)
     {
-        $this->andWhere($conditions);
+        $this->where(...func_get_args());
         $data = $this->execute();
         if ($this->indexBy) {
             $data = $this->executeIndexBy($data, $this->indexBy);
@@ -268,7 +268,7 @@ class QueryBuilder extends Base
      */
     public function count($conditions = false, $count = '1')
     {
-        $this->andWhere($conditions);
+        $this->where(...func_get_args());
 
         $select = $this->sqlParts['select'];
         $this->select('COUNT(' . $count . ')');
@@ -284,9 +284,9 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return int
      */
-    public function countBySubQuery($conditions = false)
+    public function countBySubQuery($column, $operator = null, $value = null)
     {
-        $this->andWhere($conditions);
+        $this->where(...func_get_args());
         return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->params);
     }
 
@@ -339,9 +339,9 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return mixed
      */
-    public function delete($conditions = false)
+    public function delete($column, $operator = null, $value = null)
     {
-        $this->andWhere($conditions);
+        $this->where(...func_get_args());
         $this->type = self::DELETE;
         return $this->execute();
     }
@@ -545,25 +545,6 @@ class QueryBuilder extends Base
     public function whereRaw($expression, $params = [])
     {
         return $this->where($this->raw($expression), null, $params);
-    }
-
-    /**
-     * Adds one or more restrictions to the query results, forming a logical
-     * conjunction with any previously specified restrictions
-     *
-     * @param string|array $conditions The WHERE conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
-     * @return $this
-     */
-    public function andWhere($conditions, $params = array(), $types = array())
-    {
-        if ($conditions === false) {
-            return $this;
-        } else {
-            $conditions = $this->processCondition($conditions, $params, $types);
-            return $this->add('where', $conditions, true, 'AND');
-        }
     }
 
     /**

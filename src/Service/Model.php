@@ -2,8 +2,51 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Services\Model\CamelCaseTrait;
+use Miaoxing\Services\Model\CastTrait;
+use Miaoxing\Services\Model\DefaultScopeTrait;
+use Miaoxing\Services\Model\GetSetTrait;
+use Miaoxing\Services\Model\ReqQueryTrait;
+use Wei\Record;
+use Wei\RetTrait;
+
 class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \Countable
 {
+    use CamelCaseTrait;
+    use CastTrait;
+    use ReqQueryTrait;
+    use GetSetTrait;
+    use RetTrait;
+    use DefaultScopeTrait;
+
+    protected $appIdColumn = 'app_id';
+
+    protected $createdAtColumn = 'created_at';
+
+    protected $createdByColumn = 'created_by';
+
+    protected $updatedAtColumn = 'updated_at';
+
+    protected $updatedByColumn = 'updated_by';
+
+    protected $deletedByColumn = 'deleted_by';
+
+    protected $deletedAtColumn = 'deleted_at';
+
+    protected $userIdColumn = 'user_id';
+
+    protected $guarded = [
+        'id',
+        'app_id',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
+    ];
+
     /**
      * Whether it's a new record and has not save to database
      *
@@ -30,7 +73,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @var array
      */
-    protected $guarded = array('id');
+    //protected $guarded = array('id');
 
     /**
      * Whether the record's data is changed
@@ -101,6 +144,75 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected $cacheTags = array();
 
     /**
+     * The relation configs
+     *
+     * @var array
+     */
+    protected $relations = [];
+
+    /**
+     * The relations have been loaded
+     *
+     * @var array
+     */
+    protected $loadedRelations = [];
+
+    /**
+     * The value for relation base query
+     *
+     * @var mixed
+     */
+    protected $relatedValue;
+
+    /**
+     * @var array
+     */
+    protected $virtual = [];
+
+    /**
+     * @var array
+     */
+    protected $hidden = [];
+
+    protected static $snakeCache = [];
+
+    protected static $camelCache = [];
+
+    protected static $booted = [];
+
+    protected static $events = [];
+
+    protected $sqlParts = [
+        'select' => [],
+        'from' => null,
+        'join' => [],
+        'set' => [],
+        'where' => null,
+        'groupBy' => [],
+        'having' => null,
+        'orderBy' => [],
+        'limit' => null,
+        'offset' => null,
+        'page' => null,
+    ];
+
+    /**
+     * @var array
+     */
+    protected $requiredServices = [
+        'db',
+        'cache',
+        'logger',
+        'ret',
+        'str',
+    ];
+
+    protected $defaultValues = [
+        'date' => '0000-00-00',
+        'datetime' => '0000-00-00 00:00:00',
+    ];
+
+    /**
      * Constructor
      *
      * @param array $options
@@ -114,6 +226,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $this->isChanged = false;
 
         $this->triggerCallback('afterLoad');
+
+        $this->boot();
     }
 
     /**
@@ -124,14 +238,18 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function toArray($returnFields = array())
     {
+        if (!$this->isLoaded()) {
+            $this->loadData($this->isColl() ? 0 : 'id');
+        }
+
         if (!$this->isColl) {
-            $data = array_fill_keys($returnFields ?: $this->getFields(), null);
-            if (!$returnFields) {
-                return $this->data + $data;
-            } else {
-                $data = array_fill_keys($returnFields, null);
-                return array_intersect_key($this->data, $data) + $data;
+            $data = [];
+            $columns = $this->getToArrayColumns($returnFields ?: $this->getFields());
+            foreach ($columns as $column) {
+                $data[$this->filterOutputColumn($column)] = $this->get($column);
             }
+
+            return $data + $this->virtualToArray();
         } else {
             $data = array();
             /** @var $record Record */
@@ -175,8 +293,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string $field
      * @return bool
      */
-    public function isFillable($field)
+    public function isFillable($field, $data = null)
     {
+        if ($this->trigger('checkInputColumn', [$field, $data]) === false) {
+            return false;
+        }
+
+        $field = $this->filterInputColumn($field);
+
         return !in_array($field, $this->guarded) && !$this->fillable || in_array($field, $this->fillable);
     }
 
@@ -385,6 +509,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function get($name)
     {
+        $name = $this->filterInputColumn($name);
+
+        $method = 'get' . $this->camel($name) . 'Attribute';
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+
         // Check if field exists when it is not a collection
         if (!$this->isColl && !in_array($name, $this->getFields())) {
             throw new \InvalidArgumentException(sprintf(
@@ -393,7 +524,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 get_class($this)
             ));
         }
-        return isset($this->data[$name]) ? $this->data[$name] : null;
+        $value = isset($this->data[$name]) ? $this->data[$name] : null;
+
+        return $this->trigger('getValue', [$value, $name]);
     }
 
     /**
@@ -406,6 +539,20 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function set($name, $value = null)
     {
+        // Ignore $coll[] = $value
+        if ($name !== null) {
+            $name = $this->filterInputColumn($name);
+
+            $method = 'set' . $this->camel($name) . 'Attribute';
+            if (method_exists($this, $method)) {
+                $this->setChanged($name);
+
+                return $this->$method($value);
+            }
+
+            $value = $this->trigger('setValue', [$value, $name]);
+        }
+
         $this->loaded = true;
 
         // Set record for collection
@@ -491,6 +638,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function incr($name, $offset = 1)
     {
+        $name = $this->filterInputColumn($name);
         $this[$name] = (object) ($name . ' + ' . $offset);
         return $this;
     }
@@ -504,6 +652,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function decr($name, $offset = 1)
     {
+        $name = $this->filterInputColumn($name);
         $this[$name] = (object) ($name . ' - ' . $offset);
         return $this;
     }
@@ -528,20 +677,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function isNew()
     {
         return $this->isNew;
-    }
-
-    /**
-     * Check if the record's data or specified field is changed
-     *
-     * @param string $field
-     * @return bool
-     */
-    public function isChanged($field = null)
-    {
-        if ($field) {
-            return array_key_exists($field, $this->changedData);
-        }
-        return $this->isChanged;
     }
 
     /**
@@ -897,6 +1032,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function triggerCallback($name)
     {
+        $this->trigger($name);
         $this->$name();
     }
 
@@ -919,6 +1055,15 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function beforeSave()
     {
+        $fields = $this->getFields();
+
+        if (in_array($this->updatedAtColumn, $fields)) {
+            $this[$this->updatedAtColumn] = date('Y-m-d H:i:s');
+        }
+
+        if (in_array($this->updatedByColumn, $fields)) {
+            $this[$this->updatedByColumn] = (int) wei()->curUser['id'];
+        }
     }
 
     /**
@@ -933,6 +1078,15 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function beforeCreate()
     {
+        $fields = $this->getFields();
+
+        if (in_array($this->createdAtColumn, $fields) && !$this[$this->createdAtColumn]) {
+            $this[$this->createdAtColumn] = date('Y-m-d H:i:s');
+        }
+
+        if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
+            $this[$this->createdByColumn] = (int) wei()->curUser['id'];
+        }
     }
 
     /**
@@ -968,5 +1122,884 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function afterDestroy()
     {
+    }
+
+    public function boot()
+    {
+        $class = get_called_class();
+        if (isset(static::$booted[$class])) {
+            return;
+        }
+
+        static::$booted[$class] = true;
+        foreach ($this->classUsesDeep($this) as $trait) {
+            $parts = explode('\\', $trait);
+            $method = 'boot' . array_pop($parts);
+            if (method_exists($class, $method)) {
+                $this->$method($this);
+            }
+        }
+    }
+
+    /**
+     * @param $class
+     * @param bool $autoload
+     * @return array
+     * @see http://php.net/manual/en/function.class-uses.php#110752
+     */
+    public function classUsesDeep($class, $autoload = true)
+    {
+        $traits = [];
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+
+        return array_unique($traits);
+    }
+
+    /**
+     * @return BaseModel|BaseModel[]
+     */
+    public function __invoke(string $table = null)
+    {
+        if (!$this->table) {
+            $this->detectTable();
+        }
+        $this->db->addRecordClass($this->table, get_class($this));
+
+        return $this->db($this->table);
+    }
+
+    /**
+     * QueryBuilder: 筛选属于当前登录用户的记录
+     *
+     * @return $this
+     */
+    public function mine()
+    {
+        return $this->andWhere([$this->userIdColumn => (int) wei()->curUser['id']]);
+    }
+
+    /**
+     * @return string
+     * @todo 移到视图hepler?
+     */
+    public function getFormAction()
+    {
+        return $this->isNew ? 'create' : 'update';
+    }
+
+    public function getHttpMethod()
+    {
+        return $this->isNew ? 'POST' : 'PUT';
+    }
+
+    /**
+     * @return $this|$this[]
+     */
+    public function beColl()
+    {
+        $this->data = [];
+        $this->isColl = true;
+
+        return $this;
+    }
+
+    /**
+     * 软删除
+     *
+     * @return $this
+     * @deprecated Use softDelete trait
+     */
+    public function softDelete()
+    {
+        return $this->saveData([
+            $this->deletedAtColumn => date('Y-m-d H:i:s'),
+            $this->deletedByColumn => (int) wei()->curUser['id'],
+        ]);
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function saveData($data = [])
+    {
+        $data && $this->setData($data);
+
+        return $this->save();
+    }
+
+    /**
+     * 如果提供了ID,检查该ID的数据是否存在,如果不存在则抛出404异常
+     * 即FindOneOrInitById的缩写
+     *
+     * @param mixed $id
+     * @param array|\ArrayAccess $data
+     * @return $this
+     * @todo 和已有的find方法可能会混淆,是否要改为seek或lookup
+     */
+    public function findId($id, $data = [])
+    {
+        if ($id) {
+            $this->findOneById($id);
+        } else {
+            // Reset status when record not found
+            $this->isNew = true;
+        }
+
+        return $this->fromArray($data);
+    }
+
+    public function findAllByIds($ids)
+    {
+        if (!$ids) {
+            return $this->beColl();
+        }
+
+        return $this->findAll(['id' => $ids]);
+    }
+
+    /**
+     * 设置缓存的标签为当前表名+用户ID
+     *
+     * @return $this
+     */
+    public function tagByUser()
+    {
+        return $this->tags($this->getUserTag());
+    }
+
+    /**
+     * Record: 清除当前记录的缓存
+     *
+     * @return $this
+     */
+    public function clearRecordCache()
+    {
+        if ($this['id']) {
+            $this->cache->remove($this->getRecordCacheKey());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Record: 获取当前记录的缓存键名
+     *
+     * @param int|null $id
+     * @return string
+     */
+    public function getRecordCacheKey($id = null)
+    {
+        return $this->db->getDbname() . ':' . $this->table . ':' . ($id ?: $this['id']);
+    }
+
+    /**
+     * @return $this
+     */
+    public function clearTagCacheByUser()
+    {
+        $tag = $this->getUserTag();
+        $this->tagCache($tag)->clear();
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserTag()
+    {
+        return $this->table . ':' . ($this['userId'] ?: wei()->curUser['id']);
+    }
+
+    /**
+     * 获取包含数据库名词的数据表,如app.user,方便跨库查询
+     *
+     * @param string $table
+     * @return string
+     */
+    public function getDbTable($table)
+    {
+        return wei()->app->getDbName($this[$this->appIdColumn]) . '.' . $table;
+    }
+
+    /**
+     * 将类名的最后一段作为数据表名称
+     */
+    protected function detectTable()
+    {
+        if (!$this->table) {
+            // 适合类名: Miaoxing\Plugin\Service\User
+            $parts = explode('\\', get_class($this));
+            $basename = end($parts);
+
+            $endWiths = substr($basename, -5) === 'Model';
+            if ($endWiths) {
+                $endWiths && $basename = substr($basename, 0, -5);
+                $this->table = $this->str->pluralize($this->snake($basename));
+            } else {
+                $this->table = lcfirst($basename);
+            }
+        }
+    }
+
+    /**
+     * Returns the record data
+     *
+     * @return $this[]|array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Reset all SQL parts and parameters
+     *
+     * @return $this
+     */
+    public function resetQuery()
+    {
+        $this->params = [];
+        $this->paramTypes = [];
+
+        return $this->resetSqlParts();
+    }
+
+    /**
+     * Specifies an item that is not to be returned in the query result.
+     * Replaces any previously specified selections, if any.
+     *
+     * @param string|array $fields
+     * @return $this
+     */
+    public function selectExcept($fields)
+    {
+        $fields = array_diff($this->getFields(), is_array($fields) ? $fields : [$fields]);
+
+        return $this->select($fields);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * @param \Closure $fn
+     * @deprecated 使用filter
+     */
+    public function filterDeprecated(\Closure $fn)
+    {
+        $this->data = array_filter($this->data, $fn);
+    }
+
+    protected function getToArrayColumns(array $columns)
+    {
+        if ($this->hidden) {
+            $columns = array_diff($columns, $this->hidden);
+        }
+
+        return $columns;
+    }
+
+    public function setHidden($hidden)
+    {
+        $this->hidden = (array) $hidden;
+
+        return $this;
+    }
+
+    protected function virtualToArray()
+    {
+        $data = [];
+        foreach ($this->virtual as $column) {
+            $data[$this->filterOutputColumn($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param string $record
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return $this
+     */
+    public function hasOne($record, $foreignKey = null, $localKey = null)
+    {
+        $related = $this->getRelatedModel($record);
+        $name = $related->getClassServiceName();
+
+        $localKey || $localKey = $this->getPrimaryKey();
+        $foreignKey || $foreignKey = $this->getForeignKey();
+        $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
+
+        $related->andWhere([$foreignKey => $this->getRelatedValue($localKey)]);
+
+        return $related;
+    }
+
+    /**
+     * @param string $record
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return $this
+     */
+    public function hasMany($record, $foreignKey = null, $localKey = null)
+    {
+        return $this->hasOne($record, $foreignKey, $localKey)->beColl();
+    }
+
+    /**
+     * @param string $record
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return BaseModel
+     */
+    public function belongsTo($record, $foreignKey = null, $localKey = null)
+    {
+        $related = $this->getRelatedModel($record);
+        $foreignKey || $foreignKey = $this->getPrimaryKey();
+        $localKey || $localKey = $this->snake($related->getClassServiceName()) . '_' . $this->getPrimaryKey();
+
+        return $this->hasOne($related, $foreignKey, $localKey);
+    }
+
+    /**
+     * @param string $record
+     * @param string|null $junctionTable
+     * @param string|null $foreignKey
+     * @param string|null $relatedKey
+     * @return BaseModel
+     */
+    public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
+    {
+        $related = $this->getRelatedModel($record);
+        $name = $this->getClassServiceName($related);
+
+        $primaryKey = $this->getPrimaryKey();
+        $junctionTable || $junctionTable = $this->getJunctionTable($related);
+        $foreignKey || $foreignKey = $this->getForeignKey();
+        $relatedKey || $relatedKey = $this->snake($name) . '_' . $primaryKey;
+        $this->relations[$name] = [
+            'junctionTable' => $junctionTable,
+            'relatedKey' => $relatedKey,
+            'foreignKey' => $foreignKey,
+            'localKey' => $primaryKey,
+        ];
+
+        $relatedTable = $related->getTable();
+        $related->select($relatedTable . '.*')
+            ->where([$junctionTable . '.' . $foreignKey => $this->getRelatedValue($primaryKey)])
+            ->innerJoin(
+                $junctionTable,
+                sprintf('%s.%s = %s.%s', $junctionTable, $relatedKey, $relatedTable, $primaryKey)
+            )
+            ->beColl();
+
+        return $related;
+    }
+
+    /**
+     * @param string|object $model
+     * @return BaseModel
+     */
+    protected function getRelatedModel($model)
+    {
+        if ($model instanceof self) {
+            return $model;
+        } else {
+            return $this->wei->$model();
+        }
+    }
+
+    /**
+     * Eager load relations
+     *
+     * @param string|array $names
+     * @return $this|$this[]
+     */
+    public function load($names)
+    {
+        foreach ((array) $names as $name) {
+            // 1. Load relation config
+            $parts = explode('.', $name, 2);
+            $name = $parts[0];
+            $next = isset($parts[1]) ? $parts[1] : null;
+            if (isset($this->loadedRelations[$name])) {
+                continue;
+            }
+
+            /** @var BaseModel $related */
+            $related = $this->$name();
+            $isColl = $related->isColl();
+            $serviceName = $this->getClassServiceName($related);
+            $relation = $this->relations[$serviceName];
+
+            // 2. Fetch relation record data
+            $ids = $this->getAll($relation['localKey']);
+            $ids = array_unique(array_filter($ids));
+            if ($ids) {
+                $this->relatedValue = $ids;
+                $related = $this->$name();
+                $this->relatedValue = null;
+            } else {
+                $related = null;
+            }
+
+            // 3. Load relation data
+            if (isset($relation['junctionTable'])) {
+                $records = $this->loadBelongsToMany($related, $relation, $name);
+            } elseif ($isColl) {
+                $records = $this->loadHasMany($related, $relation, $name);
+            } else {
+                $records = $this->loadHasOne($related, $relation, $name);
+            }
+
+            // 4. Load nested relations
+            if ($next && $records) {
+                $records->load($next);
+            }
+
+            $this->loadedRelations[$name] = true;
+        }
+
+        return $this;
+    }
+
+    protected function loadHasOne(Record $related = null, $relation, $name)
+    {
+        if ($related) {
+            $records = $related->findAll()->indexBy($relation['foreignKey']);
+        } else {
+            $records = [];
+        }
+        foreach ($this->data as $row) {
+            $row->$name = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
+        }
+
+        return $records;
+    }
+
+    protected function loadHasMany(self $related = null, $relation, $name)
+    {
+        $serviceName = $this->getClassServiceName($related);
+        $records = $related ? $related->fetchAll() : [];
+        foreach ($this->data as $row) {
+            $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
+            foreach ($records as $record) {
+                if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
+                    // Remove external data
+                    if (!$related->hasColumn($relation['foreignKey'])) {
+                        unset($record[$relation['foreignKey']]);
+                    }
+                    $rowRelation[] = $this->wei->$serviceName()->setData($record);
+                }
+            }
+        }
+
+        return $records;
+    }
+
+    protected function loadBelongsToMany(Record $related = null, $relation, $name)
+    {
+        if ($related) {
+            $related->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
+        }
+
+        return $this->loadHasMany($related, $relation, $name);
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \Exception
+     */
+    public function __get($name)
+    {
+        // Receive service that conflict with record method name
+        if (in_array($name, $this->requiredServices)) {
+            return parent::__get($name);
+        }
+
+        // Receive relation
+        if (method_exists($this, $name)) {
+            return $this->getRelationValue($name);
+        }
+
+        // Receive service
+        return parent::__get($name);
+    }
+
+    /**
+     * Convert a input to snake case
+     *
+     * @param string $input
+     * @return string
+     */
+    protected function snake($input)
+    {
+        if (isset(static::$snakeCache[$input])) {
+            return static::$snakeCache[$input];
+        }
+
+        $value = $input;
+        if (!ctype_lower($input)) {
+            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+        }
+
+        return static::$snakeCache[$input] = $value;
+    }
+
+    /**
+     * Convert a input to camel case
+     *
+     * @param string $input
+     * @return string
+     */
+    protected function camel($input)
+    {
+        if (isset(static::$camelCache[$input])) {
+            return static::$camelCache[$input];
+        }
+
+        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
+    }
+
+    protected function getClassServiceName($object = null)
+    {
+        !$object && $object = $this;
+        $parts = explode('\\', get_class($object));
+        $name = lcfirst(end($parts));
+
+        // TODO deprecated
+        if (substr($name, -6) == 'Record') {
+            $name = substr($name, 0, -6);
+        }
+
+        if (substr($name, -5) == 'Model') {
+            $name = substr($name, 0, -5);
+        }
+
+        return $name;
+    }
+
+    protected function getForeignKey()
+    {
+        return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
+    }
+
+    protected function getJunctionTable(self $related)
+    {
+        $tables = [$this->getTable(), $related->getTable()];
+        sort($tables);
+
+        return implode('_', $tables);
+    }
+
+    protected function getRelatedValue($field)
+    {
+        return $this->relatedValue ?: (array_key_exists($field, $this->data) ? $this->get($field) : null);
+    }
+
+    /**
+     * 直接设置表名，用于子查询的情况
+     *
+     * @param string $table
+     * @return $this
+     */
+    public function setRawTable($table)
+    {
+        $this->table = $table;
+        $this->fullTable = $this->db->getTable($this->table);
+
+        return $this;
+    }
+
+    /**
+     * Check if column name exists
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasColumn($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        return in_array($name, $this->getFields());
+    }
+
+    /**
+     * @param string $column
+     * @return array|mixed|null
+     */
+    protected function filterInputColumn($column)
+    {
+        return $this->trigger('inputColumn', $column);
+    }
+
+    protected function filterOutputColumn($column)
+    {
+        return $this->trigger('outputColumn', $column);
+    }
+
+    public function trigger($event, $data = [])
+    {
+        $result = null;
+        $class = get_called_class();
+        if (isset(static::$events[$class][$event])) {
+            foreach (static::$events[$class][$event] as $callback) {
+                // 优先使用自身方法
+                if (method_exists($this, $callback)) {
+                    $callback = [$this, $callback];
+                }
+                $result = call_user_func_array($callback, (array) $data);
+            }
+        } else {
+            $result = is_array($data) ? current($data) : $data;
+        }
+
+        return $result;
+    }
+
+    public static function on($event, $method)
+    {
+        static::$events[get_called_class()][$event][] = $method;
+    }
+
+    public function execute()
+    {
+        $this->trigger('preExecute');
+
+        return parent::execute();
+    }
+
+    public function add($sqlPartName, $sqlPart, $append = false, $type = null)
+    {
+        $this->trigger('preBuildQuery', func_get_args());
+
+        return parent::add($sqlPartName, $sqlPart, $append, $type);
+    }
+
+    protected function setChanged($name)
+    {
+        $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
+        $this->isChanged = true;
+    }
+
+    protected function resetChanged($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        if (array_key_exists($name, $this->changedData)) {
+            unset($this->changedData[$name]);
+        }
+        if (!$this->changedData) {
+            $this->isChanged = false;
+        }
+        return $this;
+    }
+
+    /**
+     * Check if the record's data or specified field is changed
+     *
+     * @param string $field
+     * @return bool
+     */
+    public function isChanged($field = null)
+    {
+        if ($field) {
+            $field = $this->filterInputColumn($field);
+            return array_key_exists($field, $this->changedData);
+        }
+        return $this->isChanged;
+    }
+
+    public function page($page)
+    {
+        $page = max(1, (int) $page);
+        $this->add('page', $page);
+
+        return parent::page($page);
+    }
+
+    public function limit($limit)
+    {
+        parent::limit($limit);
+
+        // 计算出新的offset
+        if ($page = $this->getSqlPart('page')) {
+            $this->page($page);
+        }
+
+        return $this;
+    }
+
+    protected function &getRelationValue($name)
+    {
+        /** @var BaseModel $related */
+        $related = $this->$name();
+        $serviceName = $this->getClassServiceName($related);
+        $relation = $this->relations[$serviceName];
+        $localValue = $this[$relation['localKey']];
+
+        if ($related->isColl()) {
+            if ($localValue) {
+                $this->$name = $related->findAll();
+            } else {
+                $this->$name = $related;
+            }
+        } else {
+            if ($localValue) {
+                $this->$name = $related->find() ?: null;
+            } else {
+                $this->$name = null;
+            }
+        }
+
+        return $this->$name;
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     */
+    public function toRet(array $merge = [])
+    {
+        if ($this->isColl()) {
+            return $this->suc($merge + [
+                    'data' => $this,
+                    'page' => $this->getSqlPart('page'),
+                    'rows' => $this->getSqlPart('limit'),
+                    'records' => $this->count(),
+                ]);
+        } else {
+            return $this->suc($merge + ['data' => $this]);
+        }
+    }
+
+    /**
+     * Check if collection key
+     *
+     * @param string $key
+     * @return bool
+     */
+    protected function isCollKey($key)
+    {
+        return $key === null || is_numeric($key);
+    }
+
+    /**
+     * 搜索字段是否包含某个值
+     *
+     * @param string $column
+     * @param string $value
+     * @return $this
+     */
+    public function whereContains($column, $value)
+    {
+        return $this->andWhere($column . ' LIKE ?', '%' . $value . '%');
+    }
+
+    /**
+     * 搜索某一列是否有值
+     *
+     * @param string $column
+     * @param bool $value
+     * @return $this
+     */
+    public function whereHas($column, $value = true)
+    {
+        if (isset($this->defaultValues[$this->casts[$column]])) {
+            $default = $this->defaultValues[$this->casts[$column]];
+        } else {
+            $default = '';
+        }
+        $op = $value ? '!=' : '=';
+        $this->andWhere($column . ' ' . $op . ' \'' . $default . '\'');
+
+        return $this;
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     */
+    public function setRawValue($column, $value)
+    {
+        $this->data[$column] = $value;
+        return $this;
+    }
+
+    /**
+     * 根据条件查找记录,如果是新记录则保存
+     *
+     * @param mixed $conditions
+     * @param array $data
+     * @return $this
+     */
+    public function findOrCreate($conditions, $data = array())
+    {
+        $this->findOrInit($conditions, $data);
+        if ($this->isNew) {
+            $this->save();
+        }
+        return $this;
+    }
+
+    public function selectMain($column = '*')
+    {
+        return $this->select($this->getTable() . '.' . $column);
+    }
+
+    public function incrSave($name, $offset = 1)
+    {
+        $value = $this->get($name) + $offset;
+        $this->incr($name, $offset)->save();
+        $this->set($name, $value);
+        $this->resetChanged($name);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws \Exception
+     */
+    public function existOrFail()
+    {
+        if ($this->isNew) {
+            throw new \Exception('Record not found', 404);
+        }
+        return $this;
+    }
+
+    /**
+     * @param bool $bool
+     * @param mixed $conditions
+     * @param array $params
+     * @param array $types
+     * @return $this
+     */
+    public function whenWhere($bool, $conditions, $params = array(), $types = array())
+    {
+        if ($bool) {
+            return $this->andWhere($conditions, $params, $types);
+        }
+        return $this;
     }
 }

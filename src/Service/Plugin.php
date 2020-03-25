@@ -631,7 +631,7 @@ class Plugin extends BaseService
      */
     protected function getInstalledIds()
     {
-        return $this->app->getRecord()->get('pluginIds');
+        return $this->app->getModel()->get('pluginIds');
     }
 
     /**
@@ -642,7 +642,7 @@ class Plugin extends BaseService
      */
     protected function setInstalledIds(array $pluginIds)
     {
-        $app = $this->app->getRecord();
+        $app = $this->app->getModel();
         $app['pluginIds'] = array_filter($pluginIds);
         $app->save();
 
