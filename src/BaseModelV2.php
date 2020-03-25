@@ -2,10 +2,10 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Services\Model\CamelCaseTrait;
-use Miaoxing\Services\Model\CastTrait;
-use Miaoxing\Services\Model\GetSetTrait;
-use Miaoxing\Services\Model\ReqQueryTrait;
+use Miaoxing\Plugin\Model\CamelCaseTrait;
+use Miaoxing\Plugin\Model\CastTrait;
+use Miaoxing\Plugin\Model\GetSetTrait;
+use Miaoxing\Plugin\Model\ReqQueryTrait;
 
 class BaseModelV2 extends BaseModel
 {

@@ -3,11 +3,11 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseModel;
-use Miaoxing\Services\Model\CamelCaseTrait;
-use Miaoxing\Services\Model\CastTrait;
-use Miaoxing\Services\Model\DefaultScopeTrait;
-use Miaoxing\Services\Model\GetSetTrait;
-use Miaoxing\Services\Model\ReqQueryTrait;
+use Miaoxing\Plugin\Model\CamelCaseTrait;
+use Miaoxing\Plugin\Model\CastTrait;
+use Miaoxing\Plugin\Model\DefaultScopeTrait;
+use Miaoxing\Plugin\Model\GetSetTrait;
+use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Wei\Record;
 use Wei\RetTrait;
 
@@ -386,7 +386,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function destroy($conditions = false)
     {
-        $this->andWhere($conditions);
+        $this->where($conditions);
         !$this->loaded && $this->loadData(0);
 
         if (!$this->isColl) {
@@ -1163,7 +1163,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function mine()
     {
-        return $this->andWhere([$this->userIdColumn => (int) wei()->curUser['id']]);
+        return $this->where([$this->userIdColumn => (int) wei()->curUser['id']]);
     }
 
     /**
@@ -1428,7 +1428,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $foreignKey || $foreignKey = $this->getForeignKey();
         $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
-        $related->andWhere([$foreignKey => $this->getRelatedValue($localKey)]);
+        $related->where([$foreignKey => $this->getRelatedValue($localKey)]);
 
         return $related;
     }
@@ -1874,7 +1874,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function whereContains($column, $value)
     {
-        return $this->andWhere($column . ' LIKE ?', '%' . $value . '%');
+        return $this->where($column . ' LIKE ?', '%' . $value . '%');
     }
 
     /**
@@ -1892,7 +1892,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             $default = '';
         }
         $op = $value ? '!=' : '=';
-        $this->andWhere($column . ' ' . $op . ' \'' . $default . '\'');
+        $this->where($column . ' ' . $op . ' \'' . $default . '\'');
 
         return $this;
     }

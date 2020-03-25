@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin;
 
 use JsonSerializable;
-use Miaoxing\Services\Model\DefaultScopeTrait;
+use Miaoxing\Plugin\Model\DefaultScopeTrait;
 use Miaoxing\Services\Service\Str;
 use Wei\Logger;
 use Wei\Record;

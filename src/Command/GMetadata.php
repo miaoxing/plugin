@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Services\Model\CamelCaseTrait;
+use Miaoxing\Plugin\Model\CamelCaseTrait;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
