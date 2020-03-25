@@ -3,13 +3,12 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Services\Service\Str;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * @property Str $str
+ * @mixin \StrMixin
  */
 class GMetadata extends BaseCommand
 {
@@ -33,10 +32,11 @@ class GMetadata extends BaseCommand
 
         $services = wei()->classMap->generate(
             [$plugin->getBasePath() . '/src'],
-            '/Service/*Model.php',
+            '/Service/?*Model.php', // 排除 Model.php
             'Service',
             false
         );
+
         foreach ($services as $name => $class) {
             $uses = $this->classUsesDeep($class);
             $camelCase = isset($uses['Miaoxing\Plugin\Model\CamelCaseTrait']);
@@ -190,7 +190,7 @@ class GMetadata extends BaseCommand
     {
         $table = $this->getTable($class);
 
-        $this->writeln('生成文件 ' . $this->cli->success($file));
+        $this->suc('生成文件 ' . $file);
 
         ob_start();
         require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/metadata.php';
@@ -198,19 +198,6 @@ class GMetadata extends BaseCommand
 
         file_put_contents($file, $content);
         chmod($file, 0777);
-    }
-
-    protected function createDefinition()
-    {
-        $this->addArgument('plugin');
-    }
-
-    /**
-     * @param string $message
-     */
-    protected function writeln($message)
-    {
-        fwrite(STDERR, $message . "\n");
     }
 
     protected function getMethodReturn(ReflectionClass $class, ReflectionMethod $method)
