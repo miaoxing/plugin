@@ -292,27 +292,6 @@ class QueryBuilder extends Base
     }
 
     /**
-     * Returns the record number in collection
-     *
-     * @return int
-     */
-    public function length()
-    {
-        return $this->size();
-    }
-
-    /**
-     * Returns the record number in collection
-     *
-     * @return int
-     */
-    public function size()
-    {
-        $this->loadData(0);
-        return count($this->data);
-    }
-
-    /**
      * Execute a update query with specified data
      *
      * @param array|string $set
@@ -397,8 +376,6 @@ class QueryBuilder extends Base
         }
         return $this->offset(($page - 1) * $limit);
     }
-
-    protected $columns = [];
 
     /**
      * Specifies an item that is to be returned in the query result.
@@ -706,6 +683,34 @@ class QueryBuilder extends Base
     public function orWhereColumn($column, $opOrColumn2, $column2 = null)
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'COLUMN');
+    }
+
+    /**
+     * 搜索字段是否包含某个值
+     *
+     * @param string $column
+     * @param string $value
+     * @param string $condition
+     * @return $this
+     */
+    public function whereContains($column, $value, string $condition = 'AND')
+    {
+        return $this->addWhere($column, 'LIKE', '%' . $value . '%', $condition);
+    }
+
+    public function orWhereContains($column, $value)
+    {
+        return $this->whereContains($column, $value, 'OR');
+    }
+
+    public function whereNotContains($column, $value, string $condition = 'OR')
+    {
+        return $this->addWhere($column, 'NOT LIKE', '%' . $value . '%', $condition);
+    }
+
+    public function orWhereNotContains($column, $value)
+    {
+        return $this->whereNotContains($column, $value, 'OR');
     }
 
     /**

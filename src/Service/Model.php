@@ -1354,15 +1354,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this->toArray();
     }
 
-    /**
-     * @param \Closure $fn
-     * @deprecated 使用filter
-     */
-    public function filterDeprecated(\Closure $fn)
-    {
-        $this->data = array_filter($this->data, $fn);
-    }
-
     protected function getToArrayColumns(array $columns)
     {
         if ($this->hidden) {
@@ -1842,38 +1833,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * 搜索字段是否包含某个值
-     *
-     * @param string $column
-     * @param string $value
-     * @return $this
-     */
-    public function whereContains($column, $value)
-    {
-        return $this->where($column . ' LIKE ?', '%' . $value . '%');
-    }
-
-    /**
-     * 搜索某一列是否有值
-     *
-     * @param string $column
-     * @param bool $value
-     * @return $this
-     */
-    public function whereHas($column, $value = true)
-    {
-        if (isset($this->defaultValues[$this->casts[$column]])) {
-            $default = $this->defaultValues[$this->casts[$column]];
-        } else {
-            $default = '';
-        }
-        $op = $value ? '!=' : '=';
-        $this->where($column . ' ' . $op . ' \'' . $default . '\'');
-
-        return $this;
-    }
-
-    /**
      * @param string $column
      * @param mixed $value
      * @return $this
@@ -1900,11 +1859,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this;
     }
 
-    public function selectMain($column = '*')
-    {
-        return $this->select($this->getTable() . '.' . $column);
-    }
-
     public function incrSave($name, $offset = 1)
     {
         $value = $this->get($name) + $offset;
@@ -1924,6 +1878,52 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         if ($this->isNew) {
             throw new \Exception('Record not found', 404);
         }
+        return $this;
+    }
+
+    /**
+     * Returns the record number in collection
+     *
+     * @return int
+     */
+    public function length()
+    {
+        return $this->size();
+    }
+
+    /**
+     * Returns the record number in collection
+     *
+     * @return int
+     */
+    public function size()
+    {
+        $this->loadData(0);
+        return count($this->data);
+    }
+
+    public function selectMain($column = '*')
+    {
+        return $this->select($this->getTable() . '.' . $column);
+    }
+
+    /**
+     * 搜索某一列是否有值
+     *
+     * @param string $column
+     * @param bool $value
+     * @return $this
+     */
+    public function whereHas($column, $value = true)
+    {
+        if (isset($this->defaultValues[$this->casts[$column]])) {
+            $default = $this->defaultValues[$this->casts[$column]];
+        } else {
+            $default = '';
+        }
+        $op = $value ? '!=' : '=';
+        $this->where($column . ' ' . $op . ' \'' . $default . '\'');
+
         return $this;
     }
 }

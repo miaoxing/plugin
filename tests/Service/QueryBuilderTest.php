@@ -455,6 +455,44 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `created_at` = `updated_at`", $sql);
     }
 
+    public function testWhereContains()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->whereContains('name', 'twin')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` LIKE '%twin%'", $sql);
+    }
+
+    public function testOrWhereContains()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->whereContains('name', 'twin')
+            ->orWhereContains('email', 'twin')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` LIKE '%twin%' OR `email` LIKE '%twin%'", $sql);
+    }
+
+    public function testWhereNotContains()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->whereNotContains('name', 'twin')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` NOT LIKE '%twin%'", $sql);
+    }
+
+    public function testOrWhereNotContains()
+    {
+        $sql = wei()->queryBuilder('users')
+            ->whereNotContains('name', 'twin')
+            ->orWhereNotContains('email', 'twin')
+            ->getRawSql();
+
+        $this->assertEquals("SELECT * FROM `users` WHERE `name` NOT LIKE '%twin%' OR `email` NOT LIKE '%twin%'", $sql);
+    }
+
     public function testOrderBy()
     {
         $sql = wei()->queryBuilder('users')->orderBy('id')->getRawSql();
