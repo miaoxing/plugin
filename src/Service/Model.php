@@ -1132,7 +1132,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @return Model|Model[]
+     * @return $this|$this[]
      */
     public function __invoke(string $table = null)
     {
