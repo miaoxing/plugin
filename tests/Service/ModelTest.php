@@ -132,19 +132,19 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('name', $user->name);
     }
 
-    public function testRecordSave()
+    public function testModelSave()
     {
         $this->initFixtures();
 
         $db = $this->db;
 
         // Existing member
-        $user = $db('users')->find(1);
+        $user = $this->db('users')->find(1);
         $user->address = 'address';
         $result = $user->save();
 
         $this->assertSame($result, $user);
-        $this->assertEquals('1', $user['id']);
+        $this->assertEquals('1', $user->id);
 
         // New member save with data
         $user = $db->init('users');
@@ -158,14 +158,14 @@ class ModelTest extends BaseTestCase
 
         $this->assertFalse($user->isNew());
         $this->assertSame($result, $user);
-        $this->assertEquals('3', $user['id']);
-        $this->assertEquals('save', $user['name']);
+        $this->assertEquals('3', $user->id);
+        $this->assertEquals('save', $user->name);
 
         // Save again
         $user->address = 'address3';
         $result = $user->save();
         $this->assertSame($result, $user);
-        $this->assertEquals('3', $user['id']);
+        $this->assertEquals('3', $user->id);
     }
 
     public function testRecordIsLoaded()
