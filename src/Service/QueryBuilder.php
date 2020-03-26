@@ -226,9 +226,9 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return array|false
      */
-    public function fetch($column, $operator = null, $value = null)
+    public function fetch($column = null, $operator = null, $value = null)
     {
-        $this->where(...func_get_args());
+        $column !== null && $this->where(...func_get_args());
         $this->limit(1);
         $data = $this->execute();
         return $data ? $data[0] : false;
@@ -252,9 +252,9 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return array|false
      */
-    public function fetchAll($column, $operator = null, $value = null)
+    public function fetchAll($column = null, $operator = null, $value = null)
     {
-        $this->where(...func_get_args());
+        $column !== null && $this->where(...func_get_args());
         $data = $this->execute();
         if ($this->indexBy) {
             $data = $this->executeIndexBy($data, $this->indexBy);

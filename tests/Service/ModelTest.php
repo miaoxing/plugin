@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Service;
 use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Miaoxing\Services\Service\ServiceTrait;
+use MiaoxingTest\Plugin\Fixture\DbTrait;
 
 /**
  * @property \Wei\Db db
@@ -13,88 +14,7 @@ use Miaoxing\Services\Service\ServiceTrait;
 class ModelTest extends BaseTestCase
 {
     use ServiceTrait;
-
-    protected function createTable()
-    {
-        $db = $this->db;
-        $db->query("CREATE TABLE pre_user_groups (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))");
-        $db->query("CREATE TABLE pre_users (id INTEGER NOT NULL AUTO_INCREMENT, group_id INTEGER NOT NULL, name VARCHAR(50) NOT NULL, address VARCHAR(256) NOT NULL, PRIMARY KEY(id))");
-        $db->query("CREATE TABLE pre_posts (id INTEGER NOT NULL AUTO_INCREMENT, user_id INTEGER NOT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))");
-        $db->query("CREATE TABLE pre_tags (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))");
-        $db->query("CREATE TABLE pre_post_tags (post_id INTEGER NOT NULL, tag_id INTEGER NOT NULL)");
-    }
-
-    protected function dropTable()
-    {
-        $db = $this->db;
-        $db->query('DROP TABLE IF EXISTS pre_user_groups');
-        $db->query('DROP TABLE IF EXISTS pre_users');
-        $db->query('DROP TABLE IF EXISTS pre_posts');
-        $db->query('DROP TABLE IF EXISTS pre_tags');
-        $db->query('DROP TABLE IF EXISTS pre_post_tags');
-    }
-
-    public function initFixtures()
-    {
-        $db = $this->db;
-
-        $db->setOption('tablePrefix', 'pre_');
-
-        $this->dropTable();
-        $this->createTable();
-
-        $db->insert('user_groups', array(
-            'id' => '1',
-            'name' => 'vip',
-        ));
-
-        $db->insert('users', array(
-            'group_id' => '1',
-            'name' => 'twin',
-            'address' => 'test',
-        ));
-
-        $db->insert('users', array(
-            'group_id' => '1',
-            'name' => 'test',
-            'address' => 'test',
-        ));
-
-        $db->insert('posts', array(
-            'user_id' => '1',
-            'name' => 'my first post',
-        ));
-
-        $db->insert('posts', array(
-            'user_id' => '1',
-            'name' => 'my second post',
-        ));
-
-        $db->insert('tags', array(
-            'id' => '1',
-            'name' => 'database',
-        ));
-
-        $db->insert('tags', array(
-            'id' => '2',
-            'name' => 'PHP',
-        ));
-
-        $db->insert('post_tags', array(
-            'post_id' => '1',
-            'tag_id' => '1',
-        ));
-
-        $db->insert('post_tags', array(
-            'post_id' => '1',
-            'tag_id' => '2',
-        ));
-
-        $db->insert('post_tags', array(
-            'post_id' => '2',
-            'tag_id' => '1',
-        ));
-    }
+    use DbTrait;
 
     public function testSetter()
     {
@@ -168,7 +88,7 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('3', $user->id);
     }
 
-    public function testRecordIsLoaded()
+    public function testModelIsLoaded()
     {
         $this->initFixtures();
 
@@ -176,96 +96,9 @@ class ModelTest extends BaseTestCase
 
         $this->assertFalse($user->isLoaded());
 
-        $user->find('1');
+        $user->find(1);
 
         $this->assertTrue($user->isLoaded());
-    }
-
-    public function testSelect()
-    {
-        $this->initFixtures();
-
-        $data = $this->db->select('users', 1);
-        $this->assertEquals('twin', $data['name']);
-
-        // Empty array as conditions
-        $data = $this->db->select('users', array());
-        $this->assertArrayHasKey('name', $data);
-    }
-
-    public function testSelectWithField()
-    {
-        $this->initFixtures();
-
-        $data = $this->db->select('users', 1, 'id, name');
-
-        $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('name', $data);
-        $this->assertArrayNotHasKey('group_id', $data);
-    }
-
-    public function testSelectAll()
-    {
-        $this->initFixtures();
-
-        $data = $this->db->selectAll('users', array('name' => 'twin'));
-
-        $this->assertCount(1, $data);
-
-        $data = $this->db->selectAll('users');
-
-        $this->assertCount(2, $data);
-    }
-
-    public function testFetch()
-    {
-        $this->initFixtures();
-
-        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = ?", 'twin');
-        $this->assertInternalType('array', $data);
-        $this->assertEquals('twin', $data['name']);
-        $this->assertEquals("SELECT * FROM prefix_member WHERE name = ?", $this->db->getLastQuery());
-
-        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = ?", 'notFound');
-        $this->assertFalse($data);
-        $this->assertEquals("SELECT * FROM prefix_member WHERE name = ?", $this->db->getLastQuery());
-
-        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = :name", array('name' => 'twin'));
-        $this->assertInternalType('array', $data);
-        $this->assertEquals('twin', $data['name']);
-
-        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = :name", array(':name' => 'twin'));
-        $this->assertInternalType('array', $data);
-        $this->assertEquals('twin', $data['name']);
-    }
-
-    public function testFetchAll()
-    {
-        $this->initFixtures();
-
-        $data = $this->db->fetchAll("SELECT * FROM prefix_member WHERE group_id = ?", '1');
-
-        $this->assertInternalType('array', $data);
-        $this->assertEquals('1', $data[0]['group_id']);
-    }
-
-    public function testQueryFetch()
-    {
-        $this->initFixtures();
-
-        $data = $this->db('users')->where('id = 1')->fetch();
-        $this->assertInternalType('array', $data);
-        $this->assertEquals('1', $data['id']);
-    }
-
-    public function testQueryFetchAll()
-    {
-        $this->initFixtures();
-
-        $data = $this->db('users')->fetchAll();
-
-        $this->assertInternalType('array', $data);
-        $this->assertEquals('1', $data[0]['group_id']);
     }
 
     public function testGetRecordClass()
