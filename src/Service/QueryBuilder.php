@@ -968,7 +968,7 @@ class QueryBuilder extends Base
             return $this->sql;
         }
 
-        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts, $this);
+        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts);
 
         $this->state = self::STATE_CLEAN;
 
@@ -977,7 +977,7 @@ class QueryBuilder extends Base
 
     public function getRawSql()
     {
-        return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this, $this->getBindParams());
+        return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this->getBindParams());
     }
 
     protected function addParams($params)
@@ -1050,6 +1050,16 @@ class QueryBuilder extends Base
 
     protected function addWhere($column, $operator, $value = null, $condition = 'AND', $type = null)
     {
+        if ($column instanceof \Closure) {
+            $query = new static([
+                'db' => $this->db,
+                'table' => $this->table,
+            ]);
+            $column($query);
+            $column = $query;
+            $this->params['where'] = array_merge($this->params['where'], $query->getParameters()['where']);
+        }
+
         $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
         if ($value !== null) {
             $this->params['where'][] = (array) $value;

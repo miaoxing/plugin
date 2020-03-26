@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Db;
 
-use Closure;
+use Miaoxing\Plugin\Service\QueryBuilder;
 
 class Mysql extends BaseDriver
 {
@@ -15,12 +15,9 @@ class Mysql extends BaseDriver
 
     protected $sqlParts = [];
 
-    protected $queryBuilder;
-
-    public function getSql($type, $sqlParts, $queryBuilder)
+    public function getSql($type, $sqlParts)
     {
         $this->sqlParts = $sqlParts;
-        $this->queryBuilder = $queryBuilder;
         switch ($type) {
             case self::DELETE:
                 return $this->getSqlForDelete();
@@ -40,9 +37,9 @@ class Mysql extends BaseDriver
      * @return string
      * @link https://stackoverflow.com/a/8403150
      */
-    public function getRawSql($type, $sqlParts, $queryBuilder, array $values)
+    public function getRawSql($type, $sqlParts, array $values)
     {
-        $query = $this->getSql($type, $sqlParts, $queryBuilder);
+        $query = $this->getSql($type, $sqlParts);
         $keys = [];
 
         // build a regular expression for each parameter
@@ -155,11 +152,9 @@ class Mysql extends BaseDriver
                 continue;
             }
 
-            if ($where['column'] instanceof Closure) {
-                $prevCount = count($this->sqlParts['where']);
-                $where['column']($this->queryBuilder);
-                $newWhere = array_slice($this->sqlParts['where'], $prevCount);
-                $query .= '(' . $this->buildWhere($newWhere) . ')';
+            if ($where['column'] instanceof QueryBuilder) {
+                $sqlParts = $where['column']->getSqlParts();
+                $query .= '(' . $this->buildWhere($sqlParts['where']) . ')';
                 continue;
             }
 
