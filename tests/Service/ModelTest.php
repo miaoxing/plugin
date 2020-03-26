@@ -113,9 +113,9 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = $this->db('users')->findOrInit('3', array(
+        $user = $this->db('users')->findOrInit('3', [
             'name' => 'name'
-        ));
+        ]);
         $this->assertTrue($user->isNew());
         $this->assertFalse($user->isDestroyed());
     }

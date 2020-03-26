@@ -813,28 +813,24 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * Find a record by specified conditions and init with the specified data if record not found
+     * Find a record by primary key, or init with the specified data if record not found
      *
-     * @param mixed $conditions
-     * @param array $data
+     * @param int|string $id
+     * @param array|object $data
      * @return $this
      */
-    public function findOrInit($conditions = false, $data = array())
+    public function findOrInit($id = null, $data = array())
     {
-        if (!$this->find($conditions)) {
+        if (!$this->find($id)) {
             // Reset status when record not found
             $this->isNew = true;
-
-            !is_array($conditions) && $conditions = array($this->primaryKey => $conditions);
 
             // Convert to object to array
             if (is_object($data) && method_exists($data, 'toArray')) {
                 $data = $data->toArray();
             }
 
-            // conditions data are fillable
             $this->fromArray($data);
-            $this->setData($conditions);
         }
         return $this;
     }

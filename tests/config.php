@@ -1,5 +1,7 @@
 <?php
 
+use Miaoxing\Plugin\Service\Model;
+
 return [
     // 服务容器
     'wei' => [
@@ -31,7 +33,7 @@ return [
         'dbname' => 'miaoxing',
         'charset' => 'utf8mb4',
         'password' => getenv('MYSQL_PASSWORD') ?: 'password',
-        'recordClass' => 'Miaoxing\Plugin\BaseModel',
+        'recordClass' => Model::class,
     ],
     'router' => [
         'namespaces' => ['admin', 'api', 'cli'],
