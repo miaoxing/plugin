@@ -2,9 +2,2028 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
+use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
+use Miaoxing\Services\Service\ServiceTrait;
 
+/**
+ * @property \Wei\Db db
+ * @method Model db($table = null)
+ */
 class ModelTest extends BaseTestCase
 {
-    
+    use ServiceTrait;
+
+    protected function createTable()
+    {
+        $db = $this->db;
+        $db->query("CREATE TABLE pre_user_groups (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))");
+        $db->query("CREATE TABLE pre_users (id INTEGER NOT NULL AUTO_INCREMENT, group_id INTEGER NOT NULL, name VARCHAR(50) NOT NULL, address VARCHAR(256) NOT NULL, PRIMARY KEY(id))");
+        $db->query("CREATE TABLE pre_posts (id INTEGER NOT NULL AUTO_INCREMENT, user_id INTEGER NOT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))");
+        $db->query("CREATE TABLE pre_tags (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))");
+        $db->query("CREATE TABLE pre_post_tags (post_id INTEGER NOT NULL, tag_id INTEGER NOT NULL)");
+    }
+
+    protected function dropTable()
+    {
+        $db = $this->db;
+        $db->query('DROP TABLE IF EXISTS pre_user_groups');
+        $db->query('DROP TABLE IF EXISTS pre_users');
+        $db->query('DROP TABLE IF EXISTS pre_posts');
+        $db->query('DROP TABLE IF EXISTS pre_tags');
+        $db->query('DROP TABLE IF EXISTS pre_post_tags');
+    }
+
+    public function initFixtures()
+    {
+        $db = $this->db;
+
+        $db->setOption('tablePrefix', 'pre_');
+
+        $this->dropTable();
+        $this->createTable();
+
+        $db->insert('user_groups', array(
+            'id' => '1',
+            'name' => 'vip',
+        ));
+
+        $db->insert('users', array(
+            'group_id' => '1',
+            'name' => 'twin',
+            'address' => 'test',
+        ));
+
+        $db->insert('users', array(
+            'group_id' => '1',
+            'name' => 'test',
+            'address' => 'test',
+        ));
+
+        $db->insert('posts', array(
+            'user_id' => '1',
+            'name' => 'my first post',
+        ));
+
+        $db->insert('posts', array(
+            'user_id' => '1',
+            'name' => 'my second post',
+        ));
+
+        $db->insert('tags', array(
+            'id' => '1',
+            'name' => 'database',
+        ));
+
+        $db->insert('tags', array(
+            'id' => '2',
+            'name' => 'PHP',
+        ));
+
+        $db->insert('post_tags', array(
+            'post_id' => '1',
+            'tag_id' => '1',
+        ));
+
+        $db->insert('post_tags', array(
+            'post_id' => '1',
+            'tag_id' => '2',
+        ));
+
+        $db->insert('post_tags', array(
+            'post_id' => '2',
+            'tag_id' => '1',
+        ));
+    }
+
+    public function testSetter()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find(1);
+
+        $this->assertEquals('1', $user->id);
+
+        $user->id = 2;
+
+        $this->assertEquals('2', $user->id);
+    }
+
+    public function testFindOrInitAndStatusIsNew()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->findOrInit('3', array(
+            'name' => 'name'
+        ));
+        $this->assertTrue($user->isNew());
+        $this->assertFalse($user->isDestroyed());
+    }
+
+    public function testFindOrInitWithSameFields()
+    {
+        $this->initFixtures();
+
+        // The init data may from request, contains key like id, name
+        $user = $this->db('users')->findOrInit(array('id' => 3, 'name' => 'tom'), array('name' => 'name', 'id' => '5'));
+
+        $this->assertEquals(3, $user['id']);
+        $this->assertEquals('tom', $user['name']);
+    }
+
+    public function testRecordSave()
+    {
+        $this->initFixtures();
+
+        $db = $this->db;
+
+        // Existing member
+        $user = $db('users')->find(1);
+        $user->address = 'address';
+        $result = $user->save();
+
+        $this->assertSame($result, $user);
+        $this->assertEquals('1', $user['id']);
+
+        // New member save with data
+        $user = $db->init('users');
+        $this->assertTrue($user->isNew());
+        $user->fromArray(array(
+            'group_id' => '1',
+            'name' => 'save',
+            'address' => 'save'
+        ));
+        $result = $user->save();
+
+        $this->assertFalse($user->isNew());
+        $this->assertSame($result, $user);
+        $this->assertEquals('3', $user['id']);
+        $this->assertEquals('save', $user['name']);
+
+        // Save again
+        $user->address = 'address3';
+        $result = $user->save();
+        $this->assertSame($result, $user);
+        $this->assertEquals('3', $user['id']);
+    }
+
+    public function testRecordIsLoaded()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users');
+
+        $this->assertFalse($user->isLoaded());
+
+        $user->find('1');
+
+        $this->assertTrue($user->isLoaded());
+    }
+
+    public function testSelect()
+    {
+        $this->initFixtures();
+
+        $data = $this->db->select('users', 1);
+        $this->assertEquals('twin', $data['name']);
+
+        // Empty array as conditions
+        $data = $this->db->select('users', array());
+        $this->assertArrayHasKey('name', $data);
+    }
+
+    public function testSelectWithField()
+    {
+        $this->initFixtures();
+
+        $data = $this->db->select('users', 1, 'id, name');
+
+        $this->assertArrayHasKey('id', $data);
+        $this->assertArrayHasKey('name', $data);
+        $this->assertArrayNotHasKey('group_id', $data);
+    }
+
+    public function testSelectAll()
+    {
+        $this->initFixtures();
+
+        $data = $this->db->selectAll('users', array('name' => 'twin'));
+
+        $this->assertCount(1, $data);
+
+        $data = $this->db->selectAll('users');
+
+        $this->assertCount(2, $data);
+    }
+
+    public function testFetch()
+    {
+        $this->initFixtures();
+
+        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = ?", 'twin');
+        $this->assertInternalType('array', $data);
+        $this->assertEquals('twin', $data['name']);
+        $this->assertEquals("SELECT * FROM prefix_member WHERE name = ?", $this->db->getLastQuery());
+
+        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = ?", 'notFound');
+        $this->assertFalse($data);
+        $this->assertEquals("SELECT * FROM prefix_member WHERE name = ?", $this->db->getLastQuery());
+
+        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = :name", array('name' => 'twin'));
+        $this->assertInternalType('array', $data);
+        $this->assertEquals('twin', $data['name']);
+
+        $data = $this->db->fetch("SELECT * FROM prefix_member WHERE name = :name", array(':name' => 'twin'));
+        $this->assertInternalType('array', $data);
+        $this->assertEquals('twin', $data['name']);
+    }
+
+    public function testFetchAll()
+    {
+        $this->initFixtures();
+
+        $data = $this->db->fetchAll("SELECT * FROM prefix_member WHERE group_id = ?", '1');
+
+        $this->assertInternalType('array', $data);
+        $this->assertEquals('1', $data[0]['group_id']);
+    }
+
+    public function testQueryFetch()
+    {
+        $this->initFixtures();
+
+        $data = $this->db('users')->where('id = 1')->fetch();
+        $this->assertInternalType('array', $data);
+        $this->assertEquals('1', $data['id']);
+    }
+
+    public function testQueryFetchAll()
+    {
+        $this->initFixtures();
+
+        $data = $this->db('users')->fetchAll();
+
+        $this->assertInternalType('array', $data);
+        $this->assertEquals('1', $data[0]['group_id']);
+    }
+
+    public function testGetRecordClass()
+    {
+        $db = $this->db;
+
+        $db->setOption('recordNamespace', 'WeiTest\Db');
+
+        $this->assertEquals('WeiTest\Db\Member', $db->getRecordClass('users'));
+        $this->assertEquals('WeiTest\Db\Member', $db->getRecordClass('users'));
+        $this->assertEquals('WeiTest\Db\MemberGroup', $db->getRecordClass('member_group'));
+        $this->assertEquals('WeiTest\Db\MemberGroup', $db->getRecordClass('memberGroup'));
+        $this->assertEquals('WeiTest\Db\MemberGroup', $db->getRecordClass('member_Group'));
+    }
+
+    /**
+     * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
+     */
+    public function testQuery()
+    {
+        $this->initFixtures();
+
+        // Pure string conditions
+        $query = $this->db('users')->where("name = 'twin'");
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE name = 'twin' LIMIT 1", $query->getSql());
+        $this->assertEquals('twin', $user['name']);
+
+        // ? conditions
+        $query = $this->db('users')->where('name = ?', 'twin');
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE name = ? LIMIT 1", $query->getSql());
+        $this->assertEquals('twin', $user['name']);
+
+        $query = $this->db('users')->where('group_id = ? AND name = ?', array('1', 'twin'));
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = ? AND name = ? LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+        $this->assertEquals('twin', $user['name']);
+
+        // : conditions
+        $query = $this->db('users')->where('group_id = :groupId AND name = :name', array(
+            'groupId' => '1',
+            'name' => 'twin'
+        ));
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId AND name = :name LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+        $this->assertEquals('twin', $user['name']);
+
+        $query = $this->db('users')->where('group_id = :groupId AND name = :name', array(
+            ':groupId' => '1',
+            ':name' => 'twin'
+        ));
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId AND name = :name LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+        $this->assertEquals('twin', $user['name']);
+
+        // Range conditions
+        $query = $this->db('users')->where('group_id BETWEEN ? AND ?', array('1', '2'));
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id BETWEEN ? AND ?", $query->getSql());
+
+        $user = $query->find();
+        $this->assertGreaterThanOrEqual(1, $user['group_id']);
+        $this->assertLessThanOrEqual(2, $user['group_id']);
+
+        // Subset conditions
+        $query = $this->db('users')->where(array('group_id' => array('1', '2')));
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id IN (?, ?) LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+
+        $query = $this->db('users')->where(array(
+            'id' => '1',
+            'group_id' => array('1', '2')
+        ));
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE id = ? AND group_id IN (?, ?) LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['id']);
+
+        // Overwrite where
+        $query = $this
+            ->db('users')
+            ->where('id = :id')
+            ->where('group_id = :groupId')
+            ->setParameter('groupId', 1);
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+
+        // Where with empty content
+        $query = $this->db('users')->where(false);
+        $this->assertEquals("SELECT * FROM prefix_member", $query->getSql());
+
+        // Order
+        $query = $this->db('users')->orderBy('id', 'ASC');
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member ORDER BY id ASC LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['id']);
+
+        // Add order
+        $query = $this->db('users')->orderBy('id', 'ASC')->addOrderBy('group_id', 'ASC');
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member ORDER BY id ASC, group_id ASC LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['id']);
+
+        // Select
+        $query = $this->db('users')->select('id, group_id');
+        $user = $query->fetch();
+
+        $this->assertEquals("SELECT id, group_id FROM prefix_member LIMIT 1", $query->getSql());
+        $this->assertArrayHasKey('id', $user);
+        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayNotHasKey('name', $user);
+
+        // Add select
+        $query = $this->db('users')->select('id')->addSelect('group_id');
+        $user = $query->fetch();
+
+        $this->assertEquals("SELECT id, group_id FROM prefix_member LIMIT 1", $query->getSql());
+        $this->assertArrayHasKey('id', $user);
+        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayNotHasKey('name', $user);
+
+        // Distinct
+        $query = $this->db('users')->select('DISTINCT group_id');
+        $user = $query->find();
+
+        $this->assertEquals("SELECT DISTINCT group_id FROM prefix_member LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+
+        // Limit
+        $query = $this->db('users')->limit(2);
+        $user = $query->findAll();
+
+        $this->assertEquals("SELECT * FROM prefix_member LIMIT 2", $query->getSql());
+        $this->assertCount(2, $user);
+
+        // Offset
+        $query = $this->db('users')->limit(1)->offset(1);
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member LIMIT 1 OFFSET 1", $query->getSql());
+        $this->assertEquals(2, $user['id']);
+
+        // Page
+        $query = $this->db('users')->page(3);
+        $this->assertEquals("SELECT * FROM prefix_member LIMIT 10 OFFSET 20", $query->getSql());
+
+        // Mixed limit and page
+        $query = $this->db('users')->limit(3)->page(3);
+        $this->assertEquals("SELECT * FROM prefix_member LIMIT 3 OFFSET 6", $query->getSql());
+
+        // Group by
+        $query = $this->db('users')->groupBy('id, group_id');
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member GROUP BY id, group_id LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+
+        // Having
+        $query = $this->db('users')->groupBy('id, group_id')->having('group_id >= ?', '1');
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member GROUP BY id, group_id HAVING group_id >= ? LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+
+        // Join
+        $query = $this
+            ->db('users')
+            ->select('prefix_member.*, prefix_member_group.name AS group_name')
+            ->leftJoin('prefix_member_group', 'prefix_member_group.id = prefix_member.group_id');
+        $user = $query->fetch();
+
+        $this->assertEquals("SELECT prefix_member.*, prefix_member_group.name AS group_name FROM prefix_member LEFT JOIN prefix_member_group ON prefix_member_group.id = prefix_member.group_id LIMIT 1", $query->getSql());
+        $this->assertArrayHasKey('group_name', $user);
+
+        // Join with table alias
+        $query = $this
+            ->db('member u')
+            ->rightJoin('prefix_member_group g', 'g.id = u.group_id');
+
+        $this->assertEquals("SELECT * FROM prefix_member u RIGHT JOIN prefix_member_group g ON g.id = u.group_id", $query->getSql());
+    }
+
+    public function testIndexBy()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users')
+            ->indexBy('name')
+            ->fetchAll();
+
+        $this->assertArrayHasKey('twin', $users);
+        $this->assertArrayHasKey('test', $users);
+
+        $users = $this->db('users')
+            ->indexBy('name')
+            ->findAll();
+
+        $this->assertInstanceOf('\Wei\Record', $users['twin']);
+        $this->assertInstanceOf('\Wei\Record', $users['test']);
+
+        $users = $users->toArray();
+
+        $this->assertArrayHasKey('twin', $users);
+        $this->assertArrayHasKey('test', $users);
+    }
+
+    public function testIndexByMoreThanOneTime()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users')
+            ->indexBy('id')
+            ->findAll();
+
+        $this->assertArrayHasKey(1, $users);
+
+        $users->indexBy('name');
+        $this->assertArrayHasKey('twin', $users);
+
+        $users->indexBy('id');
+        $this->assertArrayHasKey(1, $users);
+    }
+
+    public function testFixUndefinedOffset0WhenFetchEmptyData()
+    {
+        $this->initFixtures();
+
+        $emptyMembers = $this->db('users')->where(array('group_id' => '3'))->indexBy('id')->fetchAll();
+        $this->assertEmpty($emptyMembers);
+    }
+
+    public function testRealTimeIndexBy()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users')->findAll();
+
+        $users = $users->indexBy('name')->toArray();
+
+        $this->assertArrayHasKey('twin', $users);
+        $this->assertArrayHasKey('test', $users);
+    }
+
+    public function testQueryUpdate()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->where('id = 1');
+        $result = $user->update("name = 'twin2'");
+
+        $this->assertGreaterThan(0, $result);
+        $this->assertEquals("UPDATE prefix_member SET name = 'twin2' WHERE id = 1", $user->getSql());
+
+        $user = $this->db->find('users', 1);
+        $this->assertEquals(1, $result);
+        $this->assertEquals('twin2', $user['name']);
+    }
+
+    public function testBindValue()
+    {
+        $this->initFixtures();
+
+        // Not array parameter
+        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = ?", 1, PDO::PARAM_INT);
+
+        $this->assertEquals('1', $user['id']);
+
+        // Array parameter
+        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = ?", array(1), array(PDO::PARAM_INT));
+
+        $this->assertEquals('1', $user['id']);
+
+        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = ? AND group_id = ?", array(1, 1), array(
+            PDO::PARAM_INT // (no parameter type for second placeholder)
+        ));
+
+        $this->assertEquals('1', $user['id']);
+        $this->assertEquals('1', $user['group_id']);
+
+        // Name parameter
+        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
+            'id' => 1
+        ), array(
+            'id' => PDO::PARAM_INT
+        ));
+
+        $this->assertEquals('1', $user['id']);
+
+        // Name parameter with colon
+        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
+            'id' => 1
+        ), array(
+            ':id' => PDO::PARAM_INT
+        ));
+
+        $this->assertEquals('1', $user['id']);
+
+        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
+            'id' => '1'
+        ));
+
+        $this->assertEquals('1', $user['id']);
+    }
+
+    public function testFetchColumn()
+    {
+        $this->initFixtures();
+
+        $count = $this->db->fetchColumn("SELECT COUNT(id) FROM prefix_member");
+        $this->assertEquals(2, $count);
+    }
+
+    public function testRecordNamespace()
+    {
+        $this->initFixtures();
+
+        $this->db->setOption('recordNamespace', 'WeiTest\Db');
+
+        $user = $this->db->find('users', 1);
+
+        $this->assertEquals('WeiTest\Db\Member', $this->db->getRecordClass('users'));
+        $this->assertInstanceOf('WeiTest\Db\Member', $user);
+    }
+
+    public function testCustomRecordClass()
+    {
+        $this->initFixtures();
+
+        $this->db->setOption('recordClasses', array(
+            'users' => 'WeiTest\Db\Member'
+        ));
+
+        $user = $this->db->find('users', 1);
+
+        $this->assertEquals('WeiTest\Db\Member', $this->db->getRecordClass('users'));
+        $this->assertInstanceOf('WeiTest\Db\Member', $user);
+    }
+
+    public function testRecordToArray()
+    {
+        $this->initFixtures();
+
+        $user = $this->db->find('users', 1)->toArray();
+
+        $this->assertInternalType('array', $user);
+        $this->assertArrayHasKey('id', $user);
+        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayHasKey('name', $user);
+        $this->assertArrayHasKey('address', $user);
+
+        $user = $this->db->find('users', 1)->toArray(array('id', 'group_id'));
+        $this->assertInternalType('array', $user);
+        $this->assertArrayHasKey('id', $user);
+        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayNotHasKey('name', $user);
+        $this->assertArrayNotHasKey('address', $user);
+
+        $user = $this->db->find('users', 1)->toArray(array('id', 'group_id', 'notExistField'));
+        $this->assertInternalType('array', $user);
+        $this->assertArrayHasKey('id', $user);
+        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayNotHasKey('name', $user);
+        $this->assertArrayNotHasKey('address', $user);
+
+        $user = $this->db->init('users')->toArray();
+        $this->assertInternalType('array', $user);
+        $this->assertArrayHasKey('id', $user);
+        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayHasKey('name', $user);
+        $this->assertArrayHasKey('address', $user);
+        $this->assertNull($user['id']);
+        $this->assertNull($user['group_id']);
+        $this->assertNull($user['name']);
+        $this->assertNull($user['address']);
+
+        $users = $this->db('users')->findAll()->toArray(array('id', 'group_id'));
+        $this->assertInternalType('array', $users);
+        $this->assertArrayHasKey(0, $users);
+        $this->assertArrayHasKey('id', $users[0]);
+        $this->assertArrayHasKey('group_id', $users[0]);
+        $this->assertArrayNotHasKey('name', $users[0]);
+
+        $this->db->setOption('recordClasses', array(
+            'users' => 'WeiTest\Db\Member'
+        ));
+    }
+
+    public function testNewRecordToArrayWithoutReturnFields()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->findOrInit(array('id' => 9999));
+
+        $this->assertTrue($user->isNew());
+
+        $data = $user->toArray();
+
+        $this->assertArrayHasKey('id', $data);
+        $this->assertArrayHasKey('group_id', $data);
+        $this->assertArrayHasKey('name', $data);
+    }
+
+    public function testNewRecordToArrayWithReturnFields()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->findOrInit(array('id' => 9999));
+
+        $this->assertTrue($user->isNew());
+
+        $data = $user->toArray(array('group_id', 'name'));
+
+        $this->assertArrayNotHasKey('id', $data);
+        $this->assertArrayHasKey('group_id', $data);
+        $this->assertArrayHasKey('name', $data);
+    }
+
+    public function testToJson()
+    {
+        $this->initFixtures();
+        $user = $this->db->init('users');
+        $this->assertInternalType('string', $user->toJson());
+    }
+
+    public function testDestroyRecord()
+    {
+        $this->initFixtures();
+
+        $user = $this->db->find('users', 1);
+
+        $result = $user->destroy();
+
+        $this->assertInstanceOf('\Wei\Record', $result);
+
+        $user = $this->db->find('users', 1);
+
+        $this->assertFalse($user);
+    }
+
+    public function testDestroyByCondition()
+    {
+        $this->initFixtures();
+
+        $result = $this->db('users')->destroy(2);
+
+        $this->assertFalse($this->db('users')->find(2));
+    }
+
+    public function testGetTable()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find('1');
+
+        $this->assertEquals('users', $user->getTable());
+    }
+
+    public function testFieldNotFound()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find('1');
+
+        $this->setExpectedException('\InvalidArgumentException', 'Field "notFound" not found in record class "Wei\Record"');
+
+        $user['notFound'];
+    }
+
+    public function testCollection()
+    {
+        $this->initFixtures();
+
+        $users = $this->db->findAll('users');
+
+        $this->assertInstanceOf('\Wei\Record', $users);
+
+        // ToArray
+        $userArray = $users->toArray();
+        $this->assertInternalType('array', $userArray);
+        foreach ($userArray as $user) {
+            $this->assertInternalType('array', $user);
+        }
+
+        // Filter
+        $firstGroupMembers = $users->filter(function($user){
+            if ('1' == $user['group_id']) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        $this->assertEquals('1', $firstGroupMembers[0]['group_id']);
+        $this->assertInstanceOf('\Wei\Record', $firstGroupMembers);
+        $this->assertNotSame($users, $firstGroupMembers);
+    }
+
+    public function testFilter()
+    {
+        $this->initFixtures();
+
+        $this->db->setOption('recordNamespace', 'WeiTest\Db');
+        $users = $this->db('users')->findAll();
+
+        $oneMembers =  $users->filter(function ($user) {
+            return $user['id'] == 1;
+        });
+
+        $this->assertEquals(1, $oneMembers->length());
+        $this->assertEquals(1, $oneMembers[0]['id']);
+
+        $noMembers = $users->filter(function () {
+            return false;
+        });
+
+        $this->assertEquals(0, $noMembers->length());
+        $this->assertEmpty($noMembers->toArray());
+    }
+
+    public function testRecordUnset()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find('1');
+
+        $this->assertEquals('twin', $user['name']);
+        $this->assertEquals('1', $user['group_id']);
+
+        unset($user['name']);
+        $user->remove('group_id');
+
+        $this->assertEquals(null, $user['name']);
+        $this->assertEquals(null, $user['group_id']);
+    }
+
+    public function testErrorCodeAndInfo()
+    {
+        $this->db->errorCode();
+        $info = $this->db->errorInfo();
+
+        $this->assertArrayHasKey(0, $info);
+        $this->assertArrayHasKey(1, $info);
+        $this->assertArrayHasKey(1, $info);
+    }
+
+    public function testBeforeAndAfterQuery()
+    {
+        $this->initFixtures();
+
+        $this->expectOutputRegex('/beforeQueryafterQuery/');
+
+        $this->db->setOption(array(
+            'beforeQuery' => function(){
+                echo 'beforeQuery';
+            },
+            'afterQuery' => function(){
+                echo 'afterQuery';
+            }
+        ));
+
+        $this->db->find('users', 1);
+    }
+
+    public function testBeforeAndAfterQueryForUpdate()
+    {
+        $this->initFixtures();
+
+        $this->expectOutputString('beforeQueryafterQuery');
+
+        $this->db->setOption(array(
+            'beforeQuery' => function(){
+                echo 'beforeQuery';
+            },
+            'afterQuery' => function(){
+                echo 'afterQuery';
+            }
+        ));
+
+        $this->db->executeUpdate("UPDATE prefix_member SET name = 'twin2' WHERE id = 1");
+
+        $this->assertEquals("UPDATE prefix_member SET name = 'twin2' WHERE id = 1", $this->db->getLastQuery());
+    }
+
+    public function testException()
+    {
+        $this->setExpectedException('PDOException');
+
+        $this->db->query("SELECT * FROM noThis table");
+    }
+
+    public function testExceptionWithParams()
+    {
+        $this->setExpectedException('PDOException', 'An exception occurred while executing "SELECT * FROM noThis table WHERE id = ?"');
+
+        $this->db->query("SELECT * FROM noThis table WHERE id = ?", array(1));
+    }
+
+    public function testUpdateWithoutParameters()
+    {
+        $this->initFixtures();
+
+        $result = $this->db->executeUpdate("UPDATE prefix_member SET name = 'twin2' WHERE id = 1");
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCount()
+    {
+        $this->initFixtures();
+
+        $count = $this->db('users')->count();
+
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(2, $count);
+
+        $count = $this->db('users')->select('id, name')->limit(1)->offset(2)->count();
+
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(2, $count);
+    }
+
+    public function testCountBySubQuery()
+    {
+        $this->initFixtures();
+
+        $count = $this->db('users')->countBySubQuery();
+
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(2, $count);
+
+        $count = $this->db('users')->select('id, name')->limit(1)->offset(2)->countBySubQuery();
+
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(2, $count);
+    }
+
+    public function testCountWithCondition()
+    {
+        $this->initFixtures();
+
+        $count = $this->db('users')->count(1);
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(1, $count);
+
+        $count = $this->db('users')->count(array('id' => 1));
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testParameters()
+    {
+        $this->initFixtures();
+
+        $db = $this->db;
+
+        $query = $db('users')
+            ->where('id = :id AND group_id = :groupId')
+            ->setParameters(array(
+                'id' => 1,
+                'groupId' => 1
+            ), array(
+                PDO::PARAM_INT,
+                PDO::PARAM_INT
+            ));
+        $user = $query->find();
+
+        $this->assertEquals(array(
+            'id' => 1,
+            'groupId' => 1
+        ), $query->getParameters());
+
+        $this->assertEquals(1, $query->getParameter('id'));
+        $this->assertNull($query->getParameter('no'));
+
+        $this->assertEquals(1, $user['id']);
+        $this->assertEquals(1, $user['group_id']);
+
+        // Set parameter
+        $query->setParameter('id', 1, PDO::PARAM_STR);
+        $user = $query->find();
+        $this->assertEquals(1, $user['id']);
+
+        $query->setParameter('id', 10);
+        $user = $query->find();
+        $this->assertFalse($user);
+
+        $query = $this
+            ->db('users')
+            ->andWhere('id = ?', '1', PDO::PARAM_INT);
+
+        $user = $query->find();
+        $this->assertEquals('1', $user['id']);
+    }
+
+    /**
+     * @dataProvider providerForParameterValue
+     */
+    public function testParameterValue($value)
+    {
+        $this->initFixtures();
+
+        $query = $this
+            ->db('users')
+            ->where('id = ?', $value)
+            ->andWhere('id = ?', $value)
+            ->andWhere('id = ?', $value)
+            ->orWhere('id = ?', $value)
+            ->orWhere('id = ?', $value)
+            ->groupBy('id')
+            ->having('id = ?', $value)
+            ->andHaving('id = ?', $value)
+            ->andHaving('id = ?', $value)
+            ->orHaving('id = ?', $value)
+            ->orHaving('id = ?', $value);
+
+        // No error raise
+        $array = $query->fetchAll();
+        $this->assertInternalType('array', $array);
+    }
+
+    public function providerForParameterValue()
+    {
+        return array(
+            array('0'),
+            array(0),
+            array(null),
+            array(true),
+            array(array(null))
+        );
+    }
+
+    public function testGetAndResetAllSqlParts()
+    {
+        $query = $this->db('users')->offset(1)->limit(1);
+
+        $this->assertEquals(1, $query->getSqlPart('offset'));
+        $this->assertEquals(1, $query->getSqlPart('limit'));
+
+        $queryParts = $query->getSqlParts();
+        $this->assertArrayHasKey('offset', $queryParts);
+        $this->assertArrayHasKey('limit', $queryParts);
+
+        $query->resetSqlParts();
+
+        $this->assertEquals(null, $query->getSqlPart('offset'));
+        $this->assertEquals(null, $query->getSqlPart('limit'));
+    }
+
+    public function testGetTableFromQueryBuilder()
+    {
+        $qb = $this->db('users');
+        $this->assertEquals('users', $qb->getTable());
+
+        $qb->from('member m');
+        $this->assertEquals('users', $qb->getTable());
+
+        $qb->from('member m');
+        $this->assertEquals('users', $qb->getTable());
+
+        $qb->from('member AS m');
+        $this->assertEquals('users', $qb->getTable());
+    }
+
+    public function testDbCount()
+    {
+        $this->initFixtures();
+
+        $db = $this->db;
+
+        $count = $db->count('users');
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(2, $count);
+
+        $count = $db->count('users', array('id' => '1'));
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(1, $count);
+
+        $count = $db->count('users', array('id' => '1'));
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(1, $count);
+
+        $count = $db->count('users', array('id' => '123'));
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(0, $count);
+    }
+
+    public function testTablePrefix()
+    {
+        $this->initFixtures();
+
+        $db = $this->db;
+
+        $db->setOption('tablePrefix', 'tbl_');
+        $this->assertEquals('tbl_member', $db->getTable('users'));
+
+        $db->setOption('tablePrefix', 'prefix_post_');
+        $this->assertEquals(3, $db->count('tag'));
+    }
+
+    public function testConnectFails()
+    {
+        $this->setExpectedException('\PDOException');
+        $test = &$this;
+        $db = new \Wei\Db(array(
+            'wei' => $this->wei,
+            'driver' => 'mysql',
+            'host'   => '255.255.255.255',
+            'dbname' => 'test',
+            'connectFails' => function($db, $exception) use($test) {
+                $test->assertTrue(true);
+                $test->assertInstanceOf('PDOException', $exception);
+            }
+        ));
+        $db->connect();
+    }
+
+    public function testGlobalOption()
+    {
+        $cb = function(){};
+        $this->wei->setConfig(array(
+            // sqlite
+            'db' => array(
+                'beforeConnect' => $cb,
+            ),
+            'mysql.db' => array(
+                'beforeConnect' => $cb,
+            ),
+            'pgsql.db' => array(
+                'beforeConnect' => $cb,
+            ),
+            'cb.db' => array(
+                'db' => $this->db,
+                'global' => true
+            )
+        ));
+
+        $this->assertSame($cb, $this->db->getOption('beforeConnect'));
+        $this->assertSame($cb, $this->cbDb->getOption('beforeConnect'));
+
+        // Remove all relation configuration
+        unset($this->cbDb);
+        $this->wei->remove('cbDb');
+        $this->wei->setConfig('cb.db', array(
+            'db' => null
+        ));
+    }
+
+    public function testUnsupportedDriver()
+    {
+        $this->setExpectedException('\RuntimeException', 'Unsupported database driver: abc');
+
+        $db = new \Wei\Db(array(
+            'wei' => $this->wei,
+            'driver' => 'abc'
+        ));
+
+        $db->query("SELECT MAX(1, 2)");
+    }
+
+    public function testCustomDsn()
+    {
+        $db = new \Wei\Db(array(
+            'wei' => $this->wei,
+            'dsn' => 'sqlite::memory:'
+        ));
+
+        $this->assertEquals('sqlite::memory:', $db->getDsn());
+    }
+
+    public function testInsertBatch()
+    {
+        $this->initFixtures();
+
+        $result = $this->db->batchInsert('users', array(
+            array(
+                'group_id' => '1',
+                'name' => 'twin',
+                'address' => 'test'
+            ),
+            array(
+                'group_id' => '1',
+                'name' => 'test',
+                'address' => 'test'
+            )
+        ));
+
+        $this->assertEquals(2, $result);
+    }
+
+    public function testSlaveDb()
+    {
+        // Generate slave db configuration name
+        $driver = $this->db->getDriver();
+        $configName = $driver . 'Slave.db';
+
+        // Set configuration for slave db
+        $options = $this->wei->getConfig('db');
+        $this->wei->setConfig($configName, $options);
+
+        $this->db->setOption('slaveDb', $configName);
+
+        $query = "SELECT 1 + 2";
+        $this->db->query($query);
+
+        // Receives the slave db wei
+        /** @var $slaveDb \Wei\Db */
+        $slaveDb = $this->wei->get($configName);
+
+        // Test that the query is execute by slave db, not the master db
+        $this->assertNotContains($query, $this->db->getQueries());
+        $this->assertContains($query, $slaveDb->getQueries());
+    }
+
+    public function testReload()
+    {
+        $this->db->setOption('recordNamespace', 'WeiTest\Db');
+        $this->initFixtures();
+
+        /** @var $user2 \WeiTest\Db\Member */
+        $user = $this->db->find('users', 1);
+        /** @var $user2 \WeiTest\Db\Member */
+        $user2 = $this->db->find('users', 1);
+
+        $user['group_id'] = 2;
+        $user->save();
+
+        $this->assertNotEquals($user['group_id'], $user2['group_id']);
+        $this->assertEquals(1, $user->getLoadTimes());
+
+        $user2->reload();
+        $this->assertEquals($user['group_id'], $user2['group_id']);
+        $this->assertEquals(2, $user2->getLoadTimes());
+    }
+
+    public function testFindOne()
+    {
+        $this->initFixtures();
+
+        $record = $this->db->findOne('users', 1);
+        $this->assertInstanceOf('\Wei\Record', $record);
+    }
+
+    public function testFindOneWithException()
+    {
+        $this->initFixtures();
+
+        $this->setExpectedException('Exception', 'Record not found', 404);
+
+        $this->db->findOne('users', 999);
+    }
+
+    public function testisChanged()
+    {
+        $this->initFixtures();
+
+        $user = $this->db->init('users');
+        $this->assertFalse($user->isChanged());
+
+        $user['name'] = 'tt';
+        $user['group_id'] = '1';
+        $user['address'] = 'address';
+        $this->assertFalse($user->isChanged('id'));
+        $this->assertTrue($user->isChanged('name'));
+        $this->assertTrue($user->isChanged());
+
+        $this->assertNull($user->getChangedData('name'));
+
+        $user['name'] = 'aa';
+        $this->assertTrue($user->isChanged());
+        $this->assertEquals('tt', $user->getChangedData('name'));
+
+        $user->save();
+        $this->assertFalse($user->isChanged());
+        $this->assertEmpty($user->getChangedData());
+    }
+
+    public function testReconnect()
+    {
+        $this->db->connect();
+        $pdo = $this->db->getOption('pdo');
+
+        $this->db->reconnect();
+        $newPdo = $this->db->getOption('pdo');
+
+        $this->assertEquals($pdo, $newPdo);
+        $this->assertNotSame($pdo, $newPdo);
+    }
+
+    public function testGetter()
+    {
+        wei(array(
+            'test.db' => array(
+                'user' => 'user',
+                'password' => 'password',
+                'host' => 'host',
+                'port' => 'port',
+                'dbname' => 'dbname'
+            )
+        ));
+
+        /** @var $testDb \Wei\Db */
+        $testDb = $this->testDb;
+
+        $this->assertEquals('user', $testDb->getUser());
+        $this->assertEquals('password', $testDb->getPassword());
+        $this->assertEquals('host', $testDb->getHost());
+        $this->assertEquals('port', $testDb->getPort());
+        $this->assertEquals('dbname', $testDb->getDbname());
+    }
+
+    public function testQueryBuilderForEach()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users')->where('group_id = 1');
+        foreach ($users as $user) {
+            $this->assertEquals(1, $user['group_id']);
+        }
+    }
+
+    public function testInsertWithSqlObject()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('users', array(
+            'group_id' => '1',
+            'name' => (object)'1 + 1',
+            'address' => 'test'
+        ));
+
+        $id = $this->db->lastInsertId('prefix_member_id_seq');
+        $user = $this->db->select('users', $id);
+
+        $this->assertNotEquals('1 + 1', $user['name']);
+        $this->assertEquals('2', $user['name']);
+    }
+
+    public function testUpdateWithSqlObject()
+    {
+        $this->initFixtures();
+
+        $this->db->update('users', array('group_id' => (object)'group_id + 1'), array('id' => (object)'0.5 + 0.5'));
+
+        $user = $this->db->select('users', 1);
+
+        $this->assertEquals('2', $user['group_id']);
+    }
+
+    public function testDeleteWithSqlObject()
+    {
+        $this->initFixtures();
+
+        $result = $this->db->delete('users', array('id' => (object)'0.5 + 0.5'));
+
+        $this->assertEquals(1, $result);
+        $this->assertFalse($this->db->select('users', 1));
+    }
+
+    public function testRecordWithSqlObject()
+    {
+        $this->initFixtures();
+
+        $user = $this->db->find('users', 1);
+        $groupId = $user['group_id'];
+
+        $user['group_id'] = (object)'group_id + 1';
+        $user->save();
+        $user->reload();
+
+        $this->assertEquals($groupId + 1, $user['group_id']);
+    }
+
+    public function testGetTableFieldsButTableNotExists()
+    {
+        $this->setExpectedException('PDOException');
+        $this->db->getTableFields('notExists');
+    }
+
+    public function testNewRecord()
+    {
+        $this->initFixtures();
+
+        // Use record as array
+        $user = $this->db('users')->where('id = 1');
+        $this->assertEquals('1', $user['id']);
+
+        // Use record as 2d array
+        $users = $this->db('users')->where('group_id = 1');
+        foreach ($users as $user) {
+            $this->assertEquals(1, $user['group_id']);
+        }
+
+        $user1 = $this->db('users');
+        $user2 = $this->db('users');
+        $this->assertEquals($user1, $user2);
+        $this->assertNotSame($user1, $user2);
+    }
+
+    public function testCreateRecord()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users');
+
+        $data = $user->toArray();
+        $this->assertArrayHasKey('id', $data);
+        $this->assertArrayHasKey('group_id', $data);
+        $this->assertArrayHasKey('name', $data);
+        $this->assertArrayHasKey('address', $data);
+
+        $user->fromArray(array(
+            'group_id' => 1,
+            'name' => 'John',
+            'address' => 'xx street'
+        ));
+        $result = $user->save();
+
+        $this->assertSame($result, $user);
+    }
+
+    public function testBeforeAndAfterCreateCallbacks()
+    {
+        $this->initFixtures();
+
+        $this->db->setOption('recordNamespace', 'WeiTest\Db');
+
+        $user = $this->db('users')->fromArray(array(
+            'group_id' => 1,
+            'name' => 'twin',
+            'address' => 'xx street',
+        ));
+
+        $user->save();
+
+        $this->assertEquals('beforeSave->beforeCreate->afterCreate->afterSave', $user->getEventResult());
+    }
+
+    public function testBeforeAndAfterDestroyCallbacks()
+    {
+        $this->initFixtures();
+
+        $this->db->setOption('recordNamespace', 'WeiTest\Db');
+
+        $user = $this->db->find('users', 1);
+
+        $user->destroy();
+
+        $this->assertEquals('beforeDestroy->afterDestroy', $user->getEventResult());
+    }
+
+    public function testCreateCollection()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users');
+
+        $users->fromArray(array(
+            array(
+                'group_id' => 1,
+                'name' => 'John',
+                'address' => 'xx street'
+            ),
+            array(
+                'group_id' => 2,
+                'name' => 'Tome',
+                'address' => 'xx street'
+            )
+        ));
+    }
+
+    public function testFindRecordAndDestroy()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find(array('id' => 1));
+        $result = $user->destroy();
+
+        $this->assertInstanceOf('\Wei\Record', $result);
+
+        $user = $this->db('users')->find(array('id' => 1));
+        $this->assertFalse($user);
+    }
+
+    public function testDeleteRecordByQueryBuilder()
+    {
+        $this->initFixtures();
+
+        $result = $this->db('users')->where('group_id = ?', 1)->delete();
+        $this->assertEquals(2, $result);
+
+        $result = $this->db('users')->delete(array('group_id' => 1));
+        $this->assertEquals(0, $result);
+    }
+
+    public function testFindCollectionAndDestroy()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users')->where('group_id = 1');
+        $users->destroy();
+
+        $users = $this->db('users')->where('group_id = 1');
+        $this->assertEquals(0, count($users));
+    }
+
+    public function testFindRecordAndUpdate()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find(array('id' => 1));
+        $user['name'] = 'William';
+        $result = $user->save();
+        $this->assertSame($result, $user);
+
+        $user = $this->db('users')->find(array('id' => 1));
+        $this->assertEquals('William', $user['name']);
+    }
+
+    public function testFindCollectionAndUpdate()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users')->where('group_id = 1');
+        $number = $users->length();
+        $this->assertEquals(2, $number);
+
+        foreach ($users as $user) {
+            $user['group_id'] = 2;
+        }
+        $users->save();
+
+        $users = $this->db('users')->where('group_id = 2');
+        $this->assertEquals(2, $users->length());
+    }
+
+    public function testCreateCollectionAndSave()
+    {
+        $this->initFixtures();
+
+        // Creates a member collection
+        $users = $this->db('users');
+
+        $john = $this->db('users')->fromArray(array(
+            'group_id' => 2,
+            'name' => 'John',
+            'address' => 'xx street',
+        ));
+
+        $larry = $this->db('users')->fromArray(array(
+            'group_id' => 3,
+            'name' => 'Larry',
+            'address' => 'xx street',
+        ));
+
+        // Adds record to collection
+        $users->fromArray(array(
+            $john
+        ));
+
+        // Or adds by [] operator
+        $users[] = $larry;
+
+        /** @var $users \Wei\Record */
+        $result = $users->save();
+
+        $this->assertSame($result, $users);
+
+        // Find out member by id
+        $users = $this->db('users')->indexBy('id')->where(array('id' => array($john['id'], $larry['id'])));
+
+        $this->assertEquals('John', $users[$john['id']]['name']);
+        $this->assertEquals('Larry', $users[$larry['id']]['name']);
+    }
+
+    public function testDestroyRecordAndFindAgainReturnFalse()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users');
+        $result = $user->find(array('id' => 1))->destroy();
+
+        $this->assertInstanceOf('\Wei\Record', $result);
+
+        $user = $this->db('users')->find(array('id' => 1));
+        $this->assertFalse($user);
+    }
+
+    public function testSaveOnNoFiledChanged()
+    {
+        $this->initFixtures();
+        $record = $this->db->init('users', array('id' => 1), false);
+        $record = $record->save();
+
+        $this->assertInstanceOf('\Wei\Record', $record);
+    }
+
+    public function testPrimaryKey()
+    {
+        $this->initFixtures();
+
+        $record = $this->db->init('users');
+        $this->assertEquals('id', $record->getPrimaryKey());
+
+        $record->setPrimaryKey('testId');
+        $this->assertEquals('testId', $record->getPrimaryKey());
+    }
+
+    public function testIsNew()
+    {
+        $this->initFixtures();
+
+        $record = $this->db->init('users', array('id' => 1), true);
+        $this->assertTrue($record->isNew());
+
+        $record = $this->db->init('users', array('id' => 1), false);
+        $this->assertFalse($record->isNew());
+    }
+
+    public function testFindByPrimaryKey()
+    {
+        $this->initFixtures();
+
+        $record = $this->db('users')->find(1);
+        $this->assertEquals(1, $record['id']);
+
+        $record = $this->db('users')->find('1');
+        $this->assertEquals(1, $record['id']);
+    }
+
+    public function testInvalidLimit()
+    {
+        $this->initFixtures();
+        $user = $this->db('users');
+
+        $user->limit(-1);
+        $this->assertEquals(1, $user->getSqlPart('limit'));
+
+        $user->limit(0);
+        $this->assertEquals(1, $user->getSqlPart('limit'));
+
+        $user->limit('string');
+        $this->assertEquals(1, $user->getSqlPart('limit'));
+    }
+
+    public function testInvalidOffset()
+    {
+        $this->initFixtures();
+        $user = $this->db('users');
+
+        $user->offset(-1);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+
+        $user->offset(-1.1);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+
+        $user->offset('string');
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+
+        $user->offset(9848519079999155811);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+    }
+
+    public function testInvalidPage()
+    {
+        $this->initFixtures();
+        $user = $this->db('users');
+
+        // @link http://php.net/manual/en/language.types.integer.php#language.types.integer.casting.from-float
+        // (984851907999915581 - 1) * 10
+        // => 9.8485190799992E+18
+        // => (int)9.8485190799992E+18
+        // => -8598224993710352384
+        // => 0
+        $user->page(984851907999915581);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+    }
+
+    public function testMax()
+    {
+        $this->initFixtures();
+
+        $result = $this->db->max('users', 'id');
+        $this->assertInternalType('float', $result);
+        $this->assertEquals(2, $result);
+    }
+
+    public function testMin()
+    {
+        $this->initFixtures();
+
+        $result = $this->db->min('users', 'id');
+        $this->assertInternalType('float', $result);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testAvg()
+    {
+        $this->initFixtures();
+
+        $result = $this->db->avg('users', 'id');
+        $this->assertInternalType('float', $result);
+        $this->assertEquals(1.5, $result);
+    }
+
+    public function testSaveDestroyRecord()
+    {
+        $this->initFixtures();
+
+        $user = $this->db->find('users', 1);
+        $user->destroy();
+
+        $user->save();
+
+        $user = $this->db->find('users', 1);
+        $this->assertFalse($user);
+    }
+
+    public function testSaveWithNullPrimaryKey()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users');
+        $user->save(array(
+            'id' => null,
+            'group_id' => '1',
+            'name' => 'twin',
+            'address' => 'test'
+        ));
+
+        $this->assertNotNull($user['id']);
+
+        $user = $this->db('users');
+        $user->save(array(
+            'id' => '',
+            'group_id' => '1',
+            'name' => 'twin',
+            'address' => 'test'
+        ));
+
+        $this->assertNotNull($user['id']);
+    }
+
+    public function testNullAsCollectionKey()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users');
+
+        $users[] = $this->db('users');
+        $users[] = $this->db('users');
+        $users[] = $this->db('users');
+        $users[] = $this->db('users');
+
+        $this->assertEquals(4, $users->length());
+    }
+
+    public function testSetDataWithProperty()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users');
+
+        $user['table'] = 234;
+
+        $this->assertNotEquals(234, $user->getTable());
+        $this->assertEquals('users', $user->getTable());
+    }
+
+    public function testAddNotRecordToCollection()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users');
+        $user = $this->db('users');
+
+        // Make sure $users is a collection
+        $users[] = $user;
+
+        $this->setExpectedException('InvalidArgumentException', 'Value for collection must be an instance of Wei\Record');
+
+        // Assign non record value to raise an exception
+        $users[] = 234;
+    }
+
+    public function testGetPdo()
+    {
+        $this->assertInstanceOf('PDO', $this->db->getPdo());
+    }
+
+    public function testIncrAndDecr()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find(1);
+
+        $groupId = $user['group_id'];
+
+        $user->incr('group_id', 2);
+        $user->save();
+        $user->reload();
+
+        $this->assertEquals($groupId + 2, $user['group_id']);
+
+        $user->decr('group_id');
+        $user->save();
+        $user->reload();
+
+        $this->assertEquals($groupId + 2 - 1, $user['group_id']);
+    }
+
+    public function testCreateOrUpdate()
+    {
+        $this->initFixtures();
+
+        $id = null;
+        $user = $this->db('users')->findOrInit($id, array(
+            'group_id' => 2,
+            'name' => 'twin',
+            'address' => 'xx street'
+        ));
+
+        $this->assertTrue($user->isNew());
+        $this->assertEquals(2, $user['group_id']);
+
+        $user = $this->db('users')->findOrInit(1, array(
+            'group_id' => 2,
+            'name' => 'twin',
+            'address' => 'xx street'
+        ));
+
+        $this->assertFalse($user->isNew());
+    }
+
+    public function testDetach()
+    {
+        $this->initFixtures();
+
+        /** @var $user \Wei\Record */
+        $user = $this->db('users')->findById(1);
+
+        $this->assertFalse($user->isDetached());
+
+        $user->detach();
+
+        $this->assertTrue($user->isDetached());
+
+        $user->save();
+
+        $this->assertTrue($user->isDestroyed());
+
+        $newMember = $this->db('users')->findById(1);
+
+        $this->assertFalse($newMember);
+    }
+
+    public function testRecordFetchColumn()
+    {
+        $this->initFixtures();
+
+        $count = $this->db('users')->select('COUNT(id)')->fetchColumn();
+        $this->assertEquals(2, $count);
+
+        $count = $this->db('users')->select('COUNT(id)')->fetchColumn(array('id' => 1));
+        $this->assertEquals(1, $count);
+    }
+
+    public function testFillable()
+    {
+        $this->initFixtures();
+
+        /** @var $user \Wei\Record */
+        $user = $this->db('users');
+
+        $user->setOption('fillable', array('name'));
+        $this->assertEquals(true, $user->isFillable('name'));
+
+        $user->fromArray(array(
+            'id' => '1',
+            'name' => 'name'
+        ));
+
+        $this->assertNull($user['id']);
+        $this->assertEquals('name', $user['name']);
+    }
+
+    public function testGuarded()
+    {
+        $this->initFixtures();
+
+        /** @var $user \Wei\Record */
+        $user = $this->db('users');
+
+        $user->setOption('guarded', array('id', 'name'));
+
+        $this->assertEquals(false, $user->isFillable('id'));
+        $this->assertEquals(false, $user->isFillable('name'));
+
+        $user->fromArray(array(
+            'id' => '1',
+            'group_id' => '2',
+            'name' => 'name'
+        ));
+
+        $this->assertNull($user['id']);
+        $this->assertEquals('2', $user['group_id']);
+        $this->assertNull($user['name']);
+    }
+
+    public function testCache()
+    {
+        $this->initFixtures();
+
+        $user = $this->getMemberFromCache(1);
+        $this->assertEquals('twin', $user['name']);
+
+        $user->save(array(
+            'name' => 'twin2'
+        ));
+
+        $user = $this->getMemberFromCache(1);
+        $this->assertEquals('twin', $user['name']);
+
+        $user->clearTagCache();
+
+        $user = $this->getMemberFromCache(1);
+        $this->assertEquals('twin2', $user['name']);
+
+        wei()->cache->clear();
+    }
+
+    public function testCacheWithJoin()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')
+            ->select('prefix_member.*')
+            ->leftJoin('prefix_member_group', 'prefix_member.group_id = prefix_member_group.id')
+            ->where('prefix_member.id = 1')
+            ->tags()
+            ->cache();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        $this->db('users')->where('id = 1')->update("name = 'twin2'");
+
+        // Fetch from cache
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        // Clear cache
+        wei()->tagCache('prefix_member')->clear();
+        wei()->tagCache('prefix_member', 'prefix_member_group')->reload();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin2', $data['name']);
+    }
+
+    public function testCustomCacheTags()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')
+            ->select('prefix_member.*')
+            ->leftJoin('prefix_member_group', 'prefix_member.group_id = prefix_member_group.id')
+            ->where('prefix_member.id = 1')
+            ->tags(array('users', 'member_group'))
+            ->cache();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        $this->db('users')->where('id = 1')->update("name = 'twin2'");
+
+        // Fetch from cache
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        // Clear cache
+        wei()->tagCache('users')->clear();
+        wei()->tagCache('users', 'member_group')->reload();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin2', $data['name']);
+
+        wei()->cache->clear();
+    }
+
+    public function testCustomCacheKey()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->cache()->setCacheKey('member-1')->tags(false)->find(array('id' => 1));
+
+        $this->assertEquals(1, $user['id']);
+
+        $cacheData = wei()->cache->get('member-1');
+        $this->assertEquals('1', $cacheData[0]['id']);
+
+        wei()->cache->clear();
+    }
+
+    protected function getMemberFromCache($id)
+    {
+        return $this->db('users')->cache(600)->findById($id);
+    }
+
+    public function testUpdateWithParam()
+    {
+        $this->initFixtures();
+
+        $row = $this->db('users')->update(array('address' => 'test address'));
+        $this->assertEquals(2, $row);
+
+        $user = $this->db('users')->find();
+        $this->assertEquals('test address', $user['address']);
+
+        // Update with where clause
+        $row = $this->db('users')->where(array('name' => 'twin'))->update(array('address' => 'test address 2'));
+        $this->assertEquals(1, $row);
+
+        $user = $this->db('users')->findOne(array('name' => 'twin'));
+        $this->assertEquals('test address 2', $user['address']);
+
+        // Update with two where clauses
+        $row = $this->db('users')
+            ->where(array('name' => 'twin'))
+            ->andWhere(array('group_id' => 1))
+            ->update(array('address' => 'test address 3'));
+        $this->assertEquals(1, $row);
+
+        $user = $this->db('users')->findOne(array('name' => 'twin'));
+        $this->assertEquals('test address 3', $user['address']);
+    }
+
+    public function testEmptyFrom()
+    {
+        $sql = $this->db('users')->resetSqlPart('from')->getSql();
+        $this->assertEquals('SELECT * FROM member', $sql);
+
+        $sql = $this->db('users')->from('member m')->getSql();
+        $this->assertEquals('SELECT * FROM member m', $sql);
+    }
 }
