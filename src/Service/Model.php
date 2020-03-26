@@ -1291,19 +1291,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * Reset all SQL parts and parameters
-     *
-     * @return $this
-     */
-    public function resetQuery()
-    {
-        $this->params = [];
-        $this->paramTypes = [];
-
-        return $this->resetSqlParts();
-    }
-
-    /**
      * Specifies an item that is not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *

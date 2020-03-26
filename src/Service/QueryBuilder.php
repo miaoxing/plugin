@@ -1398,6 +1398,19 @@ class QueryBuilder extends Base
         return $this;
     }
 
+    /**
+     * Reset all SQL parts and parameters
+     *
+     * @return $this
+     */
+    public function resetQuery()
+    {
+        $this->params = [];
+        $this->paramTypes = [];
+
+        return $this->resetSqlParts();
+    }
+
     protected function wrap($value)
     {
         return '`' . $value . '`';
