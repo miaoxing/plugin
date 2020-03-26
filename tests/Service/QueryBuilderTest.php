@@ -113,9 +113,22 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereRaw()
     {
+        $this->initFixtures();
+
+        $qb = wei()->queryBuilder('users')->whereRaw("name = 'twin'");
+
+        $this->assertEquals("SELECT * FROM `pre_users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals('twin', $qb->fetch()['name']);
+    }
+
+    public function testWhereRawWithParam()
+    {
+        $this->initFixtures();
+
         $qb = wei()->queryBuilder('users')->whereRaw('name = ?', 'twin');
 
-        $this->assertEquals("SELECT * FROM `users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `pre_users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
     public function testOrWhere()

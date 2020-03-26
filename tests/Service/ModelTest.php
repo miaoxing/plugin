@@ -101,19 +101,6 @@ class ModelTest extends BaseTestCase
         $this->assertTrue($user->isLoaded());
     }
 
-    public function testGetRecordClass()
-    {
-        $db = $this->db;
-
-        $db->setOption('recordNamespace', 'WeiTest\Db');
-
-        $this->assertEquals('WeiTest\Db\Member', $db->getRecordClass('users'));
-        $this->assertEquals('WeiTest\Db\Member', $db->getRecordClass('users'));
-        $this->assertEquals('WeiTest\Db\MemberGroup', $db->getRecordClass('member_group'));
-        $this->assertEquals('WeiTest\Db\MemberGroup', $db->getRecordClass('memberGroup'));
-        $this->assertEquals('WeiTest\Db\MemberGroup', $db->getRecordClass('member_Group'));
-    }
-
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
      */

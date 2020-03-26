@@ -77,6 +77,22 @@ class QueryBuilder extends Base
     ];
 
     /**
+     * The query parameters
+     *
+     * @var array
+     */
+    protected $params = [
+        'where' => [],
+    ];
+
+    /**
+     * The parameter type map of this query
+     *
+     * @var array
+     */
+    protected $paramTypes = array();
+
+    /**
      * A field to be the key of the fetched array, if not provided, return
      * default number index array
      *
@@ -88,20 +104,6 @@ class QueryBuilder extends Base
      * @var string The complete SQL string for this query.
      */
     protected $sql;
-
-    /**
-     * The query parameters
-     *
-     * @var array
-     */
-    protected $params = array();
-
-    /**
-     * The parameter type map of this query
-     *
-     * @var array
-     */
-    protected $paramTypes = array();
 
     /**
      * The type of query this is. Can be select, update or delete
@@ -213,10 +215,10 @@ class QueryBuilder extends Base
             if ($this->cacheTime !== false) {
                 return $this->fetchFromCache();
             } else {
-                return $this->db->fetchAll($this->getSql(), $this->params, $this->paramTypes);
+                return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
             }
         } else {
-            return $this->db->executeUpdate($this->getSql(), $this->params, $this->paramTypes);
+            return $this->db->executeUpdate($this->getSql(), $this->getBindParams(), $this->paramTypes);
         }
     }
 
@@ -275,7 +277,7 @@ class QueryBuilder extends Base
 
         $select = $this->sqlParts['select'];
         $this->select('COUNT(' . $count . ')');
-        $count = (int) $this->db->fetchColumn($this->getSqlForSelect(true), $this->params);
+        $count = (int) $this->db->fetchColumn($this->getSqlForSelect(true), $this->getBindParams());
         $this->sqlParts['select'] = $select;
 
         return $count;
@@ -290,7 +292,7 @@ class QueryBuilder extends Base
     public function countBySubQuery($column, $operator = null, $value = null)
     {
         $this->where(...func_get_args());
-        return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->params);
+        return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
     }
 
     /**
@@ -986,10 +988,10 @@ class QueryBuilder extends Base
     {
         $query = $this->getSql();
         $keys = [];
-        $values = $this->params;
+        $values = $this->getBindParams();
 
         // build a regular expression for each parameter
-        foreach ($this->params as $key => $value) {
+        foreach ($values as $key => $value) {
             if (is_string($key)) {
                 $keys[] = '/:' . $key . '/';
             } else {
@@ -1095,7 +1097,6 @@ class QueryBuilder extends Base
 
             if ($this->isRaw($where['column'])) {
                 $query .= $this->getRawValue($where['column']);
-                $this->addParams($where['value']);
                 continue;
             }
 
@@ -1129,14 +1130,13 @@ class QueryBuilder extends Base
             switch ($where['operator']) {
                 case 'BETWEEN':
                 case 'NOT BETWEEN':
-                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ? AND ?',
-                        $where['value']);
+                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' ? AND ?');
                     break;
 
                 case 'IN':
                 case 'NOT IN':
-                    $query .= $this->processCondition($column . ' ' . $where['operator']
-                        . ' (' . implode(', ', array_pad([], count($where['value']), '?')) . ')', $where['value']);
+                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' (' . implode(', ',
+                            array_pad([], count($where['value']), '?')) . ')');
                     break;
 
                 case 'NULL':
@@ -1145,8 +1145,7 @@ class QueryBuilder extends Base
                     break;
 
                 default:
-                    $query .= $this->processCondition($column . ' ' . ($where['operator'] ?: '=') . ' ?',
-                        $where['value']);
+                    $query .= $this->processCondition($column . ' ' . ($where['operator'] ?: '=') . ' ?');
             }
         }
 
@@ -1162,6 +1161,20 @@ class QueryBuilder extends Base
                 $this->params[] = $params;
             }
         }
+    }
+
+    /**
+     * Returns flatten array for parameter binding.
+     *
+     * @return array
+     */
+    protected function getBindParams()
+    {
+        $params = [];
+        foreach ($this->params as $value) {
+            $params[] = array_merge([], ...$value);
+        }
+        return array_merge([], ...$params);
     }
 
     /**
@@ -1289,6 +1302,9 @@ class QueryBuilder extends Base
     protected function addWhere($column, $operator, $value = null, $condition = 'AND', $type = null)
     {
         $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
+        if ($value !== null) {
+            $this->params['where'][] = (array) $value;
+        }
         return $this;
     }
 

@@ -784,7 +784,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $cache = $this->cacheTags === false ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
         return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
-            return $this->db->fetchAll($this->getSql(), $this->params, $this->paramTypes);
+            return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
         });
     }
 
