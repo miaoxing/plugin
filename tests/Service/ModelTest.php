@@ -1816,8 +1816,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        /** @var $user \Wei\Record */
-        $user = $this->db('users')->findById(1);
+        $user = $this->db('users')->find(1);
 
         $this->assertFalse($user->isDetached());
 
@@ -1829,9 +1828,9 @@ class ModelTest extends BaseTestCase
 
         $this->assertTrue($user->isDestroyed());
 
-        $newMember = $this->db('users')->findById(1);
+        $newMember = $this->db('users')->find(1);
 
-        $this->assertFalse($newMember);
+        $this->assertNull($newMember);
     }
 
     public function testRecordFetchColumn()
@@ -1987,7 +1986,7 @@ class ModelTest extends BaseTestCase
 
     protected function getMemberFromCache($id)
     {
-        return $this->db('users')->cache(600)->findById($id);
+        return $this->db('users')->cache(600)->find($id);
     }
 
     public function testUpdateWithParam()

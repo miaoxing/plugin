@@ -799,19 +799,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this->findBy($this->primaryKey, $id);
     }
 
-    public function findBy($column, $operator, $value = null)
-    {
-        $this->isColl = false;
-        $data = $this->fetch(...func_get_args());
-        if ($data) {
-            $this->data = $data + $this->data;
-            $this->triggerCallback('afterFind');
-            return $this;
-        } else {
-            return null;
-        }
-    }
-
     /**
      * Find a record by primary key, or init with the specified data if record not found
      *
@@ -873,15 +860,17 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this;
     }
 
-    /**
-     * Find a record by primary key value
-     *
-     * @param mixed $value
-     * @return $this|false
-     */
-    public function findById($value)
+    public function findBy($column, $operator, $value = null)
     {
-        return $this->find(array($this->primaryKey => $value));
+        $this->isColl = false;
+        $data = $this->fetch(...func_get_args());
+        if ($data) {
+            $this->data = $data + $this->data;
+            $this->triggerCallback('afterFind');
+            return $this;
+        } else {
+            return null;
+        }
     }
 
     /**

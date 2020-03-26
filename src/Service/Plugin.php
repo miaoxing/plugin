@@ -631,7 +631,7 @@ class Plugin extends BaseService
      */
     protected function getInstalledIds()
     {
-        return $this->app->getModel()->get('pluginIds');
+        return (array) $this->app->getModel()->get('pluginIds');
     }
 
     /**

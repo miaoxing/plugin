@@ -278,7 +278,7 @@ class App extends \Wei\App
                 ->tags(false)
                 ->setCacheKey('appName:' . $namespace)
                 ->cache(86400)
-                ->find('name', $namespace);
+                ->findBy('name', $namespace);
         }
 
         return $this->records[$namespace];
@@ -309,7 +309,7 @@ class App extends \Wei\App
     public function getDbName($id)
     {
         if (!$this->dbNames[$id]) {
-            $record = wei()->appModel()->findById($id);
+            $record = wei()->appModel()->find($id);
             $this->dbNames[$id] = $record['name'];
         }
 
