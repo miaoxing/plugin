@@ -125,10 +125,11 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         // The init data may from request, contains key like id, name
-        $user = $this->db('users')->findOrInit(array('id' => 3, 'name' => 'tom'), array('name' => 'name', 'id' => '5'));
+        // TODO find by array ['id' => 3, 'name' => 'tom']
+        $user = $this->db('users')->findOrInitBy('id', 3, ['name' => 'name', 'id' => '5']);
 
-        $this->assertEquals(3, $user['id']);
-        $this->assertEquals('tom', $user['name']);
+        $this->assertEquals(3, $user->id);
+        $this->assertEquals('name', $user->name);
     }
 
     public function testRecordSave()

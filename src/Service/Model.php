@@ -806,20 +806,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param array|object $data
      * @return $this
      */
-    public function findOrInit($id = null, $data = array())
+    public function findOrInit($id = null, $data = [])
     {
-        if (!$this->find($id)) {
-            // Reset status when record not found
-            $this->isNew = true;
-
-            // Convert to object to array
-            if (is_object($data) && method_exists($data, 'toArray')) {
-                $data = $data->toArray();
-            }
-
-            $this->fromArray($data);
-        }
-        return $this;
+        return $this->findOrInitBy($this->primaryKey, $id, $data);
     }
 
     /**
@@ -873,6 +862,23 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
     }
 
+    public function findOrInitBy($column, $value = null, $data = [])
+    {
+        if (!$this->findBy($column, $value)) {
+            // Reset status when record not found
+            $this->isNew = true;
+
+            // Convert to object to array
+            if (is_object($data) && method_exists($data, 'toArray')) {
+                $data = $data->toArray();
+            }
+
+            $this->setData([$column => $value]);
+            $this->fromArray($data);
+        }
+        return $this;
+    }
+
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
@@ -882,18 +888,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function findOneById($value)
     {
         return $this->findOne(array($this->primaryKey => $value));
-    }
-
-    /**
-     * Find a record by primary key value and init with the specified data if record not found
-     *
-     * @param mixed $value
-     * @param array $data
-     * @return $this
-     */
-    public function findOrInitById($value, $data = array())
-    {
-        return $this->findOrInit(array($this->primaryKey => $value), $data);
     }
 
     /**
@@ -916,7 +910,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function &offsetGet($offset)
     {
-        return $this->get($name);
+        return $this->get($offset);
     }
 
     /**
