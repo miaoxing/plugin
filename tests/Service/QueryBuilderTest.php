@@ -16,62 +16,69 @@ class QueryBuilderTest extends BaseTestCase
     use ServiceTrait;
     use DbTrait;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->db->setOption('tablePrefix', 'p_');
+    }
+
     public function testSelect()
     {
         $sql = wei()->queryBuilder('users')->select('name')->getSql();
 
-        $this->assertEquals('SELECT `name` FROM `users`', $sql);
+        $this->assertEquals('SELECT `name` FROM `p_users`', $sql);
     }
 
     public function testSelectMultipleByArray()
     {
         $sql = wei()->queryBuilder('users')->select(['name', 'email'])->getSql();
 
-        $this->assertEquals('SELECT `name`, `email` FROM `users`', $sql);
+        $this->assertEquals('SELECT `name`, `email` FROM `p_users`', $sql);
     }
 
     public function testSelectMultipleByArguments()
     {
         $sql = wei()->queryBuilder('users')->select('name', 'email')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT `name`, `email` FROM `users`', $sql);
+        $this->assertEqualsIgnoringCase('SELECT `name`, `email` FROM `p_users`', $sql);
     }
 
     public function testSelectAlias()
     {
         $sql = wei()->queryBuilder('users')->select(['name' => 'user_name'])->getSql();
 
-        $this->assertEquals('SELECT `name` AS `user_name` FROM `users`', $sql);
+        $this->assertEquals('SELECT `name` AS `user_name` FROM `p_users`', $sql);
     }
 
     public function testDistinct()
     {
         $qb = wei()->queryBuilder('users')->select('name')->distinct();
 
-        $this->assertEquals('SELECT DISTINCT `name` FROM `users`', $qb->getSql());
+        $this->assertEquals('SELECT DISTINCT `name` FROM `p_users`', $qb->getSql());
 
-        $this->assertEquals('SELECT `name` FROM `users`', $qb->distinct(false)->getSql());
+        $this->assertEquals('SELECT `name` FROM `p_users`', $qb->distinct(false)->getSql());
     }
 
     public function testSelectDistinct()
     {
         $sql = wei()->queryBuilder('users')->selectDistinct('name')->getSql();
 
-        $this->assertEquals('SELECT DISTINCT `name` FROM `users`', $sql);
+        $this->assertEquals('SELECT DISTINCT `name` FROM `p_users`', $sql);
     }
 
     public function testAddSelect()
     {
         $sql = wei()->queryBuilder('users')->select('name')->select('email')->getSql();
 
-        $this->assertEquals('SELECT `name`, `email` FROM `users`', $sql);
+        $this->assertEquals('SELECT `name`, `email` FROM `p_users`', $sql);
     }
 
     public function testSelectRaw()
     {
         $sql = wei()->queryBuilder('users')->selectRaw('UPPER(name)')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT UPPER(name) FROM `users`', $sql);
+        $this->assertEqualsIgnoringCase('SELECT UPPER(name) FROM `p_users`', $sql);
     }
 
     public function testSelectExcept()
@@ -80,21 +87,21 @@ class QueryBuilderTest extends BaseTestCase
 
         $sql = wei()->queryBuilder('users')->selectExcept('id')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT `group_id`, `name`, `address` FROM `pre_users`', $sql);
+        $this->assertEqualsIgnoringCase('SELECT `group_id`, `name`, `address` FROM `p_users`', $sql);
     }
 
     public function testWhereEqual()
     {
         $sql = wei()->queryBuilder('users')->where('name', '=', 'twin')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhereEqualShorthand()
     {
         $sql = wei()->queryBuilder('users')->where('name', 'twin')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhereArray()
@@ -104,7 +111,7 @@ class QueryBuilderTest extends BaseTestCase
             ['email', '!=', 'twin@example.com'],
         ])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' AND `email` != 'twin@example.com'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' AND `email` != 'twin@example.com'", $sql);
     }
 
     public function testWhereClosure()
@@ -116,7 +123,7 @@ class QueryBuilderTest extends BaseTestCase
                     ->orWhere('score', '>', 100);
             })
             ->getRawSql();
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
             $sql);
     }
 
@@ -126,7 +133,7 @@ class QueryBuilderTest extends BaseTestCase
 
         $qb = wei()->queryBuilder('users')->whereRaw("name = 'twin'");
 
-        $this->assertEquals("SELECT * FROM `pre_users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_users` WHERE name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
@@ -136,7 +143,7 @@ class QueryBuilderTest extends BaseTestCase
 
         $qb = wei()->queryBuilder('users')->whereRaw('name = ?', 'twin');
 
-        $this->assertEquals("SELECT * FROM `pre_users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_users` WHERE name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
@@ -147,7 +154,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhere('email', '!=', 'twin@example.com')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `email` != 'twin@example.com'",
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `email` != 'twin@example.com'",
             $sql);
     }
 
@@ -159,7 +166,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhere('first_name', '=', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
             $sql);
     }
 
@@ -169,7 +176,7 @@ class QueryBuilderTest extends BaseTestCase
             ['name', 'twin'],
             ['email', 'twin@example.com'],
         ])->getRawSql();
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `email` = 'twin@example.com'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com'", $sql);
     }
 
     public function testOrWhereClosure()
@@ -182,7 +189,7 @@ class QueryBuilderTest extends BaseTestCase
             })
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR (`email` = 'twin@example.com' OR `score` > 100)",
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR (`email` = 'twin@example.com' OR `score` > 100)",
             $sql);
     }
 
@@ -192,7 +199,7 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereRaw('email = ?', 'twin@example.com');
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR email = 'twin@example.com'",
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR email = 'twin@example.com'",
             $qb->getRawSql());
     }
 
@@ -200,7 +207,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $sql = wei()->queryBuilder('users')->whereBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `age` BETWEEN 1 AND 10', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` BETWEEN 1 AND 10', $sql);
     }
 
     public function testOrWhereBetween()
@@ -209,14 +216,14 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` BETWEEN 1 AND 10", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` BETWEEN 1 AND 10", $sql);
     }
 
     public function testWhereNotBetween()
     {
         $sql = wei()->queryBuilder('users')->whereNotBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `age` NOT BETWEEN 1 AND 10', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` NOT BETWEEN 1 AND 10', $sql);
     }
 
     public function testOrWhereNotBetween()
@@ -225,14 +232,14 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereNotBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` NOT BETWEEN 1 AND 10", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` NOT BETWEEN 1 AND 10", $sql);
     }
 
     public function testWhereIn()
     {
         $sql = wei()->queryBuilder('users')->whereIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `age` IN (1, 10)', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IN (1, 10)', $sql);
     }
 
     public function testOrWhereIn()
@@ -241,14 +248,14 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` IN (1, 10)", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` IN (1, 10)", $sql);
     }
 
     public function testWhereNotIn()
     {
         $sql = wei()->queryBuilder('users')->whereNotIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `age` NOT IN (1, 10)', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` NOT IN (1, 10)', $sql);
     }
 
     public function testOrWhereNotIn()
@@ -257,14 +264,14 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereNotIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` NOT IN (1, 10)", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` NOT IN (1, 10)", $sql);
     }
 
     public function testWhereNull()
     {
         $sql = wei()->queryBuilder('users')->whereNull('age')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `age` IS NULL', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IS NULL', $sql);
     }
 
     public function testOrWhereNull()
@@ -273,14 +280,14 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereNull('age')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` IS NULL", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` IS NULL", $sql);
     }
 
     public function testWhereNotNull()
     {
         $sql = wei()->queryBuilder('users')->whereNotNULL('age')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `age` IS NOT NULL', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IS NOT NULL', $sql);
     }
 
     public function testOrWhereNotNull()
@@ -289,14 +296,14 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereNotNull('age')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `age` IS NOT NULL", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` IS NOT NULL", $sql);
     }
 
     public function testWhereDate()
     {
         $sql = wei()->queryBuilder('users')->whereDate('created_at', '2020-02-02')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE DATE(`created_at`) = '2020-02-02'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE DATE(`created_at`) = '2020-02-02'", $sql);
     }
 
     public function testOrWhereDate()
@@ -306,7 +313,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereDate('created_at', '2020-02-02')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR DATE(`created_at`) = '2020-02-02'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR DATE(`created_at`) = '2020-02-02'", $sql);
     }
 
     public function testWhereMonth()
@@ -314,7 +321,7 @@ class QueryBuilderTest extends BaseTestCase
         $sql = wei()->queryBuilder('users')->whereMonth('created_at', '2')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE MONTH(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE MONTH(`created_at`) = '2'", $sql);
     }
 
     public function testOrWhereMonth()
@@ -324,14 +331,14 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereMonth('created_at', '2')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR MONTH(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR MONTH(`created_at`) = '2'", $sql);
     }
 
     public function testWhereDay()
     {
         $sql = wei()->queryBuilder('users')->whereDay('created_at', '2')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE DAY(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE DAY(`created_at`) = '2'", $sql);
     }
 
     public function testOrWhereDay()
@@ -341,14 +348,14 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereDay('created_at', '2')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR DAY(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR DAY(`created_at`) = '2'", $sql);
     }
 
     public function testWhereYear()
     {
         $sql = wei()->queryBuilder('users')->whereYear('created_at', '2020')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE YEAR(`created_at`) = '2020'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE YEAR(`created_at`) = '2020'", $sql);
     }
 
     public function testOrWhereYear()
@@ -358,14 +365,14 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereYear('created_at', '2020')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR YEAR(`created_at`) = '2020'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR YEAR(`created_at`) = '2020'", $sql);
     }
 
     public function testWhereTime()
     {
         $sql = wei()->queryBuilder('users')->whereTime('created_at', '20:20:20')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE TIME(`created_at`) = '20:20:20'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE TIME(`created_at`) = '20:20:20'", $sql);
     }
 
     public function testOrWhereTime()
@@ -375,7 +382,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereTime('created_at', '20:20:20')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'", $sql);
     }
 
     public function testWhereColumn()
@@ -384,7 +391,7 @@ class QueryBuilderTest extends BaseTestCase
             ->whereColumn('created_at', 'updated_at')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `created_at` = `updated_at`", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `created_at` = `updated_at`", $sql);
     }
 
     public function testOrWhereColumn()
@@ -394,7 +401,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereColumn('created_at', 'updated_at')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin' OR `created_at` = `updated_at`", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `created_at` = `updated_at`", $sql);
     }
 
     public function testWhereContains()
@@ -403,7 +410,7 @@ class QueryBuilderTest extends BaseTestCase
             ->whereContains('name', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` LIKE '%twin%'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` LIKE '%twin%'", $sql);
     }
 
     public function testOrWhereContains()
@@ -413,7 +420,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereContains('email', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` LIKE '%twin%' OR `email` LIKE '%twin%'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` LIKE '%twin%' OR `email` LIKE '%twin%'", $sql);
     }
 
     public function testWhereNotContains()
@@ -422,7 +429,7 @@ class QueryBuilderTest extends BaseTestCase
             ->whereNotContains('name', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` NOT LIKE '%twin%'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` NOT LIKE '%twin%'", $sql);
     }
 
     public function testOrWhereNotContains()
@@ -432,21 +439,22 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereNotContains('email', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` NOT LIKE '%twin%' OR `email` NOT LIKE '%twin%'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` NOT LIKE '%twin%' OR `email` NOT LIKE '%twin%'",
+            $sql);
     }
 
     public function testOrderBy()
     {
         $sql = wei()->queryBuilder('users')->orderBy('id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` ASC', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` ASC', $sql);
     }
 
     public function testOrderByDesc()
     {
         $sql = wei()->queryBuilder('users')->orderBy('id', 'DESC')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` DESC', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` DESC', $sql);
     }
 
     public function testOrderByMultiple()
@@ -456,21 +464,21 @@ class QueryBuilderTest extends BaseTestCase
             ->orderBy('id', 'ASC')
             ->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` ORDER BY `created_at` DESC, `id` ASC', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `created_at` DESC, `id` ASC', $sql);
     }
 
     public function testAsc()
     {
         $sql = wei()->queryBuilder('users')->asc('id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` ASC', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` ASC', $sql);
     }
 
     public function testDesc()
     {
         $sql = wei()->queryBuilder('users')->desc('id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` ORDER BY `id` DESC', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` DESC', $sql);
     }
 
     public function testInvalidOrder()
@@ -484,14 +492,14 @@ class QueryBuilderTest extends BaseTestCase
     {
         $sql = wei()->queryBuilder('users')->groupBy('group_id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id`', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id`', $sql);
     }
 
     public function testGroupByMultiply()
     {
         $sql = wei()->queryBuilder('users')->groupBy('group_id', 'type')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id`, `type`', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id`, `type`', $sql);
     }
 
     public function testHaving()
@@ -501,7 +509,7 @@ class QueryBuilderTest extends BaseTestCase
             ->having('id', '>', 1)
             ->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id` HAVING `id` > 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id` HAVING `id` > 1', $sql);
     }
 
     public function testHavingMultiply()
@@ -512,14 +520,14 @@ class QueryBuilderTest extends BaseTestCase
             ->having('type', 1)
             ->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` GROUP BY `group_id` HAVING `id` > 1 AND `type` = 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id` HAVING `id` > 1 AND `type` = 1', $sql);
     }
 
     public function testHavingRaw()
     {
         $qb = wei()->queryBuilder('users')->havingRaw('name = ?', 'twin');
 
-        $this->assertEquals("SELECT * FROM `users` HAVING name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_users` HAVING name = 'twin'", $qb->getRawSql());
     }
 
     public function testOrHaving()
@@ -529,7 +537,7 @@ class QueryBuilderTest extends BaseTestCase
             ->orHaving('email', '!=', 'twin@example.com')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
+        $this->assertEquals("SELECT * FROM `p_users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
             $sql);
     }
 
@@ -537,35 +545,35 @@ class QueryBuilderTest extends BaseTestCase
     {
         $sql = wei()->queryBuilder('users')->limit(1)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` LIMIT 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` LIMIT 1', $sql);
     }
 
     public function testOffset()
     {
         $sql = wei()->queryBuilder('users')->offset(1)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` OFFSET 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` OFFSET 1', $sql);
     }
 
     public function testLimitOffset()
     {
         $sql = wei()->queryBuilder('users')->limit(2)->offset(1)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` LIMIT 2 OFFSET 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` LIMIT 2 OFFSET 1', $sql);
     }
 
     public function testPageLimit()
     {
         $sql = wei()->queryBuilder('users')->page(3)->limit(3)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` LIMIT 3 OFFSET 6', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` LIMIT 3 OFFSET 6', $sql);
     }
 
     public function testLimitPage()
     {
         $sql = wei()->queryBuilder('users')->limit(3)->page(3)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` LIMIT 3 OFFSET 6', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` LIMIT 3 OFFSET 6', $sql);
     }
 
     public function testWhen()
@@ -574,7 +582,7 @@ class QueryBuilderTest extends BaseTestCase
             $qb->where('name', $value);
         })->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhenFalse()
@@ -583,7 +591,7 @@ class QueryBuilderTest extends BaseTestCase
             $qb->where('name', $value);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users`', $sql);
+        $this->assertEquals('SELECT * FROM `p_users`', $sql);
     }
 
     public function testWhenDefault()
@@ -594,7 +602,7 @@ class QueryBuilderTest extends BaseTestCase
             $qb->where('type', 0);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `type` = 0', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `type` = 0', $sql);
     }
 
     public function testUnless()
@@ -603,7 +611,7 @@ class QueryBuilderTest extends BaseTestCase
             $qb->where('name', 'twin');
         })->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testUnlessTrue()
@@ -612,7 +620,7 @@ class QueryBuilderTest extends BaseTestCase
             $qb->where('name', $value);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users`', $sql);
+        $this->assertEquals('SELECT * FROM `p_users`', $sql);
     }
 
     public function testUnlessDefault()
@@ -623,7 +631,7 @@ class QueryBuilderTest extends BaseTestCase
             $qb->where('type', 0);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `users` WHERE `type` = 0', $sql);
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `type` = 0', $sql);
     }
 
     public function testFetch()
