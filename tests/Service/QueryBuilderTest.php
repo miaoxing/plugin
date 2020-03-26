@@ -74,6 +74,15 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEqualsIgnoringCase('SELECT UPPER(name) FROM `users`', $sql);
     }
 
+    public function testSelectExcept()
+    {
+        $this->initFixtures();
+
+        $sql = wei()->queryBuilder('users')->selectExcept('id')->getSql();
+
+        $this->assertEqualsIgnoringCase('SELECT `group_id`, `name`, `address` FROM `pre_users`', $sql);
+    }
+
     public function testWhereEqual()
     {
         $sql = wei()->queryBuilder('users')->where('name', '=', 'twin')->getRawSql();

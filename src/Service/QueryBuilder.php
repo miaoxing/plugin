@@ -419,6 +419,20 @@ class QueryBuilder extends Base
         return $this->add('select', $this->raw($expression));
     }
 
+    /**
+     * Specifies columns that are not to be returned in the query result.
+     * Replaces any previously specified selections, if any.
+     *
+     * @param string|array $columns
+     * @return $this
+     */
+    public function selectExcept($columns)
+    {
+        $columns = array_diff($this->getFields(), is_array($columns) ? $columns : [$columns]);
+
+        return $this->select($columns);
+    }
+
     public function raw($expression)
     {
         return (object) $expression;

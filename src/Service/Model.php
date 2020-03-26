@@ -1291,20 +1291,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * Specifies an item that is not to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param string|array $fields
-     * @return $this
-     */
-    public function selectExcept($fields)
-    {
-        $fields = array_diff($this->getFields(), is_array($fields) ? $fields : [$fields]);
-
-        return $this->select($fields);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function jsonSerialize()
