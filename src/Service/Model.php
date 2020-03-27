@@ -814,13 +814,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Find a record by specified conditions and throws 404 exception if record not found
      *
-     * @param mixed $conditions
+     * @param int|string $id
      * @return $this
      * @throws \Exception
      */
-    public function findOne($conditions = false)
+    public function findOne($id)
     {
-        if ($this->find($conditions)) {
+        if ($this->find($id)) {
             return $this;
         } else {
             throw new \Exception('Record not found', 404);
@@ -882,12 +882,19 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
+     * @param $column
+     * @param $operator
      * @param mixed $value
      * @return $this
+     * @throws \Exception
      */
-    public function findOneById($value)
+    public function findOneBy($column, $operator, $value = null)
     {
-        return $this->findOne(array($this->primaryKey => $value));
+        if ($this->findBy($column, $operator, $value)) {
+            return $this;
+        } else {
+            throw new \Exception('Record not found', 404);
+        }
     }
 
     /**
