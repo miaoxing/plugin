@@ -6,6 +6,8 @@ use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Miaoxing\Services\Service\ServiceTrait;
 use MiaoxingTest\Plugin\Fixture\DbTrait;
+use MiaoxingTest\Plugin\Fixture\Model\User;
+use MiaoxingTest\Plugin\Fixture\Model\UserGroup;
 
 /**
  * @property \Wei\Db db
@@ -20,6 +22,8 @@ class ModelTest extends BaseTestCase
     {
         parent::setUp();
 
+        $this->db->addRecordClass('users', User::class);
+        $this->db->addRecordClass('user_groups', UserGroup::class);
         $this->db->setOption('tablePrefix', 'p_');
     }
 
@@ -1041,22 +1045,21 @@ class ModelTest extends BaseTestCase
 
     public function testReload()
     {
-        $this->db->setOption('recordNamespace', 'WeiTest\Db');
         $this->initFixtures();
 
-        /** @var $user2 \WeiTest\Db\User */
+        /** @var $user User */
         $user = $this->db->find('users', 1);
-        /** @var $user2 \WeiTest\Db\User */
+        /** @var $user2 User */
         $user2 = $this->db->find('users', 1);
 
-        $user['group_id'] = 2;
+        $user->groupId = 2;
         $user->save();
 
-        $this->assertNotEquals($user['group_id'], $user2['group_id']);
+        $this->assertNotEquals($user->groupId, $user2->groupId);
         $this->assertEquals(1, $user->getLoadTimes());
 
         $user2->reload();
-        $this->assertEquals($user['group_id'], $user2['group_id']);
+        $this->assertEquals($user->groupId, $user2->groupId);
         $this->assertEquals(2, $user2->getLoadTimes());
     }
 
