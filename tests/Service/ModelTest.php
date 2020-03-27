@@ -1099,6 +1099,58 @@ class ModelTest extends BaseTestCase
         $this->db->findOne('users', 999);
     }
 
+    public function testChunk()
+    {
+        $this->initFixtures();
+
+        $this->db->batchInsert('users', [
+            [
+                'group_id' => '1',
+                'name' => 'twin',
+                'address' => 'test',
+            ],
+            [
+                'group_id' => '1',
+                'name' => 'twin',
+                'address' => 'test',
+            ],
+        ]);
+
+        /** @var User $user */
+        $user = $this->db->init('users');
+
+        $count = 0;
+        $times = 0;
+        $result = $user->chunk(2, function (User $users, $page) use (&$count, &$times) {
+            $count += $users->length();
+            $times++;
+        });
+
+        $this->assertEquals(4, $count);
+        $this->assertEquals(2, $times);
+        $this->assertTrue($result);
+    }
+
+    public function testChunkBreak()
+    {
+        $this->initFixtures();
+
+        /** @var User $user */
+        $user = $this->db->init('users');
+
+        $count = 0;
+        $times = 0;
+        $result = $user->chunk(1, function (User $users, $page) use (&$count, &$times) {
+            $count += $users->length();
+            $times++;
+            return false;
+        });
+
+        $this->assertEquals(1, $count);
+        $this->assertEquals(1, $times);
+        $this->assertFalse($result);
+    }
+
     public function testisChanged()
     {
         $this->initFixtures();

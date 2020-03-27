@@ -908,6 +908,35 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     */
+    public function chunk(int $count, callable $callback)
+    {
+        $this->limit($count);
+        $page = 1;
+
+        do {
+            $model = clone $this;
+            $model->page($page)->findAll();
+
+            // Do not execute callback when not new records area founded
+            if ($model->length() === 0) {
+                break;
+            }
+
+            if ($callback($model, $page) === false) {
+                return false;
+            }
+
+            $page++;
+        } while ($model->length() === $count);
+
+        return true;
+    }
+
+    /**
      * Check if the offset exists
      *
      * @param string $offset
