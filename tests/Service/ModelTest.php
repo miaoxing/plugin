@@ -122,6 +122,16 @@ class ModelTest extends BaseTestCase
         $this->assertTrue($user->isLoaded());
     }
 
+    public function testQueryBuilder()
+    {
+        $user = $this->db('users')
+            ->where('name', 'twin')
+            ->first();
+
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
+        $this->assertEquals('twin', $user->name);
+    }
+
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
      */
@@ -1061,6 +1071,15 @@ class ModelTest extends BaseTestCase
         $user2->reload();
         $this->assertEquals($user->groupId, $user2->groupId);
         $this->assertEquals(2, $user2->getLoadTimes());
+    }
+
+    public function testFirst()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->first();
+
+        $this->assertEquals(1, $user->id);
     }
 
     public function testFindOne()

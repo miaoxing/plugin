@@ -898,6 +898,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Executes the generated SQL and returns the found record object or null if not found
+     *
+     * @return $this|null
+     */
+    public function first()
+    {
+        return $this->findBy(null, null);
+    }
+
+    /**
      * Check if the offset exists
      *
      * @param string $offset
