@@ -1165,27 +1165,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this->save();
     }
 
-    /**
-     * 如果提供了ID,检查该ID的数据是否存在,如果不存在则抛出404异常
-     * 即FindOneOrInitById的缩写
-     *
-     * @param mixed $id
-     * @param array|\ArrayAccess $data
-     * @return $this
-     * @todo 和已有的find方法可能会混淆,是否要改为seek或lookup
-     */
-    public function findId($id, $data = [])
-    {
-        if ($id) {
-            $this->findOneById($id);
-        } else {
-            // Reset status when record not found
-            $this->isNew = true;
-        }
-
-        return $this->fromArray($data);
-    }
-
     public function findAllByIds($ids)
     {
         if (!$ids) {
