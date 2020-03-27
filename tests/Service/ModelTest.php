@@ -16,6 +16,13 @@ class ModelTest extends BaseTestCase
     use ServiceTrait;
     use DbTrait;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->db->setOption('tablePrefix', 'p_');
+    }
+
     public function testSetter()
     {
         $this->initFixtures();
@@ -34,7 +41,7 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         $user = $this->db('users')->findOrInit('3', [
-            'name' => 'name'
+            'name' => 'name',
         ]);
         $this->assertTrue($user->isNew());
         $this->assertFalse($user->isDestroyed());
@@ -50,6 +57,16 @@ class ModelTest extends BaseTestCase
 
         $this->assertEquals(3, $user->id);
         $this->assertEquals('name', $user->name);
+    }
+
+    public function testFindAll()
+    {
+        $this->initFixtures();
+
+        $users = $this->db('users')->findAll();
+
+        $this->assertEquals(2, $users->length());
+        $this->assertEquals(1, $users[0]->id);
     }
 
     public function testModelSave()
@@ -72,7 +89,7 @@ class ModelTest extends BaseTestCase
         $user->fromArray(array(
             'group_id' => '1',
             'name' => 'save',
-            'address' => 'save'
+            'address' => 'save',
         ));
         $result = $user->save();
 
@@ -132,21 +149,23 @@ class ModelTest extends BaseTestCase
         // : conditions
         $query = $this->db('users')->where('group_id = :groupId AND name = :name', array(
             'groupId' => '1',
-            'name' => 'twin'
+            'name' => 'twin',
         ));
         $user = $query->find();
 
-        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId AND name = :name LIMIT 1", $query->getSql());
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId AND name = :name LIMIT 1",
+            $query->getSql());
         $this->assertEquals('1', $user['group_id']);
         $this->assertEquals('twin', $user['name']);
 
         $query = $this->db('users')->where('group_id = :groupId AND name = :name', array(
             ':groupId' => '1',
-            ':name' => 'twin'
+            ':name' => 'twin',
         ));
         $user = $query->find();
 
-        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId AND name = :name LIMIT 1", $query->getSql());
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId AND name = :name LIMIT 1",
+            $query->getSql());
         $this->assertEquals('1', $user['group_id']);
         $this->assertEquals('twin', $user['name']);
 
@@ -167,11 +186,12 @@ class ModelTest extends BaseTestCase
 
         $query = $this->db('users')->where(array(
             'id' => '1',
-            'group_id' => array('1', '2')
+            'group_id' => array('1', '2'),
         ));
         $user = $query->find();
 
-        $this->assertEquals("SELECT * FROM prefix_member WHERE id = ? AND group_id IN (?, ?) LIMIT 1", $query->getSql());
+        $this->assertEquals("SELECT * FROM prefix_member WHERE id = ? AND group_id IN (?, ?) LIMIT 1",
+            $query->getSql());
         $this->assertEquals('1', $user['id']);
 
         // Overwrite where
@@ -261,7 +281,8 @@ class ModelTest extends BaseTestCase
         $query = $this->db('users')->groupBy('id, group_id')->having('group_id >= ?', '1');
         $user = $query->find();
 
-        $this->assertEquals("SELECT * FROM prefix_member GROUP BY id, group_id HAVING group_id >= ? LIMIT 1", $query->getSql());
+        $this->assertEquals("SELECT * FROM prefix_member GROUP BY id, group_id HAVING group_id >= ? LIMIT 1",
+            $query->getSql());
         $this->assertEquals('1', $user['group_id']);
 
         // Join
@@ -271,7 +292,8 @@ class ModelTest extends BaseTestCase
             ->leftJoin('prefix_member_group', 'prefix_member_group.id = prefix_member.group_id');
         $user = $query->fetch();
 
-        $this->assertEquals("SELECT prefix_member.*, prefix_member_group.name AS group_name FROM prefix_member LEFT JOIN prefix_member_group ON prefix_member_group.id = prefix_member.group_id LIMIT 1", $query->getSql());
+        $this->assertEquals("SELECT prefix_member.*, prefix_member_group.name AS group_name FROM prefix_member LEFT JOIN prefix_member_group ON prefix_member_group.id = prefix_member.group_id LIMIT 1",
+            $query->getSql());
         $this->assertArrayHasKey('group_name', $user);
 
         // Join with table alias
@@ -279,7 +301,8 @@ class ModelTest extends BaseTestCase
             ->db('member u')
             ->rightJoin('prefix_member_group g', 'g.id = u.group_id');
 
-        $this->assertEquals("SELECT * FROM prefix_member u RIGHT JOIN prefix_member_group g ON g.id = u.group_id", $query->getSql());
+        $this->assertEquals("SELECT * FROM prefix_member u RIGHT JOIN prefix_member_group g ON g.id = u.group_id",
+            $query->getSql());
     }
 
     public function testIndexBy()
@@ -381,24 +404,24 @@ class ModelTest extends BaseTestCase
 
         // Name parameter
         $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
-            'id' => 1
+            'id' => 1,
         ), array(
-            'id' => PDO::PARAM_INT
+            'id' => PDO::PARAM_INT,
         ));
 
         $this->assertEquals('1', $user['id']);
 
         // Name parameter with colon
         $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
-            'id' => 1
+            'id' => 1,
         ), array(
-            ':id' => PDO::PARAM_INT
+            ':id' => PDO::PARAM_INT,
         ));
 
         $this->assertEquals('1', $user['id']);
 
         $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
-            'id' => '1'
+            'id' => '1',
         ));
 
         $this->assertEquals('1', $user['id']);
@@ -420,8 +443,8 @@ class ModelTest extends BaseTestCase
 
         $user = $this->db->find('users', 1);
 
-        $this->assertEquals('WeiTest\Db\Member', $this->db->getRecordClass('users'));
-        $this->assertInstanceOf('WeiTest\Db\Member', $user);
+        $this->assertEquals('WeiTest\Db\User', $this->db->getRecordClass('users'));
+        $this->assertInstanceOf('WeiTest\Db\User', $user);
     }
 
     public function testCustomRecordClass()
@@ -429,13 +452,13 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         $this->db->setOption('recordClasses', array(
-            'users' => 'WeiTest\Db\Member'
+            'users' => 'WeiTest\Db\User',
         ));
 
         $user = $this->db->find('users', 1);
 
-        $this->assertEquals('WeiTest\Db\Member', $this->db->getRecordClass('users'));
-        $this->assertInstanceOf('WeiTest\Db\Member', $user);
+        $this->assertEquals('WeiTest\Db\User', $this->db->getRecordClass('users'));
+        $this->assertInstanceOf('WeiTest\Db\User', $user);
     }
 
     public function testRecordToArray()
@@ -483,7 +506,7 @@ class ModelTest extends BaseTestCase
         $this->assertArrayNotHasKey('name', $users[0]);
 
         $this->db->setOption('recordClasses', array(
-            'users' => 'WeiTest\Db\Member'
+            'users' => 'WeiTest\Db\User',
         ));
     }
 
@@ -563,7 +586,8 @@ class ModelTest extends BaseTestCase
 
         $user = $this->db('users')->find('1');
 
-        $this->setExpectedException('\InvalidArgumentException', 'Field "notFound" not found in record class "Wei\Record"');
+        $this->setExpectedException('\InvalidArgumentException',
+            'Field "notFound" not found in record class "Wei\Record"');
 
         $user['notFound'];
     }
@@ -584,7 +608,7 @@ class ModelTest extends BaseTestCase
         }
 
         // Filter
-        $firstGroupMembers = $users->filter(function($user){
+        $firstGroupMembers = $users->filter(function ($user) {
             if ('1' == $user['group_id']) {
                 return true;
             } else {
@@ -604,7 +628,7 @@ class ModelTest extends BaseTestCase
         $this->db->setOption('recordNamespace', 'WeiTest\Db');
         $users = $this->db('users')->findAll();
 
-        $oneMembers =  $users->filter(function ($user) {
+        $oneMembers = $users->filter(function ($user) {
             return $user['id'] == 1;
         });
 
@@ -652,12 +676,12 @@ class ModelTest extends BaseTestCase
         $this->expectOutputRegex('/beforeQueryafterQuery/');
 
         $this->db->setOption(array(
-            'beforeQuery' => function(){
+            'beforeQuery' => function () {
                 echo 'beforeQuery';
             },
-            'afterQuery' => function(){
+            'afterQuery' => function () {
                 echo 'afterQuery';
-            }
+            },
         ));
 
         $this->db->find('users', 1);
@@ -670,12 +694,12 @@ class ModelTest extends BaseTestCase
         $this->expectOutputString('beforeQueryafterQuery');
 
         $this->db->setOption(array(
-            'beforeQuery' => function(){
+            'beforeQuery' => function () {
                 echo 'beforeQuery';
             },
-            'afterQuery' => function(){
+            'afterQuery' => function () {
                 echo 'afterQuery';
-            }
+            },
         ));
 
         $this->db->executeUpdate("UPDATE prefix_member SET name = 'twin2' WHERE id = 1");
@@ -692,7 +716,8 @@ class ModelTest extends BaseTestCase
 
     public function testExceptionWithParams()
     {
-        $this->setExpectedException('PDOException', 'An exception occurred while executing "SELECT * FROM noThis table WHERE id = ?"');
+        $this->setExpectedException('PDOException',
+            'An exception occurred while executing "SELECT * FROM noThis table WHERE id = ?"');
 
         $this->db->query("SELECT * FROM noThis table WHERE id = ?", array(1));
     }
@@ -759,16 +784,16 @@ class ModelTest extends BaseTestCase
             ->where('id = :id AND group_id = :groupId')
             ->setParameters(array(
                 'id' => 1,
-                'groupId' => 1
+                'groupId' => 1,
             ), array(
                 PDO::PARAM_INT,
-                PDO::PARAM_INT
+                PDO::PARAM_INT,
             ));
         $user = $query->find();
 
         $this->assertEquals(array(
             'id' => 1,
-            'groupId' => 1
+            'groupId' => 1,
         ), $query->getParameters());
 
         $this->assertEquals(1, $query->getParameter('id'));
@@ -827,7 +852,7 @@ class ModelTest extends BaseTestCase
             array(0),
             array(null),
             array(true),
-            array(array(null))
+            array(array(null)),
         );
     }
 
@@ -906,19 +931,20 @@ class ModelTest extends BaseTestCase
         $db = new \Wei\Db(array(
             'wei' => $this->wei,
             'driver' => 'mysql',
-            'host'   => '255.255.255.255',
+            'host' => '255.255.255.255',
             'dbname' => 'test',
-            'connectFails' => function($db, $exception) use($test) {
+            'connectFails' => function ($db, $exception) use ($test) {
                 $test->assertTrue(true);
                 $test->assertInstanceOf('PDOException', $exception);
-            }
+            },
         ));
         $db->connect();
     }
 
     public function testGlobalOption()
     {
-        $cb = function(){};
+        $cb = function () {
+        };
         $this->wei->setConfig(array(
             // sqlite
             'db' => array(
@@ -932,8 +958,8 @@ class ModelTest extends BaseTestCase
             ),
             'cb.db' => array(
                 'db' => $this->db,
-                'global' => true
-            )
+                'global' => true,
+            ),
         ));
 
         $this->assertSame($cb, $this->db->getOption('beforeConnect'));
@@ -943,7 +969,7 @@ class ModelTest extends BaseTestCase
         unset($this->cbDb);
         $this->wei->remove('cbDb');
         $this->wei->setConfig('cb.db', array(
-            'db' => null
+            'db' => null,
         ));
     }
 
@@ -953,7 +979,7 @@ class ModelTest extends BaseTestCase
 
         $db = new \Wei\Db(array(
             'wei' => $this->wei,
-            'driver' => 'abc'
+            'driver' => 'abc',
         ));
 
         $db->query("SELECT MAX(1, 2)");
@@ -963,7 +989,7 @@ class ModelTest extends BaseTestCase
     {
         $db = new \Wei\Db(array(
             'wei' => $this->wei,
-            'dsn' => 'sqlite::memory:'
+            'dsn' => 'sqlite::memory:',
         ));
 
         $this->assertEquals('sqlite::memory:', $db->getDsn());
@@ -977,13 +1003,13 @@ class ModelTest extends BaseTestCase
             array(
                 'group_id' => '1',
                 'name' => 'twin',
-                'address' => 'test'
+                'address' => 'test',
             ),
             array(
                 'group_id' => '1',
                 'name' => 'test',
-                'address' => 'test'
-            )
+                'address' => 'test',
+            ),
         ));
 
         $this->assertEquals(2, $result);
@@ -1018,9 +1044,9 @@ class ModelTest extends BaseTestCase
         $this->db->setOption('recordNamespace', 'WeiTest\Db');
         $this->initFixtures();
 
-        /** @var $user2 \WeiTest\Db\Member */
+        /** @var $user2 \WeiTest\Db\User */
         $user = $this->db->find('users', 1);
-        /** @var $user2 \WeiTest\Db\Member */
+        /** @var $user2 \WeiTest\Db\User */
         $user2 = $this->db->find('users', 1);
 
         $user['group_id'] = 2;
@@ -1096,8 +1122,8 @@ class ModelTest extends BaseTestCase
                 'password' => 'password',
                 'host' => 'host',
                 'port' => 'port',
-                'dbname' => 'dbname'
-            )
+                'dbname' => 'dbname',
+            ),
         ));
 
         /** @var $testDb \Wei\Db */
@@ -1126,8 +1152,8 @@ class ModelTest extends BaseTestCase
 
         $this->db->insert('users', array(
             'group_id' => '1',
-            'name' => (object)'1 + 1',
-            'address' => 'test'
+            'name' => (object) '1 + 1',
+            'address' => 'test',
         ));
 
         $id = $this->db->lastInsertId('prefix_member_id_seq');
@@ -1141,7 +1167,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $this->db->update('users', array('group_id' => (object)'group_id + 1'), array('id' => (object)'0.5 + 0.5'));
+        $this->db->update('users', array('group_id' => (object) 'group_id + 1'), array('id' => (object) '0.5 + 0.5'));
 
         $user = $this->db->select('users', 1);
 
@@ -1152,7 +1178,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $result = $this->db->delete('users', array('id' => (object)'0.5 + 0.5'));
+        $result = $this->db->delete('users', array('id' => (object) '0.5 + 0.5'));
 
         $this->assertEquals(1, $result);
         $this->assertFalse($this->db->select('users', 1));
@@ -1165,7 +1191,7 @@ class ModelTest extends BaseTestCase
         $user = $this->db->find('users', 1);
         $groupId = $user['group_id'];
 
-        $user['group_id'] = (object)'group_id + 1';
+        $user['group_id'] = (object) 'group_id + 1';
         $user->save();
         $user->reload();
 
@@ -1213,7 +1239,7 @@ class ModelTest extends BaseTestCase
         $user->fromArray(array(
             'group_id' => 1,
             'name' => 'John',
-            'address' => 'xx street'
+            'address' => 'xx street',
         ));
         $result = $user->save();
 
@@ -1260,13 +1286,13 @@ class ModelTest extends BaseTestCase
             array(
                 'group_id' => 1,
                 'name' => 'John',
-                'address' => 'xx street'
+                'address' => 'xx street',
             ),
             array(
                 'group_id' => 2,
                 'name' => 'Tome',
-                'address' => 'xx street'
-            )
+                'address' => 'xx street',
+            ),
         ));
     }
 
@@ -1356,7 +1382,7 @@ class ModelTest extends BaseTestCase
 
         // Adds record to collection
         $users->fromArray(array(
-            $john
+            $john,
         ));
 
         // Or adds by [] operator
@@ -1526,7 +1552,7 @@ class ModelTest extends BaseTestCase
             'id' => null,
             'group_id' => '1',
             'name' => 'twin',
-            'address' => 'test'
+            'address' => 'test',
         ));
 
         $this->assertNotNull($user['id']);
@@ -1536,7 +1562,7 @@ class ModelTest extends BaseTestCase
             'id' => '',
             'group_id' => '1',
             'name' => 'twin',
-            'address' => 'test'
+            'address' => 'test',
         ));
 
         $this->assertNotNull($user['id']);
@@ -1578,7 +1604,8 @@ class ModelTest extends BaseTestCase
         // Make sure $users is a collection
         $users[] = $user;
 
-        $this->setExpectedException('InvalidArgumentException', 'Value for collection must be an instance of Wei\Record');
+        $this->setExpectedException('InvalidArgumentException',
+            'Value for collection must be an instance of Wei\Record');
 
         // Assign non record value to raise an exception
         $users[] = 234;
@@ -1618,7 +1645,7 @@ class ModelTest extends BaseTestCase
         $user = $this->db('users')->findOrInit($id, array(
             'group_id' => 2,
             'name' => 'twin',
-            'address' => 'xx street'
+            'address' => 'xx street',
         ));
 
         $this->assertTrue($user->isNew());
@@ -1627,7 +1654,7 @@ class ModelTest extends BaseTestCase
         $user = $this->db('users')->findOrInit(1, array(
             'group_id' => 2,
             'name' => 'twin',
-            'address' => 'xx street'
+            'address' => 'xx street',
         ));
 
         $this->assertFalse($user->isNew());
@@ -1677,7 +1704,7 @@ class ModelTest extends BaseTestCase
 
         $user->fromArray(array(
             'id' => '1',
-            'name' => 'name'
+            'name' => 'name',
         ));
 
         $this->assertNull($user['id']);
@@ -1699,7 +1726,7 @@ class ModelTest extends BaseTestCase
         $user->fromArray(array(
             'id' => '1',
             'group_id' => '2',
-            'name' => 'name'
+            'name' => 'name',
         ));
 
         $this->assertNull($user['id']);
@@ -1715,7 +1742,7 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('twin', $user['name']);
 
         $user->save(array(
-            'name' => 'twin2'
+            'name' => 'twin2',
         ));
 
         $user = $this->getMemberFromCache(1);

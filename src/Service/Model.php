@@ -833,7 +833,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param mixed $conditions
      * @return $this|$this[]
      */
-    public function findAll($conditions = false)
+    public function findAll($conditions = null)
     {
         $this->isColl = true;
         $data = $this->fetchAll($conditions);
