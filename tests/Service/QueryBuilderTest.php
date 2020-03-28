@@ -659,4 +659,22 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertIsArray($data);
         $this->assertEquals('1', $data[0]['group_id']);
     }
+
+    public function testPluck()
+    {
+        $this->initFixtures();
+
+        $ids = Qb::table('users')->pluck('id');
+
+        $this->assertSame(['1', '2'], $ids);
+    }
+
+    public function testPluckWithIndex()
+    {
+        $this->initFixtures();
+
+        $ids = Qb::table('users')->pluck('name', 'id');
+
+        $this->assertSame([1 => 'twin', 2 => 'test'], $ids);
+    }
 }

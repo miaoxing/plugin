@@ -40,13 +40,6 @@ class QueryBuilder extends Base
     protected $table;
 
     /**
-     * The complete record table name with table prefix
-     *
-     * @var string
-     */
-    protected $fullTable;
-
-    /**
      * The table fields
      * If leave it blank, it will automatic generate form the database table,
      * or fill it to speed up the record
@@ -273,6 +266,20 @@ class QueryBuilder extends Base
     }
 
     /**
+     * @param string $column
+     * @param string|null $index
+     * @return array
+     * @api
+     */
+    protected function pluck(string $column, string $index = null)
+    {
+        $columns = [$column];
+        $index && $columns[] = $index;
+        $data = $this->select($columns)->fetchAll();
+        return array_column($data, $column, $index);
+    }
+
+    /**
      * Executes a COUNT query to receive the rows number
      *
      * @param mixed $conditions
@@ -476,8 +483,7 @@ class QueryBuilder extends Base
         } else {
             $this->table = $from;
         }
-        $this->fullTable = $this->db->getTable($this->table);
-        return $this->add('from', $this->db->getTable($from));
+        return $this->add('from', $from);
     }
 
     /**

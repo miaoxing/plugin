@@ -355,7 +355,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 // Receives primary key value when it's empty
                 if (!isset($this->data[$this->primaryKey]) || !$this->data[$this->primaryKey]) {
                     // Prepare sequence name for PostgreSQL
-                    $sequence = sprintf('%s_%s_seq', $this->fullTable, $this->primaryKey);
+                    $sequence = sprintf('%s_%s_seq', $this->db->getTable($this->getTable()), $this->primaryKey);
                     $this->data[$this->primaryKey] = $this->db->lastInsertId($sequence);
                 }
                 // 2.1.3.2 Updates existing record
@@ -1672,20 +1672,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function getRelatedValue($field)
     {
         return $this->relatedValue ?: (array_key_exists($field, $this->data) ? $this->get($field) : null);
-    }
-
-    /**
-     * 直接设置表名，用于子查询的情况
-     *
-     * @param string $table
-     * @return $this
-     */
-    public function setRawTable($table)
-    {
-        $this->table = $table;
-        $this->fullTable = $this->db->getTable($this->table);
-
-        return $this;
     }
 
     /**

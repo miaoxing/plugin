@@ -42,11 +42,11 @@ class AppModel
     /**
      * Executes the generated SQL and returns the found record collection object or false
      *
-     * @param mixed $ids
+     * @param array $ids
      * @return $this|$this[]
      * @api
      */
-    public function findAll($ids = [])
+    public function findAll($ids)
     {
     }
 
@@ -122,6 +122,16 @@ class AppModel
      * @api
      */
     public function chunk(int $count, callable $callback)
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param string|null $index
+     * @return array
+     * @api
+     */
+    public function pluck(string $column, string $index = null)
     {
     }
 
@@ -597,11 +607,11 @@ if (0) {
         /**
          * Executes the generated SQL and returns the found record collection object or false
          *
-         * @param mixed $ids
+         * @param array $ids
          * @return $this|$this[]
          * @api
          */
-        public static function findAll($ids = [])
+        public static function findAll($ids)
         {
         }
     
@@ -677,6 +687,16 @@ if (0) {
          * @api
          */
         public static function chunk(int $count, callable $callback)
+        {
+        }
+    
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @api
+         */
+        public static function pluck(string $column, string $index = null)
         {
         }
     
@@ -1152,11 +1172,11 @@ class Model
     /**
      * Executes the generated SQL and returns the found record collection object or false
      *
-     * @param mixed $ids
+     * @param array $ids
      * @return $this|$this[]
      * @api
      */
-    public function findAll($ids = [])
+    public function findAll($ids)
     {
     }
 
@@ -1232,6 +1252,16 @@ class Model
      * @api
      */
     public function chunk(int $count, callable $callback)
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param string|null $index
+     * @return array
+     * @api
+     */
+    public function pluck(string $column, string $index = null)
     {
     }
 
@@ -1707,11 +1737,11 @@ if (0) {
         /**
          * Executes the generated SQL and returns the found record collection object or false
          *
-         * @param mixed $ids
+         * @param array $ids
          * @return $this|$this[]
          * @api
          */
-        public static function findAll($ids = [])
+        public static function findAll($ids)
         {
         }
     
@@ -1787,6 +1817,16 @@ if (0) {
          * @api
          */
         public static function chunk(int $count, callable $callback)
+        {
+        }
+    
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @api
+         */
+        public static function pluck(string $column, string $index = null)
         {
         }
     
@@ -2225,6 +2265,16 @@ if (0) {
 class QueryBuilder
 {
     /**
+     * @param string $column
+     * @param string|null $index
+     * @return array
+     * @api
+     */
+    public function pluck(string $column, string $index = null)
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -2658,6 +2708,16 @@ class QueryBuilder
 if (0) {
     class QueryBuilder
     {
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @api
+         */
+        public static function pluck(string $column, string $index = null)
+        {
+        }
+    
         /**
          * Sets the position of the first result to retrieve (the "offset")
          *
