@@ -5,6 +5,15 @@ namespace Miaoxing\Plugin\Service;
 interface AppModel
 {
     /**
+     * Executes the generated SQL and returns the found record object or false
+     *
+     * @param int|string $id
+     * @return $this|null
+     * @api
+     */
+    public function find($id);
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -360,6 +369,15 @@ interface AppModel
 if (0) {
     interface AppModel
     {
+        /**
+         * Executes the generated SQL and returns the found record object or false
+         *
+         * @param int|string $id
+         * @return $this|null
+         * @api
+         */
+        public static function find($id);
+    
         /**
          * Sets the position of the first result to retrieve (the "offset")
          *
@@ -717,6 +735,15 @@ if (0) {
 interface Model
 {
     /**
+     * Executes the generated SQL and returns the found record object or false
+     *
+     * @param int|string $id
+     * @return $this|null
+     * @api
+     */
+    public function find($id);
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -1072,6 +1099,15 @@ interface Model
 if (0) {
     interface Model
     {
+        /**
+         * Executes the generated SQL and returns the found record object or false
+         *
+         * @param int|string $id
+         * @return $this|null
+         * @api
+         */
+        public static function find($id);
+    
         /**
          * Sets the position of the first result to retrieve (the "offset")
          *

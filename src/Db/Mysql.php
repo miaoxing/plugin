@@ -240,10 +240,7 @@ class Mysql extends BaseDriver
      */
     protected function getFrom()
     {
-        if (!$this->sqlParts['from']) {
-            $this->from($this->table);
-        }
-        return $this->sqlParts['from'];
+        return $this->db->getTable($this->sqlParts['from']);
     }
 
     /**

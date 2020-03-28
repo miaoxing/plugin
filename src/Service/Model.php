@@ -202,6 +202,23 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Return the record table name
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        if (!$this->table) {
+            $baseName = $this->baseName();
+            if (substr($baseName, -5) === 'Model') {
+                $baseName = substr($baseName, 0, -5);
+            }
+            $this->table = $this->pluralize($this->snake($baseName));
+        }
+        return $this->table;
+    }
+
+    /**
      * Returns the record data as array
      *
      * @param array $returnFields A indexed array specified the fields to return
@@ -793,8 +810,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param int|string $id
      * @return $this|null
+     * @api
      */
-    public function find($id)
+    protected function find($id)
     {
         return $this->findBy($this->primaryKey, $id);
     }
@@ -1188,10 +1206,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function __invoke(string $table = null)
     {
-        if (!$this->table) {
-            $this->detectTable();
-        }
-        $this->db->addRecordClass($this->table, get_class($this));
+        $this->db->addRecordClass($this->getTable(), get_class($this));
 
         return $this->db($this->table);
     }
@@ -1306,26 +1321,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function getDbTable($table)
     {
         return wei()->app->getDbName($this[$this->appIdColumn]) . '.' . $table;
-    }
-
-    /**
-     * 将类名的最后一段作为数据表名称
-     */
-    protected function detectTable()
-    {
-        if (!$this->table) {
-            // 适合类名: Miaoxing\Plugin\Service\User
-            $parts = explode('\\', get_class($this));
-            $basename = end($parts);
-
-            $endWiths = substr($basename, -5) === 'Model';
-            if ($endWiths) {
-                $endWiths && $basename = substr($basename, 0, -5);
-                $this->table = $this->str->pluralize($this->snake($basename));
-            } else {
-                $this->table = lcfirst($basename);
-            }
-        }
     }
 
     /**
@@ -2188,5 +2183,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         return $result;
+    }
+
+    private function baseName()
+    {
+        $parts = explode('\\', get_class($this));
+        return end($parts);
+    }
+
+    private function pluralize($word)
+    {
+        return wei()->str->pluralize($word);
     }
 }

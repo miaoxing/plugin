@@ -2,7 +2,13 @@
 
 namespace Miaoxing\Plugin\Db;
 
-abstract class BaseDriver
+use Wei\Base;
+use Wei\Db;
+
+/**
+ * @property Db db
+ */
+abstract class BaseDriver extends Base
 {
     protected function wrap($value)
     {

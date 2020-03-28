@@ -196,7 +196,7 @@ class QueryBuilder extends Base
     public function getFields()
     {
         if (empty($this->fields)) {
-            $this->fields = $this->db->getTableFields($this->fullTable, true);
+            $this->fields = $this->db->getTableFields($this->getTable());
         }
         return $this->fields;
     }
@@ -1103,6 +1103,10 @@ class QueryBuilder extends Base
     {
         if ($this->sql !== null && $this->state === self::STATE_CLEAN) {
             return $this->sql;
+        }
+
+        if (!$this->sqlParts['from']) {
+            $this->sqlParts['from'] = $this->getTable();
         }
 
         $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts);

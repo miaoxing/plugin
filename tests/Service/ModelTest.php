@@ -31,7 +31,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = $this->db('users')->find(1);
+        $user = User::find(1);
 
         $this->assertEquals('1', $user->id);
 
