@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-interface AppModel
+class AppModel
 {
     /**
      * Executes the generated SQL and returns the found record object or false
@@ -11,7 +11,9 @@ interface AppModel
      * @return $this|null
      * @api
      */
-    public function find($id);
+    public function find($id)
+    {
+    }
 
     /**
      * Sets the position of the first result to retrieve (the "offset")
@@ -20,7 +22,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function offset($offset);
+    public function offset($offset)
+    {
+    }
 
     /**
      * Sets the maximum number of results to retrieve (the "limit")
@@ -29,7 +33,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function limit($limit);
+    public function limit($limit)
+    {
+    }
 
     /**
      * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
@@ -38,7 +44,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function page($page);
+    public function page($page)
+    {
+    }
 
     /**
      * Specifies an item that is to be returned in the query result.
@@ -48,21 +56,27 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function select($columns = ['*']): self;
+    public function select($columns = ['*']): self
+    {
+    }
 
     /**
      * @param $columns
      * @return $this
      * @api
      */
-    public function selectDistinct($columns);
+    public function selectDistinct($columns)
+    {
+    }
 
     /**
      * @param string $expression
      * @return $this
      * @api
      */
-    public function selectRaw($expression);
+    public function selectRaw($expression)
+    {
+    }
 
     /**
      * Specifies columns that are not to be returned in the query result.
@@ -72,7 +86,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function selectExcept($columns);
+    public function selectExcept($columns)
+    {
+    }
 
     /**
      * Sets table for FROM query
@@ -81,14 +97,18 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function from($from);
+    public function from($from)
+    {
+    }
 
     /**
      * @param string $table
      * @return $this
      * @api
      */
-    public function table(string $table): self;
+    public function table(string $table): self
+    {
+    }
 
     /**
      * Adds a inner join to the query
@@ -98,7 +118,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function join($table, $on = null);
+    public function join($table, $on = null)
+    {
+    }
 
     /**
      * Adds a inner join to the query
@@ -108,7 +130,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null);
+    public function innerJoin($table, $on = null)
+    {
+    }
 
     /**
      * Adds a left join to the query
@@ -118,7 +142,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null);
+    public function leftJoin($table, $on = null)
+    {
+    }
 
     /**
      * Adds a right join to the query
@@ -128,7 +154,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null);
+    public function rightJoin($table, $on = null)
+    {
+    }
 
     /**
      * Specifies one or more restrictions to the query result.
@@ -147,7 +175,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null);
+    public function where($column, $operator = null, $value = null)
+    {
+    }
 
     /**
      * @param string $expression
@@ -155,7 +185,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereRaw($expression, $params = []);
+    public function whereRaw($expression, $params = [])
+    {
+    }
 
     /**
      * @param $column
@@ -163,7 +195,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereBetween($column, array $params);
+    public function whereBetween($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -171,7 +205,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereNotBetween($column, array $params);
+    public function whereNotBetween($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -179,7 +215,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereIn($column, array $params);
+    public function whereIn($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -187,39 +225,27 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereNotIn($column, array $params);
+    public function whereNotIn($column, array $params)
+    {
+    }
 
     /**
      * @param $column
      * @return $this
      * @api
      */
-    public function whereNull($column);
+    public function whereNull($column)
+    {
+    }
 
     /**
      * @param $column
      * @return $this
      * @api
      */
-    public function whereNotNULL($column);
-
-    /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
-     * @return $this
-     * @api
-     */
-    public function whereDate($column, $opOrValue, $value = null);
-
-    /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
-     * @return $this
-     * @api
-     */
-    public function whereMonth($column, $opOrValue, $value = null);
+    public function whereNotNULL($column)
+    {
+    }
 
     /**
      * @param $column
@@ -228,7 +254,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereDay($column, $opOrValue, $value = null);
+    public function whereDate($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -237,7 +265,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereYear($column, $opOrValue, $value = null);
+    public function whereMonth($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -246,7 +276,31 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereTime($column, $opOrValue, $value = null);
+    public function whereDay($column, $opOrValue, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function whereYear($column, $opOrValue, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function whereTime($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -255,7 +309,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereColumn($column, $opOrColumn2, $column2 = null);
+    public function whereColumn($column, $opOrColumn2, $column2 = null)
+    {
+    }
 
     /**
      * 搜索字段是否包含某个值
@@ -266,7 +322,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereContains($column, $value, string $condition = 'AND');
+    public function whereContains($column, $value, string $condition = 'AND')
+    {
+    }
 
     /**
      * @param $column
@@ -275,7 +333,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function whereNotContains($column, $value, string $condition = 'OR');
+    public function whereNotContains($column, $value, string $condition = 'OR')
+    {
+    }
 
     /**
      * Specifies a grouping over the results of the query.
@@ -285,7 +345,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function groupBy($column);
+    public function groupBy($column)
+    {
+    }
 
     /**
      * Specifies a restriction over the groups of the query.
@@ -297,7 +359,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function having($column, $operator, $value = null, $condition = 'AND');
+    public function having($column, $operator, $value = null, $condition = 'AND')
+    {
+    }
 
     /**
      * Specifies an ordering for the query results.
@@ -308,7 +372,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function orderBy($column, $order = 'ASC');
+    public function orderBy($column, $order = 'ASC')
+    {
+    }
 
     /**
      * Adds a DESC ordering to the query
@@ -317,7 +383,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function desc($field);
+    public function desc($field)
+    {
+    }
 
     /**
      * Add an ASC ordering to the query
@@ -326,26 +394,34 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function asc($field);
+    public function asc($field)
+    {
+    }
 
     /**
      * @return $this
      * @api
      */
-    public function forUpdate();
+    public function forUpdate()
+    {
+    }
 
     /**
      * @return $this
      * @api
      */
-    public function forShare();
+    public function forShare()
+    {
+    }
 
     /**
      * @param string $lock
      * @return $this
      * @api
      */
-    public function lock($lock);
+    public function lock($lock)
+    {
+    }
 
     /**
      * @param mixed $value
@@ -354,7 +430,9 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function when($value, $callback, callable $default = null);
+    public function when($value, $callback, callable $default = null)
+    {
+    }
 
     /**
      * @param mixed $value
@@ -363,11 +441,13 @@ interface AppModel
      * @return $this
      * @api
      */
-    public function unless($value, callable $callback, callable $default = null);
+    public function unless($value, callable $callback, callable $default = null)
+    {
+    }
 }
 
 if (0) {
-    interface AppModel
+    class AppModel
     {
         /**
          * Executes the generated SQL and returns the found record object or false
@@ -376,7 +456,9 @@ if (0) {
          * @return $this|null
          * @api
          */
-        public static function find($id);
+        public static function find($id)
+        {
+        }
     
         /**
          * Sets the position of the first result to retrieve (the "offset")
@@ -385,7 +467,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function offset($offset);
+        public static function offset($offset)
+        {
+        }
     
         /**
          * Sets the maximum number of results to retrieve (the "limit")
@@ -394,7 +478,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function limit($limit);
+        public static function limit($limit)
+        {
+        }
     
         /**
          * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
@@ -403,7 +489,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function page($page);
+        public static function page($page)
+        {
+        }
     
         /**
          * Specifies an item that is to be returned in the query result.
@@ -413,21 +501,27 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function select($columns = ['*']): self;
+        public static function select($columns = ['*']): self
+        {
+        }
     
         /**
          * @param $columns
          * @return $this
          * @api
          */
-        public static function selectDistinct($columns);
+        public static function selectDistinct($columns)
+        {
+        }
     
         /**
          * @param string $expression
          * @return $this
          * @api
          */
-        public static function selectRaw($expression);
+        public static function selectRaw($expression)
+        {
+        }
     
         /**
          * Specifies columns that are not to be returned in the query result.
@@ -437,7 +531,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function selectExcept($columns);
+        public static function selectExcept($columns)
+        {
+        }
     
         /**
          * Sets table for FROM query
@@ -446,14 +542,18 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function from($from);
+        public static function from($from)
+        {
+        }
     
         /**
          * @param string $table
          * @return $this
          * @api
          */
-        public static function table(string $table): self;
+        public static function table(string $table): self
+        {
+        }
     
         /**
          * Adds a inner join to the query
@@ -463,7 +563,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function join($table, $on = null);
+        public static function join($table, $on = null)
+        {
+        }
     
         /**
          * Adds a inner join to the query
@@ -473,7 +575,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null);
+        public static function innerJoin($table, $on = null)
+        {
+        }
     
         /**
          * Adds a left join to the query
@@ -483,7 +587,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null);
+        public static function leftJoin($table, $on = null)
+        {
+        }
     
         /**
          * Adds a right join to the query
@@ -493,7 +599,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null);
+        public static function rightJoin($table, $on = null)
+        {
+        }
     
         /**
          * Specifies one or more restrictions to the query result.
@@ -512,7 +620,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null);
+        public static function where($column, $operator = null, $value = null)
+        {
+        }
     
         /**
          * @param string $expression
@@ -520,7 +630,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereRaw($expression, $params = []);
+        public static function whereRaw($expression, $params = [])
+        {
+        }
     
         /**
          * @param $column
@@ -528,7 +640,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereBetween($column, array $params);
+        public static function whereBetween($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -536,7 +650,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotBetween($column, array $params);
+        public static function whereNotBetween($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -544,7 +660,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereIn($column, array $params);
+        public static function whereIn($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -552,39 +670,27 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotIn($column, array $params);
+        public static function whereNotIn($column, array $params)
+        {
+        }
     
         /**
          * @param $column
          * @return $this
          * @api
          */
-        public static function whereNull($column);
+        public static function whereNull($column)
+        {
+        }
     
         /**
          * @param $column
          * @return $this
          * @api
          */
-        public static function whereNotNULL($column);
-    
-        /**
-         * @param $column
-         * @param $opOrValue
-         * @param null $value
-         * @return $this
-         * @api
-         */
-        public static function whereDate($column, $opOrValue, $value = null);
-    
-        /**
-         * @param $column
-         * @param $opOrValue
-         * @param null $value
-         * @return $this
-         * @api
-         */
-        public static function whereMonth($column, $opOrValue, $value = null);
+        public static function whereNotNULL($column)
+        {
+        }
     
         /**
          * @param $column
@@ -593,7 +699,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereDay($column, $opOrValue, $value = null);
+        public static function whereDate($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -602,7 +710,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereYear($column, $opOrValue, $value = null);
+        public static function whereMonth($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -611,7 +721,31 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereTime($column, $opOrValue, $value = null);
+        public static function whereDay($column, $opOrValue, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param $opOrValue
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function whereYear($column, $opOrValue, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param $opOrValue
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function whereTime($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -620,7 +754,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereColumn($column, $opOrColumn2, $column2 = null);
+        public static function whereColumn($column, $opOrColumn2, $column2 = null)
+        {
+        }
     
         /**
          * 搜索字段是否包含某个值
@@ -631,7 +767,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereContains($column, $value, string $condition = 'AND');
+        public static function whereContains($column, $value, string $condition = 'AND')
+        {
+        }
     
         /**
          * @param $column
@@ -640,7 +778,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotContains($column, $value, string $condition = 'OR');
+        public static function whereNotContains($column, $value, string $condition = 'OR')
+        {
+        }
     
         /**
          * Specifies a grouping over the results of the query.
@@ -650,7 +790,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function groupBy($column);
+        public static function groupBy($column)
+        {
+        }
     
         /**
          * Specifies a restriction over the groups of the query.
@@ -662,7 +804,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function having($column, $operator, $value = null, $condition = 'AND');
+        public static function having($column, $operator, $value = null, $condition = 'AND')
+        {
+        }
     
         /**
          * Specifies an ordering for the query results.
@@ -673,7 +817,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function orderBy($column, $order = 'ASC');
+        public static function orderBy($column, $order = 'ASC')
+        {
+        }
     
         /**
          * Adds a DESC ordering to the query
@@ -682,7 +828,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function desc($field);
+        public static function desc($field)
+        {
+        }
     
         /**
          * Add an ASC ordering to the query
@@ -691,26 +839,34 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function asc($field);
+        public static function asc($field)
+        {
+        }
     
         /**
          * @return $this
          * @api
          */
-        public static function forUpdate();
+        public static function forUpdate()
+        {
+        }
     
         /**
          * @return $this
          * @api
          */
-        public static function forShare();
+        public static function forShare()
+        {
+        }
     
         /**
          * @param string $lock
          * @return $this
          * @api
          */
-        public static function lock($lock);
+        public static function lock($lock)
+        {
+        }
     
         /**
          * @param mixed $value
@@ -719,7 +875,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function when($value, $callback, callable $default = null);
+        public static function when($value, $callback, callable $default = null)
+        {
+        }
     
         /**
          * @param mixed $value
@@ -728,11 +886,13 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function unless($value, callable $callback, callable $default = null);
+        public static function unless($value, callable $callback, callable $default = null)
+        {
+        }
     }
 }
 
-interface Model
+class Model
 {
     /**
      * Executes the generated SQL and returns the found record object or false
@@ -741,7 +901,9 @@ interface Model
      * @return $this|null
      * @api
      */
-    public function find($id);
+    public function find($id)
+    {
+    }
 
     /**
      * Sets the position of the first result to retrieve (the "offset")
@@ -750,7 +912,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function offset($offset);
+    public function offset($offset)
+    {
+    }
 
     /**
      * Sets the maximum number of results to retrieve (the "limit")
@@ -759,7 +923,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function limit($limit);
+    public function limit($limit)
+    {
+    }
 
     /**
      * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
@@ -768,7 +934,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function page($page);
+    public function page($page)
+    {
+    }
 
     /**
      * Specifies an item that is to be returned in the query result.
@@ -778,21 +946,27 @@ interface Model
      * @return $this
      * @api
      */
-    public function select($columns = ['*']): self;
+    public function select($columns = ['*']): self
+    {
+    }
 
     /**
      * @param $columns
      * @return $this
      * @api
      */
-    public function selectDistinct($columns);
+    public function selectDistinct($columns)
+    {
+    }
 
     /**
      * @param string $expression
      * @return $this
      * @api
      */
-    public function selectRaw($expression);
+    public function selectRaw($expression)
+    {
+    }
 
     /**
      * Specifies columns that are not to be returned in the query result.
@@ -802,7 +976,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function selectExcept($columns);
+    public function selectExcept($columns)
+    {
+    }
 
     /**
      * Sets table for FROM query
@@ -811,14 +987,18 @@ interface Model
      * @return $this
      * @api
      */
-    public function from($from);
+    public function from($from)
+    {
+    }
 
     /**
      * @param string $table
      * @return $this
      * @api
      */
-    public function table(string $table): self;
+    public function table(string $table): self
+    {
+    }
 
     /**
      * Adds a inner join to the query
@@ -828,7 +1008,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function join($table, $on = null);
+    public function join($table, $on = null)
+    {
+    }
 
     /**
      * Adds a inner join to the query
@@ -838,7 +1020,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null);
+    public function innerJoin($table, $on = null)
+    {
+    }
 
     /**
      * Adds a left join to the query
@@ -848,7 +1032,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null);
+    public function leftJoin($table, $on = null)
+    {
+    }
 
     /**
      * Adds a right join to the query
@@ -858,7 +1044,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null);
+    public function rightJoin($table, $on = null)
+    {
+    }
 
     /**
      * Specifies one or more restrictions to the query result.
@@ -877,7 +1065,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null);
+    public function where($column, $operator = null, $value = null)
+    {
+    }
 
     /**
      * @param string $expression
@@ -885,7 +1075,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereRaw($expression, $params = []);
+    public function whereRaw($expression, $params = [])
+    {
+    }
 
     /**
      * @param $column
@@ -893,7 +1085,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereBetween($column, array $params);
+    public function whereBetween($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -901,7 +1095,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereNotBetween($column, array $params);
+    public function whereNotBetween($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -909,7 +1105,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereIn($column, array $params);
+    public function whereIn($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -917,39 +1115,27 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereNotIn($column, array $params);
+    public function whereNotIn($column, array $params)
+    {
+    }
 
     /**
      * @param $column
      * @return $this
      * @api
      */
-    public function whereNull($column);
+    public function whereNull($column)
+    {
+    }
 
     /**
      * @param $column
      * @return $this
      * @api
      */
-    public function whereNotNULL($column);
-
-    /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
-     * @return $this
-     * @api
-     */
-    public function whereDate($column, $opOrValue, $value = null);
-
-    /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
-     * @return $this
-     * @api
-     */
-    public function whereMonth($column, $opOrValue, $value = null);
+    public function whereNotNULL($column)
+    {
+    }
 
     /**
      * @param $column
@@ -958,7 +1144,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereDay($column, $opOrValue, $value = null);
+    public function whereDate($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -967,7 +1155,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereYear($column, $opOrValue, $value = null);
+    public function whereMonth($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -976,7 +1166,31 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereTime($column, $opOrValue, $value = null);
+    public function whereDay($column, $opOrValue, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function whereYear($column, $opOrValue, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function whereTime($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -985,7 +1199,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereColumn($column, $opOrColumn2, $column2 = null);
+    public function whereColumn($column, $opOrColumn2, $column2 = null)
+    {
+    }
 
     /**
      * 搜索字段是否包含某个值
@@ -996,7 +1212,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereContains($column, $value, string $condition = 'AND');
+    public function whereContains($column, $value, string $condition = 'AND')
+    {
+    }
 
     /**
      * @param $column
@@ -1005,7 +1223,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function whereNotContains($column, $value, string $condition = 'OR');
+    public function whereNotContains($column, $value, string $condition = 'OR')
+    {
+    }
 
     /**
      * Specifies a grouping over the results of the query.
@@ -1015,7 +1235,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function groupBy($column);
+    public function groupBy($column)
+    {
+    }
 
     /**
      * Specifies a restriction over the groups of the query.
@@ -1027,7 +1249,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function having($column, $operator, $value = null, $condition = 'AND');
+    public function having($column, $operator, $value = null, $condition = 'AND')
+    {
+    }
 
     /**
      * Specifies an ordering for the query results.
@@ -1038,7 +1262,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function orderBy($column, $order = 'ASC');
+    public function orderBy($column, $order = 'ASC')
+    {
+    }
 
     /**
      * Adds a DESC ordering to the query
@@ -1047,7 +1273,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function desc($field);
+    public function desc($field)
+    {
+    }
 
     /**
      * Add an ASC ordering to the query
@@ -1056,26 +1284,34 @@ interface Model
      * @return $this
      * @api
      */
-    public function asc($field);
+    public function asc($field)
+    {
+    }
 
     /**
      * @return $this
      * @api
      */
-    public function forUpdate();
+    public function forUpdate()
+    {
+    }
 
     /**
      * @return $this
      * @api
      */
-    public function forShare();
+    public function forShare()
+    {
+    }
 
     /**
      * @param string $lock
      * @return $this
      * @api
      */
-    public function lock($lock);
+    public function lock($lock)
+    {
+    }
 
     /**
      * @param mixed $value
@@ -1084,7 +1320,9 @@ interface Model
      * @return $this
      * @api
      */
-    public function when($value, $callback, callable $default = null);
+    public function when($value, $callback, callable $default = null)
+    {
+    }
 
     /**
      * @param mixed $value
@@ -1093,11 +1331,13 @@ interface Model
      * @return $this
      * @api
      */
-    public function unless($value, callable $callback, callable $default = null);
+    public function unless($value, callable $callback, callable $default = null)
+    {
+    }
 }
 
 if (0) {
-    interface Model
+    class Model
     {
         /**
          * Executes the generated SQL and returns the found record object or false
@@ -1106,7 +1346,9 @@ if (0) {
          * @return $this|null
          * @api
          */
-        public static function find($id);
+        public static function find($id)
+        {
+        }
     
         /**
          * Sets the position of the first result to retrieve (the "offset")
@@ -1115,7 +1357,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function offset($offset);
+        public static function offset($offset)
+        {
+        }
     
         /**
          * Sets the maximum number of results to retrieve (the "limit")
@@ -1124,7 +1368,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function limit($limit);
+        public static function limit($limit)
+        {
+        }
     
         /**
          * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
@@ -1133,7 +1379,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function page($page);
+        public static function page($page)
+        {
+        }
     
         /**
          * Specifies an item that is to be returned in the query result.
@@ -1143,21 +1391,27 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function select($columns = ['*']): self;
+        public static function select($columns = ['*']): self
+        {
+        }
     
         /**
          * @param $columns
          * @return $this
          * @api
          */
-        public static function selectDistinct($columns);
+        public static function selectDistinct($columns)
+        {
+        }
     
         /**
          * @param string $expression
          * @return $this
          * @api
          */
-        public static function selectRaw($expression);
+        public static function selectRaw($expression)
+        {
+        }
     
         /**
          * Specifies columns that are not to be returned in the query result.
@@ -1167,7 +1421,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function selectExcept($columns);
+        public static function selectExcept($columns)
+        {
+        }
     
         /**
          * Sets table for FROM query
@@ -1176,14 +1432,18 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function from($from);
+        public static function from($from)
+        {
+        }
     
         /**
          * @param string $table
          * @return $this
          * @api
          */
-        public static function table(string $table): self;
+        public static function table(string $table): self
+        {
+        }
     
         /**
          * Adds a inner join to the query
@@ -1193,7 +1453,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function join($table, $on = null);
+        public static function join($table, $on = null)
+        {
+        }
     
         /**
          * Adds a inner join to the query
@@ -1203,7 +1465,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null);
+        public static function innerJoin($table, $on = null)
+        {
+        }
     
         /**
          * Adds a left join to the query
@@ -1213,7 +1477,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null);
+        public static function leftJoin($table, $on = null)
+        {
+        }
     
         /**
          * Adds a right join to the query
@@ -1223,7 +1489,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null);
+        public static function rightJoin($table, $on = null)
+        {
+        }
     
         /**
          * Specifies one or more restrictions to the query result.
@@ -1242,7 +1510,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null);
+        public static function where($column, $operator = null, $value = null)
+        {
+        }
     
         /**
          * @param string $expression
@@ -1250,7 +1520,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereRaw($expression, $params = []);
+        public static function whereRaw($expression, $params = [])
+        {
+        }
     
         /**
          * @param $column
@@ -1258,7 +1530,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereBetween($column, array $params);
+        public static function whereBetween($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -1266,7 +1540,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotBetween($column, array $params);
+        public static function whereNotBetween($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -1274,7 +1550,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereIn($column, array $params);
+        public static function whereIn($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -1282,39 +1560,27 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotIn($column, array $params);
+        public static function whereNotIn($column, array $params)
+        {
+        }
     
         /**
          * @param $column
          * @return $this
          * @api
          */
-        public static function whereNull($column);
+        public static function whereNull($column)
+        {
+        }
     
         /**
          * @param $column
          * @return $this
          * @api
          */
-        public static function whereNotNULL($column);
-    
-        /**
-         * @param $column
-         * @param $opOrValue
-         * @param null $value
-         * @return $this
-         * @api
-         */
-        public static function whereDate($column, $opOrValue, $value = null);
-    
-        /**
-         * @param $column
-         * @param $opOrValue
-         * @param null $value
-         * @return $this
-         * @api
-         */
-        public static function whereMonth($column, $opOrValue, $value = null);
+        public static function whereNotNULL($column)
+        {
+        }
     
         /**
          * @param $column
@@ -1323,7 +1589,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereDay($column, $opOrValue, $value = null);
+        public static function whereDate($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -1332,7 +1600,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereYear($column, $opOrValue, $value = null);
+        public static function whereMonth($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -1341,7 +1611,31 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereTime($column, $opOrValue, $value = null);
+        public static function whereDay($column, $opOrValue, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param $opOrValue
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function whereYear($column, $opOrValue, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param $opOrValue
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function whereTime($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -1350,7 +1644,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereColumn($column, $opOrColumn2, $column2 = null);
+        public static function whereColumn($column, $opOrColumn2, $column2 = null)
+        {
+        }
     
         /**
          * 搜索字段是否包含某个值
@@ -1361,7 +1657,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereContains($column, $value, string $condition = 'AND');
+        public static function whereContains($column, $value, string $condition = 'AND')
+        {
+        }
     
         /**
          * @param $column
@@ -1370,7 +1668,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotContains($column, $value, string $condition = 'OR');
+        public static function whereNotContains($column, $value, string $condition = 'OR')
+        {
+        }
     
         /**
          * Specifies a grouping over the results of the query.
@@ -1380,7 +1680,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function groupBy($column);
+        public static function groupBy($column)
+        {
+        }
     
         /**
          * Specifies a restriction over the groups of the query.
@@ -1392,7 +1694,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function having($column, $operator, $value = null, $condition = 'AND');
+        public static function having($column, $operator, $value = null, $condition = 'AND')
+        {
+        }
     
         /**
          * Specifies an ordering for the query results.
@@ -1403,7 +1707,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function orderBy($column, $order = 'ASC');
+        public static function orderBy($column, $order = 'ASC')
+        {
+        }
     
         /**
          * Adds a DESC ordering to the query
@@ -1412,7 +1718,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function desc($field);
+        public static function desc($field)
+        {
+        }
     
         /**
          * Add an ASC ordering to the query
@@ -1421,26 +1729,34 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function asc($field);
+        public static function asc($field)
+        {
+        }
     
         /**
          * @return $this
          * @api
          */
-        public static function forUpdate();
+        public static function forUpdate()
+        {
+        }
     
         /**
          * @return $this
          * @api
          */
-        public static function forShare();
+        public static function forShare()
+        {
+        }
     
         /**
          * @param string $lock
          * @return $this
          * @api
          */
-        public static function lock($lock);
+        public static function lock($lock)
+        {
+        }
     
         /**
          * @param mixed $value
@@ -1449,7 +1765,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function when($value, $callback, callable $default = null);
+        public static function when($value, $callback, callable $default = null)
+        {
+        }
     
         /**
          * @param mixed $value
@@ -1458,11 +1776,13 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function unless($value, callable $callback, callable $default = null);
+        public static function unless($value, callable $callback, callable $default = null)
+        {
+        }
     }
 }
 
-interface QueryBuilder
+class QueryBuilder
 {
     /**
      * Sets the position of the first result to retrieve (the "offset")
@@ -1471,7 +1791,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function offset($offset);
+    public function offset($offset)
+    {
+    }
 
     /**
      * Sets the maximum number of results to retrieve (the "limit")
@@ -1480,7 +1802,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function limit($limit);
+    public function limit($limit)
+    {
+    }
 
     /**
      * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
@@ -1489,7 +1813,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function page($page);
+    public function page($page)
+    {
+    }
 
     /**
      * Specifies an item that is to be returned in the query result.
@@ -1499,21 +1825,27 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function select($columns = ['*']): self;
+    public function select($columns = ['*']): self
+    {
+    }
 
     /**
      * @param $columns
      * @return $this
      * @api
      */
-    public function selectDistinct($columns);
+    public function selectDistinct($columns)
+    {
+    }
 
     /**
      * @param string $expression
      * @return $this
      * @api
      */
-    public function selectRaw($expression);
+    public function selectRaw($expression)
+    {
+    }
 
     /**
      * Specifies columns that are not to be returned in the query result.
@@ -1523,7 +1855,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function selectExcept($columns);
+    public function selectExcept($columns)
+    {
+    }
 
     /**
      * Sets table for FROM query
@@ -1532,14 +1866,18 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function from($from);
+    public function from($from)
+    {
+    }
 
     /**
      * @param string $table
      * @return $this
      * @api
      */
-    public function table(string $table): self;
+    public function table(string $table): self
+    {
+    }
 
     /**
      * Adds a inner join to the query
@@ -1549,7 +1887,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function join($table, $on = null);
+    public function join($table, $on = null)
+    {
+    }
 
     /**
      * Adds a inner join to the query
@@ -1559,7 +1899,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null);
+    public function innerJoin($table, $on = null)
+    {
+    }
 
     /**
      * Adds a left join to the query
@@ -1569,7 +1911,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null);
+    public function leftJoin($table, $on = null)
+    {
+    }
 
     /**
      * Adds a right join to the query
@@ -1579,7 +1923,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null);
+    public function rightJoin($table, $on = null)
+    {
+    }
 
     /**
      * Specifies one or more restrictions to the query result.
@@ -1598,7 +1944,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null);
+    public function where($column, $operator = null, $value = null)
+    {
+    }
 
     /**
      * @param string $expression
@@ -1606,7 +1954,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereRaw($expression, $params = []);
+    public function whereRaw($expression, $params = [])
+    {
+    }
 
     /**
      * @param $column
@@ -1614,7 +1964,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereBetween($column, array $params);
+    public function whereBetween($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -1622,7 +1974,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereNotBetween($column, array $params);
+    public function whereNotBetween($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -1630,7 +1984,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereIn($column, array $params);
+    public function whereIn($column, array $params)
+    {
+    }
 
     /**
      * @param $column
@@ -1638,39 +1994,27 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereNotIn($column, array $params);
+    public function whereNotIn($column, array $params)
+    {
+    }
 
     /**
      * @param $column
      * @return $this
      * @api
      */
-    public function whereNull($column);
+    public function whereNull($column)
+    {
+    }
 
     /**
      * @param $column
      * @return $this
      * @api
      */
-    public function whereNotNULL($column);
-
-    /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
-     * @return $this
-     * @api
-     */
-    public function whereDate($column, $opOrValue, $value = null);
-
-    /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
-     * @return $this
-     * @api
-     */
-    public function whereMonth($column, $opOrValue, $value = null);
+    public function whereNotNULL($column)
+    {
+    }
 
     /**
      * @param $column
@@ -1679,7 +2023,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereDay($column, $opOrValue, $value = null);
+    public function whereDate($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -1688,7 +2034,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereYear($column, $opOrValue, $value = null);
+    public function whereMonth($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -1697,7 +2045,31 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereTime($column, $opOrValue, $value = null);
+    public function whereDay($column, $opOrValue, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function whereYear($column, $opOrValue, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function whereTime($column, $opOrValue, $value = null)
+    {
+    }
 
     /**
      * @param $column
@@ -1706,7 +2078,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereColumn($column, $opOrColumn2, $column2 = null);
+    public function whereColumn($column, $opOrColumn2, $column2 = null)
+    {
+    }
 
     /**
      * 搜索字段是否包含某个值
@@ -1717,7 +2091,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereContains($column, $value, string $condition = 'AND');
+    public function whereContains($column, $value, string $condition = 'AND')
+    {
+    }
 
     /**
      * @param $column
@@ -1726,7 +2102,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function whereNotContains($column, $value, string $condition = 'OR');
+    public function whereNotContains($column, $value, string $condition = 'OR')
+    {
+    }
 
     /**
      * Specifies a grouping over the results of the query.
@@ -1736,7 +2114,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function groupBy($column);
+    public function groupBy($column)
+    {
+    }
 
     /**
      * Specifies a restriction over the groups of the query.
@@ -1748,7 +2128,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function having($column, $operator, $value = null, $condition = 'AND');
+    public function having($column, $operator, $value = null, $condition = 'AND')
+    {
+    }
 
     /**
      * Specifies an ordering for the query results.
@@ -1759,7 +2141,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function orderBy($column, $order = 'ASC');
+    public function orderBy($column, $order = 'ASC')
+    {
+    }
 
     /**
      * Adds a DESC ordering to the query
@@ -1768,7 +2152,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function desc($field);
+    public function desc($field)
+    {
+    }
 
     /**
      * Add an ASC ordering to the query
@@ -1777,26 +2163,34 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function asc($field);
+    public function asc($field)
+    {
+    }
 
     /**
      * @return $this
      * @api
      */
-    public function forUpdate();
+    public function forUpdate()
+    {
+    }
 
     /**
      * @return $this
      * @api
      */
-    public function forShare();
+    public function forShare()
+    {
+    }
 
     /**
      * @param string $lock
      * @return $this
      * @api
      */
-    public function lock($lock);
+    public function lock($lock)
+    {
+    }
 
     /**
      * @param mixed $value
@@ -1805,7 +2199,9 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function when($value, $callback, callable $default = null);
+    public function when($value, $callback, callable $default = null)
+    {
+    }
 
     /**
      * @param mixed $value
@@ -1814,11 +2210,13 @@ interface QueryBuilder
      * @return $this
      * @api
      */
-    public function unless($value, callable $callback, callable $default = null);
+    public function unless($value, callable $callback, callable $default = null)
+    {
+    }
 }
 
 if (0) {
-    interface QueryBuilder
+    class QueryBuilder
     {
         /**
          * Sets the position of the first result to retrieve (the "offset")
@@ -1827,7 +2225,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function offset($offset);
+        public static function offset($offset)
+        {
+        }
     
         /**
          * Sets the maximum number of results to retrieve (the "limit")
@@ -1836,7 +2236,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function limit($limit);
+        public static function limit($limit)
+        {
+        }
     
         /**
          * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
@@ -1845,7 +2247,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function page($page);
+        public static function page($page)
+        {
+        }
     
         /**
          * Specifies an item that is to be returned in the query result.
@@ -1855,21 +2259,27 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function select($columns = ['*']): self;
+        public static function select($columns = ['*']): self
+        {
+        }
     
         /**
          * @param $columns
          * @return $this
          * @api
          */
-        public static function selectDistinct($columns);
+        public static function selectDistinct($columns)
+        {
+        }
     
         /**
          * @param string $expression
          * @return $this
          * @api
          */
-        public static function selectRaw($expression);
+        public static function selectRaw($expression)
+        {
+        }
     
         /**
          * Specifies columns that are not to be returned in the query result.
@@ -1879,7 +2289,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function selectExcept($columns);
+        public static function selectExcept($columns)
+        {
+        }
     
         /**
          * Sets table for FROM query
@@ -1888,14 +2300,18 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function from($from);
+        public static function from($from)
+        {
+        }
     
         /**
          * @param string $table
          * @return $this
          * @api
          */
-        public static function table(string $table): self;
+        public static function table(string $table): self
+        {
+        }
     
         /**
          * Adds a inner join to the query
@@ -1905,7 +2321,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function join($table, $on = null);
+        public static function join($table, $on = null)
+        {
+        }
     
         /**
          * Adds a inner join to the query
@@ -1915,7 +2333,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null);
+        public static function innerJoin($table, $on = null)
+        {
+        }
     
         /**
          * Adds a left join to the query
@@ -1925,7 +2345,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null);
+        public static function leftJoin($table, $on = null)
+        {
+        }
     
         /**
          * Adds a right join to the query
@@ -1935,7 +2357,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null);
+        public static function rightJoin($table, $on = null)
+        {
+        }
     
         /**
          * Specifies one or more restrictions to the query result.
@@ -1954,7 +2378,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null);
+        public static function where($column, $operator = null, $value = null)
+        {
+        }
     
         /**
          * @param string $expression
@@ -1962,7 +2388,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereRaw($expression, $params = []);
+        public static function whereRaw($expression, $params = [])
+        {
+        }
     
         /**
          * @param $column
@@ -1970,7 +2398,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereBetween($column, array $params);
+        public static function whereBetween($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -1978,7 +2408,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotBetween($column, array $params);
+        public static function whereNotBetween($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -1986,7 +2418,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereIn($column, array $params);
+        public static function whereIn($column, array $params)
+        {
+        }
     
         /**
          * @param $column
@@ -1994,39 +2428,27 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotIn($column, array $params);
+        public static function whereNotIn($column, array $params)
+        {
+        }
     
         /**
          * @param $column
          * @return $this
          * @api
          */
-        public static function whereNull($column);
+        public static function whereNull($column)
+        {
+        }
     
         /**
          * @param $column
          * @return $this
          * @api
          */
-        public static function whereNotNULL($column);
-    
-        /**
-         * @param $column
-         * @param $opOrValue
-         * @param null $value
-         * @return $this
-         * @api
-         */
-        public static function whereDate($column, $opOrValue, $value = null);
-    
-        /**
-         * @param $column
-         * @param $opOrValue
-         * @param null $value
-         * @return $this
-         * @api
-         */
-        public static function whereMonth($column, $opOrValue, $value = null);
+        public static function whereNotNULL($column)
+        {
+        }
     
         /**
          * @param $column
@@ -2035,7 +2457,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereDay($column, $opOrValue, $value = null);
+        public static function whereDate($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -2044,7 +2468,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereYear($column, $opOrValue, $value = null);
+        public static function whereMonth($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -2053,7 +2479,31 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereTime($column, $opOrValue, $value = null);
+        public static function whereDay($column, $opOrValue, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param $opOrValue
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function whereYear($column, $opOrValue, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param $opOrValue
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function whereTime($column, $opOrValue, $value = null)
+        {
+        }
     
         /**
          * @param $column
@@ -2062,7 +2512,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereColumn($column, $opOrColumn2, $column2 = null);
+        public static function whereColumn($column, $opOrColumn2, $column2 = null)
+        {
+        }
     
         /**
          * 搜索字段是否包含某个值
@@ -2073,7 +2525,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereContains($column, $value, string $condition = 'AND');
+        public static function whereContains($column, $value, string $condition = 'AND')
+        {
+        }
     
         /**
          * @param $column
@@ -2082,7 +2536,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function whereNotContains($column, $value, string $condition = 'OR');
+        public static function whereNotContains($column, $value, string $condition = 'OR')
+        {
+        }
     
         /**
          * Specifies a grouping over the results of the query.
@@ -2092,7 +2548,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function groupBy($column);
+        public static function groupBy($column)
+        {
+        }
     
         /**
          * Specifies a restriction over the groups of the query.
@@ -2104,7 +2562,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function having($column, $operator, $value = null, $condition = 'AND');
+        public static function having($column, $operator, $value = null, $condition = 'AND')
+        {
+        }
     
         /**
          * Specifies an ordering for the query results.
@@ -2115,7 +2575,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function orderBy($column, $order = 'ASC');
+        public static function orderBy($column, $order = 'ASC')
+        {
+        }
     
         /**
          * Adds a DESC ordering to the query
@@ -2124,7 +2586,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function desc($field);
+        public static function desc($field)
+        {
+        }
     
         /**
          * Add an ASC ordering to the query
@@ -2133,26 +2597,34 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function asc($field);
+        public static function asc($field)
+        {
+        }
     
         /**
          * @return $this
          * @api
          */
-        public static function forUpdate();
+        public static function forUpdate()
+        {
+        }
     
         /**
          * @return $this
          * @api
          */
-        public static function forShare();
+        public static function forShare()
+        {
+        }
     
         /**
          * @param string $lock
          * @return $this
          * @api
          */
-        public static function lock($lock);
+        public static function lock($lock)
+        {
+        }
     
         /**
          * @param mixed $value
@@ -2161,7 +2633,9 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function when($value, $callback, callable $default = null);
+        public static function when($value, $callback, callable $default = null)
+        {
+        }
     
         /**
          * @param mixed $value
@@ -2170,6 +2644,8 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function unless($value, callable $callback, callable $default = null);
+        public static function unless($value, callable $callback, callable $default = null)
+        {
+        }
     }
 }

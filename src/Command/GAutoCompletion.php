@@ -111,7 +111,6 @@ PHP;
             $namespace = $file->addNamespace($refClass->getNamespaceName());
 
             $class = new ClassType($refClass->getShortName());
-            $class->setInterface();
 
             $staticClass = clone $class;
 
@@ -120,9 +119,7 @@ PHP;
             foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
                 if ($this->isApi($refMethod)) {
                     // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
-                    $method = Method::from([$serviceClass, $refMethod->getName()])
-                        ->setBody(null)
-                        ->setPublic();
+                    $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
 
                     $methods[] = $method;
                     $staticMethods[] = (clone $method)->setStatic();
