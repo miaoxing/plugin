@@ -800,6 +800,22 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Find a record by primary key, or throws 404 exception if record not found
+     *
+     * @param int|string $id
+     * @return $this
+     * @throws \Exception
+     */
+    public function findOrFail($id)
+    {
+        if ($this->find($id)) {
+            return $this;
+        } else {
+            throw new \Exception('Record not found', 404);
+        }
+    }
+
+    /**
      * Find a record by primary key, or init with the specified data if record not found
      *
      * @param int|string $id
@@ -812,44 +828,30 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * Find a record by specified conditions and throws 404 exception if record not found
+     * Find a record by primary key, or throws 404 exception if record not found
      *
      * @param int|string $id
      * @return $this
      * @throws \Exception
+     * @deprecated use findOrFail
      */
     public function findOne($id)
     {
-        if ($this->find($id)) {
-            return $this;
-        } else {
-            throw new \Exception('Record not found', 404);
-        }
+        return $this->findOrFail($id);
     }
 
     /**
      * Executes the generated SQL and returns the found record collection object or false
      *
-     * @param mixed $conditions
+     * @param mixed $ids
      * @return $this|$this[]
      */
-    public function findAll($conditions = null)
+    public function findAll($ids = [])
     {
-        $this->isColl = true;
-        $data = $this->fetchAll($conditions);
-
-        $records = array();
-        foreach ($data as $key => $row) {
-            /** @var $records Record[] */
-            $records[$key] = $this->db->init($this->table, $row, false);
-            $records[$key]->triggerCallback('afterFind');
-        }
-
-        $this->data = $records;
-        return $this;
+        return $this->findAllBy($this->primaryKey, 'IN', $ids);
     }
 
-    public function findBy($column, $operator, $value = null)
+    public function findBy($column, $operator = null, $value = null)
     {
         $this->isColl = false;
         $data = $this->fetch(...func_get_args());
@@ -860,6 +862,22 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         } else {
             return null;
         }
+    }
+
+    public function findAllBy($column, $operator = null, $value = null)
+    {
+        $this->isColl = true;
+        $data = $this->fetchAll($column, $operator, $value);
+
+        $records = array();
+        foreach ($data as $key => $row) {
+            /** @var $records Record[] */
+            $records[$key] = $this->db->init($this->table, $row, false);
+            $records[$key]->triggerCallback('afterFind');
+        }
+
+        $this->data = $records;
+        return $this;
     }
 
     public function findOrInitBy($column, $value = null, $data = [])
@@ -888,7 +906,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @return $this
      * @throws \Exception
      */
-    public function findOneBy($column, $operator, $value = null)
+    public function findByOrFail($column, $operator = null, $value = null)
     {
         if ($this->findBy($column, $operator, $value)) {
             return $this;
@@ -904,7 +922,12 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function first()
     {
-        return $this->findBy(null, null);
+        return $this->findBy(null);
+    }
+
+    public function all()
+    {
+        return $this->findAllBy(null);
     }
 
     /**

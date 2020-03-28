@@ -40,6 +40,33 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('2', $user->id);
     }
 
+    public function testFind()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find(1);
+
+        $this->assertEquals('1', $user->id);
+    }
+
+    public function testFindOrFail()
+    {
+        $this->initFixtures();
+
+        $this->expectExceptionObject(new \Exception('Record not found', 404));
+
+        $this->db('users')->findOrFail(99);
+    }
+
+    public function testFindNotExistReturnsNull()
+    {
+        $this->initFixtures();
+
+        $user = $this->db('users')->find('not-exists');
+
+        $this->assertNull($user);
+    }
+
     public function testFindOrInitAndStatusIsNew()
     {
         $this->initFixtures();
