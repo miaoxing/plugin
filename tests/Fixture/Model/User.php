@@ -7,6 +7,7 @@ use Miaoxing\Plugin\Service\Model;
 /**
  * @property string id
  * @property string groupId
+ * @property string address
  */
 class User extends Model
 {

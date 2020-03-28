@@ -823,8 +823,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param int|string $id
      * @return $this
      * @throws \Exception
+     * @api
      */
-    public function findOrFail($id)
+    protected function findOrFail($id)
     {
         if ($this->find($id)) {
             return $this;
@@ -839,8 +840,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param int|string $id
      * @param array|object $data
      * @return $this
+     * @api
      */
-    public function findOrInit($id = null, $data = [])
+    protected function findOrInit($id = null, $data = [])
     {
         return $this->findOrInitBy($this->primaryKey, $id, $data);
     }
@@ -863,13 +865,21 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param mixed $ids
      * @return $this|$this[]
+     * @api
      */
-    public function findAll($ids = [])
+    protected function findAll($ids = [])
     {
         return $this->findAllBy($this->primaryKey, 'IN', $ids);
     }
 
-    public function findBy($column, $operator = null, $value = null)
+    /**
+     * @param $column
+     * @param null $operator
+     * @param null $value
+     * @return $this|null
+     * @api
+     */
+    protected function findBy($column, $operator = null, $value = null)
     {
         $this->isColl = false;
         $data = $this->fetch(...func_get_args());
@@ -882,7 +892,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
     }
 
-    public function findAllBy($column, $operator = null, $value = null)
+    /**
+     * @param $column
+     * @param null $operator
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    protected function findAllBy($column, $operator = null, $value = null)
     {
         $this->isColl = true;
         $data = $this->fetchAll($column, $operator, $value);
@@ -898,7 +915,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this;
     }
 
-    public function findOrInitBy($column, $value = null, $data = [])
+    /**
+     * @param $column
+     * @param null $value
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    protected function findOrInitBy($column, $value = null, $data = [])
     {
         if (!$this->findBy($column, $value)) {
             // Reset status when record not found
@@ -923,8 +947,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param mixed $value
      * @return $this
      * @throws \Exception
+     * @api
      */
-    public function findByOrFail($column, $operator = null, $value = null)
+    protected function findByOrFail($column, $operator = null, $value = null)
     {
         if ($this->findBy($column, $operator, $value)) {
             return $this;
@@ -937,13 +962,18 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
+     * @api
      */
-    public function first()
+    protected function first()
     {
         return $this->findBy(null);
     }
 
-    public function all()
+    /**
+     * @return $this
+     * @api
+     */
+    protected function all()
     {
         return $this->findAllBy(null);
     }
@@ -952,8 +982,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param int $count
      * @param callable $callback
      * @return bool
+     * @api
      */
-    public function chunk(int $count, callable $callback)
+    protected function chunk(int $count, callable $callback)
     {
         $this->limit($count);
         $page = 1;

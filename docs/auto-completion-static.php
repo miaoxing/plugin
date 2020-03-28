@@ -16,6 +16,116 @@ class AppModel
     }
 
     /**
+     * Find a record by primary key, or throws 404 exception if record not found
+     *
+     * @param int|string $id
+     * @return $this
+     * @throws \Exception
+     * @api
+     */
+    public function findOrFail($id)
+    {
+    }
+
+    /**
+     * Find a record by primary key, or init with the specified data if record not found
+     *
+     * @param int|string $id
+     * @param array|object $data
+     * @return $this
+     * @api
+     */
+    public function findOrInit($id = null, $data = [])
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record collection object or false
+     *
+     * @param mixed $ids
+     * @return $this|$this[]
+     * @api
+     */
+    public function findAll($ids = [])
+    {
+    }
+
+    /**
+     * @param $column
+     * @param null $operator
+     * @param null $value
+     * @return $this|null
+     * @api
+     */
+    public function findBy($column, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param null $operator
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function findAllBy($column, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param null $value
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function findOrInitBy($column, $value = null, $data = [])
+    {
+    }
+
+    /**
+     * Find a record by primary key value and throws 404 exception if record not found
+     *
+     * @param $column
+     * @param $operator
+     * @param mixed $value
+     * @return $this
+     * @throws \Exception
+     * @api
+     */
+    public function findByOrFail($column, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record object or null if not found
+     *
+     * @return $this|null
+     * @api
+     */
+    public function first()
+    {
+    }
+
+    /**
+     * @return $this
+     * @api
+     */
+    public function all()
+    {
+    }
+
+    /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @api
+     */
+    public function chunk(int $count, callable $callback)
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -457,6 +567,116 @@ if (0) {
          * @api
          */
         public static function find($id)
+        {
+        }
+    
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found
+         *
+         * @param int|string $id
+         * @return $this
+         * @throws \Exception
+         * @api
+         */
+        public static function findOrFail($id)
+        {
+        }
+    
+        /**
+         * Find a record by primary key, or init with the specified data if record not found
+         *
+         * @param int|string $id
+         * @param array|object $data
+         * @return $this
+         * @api
+         */
+        public static function findOrInit($id = null, $data = [])
+        {
+        }
+    
+        /**
+         * Executes the generated SQL and returns the found record collection object or false
+         *
+         * @param mixed $ids
+         * @return $this|$this[]
+         * @api
+         */
+        public static function findAll($ids = [])
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param null $operator
+         * @param null $value
+         * @return $this|null
+         * @api
+         */
+        public static function findBy($column, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param null $operator
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function findAllBy($column, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param null $value
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function findOrInitBy($column, $value = null, $data = [])
+        {
+        }
+    
+        /**
+         * Find a record by primary key value and throws 404 exception if record not found
+         *
+         * @param $column
+         * @param $operator
+         * @param mixed $value
+         * @return $this
+         * @throws \Exception
+         * @api
+         */
+        public static function findByOrFail($column, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return $this|null
+         * @api
+         */
+        public static function first()
+        {
+        }
+    
+        /**
+         * @return $this
+         * @api
+         */
+        public static function all()
+        {
+        }
+    
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @api
+         */
+        public static function chunk(int $count, callable $callback)
         {
         }
     
@@ -906,6 +1126,116 @@ class Model
     }
 
     /**
+     * Find a record by primary key, or throws 404 exception if record not found
+     *
+     * @param int|string $id
+     * @return $this
+     * @throws \Exception
+     * @api
+     */
+    public function findOrFail($id)
+    {
+    }
+
+    /**
+     * Find a record by primary key, or init with the specified data if record not found
+     *
+     * @param int|string $id
+     * @param array|object $data
+     * @return $this
+     * @api
+     */
+    public function findOrInit($id = null, $data = [])
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record collection object or false
+     *
+     * @param mixed $ids
+     * @return $this|$this[]
+     * @api
+     */
+    public function findAll($ids = [])
+    {
+    }
+
+    /**
+     * @param $column
+     * @param null $operator
+     * @param null $value
+     * @return $this|null
+     * @api
+     */
+    public function findBy($column, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param null $operator
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function findAllBy($column, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param null $value
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function findOrInitBy($column, $value = null, $data = [])
+    {
+    }
+
+    /**
+     * Find a record by primary key value and throws 404 exception if record not found
+     *
+     * @param $column
+     * @param $operator
+     * @param mixed $value
+     * @return $this
+     * @throws \Exception
+     * @api
+     */
+    public function findByOrFail($column, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record object or null if not found
+     *
+     * @return $this|null
+     * @api
+     */
+    public function first()
+    {
+    }
+
+    /**
+     * @return $this
+     * @api
+     */
+    public function all()
+    {
+    }
+
+    /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @api
+     */
+    public function chunk(int $count, callable $callback)
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -1347,6 +1677,116 @@ if (0) {
          * @api
          */
         public static function find($id)
+        {
+        }
+    
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found
+         *
+         * @param int|string $id
+         * @return $this
+         * @throws \Exception
+         * @api
+         */
+        public static function findOrFail($id)
+        {
+        }
+    
+        /**
+         * Find a record by primary key, or init with the specified data if record not found
+         *
+         * @param int|string $id
+         * @param array|object $data
+         * @return $this
+         * @api
+         */
+        public static function findOrInit($id = null, $data = [])
+        {
+        }
+    
+        /**
+         * Executes the generated SQL and returns the found record collection object or false
+         *
+         * @param mixed $ids
+         * @return $this|$this[]
+         * @api
+         */
+        public static function findAll($ids = [])
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param null $operator
+         * @param null $value
+         * @return $this|null
+         * @api
+         */
+        public static function findBy($column, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param null $operator
+         * @param null $value
+         * @return $this
+         * @api
+         */
+        public static function findAllBy($column, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * @param $column
+         * @param null $value
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function findOrInitBy($column, $value = null, $data = [])
+        {
+        }
+    
+        /**
+         * Find a record by primary key value and throws 404 exception if record not found
+         *
+         * @param $column
+         * @param $operator
+         * @param mixed $value
+         * @return $this
+         * @throws \Exception
+         * @api
+         */
+        public static function findByOrFail($column, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return $this|null
+         * @api
+         */
+        public static function first()
+        {
+        }
+    
+        /**
+         * @return $this
+         * @api
+         */
+        public static function all()
+        {
+        }
+    
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @api
+         */
+        public static function chunk(int $count, callable $callback)
         {
         }
     
