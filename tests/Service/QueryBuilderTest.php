@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\QueryBuilder;
+use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Miaoxing\Services\Service\ServiceTrait;
 use MiaoxingTest\Plugin\Fixture\DbTrait;
@@ -25,35 +25,42 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testSelect()
     {
-        $sql = wei()->queryBuilder('users')->select('name')->getSql();
+        $sql = Qb::table('users')->select('name')->getSql();
+
+        $this->assertEquals('SELECT `name` FROM `p_users`', $sql);
+    }
+
+    public function testStaticSelect()
+    {
+        $sql = Qb::select('name')->from('users')->getSql();
 
         $this->assertEquals('SELECT `name` FROM `p_users`', $sql);
     }
 
     public function testSelectMultipleByArray()
     {
-        $sql = wei()->queryBuilder('users')->select(['name', 'email'])->getSql();
+        $sql = Qb::table('users')->select(['name', 'email'])->getSql();
 
         $this->assertEquals('SELECT `name`, `email` FROM `p_users`', $sql);
     }
 
     public function testSelectMultipleByArguments()
     {
-        $sql = wei()->queryBuilder('users')->select('name', 'email')->getSql();
+        $sql = Qb::table('users')->select('name', 'email')->getSql();
 
         $this->assertEqualsIgnoringCase('SELECT `name`, `email` FROM `p_users`', $sql);
     }
 
     public function testSelectAlias()
     {
-        $sql = wei()->queryBuilder('users')->select(['name' => 'user_name'])->getSql();
+        $sql = Qb::table('users')->select(['name' => 'user_name'])->getSql();
 
         $this->assertEquals('SELECT `name` AS `user_name` FROM `p_users`', $sql);
     }
 
     public function testDistinct()
     {
-        $qb = wei()->queryBuilder('users')->select('name')->distinct();
+        $qb = Qb::table('users')->select('name')->distinct();
 
         $this->assertEquals('SELECT DISTINCT `name` FROM `p_users`', $qb->getSql());
 
@@ -62,21 +69,21 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testSelectDistinct()
     {
-        $sql = wei()->queryBuilder('users')->selectDistinct('name')->getSql();
+        $sql = Qb::table('users')->selectDistinct('name')->getSql();
 
         $this->assertEquals('SELECT DISTINCT `name` FROM `p_users`', $sql);
     }
 
     public function testAddSelect()
     {
-        $sql = wei()->queryBuilder('users')->select('name')->select('email')->getSql();
+        $sql = Qb::table('users')->select('name')->select('email')->getSql();
 
         $this->assertEquals('SELECT `name`, `email` FROM `p_users`', $sql);
     }
 
     public function testSelectRaw()
     {
-        $sql = wei()->queryBuilder('users')->selectRaw('UPPER(name)')->getSql();
+        $sql = Qb::table('users')->selectRaw('UPPER(name)')->getSql();
 
         $this->assertEqualsIgnoringCase('SELECT UPPER(name) FROM `p_users`', $sql);
     }
@@ -85,28 +92,28 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $sql = wei()->queryBuilder('users')->selectExcept('id')->getSql();
+        $sql = Qb::table('users')->selectExcept('id')->getSql();
 
         $this->assertEqualsIgnoringCase('SELECT `group_id`, `name`, `address` FROM `p_users`', $sql);
     }
 
-    public function testWhereEqual()
+    public function testWhere()
     {
-        $sql = wei()->queryBuilder('users')->where('name', '=', 'twin')->getRawSql();
+        $sql = Qb::table('users')->where('name', '=', 'twin')->getRawSql();
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhereEqualShorthand()
     {
-        $sql = wei()->queryBuilder('users')->where('name', 'twin')->getRawSql();
+        $sql = Qb::table('users')->where('name', 'twin')->getRawSql();
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhereArray()
     {
-        $sql = wei()->queryBuilder('users')->where([
+        $sql = Qb::table('users')->where([
             ['name', 'twin'],
             ['email', '!=', 'twin@example.com'],
         ])->getRawSql();
@@ -116,9 +123,9 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereClosure()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
-            ->where(function (QueryBuilder $qb) {
+            ->where(function (Qb $qb) {
                 $qb->where('email', '=', 'twin@example.com')
                     ->orWhere('score', '>', 100);
             })
@@ -131,7 +138,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = wei()->queryBuilder('users')->whereRaw("name = 'twin'");
+        $qb = Qb::table('users')->whereRaw("name = 'twin'");
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
@@ -141,7 +148,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = wei()->queryBuilder('users')->whereRaw('name = ?', 'twin');
+        $qb = Qb::table('users')->whereRaw('name = ?', 'twin');
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
@@ -149,7 +156,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhere()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhere('email', '!=', 'twin@example.com')
             ->getRawSql();
@@ -160,7 +167,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testMultipleOrWhere()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhere('email', 'twin@example.com')
             ->orWhere('first_name', '=', 'twin')
@@ -172,7 +179,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereArray()
     {
-        $sql = wei()->queryBuilder('users')->orWhere([
+        $sql = Qb::table('users')->orWhere([
             ['name', 'twin'],
             ['email', 'twin@example.com'],
         ])->getRawSql();
@@ -181,9 +188,9 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereClosure()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
-            ->orWhere(function (QueryBuilder $qb) {
+            ->orWhere(function (Qb $qb) {
                 $qb->where('email', '=', 'twin@example.com')
                     ->orWhere('score', '>', 100);
             })
@@ -195,7 +202,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereRaw()
     {
-        $qb = wei()->queryBuilder('users')
+        $qb = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereRaw('email = ?', 'twin@example.com');
 
@@ -205,14 +212,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereBetween()
     {
-        $sql = wei()->queryBuilder('users')->whereBetween('age', [1, 10])->getRawSql();
+        $sql = Qb::table('users')->whereBetween('age', [1, 10])->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` WHERE `age` BETWEEN 1 AND 10', $sql);
     }
 
     public function testOrWhereBetween()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereBetween('age', [1, 10])->getRawSql();
 
@@ -221,14 +228,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereNotBetween()
     {
-        $sql = wei()->queryBuilder('users')->whereNotBetween('age', [1, 10])->getRawSql();
+        $sql = Qb::table('users')->whereNotBetween('age', [1, 10])->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` WHERE `age` NOT BETWEEN 1 AND 10', $sql);
     }
 
     public function testOrWhereNotBetween()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereNotBetween('age', [1, 10])->getRawSql();
 
@@ -237,14 +244,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereIn()
     {
-        $sql = wei()->queryBuilder('users')->whereIn('age', [1, 10])->getRawSql();
+        $sql = Qb::table('users')->whereIn('age', [1, 10])->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IN (1, 10)', $sql);
     }
 
     public function testOrWhereIn()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereIn('age', [1, 10])->getRawSql();
 
@@ -253,14 +260,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereNotIn()
     {
-        $sql = wei()->queryBuilder('users')->whereNotIn('age', [1, 10])->getRawSql();
+        $sql = Qb::table('users')->whereNotIn('age', [1, 10])->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` WHERE `age` NOT IN (1, 10)', $sql);
     }
 
     public function testOrWhereNotIn()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereNotIn('age', [1, 10])->getRawSql();
 
@@ -269,14 +276,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereNull()
     {
-        $sql = wei()->queryBuilder('users')->whereNull('age')->getRawSql();
+        $sql = Qb::table('users')->whereNull('age')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IS NULL', $sql);
     }
 
     public function testOrWhereNull()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereNull('age')->getRawSql();
 
@@ -285,14 +292,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereNotNull()
     {
-        $sql = wei()->queryBuilder('users')->whereNotNULL('age')->getRawSql();
+        $sql = Qb::table('users')->whereNotNULL('age')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IS NOT NULL', $sql);
     }
 
     public function testOrWhereNotNull()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereNotNull('age')->getRawSql();
 
@@ -301,14 +308,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereDate()
     {
-        $sql = wei()->queryBuilder('users')->whereDate('created_at', '2020-02-02')->getRawSql();
+        $sql = Qb::table('users')->whereDate('created_at', '2020-02-02')->getRawSql();
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE DATE(`created_at`) = '2020-02-02'", $sql);
     }
 
     public function testOrWhereDate()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereDate('created_at', '2020-02-02')
             ->getRawSql();
@@ -318,7 +325,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereMonth()
     {
-        $sql = wei()->queryBuilder('users')->whereMonth('created_at', '2')
+        $sql = Qb::table('users')->whereMonth('created_at', '2')
             ->getRawSql();
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE MONTH(`created_at`) = '2'", $sql);
@@ -326,7 +333,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereMonth()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereMonth('created_at', '2')
             ->getRawSql();
@@ -336,14 +343,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereDay()
     {
-        $sql = wei()->queryBuilder('users')->whereDay('created_at', '2')->getRawSql();
+        $sql = Qb::table('users')->whereDay('created_at', '2')->getRawSql();
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE DAY(`created_at`) = '2'", $sql);
     }
 
     public function testOrWhereDay()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereDay('created_at', '2')
             ->getRawSql();
@@ -353,14 +360,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereYear()
     {
-        $sql = wei()->queryBuilder('users')->whereYear('created_at', '2020')->getRawSql();
+        $sql = Qb::table('users')->whereYear('created_at', '2020')->getRawSql();
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE YEAR(`created_at`) = '2020'", $sql);
     }
 
     public function testOrWhereYear()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereYear('created_at', '2020')
             ->getRawSql();
@@ -370,14 +377,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereTime()
     {
-        $sql = wei()->queryBuilder('users')->whereTime('created_at', '20:20:20')->getRawSql();
+        $sql = Qb::table('users')->whereTime('created_at', '20:20:20')->getRawSql();
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE TIME(`created_at`) = '20:20:20'", $sql);
     }
 
     public function testOrWhereTime()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereTime('created_at', '20:20:20')
             ->getRawSql();
@@ -387,7 +394,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereColumn()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->whereColumn('created_at', 'updated_at')
             ->getRawSql();
 
@@ -396,7 +403,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereColumn()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->where('name', 'twin')
             ->orWhereColumn('created_at', 'updated_at')
             ->getRawSql();
@@ -406,7 +413,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereContains()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->whereContains('name', 'twin')
             ->getRawSql();
 
@@ -415,7 +422,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereContains()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->whereContains('name', 'twin')
             ->orWhereContains('email', 'twin')
             ->getRawSql();
@@ -425,7 +432,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereNotContains()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->whereNotContains('name', 'twin')
             ->getRawSql();
 
@@ -434,7 +441,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereNotContains()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->whereNotContains('name', 'twin')
             ->orWhereNotContains('email', 'twin')
             ->getRawSql();
@@ -445,21 +452,21 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrderBy()
     {
-        $sql = wei()->queryBuilder('users')->orderBy('id')->getRawSql();
+        $sql = Qb::table('users')->orderBy('id')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` ASC', $sql);
     }
 
     public function testOrderByDesc()
     {
-        $sql = wei()->queryBuilder('users')->orderBy('id', 'DESC')->getRawSql();
+        $sql = Qb::table('users')->orderBy('id', 'DESC')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` DESC', $sql);
     }
 
     public function testOrderByMultiple()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->orderBy('created_at', 'DESC')
             ->orderBy('id', 'ASC')
             ->getRawSql();
@@ -469,14 +476,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testAsc()
     {
-        $sql = wei()->queryBuilder('users')->asc('id')->getRawSql();
+        $sql = Qb::table('users')->asc('id')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` ASC', $sql);
     }
 
     public function testDesc()
     {
-        $sql = wei()->queryBuilder('users')->desc('id')->getRawSql();
+        $sql = Qb::table('users')->desc('id')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` DESC', $sql);
     }
@@ -485,26 +492,26 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->expectExceptionObject(new \InvalidArgumentException('Parameter for "order" must be "ASC" or "DESC".'));
 
-        wei()->queryBuilder('users')->orderBy('id', 'as');
+        Qb::table('users')->orderBy('id', 'as');
     }
 
     public function testGroupBy()
     {
-        $sql = wei()->queryBuilder('users')->groupBy('group_id')->getRawSql();
+        $sql = Qb::table('users')->groupBy('group_id')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id`', $sql);
     }
 
     public function testGroupByMultiply()
     {
-        $sql = wei()->queryBuilder('users')->groupBy('group_id', 'type')->getRawSql();
+        $sql = Qb::table('users')->groupBy('group_id', 'type')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id`, `type`', $sql);
     }
 
     public function testHaving()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->groupBy('group_id')
             ->having('id', '>', 1)
             ->getRawSql();
@@ -514,7 +521,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testHavingMultiply()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->groupBy('group_id')
             ->having('id', '>', 1)
             ->having('type', 1)
@@ -525,14 +532,14 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testHavingRaw()
     {
-        $qb = wei()->queryBuilder('users')->havingRaw('name = ?', 'twin');
+        $qb = Qb::table('users')->havingRaw('name = ?', 'twin');
 
         $this->assertEquals("SELECT * FROM `p_users` HAVING name = 'twin'", $qb->getRawSql());
     }
 
     public function testOrHaving()
     {
-        $sql = wei()->queryBuilder('users')
+        $sql = Qb::table('users')
             ->having('name', 'twin')
             ->orHaving('email', '!=', 'twin@example.com')
             ->getRawSql();
@@ -543,42 +550,42 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testLimit()
     {
-        $sql = wei()->queryBuilder('users')->limit(1)->getRawSql();
+        $sql = Qb::table('users')->limit(1)->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` LIMIT 1', $sql);
     }
 
     public function testOffset()
     {
-        $sql = wei()->queryBuilder('users')->offset(1)->getRawSql();
+        $sql = Qb::table('users')->offset(1)->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` OFFSET 1', $sql);
     }
 
     public function testLimitOffset()
     {
-        $sql = wei()->queryBuilder('users')->limit(2)->offset(1)->getRawSql();
+        $sql = Qb::table('users')->limit(2)->offset(1)->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` LIMIT 2 OFFSET 1', $sql);
     }
 
     public function testPageLimit()
     {
-        $sql = wei()->queryBuilder('users')->page(3)->limit(3)->getRawSql();
+        $sql = Qb::table('users')->page(3)->limit(3)->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` LIMIT 3 OFFSET 6', $sql);
     }
 
     public function testLimitPage()
     {
-        $sql = wei()->queryBuilder('users')->limit(3)->page(3)->getRawSql();
+        $sql = Qb::table('users')->limit(3)->page(3)->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users` LIMIT 3 OFFSET 6', $sql);
     }
 
     public function testWhen()
     {
-        $sql = wei()->queryBuilder('users')->when('twin', function (QueryBuilder $qb, $value) {
+        $sql = Qb::table('users')->when('twin', function (Qb $qb, $value) {
             $qb->where('name', $value);
         })->getRawSql();
 
@@ -587,7 +594,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhenFalse()
     {
-        $sql = wei()->queryBuilder('users')->when(false, function (QueryBuilder $qb, $value) {
+        $sql = Qb::table('users')->when(false, function (Qb $qb, $value) {
             $qb->where('name', $value);
         })->getRawSql();
 
@@ -596,9 +603,9 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhenDefault()
     {
-        $sql = wei()->queryBuilder('users')->when(false, function (QueryBuilder $qb, $value) {
+        $sql = Qb::table('users')->when(false, function (Qb $qb, $value) {
             $qb->where('name', $value);
-        }, function (QueryBuilder $qb, $value) {
+        }, function (Qb $qb, $value) {
             $qb->where('type', 0);
         })->getRawSql();
 
@@ -607,7 +614,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testUnless()
     {
-        $sql = wei()->queryBuilder('users')->unless(false, function (QueryBuilder $qb, $value) {
+        $sql = Qb::table('users')->unless(false, function (Qb $qb, $value) {
             $qb->where('name', 'twin');
         })->getRawSql();
 
@@ -616,7 +623,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testUnlessTrue()
     {
-        $sql = wei()->queryBuilder('users')->unless(true, function (QueryBuilder $qb, $value) {
+        $sql = Qb::table('users')->unless(true, function (Qb $qb, $value) {
             $qb->where('name', $value);
         })->getRawSql();
 
@@ -625,9 +632,9 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testUnlessDefault()
     {
-        $sql = wei()->queryBuilder('users')->unless(true, function (QueryBuilder $qb, $value) {
+        $sql = Qb::table('users')->unless(true, function (Qb $qb, $value) {
             $qb->where('name', $value);
-        }, function (QueryBuilder $qb, $value) {
+        }, function (Qb $qb, $value) {
             $qb->where('type', 0);
         })->getRawSql();
 
@@ -638,7 +645,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = wei()->queryBuilder('users')->where('id', 1)->fetch();
+        $data = Qb::table('users')->where('id', 1)->fetch();
         $this->assertIsArray($data);
         $this->assertEquals('1', $data['id']);
     }
@@ -647,7 +654,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = wei()->queryBuilder('users')->fetchAll();
+        $data = Qb::table('users')->fetchAll();
 
         $this->assertIsArray($data);
         $this->assertEquals('1', $data[0]['group_id']);

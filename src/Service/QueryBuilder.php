@@ -28,6 +28,11 @@ class QueryBuilder extends Base
     const STATE_CLEAN = 1;
 
     /**
+     * @var bool
+     */
+    protected static $createNewInstance = true;
+
+    /**
      * The record table name
      *
      * @var string
@@ -338,8 +343,9 @@ class QueryBuilder extends Base
      *
      * @param integer $offset The first result to return
      * @return $this
+     * @api
      */
-    public function offset($offset)
+    protected function offset($offset)
     {
         $offset = (int) $offset;
         $offset < 0 && $offset = 0;
@@ -351,8 +357,9 @@ class QueryBuilder extends Base
      *
      * @param integer $limit The maximum number of results to retrieve
      * @return $this
+     * @api
      */
-    public function limit($limit)
+    protected function limit($limit)
     {
         $limit = max(1, (int) $limit);
         $this->add('limit', $limit);
@@ -370,8 +377,9 @@ class QueryBuilder extends Base
      *
      * @param int $page The page number
      * @return $this
+     * @api
      */
-    public function page($page)
+    protected function page($page)
     {
         $page = max(1, (int) $page);
         $this->add('page', $page);
@@ -390,8 +398,9 @@ class QueryBuilder extends Base
      *
      * @param string|array $columns The selection expressions.
      * @return $this
+     * @api
      */
-    public function select($columns = ['*']): self
+    protected function select($columns = ['*']): self
     {
         $this->type = self::SELECT;
 
@@ -409,13 +418,23 @@ class QueryBuilder extends Base
         return $this->add('distinct', $distinct);
     }
 
-    public function selectDistinct($columns)
+    /**
+     * @param $columns
+     * @return $this
+     * @api
+     */
+    protected function selectDistinct($columns)
     {
         $this->distinct(true);
         return $this->select(func_get_args());
     }
 
-    public function selectRaw($expression)
+    /**
+     * @param string $expression
+     * @return $this
+     * @api
+     */
+    protected function selectRaw($expression)
     {
         $this->type = self::SELECT;
 
@@ -428,8 +447,9 @@ class QueryBuilder extends Base
      *
      * @param string|array $columns
      * @return $this
+     * @api
      */
-    public function selectExcept($columns)
+    protected function selectExcept($columns)
     {
         $columns = array_diff($this->getFields(), is_array($columns) ? $columns : [$columns]);
 
@@ -446,8 +466,9 @@ class QueryBuilder extends Base
      *
      * @param string $from The table
      * @return $this
+     * @api
      */
-    public function from($from)
+    protected function from($from)
     {
         $pos = strpos($from, ' ');
         if (false !== $pos) {
@@ -460,13 +481,24 @@ class QueryBuilder extends Base
     }
 
     /**
+     * @param string $table
+     * @return $this
+     * @api
+     */
+    protected function table(string $table): self
+    {
+        return $this->from($table);
+    }
+
+    /**
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
      * @param string $on The condition for the join
      * @return $this
+     * @api
      */
-    public function join($table, $on = null)
+    protected function join($table, $on = null)
     {
         return $this->innerJoin($table, $on);
     }
@@ -477,8 +509,9 @@ class QueryBuilder extends Base
      * @param string $table The table name to join
      * @param string $on The condition for the join
      * @return $this
+     * @api
      */
-    public function innerJoin($table, $on = null)
+    protected function innerJoin($table, $on = null)
     {
         return $this->add('join', array('type' => 'inner', 'table' => $table, 'on' => $on), true);
     }
@@ -489,8 +522,9 @@ class QueryBuilder extends Base
      * @param string $table The table name to join
      * @param string $on The condition for the join
      * @return $this
+     * @api
      */
-    public function leftJoin($table, $on = null)
+    protected function leftJoin($table, $on = null)
     {
         return $this->add('join', array('type' => 'left', 'table' => $table, 'on' => $on), true);
     }
@@ -501,8 +535,9 @@ class QueryBuilder extends Base
      * @param string $table The table name to join
      * @param string $on The condition for the join
      * @return $this
+     * @api
      */
-    public function rightJoin($table, $on = null)
+    protected function rightJoin($table, $on = null)
     {
         return $this->add('join', array('type' => 'right', 'table' => $table, 'on' => $on), true);
     }
@@ -522,8 +557,9 @@ class QueryBuilder extends Base
      * @param null $operator
      * @param null $value
      * @return $this
+     * @api
      */
-    public function where($column, $operator = null, $value = null)
+    protected function where($column, $operator = null, $value = null)
     {
         if (is_array($column)) {
             foreach ($column as $arg) {
@@ -540,7 +576,13 @@ class QueryBuilder extends Base
         return $this->addWhere($column, $operator, $value, 'AND');
     }
 
-    public function whereRaw($expression, $params = [])
+    /**
+     * @param string $expression
+     * @param array $params
+     * @return $this
+     * @api
+     */
+    protected function whereRaw($expression, $params = [])
     {
         return $this->where($this->raw($expression), null, $params);
     }
@@ -576,17 +618,29 @@ class QueryBuilder extends Base
         return $this->orWhere($this->raw($expression), null, $params);
     }
 
-    public function whereBetween($column, array $params)
+    /**
+     * @param $column
+     * @param array $params
+     * @return $this
+     * @api
+     */
+    protected function whereBetween($column, array $params)
     {
         return $this->addWhere($column, 'BETWEEN', $params);
     }
 
-    public function orWhereBetween($column, array $params)
+    protected function orWhereBetween($column, array $params)
     {
         return $this->addWhere($column, 'BETWEEN', $params, 'OR');
     }
 
-    public function whereNotBetween($column, array $params)
+    /**
+     * @param $column
+     * @param array $params
+     * @return $this
+     * @api
+     */
+    protected function whereNotBetween($column, array $params)
     {
         return $this->addWhere($column, 'NOT BETWEEN', $params);
     }
@@ -596,7 +650,13 @@ class QueryBuilder extends Base
         return $this->addWhere($column, 'NOT BETWEEN', $params, 'OR');
     }
 
-    public function whereIn($column, array $params)
+    /**
+     * @param $column
+     * @param array $params
+     * @return $this
+     * @api
+     */
+    protected function whereIn($column, array $params)
     {
         return $this->addWhere($column, 'IN', $params);
     }
@@ -606,7 +666,13 @@ class QueryBuilder extends Base
         return $this->addWhere($column, 'IN', $params, 'OR');
     }
 
-    public function whereNotIn($column, array $params)
+    /**
+     * @param $column
+     * @param array $params
+     * @return $this
+     * @api
+     */
+    protected function whereNotIn($column, array $params)
     {
         return $this->addWhere($column, 'NOT IN', $params);
     }
@@ -616,7 +682,12 @@ class QueryBuilder extends Base
         return $this->addWhere($column, 'NOT IN', $params, 'OR');
     }
 
-    public function whereNull($column)
+    /**
+     * @param $column
+     * @return $this
+     * @api
+     */
+    protected function whereNull($column)
     {
         return $this->addWhere($column, 'NULL');
     }
@@ -626,7 +697,12 @@ class QueryBuilder extends Base
         return $this->addWhere($column, 'NULL', null, 'OR');
     }
 
-    public function whereNotNULL($column)
+    /**
+     * @param $column
+     * @return $this
+     * @api
+     */
+    protected function whereNotNULL($column)
     {
         return $this->addWhere($column, 'NOT NULL');
     }
@@ -636,7 +712,14 @@ class QueryBuilder extends Base
         return $this->addWhere($column, 'NOT NULL', null, 'OR');
     }
 
-    public function whereDate($column, $opOrValue, $value = null)
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    protected function whereDate($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'DATE');
     }
@@ -646,7 +729,14 @@ class QueryBuilder extends Base
         return $this->addWhereArgs(func_get_args(), 'OR', 'DATE');
     }
 
-    public function whereMonth($column, $opOrValue, $value = null)
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    protected function whereMonth($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'MONTH');
     }
@@ -656,7 +746,14 @@ class QueryBuilder extends Base
         return $this->addWhereArgs(func_get_args(), 'OR', 'MONTH');
     }
 
-    public function whereDay($column, $opOrValue, $value = null)
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    protected function whereDay($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'DAY');
     }
@@ -666,7 +763,14 @@ class QueryBuilder extends Base
         return $this->addWhereArgs(func_get_args(), 'OR', 'DAY');
     }
 
-    public function whereYear($column, $opOrValue, $value = null)
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    protected function whereYear($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'YEAR');
     }
@@ -676,7 +780,14 @@ class QueryBuilder extends Base
         return $this->addWhereArgs(func_get_args(), 'OR', 'YEAR');
     }
 
-    public function whereTime($column, $opOrValue, $value = null)
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    protected function whereTime($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'TIME');
     }
@@ -686,7 +797,14 @@ class QueryBuilder extends Base
         return $this->addWhereArgs(func_get_args(), 'OR', 'TIME');
     }
 
-    public function whereColumn($column, $opOrColumn2, $column2 = null)
+    /**
+     * @param $column
+     * @param $opOrColumn2
+     * @param null $column2
+     * @return $this
+     * @api
+     */
+    protected function whereColumn($column, $opOrColumn2, $column2 = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'COLUMN');
     }
@@ -703,8 +821,9 @@ class QueryBuilder extends Base
      * @param string $value
      * @param string $condition
      * @return $this
+     * @api
      */
-    public function whereContains($column, $value, string $condition = 'AND')
+    protected function whereContains($column, $value, string $condition = 'AND')
     {
         return $this->addWhere($column, 'LIKE', '%' . $value . '%', $condition);
     }
@@ -714,7 +833,14 @@ class QueryBuilder extends Base
         return $this->whereContains($column, $value, 'OR');
     }
 
-    public function whereNotContains($column, $value, string $condition = 'OR')
+    /**
+     * @param $column
+     * @param $value
+     * @param string $condition
+     * @return $this
+     * @api
+     */
+    protected function whereNotContains($column, $value, string $condition = 'OR')
     {
         return $this->addWhere($column, 'NOT LIKE', '%' . $value . '%', $condition);
     }
@@ -730,8 +856,9 @@ class QueryBuilder extends Base
      *
      * @param mixed $column The grouping column.
      * @return $this
+     * @api
      */
-    public function groupBy($column)
+    protected function groupBy($column)
     {
         $column = is_array($column) ? $column : func_get_args();
         return $this->add('groupBy', $column, true);
@@ -745,8 +872,9 @@ class QueryBuilder extends Base
      * @param array $params The condition parameters
      * @param array $types The parameter types
      * @return $this
+     * @api
      */
-    public function having($column, $operator, $value = null, $condition = 'AND')
+    protected function having($column, $operator, $value = null, $condition = 'AND')
     {
         if (func_num_args() === 2) {
             $value = $operator;
@@ -759,6 +887,12 @@ class QueryBuilder extends Base
         return $this;
     }
 
+    /**
+     * @param $expression
+     * @param array $params
+     * @return $this
+     * @api
+     */
     public function havingRaw($expression, $params = [])
     {
         return $this->having($this->raw($expression), null, $params);
@@ -789,8 +923,9 @@ class QueryBuilder extends Base
      * @param string $column The ordering expression.
      * @param string $order The ordering direction.
      * @return $this
+     * @api
      */
-    public function orderBy($column, $order = 'ASC')
+    protected function orderBy($column, $order = 'ASC')
     {
         $order = strtoupper($order);
         if (!in_array($order, ['ASC', 'DESC'])) {
@@ -805,8 +940,9 @@ class QueryBuilder extends Base
      *
      * @param string $field The name of field
      * @return $this
+     * @api
      */
-    public function desc($field)
+    protected function desc($field)
     {
         return $this->orderBy($field, 'DESC');
     }
@@ -816,8 +952,9 @@ class QueryBuilder extends Base
      *
      * @param string $field The name of field
      * @return $this
+     * @api
      */
-    public function asc($field)
+    protected function asc($field)
     {
         return $this->orderBy($field, 'ASC');
     }
@@ -1080,16 +1217,18 @@ class QueryBuilder extends Base
 
     /**
      * @return $this
+     * @api
      */
-    public function forUpdate()
+    protected function forUpdate()
     {
         return $this->lock(true);
     }
 
     /**
      * @return $this
+     * @api
      */
-    public function forShare()
+    protected function forShare()
     {
         return $this->lock(false);
     }
@@ -1097,8 +1236,9 @@ class QueryBuilder extends Base
     /**
      * @param string $lock
      * @return $this
+     * @api
      */
-    public function lock($lock)
+    protected function lock($lock)
     {
         $this->sqlParts['lock'] = $lock;
 
@@ -1110,8 +1250,9 @@ class QueryBuilder extends Base
      * @param callable $callback
      * @param callable|null $default
      * @return $this
+     * @api
      */
-    public function when($value, $callback, callable $default = null)
+    protected function when($value, $callback, callable $default = null)
     {
         if ($value) {
             $callback($this, $value);
@@ -1126,8 +1267,9 @@ class QueryBuilder extends Base
      * @param callable $callback
      * @param callable|null $default
      * @return $this
+     * @api
      */
-    public function unless($value, callable $callback, callable $default = null)
+    protected function unless($value, callable $callback, callable $default = null)
     {
         if (!$value) {
             $callback($this, $value);
