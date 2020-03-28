@@ -2,7 +2,6 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\AppModel;
 use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Miaoxing\Services\Service\ServiceTrait;
@@ -95,7 +94,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $users = User::findAll();
+        $users = User::findAll([1, 2]);
 
         $this->assertEquals(2, $users->length());
         $this->assertEquals(1, $users[0]->id);

@@ -863,11 +863,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Executes the generated SQL and returns the found record collection object or false
      *
-     * @param mixed $ids
+     * @param array $ids
      * @return $this|$this[]
      * @api
      */
-    protected function findAll($ids = [])
+    protected function findAll($ids)
     {
         return $this->findAllBy($this->primaryKey, 'IN', $ids);
     }
