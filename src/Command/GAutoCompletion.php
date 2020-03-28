@@ -104,6 +104,7 @@ PHP;
         $file = new PhpFile();
         $printer = new PsrPrinter;
         $content = '';
+        $dynamic = '';
 
         foreach ($services as $name => $serviceClass) {
             $refClass = new ReflectionClass($serviceClass);
@@ -111,12 +112,19 @@ PHP;
             $namespace = $file->addNamespace($refClass->getNamespaceName());
 
             $class = new ClassType($refClass->getShortName());
+            // NOTE: 如果增加了继承，Service目录之外的子类没有代码提示（如果还无效不断重启直到生效）
+            //$class->addExtend($refClass->getParentClass()->getName());
 
             $staticClass = clone $class;
 
             $methods = [];
             $staticMethods = [];
             foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
+                // NOTE: 如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
+                /*if ($refMethod->getDeclaringClass()->getName() !== $serviceClass) {
+                    continue;
+                }*/
+
                 if ($this->isApi($refMethod)) {
                     // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
                     $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
@@ -135,19 +143,22 @@ PHP;
                 $content .= $printer->printClass($class, $namespace);
             }
             if ($staticMethods) {
-                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass,
-                        $namespace))) . "\n}\n";
+                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass, $namespace))) . "\n}\n";
+                // NOTE: 分多个文件反而出现第二，三级的子类(例如AppModel)没有代码提示，魔术方法识别失败等问题
+                //$dynamic .= $printer->printClass($staticClass, $namespace);
             }
         }
 
-        if (!$content) {
+        if (!$content && !$dynamic) {
             $this->suc('API method not found!');
             return;
         }
 
         $content = $printer->printFile($file) . "\n" . $content;
+        //$dynamic = $printer->printFile($file) . $dynamic;
 
         $this->createFile($plugin->getBasePath() . '/docs/auto-completion-static.php', $content);
+        //$this->createFile($plugin->getBasePath() . '/docs/auto-completion-dynamic.php', $dynamic);
     }
 
     /**
