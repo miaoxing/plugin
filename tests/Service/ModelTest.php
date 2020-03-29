@@ -1244,23 +1244,23 @@ class ModelTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testisChanged()
+    public function testIsChanged()
     {
         $this->initFixtures();
 
-        $user = $this->db->init('users');
+        $user = User::new();
         $this->assertFalse($user->isChanged());
 
-        $user['name'] = 'tt';
-        $user['group_id'] = '1';
-        $user['address'] = 'address';
+        $user->name = 'tt';
+        $user->groupId = '1';
+        $user->address = 'address';
         $this->assertFalse($user->isChanged('id'));
         $this->assertTrue($user->isChanged('name'));
         $this->assertTrue($user->isChanged());
 
         $this->assertNull($user->getChangedData('name'));
 
-        $user['name'] = 'aa';
+        $user->name = 'aa';
         $this->assertTrue($user->isChanged());
         $this->assertEquals('tt', $user->getChangedData('name'));
 
