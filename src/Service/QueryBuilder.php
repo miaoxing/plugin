@@ -73,6 +73,7 @@ class QueryBuilder extends Base
         'offset' => null,
         'page' => null,
         'lock' => '',
+        'aggregate' => null,
     ];
 
     /**
@@ -308,6 +309,18 @@ class QueryBuilder extends Base
     {
         $this->where(...func_get_args());
         return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
+    }
+
+    public function max($column)
+    {
+        return $this->aggregate('MAX', $column);
+    }
+
+    public function aggregate($function, $columns = ['*'])
+    {
+        $this->add('aggregate', compact('function', 'columns'));
+        $result = $this->fetch();
+        return $result ? current($result) : null;
     }
 
     /**

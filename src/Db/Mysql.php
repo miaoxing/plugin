@@ -82,17 +82,21 @@ class Mysql extends BaseDriver
             $query .= 'DISTINCT ';
         }
 
-        $selects = [];
-        foreach ($parts['select'] as $as => $select) {
-            if ($this->isRaw($select)) {
-                $selects[] = $this->getRawValue($select);
-            } elseif (is_string($as)) {
-                $selects[] = $this->wrap($as) . ' AS ' . $this->wrap($select);
-            } else {
-                $selects[] = $select === '*' ? '*' : $this->wrap($select);
+        if ($parts['aggregate']) {
+            $query .= $parts['aggregate']['function'] . '(' . $this->wrap($parts['aggregate']['columns']) . ')';
+        } else {
+            $selects = [];
+            foreach ($parts['select'] as $as => $select) {
+                if ($this->isRaw($select)) {
+                    $selects[] = $this->getRawValue($select);
+                } elseif (is_string($as)) {
+                    $selects[] = $this->wrap($as) . ' AS ' . $this->wrap($select);
+                } else {
+                    $selects[] = $select === '*' ? '*' : $this->wrap($select);
+                }
             }
+            $query .= implode(', ', $selects);
         }
-        $query .= implode(', ', $selects);
 
         $query .= ' FROM ' . $this->wrap($this->getFrom());
 
