@@ -267,6 +267,26 @@ class QueryBuilder extends Base
     }
 
     /**
+     * Executes the generated SQL and returns the found record object or null if not found
+     *
+     * @return array|null
+     * @api
+     */
+    protected function first()
+    {
+        return $this->fetch();
+    }
+
+    /**
+     * @return array|null
+     * @api
+     */
+    protected function all()
+    {
+        return $this->fetchAll();
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array

@@ -2261,6 +2261,24 @@ if (0) {
 class QueryBuilder
 {
     /**
+     * Executes the generated SQL and returns the found record object or null if not found
+     *
+     * @return array|null
+     * @api
+     */
+    public function first()
+    {
+    }
+
+    /**
+     * @return array|null
+     * @api
+     */
+    public function all()
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -2704,6 +2722,24 @@ class QueryBuilder
 if (0) {
     class QueryBuilder
     {
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return array|null
+         * @api
+         */
+        public static function first()
+        {
+        }
+    
+        /**
+         * @return array|null
+         * @api
+         */
+        public static function all()
+        {
+        }
+    
         /**
          * @param string $column
          * @param string|null $index

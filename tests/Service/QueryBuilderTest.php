@@ -660,6 +660,25 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('1', $data[0]['group_id']);
     }
 
+    public function testFirst()
+    {
+        $this->initFixtures();
+
+        $data = Qb::table('users')->where('id', 1)->first();
+        $this->assertIsArray($data);
+        $this->assertEquals('1', $data['id']);
+    }
+
+    public function testAll()
+    {
+        $this->initFixtures();
+
+        $data = Qb::table('users')->all();
+
+        $this->assertIsArray($data);
+        $this->assertEquals('1', $data[0]['group_id']);
+    }
+
     public function testPluck()
     {
         $this->initFixtures();
