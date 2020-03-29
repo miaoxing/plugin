@@ -202,6 +202,17 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Create a new model object
+     *
+     * @param array $data
+     * @return $this
+     */
+    public static function new($data = [])
+    {
+        return static::newInstance()->fromArray($data);
+    }
+
+    /**
      * Return the record table name
      *
      * @return string
