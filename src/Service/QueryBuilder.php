@@ -581,8 +581,12 @@ class QueryBuilder extends Base
     protected function where($column, $operator = null, $value = null)
     {
         if (is_array($column)) {
-            foreach ($column as $arg) {
-                $this->where(...$arg);
+            foreach ($column as $key => $args) {
+                if (is_string($key)) {
+                    $this->where($key, '=', $args);
+                } else {
+                    $this->where(...$args);
+                }
             }
             return $this;
         }

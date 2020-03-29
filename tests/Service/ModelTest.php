@@ -46,6 +46,7 @@ class ModelTest extends BaseTestCase
 
         $user = User::find(1);
 
+        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 1 LIMIT 1', $user->getRawSql());
         $this->assertEquals('1', $user->id);
     }
 
@@ -64,6 +65,7 @@ class ModelTest extends BaseTestCase
 
         $user = User::find('not-exists');
 
+        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = ? LIMIT 1', $this->db->getLastQuery());
         $this->assertNull($user);
     }
 
@@ -71,9 +73,11 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = User::findOrInit('3', [
+        $user = User::findOrInit(3, [
             'name' => 'name',
         ]);
+
+        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
         $this->assertTrue($user->isNew());
         $this->assertFalse($user->isDestroyed());
     }
@@ -83,9 +87,9 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         // The init data may from request, contains key like id, name
-        // TODO find by array ['id' => 3, 'name' => 'tom']
         $user = User::findOrInitBy('id', 3, ['name' => 'name', 'id' => '5']);
 
+        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
         $this->assertEquals(3, $user->id);
         $this->assertEquals('name', $user->name);
     }
@@ -96,8 +100,79 @@ class ModelTest extends BaseTestCase
 
         $users = User::findAll([1, 2]);
 
+        $this->assertSame('SELECT * FROM `p_users` WHERE `id` IN (1, 2)', $users->getRawSql());
         $this->assertEquals(2, $users->length());
         $this->assertEquals(1, $users[0]->id);
+    }
+
+    public function testFindBy()
+    {
+        $this->initFixtures();
+
+        $user = User::findBy('name', 'twin');
+
+        $this->assertSame("SELECT * FROM `p_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
+        $this->assertEquals(1, $user->id);
+    }
+
+    public function testFindByOperator()
+    {
+        $this->initFixtures();
+
+        $user = User::findBy('id', '>', 1);
+
+        $this->assertSame('SELECT * FROM `p_users` WHERE `id` > 1 LIMIT 1', $user->getRawSql());
+        $this->assertEquals(2, $user->id);
+    }
+
+    public function testFindAllBy()
+    {
+        $this->initFixtures();
+
+        $users = User::findAllBy('id', '>', 1);
+
+        $this->assertSame('SELECT * FROM `p_users` WHERE `id` > 1', $users->getRawSql());
+        $this->assertSame('2', $users[0]->id);
+        $this->assertSame('test', $users[0]->name);
+    }
+
+    public function testFindOrInitBy()
+    {
+        $this->initFixtures();
+
+        // The init data may from request, contains key like id, name
+        $user = User::findOrInitBy(['id' => 3, 'name' => 'tom'], ['name' => 'name', 'id' => '5']);
+
+        $this->assertSame("SELECT * FROM `p_users` WHERE `id` = 3 AND `name` = 'tom' LIMIT 1", $user->getRawSql());
+        $this->assertSame(3, $user->id);
+        $this->assertSame('name', $user->name);
+    }
+
+    public function testFindByOrFail()
+    {
+        $this->initFixtures();
+
+        $this->expectExceptionObject(new \Exception('Record not found', 404));
+
+        User::findByOrFail('name', 'not-exists');
+    }
+
+    public function testFirst()
+    {
+        $this->initFixtures();
+
+        $user = User::first();
+
+        $this->assertSame('1', $user->id);
+    }
+
+    public function testAll()
+    {
+        $this->initFixtures();
+
+        $users = User::all();
+
+        $this->assertSame(2, $users->length());
     }
 
     public function testModelSave()
@@ -1098,15 +1173,6 @@ class ModelTest extends BaseTestCase
         $user2->reload();
         $this->assertEquals($user->groupId, $user2->groupId);
         $this->assertEquals(2, $user2->getLoadTimes());
-    }
-
-    public function testFirst()
-    {
-        $this->initFixtures();
-
-        $user = User::first();
-
-        $this->assertEquals(1, $user->id);
     }
 
     public function testFindOne()

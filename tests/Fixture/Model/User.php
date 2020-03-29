@@ -6,6 +6,7 @@ use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property string id
+ * @property string name
  * @property string groupId
  * @property string address
  */

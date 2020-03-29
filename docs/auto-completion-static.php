@@ -73,13 +73,12 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param null $value
+     * @param $attributes
      * @param array $data
      * @return $this
      * @api
      */
-    public function findOrInitBy($column, $value = null, $data = [])
+    public function findOrInitBy($attributes, $data = [])
     {
     }
 
@@ -638,13 +637,12 @@ if (0) {
         }
     
         /**
-         * @param $column
-         * @param null $value
+         * @param $attributes
          * @param array $data
          * @return $this
          * @api
          */
-        public static function findOrInitBy($column, $value = null, $data = [])
+        public static function findOrInitBy($attributes, $data = [])
         {
         }
     
@@ -1203,13 +1201,12 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param null $value
+     * @param $attributes
      * @param array $data
      * @return $this
      * @api
      */
-    public function findOrInitBy($column, $value = null, $data = [])
+    public function findOrInitBy($attributes, $data = [])
     {
     }
 
@@ -1768,13 +1765,12 @@ if (0) {
         }
     
         /**
-         * @param $column
-         * @param null $value
+         * @param $attributes
          * @param array $data
          * @return $this
          * @api
          */
-        public static function findOrInitBy($column, $value = null, $data = [])
+        public static function findOrInitBy($attributes, $data = [])
         {
         }
     

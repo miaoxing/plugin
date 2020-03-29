@@ -844,7 +844,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function findOrInit($id = null, $data = [])
     {
-        return $this->findOrInitBy($this->primaryKey, $id, $data);
+        return $this->findOrInitBy([$this->primaryKey => $id], $data);
     }
 
     /**
@@ -916,15 +916,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param $column
-     * @param null $value
+     * @param $attributes
      * @param array $data
      * @return $this
      * @api
      */
-    protected function findOrInitBy($column, $value = null, $data = [])
+    protected function findOrInitBy($attributes, $data = [])
     {
-        if (!$this->findBy($column, $value)) {
+        if (!$this->findBy($attributes)) {
             // Reset status when record not found
             $this->isNew = true;
 
@@ -933,7 +932,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 $data = $data->toArray();
             }
 
-            $this->setData([$column => $value]);
+            $this->setData($attributes);
             $this->fromArray($data);
         }
         return $this;
@@ -951,7 +950,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function findByOrFail($column, $operator = null, $value = null)
     {
-        if ($this->findBy($column, $operator, $value)) {
+        if ($this->findBy(...func_get_args())) {
             return $this;
         } else {
             throw new \Exception('Record not found', 404);
