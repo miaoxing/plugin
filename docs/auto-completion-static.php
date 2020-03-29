@@ -115,22 +115,22 @@ class AppModel
     }
 
     /**
-     * @param int $count
-     * @param callable $callback
-     * @return bool
-     * @api
-     */
-    public function chunk(int $count, callable $callback)
-    {
-    }
-
-    /**
      * @param string $column
      * @param string|null $index
      * @return array
      * @api
      */
     public function pluck(string $column, string $index = null)
+    {
+    }
+
+    /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @api
+     */
+    public function chunk(int $count, callable $callback)
     {
     }
 
@@ -679,22 +679,22 @@ if (0) {
         }
     
         /**
-         * @param int $count
-         * @param callable $callback
-         * @return bool
-         * @api
-         */
-        public static function chunk(int $count, callable $callback)
-        {
-        }
-    
-        /**
          * @param string $column
          * @param string|null $index
          * @return array
          * @api
          */
         public static function pluck(string $column, string $index = null)
+        {
+        }
+    
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @api
+         */
+        public static function chunk(int $count, callable $callback)
         {
         }
     
@@ -1243,22 +1243,22 @@ class Model
     }
 
     /**
-     * @param int $count
-     * @param callable $callback
-     * @return bool
-     * @api
-     */
-    public function chunk(int $count, callable $callback)
-    {
-    }
-
-    /**
      * @param string $column
      * @param string|null $index
      * @return array
      * @api
      */
     public function pluck(string $column, string $index = null)
+    {
+    }
+
+    /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @api
+     */
+    public function chunk(int $count, callable $callback)
     {
     }
 
@@ -1807,22 +1807,22 @@ if (0) {
         }
     
         /**
-         * @param int $count
-         * @param callable $callback
-         * @return bool
-         * @api
-         */
-        public static function chunk(int $count, callable $callback)
-        {
-        }
-    
-        /**
          * @param string $column
          * @param string|null $index
          * @return array
          * @api
          */
         public static function pluck(string $column, string $index = null)
+        {
+        }
+    
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @api
+         */
+        public static function chunk(int $count, callable $callback)
         {
         }
     
@@ -2289,6 +2289,16 @@ class QueryBuilder
     }
 
     /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @api
+     */
+    public function chunk(int $count, callable $callback)
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -2747,6 +2757,16 @@ if (0) {
          * @api
          */
         public static function pluck(string $column, string $index = null)
+        {
+        }
+    
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @api
+         */
+        public static function chunk(int $count, callable $callback)
         {
         }
     

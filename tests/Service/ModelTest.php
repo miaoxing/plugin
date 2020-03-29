@@ -1209,13 +1209,12 @@ class ModelTest extends BaseTestCase
             ],
         ]);
 
-        /** @var User $user */
-        $user = $this->db->init('users');
+        $user = User::new();
 
         $count = 0;
         $times = 0;
         $result = $user->chunk(2, function (User $users, $page) use (&$count, &$times) {
-            $count += $users->length();
+            $count += count($users);
             $times++;
         });
 

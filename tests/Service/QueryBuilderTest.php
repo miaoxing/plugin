@@ -705,4 +705,34 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertSame('2', $max);
     }
+
+    public function testChunk()
+    {
+        $this->initFixtures();
+
+        $this->db->batchInsert('users', [
+            [
+                'group_id' => '1',
+                'name' => 'twin',
+                'address' => 'test',
+            ],
+            [
+                'group_id' => '1',
+                'name' => 'twin',
+                'address' => 'test',
+            ],
+        ]);
+
+
+        $count = 0;
+        $times = 0;
+        $result = Qb::table('users')->chunk(2, static function ($data, $page) use (&$count, &$times) {
+            $count += count($data);
+            $times++;
+        });
+
+        $this->assertEquals(4, $count);
+        $this->assertEquals(2, $times);
+        $this->assertTrue($result);
+    }
 }

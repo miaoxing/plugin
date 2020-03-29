@@ -301,13 +301,48 @@ class QueryBuilder extends Base
     }
 
     /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @api
+     */
+    protected function chunk(int $count, callable $callback)
+    {
+        $this->limit($count);
+        $page = 1;
+
+        do {
+            $qb = clone $this;
+            $data = $qb->page($page)->all();
+
+            // Do not execute callback when no new records are founded
+            if (count($data) === 0) {
+                break;
+            }
+
+            if ($callback($data, $page) === false) {
+                return false;
+            }
+
+            $page++;
+        } while (count($data) === $count);
+
+        return true;
+    }
+
+    public function count()
+    {
+        return count($this->data);
+    }
+
+    /**
      * Executes a COUNT query to receive the rows number
      *
      * @param mixed $conditions
      * @param string $count
      * @return int
      */
-    public function count($conditions = false, $count = '1')
+    public function cnt($conditions = false, $count = '1')
     {
         $this->where(...func_get_args());
 
