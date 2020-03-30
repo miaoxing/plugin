@@ -92,7 +92,7 @@ class Mysql extends BaseDriver
                 } elseif (is_string($as)) {
                     $selects[] = $this->wrap($as) . ' AS ' . $this->wrap($select);
                 } else {
-                    $selects[] = $select === '*' ? '*' : $this->wrap($select);
+                    $selects[] = $this->wrap($select);
                 }
             }
             $query .= implode(', ', $selects);

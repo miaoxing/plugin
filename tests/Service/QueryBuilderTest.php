@@ -697,6 +697,17 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertSame([1 => 'twin', 2 => 'test'], $ids);
     }
 
+    public function testCnt()
+    {
+        $this->initFixtures();
+
+        $count = Qb::table('users')->cnt();
+        $this->assertSame(2, $count);
+
+        $count = Qb::table('users')->where('id', 1)->cnt();
+        $this->assertSame(1, $count);
+    }
+
     public function testMax()
     {
         $this->initFixtures();

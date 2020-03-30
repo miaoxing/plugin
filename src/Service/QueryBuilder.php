@@ -244,7 +244,7 @@ class QueryBuilder extends Base
      * @param mixed $conditions
      * @return array|false
      */
-    public function fetchColumn($column, $operator = null, $value = null)
+    public function fetchColumn($colum, $operator = null, $value = null)
     {
         $data = $this->fetch(...func_get_args());
         return $data ? current($data) : false;
@@ -338,20 +338,12 @@ class QueryBuilder extends Base
     /**
      * Executes a COUNT query to receive the rows number
      *
-     * @param mixed $conditions
-     * @param string $count
+     * @param string $column
      * @return int
      */
-    public function cnt($conditions = false, $count = '1')
+    public function cnt($column = '*')
     {
-        $this->where(...func_get_args());
-
-        $select = $this->sqlParts['select'];
-        $this->select('COUNT(' . $count . ')');
-        $count = (int) $this->db->fetchColumn($this->getSqlForSelect(true), $this->getBindParams());
-        $this->sqlParts['select'] = $select;
-
-        return $count;
+        return (int) $this->aggregate('COUNT', $column);
     }
 
     /**
@@ -374,8 +366,7 @@ class QueryBuilder extends Base
     public function aggregate($function, $columns = ['*'])
     {
         $this->add('aggregate', compact('function', 'columns'));
-        $result = $this->fetch();
-        return $result ? current($result) : null;
+        return $this->fetchColumn(null);
     }
 
     /**

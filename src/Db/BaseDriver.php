@@ -10,9 +10,9 @@ use Wei\Db;
  */
 abstract class BaseDriver extends Base
 {
-    protected function wrap($value)
+    protected function wrap($column)
     {
-        return $this->wrapper . $value . $this->wrapper;
+        return $column === '*' ? '*' : $this->wrapper . $column . $this->wrapper;
     }
 
     protected function getRawValue($expression)
