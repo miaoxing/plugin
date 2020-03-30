@@ -12,7 +12,6 @@ class BaseModelV2 extends BaseModel
     use CamelCaseTrait;
     use CastTrait;
     use ReqQueryTrait;
-    use GetSetTrait;
 
     protected $appIdColumn = 'app_id';
 

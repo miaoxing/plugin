@@ -11,24 +11,25 @@ class V20161030000000CreateUsersTable extends BaseMigration
      */
     public function up()
     {
-        $table = $this->schema->table('user');
+        $table = $this->schema->table('users');
         $table->tableComment('用户')
             ->id()
-            ->int('appId')
-            ->string('outId', 32)
-            ->char('wechatOpenId', 28)
-            ->char('wechatUnionId', 29)->comment('微信的OpenID')
+            ->int('app_id')
+            ->string('out_id', 32)
+            ->char('wechat_open_id', 28)->comment('微信的OpenID')
+            ->char('wechat_union_id', 29)
             ->bool('admin')
-            ->string('nickName', 32)
-            ->string('remarkName', 32)
+            ->string('nick_name', 32)
+            ->string('remark_name', 32)
             ->string('username', 64)
             ->string('name', 16)
             ->string('email', 256)
             ->string('mobile', 16)
+            ->timestamp('mobile_verified_at')->comment('手机校验时间')
             ->string('phone', 16)
             ->string('salt', 32)
             ->string('password', 128)
-            ->tinyInt('gender')
+            ->tinyInt('sex')
             ->string('country', 32)
             ->string('province', 32)
             ->string('city', 32)
@@ -36,31 +37,29 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->string('address', 128)
             ->string('signature', 64);
 
-        $table->string('headImg', 256)
-            ->int('groupId')->comment('用户组')
-            ->text('department')->comment('部门')
-            ->string('position', 32)->comment('职位')
-            ->text('extAttr')->comment('额外参数')
+        $table->string('avatar', 256)
+            ->int('group_id')->comment('用户组')
             ->decimal('money', 16, 2)->comment('账户余额')
-            ->decimal('rechargeMoney', 16, 2)->comment('充值账户余额')
+            ->decimal('recharge_money', 16, 2)->comment('充值账户余额')
             ->int('score')->comment('积分')
-            ->timestamp('lastLoginTime')
-            ->timestamp('unsubscribeTime')->comment('取关时间')
-            ->bool('isValid')
-            ->bool('enable')->comment('是否启用')
+            ->timestamp('last_login_at')
+            ->timestamp('unsubscribed_at')->comment('取关时间')
+            ->bool('is_subscribed')
+            ->bool('enable')->defaults(1)->comment('是否启用')
             ->string('source', 16)->comment('用户来源')
-            ->timestamp('lastPaidTime')
-            ->timestamp('mobileVerifiedAt')->comment('手机校验时间')
-            ->timestampsV1()
-            ->userstampsV1();
+            ->timestamps()
+            ->userstamps();
 
-        $table->index('wechatOpenId')
-            ->index('isValid')
+        $table->index('wechat_open_id')
+            ->index('is_subscribed')
             ->exec();
 
-        $this->db->insert('user', [
+        $salt = wei()->password->generateSalt();
+        $this->db->insert('users', [
             'username' => 'admin',
             'admin' => 1,
+            'salt' => $salt,
+            'password' => wei()->password->hash('password', $salt),
         ]);
     }
 
@@ -69,6 +68,6 @@ class V20161030000000CreateUsersTable extends BaseMigration
      */
     public function down()
     {
-        $this->schema->dropIfExists('groups');
+        $this->schema->dropIfExists('users');
     }
 }

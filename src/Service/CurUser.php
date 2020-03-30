@@ -5,8 +5,10 @@ namespace Miaoxing\Plugin\Service;
 /**
  * 当前用户
  */
-class CurUser extends User
+class CurUser extends UserModel
 {
+    protected $table = 'users';
+
     /**
      * @var array
      */
@@ -66,35 +68,35 @@ class CurUser extends User
         }
 
         // 2. 检查手机/邮箱/用户名是否存在
-        $user = wei()->user();
+        $user = wei()->userModel();
         switch (true) {
             case wei()->isMobileCn($data['username']):
-                $field = 'mobile';
+                $column = 'mobile';
                 $user->mobileVerified();
                 break;
 
             case wei()->isEmail($data['username']):
-                $field = 'email';
+                $column = 'email';
                 break;
 
             default:
-                $field = 'username';
+                $column = 'username';
         }
 
-        /** @var User $user */
-        $user = $user->find([$field => $data['username']]);
+        $user = $user->findBy($column, $data['username']);
+
         if (!$user) {
-            return ['code' => -2, 'message' => '用户名不存在或密码错误'];
+            return $this->err('用户名不存在或密码错误', 2);
         }
 
         // 3. 检查用户是否有效
-        if (!$user['enable']) {
-            return ['code' => -3, 'message' => '用户未启用,无法登录'];
+        if (!$user->enable) {
+            return $this->err('用户未启用,无法登录', 3);
         }
 
         // 4. 验证密码是否正确
         if (!$user->verifyPassword($data['password'])) {
-            return ['code' => -4, 'message' => '用户不存在或密码错误'];
+            return $this->err('用户不存在或密码错误', 4);
         }
 
         // 5. 验证通过,登录用户
@@ -136,10 +138,10 @@ class CurUser extends User
     /**
      * 根据用户对象登录用户
      *
-     * @param User $user
+     * @param UserModel $user
      * @return array
      */
-    public function loginByRecord(User $user)
+    public function loginByRecord(UserModel $user)
     {
         $this->loadRecordData($user);
         $this->session['user'] = $user->toArray($this->sessionFields);
@@ -213,7 +215,7 @@ class CurUser extends User
      *
      * {@inheritdoc}
      */
-    public function get($name)
+    public function &get($name, &$exists = null, $throwException = true)
     {
         // 未加载数据,已登录,session中存在需要的key
         if (!$this->isLoaded() && isset($this->session['user'][$name])) {
@@ -235,11 +237,11 @@ class CurUser extends User
         }
 
         $id = $this['id'];
-        $user = wei()->user()
+        $user = wei()->userModel()
             ->cache()
             ->tags(false)
             ->setCacheKey($this->getRecordCacheKey($id))
-            ->findOrInitById($id);
+            ->findOrInit($id);
 
         $this->loadRecordData($user);
     }
@@ -249,7 +251,7 @@ class CurUser extends User
      *
      * @param User $user
      */
-    protected function loadRecordData(User $user)
+    protected function loadRecordData(UserModel $user)
     {
         $this->setData($user->getData());
 

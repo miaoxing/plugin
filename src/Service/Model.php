@@ -11,7 +11,7 @@ use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Wei\Record;
 use Wei\RetTrait;
 
-class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \Countable
+class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
 {
     use CamelCaseTrait;
     use CastTrait;

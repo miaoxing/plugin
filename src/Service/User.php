@@ -37,16 +37,6 @@ class User extends BaseModel
     const STATUS_REGION_LOCKED = 3;
 
     /**
-     * {@inheritdoc}
-     */
-    protected $table = 'user';
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $fullTable = 'user';
-
-    /**
      * @var array
      */
     protected $data = [
@@ -147,17 +137,6 @@ class User extends BaseModel
         $this->group || $this->group = wei()->group()->findOrInitById($this['groupId'], ['name' => '未分组']);
 
         return $this->group;
-    }
-
-    /**
-     * Record: 验证密码是否正确
-     *
-     * @param string $password
-     * @return bool
-     */
-    public function verifyPassword($password)
-    {
-        return $this->password->verify($password, $this['password']);
     }
 
     /**
@@ -550,33 +529,6 @@ class User extends BaseModel
         $value = pow(2, $position - 1);
 
         return $this->andWhere("status & $value = 0");
-    }
-
-    /**
-     * QueryBuilder: 查询手机号码验证过
-     *
-     * @return $this
-     */
-    public function mobileVerified()
-    {
-        return $this->andWhere("mobileVerifiedAt != '0000-00-00 00:00:00'");
-    }
-
-    /**
-     * @param bool $verified
-     * @return User
-     */
-    public function setMobileVerified($verified = true)
-    {
-        return $this->set('mobileVerifiedAt', $verified ? wei()->time() : '0000-00-00 00:00:00');
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMobileVerified()
-    {
-        return $this['mobileVerifiedAt'] !== '0000-00-00 00:00:00';
     }
 
     /**
