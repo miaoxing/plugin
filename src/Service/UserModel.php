@@ -43,12 +43,4 @@ class UserModel extends Model
         $this->mobileVerifiedAt = $verified ? wei()->time() : '0000-00-00 00:00:00';
         return $this;
     }
-
-    /**
-     * @return bool
-     */
-    public function isMobileVerified()
-    {
-        return $this->mobileVerifiedAt !== '0000-00-00 00:00:00';
-    }
 }
