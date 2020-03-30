@@ -90,19 +90,6 @@ class AppModel extends Model
     {
         parent::afterSave();
 
-        $this->afterFind();
-
         $this->cache->remove('appName:' . $this['name']);
-    }
-
-    /**
-     * 获取应用的配置
-     *
-     * @param string $name
-     * @return null|string
-     */
-    public function getConfig($name)
-    {
-        return isset($this['configs'][$name]) ? $this['configs'][$name] : null;
     }
 }
