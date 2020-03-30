@@ -8,6 +8,11 @@ class UserModel extends Model
 {
     use UserTrait;
 
+    protected $hidden = [
+        'salt',
+        'password',
+    ];
+
     /**
      * Model: 验证密码是否正确
      *
