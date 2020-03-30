@@ -650,6 +650,25 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('1', $data['id']);
     }
 
+    public function testFetchNoDataReturnsNull()
+    {
+        $this->initFixtures();
+
+        $data = Qb::table('users')->where('id', -1)->fetch();
+        $this->assertNull($data);
+    }
+
+    public function testFetchColumn()
+    {
+        $this->initFixtures();
+
+        $result = Qb::table('users')->selectRaw('COUNT(id)')->fetchColumn();
+        $this->assertSame('2', $result);
+
+        $result = Qb::table('users')->where('id', -1)->fetchColumn();
+        $this->assertNull($result);
+    }
+
     public function testFetchAll()
     {
         $this->initFixtures();
@@ -707,6 +726,7 @@ class QueryBuilderTest extends BaseTestCase
         $count = Qb::table('users')->where('id', 1)->cnt();
         $this->assertSame(1, $count);
     }
+
 
     public function testMax()
     {

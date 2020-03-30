@@ -228,26 +228,26 @@ class QueryBuilder extends Base
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
-     * @return array|false
+     * @return array|null
      */
     public function fetch($column = null, $operator = null, $value = null)
     {
         $column !== null && $this->where(...func_get_args());
         $this->limit(1);
         $data = $this->execute();
-        return $data ? $data[0] : false;
+        return $data ? $data[0] : null;
     }
 
     /**
      * Executes the generated query and returns a column value of the first row
      *
      * @param mixed $conditions
-     * @return array|false
+     * @return array|null
      */
-    public function fetchColumn($colum, $operator = null, $value = null)
+    public function fetchColumn($colum = null, $operator = null, $value = null)
     {
         $data = $this->fetch(...func_get_args());
-        return $data ? current($data) : false;
+        return $data ? current($data) : null;
     }
 
     /**
