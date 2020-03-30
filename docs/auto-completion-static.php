@@ -135,6 +135,17 @@ class AppModel
     }
 
     /**
+     * Executes a COUNT query to receive the rows number
+     *
+     * @param string $column
+     * @return int
+     * @api
+     */
+    public function cnt($column = '*')
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -695,6 +706,17 @@ if (0) {
          * @api
          */
         public static function chunk(int $count, callable $callback)
+        {
+        }
+    
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @api
+         */
+        public static function cnt($column = '*')
         {
         }
     
@@ -1263,6 +1285,17 @@ class Model
     }
 
     /**
+     * Executes a COUNT query to receive the rows number
+     *
+     * @param string $column
+     * @return int
+     * @api
+     */
+    public function cnt($column = '*')
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -1827,6 +1860,17 @@ if (0) {
         }
     
         /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @api
+         */
+        public static function cnt($column = '*')
+        {
+        }
+    
+        /**
          * Sets the position of the first result to retrieve (the "offset")
          *
          * @param integer $offset The first result to return
@@ -2299,6 +2343,17 @@ class QueryBuilder
     }
 
     /**
+     * Executes a COUNT query to receive the rows number
+     *
+     * @param string $column
+     * @return int
+     * @api
+     */
+    public function cnt($column = '*')
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -2767,6 +2822,17 @@ if (0) {
          * @api
          */
         public static function chunk(int $count, callable $callback)
+        {
+        }
+    
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @api
+         */
+        public static function cnt($column = '*')
         {
         }
     

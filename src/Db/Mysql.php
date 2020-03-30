@@ -65,10 +65,9 @@ class Mysql extends BaseDriver
     /**
      * Converts this instance into an SELECT string in SQL
      *
-     * @param bool $count
      * @return string
      */
-    protected function getSqlForSelect($count = false)
+    protected function getSqlForSelect()
     {
         $parts = $this->sqlParts;
 
@@ -124,7 +123,7 @@ class Mysql extends BaseDriver
             $query .= ' HAVING ' . $this->buildWhere($parts['having']);
         }
 
-        if (false === $count) {
+        if (!$parts['aggregate']) {
             if ($parts['orderBy']) {
                 $query .= ' ORDER BY ';
                 $orderBys = [];

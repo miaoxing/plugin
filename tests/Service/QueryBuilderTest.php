@@ -727,6 +727,14 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertSame(1, $count);
     }
 
+    public function testCntIgnoreLimitOffset()
+    {
+        $this->initFixtures();
+
+        $count = Qb::table('users')->limit(1)->offset(2)->cnt();
+
+        $this->assertSame(2, $count);
+    }
 
     public function testMax()
     {

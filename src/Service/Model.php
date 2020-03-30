@@ -1863,17 +1863,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @return int
      */
-    public function length()
-    {
-        return $this->size();
-    }
-
-    /**
-     * Returns the record number in collection
-     *
-     * @return int
-     */
-    public function size()
+    public function count()
     {
         $this->loadData(0);
         return count($this->data);

@@ -849,17 +849,9 @@ class ModelTest extends BaseTestCase
 
     public function testCount()
     {
-        $this->initFixtures();
+        $users = User::limit(1)->all();
 
-        $count = User::count();
-
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(2, $count);
-
-        $count = User::select('id, name')->limit(1)->offset(2)->count();
-
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(2, $count);
+        $this->assertCount(1, $users);
     }
 
     public function testCountBySubQuery()

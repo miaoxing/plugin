@@ -330,18 +330,14 @@ class QueryBuilder extends Base
         return true;
     }
 
-    public function count()
-    {
-        return count($this->data);
-    }
-
     /**
      * Executes a COUNT query to receive the rows number
      *
      * @param string $column
      * @return int
+     * @api
      */
-    public function cnt($column = '*')
+    protected function cnt($column = '*')
     {
         return (int) $this->aggregate('COUNT', $column);
     }
