@@ -83,6 +83,7 @@ class QueryBuilder extends Base
      */
     protected $params = [
         'where' => [],
+        'set' => [],
     ];
 
     /**
@@ -379,7 +380,7 @@ class QueryBuilder extends Base
                 $this->add('set', $field . ' = ?', true);
                 $params[] = $param;
             }
-            $this->params = array_merge($params, $this->params);
+            $this->params['set'][] = array_merge($this->params['set'], $params);
         } else {
             $this->add('set', $set, true);
         }

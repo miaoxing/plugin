@@ -774,4 +774,12 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals(2, $times);
         $this->assertTrue($result);
     }
+
+    public function testUpdate()
+    {
+        $this->initFixtures();
+
+        $row = Qb::table('users')->update(['address' => 'test address']);
+        $this->assertEquals(2, $row);
+    }
 }
