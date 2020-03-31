@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin;
 
 use JsonSerializable;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;
+use Miaoxing\Plugin\Service\User;
 use Miaoxing\Services\Service\Str;
 use Wei\Logger;
 use Wei\Record;
@@ -200,7 +201,7 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
-            $this[$this->createdByColumn] = (int) wei()->curUser['id'];
+            $this[$this->createdByColumn] = User::id();
         }
     }
 
@@ -213,7 +214,7 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         if (in_array($this->updatedByColumn, $fields)) {
-            $this[$this->updatedByColumn] = (int) wei()->curUser['id'];
+            $this[$this->updatedByColumn] = User::id();
         }
     }
 
@@ -224,7 +225,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function mine()
     {
-        return $this->andWhere([$this->userIdColumn => (int) wei()->curUser['id']]);
+        return $this->andWhere([$this->userIdColumn => User::id()]);
     }
 
     /**
@@ -321,7 +322,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         return $this->saveData([
             $this->deletedAtColumn => date('Y-m-d H:i:s'),
-            $this->deletedByColumn => (int) wei()->curUser['id'],
+            $this->deletedByColumn => User::id(),
         ]);
     }
 
@@ -429,7 +430,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function getUserTag()
     {
-        return $this->table . ':' . ($this['userId'] ?: wei()->curUser['id']);
+        return $this->table . ':' . ($this['userId'] ?: User::id());
     }
 
     /**

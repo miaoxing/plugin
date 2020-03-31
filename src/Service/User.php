@@ -3,8 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Services\ConfigTrait;
-use Miaoxing\Plugin\BaseModel;
-use Miaoxing\User\Service\Group;
+use Wei\RetTrait;
 
 /**
  * 用户
@@ -12,7 +11,6 @@ use Miaoxing\User\Service\Group;
  * @property \Wei\Session $session
  * @property \Wei\Request $request
  * @property \Wei\Password $password
- * @property \Wei\Event $event
  * @property bool enableRegister
  * @property string disableRegisterTips
  * @property bool enableLoginCaptcha
@@ -26,42 +24,12 @@ use Miaoxing\User\Service\Group;
  * @property int agreementArticleId
  * @property bool enableExport
  * @property bool enableCreate
+ * @mixin \EventMixin
  */
-class User extends BaseModel
+class User extends UserModel
 {
-    use ConfigTrait;
-
-    /**
-     * 省市是否锁定(第三方平台不可更改)
-     */
-    const STATUS_REGION_LOCKED = 3;
-
-    /**
-     * @var array
-     */
-    protected $data = [
-        'gender' => 1,
-        'isValid' => 1,
-        'department' => [],
-        'extAttr' => [],
-    ];
-
-    /**
-     * @var Group
-     */
-    protected $group;
-
-    /**
-     * @var \Miaoxing\User\Service\UserProfile
-     */
-    protected $profile;
-
-    /**
-     * 当前记录是否为新创建的
-     *
-     * @var bool
-     */
-    protected $isCreated = false;
+    use RetTrait;
+    //use ConfigTrait;
 
     protected $configs = [
         'enablePinCode' => [
@@ -111,643 +79,309 @@ class User extends BaseModel
     ];
 
     /**
-     * QueryBuilder:
+     * 缓存在session中的字段
      *
-     * @return $this
+     * @var array
      */
-    public function valid()
-    {
-        return $this->andWhere(['isValid' => 1]);
-    }
+    protected $sessionFields = ['id', 'username', 'nickName'];
 
-    public function getProfile()
-    {
-        $this->profile || $this->profile = wei()->userProfile()->findOrInit(['userId' => $this['id']]);
+    /**
+     * @var array
+     */
+    protected $requiredServices = [
+        'db',
+        'cache',
+        'logger',
+        'ret',
+        'str',
+        'session',
+    ];
 
-        return $this->profile;
+    /**
+     * 获取存储在session中的用户数据
+     *
+     * @return null|array
+     */
+    public function getSessionData()
+    {
+        return $this->session['user'];
     }
 
     /**
-     * Record: 获取用户的分组对象
-     *
-     * @return Group
+     * {@inheritdoc}
      */
-    public function getGroup()
+    public function toArray($returnFields = [])
     {
-        $this->group || $this->group = wei()->group()->findOrInitById($this['groupId'], ['name' => '未分组']);
+        $this->loadDbUser();
 
-        return $this->group;
+        return parent::toArray($returnFields);
     }
 
     /**
-     * Record: 获取昵称等可供展示的名称
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getNickName()
+    public function save($data = [])
     {
-        foreach (['nickName', 'username', 'email', 'name'] as $name) {
-            if ($this[$name]) {
-                return $this[$name];
-            }
+        // 确保是更新操作,同时有ID作为更新条件
+        $this->isNew = false;
+        $this['id'] = $this->session['user']['id'];
+
+        return parent::save($data);
+    }
+
+    /**
+     * Record: 获取用户资料,优先从session中获取
+     *
+     * {@inheritdoc}
+     */
+    public function &get($name, &$exists = null, $throwException = true)
+    {
+        // 未加载数据,已登录,session中存在需要的key
+        if (!$this->isLoaded() && isset($this->session['user'][$name])) {
+            $exists = true;
+            return $this->session['user'][$name];
+        } else {
+            $this->loadDbUser();
+
+            return parent::get($name, $exists, $throwException);
+        }
+    }
+
+    /**
+     * 从数据库中查找用户加载到当前记录中
+     */
+    protected function loadDbUser()
+    {
+        if ($this->isLoaded() || !$this->isLogin()) {
+            return;
         }
 
-        return '';
+        $id = $this['id'];
+        $user = wei()->userModel()
+            ->cache()
+            ->tags(false)
+            ->setCacheKey($this->getRecordCacheKey($id))
+            ->findOrInit($id);
+
+        $this->loadRecordData($user);
     }
 
     /**
-     * Record: 设置未加密的密码
+     * 加载外部记录的数据
      *
-     * @param string $password
-     * @return $this
+     * @param User $user
      */
-    public function setPlainPassword($password)
+    protected function loadRecordData(UserModel $user)
     {
-        $this['salt'] || $this['salt'] = $this->password->generateSalt();
-        $this['password'] = $this->password->hash($password, $this['salt']);
+        $this->setData($user->getData());
 
+        // 清空更改状态
+        $this->isChanged = false;
+        $this->changedData = [];
+    }
+
+    /**
+     * @return int|null
+     * @api
+     */
+    protected function id()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return UserModel
+     * @api
+     */
+    protected function cur()
+    {
         return $this;
     }
 
     /**
-     * Record: 指定用户是否为管理员
+     * 判断用户是否登录
      *
      * @return bool
+     * @api
      */
-    public function isAdmin()
+    protected function isLogin()
     {
-        return (bool) $this['admin'];
+        return (bool) $this->session['user'];
     }
 
     /**
-     * Record: 判断用户是否为超级管理员
+     * 根据用户账号密码,登录用户
      *
-     * @return bool
-     */
-    public function isSuperAdmin()
-    {
-        return $this['id'] == 1 || $this['username'] == 'miaostar';
-    }
-
-    /**
-     * Record: 获取用户头像,没有设置头像则使用默认头像
-     *
-     * @return string
-     * @deprecated
-     */
-    public function getHeadImg()
-    {
-        return $this['headImg'];
-    }
-
-    public function getBackendDisplayName()
-    {
-        if ($this['name'] && $this['nickName']) {
-            return $this['name'] . '(' . $this['nickName'] . ')';
-        } elseif ($this['name']) {
-            return $this['name'];
-        } else {
-            return $this['nickName'];
-        }
-    }
-
-    /**
-     * Repo: 根据用户编号,从缓存中获取用户名
-     *
-     * @param int $id
-     * @return string
-     */
-    public function getDisplayNameByIdFromCache($id)
-    {
-        return wei()->arrayCache->get('nickName' . $id, function () use ($id) {
-            $user = wei()->user()->find(['id' => $id]);
-
-            return $user ? $user->getNickName() : '';
-        });
-    }
-
-    /**
-     * Record: 创建一个新用户
-     *
-     * wei()->user()->register([
-     *     'email' => 'xx', // 可选
-     *     'username' => 'xx',
-     *     'password' => 'xx',
-     *     'passwordAgain' => 'xx,
-     *     'source' => 1, // 来源,可选
-     * ]);
-     *
-     * @param array $data
+     * @param mixed $data
      * @return array
-     * @todo 太多validate,需简化
+     * @api
      */
-    public function register($data)
+    protected function login($data)
     {
-        // 1. 校验额外数据
-        if (isset($data['mobile'])) {
-            $validator = wei()->validate([
-                'data' => $data,
-                'rules' => [
-                    'mobile' => [
-                        'required' => true,
-                        'mobileCn' => true,
-                    ],
-                    'verifyCode' => [
-                        'required' => true,
-                    ],
-                ],
-                'names' => [
-                    'mobile' => '手机号码',
-                    'verifyCode' => '验证码',
-                ],
-                'messages' => [
-                    'mobile' => [
-                        'required' => '请输入手机号码',
-                    ],
-                    'verifyCode' => [
-                        'required' => '请输入验证码',
-                    ],
-                ],
-            ]);
-            if (!$validator->isValid()) {
-                return ['code' => -1, 'message' => $validator->getFirstMessage()];
-            }
-
-            $ret = wei()->verifyCode->check($data['mobile'], $data['verifyCode']);
-            if ($ret['code'] !== 1) {
-                return $ret + ['verifyCodeErr' => true];
-            }
-        } else {
-            $validator = wei()->validate([
-                'data' => $data,
-                'rules' => [
-                    'email' => [
-                        'required' => true,
-                    ],
-                ],
-                'names' => [
-                    'email' => '邮箱',
-                ],
-                'messages' => [
-                    'email' => [
-                        'required' => '请输入邮箱',
-                    ],
-                ],
-            ]);
-            if (!$validator->isValid()) {
-                return ['code' => -1, 'message' => $validator->getFirstMessage()];
-            }
-        }
-
-        // 2. 统一校验
+        // 1. 校验用户账号密码是否符合规则
         $validator = wei()->validate([
             'data' => $data,
             'rules' => [
-                'email' => [
-                    'required' => false,
-                    'email' => true,
-                    'notRecordExists' => ['user', 'email'],
+                'username' => [
+                    'required' => true,
                 ],
                 'password' => [
-                    'minLength' => 6,
-                ],
-                'passwordConfirm' => [
-                    'equalTo' => $data['password'],
+                    'required' => true,
                 ],
             ],
             'names' => [
-                'email' => '邮箱',
+                'username' => '帐号',
                 'password' => '密码',
             ],
-            'messages' => [
-                'passwordConfirm' => [
-                    'required' => '请再次输入密码',
-                    'equalTo' => '两次输入的密码不相等',
-                ],
-            ],
         ]);
+
         if (!$validator->isValid()) {
-            return ['code' => -7, 'message' => $validator->getFirstMessage()];
+            return ['code' => -1, 'message' => $validator->getFirstMessage()];
         }
 
-        if ($data['mobile']) {
-            $user = wei()->user()->mobileVerified()->find(['mobile' => $data['mobile']]);
-            if ($user) {
-                return ['code' => -8, 'message' => '手机号码已存在'];
-            }
+        // 2. 检查手机/邮箱/用户名是否存在
+        $user = wei()->userModel();
+        switch (true) {
+            case wei()->isMobileCn($data['username']):
+                $column = 'mobile';
+                $user->mobileVerified();
+                break;
+
+            case wei()->isEmail($data['username']):
+                $column = 'email';
+                break;
+
+            default:
+                $column = 'username';
         }
 
-        $ret = $this->event->until('userRegisterValidate', [$this]);
-        if ($ret) {
-            return $ret;
+        $user = $user->findBy($column, $data['username']);
+
+        if (!$user) {
+            return $this->err('用户名不存在或密码错误', 2);
         }
 
-        // 3. 保存到数据库
-        $this->setPlainPassword($data['password']);
-
-        if ($data['mobile']) {
-            $this->setMobileVerified();
+        // 3. 检查用户是否有效
+        if (!$user->enable) {
+            return $this->err('用户未启用,无法登录', 3);
         }
 
-        $this->save([
-            'email' => (string) $data['email'],
-            'mobile' => (string) $data['mobile'],
-            'username' => (string) $data['username'],
-            'source' => isset($data['source']) ? $data['source'] : '',
-        ]);
+        // 4. 验证密码是否正确
+        if (!$user->verifyPassword($data['password'])) {
+            return $this->err('用户不存在或密码错误', 4);
+        }
 
-        return ['code' => 1, 'message' => '注册成功'];
+        // 5. 验证通过,登录用户
+        return $this->loginByModel($user);
     }
 
     /**
-     * Repo: 记录用户操作日志
+     * 根据用户ID直接登录用户
      *
-     * @param string $action
+     * @param int $id
+     * @return array
+     * @api
+     */
+    protected function loginById($id)
+    {
+        $user = wei()->userModel()->find($id);
+        if (!$user) {
+            return $this->err('用户不存在');
+        } else {
+            return $this->loginByModel($user);
+        }
+    }
+
+    /**
+     * 根据条件查找或创建用户,并登录
+     *
+     * @param mixed $conditions
      * @param array $data
      * @return $this
+     * @api
      */
-    public function log($action, array $data)
+    protected function loginBy($conditions, $data = [])
     {
-        $curUser = wei()->curUser;
-        $app = wei()->app;
-
-        if (isset($data['param']) && is_array($data['param'])) {
-            $data['param'] = json_encode($data['param'], JSON_UNESCAPED_UNICODE);
-        }
-
-        if (isset($data['ret']) && is_array($data['ret'])) {
-            $data['ret'] = json_encode($data['ret'], JSON_UNESCAPED_UNICODE);
-        }
-
-        wei()->db->insert('userLogs', $data + [
-                'appId' => $app->getId(),
-                'userId' => (int) $curUser['id'],
-                'nickName' => $curUser->getNickName(),
-                'page' => $app->getControllerAction(),
-                'action' => $action,
-                'createTime' => date('Y-m-d H:i:s'),
-            ]);
-
-        return $this;
-    }
-
-    public function afterCreate()
-    {
-        parent::afterCreate();
-
-        $this->isCreated = true;
-
-        /* TODO queue
-        if (wei()->has('queue')) {
-            wei()->queue->push(UserCreate::class, ['id' => $this['id']]);
-        }*/
-
-        // TODO 移到插件中
-        if ($this['wechatOpenId']) {
-            $this->db->insert('wechatSyncUsers', ['id' => $this['id']]);
-        }
-    }
-
-    public function afterSave()
-    {
-        parent::afterSave();
-        wei()->curUser->refresh($this);
-        $this->clearRecordCache();
-    }
-
-    public function afterDestroy()
-    {
-        parent::afterDestroy();
-        $this->clearRecordCache();
-    }
-
-    public function beforeSave()
-    {
-        parent::beforeSave();
-        if (is_array($this['department'])) {
-            $this['department'] = json_encode($this['department'], JSON_UNESCAPED_SLASHES);
-        }
-
-        if (is_array($this['extAttr'])) {
-            $this['extAttr'] = json_encode($this['extAttr'], JSON_UNESCAPED_SLASHES);
-        }
-
-        if (isset($this['headImg']) && $this['headImg'] == wei()->user->getDefaultHeadImg()) {
-            $this['headImg'] = '';
-        }
-    }
-
-    public function afterFind()
-    {
-        parent::afterFind();
-        if (!is_array($this['department'])) {
-            $this['department'] = (array) json_decode($this['department'], true);
-        }
-
-        if (!is_array($this['extAttr'])) {
-            $this['extAttr'] = (array) json_decode($this['extAttr'], true);
-        }
-
-        if (!$this['headImg']) {
-            $this['headImg'] = wei()->user->getDefaultHeadImg();
-        }
-    }
-
-    /**
-     * Record: 移动用户分组
-     *
-     * @param int $groupId
-     * @return array
-     */
-    public function updateGroup($groupId)
-    {
-        $group = wei()->group()->findOrInitById($groupId);
-        $ret = wei()->event->until('groupMove', [[$this['id']], $group]);
-        if ($ret) {
-            return $ret;
-        }
-
-        $this->save(['groupId' => $groupId]);
-
-        return ['code' => 1, 'message' => '操作成功'];
-    }
-
-    /**
-     * 设置某个状态为是否开启
-     *
-     * @param int $position
-     * @param bool $value
-     * @return $this
-     */
-    public function setStatus($position, $value)
-    {
-        $status = pow(2, $position - 1);
-        if ($value) {
-            $status = $this['status'] | $status;
-        } elseif ($this['status'] !== null) {
-            $status = $this['status'] & ~$status;
-        } else {
-            $status = ~$status;
-        }
-        $this['status'] = $status & 0xFFFF;
+        $user = wei()->userModel()->findOrCreate($conditions, $data);
+        $this->loginByModel($user);
 
         return $this;
     }
 
     /**
-     * 检查某个状态位是否开启
+     * 根据用户对象登录用户
      *
-     * @param int $position
-     * @return bool
+     * @param UserModel $user
+     * @return array
+     * @api
      */
-    public function isStatus($position)
+    protected function loginByModel(UserModel $user)
     {
-        return (bool) ($this['status'] & pow(2, $position - 1));
+        $this->loadRecordData($user);
+        $this->session['user'] = $user->toArray($this->sessionFields);
+        $this->event->trigger('userLogin', [$user]);
+
+        return $this->suc('登录成功');
     }
 
     /**
-     * QueryBuilder: 查询某个状态是启用的记录
+     * 销毁用户会话,退出登录
      *
-     * @param int $position
      * @return $this
+     * @api
      */
-    public function withStatus($position)
+    protected function logout()
     {
-        $value = pow(2, $position - 1);
+        $this->data = [];
+        unset($this->session['user']);
 
-        return $this->andWhere("status & $value = $value");
+        return $this;
     }
 
     /**
-     * QueryBuilder: 查询某个状态是禁用的记录
+     * 当用户信息更改后,可以主动调用该方法,刷新会话中的数据
      *
-     * @param int $position
+     * @param UserModel $user
      * @return $this
+     * @api
      */
-    public function withoutStatus($position)
+    protected function refresh(UserModel $user)
     {
-        $value = pow(2, $position - 1);
+        if ($user->id === $this->session['user']['id']) {
+            $this->loginByModel($user);
+        }
 
-        return $this->andWhere("status & $value = 0");
+        return $this;
     }
 
     /**
-     * Record: 检查当前记录是否刚创建
+     * NOTE: 暂时只有__set有效
      *
-     * @return bool
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
      */
-    public function isCreated()
+    public function __set($name, $value = null)
     {
-        return $this->isCreated;
-    }
-
-    /**
-     * Record: 检查指定的手机号码能否绑定当前用户
-     *
-     * @param string $mobile
-     * @return array
-     */
-    public function checkMobile($mobile)
-    {
-        // 1. 检查是否已存在认证该手机号码的用户
-        $mobileUser = wei()->user()->mobileVerified()->find(['mobile' => $mobile]);
-        if ($mobileUser && $mobileUser['id'] != $this['id']) {
-            return $this->err('已存在认证该手机号码的用户');
+        // __set start
+        // Required services first
+        if (in_array($name, $this->requiredServices)) {
+            return $this->$name = $value;
         }
 
-        // 2. 提供接口供外部检查手机号
-        $ret = $this->event->until('userCheckMobile', [$this, $mobile]);
-        if ($ret) {
-            return $ret;
-        }
+        // NOTE: 设置前需主动加载，否则状态变为loaded，不会再去加载
+        $this->loadDbUser();
 
-        return $this->suc('手机号码可以绑定');
-    }
-
-    /**
-     * Record: 绑定手机
-     *
-     * @param array|\ArrayAccess $data
-     * @return array
-     */
-    public function bindMobile($data)
-    {
-        // 1. 校验数据
-        $ret = $this->checkMobile($data['mobile']);
-        if ($ret['code'] !== 1) {
-            return $ret;
-        }
-
-        // 2. 校验验证码
-        $ret = wei()->verifyCode->check($data['mobile'], $data['verifyCode']);
-        if ($ret['code'] !== 1) {
-            return $ret + ['verifyCodeErr' => true];
-        }
-
-        // 3. 记录手机信息
-        $this['mobile'] = $data['mobile'];
-        $this->setMobileVerified();
-
-        $this->event->trigger('preUserMobileVerify', [$data, $this]);
-
-        $this->save();
-
-        return $this->suc('绑定成功');
-    }
-
-    /**
-     * Record: 更新当前用户资料
-     *
-     * @param array|\ArrayAccess $data
-     * @return array
-     */
-    public function updateData($data)
-    {
-        $isMobileVerified = $this->isMobileVerified();
-
-        $validator = wei()->validate([
-            'data' => $data,
-            'rules' => [
-                'mobile' => [
-                    'required' => !$isMobileVerified,
-                    'mobileCn' => true,
-                ],
-                'name' => [
-                    'required' => false,
-                ],
-                'address' => [
-                    'required' => false,
-                    'minLength' => 3,
-                ],
-            ],
-            'names' => [
-                'mobile' => '手机号码',
-                'name' => '姓名',
-                'address' => '详细地址',
-            ],
-        ]);
-        if (!$validator->isValid()) {
-            return $this->err($validator->getFirstMessage());
-        }
-
-        if (!$isMobileVerified) {
-            // 手机号未认证时,检查手机号,根据配置检查是否重复
-            if (wei()->user->checkMobileUnique && $this->isMobileExists($data['mobile'])) {
-                return $this->err('手机号码已存在');
-            }
-            $this['mobile'] = $data['mobile'];
-        }
-
-        $result = $this->event->until('preUserUpdate', [$data, $this]);
+        $result = $this->set($name, $value, false);
         if ($result) {
-            return $result;
+            return;
         }
 
-        $this->save([
-            'name' => $data['name'],
-            'address' => $data['address'],
-        ]);
-
-        return $this->suc();
-    }
-
-    public function isMobileExists($mobile)
-    {
-        return (bool) wei()->user()
-            ->andWhere(['mobile' => $mobile])
-            ->andWhere('id != ?', $this['id'])
-            ->fetchColumn();
-    }
-
-    /**
-     * @param array|\ArrayAccess $req
-     * @return array
-     */
-    public function updatePassword($req)
-    {
-        if (wei()->user->enablePinCode) {
-            $rule = [
-                'digit' => true,
-                'length' => 6,
-            ];
-        } else {
-            $rule = [
-                'minLength' => 6,
-            ];
+        if ($this->wei->has($name)) {
+            return $this->$name = $value;
         }
 
-        // 1. 校验
-        $validator = wei()->validate([
-            'data' => $req,
-            'rules' => [
-                'oldPassword' => [
-                ],
-                'password' => $rule,
-                'passwordConfirm' => [
-                    'equalTo' => $req['password'],
-                ],
-            ],
-            'names' => [
-                'oldPassword' => '旧密码',
-                'password' => '新密码',
-                'passwordConfirm' => '重复密码',
-            ],
-            'messages' => [
-                'passwordConfirm' => [
-                    'equalTo' => '两次输入的密码不相等',
-                ],
-            ],
-        ]);
-        if (!$validator->isValid()) {
-            return $this->err($validator->getFirstMessage());
-        }
-
-        // 2. 验证旧密码
-        if ($this['password'] && $this['salt']) {
-            $isSuc = $this->verifyPassword($req['oldPassword']);
-            if (!$isSuc) {
-                return $this->err('旧密码输入错误！请重新输入');
-            }
-        }
-
-        // 3. 更新新密码
-        $this->setPlainPassword($req['password']);
-        $this->save();
-
-        wei()->curUser->logout();
-
-        return $this->suc();
-    }
-
-    /**
-     * 通过外部检查用户是否有某个权限
-     *
-     * @param string $permissionId
-     * @return bool
-     */
-    public function can($permissionId)
-    {
-        $result = $this->event->until('userCan', [$permissionId, $this]);
-        if ($result === null) {
-            $result = true;
-        }
-
-        return (bool) $result;
-    }
-
-    public function getDefaultHeadImg()
-    {
-        return wei()->user->defaultHeadImg;
-    }
-
-    public function getTags()
-    {
-        $userTags = wei()->userTag->getAll();
-        $tags = [];
-        $relations = wei()->userTagsUserModel()->asc('id')->findAll(['user_id' => $this['id']]);
-        foreach ($relations as $relation) {
-            $tags[] = $userTags[$relation->tagId];
-        }
-        return $tags;
+        throw new \InvalidArgumentException('Invalid property: ' . $name);
+        // __set end
     }
 }

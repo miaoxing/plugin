@@ -5,13 +5,12 @@ namespace Miaoxing\Plugin;
 use Miaoxing\Services\Service\Page;
 
 /**
+ * @mixin \UserMixin
  * @property \Miaoxing\Plugin\Service\App $app
  * @property \Wei\Session $session
  * @property \Wei\View $view
  * @property \Wei\Logger $logger
  * @property \Miaoxing\Plugin\Service\Plugin $plugin
- * @property \Miaoxing\Plugin\Service\CurUser $curUser 用户
- * @property \Miaoxing\User\Service\CurUserV2 $curUserV2 用户
  * @property \Wei\Ret $ret 返回值服务
  * @property Page $page
  * @property bool controllerAuth

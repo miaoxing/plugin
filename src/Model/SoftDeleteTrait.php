@@ -2,15 +2,13 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\BaseModel;
-use Miaoxing\Plugin\Service\CurUser;
 use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\User;
 use Miaoxing\Services\Service\Time;
 
 /**
  * @property-read string deletedAtColumn
  * @property-read string deletedByColumn
- * @property-read CurUser curUser
  */
 trait SoftDeleteTrait
 {
@@ -67,7 +65,7 @@ trait SoftDeleteTrait
      */
     public function withoutDeleted()
     {
-         $this->where($this->deletedAtColumn, '0000-00-00 00:00:00');
+        $this->where($this->deletedAtColumn, '0000-00-00 00:00:00');
     }
 
     /**
@@ -97,7 +95,7 @@ trait SoftDeleteTrait
         } else {
             $this->saveData([
                 $this->deletedAtColumn => Time::now(),
-                $this->deletedByColumn => $this->curUser->id,
+                $this->deletedByColumn => User::id(),
             ]);
         }
     }

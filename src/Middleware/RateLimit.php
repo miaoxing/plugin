@@ -2,10 +2,13 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Plugin\Service\User;
 use Miaoxing\Services\Middleware\BaseMiddleware;
 
 /**
  * 限制用户在一段请求时间内(如每分钟,每小时,每天)最多的请求次数
+ *
+ * @mixin \UserMixin
  */
 class RateLimit extends BaseMiddleware
 {
@@ -68,6 +71,6 @@ class RateLimit extends BaseMiddleware
      */
     public function getIdentifier()
     {
-        return wei()->curUser['id'] ?: $this->request->getServer('REMOTE_ADDR');
+        return $this->user->id() ?: $this->request->getServer('REMOTE_ADDR');
     }
 }

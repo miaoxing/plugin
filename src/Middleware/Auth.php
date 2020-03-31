@@ -8,6 +8,7 @@ use Miaoxing\Services\Middleware\BaseMiddleware;
 /**
  * @property \Wei\Url $url
  * @method string url($url = '', $argsOrParams = array(), $params = array())
+ * @mixin \UserMixin
  */
 class Auth extends BaseMiddleware
 {
@@ -28,7 +29,7 @@ class Auth extends BaseMiddleware
             return $next();
         }
 
-        if (wei()->curUser->isLogin()) {
+        if ($this->user->isLogin()) {
             return $next();
         }
 

@@ -50,7 +50,7 @@ class SessionMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\User $user 用户
- * @method      Miaoxing\Plugin\Service\User|Miaoxing\Plugin\Service\User[] user()
+ * @method      Miaoxing\Plugin\Service\User|Miaoxing\Plugin\Service\User[] user($table = null)
  */
 class UserMixin {
 }

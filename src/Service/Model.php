@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use InvalidArgumentException;
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
@@ -523,7 +524,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param string $name
      * @return mixed|$this
-     * @throws \InvalidArgumentException When field not found
+     * @throws InvalidArgumentException When field not found
      */
     public function &get($name, &$exists = null, $throwException = true)
     {
@@ -558,7 +559,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param string $name
      * @return mixed|$this
-     * @throws \InvalidArgumentException When field not found
+     * @throws InvalidArgumentException When field not found
      */
     public function origGet($name)
     {
@@ -571,7 +572,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         // Check if field exists when it is not a collection
         if (!$this->isColl && !in_array($name, $this->getFields())) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
                 get_class($this)
@@ -588,7 +589,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string $name
      * @param mixed $value
      * @return $this
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function origSet($name, $value = null)
     {
@@ -621,7 +622,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             }
         } else {
             if (!$value instanceof static) {
-                throw new \InvalidArgumentException('Value for collection must be an instance of Wei\Record');
+                throw new InvalidArgumentException('Value for collection must be an instance of Wei\Record');
             } else {
                 // Support $coll[] = $value;
                 if ($name === null) {
@@ -1114,7 +1115,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if (in_array($this->updatedByColumn, $fields)) {
-            $this[$this->updatedByColumn] = (int) wei()->curUser['id'];
+            $this[$this->updatedByColumn] = User::id();
         }
     }
 
@@ -1137,7 +1138,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
-            $this[$this->createdByColumn] = (int) wei()->curUser['id'];
+            $this[$this->createdByColumn] = User::id();
         }
     }
 
@@ -1301,7 +1302,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function getRecordCacheKey($id = null)
     {
-        return $this->db->getDbname() . ':' . $this->table . ':' . ($id ?: $this['id']);
+        return $this->db->getDbname() . ':' . $this->getTable() . ':' . ($id ?: $this['id']);
     }
 
     /**
@@ -1320,7 +1321,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function getUserTag()
     {
-        return $this->table . ':' . ($this['userId'] ?: wei()->curUser['id']);
+        return $this->table . ':' . ($this['userId'] ?: User::id());
     }
 
     /**

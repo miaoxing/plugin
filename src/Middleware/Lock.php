@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
+use Miaoxing\Plugin\Service\User;
 use Miaoxing\Services\Middleware\BaseMiddleware;
 use Wei\RetTrait;
 
@@ -52,6 +53,6 @@ class Lock extends BaseMiddleware
      */
     public function getIdentifier()
     {
-        return wei()->curUser['id'] ?: $this->request->getServer('REMOTE_ADDR');
+        return User::id() ?: $this->request->getServer('REMOTE_ADDR');
     }
 }

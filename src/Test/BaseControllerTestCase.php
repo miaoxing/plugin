@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Test;
 
+use Miaoxing\Plugin\Service\User;
 use Miaoxing\Services\Service\Tester;
 
 class BaseControllerTestCase extends BaseTestCase
@@ -119,9 +120,7 @@ class BaseControllerTestCase extends BaseTestCase
     {
         $wei = wei();
 
-        if ($wei->has('curUser')) {
-            $wei->curUser->loginById(1);
-        }
+        User::loginById(1);
 
         $wei->setNamespace('test');
 

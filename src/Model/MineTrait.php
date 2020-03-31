@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Model;
 
+use Miaoxing\Plugin\Service\User;
+
 trait MineTrait
 {
     protected $userIdColumn = 'user_id';
@@ -15,7 +17,7 @@ trait MineTrait
      */
     public function mine()
     {
-        return $this->andWhere([$this->userIdColumn => (int) wei()->curUserV2->id]);
+        return $this->andWhere([$this->userIdColumn => User::id()]);
     }
 
     /**
