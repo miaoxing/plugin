@@ -221,8 +221,8 @@ class Mysql extends BaseDriver
     protected function getSqlForUpdate()
     {
         $query = 'UPDATE ' . $this->getFrom()
-            . ' SET ' . implode(", ", $this->sqlParts['set'])
-            . ($this->sqlParts['where'] !== null ? ' WHERE ' . ((string) $this->sqlParts['where']) : '');
+            . ' SET ' . implode(', ', $this->sqlParts['set'])
+            . ($this->sqlParts['where'] ? ' WHERE ' . $this->buildWhere($this->sqlParts['where']) : '');
         return $query;
     }
 
@@ -233,7 +233,7 @@ class Mysql extends BaseDriver
      */
     protected function getSqlForDelete()
     {
-        return 'DELETE FROM ' . $this->getFrom() . ($this->sqlParts['where'] !== null ? ' WHERE ' . ((string) $this->sqlParts['where']) : '');
+        return 'DELETE FROM ' . $this->getFrom() . ($this->sqlParts['where'] ? ' WHERE ' . $this->buildWhere($this->sqlParts['where']) : '');
     }
 
     /**

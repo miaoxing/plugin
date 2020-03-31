@@ -4,6 +4,8 @@ namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Service\CurUser;
+use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Services\Service\Time;
 
 /**
  * @property-read string deletedAtColumn
@@ -18,9 +20,9 @@ trait SoftDeleteTrait
     protected $reallyDestroy = false;
 
     /**
-     * @param BaseModel $initModel
+     * @param Model $initModel
      */
-    public static function bootSoftDeleteTrait(BaseModel $initModel)
+    public static function bootSoftDeleteTrait(Model $initModel)
     {
         $initModel->addDefaultScope('withoutDeleted');
     }
@@ -43,7 +45,7 @@ trait SoftDeleteTrait
     {
         return $this->saveData([
             $this->deletedAtColumn => '',
-            $this->deletedByColumn => 0
+            $this->deletedByColumn => 0,
         ]);
     }
 
@@ -65,7 +67,7 @@ trait SoftDeleteTrait
      */
     public function withoutDeleted()
     {
-        return $this->andWhere([$this->fullTable . '.' . $this->deletedAtColumn => '0000-00-00 00:00:00']);
+         $this->where($this->deletedAtColumn, '0000-00-00 00:00:00');
     }
 
     /**
@@ -74,7 +76,7 @@ trait SoftDeleteTrait
     public function onlyDeleted()
     {
         return $this->unscoped('withoutDeleted')
-            ->andWhere($this->deletedAtColumn . " != '0000-00-00 00:00:00'");
+            ->where($this->deletedAtColumn, '!=', '0000-00-00 00:00:00');
     }
 
     /**
@@ -94,8 +96,8 @@ trait SoftDeleteTrait
             parent::executeDestroy();
         } else {
             $this->saveData([
-                $this->deletedAtColumn => date('Y-m-d H:i:s'),
-                $this->deletedByColumn => $this->curUser['id'],
+                $this->deletedAtColumn => Time::now(),
+                $this->deletedByColumn => $this->curUser->id,
             ]);
         }
     }

@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Migration;
 
 use Miaoxing\Services\Migration\BaseMigration;
+use Miaoxing\Services\Service\Time;
 
 class V20161030000000CreateUsersTable extends BaseMigration
 {
@@ -60,6 +61,8 @@ class V20161030000000CreateUsersTable extends BaseMigration
             'admin' => 1,
             'salt' => $salt,
             'password' => wei()->password->hash('password', $salt),
+            'created_at' => Time::now(),
+            'updated_at' => Time::now(),
         ]);
     }
 

@@ -3,7 +3,11 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Metadata\UserTrait;
+use Miaoxing\User\Service\GroupModel;
 
+/**
+ * @property GroupModel $group
+ */
 class UserModel extends Model
 {
     use UserTrait;
@@ -12,6 +16,11 @@ class UserModel extends Model
         'salt',
         'password',
     ];
+
+    public function group()
+    {
+        return $this->hasOne(wei()->groupModel(), 'id', 'groupId');
+    }
 
     /**
      * Model: 验证密码是否正确

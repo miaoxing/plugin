@@ -75,9 +75,10 @@ trait DefaultScopeTrait
             return;
         }
 
+        // TODO confirm
         // 临时解决andWhere等中,被拦截时,已经设置了参数,还未设置语句,导致参数顺序错误
-        $temp = [$this->params, $this->paramTypes];
-        $this->params = $this->paramTypes = [];
+        //$temp = [$this->params, $this->paramTypes];
+        //$this->params = $this->paramTypes = [];
 
         $scopes = array_diff(array_keys($defaultScopes), $this->withoutScopes);
         foreach ($scopes as $scope) {
@@ -85,8 +86,8 @@ trait DefaultScopeTrait
         }
 
         // 还原参数
-        $this->params = array_merge($this->params, $temp[0]);
-        $this->paramTypes = array_merge($this->paramTypes, $temp[1]);
+        //$this->params = array_merge($this->params, $temp[0]);
+        //$this->paramTypes = array_merge($this->paramTypes, $temp[1]);
 
         return $this;
     }
