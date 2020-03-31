@@ -69,6 +69,15 @@ class ModelTest extends BaseTestCase
         $this->assertNull($user);
     }
 
+    public function testFindNull()
+    {
+        $this->initFixtures();
+
+        $user = User::find(null);
+
+        $this->assertNull($user);
+    }
+
     public function testFindOrInitAndStatusIsNew()
     {
         $this->initFixtures();

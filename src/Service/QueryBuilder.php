@@ -1266,10 +1266,14 @@ class QueryBuilder extends Base
             $this->params['where'] = array_merge($this->params['where'], $query->getParameters()['where']);
         }
 
-        $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
-        if ($value !== null) {
+        if ($value === null) {
+            $operator = $operator === 'NOT NULL' ? $operator : 'NULL';
+        } else {
             $this->params['where'][] = (array) $value;
         }
+
+        $this->sqlParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
+
         return $this;
     }
 
