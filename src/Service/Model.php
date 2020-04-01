@@ -12,6 +12,9 @@ use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Wei\Record;
 use Wei\RetTrait;
 
+/**
+ * @mixin \UserMixin
+ */
 class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
 {
     use CamelCaseTrait;
@@ -1115,7 +1118,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if (in_array($this->updatedByColumn, $fields)) {
-            $this[$this->updatedByColumn] = User::id();
+            $this[$this->updatedByColumn] = $this->user->id;
         }
     }
 
@@ -1138,7 +1141,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
-            $this[$this->createdByColumn] = User::id();
+            $this[$this->createdByColumn] = $this->user->id;
         }
     }
 
@@ -1321,7 +1324,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function getUserTag()
     {
-        return $this->table . ':' . ($this['userId'] ?: User::id());
+        return $this->table . ':' . ($this['userId'] ?: $this->user->id);
     }
 
     /**
