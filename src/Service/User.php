@@ -31,6 +31,13 @@ class User extends UserModel
     use RetTrait;
     //use ConfigTrait;
 
+    /**
+     * 当前用户是唯一的
+     *
+     * @var bool
+     */
+    protected static $createNewInstance = false;
+
     protected $configs = [
         'enablePinCode' => [
             'default' => false,
