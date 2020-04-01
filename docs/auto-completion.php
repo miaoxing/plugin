@@ -15,13 +15,6 @@ class AppModelMixin {
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\CurUser $curUser 当前用户
- * @method      Miaoxing\Plugin\Service\CurUser|Miaoxing\Plugin\Service\CurUser[] curUser($table = null)
- */
-class CurUserMixin {
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\Model $model
  * @method      Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] model($table = null)
  */
@@ -65,7 +58,6 @@ class UserModelMixin {
 /**
  * @mixin AppMixin
  * @mixin AppModelMixin
- * @mixin CurUserMixin
  * @mixin ModelMixin
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
@@ -92,9 +84,6 @@ $app = wei()->appModel();
 
 /** @var Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] $appModels */
 $apps = wei()->appModel();
-
-/** @var Miaoxing\Plugin\Service\CurUser $curUser */
-$curUser = wei()->curUser;
 
 /** @var Miaoxing\Plugin\Service\Model $model */
 $model = wei()->model;

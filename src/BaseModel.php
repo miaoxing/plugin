@@ -17,6 +17,7 @@ use Wei\RetTrait;
  * @property Logger $logger
  * @property Str $str
  * @SuppressWarnings(PHPMD.ExcessiveClassLength) 允许模型类较长
+ * @deprecated 改用 Model
  */
 class BaseModel extends Record implements JsonSerializable
 {

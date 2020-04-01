@@ -7,6 +7,9 @@ use Miaoxing\Plugin\Model\CastTrait;
 use Miaoxing\Plugin\Model\GetSetTrait;
 use Miaoxing\Plugin\Model\ReqQueryTrait;
 
+/**
+ * @deprecated 改用 Model
+ */
 class BaseModelV2 extends BaseModel
 {
     use CamelCaseTrait;
