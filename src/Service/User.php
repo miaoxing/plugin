@@ -21,6 +21,7 @@ use Wei\RetTrait;
  * @property int agreementArticleId
  * @property bool enableExport
  * @property bool enableCreate
+ * @property string defaultAvatar
  * @mixin \EventMixin
  * @mixin \SessionMixin
  * @mixin \RequestMixin
@@ -29,7 +30,9 @@ use Wei\RetTrait;
 class User extends UserModel
 {
     use RetTrait;
-    //use ConfigTrait;
+    use ConfigTrait {
+        __get as getConfig;
+    }
 
     /**
      * 当前用户是唯一的
@@ -45,7 +48,7 @@ class User extends UserModel
         'checkMobileUnique' => [
             'default' => false,
         ],
-        'defaultHeadImg' => [
+        'defaultAvatar' => [
             'default' => '/images/head.jpg',
         ],
         'enableLogin' => [
@@ -390,5 +393,11 @@ class User extends UserModel
 
         throw new \InvalidArgumentException('Invalid property: ' . $name);
         // __set end
+    }
+
+    public function &__get($name)
+    {
+        $result = $this->getConfig($name);
+        return $result;
     }
 }

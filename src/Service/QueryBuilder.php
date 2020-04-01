@@ -393,8 +393,9 @@ class QueryBuilder extends Base
      *
      * @param mixed $conditions
      * @return mixed
+     * @api
      */
-    public function delete($column, $operator = null, $value = null)
+    protected function delete($column = null, $operator = null, $value = null)
     {
         $this->where(...func_get_args());
         $this->type = self::DELETE;

@@ -35,6 +35,17 @@ if (0) {
 class AppModel
 {
     /**
+     * Save the record or data to database
+     *
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function save($data = [])
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -172,6 +183,17 @@ class AppModel
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a delete query with specified conditions
+     *
+     * @param mixed $conditions
+     * @return mixed
+     * @api
+     */
+    public function delete($column = null, $operator = null, $value = null)
     {
     }
 
@@ -610,6 +632,17 @@ if (0) {
     class AppModel
     {
         /**
+         * Save the record or data to database
+         *
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function save($data = [])
+        {
+        }
+    
+        /**
          * Executes the generated SQL and returns the found record object or false
          *
          * @param int|string $id
@@ -747,6 +780,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed $conditions
+         * @return mixed
+         * @api
+         */
+        public static function delete($column = null, $operator = null, $value = null)
         {
         }
     
@@ -1185,6 +1229,17 @@ if (0) {
 class Model
 {
     /**
+     * Save the record or data to database
+     *
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function save($data = [])
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -1322,6 +1377,17 @@ class Model
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a delete query with specified conditions
+     *
+     * @param mixed $conditions
+     * @return mixed
+     * @api
+     */
+    public function delete($column = null, $operator = null, $value = null)
     {
     }
 
@@ -1760,6 +1826,17 @@ if (0) {
     class Model
     {
         /**
+         * Save the record or data to database
+         *
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function save($data = [])
+        {
+        }
+    
+        /**
          * Executes the generated SQL and returns the found record object or false
          *
          * @param int|string $id
@@ -1897,6 +1974,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed $conditions
+         * @return mixed
+         * @api
+         */
+        public static function delete($column = null, $operator = null, $value = null)
         {
         }
     
@@ -2384,6 +2472,17 @@ class QueryBuilder
     }
 
     /**
+     * Execute a delete query with specified conditions
+     *
+     * @param mixed $conditions
+     * @return mixed
+     * @api
+     */
+    public function delete($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
      * Sets the position of the first result to retrieve (the "offset")
      *
      * @param integer $offset The first result to return
@@ -2863,6 +2962,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed $conditions
+         * @return mixed
+         * @api
+         */
+        public static function delete($column = null, $operator = null, $value = null)
         {
         }
     
@@ -3399,7 +3509,7 @@ class User
      * @return array
      * @api
      */
-    public function checkMobile($mobile)
+    public function checkMobile(string $mobile)
     {
     }
 
@@ -3583,6 +3693,17 @@ class User
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a delete query with specified conditions
+     *
+     * @param mixed $conditions
+     * @return mixed
+     * @api
+     */
+    public function delete($column = null, $operator = null, $value = null)
     {
     }
 
@@ -4119,7 +4240,7 @@ if (0) {
          * @return array
          * @api
          */
-        public static function checkMobile($mobile)
+        public static function checkMobile(string $mobile)
         {
         }
     
@@ -4303,6 +4424,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed $conditions
+         * @return mixed
+         * @api
+         */
+        public static function delete($column = null, $operator = null, $value = null)
         {
         }
     
@@ -4747,7 +4879,7 @@ class UserModel
      * @return array
      * @api
      */
-    public function checkMobile($mobile)
+    public function checkMobile(string $mobile)
     {
     }
 
@@ -4790,6 +4922,17 @@ class UserModel
      * @api
      */
     public function can($permissionId)
+    {
+    }
+
+    /**
+     * Save the record or data to database
+     *
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function save($data = [])
     {
     }
 
@@ -4931,6 +5074,17 @@ class UserModel
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a delete query with specified conditions
+     *
+     * @param mixed $conditions
+     * @return mixed
+     * @api
+     */
+    public function delete($column = null, $operator = null, $value = null)
     {
     }
 
@@ -5375,7 +5529,7 @@ if (0) {
          * @return array
          * @api
          */
-        public static function checkMobile($mobile)
+        public static function checkMobile(string $mobile)
         {
         }
     
@@ -5418,6 +5572,17 @@ if (0) {
          * @api
          */
         public static function can($permissionId)
+        {
+        }
+    
+        /**
+         * Save the record or data to database
+         *
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function save($data = [])
         {
         }
     
@@ -5559,6 +5724,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed $conditions
+         * @return mixed
+         * @api
+         */
+        public static function delete($column = null, $operator = null, $value = null)
         {
         }
     

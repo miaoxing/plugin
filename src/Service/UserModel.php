@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Metadata\UserTrait;
+use Miaoxing\Services\Service\Time;
 use Miaoxing\User\Service\Group;
 use Miaoxing\User\Service\GroupModel;
 
@@ -120,10 +121,11 @@ class UserModel extends Model
      * Record: 指定用户是否为管理员
      *
      * @return bool
+     * @deprecated 使用 $this->admin
      */
     public function isAdmin()
     {
-        return (bool) $this['admin'];
+        return (bool) $this->admin;
     }
 
     /**
@@ -358,7 +360,7 @@ class UserModel extends Model
     public function afterSave()
     {
         parent::afterSave();
-        User::refresh($this);
+        $this->user->refresh($this);
         $this->clearRecordCache();
     }
 
@@ -384,7 +386,7 @@ class UserModel extends Model
 
         $this->save(['groupId' => $groupId]);
 
-        return ['code' => 1, 'message' => '操作成功'];
+        return $this->suc();
     }
 
     /**
@@ -404,10 +406,10 @@ class UserModel extends Model
      * @return array
      * @api
      */
-    protected function checkMobile($mobile)
+    protected function checkMobile(string $mobile)
     {
         // 1. 检查是否已存在认证该手机号码的用户
-        $mobileUser = wei()->user()->mobileVerified()->find(['mobile' => $mobile]);
+        $mobileUser = wei()->userModel()->mobileVerified()->findBy('mobile', $mobile);
         if ($mobileUser && $mobileUser['id'] != $this['id']) {
             return $this->err('已存在认证该手机号码的用户');
         }
@@ -596,11 +598,6 @@ class UserModel extends Model
         return (bool) $result;
     }
 
-    public function getDefaultHeadImg()
-    {
-        return wei()->user->defaultHeadImg;
-    }
-
     public function getTags()
     {
         $userTags = wei()->userTag->getAll();
@@ -630,7 +627,7 @@ class UserModel extends Model
      */
     public function mobileVerified()
     {
-        return $this->where('mobileVerifiedAt', '!=', '0000-00-00 00:00:00');
+        return $this->where('mobile_verified_at', '!=', '0000-00-00 00:00:00');
     }
 
     /**
@@ -639,7 +636,7 @@ class UserModel extends Model
      */
     public function setMobileVerified($verified = true)
     {
-        $this->mobileVerifiedAt = $verified ? wei()->time() : '0000-00-00 00:00:00';
+        $this->mobileVerifiedAt = $verified ? Time::now() : '0000-00-00 00:00:00';
         return $this;
     }
 
@@ -687,5 +684,10 @@ class UserModel extends Model
     public function setIsMobileVerifiedAttribute()
     {
         // do nothing
+    }
+
+    public function getAvatarAttribute()
+    {
+        return $this->data['avatar'] ?: $this->user->defaultAvatar;
     }
 }

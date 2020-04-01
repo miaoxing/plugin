@@ -2040,4 +2040,10 @@ class ModelTest extends BaseTestCase
         $sql = User::from('member m')->getSql();
         $this->assertEquals('SELECT * FROM member m', $sql);
     }
+
+    public function testGetAttribute()
+    {
+        $user = User::new();
+        $this->assertEquals('default address', $user->address);
+    }
 }

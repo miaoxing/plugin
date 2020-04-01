@@ -84,4 +84,9 @@ class User extends Model
     {
         return $this->eventResult;
     }
+
+    public function getAddressAttribute()
+    {
+        return $this->data['address'] ?: 'default address';
+    }
 }

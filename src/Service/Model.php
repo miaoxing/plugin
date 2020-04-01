@@ -326,8 +326,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param array $data
      * @return $this
+     * @api
      */
-    public function save($data = array())
+    protected function save($data = array())
     {
         // 1. Merges data from parameters
         $data && $this->fromArray($data);
@@ -1974,7 +1975,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $source = $this->getDataSource($name);
 
         if ($source === 'php') {
-            return $this->data[$name];
+            return $value;
         }
 
         // 用户数据则先转换为db数据
