@@ -2,6 +2,36 @@
 
 namespace Miaoxing\Plugin\Service;
 
+class App
+{
+    /**
+     * 根据域名查找应用名称
+     *
+     * @param string $domain
+     * @return string|false
+     * @api
+     */
+    public function getIdByDomain($domain)
+    {
+    }
+}
+
+if (0) {
+    class App
+    {
+        /**
+         * 根据域名查找应用名称
+         *
+         * @param string $domain
+         * @return string|false
+         * @api
+         */
+        public static function getIdByDomain($domain)
+        {
+        }
+    }
+}
+
 class AppModel
 {
     /**

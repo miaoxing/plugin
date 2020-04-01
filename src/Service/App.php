@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Services\ConfigTrait;
+use Miaoxing\Services\Service\StaticTrait;
 use Wei\Response;
 
 /**
@@ -11,10 +12,12 @@ use Wei\Response;
  * @mixin \EventMixin
  * @mixin \StrMixin
  * @mixin \AppModelMixin
+ * @mixin \CacheMixin
  */
 class App extends \Wei\App
 {
     use ConfigTrait;
+    use StaticTrait;
 
     /**
      * 插件控制器不使用该格式,留空可减少类查找
@@ -48,6 +51,13 @@ class App extends \Wei\App
      * @var array
      */
     protected $domains = [];
+
+    /**
+     * 预先定义的应用slug,可以减少查询
+     *
+     * @var array
+     */
+    protected $predefinedNames = ['app'];
 
     /**
      * 默认的应用首页,以便首页不是404
@@ -191,11 +201,11 @@ class App extends \Wei\App
     protected function getNamespaceFromDomain()
     {
         $domain = $this->request->getHost();
-        if (!$domain || in_array($domain, $this->domains)) {
+        if (!$domain || in_array($domain, $this->domains, true)) {
             return false;
         }
 
-        return $this->appModel->getIdByDomain($domain);
+        return $this->getIdByDomain($domain);
     }
 
     /**
@@ -206,7 +216,20 @@ class App extends \Wei\App
      */
     public function isNamespaceAvailable($namespace)
     {
-        return $this->appModel->isExists($namespace);
+        // 忽略非数字和字母组成的项目名称
+        if (!ctype_alnum($namespace)) {
+            return false;
+        }
+
+        if (in_array($namespace, $this->predefinedNames)) {
+            return true;
+        }
+
+        return $this->cache->get('appExists:' . $namespace, 86400, function () use ($namespace) {
+            $app = wei()->appModel()->select('name')->fetch('name', $namespace);
+
+            return $app && $app['name'] === $namespace;
+        });
     }
 
     /**
@@ -400,5 +423,21 @@ class App extends \Wei\App
     {
         $this->defaultViewFile = $defaultViewFile;
         return $this;
+    }
+
+    /**
+     * 根据域名查找应用名称
+     *
+     * @param string $domain
+     * @return string|false
+     * @api
+     */
+    protected function getIdByDomain($domain)
+    {
+        return $this->cache->get('appDomain:' . $domain, 86400, static function () use ($domain) {
+            $app = AppModel::select('name')->fetch('domain', $domain);
+
+            return $app ? $app['name'] : false;
+        });
     }
 }

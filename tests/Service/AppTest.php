@@ -2,6 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
+use Miaoxing\Plugin\Service\App;
+use Miaoxing\Plugin\Service\AppModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\Controller\TestController;
 
@@ -77,5 +79,26 @@ class AppTest extends BaseTestCase
                 'returnResponseInMiddleware',
             ],
         ];
+    }
+
+    public function testGetIdByDomain()
+    {
+        $prefix = 'appDomain:';
+        $app = AppModel::findOrInitBy(['domain' => 't.test.com']);
+
+        $app->save([
+            'name' => 'domain',
+            'domain' => '',
+        ]);
+
+        wei()->cache->remove($prefix . 't.test.com');
+        $this->assertFalse(App::getIdByDomain('t.test.com'));
+
+        wei()->cache->remove($prefix . 't.test.com');
+        $app->save(['domain' => 't.test.com']);
+
+        $this->assertEquals('domain', App::getIdByDomain('t.test.com'));
+
+        $app->destroy();
     }
 }
