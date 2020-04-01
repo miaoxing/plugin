@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
+use Miaoxing\Services\Service\ClassMap;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpFile;
@@ -35,13 +36,49 @@ class GAutoCompletion extends BaseCommand
      */
     protected function handle()
     {
-        $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
+        $id = $this->getArgument('plugin-id');
+        if ($id === 'wei') {
+            [$services, $path, $generateViewVars] = $this->getWeiConfig();
+        } else {
+            $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
+            $path = $plugin->getBasePath();
+            $services = $this->getServerMap($plugin);
+            $generateViewVars = true;
+        }
 
         // NOTE: 需生成两个文件，services.php 里的类才能正确跳转到源文件
-        $this->generateServices($plugin);
-        $this->generateStaticCalls($plugin);
+        $this->generateServices($services, $path, $generateViewVars);
+        $this->generateStaticCalls($services, $path);
 
         return $this->suc('创建成功');
+    }
+
+    protected function getWeiConfig()
+    {
+        // TODO
+        // 1. ClassMap 服务支持 wei/lib 目录(无类型)
+        // 2. wei/wei 增加 psr-4 配置？
+
+        $services = [];
+        $path = 'packages/wei/lib';
+
+        $files = glob($path . '/*.php');
+        foreach ($files as $file) {
+            $name = basename($file, '.php');
+            $services[lcfirst($name)] = 'Wei\\' . $name;
+        }
+
+        $files = glob($path . '/Validator/*.php');
+        foreach ($files as $file) {
+            $name = basename($file, '.php');
+            // TODO Null 类 php7 不支持
+            if ($name === 'Null') {
+                continue;
+            }
+            $services['is' . $name] = 'Wei\\Validator\\' . $name;
+        }
+
+        return [$services, 'packages/wei', false];
     }
 
     /**
@@ -52,12 +89,13 @@ class GAutoCompletion extends BaseCommand
      * 2. Function calls, that is wei()->xxx
      * 3. Global variables
      *
-     * @param BasePlugin $plugin
+     * @param array $services
+     * @param string $path
+     * @param bool $generateViewVars
      * @throws \ReflectionException
      */
-    protected function generateServices(BasePlugin $plugin)
+    protected function generateServices(array $services, string $path, bool $generateViewVars = true)
     {
-        $services = $this->getServerMap($plugin);
         $content = "<?php\n\n";
         $autoComplete = '';
 
@@ -84,9 +122,9 @@ function wei()
 
 PHP;
 
-        $content .= $this->generateViewVars($services);
+        $generateViewVars && $content .= $this->generateViewVars($services);
 
-        $this->createFile($plugin->getBasePath() . '/docs/auto-completion.php', $content);
+        $this->createFile($path . '/docs/auto-completion.php', $content);
     }
 
     /**
@@ -96,11 +134,8 @@ PHP;
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function generateStaticCalls(BasePlugin $plugin)
+    public function generateStaticCalls(array $services, string $path)
     {
-        $dir = $plugin->getBasePath();
-        $services = $this->classMap->generate($dir . '/src', '/Service/*.php', 'Service');
-
         $file = new PhpFile();
         $printer = new PsrPrinter;
         $content = '';
@@ -143,7 +178,8 @@ PHP;
                 $content .= $printer->printClass($class, $namespace);
             }
             if ($staticMethods) {
-                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass, $namespace))) . "\n}\n";
+                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass,
+                        $namespace))) . "\n}\n";
                 // NOTE: 分多个文件反而出现第二，三级的子类(例如AppModel)没有代码提示，魔术方法识别失败等问题
                 //$dynamic .= $printer->printClass($staticClass, $namespace);
             }
@@ -157,7 +193,7 @@ PHP;
         $content = $printer->printFile($file) . "\n" . $content;
         //$dynamic = $printer->printFile($file) . $dynamic;
 
-        $this->createFile($plugin->getBasePath() . '/docs/auto-completion-static.php', $content);
+        $this->createFile($path . '/docs/auto-completion-static.php', $content);
         //$this->createFile($plugin->getBasePath() . '/docs/auto-completion-dynamic.php', $dynamic);
     }
 
