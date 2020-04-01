@@ -388,65 +388,6 @@ class UserModel extends Model
     }
 
     /**
-     * 设置某个状态为是否开启
-     *
-     * @param int $position
-     * @param bool $value
-     * @return $this
-     */
-    public function setStatus($position, $value)
-    {
-        $status = pow(2, $position - 1);
-        if ($value) {
-            $status = $this['status'] | $status;
-        } elseif ($this['status'] !== null) {
-            $status = $this['status'] & ~$status;
-        } else {
-            $status = ~$status;
-        }
-        $this['status'] = $status & 0xFFFF;
-
-        return $this;
-    }
-
-    /**
-     * 检查某个状态位是否开启
-     *
-     * @param int $position
-     * @return bool
-     */
-    public function isStatus($position)
-    {
-        return (bool) ($this['status'] & pow(2, $position - 1));
-    }
-
-    /**
-     * QueryBuilder: 查询某个状态是启用的记录
-     *
-     * @param int $position
-     * @return $this
-     */
-    public function withStatus($position)
-    {
-        $value = pow(2, $position - 1);
-
-        return $this->andWhere("status & $value = $value");
-    }
-
-    /**
-     * QueryBuilder: 查询某个状态是禁用的记录
-     *
-     * @param int $position
-     * @return $this
-     */
-    public function withoutStatus($position)
-    {
-        $value = pow(2, $position - 1);
-
-        return $this->andWhere("status & $value = 0");
-    }
-
-    /**
      * Record: 检查当前记录是否刚创建
      *
      * @return bool
