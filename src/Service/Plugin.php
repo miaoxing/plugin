@@ -4,20 +4,19 @@ namespace Miaoxing\Plugin\Service;
 
 use Exception;
 use Miaoxing\Plugin\BaseService;
-use Miaoxing\Services\Service\ClassMap;
 
 /**
  * 插件管理器
  *
  * 注意: 启用调试模式下,Ctrl+F5可以刷新缓存
  *
- * @property \Wei\BaseCache $cache 常规缓存,用于记录插件对应的事件
+ * @mixin \CacheMixin 常规缓存,用于记录插件对应的事件
  * @property \Wei\BaseCache $configCache 记录生成的配置数组,使用phpFileCache速度最快,但需要在开发过程中生成,
  *                                       或者线上服务器可写,否则可改为memcached,redis等缓存
- * @property \Wei\Event $event
- * @property \Wei\Request $request
- * @property \Miaoxing\Plugin\Service\App $app
- * @property ClassMap $classMap
+ * @mixin \EventMixin
+ * @mixin \RequestMixin
+ * @mixin \AppMixin
+ * @mixin \ClassMapMixin
  */
 class Plugin extends BaseService
 {

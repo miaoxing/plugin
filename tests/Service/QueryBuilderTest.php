@@ -8,8 +8,7 @@ use Miaoxing\Services\Service\ServiceTrait;
 use MiaoxingTest\Plugin\Fixture\DbTrait;
 
 /**
- * @property \Wei\Db db
- * @method \Wei\Record db($table = null)
+ * @mixin \DbMixin
  */
 class QueryBuilderTest extends BaseTestCase
 {

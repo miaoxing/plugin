@@ -6,13 +6,13 @@ use Miaoxing\Services\Service\Page;
 
 /**
  * @mixin \UserMixin
- * @property \Miaoxing\Plugin\Service\App $app
- * @property \Wei\Session $session
- * @property \Wei\View $view
- * @property \Wei\Logger $logger
- * @property \Miaoxing\Plugin\Service\Plugin $plugin
- * @property \Wei\Ret $ret 返回值服务
- * @property Page $page
+ * @mixin \AppMixin
+ * @mixin \SessionMixin
+ * @mixin \ViewMixin
+ * @mixin \LoggerMixin
+ * @mixin \PluginMixin
+ * @mixin \RetMixin
+ * @mixin \PageMixin
  * @property bool controllerAuth
  * @property array actionAuths
  */

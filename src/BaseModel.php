@@ -12,10 +12,10 @@ use Wei\RetTrait;
 
 /**
  * @method \Miaoxing\Plugin\BaseModel db($table = null) Create a new record object
- * @property \Wei\BaseCache $cache
- * @property \Miaoxing\Plugin\Service\Plugin $plugin
- * @property Logger $logger
- * @property Str $str
+ * @mixin \CacheMixin
+ * @mixin \PluginMixin
+ * @mixin \LoggerMixin
+ * @mixin \StrMixin
  * @SuppressWarnings(PHPMD.ExcessiveClassLength) 允许模型类较长
  * @deprecated 改用 Model
  */

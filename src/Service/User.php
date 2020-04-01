@@ -8,9 +8,6 @@ use Wei\RetTrait;
 /**
  * 用户
  *
- * @property \Wei\Session $session
- * @property \Wei\Request $request
- * @property \Wei\Password $password
  * @property bool enableRegister
  * @property string disableRegisterTips
  * @property bool enableLoginCaptcha
@@ -25,6 +22,9 @@ use Wei\RetTrait;
  * @property bool enableExport
  * @property bool enableCreate
  * @mixin \EventMixin
+ * @mixin \SessionMixin
+ * @mixin \RequestMixin
+ * @mixin \PasswordMixin
  */
 class User extends UserModel
 {

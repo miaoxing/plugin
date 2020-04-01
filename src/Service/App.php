@@ -8,9 +8,9 @@ use Wei\Response;
 /**
  * 应用
  *
- * @property \Miaoxing\Plugin\Service\AppModel $appModel 应用的数据库服务
  * @mixin \EventMixin
  * @mixin \StrMixin
+ * @mixin \AppModelMixin
  */
 class App extends \Wei\App
 {

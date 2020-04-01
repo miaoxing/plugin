@@ -8,7 +8,7 @@ use Miaoxing\Services\ConstTrait;
 /**
  * 应用模型
  *
- * @property \Wei\BaseCache $cache
+ * @mixin \CacheMixin
  */
 class AppModel extends Model
 {

@@ -6,9 +6,8 @@ use Miaoxing\Plugin\BaseController;
 use Miaoxing\Services\Middleware\BaseMiddleware;
 
 /**
- * @property \Wei\Url $url
- * @method string url($url = '', $argsOrParams = array(), $params = array())
  * @mixin \UserMixin
+ * @mixin \UrlMixin
  */
 class Auth extends BaseMiddleware
 {

@@ -10,8 +10,8 @@ use Wei\Base;
 /**
  * A SQL query builder class
  *
- * @author      Twin Huang <twinhuang@qq.com>
- * @property    \Wei\Db $db A database service inspired by Doctrine DBAL
+ * @author Twin Huang <twinhuang@qq.com>
+ * @mixin \DbMixin
  */
 class QueryBuilder extends Base
 {
