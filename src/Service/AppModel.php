@@ -37,7 +37,7 @@ class AppModel extends Model
 
     protected $data = [
         'configs' => [],
-        'pluginIds' => [],
+        'plugin_ids' => [],
     ];
 
     /**
@@ -64,7 +64,7 @@ class AppModel extends Model
             return true;
         }
 
-        return $this->cache->get('appExists' . $name, 86400, function () use ($name) {
+        return $this->cache->get('appExists:' . $name, 86400, function () use ($name) {
             $app = wei()->appModel()->select('name')->fetch('name', $name);
 
             return $app && $app['name'] === $name;
@@ -79,7 +79,7 @@ class AppModel extends Model
      */
     public function getIdByDomain($domain)
     {
-        return $this->cache->get('appDomain' . $domain, 86400, function () use ($domain) {
+        return $this->cache->get('appDomain:' . $domain, 86400, function () use ($domain) {
             $app = wei()->appModel()->select('name')->fetch('domain', $domain);
 
             return $app ? $app['name'] : false;

@@ -2,12 +2,15 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-class AppModelTest extends \Miaoxing\Plugin\Test\BaseTestCase
+use Miaoxing\Plugin\Test\BaseTestCase;
+
+class AppModelTest extends BaseTestCase
 {
     public function testGetIdByDomain()
     {
-        $prefix = 'appDomain';
-        $app = wei()->appModel()->findOrInit(['domain' => 't.test.com']);
+        $prefix = 'appDomain:';
+        $app = wei()->appModel()->findOrInitBy(['domain' => 't.test.com']);
+
         $app->save([
             'name' => 'domain',
             'domain' => '',
