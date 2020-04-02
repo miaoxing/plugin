@@ -703,6 +703,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function remove($name)
     {
+        $name = $this->filterInputColumn($name);
+
         if (!$this->isColl) {
             if (array_key_exists($name, $this->data)) {
                 $this->data[$name] = null;

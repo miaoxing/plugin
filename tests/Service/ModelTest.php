@@ -467,20 +467,20 @@ class ModelTest extends BaseTestCase
         $this->assertEmpty($noMembers->toArray());
     }
 
-    public function testRecordUnset()
+    public function testOffsetUnset()
     {
         $this->initFixtures();
 
-        $user = User::find('1');
+        $user = User::find(1);
 
         $this->assertEquals('twin', $user['name']);
-        $this->assertEquals('1', $user['group_id']);
+        $this->assertEquals('1', $user['groupId']);
 
         unset($user['name']);
-        $user->remove('group_id');
+        unset($user['groupId']);
 
         $this->assertEquals(null, $user['name']);
-        $this->assertEquals(null, $user['group_id']);
+        $this->assertEquals(null, $user['groupId']);
     }
 
     public function testErrorCodeAndInfo()
