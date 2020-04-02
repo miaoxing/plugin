@@ -2,10 +2,15 @@
 
 namespace Miaoxing\Plugin\Test;
 
+use Miaoxing\Services\Service\ServiceTrait;
+use Wei\Wei;
+
 class BaseTestCase extends \PHPUnit\Framework\TestCase
 {
+    use ServiceTrait;
+
     /**
-     * @var \Wei\Wei|\Miaoxing\Plugin\BaseService
+     * @var Wei
      */
     protected $wei;
 
@@ -19,8 +24,10 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
      */
     protected $fixture;
 
-    protected function setUp(): void
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
+        parent::__construct($name, $data, $dataName);
+
         $this->wei = wei();
 
         // 将当前测试用例作为一个服务,允许其他服务调用
@@ -154,14 +161,10 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param string $message
      * @param string $args
+     * @deprecated 使用 asset 的 message
      */
     public function step($message, $args = null)
     {
-        $args = func_get_args();
-        if (count($args) > 1) {
-            array_shift($args);
-            $message = vsprintf($message, $args);
-        }
-        echo $message;
+        // do nothing
     }
 }

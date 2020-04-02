@@ -4,7 +4,11 @@ namespace Miaoxing\Plugin\Test;
 
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Services\Service\Tester;
+use RuntimeException;
 
+/**
+ * @mixin \AppMixin
+ */
 class BaseControllerTestCase extends BaseTestCase
 {
     /**
@@ -49,12 +53,10 @@ class BaseControllerTestCase extends BaseTestCase
     public function providerForActions()
     {
         $controller = $this->getController();
-        $controllerClasses = wei()->app->getControllerClasses($controller);
-        $controllerClass = array_pop($controllerClasses);
+        $controllerClass = last($this->app->getControllerClasses($controller));
         $actions = get_class_methods($controllerClass);
-
         if ($actions === null) {
-            throw new \Exception(sprintf(
+            throw new RuntimeException(sprintf(
                 'Action method not found in controller %s class %s',
                 $controller,
                 $controllerClass
@@ -63,7 +65,7 @@ class BaseControllerTestCase extends BaseTestCase
 
         $params = [];
         foreach ($actions as $action) {
-            if (substr($action, -6) == 'Action') {
+            if (substr($action, -6) === 'Action') {
                 $action = substr($action, 0, -6);
                 $params[] = [
                     $action,
@@ -78,10 +80,12 @@ class BaseControllerTestCase extends BaseTestCase
     public function getController()
     {
         if (!$this->controller) {
-            $class = get_called_class();
-            $parts = explode('Controller\\', $class);
-            $controller = substr($parts[1], 0, -4);
-            $this->controller = implode('/', array_map('lcfirst', explode('\\', $controller)));
+            preg_match('/Controller\\\\(.+?)ControllerTest/', static::class, $matches);
+            $values = [];
+            foreach (explode('\\', $matches[1]) as $value) {
+                $values[] = lcfirst($value);
+            }
+            $this->controller = implode('\\', $values);
         }
 
         return $this->controller;
@@ -118,15 +122,13 @@ class BaseControllerTestCase extends BaseTestCase
      */
     public function dispatch($controller, $action = 'index')
     {
-        $wei = wei();
-
         User::loginById(1);
 
-        $wei->setNamespace('test');
+        $this->wei->setNamespace('test');
 
         ob_start();
         try {
-            $response = $wei->app->dispatch($controller, $action);
+            $response = $this->app->dispatch($controller, $action);
         } catch (\Exception $e) {
             ob_end_clean();
 
