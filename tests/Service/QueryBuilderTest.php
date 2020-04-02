@@ -825,6 +825,76 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('test address', $user['address']);
     }
 
+
+    public function testParameters()
+    {
+        $this->initFixtures();
+
+        $query = Qb::table('users')
+            ->whereRaw('id = :id AND group_id = :groupId')
+            ->addParameter([
+                'id' => 1,
+                'groupId' => 1,
+            ]);
+        $user = $query->fetch();
+
+        $this->assertEquals(array(
+            'id' => 1,
+            'groupId' => 1,
+        ), $query->getBindParams());
+
+        $this->assertEquals(1, $query->getParameter('id'));
+        $this->assertNull($query->getParameter('no'));
+
+        $this->assertEquals(1, $user['id']);
+        $this->assertEquals(1, $user['group_id']);
+
+        // TODO set parameter
+        $query->removeParameters()->addParameter([
+            'id' => 10,
+            'groupId' => 1,
+        ]);
+        $user = $query->first();
+        $this->assertNull($user);
+    }
+
+    /**
+     * @dataProvider providerForParameterValue
+     */
+    public function testParameterValue($value)
+    {
+        $this->initFixtures();
+
+        $query = $this
+            ->db('users')
+            ->where('id = ?', $value)
+            ->andWhere('id = ?', $value)
+            ->andWhere('id = ?', $value)
+            ->orWhere('id = ?', $value)
+            ->orWhere('id = ?', $value)
+            ->groupBy('id')
+            ->having('id = ?', $value)
+            ->andHaving('id = ?', $value)
+            ->andHaving('id = ?', $value)
+            ->orHaving('id = ?', $value)
+            ->orHaving('id = ?', $value);
+
+        // No error raise
+        $array = $query->fetchAll();
+        $this->assertIsArray($array);
+    }
+
+    public function providerForParameterValue()
+    {
+        return array(
+            array('0'),
+            array(0),
+            array(null),
+            array(true),
+            array(array(null)),
+        );
+    }
+
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
      */

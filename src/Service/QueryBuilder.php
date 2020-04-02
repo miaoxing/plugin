@@ -1113,6 +1113,7 @@ class QueryBuilder extends Base
      * @param mixed $value The parameter value
      * @param string|null $type PDO::PARAM_*
      * @return $this
+     * @todo refactor 暂不支持
      */
     public function setParameter($key, $value, $type = null)
     {
@@ -1128,11 +1129,12 @@ class QueryBuilder extends Base
      * Gets a (previously set) query parameter of the query being constructed
      *
      * @param mixed $key The key (index or name) of the bound parameter
+     * @param string $type
      * @return mixed The value of the bound parameter
      */
-    public function getParameter($key)
+    public function getParameter($key, $type = 'where')
     {
-        return isset($this->params[$key]) ? $this->params[$key] : null;
+        return $this->getBindParams()[$key] ?? null;
     }
 
     /**
@@ -1157,6 +1159,29 @@ class QueryBuilder extends Base
     public function getParameters()
     {
         return $this->params;
+    }
+
+    /**
+     * @param string|array $parameter
+     * @param string $type
+     * @return $this
+     */
+    public function addParameter($parameter, $type = 'where')
+    {
+        $this->params[$type][] = (array) $parameter;
+        return $this;
+    }
+
+    public function removeParameters($type = null)
+    {
+        if ($type) {
+            $this->params[$type] = [];
+        } else {
+            foreach ($this->params as $paramType => $params) {
+                $this->params[$paramType] = [];
+            }
+        }
+        return $this;
     }
 
     /**
@@ -1202,7 +1227,7 @@ class QueryBuilder extends Base
      *
      * @return array
      */
-    protected function getBindParams()
+    public function getBindParams()
     {
         $params = [];
         foreach ($this->params as $value) {
