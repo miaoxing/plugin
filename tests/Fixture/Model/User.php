@@ -20,6 +20,10 @@ class User extends Model
 
     protected $eventResult;
 
+    protected $casts = [
+        'id' => 'int',
+    ];
+
     protected $data = array(
         'group_id' => 0,
     );

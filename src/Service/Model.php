@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Closure;
 use InvalidArgumentException;
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\BaseService;
@@ -267,7 +268,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Returns the record and relative records data as JSON string
      *
      * @param array $returnFields A indexed array specified the fields to return
-     * @return array
+     * @return string
      */
     public function toJson($returnFields = array())
     {
@@ -416,12 +417,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param mixed $conditions
+     * @param string|int $id
      * @return $this
+     * @api
      */
-    public function destroy($conditions = false)
+    protected function destroy($id = null)
     {
-        $this->where($conditions);
+        $id && $this->find($id);
         !$this->loaded && $this->loadData(0);
 
         if (!$this->isColl) {
@@ -1070,7 +1072,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Filters elements of the collection using a callback function
      *
      * @param Closure $fn
-     * @return $this
+     * @return $this|$this[]
      */
     public function filter(Closure $fn)
     {

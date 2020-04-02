@@ -296,140 +296,119 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('twin', $user->name);
     }
 
-    public function testRecordNamespace()
+    public function testToArray()
     {
         $this->initFixtures();
 
-        $this->db->setOption('recordNamespace', 'WeiTest\Db');
+        $user = User::find(1)->toArray();
 
-        $user = $this->db->find('users', 1);
-
-        $this->assertEquals('WeiTest\Db\User', $this->db->getRecordClass('users'));
-        $this->assertInstanceOf('WeiTest\Db\User', $user);
-    }
-
-    public function testCustomRecordClass()
-    {
-        $this->initFixtures();
-
-        $this->db->setOption('recordClasses', array(
-            'users' => 'WeiTest\Db\User',
-        ));
-
-        $user = $this->db->find('users', 1);
-
-        $this->assertEquals('WeiTest\Db\User', $this->db->getRecordClass('users'));
-        $this->assertInstanceOf('WeiTest\Db\User', $user);
-    }
-
-    public function testRecordToArray()
-    {
-        $this->initFixtures();
-
-        $user = $this->db->find('users', 1)->toArray();
-
-        $this->assertInternalType('array', $user);
+        $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayHasKey('groupId', $user);
         $this->assertArrayHasKey('name', $user);
         $this->assertArrayHasKey('address', $user);
 
-        $user = $this->db->find('users', 1)->toArray(array('id', 'group_id'));
-        $this->assertInternalType('array', $user);
+        $user = User::find(1)->toArray(array('id', 'groupId'));
+        $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayHasKey('groupId', $user);
         $this->assertArrayNotHasKey('name', $user);
         $this->assertArrayNotHasKey('address', $user);
 
-        $user = $this->db->find('users', 1)->toArray(array('id', 'group_id', 'notExistField'));
-        $this->assertInternalType('array', $user);
+        $user = User::find(1)->toArray(array('id', 'groupId'));
+        $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayHasKey('groupId', $user);
         $this->assertArrayNotHasKey('name', $user);
         $this->assertArrayNotHasKey('address', $user);
 
-        $user = $this->db->init('users')->toArray();
-        $this->assertInternalType('array', $user);
+        $user = User::new()->toArray();
+        $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('group_id', $user);
+        $this->assertArrayHasKey('groupId', $user);
         $this->assertArrayHasKey('name', $user);
         $this->assertArrayHasKey('address', $user);
         $this->assertNull($user['id']);
-        $this->assertNull($user['group_id']);
+        $this->assertNull($user['groupId']);
         $this->assertNull($user['name']);
         $this->assertNull($user['address']);
 
-        $users = User::findAll()->toArray(array('id', 'group_id'));
-        $this->assertInternalType('array', $users);
+        $users = User::all()->toArray(array('id', 'groupId'));
+        $this->assertIsArray($users);
         $this->assertArrayHasKey(0, $users);
         $this->assertArrayHasKey('id', $users[0]);
-        $this->assertArrayHasKey('group_id', $users[0]);
+        $this->assertArrayHasKey('groupId', $users[0]);
         $this->assertArrayNotHasKey('name', $users[0]);
-
-        $this->db->setOption('recordClasses', array(
-            'users' => 'WeiTest\Db\User',
-        ));
     }
 
-    public function testNewRecordToArrayWithoutReturnFields()
+    public function testToArrayWithInvalidColumn()
+    {
+        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: notExistColumn'));
+
+        User::new()->toArray(['notExistColumn']);
+    }
+
+    public function testNewModelToArrayWithoutReturnFields()
     {
         $this->initFixtures();
 
-        $user = User::findOrInit(array('id' => 9999));
+        $user = User::findOrInitBy(array('id' => 9999));
 
         $this->assertTrue($user->isNew());
 
         $data = $user->toArray();
 
         $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('group_id', $data);
+        $this->assertArrayHasKey('groupId', $data);
         $this->assertArrayHasKey('name', $data);
     }
 
-    public function testNewRecordToArrayWithReturnFields()
+    public function testNewModelToArrayWithReturnFields()
     {
         $this->initFixtures();
 
-        $user = User::findOrInit(array('id' => 9999));
+        $user = User::findOrInitBy(array('id' => 9999));
 
         $this->assertTrue($user->isNew());
 
-        $data = $user->toArray(array('group_id', 'name'));
+        $data = $user->toArray(array('groupId', 'name'));
 
         $this->assertArrayNotHasKey('id', $data);
-        $this->assertArrayHasKey('group_id', $data);
+        $this->assertArrayHasKey('groupId', $data);
         $this->assertArrayHasKey('name', $data);
     }
 
     public function testToJson()
     {
         $this->initFixtures();
-        $user = $this->db->init('users');
-        $this->assertInternalType('string', $user->toJson());
+
+        $user = User::new();
+        $this->assertJson($user->toJson());
     }
 
-    public function testDestroyRecord()
+    public function testDestroy()
     {
         $this->initFixtures();
 
-        $user = $this->db->find('users', 1);
+        $user = User::find(1);
 
         $result = $user->destroy();
 
-        $this->assertInstanceOf('\Wei\Record', $result);
+        $this->assertInstanceOf(User::class, $result);
 
-        $user = $this->db->find('users', 1);
+        $user = User::find(1);
 
-        $this->assertFalse($user);
+        $this->assertNull($user);
     }
 
-    public function testDestroyByCondition()
+    public function testDestroyById()
     {
         $this->initFixtures();
 
-        $result = User::destroy(2);
+        $user = User::destroy(2);
+        $this->assertInstanceOf(User::class, $user);
 
-        $this->assertFalse(User::find(2));
+        $this->assertNull(User::find(2));
     }
 
     public function testGetTable()
@@ -441,66 +420,50 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('users', $user->getTable());
     }
 
-    public function testFieldNotFound()
+    public function testColumnNotFound()
     {
         $this->initFixtures();
 
         $user = User::find('1');
 
-        $this->setExpectedException('\InvalidArgumentException',
-            'Field "notFound" not found in record class "Wei\Record"');
+        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: notFound'));
 
         $user['notFound'];
     }
 
-    public function testCollection()
+    public function testColl()
     {
         $this->initFixtures();
 
-        $users = $this->db->findAll('users');
+        $users = User::all();
 
-        $this->assertInstanceOf('\Wei\Record', $users);
+        $this->assertInstanceOf(User::class, $users);
 
-        // ToArray
         $userArray = $users->toArray();
-        $this->assertInternalType('array', $userArray);
+        $this->assertIsArray($userArray);
         foreach ($userArray as $user) {
-            $this->assertInternalType('array', $user);
+            $this->assertIsArray($user);
         }
-
-        // Filter
-        $firstGroupMembers = $users->filter(function ($user) {
-            if ('1' == $user['group_id']) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-
-        $this->assertEquals('1', $firstGroupMembers[0]['group_id']);
-        $this->assertInstanceOf('\Wei\Record', $firstGroupMembers);
-        $this->assertNotSame($users, $firstGroupMembers);
     }
 
     public function testFilter()
     {
         $this->initFixtures();
 
-        $this->db->setOption('recordNamespace', 'WeiTest\Db');
-        $users = User::findAll();
+        $users = User::all();
 
-        $oneMembers = $users->filter(function ($user) {
-            return $user['id'] == 1;
+        $oneUsers = $users->filter(static function (User $user) {
+            return $user->id === 1;
         });
 
-        $this->assertEquals(1, $oneMembers->length());
-        $this->assertEquals(1, $oneMembers[0]['id']);
+        $this->assertCount(1, $oneUsers);
+        $this->assertEquals(1, $oneUsers[0]->id);
 
-        $noMembers = $users->filter(function () {
+        $noMembers = $users->filter(static function () {
             return false;
         });
 
-        $this->assertEquals(0, $noMembers->length());
+        $this->assertCount(0, $noMembers);
         $this->assertEmpty($noMembers->toArray());
     }
 
@@ -695,7 +658,7 @@ class ModelTest extends BaseTestCase
 
         // No error raise
         $array = $query->fetchAll();
-        $this->assertInternalType('array', $array);
+        $this->assertIsArray($array);
     }
 
     public function providerForParameterValue()

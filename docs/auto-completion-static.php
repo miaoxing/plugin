@@ -46,6 +46,17 @@ class AppModel
     }
 
     /**
+     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+     *
+     * @param string|int $id
+     * @return $this
+     * @api
+     */
+    public function destroy($id = null)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -648,6 +659,17 @@ if (0) {
          * @api
          */
         public static function save($data = [])
+        {
+        }
+    
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param string|int $id
+         * @return $this
+         * @api
+         */
+        public static function destroy($id = null)
         {
         }
     
@@ -1258,6 +1280,17 @@ class Model
     }
 
     /**
+     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+     *
+     * @param string|int $id
+     * @return $this
+     * @api
+     */
+    public function destroy($id = null)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -1860,6 +1893,17 @@ if (0) {
          * @api
          */
         public static function save($data = [])
+        {
+        }
+    
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param string|int $id
+         * @return $this
+         * @api
+         */
+        public static function destroy($id = null)
         {
         }
     
@@ -3614,6 +3658,17 @@ class User
     }
 
     /**
+     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+     *
+     * @param string|int $id
+     * @return $this
+     * @api
+     */
+    public function destroy($id = null)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -4354,6 +4409,17 @@ if (0) {
         }
     
         /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param string|int $id
+         * @return $this
+         * @api
+         */
+        public static function destroy($id = null)
+        {
+        }
+    
+        /**
          * Executes the generated SQL and returns the found record object or false
          *
          * @param int|string $id
@@ -5013,6 +5079,17 @@ class UserModel
     }
 
     /**
+     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+     *
+     * @param string|int $id
+     * @return $this
+     * @api
+     */
+    public function destroy($id = null)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -5668,6 +5745,17 @@ if (0) {
          * @api
          */
         public static function save($data = [])
+        {
+        }
+    
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param string|int $id
+         * @return $this
+         * @api
+         */
+        public static function destroy($id = null)
         {
         }
     
