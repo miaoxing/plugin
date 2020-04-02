@@ -296,81 +296,12 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $users = User::findAll();
+        $users = User::all();
 
         $users = $users->indexBy('name')->toArray();
 
         $this->assertArrayHasKey('twin', $users);
         $this->assertArrayHasKey('test', $users);
-    }
-
-    public function testQueryUpdate()
-    {
-        $this->initFixtures();
-
-        $user = User::where('id = 1');
-        $result = $user->update("name = 'twin2'");
-
-        $this->assertGreaterThan(0, $result);
-        $this->assertEquals("UPDATE prefix_member SET name = 'twin2' WHERE id = 1", $user->getSql());
-
-        $user = $this->db->find('users', 1);
-        $this->assertEquals(1, $result);
-        $this->assertEquals('twin2', $user['name']);
-    }
-
-    public function testBindValue()
-    {
-        $this->initFixtures();
-
-        // Not array parameter
-        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = ?", 1, PDO::PARAM_INT);
-
-        $this->assertEquals('1', $user['id']);
-
-        // Array parameter
-        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = ?", array(1), array(PDO::PARAM_INT));
-
-        $this->assertEquals('1', $user['id']);
-
-        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = ? AND group_id = ?", array(1, 1), array(
-            PDO::PARAM_INT // (no parameter type for second placeholder)
-        ));
-
-        $this->assertEquals('1', $user['id']);
-        $this->assertEquals('1', $user['group_id']);
-
-        // Name parameter
-        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
-            'id' => 1,
-        ), array(
-            'id' => PDO::PARAM_INT,
-        ));
-
-        $this->assertEquals('1', $user['id']);
-
-        // Name parameter with colon
-        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
-            'id' => 1,
-        ), array(
-            ':id' => PDO::PARAM_INT,
-        ));
-
-        $this->assertEquals('1', $user['id']);
-
-        $user = $this->db->fetch("SELECT * FROM prefix_member WHERE id = :id", array(
-            'id' => '1',
-        ));
-
-        $this->assertEquals('1', $user['id']);
-    }
-
-    public function testFetchColumn()
-    {
-        $this->initFixtures();
-
-        $count = $this->db->fetchColumn("SELECT COUNT(id) FROM prefix_member");
-        $this->assertEquals(2, $count);
     }
 
     public function testRecordNamespace()

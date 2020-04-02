@@ -793,6 +793,9 @@ class QueryBuilderTest extends BaseTestCase
 
         $row = Qb::table('users')->update(['address' => 'test address']);
         $this->assertEquals(2, $row);
+
+        $user = Qb::table('users')->where('id', 1)->first();
+        $this->assertEquals('test address', $user['address']);
     }
 
     /**

@@ -372,18 +372,15 @@ class QueryBuilder extends Base
      * @param array|string $set
      * @return int
      */
-    public function update($set = array())
+    public function update($set = [])
     {
-        if (is_array($set)) {
-            $params = array();
-            foreach ($set as $field => $param) {
-                $this->add('set', $field . ' = ?', true);
-                $params[] = $param;
-            }
-            $this->params['set'][] = array_merge($this->params['set'], $params);
-        } else {
-            $this->add('set', $set, true);
+        $params = [];
+        foreach ($set as $field => $param) {
+            $this->add('set', $field . ' = ?', true);
+            $params[] = $param;
         }
+        $this->params['set'][] = array_merge($this->params['set'], $params);
+
         $this->type = self::UPDATE;
         return $this->execute();
     }
