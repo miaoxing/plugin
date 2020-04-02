@@ -109,7 +109,6 @@ class BaseControllerTestCase extends BaseTestCase
     {
         $controller = $this->getController();
         $action = $this->getAction();
-        $this->step('访问页面' . $controller . '/' . $action);
 
         return wei()->tester($controller, $action)
             ->request($request);
@@ -123,8 +122,6 @@ class BaseControllerTestCase extends BaseTestCase
     public function dispatch($controller, $action = 'index')
     {
         User::loginById(1);
-
-        $this->wei->setNamespace('test');
 
         ob_start();
         try {
