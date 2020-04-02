@@ -1119,7 +1119,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if (in_array($this->updatedByColumn, $fields)) {
-            $this[$this->updatedByColumn] = $this->user->id;
+            $this[$this->updatedByColumn] = (int) $this->user->id;
         }
     }
 
@@ -1142,7 +1142,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
-            $this[$this->createdByColumn] = $this->user->id;
+            $this[$this->createdByColumn] = (int) $this->user->id;
         }
     }
 
