@@ -758,6 +758,23 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertSame(2, $count);
     }
 
+    public function testCountBySubQuery()
+    {
+        $this->markTestIncomplete('todo refactor');
+
+        $this->initFixtures();
+
+        $count = Qb::table('users')::countBySubQuery();
+
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(2, $count);
+
+        $count = User::select('id, name')->limit(1)->offset(2)->countBySubQuery();
+
+        $this->assertInternalType('int', $count);
+        $this->assertEquals(2, $count);
+    }
+
     public function testMax()
     {
         $this->initFixtures();

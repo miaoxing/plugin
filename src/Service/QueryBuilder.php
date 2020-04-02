@@ -348,8 +348,9 @@ class QueryBuilder extends Base
      *
      * @param mixed $conditions
      * @return int
+     * @todo 改为自动识别
      */
-    public function countBySubQuery($column, $operator = null, $value = null)
+    public function countBySubQuery()
     {
         $this->where(...func_get_args());
         return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());

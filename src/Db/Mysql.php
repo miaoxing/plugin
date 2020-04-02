@@ -210,7 +210,7 @@ class Mysql extends BaseDriver
      */
     protected function getSqlForCount()
     {
-        return "SELECT COUNT(*) FROM (" . $this->getSqlForSelect(true) . ") wei_count";
+        return "SELECT COUNT(*) FROM (" . $this->getSqlForSelect() . ") wei_count";
     }
 
     /**

@@ -490,34 +490,6 @@ class ModelTest extends BaseTestCase
         $this->assertCount(1, $users);
     }
 
-    public function testCountBySubQuery()
-    {
-        $this->initFixtures();
-
-        $count = User::countBySubQuery();
-
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(2, $count);
-
-        $count = User::select('id, name')->limit(1)->offset(2)->countBySubQuery();
-
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(2, $count);
-    }
-
-    public function testCountWithCondition()
-    {
-        $this->initFixtures();
-
-        $count = User::count(1);
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(1, $count);
-
-        $count = User::count(array('id' => 1));
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(1, $count);
-    }
-
     public function testParameters()
     {
         $this->initFixtures();
