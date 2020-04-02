@@ -329,9 +329,9 @@ class ModelTest extends BaseTestCase
         $this->assertArrayHasKey('name', $user);
         $this->assertArrayHasKey('address', $user);
         $this->assertNull($user['id']);
-        $this->assertNull($user['groupId']);
+        $this->assertSame(0, $user['groupId']); // default value
         $this->assertNull($user['name']);
-        $this->assertNull($user['address']);
+        $this->assertSame('default address', $user['address']); // getAddressAttribute
 
         $users = User::all()->toArray(array('id', 'groupId'));
         $this->assertIsArray($users);
@@ -481,78 +481,6 @@ class ModelTest extends BaseTestCase
 
         $this->assertEquals(null, $user['name']);
         $this->assertEquals(null, $user['groupId']);
-    }
-
-    public function testErrorCodeAndInfo()
-    {
-        $this->db->errorCode();
-        $info = $this->db->errorInfo();
-
-        $this->assertArrayHasKey(0, $info);
-        $this->assertArrayHasKey(1, $info);
-        $this->assertArrayHasKey(1, $info);
-    }
-
-    public function testBeforeAndAfterQuery()
-    {
-        $this->initFixtures();
-
-        $this->expectOutputRegex('/beforeQueryafterQuery/');
-
-        $this->db->setOption(array(
-            'beforeQuery' => function () {
-                echo 'beforeQuery';
-            },
-            'afterQuery' => function () {
-                echo 'afterQuery';
-            },
-        ));
-
-        $this->db->find('users', 1);
-    }
-
-    public function testBeforeAndAfterQueryForUpdate()
-    {
-        $this->initFixtures();
-
-        $this->expectOutputString('beforeQueryafterQuery');
-
-        $this->db->setOption(array(
-            'beforeQuery' => function () {
-                echo 'beforeQuery';
-            },
-            'afterQuery' => function () {
-                echo 'afterQuery';
-            },
-        ));
-
-        $this->db->executeUpdate("UPDATE prefix_member SET name = 'twin2' WHERE id = 1");
-
-        $this->assertEquals("UPDATE prefix_member SET name = 'twin2' WHERE id = 1", $this->db->getLastQuery());
-    }
-
-    public function testException()
-    {
-        $this->setExpectedException('PDOException');
-
-        $this->db->query("SELECT * FROM noThis table");
-    }
-
-    public function testExceptionWithParams()
-    {
-        $this->setExpectedException('PDOException',
-            'An exception occurred while executing "SELECT * FROM noThis table WHERE id = ?"');
-
-        $this->db->query("SELECT * FROM noThis table WHERE id = ?", array(1));
-    }
-
-    public function testUpdateWithoutParameters()
-    {
-        $this->initFixtures();
-
-        $result = $this->db->executeUpdate("UPDATE prefix_member SET name = 'twin2' WHERE id = 1");
-
-        $this->assertEquals(1, $result);
     }
 
     public function testCount()
