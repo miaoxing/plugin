@@ -143,13 +143,26 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
-    public function testWhereRawWithParam()
+    public function testWhereRawWithQuestionParam()
     {
         $this->initFixtures();
 
         $qb = Qb::table('users')->whereRaw('name = ?', 'twin');
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals('twin', $qb->fetch()['name']);
+    }
+
+    public function testWhereRawWithColonParam()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::table('users')->whereRaw('group_id = :groupId AND name = :name', [
+            'groupId' => 1,
+            'name' => 'twin',
+        ]);
+
+        $this->assertEquals("SELECT * FROM `p_users` WHERE group_id = 1 AND name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
@@ -780,5 +793,62 @@ class QueryBuilderTest extends BaseTestCase
 
         $row = Qb::table('users')->update(['address' => 'test address']);
         $this->assertEquals(2, $row);
+    }
+
+    /**
+     * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
+     */
+    public function testQuery()
+    {
+        $this->markTestSkipped('todo');
+
+        $this->initFixtures();
+
+        // Subset conditions
+        $query = User::where(array('group_id' => array('1', '2')));
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id IN (?, ?) LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+
+        $query = User::where(array(
+            'id' => '1',
+            'group_id' => array('1', '2'),
+        ));
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE id = ? AND group_id IN (?, ?) LIMIT 1",
+            $query->getSql());
+        $this->assertEquals('1', $user['id']);
+
+        // Overwrite where
+        $query = $this
+            ->db('users')
+            ->where('id = :id')
+            ->where('group_id = :groupId')
+            ->setParameter('groupId', 1);
+        $user = $query->find();
+
+        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId LIMIT 1", $query->getSql());
+        $this->assertEquals('1', $user['group_id']);
+
+        // Join
+        $query = $this
+            ->db('users')
+            ->select('prefix_member.*, prefix_member_group.name AS group_name')
+            ->leftJoin('prefix_member_group', 'prefix_member_group.id = prefix_member.group_id');
+        $user = $query->fetch();
+
+        $this->assertEquals("SELECT prefix_member.*, prefix_member_group.name AS group_name FROM prefix_member LEFT JOIN prefix_member_group ON prefix_member_group.id = prefix_member.group_id LIMIT 1",
+            $query->getSql());
+        $this->assertArrayHasKey('group_name', $user);
+
+        // Join with table alias
+        $query = $this
+            ->db('member u')
+            ->rightJoin('prefix_member_group g', 'g.id = u.group_id');
+
+        $this->assertEquals("SELECT * FROM prefix_member u RIGHT JOIN prefix_member_group g ON g.id = u.group_id",
+            $query->getSql());
     }
 }

@@ -55,6 +55,9 @@ return [
             'back' => 'cache',
         ],
     ],
+    'logger' => [
+        'dir' => 'data/logs',
+    ],
     'error.logger' => [
 
     ],
