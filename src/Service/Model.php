@@ -1880,6 +1880,19 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * @param string $column
+     * @return $this
+     * @api
+     */
+    protected function indexBy($column)
+    {
+        if ($this->loaded) {
+            $this->data = $this->executeIndexBy($this->data, $column);
+        }
+        return $this;
+    }
+
+    /**
      * 搜索某一列是否有值
      *
      * @param string $column

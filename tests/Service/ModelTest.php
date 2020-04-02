@@ -181,7 +181,60 @@ class ModelTest extends BaseTestCase
 
         $users = User::all();
 
-        $this->assertSame(2, $users->length());
+        $this->assertCount(2, $users);
+    }
+
+    public function testIndexByAndAll()
+    {
+        $this->initFixtures();
+
+        $users = User::indexBy('name')->all();
+
+        $this->assertArrayHasKey('twin', $users);
+        $this->assertArrayHasKey('test', $users);
+
+        $this->assertInstanceOf(User::class, $users['twin']);
+        $this->assertInstanceOf(User::class, $users['test']);
+
+        $users = $users->toArray();
+
+        $this->assertArrayHasKey('twin', $users);
+        $this->assertArrayHasKey('test', $users);
+    }
+
+    public function testIndexByMultipleTimes()
+    {
+        $this->initFixtures();
+
+        $users = User::indexBy('id')->all();
+
+        $this->assertArrayHasKey(1, $users);
+
+        $users->indexBy('name');
+        $this->assertArrayHasKey('twin', $users);
+
+        $users->indexBy('id');
+        $this->assertArrayHasKey(1, $users);
+    }
+
+    public function testFixUndefinedOffset0WhenFetchEmptyData()
+    {
+        $this->initFixtures();
+
+        $emptyMembers = User::where(['group_id' => '3'])->indexBy('id')->fetchAll();
+        $this->assertEmpty($emptyMembers);
+    }
+
+    public function testRealTimeIndexBy()
+    {
+        $this->initFixtures();
+
+        $users = User::all();
+
+        $users = $users->indexBy('name')->toArray();
+
+        $this->assertArrayHasKey('twin', $users);
+        $this->assertArrayHasKey('test', $users);
     }
 
     public function testModelSave()
@@ -199,7 +252,7 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('1', $user->id);
 
         // New member save with data
-        $user = $db->init('users');
+        $user = User::new();
         $this->assertTrue($user->isNew());
         $user->fromArray(array(
             'group_id' => '1',
@@ -241,67 +294,6 @@ class ModelTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
         $this->assertEquals('twin', $user->name);
-    }
-
-    public function testIndexBy()
-    {
-        $this->initFixtures();
-
-        $users = $this->db('users')
-            ->indexBy('name')
-            ->fetchAll();
-
-        $this->assertArrayHasKey('twin', $users);
-        $this->assertArrayHasKey('test', $users);
-
-        $users = $this->db('users')
-            ->indexBy('name')
-            ->findAll();
-
-        $this->assertInstanceOf('\Wei\Record', $users['twin']);
-        $this->assertInstanceOf('\Wei\Record', $users['test']);
-
-        $users = $users->toArray();
-
-        $this->assertArrayHasKey('twin', $users);
-        $this->assertArrayHasKey('test', $users);
-    }
-
-    public function testIndexByMoreThanOneTime()
-    {
-        $this->initFixtures();
-
-        $users = $this->db('users')
-            ->indexBy('id')
-            ->findAll();
-
-        $this->assertArrayHasKey(1, $users);
-
-        $users->indexBy('name');
-        $this->assertArrayHasKey('twin', $users);
-
-        $users->indexBy('id');
-        $this->assertArrayHasKey(1, $users);
-    }
-
-    public function testFixUndefinedOffset0WhenFetchEmptyData()
-    {
-        $this->initFixtures();
-
-        $emptyMembers = User::where(array('group_id' => '3'))->indexBy('id')->fetchAll();
-        $this->assertEmpty($emptyMembers);
-    }
-
-    public function testRealTimeIndexBy()
-    {
-        $this->initFixtures();
-
-        $users = User::all();
-
-        $users = $users->indexBy('name')->toArray();
-
-        $this->assertArrayHasKey('twin', $users);
-        $this->assertArrayHasKey('test', $users);
     }
 
     public function testRecordNamespace()

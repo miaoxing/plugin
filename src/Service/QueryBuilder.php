@@ -1026,22 +1026,22 @@ class QueryBuilder extends Base
     /**
      * Specifies a field to be the key of the fetched array
      *
-     * @param string $field
+     * @param string $column
      * @return $this
+     * @api
      */
-    public function indexBy($field)
+    protected function indexBy($column)
     {
-        $this->data = $this->executeIndexBy($this->data, $field);
-        $this->indexBy = $field;
+        $this->indexBy = $column;
         return $this;
     }
 
     /**
      * @param array $data
-     * @param string $field
+     * @param string $column
      * @return array
      */
-    protected function executeIndexBy($data, $field)
+    protected function executeIndexBy($data, $column)
     {
         if (!$data) {
             return $data;
@@ -1049,7 +1049,7 @@ class QueryBuilder extends Base
 
         $newData = array();
         foreach ($data as $row) {
-            $newData[$row[$field]] = $row;
+            $newData[$row[$column]] = $row;
         }
         return $newData;
     }

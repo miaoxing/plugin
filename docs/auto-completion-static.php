@@ -157,6 +157,15 @@ class AppModel
 
     /**
      * @param string $column
+     * @return $this
+     * @api
+     */
+    public function indexBy($column)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param string|null $index
      * @return array
      * @api
@@ -749,6 +758,15 @@ if (0) {
          * @api
          */
         public static function all()
+        {
+        }
+    
+        /**
+         * @param string $column
+         * @return $this
+         * @api
+         */
+        public static function indexBy($column)
         {
         }
     
@@ -1351,6 +1369,15 @@ class Model
 
     /**
      * @param string $column
+     * @return $this
+     * @api
+     */
+    public function indexBy($column)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param string|null $index
      * @return array
      * @api
@@ -1943,6 +1970,15 @@ if (0) {
          * @api
          */
         public static function all()
+        {
+        }
+    
+        /**
+         * @param string $column
+         * @return $this
+         * @api
+         */
+        public static function indexBy($column)
         {
         }
     
@@ -2866,6 +2902,17 @@ class QueryBuilder
     }
 
     /**
+     * Specifies a field to be the key of the fetched array
+     *
+     * @param string $column
+     * @return $this
+     * @api
+     */
+    public function indexBy($column)
+    {
+    }
+
+    /**
      * @return $this
      * @api
      */
@@ -3360,6 +3407,17 @@ if (0) {
         }
     
         /**
+         * Specifies a field to be the key of the fetched array
+         *
+         * @param string $column
+         * @return $this
+         * @api
+         */
+        public static function indexBy($column)
+        {
+        }
+    
+        /**
          * @return $this
          * @api
          */
@@ -3662,6 +3720,15 @@ class User
      * @api
      */
     public function all()
+    {
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     * @api
+     */
+    public function indexBy($column)
     {
     }
 
@@ -4398,6 +4465,15 @@ if (0) {
     
         /**
          * @param string $column
+         * @return $this
+         * @api
+         */
+        public static function indexBy($column)
+        {
+        }
+    
+        /**
+         * @param string $column
          * @param string|null $index
          * @return array
          * @api
@@ -5048,6 +5124,15 @@ class UserModel
 
     /**
      * @param string $column
+     * @return $this
+     * @api
+     */
+    public function indexBy($column)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param string|null $index
      * @return array
      * @api
@@ -5693,6 +5778,15 @@ if (0) {
          * @api
          */
         public static function all()
+        {
+        }
+    
+        /**
+         * @param string $column
+         * @return $this
+         * @api
+         */
+        public static function indexBy($column)
         {
         }
     

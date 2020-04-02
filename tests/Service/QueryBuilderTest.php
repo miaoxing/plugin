@@ -710,6 +710,16 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('1', $data[0]['group_id']);
     }
 
+    public function testIndexBy()
+    {
+        $this->initFixtures();
+
+        $users = Qb::table('users')->indexBy('name')->fetchAll();
+
+        $this->assertArrayHasKey('twin', $users);
+        $this->assertArrayHasKey('test', $users);
+    }
+
     public function testPluck()
     {
         $this->initFixtures();
