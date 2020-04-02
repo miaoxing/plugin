@@ -860,24 +860,21 @@ class QueryBuilderTest extends BaseTestCase
 
     /**
      * @dataProvider providerForParameterValue
+     * @param mixed $value
      */
     public function testParameterValue($value)
     {
         $this->initFixtures();
 
-        $query = $this
-            ->db('users')
-            ->where('id = ?', $value)
-            ->andWhere('id = ?', $value)
-            ->andWhere('id = ?', $value)
-            ->orWhere('id = ?', $value)
-            ->orWhere('id = ?', $value)
-            ->groupBy('id')
-            ->having('id = ?', $value)
-            ->andHaving('id = ?', $value)
-            ->andHaving('id = ?', $value)
-            ->orHaving('id = ?', $value)
-            ->orHaving('id = ?', $value);
+        $query = Qb::table('users')
+            ->where('id', $value)
+            ->where('id', '=', $value)
+            ->orWhere('id', $value)
+            ->orWhere('id', '=', $value)
+            ->having('id', $value)
+            ->having('id', '=', $value)
+            ->orHaving('id', $value)
+            ->orHaving('id', '=', $value);
 
         // No error raise
         $array = $query->fetchAll();
@@ -886,13 +883,13 @@ class QueryBuilderTest extends BaseTestCase
 
     public function providerForParameterValue()
     {
-        return array(
-            array('0'),
-            array(0),
-            array(null),
-            array(true),
-            array(array(null)),
-        );
+        return [
+            [null],
+            ['0'],
+            [0],
+            [true],
+            [[null]],
+        ];
     }
 
     /**

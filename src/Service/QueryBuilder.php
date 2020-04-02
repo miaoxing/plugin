@@ -945,10 +945,15 @@ class QueryBuilder extends Base
             $value = $operator;
             $operator = '=';
         }
-        $this->sqlParts['having'][] = compact('column', 'operator', 'value', 'condition');
-        if ($value !== null) {
+
+        if ($value === null) {
+            $operator = $operator === 'NOT NULL' ? $operator : 'NULL';
+        } else {
             $this->params['having'][] = (array) $value;
         }
+
+        $this->sqlParts['having'][] = compact('column', 'operator', 'value', 'condition');
+
         return $this;
     }
 
