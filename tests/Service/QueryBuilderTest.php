@@ -923,6 +923,17 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('users', $query->getTable());
     }
 
+    public function testDeleteRecordByQueryBuilder()
+    {
+        $this->initFixtures();
+
+        $result = User::where('group_id = ?', 1)->delete();
+        $this->assertEquals(2, $result);
+
+        $result = User::delete(array('group_id' => 1));
+        $this->assertEquals(0, $result);
+    }
+
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
      */

@@ -35,6 +35,17 @@ if (0) {
 class AppModel
 {
     /**
+     * Import a PHP array in this record
+     *
+     * @param array|\ArrayAccess $data
+     * @return $this
+     * @api
+     */
+    public function fromArray($data)
+    {
+    }
+
+    /**
      * Save the record or data to database
      *
      * @param array $data
@@ -117,7 +128,7 @@ class AppModel
      * @param $column
      * @param null $operator
      * @param null $value
-     * @return $this
+     * @return $this|$this[]
      * @api
      */
     public function findAllBy($column, $operator = null, $value = null)
@@ -652,6 +663,17 @@ if (0) {
     class AppModel
     {
         /**
+         * Import a PHP array in this record
+         *
+         * @param array|\ArrayAccess $data
+         * @return $this
+         * @api
+         */
+        public static function fromArray($data)
+        {
+        }
+    
+        /**
          * Save the record or data to database
          *
          * @param array $data
@@ -734,7 +756,7 @@ if (0) {
          * @param $column
          * @param null $operator
          * @param null $value
-         * @return $this
+         * @return $this|$this[]
          * @api
          */
         public static function findAllBy($column, $operator = null, $value = null)
@@ -1269,6 +1291,17 @@ if (0) {
 class Model
 {
     /**
+     * Import a PHP array in this record
+     *
+     * @param array|\ArrayAccess $data
+     * @return $this
+     * @api
+     */
+    public function fromArray($data)
+    {
+    }
+
+    /**
      * Save the record or data to database
      *
      * @param array $data
@@ -1351,7 +1384,7 @@ class Model
      * @param $column
      * @param null $operator
      * @param null $value
-     * @return $this
+     * @return $this|$this[]
      * @api
      */
     public function findAllBy($column, $operator = null, $value = null)
@@ -1886,6 +1919,17 @@ if (0) {
     class Model
     {
         /**
+         * Import a PHP array in this record
+         *
+         * @param array|\ArrayAccess $data
+         * @return $this
+         * @api
+         */
+        public static function fromArray($data)
+        {
+        }
+    
+        /**
          * Save the record or data to database
          *
          * @param array $data
@@ -1968,7 +2012,7 @@ if (0) {
          * @param $column
          * @param null $operator
          * @param null $value
-         * @return $this
+         * @return $this|$this[]
          * @api
          */
         public static function findAllBy($column, $operator = null, $value = null)
@@ -3658,6 +3702,17 @@ class User
     }
 
     /**
+     * Import a PHP array in this record
+     *
+     * @param array|\ArrayAccess $data
+     * @return $this
+     * @api
+     */
+    public function fromArray($data)
+    {
+    }
+
+    /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
      * @param string|int $id
@@ -3729,7 +3784,7 @@ class User
      * @param $column
      * @param null $operator
      * @param null $value
-     * @return $this
+     * @return $this|$this[]
      * @api
      */
     public function findAllBy($column, $operator = null, $value = null)
@@ -4409,6 +4464,17 @@ if (0) {
         }
     
         /**
+         * Import a PHP array in this record
+         *
+         * @param array|\ArrayAccess $data
+         * @return $this
+         * @api
+         */
+        public static function fromArray($data)
+        {
+        }
+    
+        /**
          * Delete the current record and trigger the beforeDestroy and afterDestroy callback
          *
          * @param string|int $id
@@ -4480,7 +4546,7 @@ if (0) {
          * @param $column
          * @param null $operator
          * @param null $value
-         * @return $this
+         * @return $this|$this[]
          * @api
          */
         public static function findAllBy($column, $operator = null, $value = null)
@@ -5068,6 +5134,17 @@ class UserModel
     }
 
     /**
+     * Import a PHP array in this record
+     *
+     * @param array|\ArrayAccess $data
+     * @return $this
+     * @api
+     */
+    public function fromArray($data)
+    {
+    }
+
+    /**
      * Save the record or data to database
      *
      * @param array $data
@@ -5150,7 +5227,7 @@ class UserModel
      * @param $column
      * @param null $operator
      * @param null $value
-     * @return $this
+     * @return $this|$this[]
      * @api
      */
     public function findAllBy($column, $operator = null, $value = null)
@@ -5738,6 +5815,17 @@ if (0) {
         }
     
         /**
+         * Import a PHP array in this record
+         *
+         * @param array|\ArrayAccess $data
+         * @return $this
+         * @api
+         */
+        public static function fromArray($data)
+        {
+        }
+    
+        /**
          * Save the record or data to database
          *
          * @param array $data
@@ -5820,7 +5908,7 @@ if (0) {
          * @param $column
          * @param null $operator
          * @param null $value
-         * @return $this
+         * @return $this|$this[]
          * @api
          */
         public static function findAllBy($column, $operator = null, $value = null)

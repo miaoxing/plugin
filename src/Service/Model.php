@@ -119,7 +119,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @var bool
      */
-    protected $isColl;
+    protected $isColl = false;
 
     /**
      * The relation configs
@@ -280,8 +280,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param array|\ArrayAccess $data
      * @return $this
+     * @api
      */
-    public function fromArray($data)
+    protected function fromArray($data)
     {
         foreach ($data as $key => $value) {
             if (is_int($key) || $this->isFillable($key, $data)) {
@@ -916,13 +917,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param $column
      * @param null $operator
      * @param null $value
-     * @return $this
+     * @return $this|$this[]
      * @api
      */
     protected function findAllBy($column, $operator = null, $value = null)
     {
         $this->isColl = true;
-        $data = $this->fetchAll($column, $operator, $value);
+        $data = $this->fetchAll(...func_get_args());
 
         $records = array();
         foreach ($data as $key => $row) {
@@ -1063,9 +1064,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         if (!$this->loaded && !$this->isNew) {
             if (is_numeric($offset) || is_null($offset)) {
-                $this->findAll();
+                $this->all();
             } else {
-                $this->find();
+                $this->first();
             }
         }
     }

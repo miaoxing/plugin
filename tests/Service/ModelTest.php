@@ -241,8 +241,6 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $db = $this->db;
-
         // Existing member
         $user = User::find(1);
         $user->address = 'address';
@@ -586,74 +584,34 @@ class ModelTest extends BaseTestCase
 
     public function testQueryBuilderForEach()
     {
+        $this->markTestSkipped('todo refine');
+
         $this->initFixtures();
 
-        $users = User::where('group_id = 1');
+        $users = User::where('group_id', 1);
         foreach ($users as $user) {
             $this->assertEquals(1, $user['group_id']);
         }
     }
 
-    public function testInsertWithSqlObject()
+    public function testSaveRawObject()
     {
         $this->initFixtures();
 
-        $this->db->insert('users', array(
-            'group_id' => '1',
-            'name' => (object) '1 + 1',
-            'address' => 'test',
-        ));
+        $user = User::find(1);
+        $groupId = $user->groupId;
 
-        $id = $this->db->lastInsertId('prefix_member_id_seq');
-        $user = $this->db->select('users', $id);
-
-        $this->assertNotEquals('1 + 1', $user['name']);
-        $this->assertEquals('2', $user['name']);
-    }
-
-    public function testUpdateWithSqlObject()
-    {
-        $this->initFixtures();
-
-        $this->db->update('users', array('group_id' => (object) 'group_id + 1'), array('id' => (object) '0.5 + 0.5'));
-
-        $user = $this->db->select('users', 1);
-
-        $this->assertEquals('2', $user['group_id']);
-    }
-
-    public function testDeleteWithSqlObject()
-    {
-        $this->initFixtures();
-
-        $result = $this->db->delete('users', array('id' => (object) '0.5 + 0.5'));
-
-        $this->assertEquals(1, $result);
-        $this->assertFalse($this->db->select('users', 1));
-    }
-
-    public function testRecordWithSqlObject()
-    {
-        $this->initFixtures();
-
-        $user = $this->db->find('users', 1);
-        $groupId = $user['group_id'];
-
-        $user['group_id'] = (object) 'group_id + 1';
+        $user->groupId = (object) 'group_id + 1';
         $user->save();
         $user->reload();
 
-        $this->assertEquals($groupId + 1, $user['group_id']);
-    }
-
-    public function testGetTableFieldsButTableNotExists()
-    {
-        $this->setExpectedException('PDOException');
-        $this->db->getTableFields('notExists');
+        $this->assertSame($groupId + 1, $user->groupId);
     }
 
     public function testNewRecord()
     {
+        $this->markTestSkipped('todo refine');
+
         $this->initFixtures();
 
         // Use record as array
@@ -672,19 +630,11 @@ class ModelTest extends BaseTestCase
         $this->assertNotSame($user1, $user2);
     }
 
-    public function testCreateRecord()
+    public function testSaveReturnThis()
     {
         $this->initFixtures();
 
-        $user = $this->db('users');
-
-        $data = $user->toArray();
-        $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('group_id', $data);
-        $this->assertArrayHasKey('name', $data);
-        $this->assertArrayHasKey('address', $data);
-
-        $user->fromArray(array(
+        $user = User::fromArray(array(
             'group_id' => 1,
             'name' => 'John',
             'address' => 'xx street',
@@ -697,8 +647,6 @@ class ModelTest extends BaseTestCase
     public function testBeforeAndAfterCreateCallbacks()
     {
         $this->initFixtures();
-
-        $this->db->setOption('recordNamespace', 'WeiTest\Db');
 
         $user = User::fromArray(array(
             'group_id' => 1,
@@ -715,20 +663,18 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $this->db->setOption('recordNamespace', 'WeiTest\Db');
-
-        $user = $this->db->find('users', 1);
+        $user = User::find(1);
 
         $user->destroy();
 
         $this->assertEquals('beforeDestroy->afterDestroy', $user->getEventResult());
     }
 
-    public function testCreateCollection()
+    public function testFromArrayMultipleLevelWontBecomeColl()
     {
         $this->initFixtures();
 
-        $users = $this->db('users');
+        $users = User::new();
 
         $users->fromArray(array(
             array(
@@ -742,79 +688,57 @@ class ModelTest extends BaseTestCase
                 'address' => 'xx street',
             ),
         ));
-    }
 
-    public function testFindRecordAndDestroy()
-    {
-        $this->initFixtures();
-
-        $user = User::find(array('id' => 1));
-        $result = $user->destroy();
-
-        $this->assertInstanceOf('\Wei\Record', $result);
-
-        $user = User::find(array('id' => 1));
-        $this->assertFalse($user);
-    }
-
-    public function testDeleteRecordByQueryBuilder()
-    {
-        $this->initFixtures();
-
-        $result = User::where('group_id = ?', 1)->delete();
-        $this->assertEquals(2, $result);
-
-        $result = User::delete(array('group_id' => 1));
-        $this->assertEquals(0, $result);
+        $this->assertFalse($users->isColl());
     }
 
     public function testFindCollectionAndDestroy()
     {
         $this->initFixtures();
 
-        $users = User::where('group_id = 1');
+        $users = User::findAllBy('group_id', 1);
         $users->destroy();
 
-        $users = User::where('group_id = 1');
-        $this->assertEquals(0, count($users));
+        $users = User::findAllBy('group_id', 1);
+        $this->assertCount(0, $users);
     }
 
-    public function testFindRecordAndUpdate()
+    public function testFindAndUpdate()
     {
         $this->initFixtures();
 
-        $user = User::find(array('id' => 1));
-        $user['name'] = 'William';
+        $user = User::find(1);
+        $user->name = 'William';
         $result = $user->save();
         $this->assertSame($result, $user);
 
-        $user = User::find(array('id' => 1));
-        $this->assertEquals('William', $user['name']);
+        $user = User::find(1);
+        $this->assertEquals('William', $user->name);
     }
 
     public function testFindCollectionAndUpdate()
     {
         $this->initFixtures();
 
-        $users = User::where('group_id = 1');
-        $number = $users->length();
-        $this->assertEquals(2, $number);
+        $users = User::findAllBy('group_id', 1);
+
+        $this->assertCount(2, $users);
 
         foreach ($users as $user) {
-            $user['group_id'] = 2;
+            $user->groupId = 2;
         }
         $users->save();
 
-        $users = User::where('group_id = 2');
-        $this->assertEquals(2, $users->length());
+        $users = User::findAllBy('group_id', 2);
+        $this->assertCount(2, $users);
     }
 
     public function testCreateCollectionAndSave()
     {
         $this->initFixtures();
 
-        // Creates a member collection
-        $users = $this->db('users');
+        // Creates a user collection
+        $users = User::new()->beColl();
 
         $john = User::fromArray(array(
             'group_id' => 2,

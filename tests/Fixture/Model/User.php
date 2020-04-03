@@ -7,7 +7,7 @@ use Miaoxing\Plugin\Service\Model;
 /**
  * @property string id
  * @property string name
- * @property string groupId
+ * @property int groupId
  * @property string address
  */
 class User extends Model
@@ -22,6 +22,7 @@ class User extends Model
 
     protected $casts = [
         'id' => 'int',
+        'group_id' => 'int',
     ];
 
     protected $data = array(
