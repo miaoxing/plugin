@@ -892,6 +892,37 @@ class QueryBuilderTest extends BaseTestCase
         ];
     }
 
+
+    public function testGetAndResetAllSqlParts()
+    {
+        $query = Qb::table('users')->offset(1)->limit(1);
+
+        $this->assertEquals(1, $query->getSqlPart('offset'));
+        $this->assertEquals(1, $query->getSqlPart('limit'));
+
+        $queryParts = $query->getSqlParts();
+        $this->assertArrayHasKey('offset', $queryParts);
+        $this->assertArrayHasKey('limit', $queryParts);
+
+        $query->resetSqlParts();
+
+        $this->assertEquals(null, $query->getSqlPart('offset'));
+        $this->assertEquals(null, $query->getSqlPart('limit'));
+    }
+
+    public function testGetTableFromQueryBuilder()
+    {
+        $query = Qb::table('users');
+
+        $this->assertEquals('users', $query->getTable());
+
+        $query->from('users u');
+        $this->assertEquals('users', $query->getTable());
+
+        $query->from('users AS u');
+        $this->assertEquals('users', $query->getTable());
+    }
+
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
      */

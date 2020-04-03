@@ -490,197 +490,12 @@ class ModelTest extends BaseTestCase
         $this->assertCount(1, $users);
     }
 
-    public function testGetAndResetAllSqlParts()
-    {
-        $query = User::offset(1)->limit(1);
-
-        $this->assertEquals(1, $query->getSqlPart('offset'));
-        $this->assertEquals(1, $query->getSqlPart('limit'));
-
-        $queryParts = $query->getSqlParts();
-        $this->assertArrayHasKey('offset', $queryParts);
-        $this->assertArrayHasKey('limit', $queryParts);
-
-        $query->resetSqlParts();
-
-        $this->assertEquals(null, $query->getSqlPart('offset'));
-        $this->assertEquals(null, $query->getSqlPart('limit'));
-    }
-
-    public function testGetTableFromQueryBuilder()
-    {
-        $qb = $this->db('users');
-        $this->assertEquals('users', $qb->getTable());
-
-        $qb->from('member m');
-        $this->assertEquals('users', $qb->getTable());
-
-        $qb->from('member m');
-        $this->assertEquals('users', $qb->getTable());
-
-        $qb->from('member AS m');
-        $this->assertEquals('users', $qb->getTable());
-    }
-
-    public function testDbCount()
-    {
-        $this->initFixtures();
-
-        $db = $this->db;
-
-        $count = $db->count('users');
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(2, $count);
-
-        $count = $db->count('users', array('id' => '1'));
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(1, $count);
-
-        $count = $db->count('users', array('id' => '1'));
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(1, $count);
-
-        $count = $db->count('users', array('id' => '123'));
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(0, $count);
-    }
-
-    public function testTablePrefix()
-    {
-        $this->initFixtures();
-
-        $db = $this->db;
-
-        $db->setOption('tablePrefix', 'tbl_');
-        $this->assertEquals('tbl_member', $db->getTable('users'));
-
-        $db->setOption('tablePrefix', 'prefix_post_');
-        $this->assertEquals(3, $db->count('tag'));
-    }
-
-    public function testConnectFails()
-    {
-        $this->setExpectedException('\PDOException');
-        $test = &$this;
-        $db = new \Wei\Db(array(
-            'wei' => $this->wei,
-            'driver' => 'mysql',
-            'host' => '255.255.255.255',
-            'dbname' => 'test',
-            'connectFails' => function ($db, $exception) use ($test) {
-                $test->assertTrue(true);
-                $test->assertInstanceOf('PDOException', $exception);
-            },
-        ));
-        $db->connect();
-    }
-
-    public function testGlobalOption()
-    {
-        $cb = function () {
-        };
-        $this->wei->setConfig(array(
-            // sqlite
-            'db' => array(
-                'beforeConnect' => $cb,
-            ),
-            'mysql.db' => array(
-                'beforeConnect' => $cb,
-            ),
-            'pgsql.db' => array(
-                'beforeConnect' => $cb,
-            ),
-            'cb.db' => array(
-                'db' => $this->db,
-                'global' => true,
-            ),
-        ));
-
-        $this->assertSame($cb, $this->db->getOption('beforeConnect'));
-        $this->assertSame($cb, $this->cbDb->getOption('beforeConnect'));
-
-        // Remove all relation configuration
-        unset($this->cbDb);
-        $this->wei->remove('cbDb');
-        $this->wei->setConfig('cb.db', array(
-            'db' => null,
-        ));
-    }
-
-    public function testUnsupportedDriver()
-    {
-        $this->setExpectedException('\RuntimeException', 'Unsupported database driver: abc');
-
-        $db = new \Wei\Db(array(
-            'wei' => $this->wei,
-            'driver' => 'abc',
-        ));
-
-        $db->query("SELECT MAX(1, 2)");
-    }
-
-    public function testCustomDsn()
-    {
-        $db = new \Wei\Db(array(
-            'wei' => $this->wei,
-            'dsn' => 'sqlite::memory:',
-        ));
-
-        $this->assertEquals('sqlite::memory:', $db->getDsn());
-    }
-
-    public function testInsertBatch()
-    {
-        $this->initFixtures();
-
-        $result = $this->db->batchInsert('users', array(
-            array(
-                'group_id' => '1',
-                'name' => 'twin',
-                'address' => 'test',
-            ),
-            array(
-                'group_id' => '1',
-                'name' => 'test',
-                'address' => 'test',
-            ),
-        ));
-
-        $this->assertEquals(2, $result);
-    }
-
-    public function testSlaveDb()
-    {
-        // Generate slave db configuration name
-        $driver = $this->db->getDriver();
-        $configName = $driver . 'Slave.db';
-
-        // Set configuration for slave db
-        $options = $this->wei->getConfig('db');
-        $this->wei->setConfig($configName, $options);
-
-        $this->db->setOption('slaveDb', $configName);
-
-        $query = "SELECT 1 + 2";
-        $this->db->query($query);
-
-        // Receives the slave db wei
-        /** @var $slaveDb \Wei\Db */
-        $slaveDb = $this->wei->get($configName);
-
-        // Test that the query is execute by slave db, not the master db
-        $this->assertNotContains($query, $this->db->getQueries());
-        $this->assertContains($query, $slaveDb->getQueries());
-    }
-
     public function testReload()
     {
         $this->initFixtures();
 
-        /** @var $user User */
-        $user = $this->db->find('users', 1);
-        /** @var $user2 User */
-        $user2 = $this->db->find('users', 1);
+        $user = User::find(1);
+        $user2 = User::find(1);
 
         $user->groupId = 2;
         $user->save();
@@ -691,23 +506,6 @@ class ModelTest extends BaseTestCase
         $user2->reload();
         $this->assertEquals($user->groupId, $user2->groupId);
         $this->assertEquals(2, $user2->getLoadTimes());
-    }
-
-    public function testFindOne()
-    {
-        $this->initFixtures();
-
-        $record = $this->db->findOne('users', 1);
-        $this->assertInstanceOf('\Wei\Record', $record);
-    }
-
-    public function testFindOneWithException()
-    {
-        $this->initFixtures();
-
-        $this->setExpectedException('Exception', 'Record not found', 404);
-
-        $this->db->findOne('users', 999);
     }
 
     public function testChunk()
@@ -784,40 +582,6 @@ class ModelTest extends BaseTestCase
         $user->save();
         $this->assertFalse($user->isChanged());
         $this->assertEmpty($user->getChangedData());
-    }
-
-    public function testReconnect()
-    {
-        $this->db->connect();
-        $pdo = $this->db->getOption('pdo');
-
-        $this->db->reconnect();
-        $newPdo = $this->db->getOption('pdo');
-
-        $this->assertEquals($pdo, $newPdo);
-        $this->assertNotSame($pdo, $newPdo);
-    }
-
-    public function testGetter()
-    {
-        wei(array(
-            'test.db' => array(
-                'user' => 'user',
-                'password' => 'password',
-                'host' => 'host',
-                'port' => 'port',
-                'dbname' => 'dbname',
-            ),
-        ));
-
-        /** @var $testDb \Wei\Db */
-        $testDb = $this->testDb;
-
-        $this->assertEquals('user', $testDb->getUser());
-        $this->assertEquals('password', $testDb->getPassword());
-        $this->assertEquals('host', $testDb->getHost());
-        $this->assertEquals('port', $testDb->getPort());
-        $this->assertEquals('dbname', $testDb->getDbname());
     }
 
     public function testQueryBuilderForEach()
