@@ -919,16 +919,22 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals(null, $query->getSqlPart('limit'));
     }
 
-    public function testGetTableFromQueryBuilder()
+    public function testFromAlias()
+    {
+        $qb = Qb::from('users', 'm');
+        $this->assertEquals('SELECT * FROM `p_users` `m`', $qb->getRawSql());
+
+        $first = $qb->first();
+        $this->assertNotNull($first);
+    }
+
+    public function testGetTable()
     {
         $query = Qb::table('users');
 
         $this->assertEquals('users', $query->getTable());
 
-        $query->from('users u');
-        $this->assertEquals('users', $query->getTable());
-
-        $query->from('users AS u');
+        $query->from('users', 'u');
         $this->assertEquals('users', $query->getTable());
     }
 
@@ -989,15 +995,6 @@ class QueryBuilderTest extends BaseTestCase
         // => 0
         $user->page(984851907999915581);
         $this->assertEquals(0, $user->getSqlPart('offset'));
-    }
-
-    public function testFromAlias()
-    {
-        $qb = Qb::from('users', 'm');
-        $this->assertEquals('SELECT * FROM `p_users` `m`', $qb->getRawSql());
-
-        $first = $qb->first();
-        $this->assertNotNull($first);
     }
 
     /**
