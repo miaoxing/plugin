@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Closure;
 use Miaoxing\Plugin\Db\BaseDriver;
 use Miaoxing\Plugin\Model\QueryBuilderCacheTrait;
 use Miaoxing\Services\Service\StaticTrait;
@@ -612,13 +613,13 @@ class QueryBuilder extends Base
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array $column
+     * @param string|array|Closure|null $column
      * @param null $operator
      * @param null $value
      * @return $this
      * @api
      */
-    protected function where($column, $operator = null, $value = null)
+    protected function where($column = null, $operator = null, $value = null)
     {
         //
         if ($column === null) {
@@ -1289,7 +1290,7 @@ class QueryBuilder extends Base
 
     protected function addWhere($column, $operator, $value = null, $condition = 'AND', $type = null)
     {
-        if ($column instanceof \Closure) {
+        if ($column instanceof Closure) {
             $query = new static([
                 'db' => $this->db,
                 'table' => $this->table,

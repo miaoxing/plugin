@@ -382,13 +382,13 @@ class AppModel
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array $column
+     * @param string|array|Closure|null $column
      * @param null $operator
      * @param null $value
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null)
+    public function where($column = null, $operator = null, $value = null)
     {
     }
 
@@ -1010,13 +1010,13 @@ if (0) {
          * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
-         * @param string|array $column
+         * @param string|array|Closure|null $column
          * @param null $operator
          * @param null $value
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null)
+        public static function where($column = null, $operator = null, $value = null)
         {
         }
     
@@ -1638,13 +1638,13 @@ class Model
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array $column
+     * @param string|array|Closure|null $column
      * @param null $operator
      * @param null $value
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null)
+    public function where($column = null, $operator = null, $value = null)
     {
     }
 
@@ -2266,13 +2266,13 @@ if (0) {
          * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
-         * @param string|array $column
+         * @param string|array|Closure|null $column
          * @param null $operator
          * @param null $value
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null)
+        public static function where($column = null, $operator = null, $value = null)
         {
         }
     
@@ -2760,13 +2760,13 @@ class QueryBuilder
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array $column
+     * @param string|array|Closure|null $column
      * @param null $operator
      * @param null $value
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null)
+    public function where($column = null, $operator = null, $value = null)
     {
     }
 
@@ -3265,13 +3265,13 @@ if (0) {
          * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
-         * @param string|array $column
+         * @param string|array|Closure|null $column
          * @param null $operator
          * @param null $value
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null)
+        public static function where($column = null, $operator = null, $value = null)
         {
         }
     
@@ -4038,13 +4038,13 @@ class User
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array $column
+     * @param string|array|Closure|null $column
      * @param null $operator
      * @param null $value
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null)
+    public function where($column = null, $operator = null, $value = null)
     {
     }
 
@@ -4800,13 +4800,13 @@ if (0) {
          * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
-         * @param string|array $column
+         * @param string|array|Closure|null $column
          * @param null $operator
          * @param null $value
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null)
+        public static function where($column = null, $operator = null, $value = null)
         {
         }
     
@@ -5481,13 +5481,13 @@ class UserModel
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array $column
+     * @param string|array|Closure|null $column
      * @param null $operator
      * @param null $value
      * @return $this
      * @api
      */
-    public function where($column, $operator = null, $value = null)
+    public function where($column = null, $operator = null, $value = null)
     {
     }
 
@@ -6162,13 +6162,13 @@ if (0) {
          * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
-         * @param string|array $column
+         * @param string|array|Closure|null $column
          * @param null $operator
          * @param null $value
          * @return $this
          * @api
          */
-        public static function where($column, $operator = null, $value = null)
+        public static function where($column = null, $operator = null, $value = null)
         {
         }
     
