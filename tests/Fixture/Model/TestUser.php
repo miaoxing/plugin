@@ -10,9 +10,9 @@ use Miaoxing\Plugin\Service\Model;
  * @property int groupId
  * @property string address
  */
-class User extends Model
+class TestUser extends Model
 {
-    protected $table;
+    protected $table = 'users';
 
     protected $scopes;
 

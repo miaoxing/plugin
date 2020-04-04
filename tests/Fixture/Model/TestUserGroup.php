@@ -4,7 +4,7 @@ namespace MiaoxingTest\Plugin\Fixture\Model;
 
 use Miaoxing\Plugin\Service\Model;
 
-class UserGroup extends Model
+class TestUserGroup extends Model
 {
 
 }
