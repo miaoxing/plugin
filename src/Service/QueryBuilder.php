@@ -231,7 +231,7 @@ class QueryBuilder extends Base
      */
     public function fetch($column = null, $operator = null, $value = null)
     {
-        $column !== null && $this->where(...func_get_args());
+        $this->where(...func_get_args());
         $this->limit(1);
         $data = $this->execute();
         return $data ? $data[0] : null;
@@ -257,7 +257,7 @@ class QueryBuilder extends Base
      */
     public function fetchAll($column = null, $operator = null, $value = null)
     {
-        $column !== null && $this->where(...func_get_args());
+        $this->where(...func_get_args());
         $data = $this->execute();
         if ($this->indexBy) {
             $data = $this->executeIndexBy($data, $this->indexBy);
@@ -620,6 +620,11 @@ class QueryBuilder extends Base
      */
     protected function where($column, $operator = null, $value = null)
     {
+        //
+        if ($column === null) {
+            return $this;
+        }
+
         if (is_array($column)) {
             foreach ($column as $key => $args) {
                 if (is_string($key)) {

@@ -133,6 +133,15 @@ class QueryBuilderTest extends BaseTestCase
             $sql);
     }
 
+    public function testWhereIgnoreNullColumn()
+    {
+        $this->initFixtures();
+
+        $sql = Qb::table('users')->where(null)->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `p_users`', $sql);
+    }
+
     public function testWhereRaw()
     {
         $this->initFixtures();
@@ -927,12 +936,61 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $result = User::where('group_id = ?', 1)->delete();
+        $result = Qb::table('users')->where('group_id', 1)->delete();
         $this->assertEquals(2, $result);
 
-        $result = User::delete(array('group_id' => 1));
+        $result = Qb::table('users')->delete(array('group_id' => 1));
         $this->assertEquals(0, $result);
     }
+
+    public function testInvalidLimit()
+    {
+        $this->initFixtures();
+        $user = Qb::table('users');
+
+        $user->limit(-1);
+        $this->assertEquals(1, $user->getSqlPart('limit'));
+
+        $user->limit(0);
+        $this->assertEquals(1, $user->getSqlPart('limit'));
+
+        $user->limit('string');
+        $this->assertEquals(1, $user->getSqlPart('limit'));
+    }
+
+    public function testInvalidOffset()
+    {
+        $this->initFixtures();
+        $user = $this->db('users');
+
+        $user->offset(-1);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+
+        $user->offset(-1.1);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+
+        $user->offset('string');
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+
+        $user->offset(9848519079999155811);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+    }
+
+    public function testInvalidPage()
+    {
+        $this->initFixtures();
+        $user = $this->db('users');
+
+        // @link http://php.net/manual/en/language.types.integer.php#language.types.integer.casting.from-float
+        // (984851907999915581 - 1) * 10
+        // => 9.8485190799992E+18
+        // => (int)9.8485190799992E+18
+        // => -8598224993710352384
+        // => 0
+        $user->page(984851907999915581);
+        $this->assertEquals(0, $user->getSqlPart('offset'));
+    }
+
 
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions

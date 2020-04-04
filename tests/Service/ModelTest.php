@@ -819,59 +819,11 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $record = TestUser::find(1);
-        $this->assertEquals(1, $record['id']);
+        $user = TestUser::find(1);
+        $this->assertSame(1, $user->id);
 
-        $record = TestUser::find('1');
-        $this->assertEquals(1, $record['id']);
-    }
-
-    public function testInvalidLimit()
-    {
-        $this->initFixtures();
-        $user = $this->db('users');
-
-        $user->limit(-1);
-        $this->assertEquals(1, $user->getSqlPart('limit'));
-
-        $user->limit(0);
-        $this->assertEquals(1, $user->getSqlPart('limit'));
-
-        $user->limit('string');
-        $this->assertEquals(1, $user->getSqlPart('limit'));
-    }
-
-    public function testInvalidOffset()
-    {
-        $this->initFixtures();
-        $user = $this->db('users');
-
-        $user->offset(-1);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
-
-        $user->offset(-1.1);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
-
-        $user->offset('string');
-        $this->assertEquals(0, $user->getSqlPart('offset'));
-
-        $user->offset(9848519079999155811);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
-    }
-
-    public function testInvalidPage()
-    {
-        $this->initFixtures();
-        $user = $this->db('users');
-
-        // @link http://php.net/manual/en/language.types.integer.php#language.types.integer.casting.from-float
-        // (984851907999915581 - 1) * 10
-        // => 9.8485190799992E+18
-        // => (int)9.8485190799992E+18
-        // => -8598224993710352384
-        // => 0
-        $user->page(984851907999915581);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
+        $user = TestUser::find('1');
+        $this->assertSame(1, $user->id);
     }
 
     public function testMax()
