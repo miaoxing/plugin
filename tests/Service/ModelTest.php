@@ -738,7 +738,7 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         // Creates a user collection
-        $users = TestUser::new()->beColl();
+        $users = TestUser::newColl();
 
         $john = TestUser::fromArray(array(
             'group_id' => 2,
@@ -760,13 +760,12 @@ class ModelTest extends BaseTestCase
         // Or adds by [] operator
         $users[] = $larry;
 
-        /** @var $users \Wei\Record */
         $result = $users->save();
 
         $this->assertSame($result, $users);
 
         // Find out member by id
-        $users = TestUser::indexBy('id')->where(array('id' => array($john['id'], $larry['id'])));
+        $users = TestUser::indexBy('id')->whereIn('id', array($john['id'], $larry['id']))->all();
 
         $this->assertEquals('John', $users[$john['id']]['name']);
         $this->assertEquals('Larry', $users[$larry['id']]['name']);
@@ -826,51 +825,24 @@ class ModelTest extends BaseTestCase
         $this->assertSame(1, $user->id);
     }
 
-    public function testMax()
+    public function testSaveDestroyedModel()
     {
         $this->initFixtures();
 
-        $result = $this->db->max('users', 'id');
-        $this->assertInternalType('float', $result);
-        $this->assertEquals(2, $result);
-    }
-
-    public function testMin()
-    {
-        $this->initFixtures();
-
-        $result = $this->db->min('users', 'id');
-        $this->assertInternalType('float', $result);
-        $this->assertEquals(1, $result);
-    }
-
-    public function testAvg()
-    {
-        $this->initFixtures();
-
-        $result = $this->db->avg('users', 'id');
-        $this->assertInternalType('float', $result);
-        $this->assertEquals(1.5, $result);
-    }
-
-    public function testSaveDestroyRecord()
-    {
-        $this->initFixtures();
-
-        $user = $this->db->find('users', 1);
+        $user = TestUser::find(1);
         $user->destroy();
 
         $user->save();
 
-        $user = $this->db->find('users', 1);
-        $this->assertFalse($user);
+        $user = TestUser::find(1);
+        $this->assertNull($user);
     }
 
     public function testSaveWithNullPrimaryKey()
     {
         $this->initFixtures();
 
-        $user = $this->db('users');
+        $user = TestUser::new();
         $user->save(array(
             'id' => null,
             'group_id' => '1',
@@ -880,7 +852,7 @@ class ModelTest extends BaseTestCase
 
         $this->assertNotNull($user['id']);
 
-        $user = $this->db('users');
+        $user = TestUser::new();
         $user->save(array(
             'id' => '',
             'group_id' => '1',
@@ -895,14 +867,14 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $users = $this->db('users');
+        $users = TestUser::newColl();
 
-        $users[] = $this->db('users');
-        $users[] = $this->db('users');
-        $users[] = $this->db('users');
-        $users[] = $this->db('users');
+        $users[] = TestUser::new();
+        $users[] = TestUser::new();
+        $users[] = TestUser::new();
+        $users[] = TestUser::new();
 
-        $this->assertEquals(4, $users->length());
+        $this->assertCount(4, $users);
     }
 
     public function testSetDataWithProperty()

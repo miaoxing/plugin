@@ -218,6 +218,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * @param array $data
+     * @return $this|$this[]
+     * @todo 待 data 改为 default ？ 后移除
+     */
+    public static function newColl($data = [])
+    {
+        return static::newInstance()->beColl()->fromArray($data);
+    }
+
+    /**
      * Return the record table name
      *
      * @return string
@@ -616,6 +626,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         $this->loaded = true;
 
+        // TODO data 有默认值就失效
         // Set record for collection
         if (!$this->data && $value instanceof static) {
             $this->isColl = true;
@@ -1891,9 +1902,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function indexBy($column)
     {
-        if ($this->loaded) {
-            $this->data = $this->executeIndexBy($this->data, $column);
-        }
+        parent::indexBy($column);
+        $this->loaded && $this->data = $this->executeIndexBy($this->data, $column);
         return $this;
     }
 

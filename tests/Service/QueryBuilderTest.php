@@ -961,7 +961,7 @@ class QueryBuilderTest extends BaseTestCase
     public function testInvalidOffset()
     {
         $this->initFixtures();
-        $user = $this->db('users');
+        $user = Qb::table('users');
 
         $user->offset(-1);
         $this->assertEquals(0, $user->getSqlPart('offset'));
@@ -979,7 +979,7 @@ class QueryBuilderTest extends BaseTestCase
     public function testInvalidPage()
     {
         $this->initFixtures();
-        $user = $this->db('users');
+        $user = Qb::table('users');
 
         // @link http://php.net/manual/en/language.types.integer.php#language.types.integer.casting.from-float
         // (984851907999915581 - 1) * 10
@@ -990,7 +990,6 @@ class QueryBuilderTest extends BaseTestCase
         $user->page(984851907999915581);
         $this->assertEquals(0, $user->getSqlPart('offset'));
     }
-
 
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
