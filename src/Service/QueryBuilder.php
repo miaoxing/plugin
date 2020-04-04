@@ -121,10 +121,8 @@ class QueryBuilder extends Base
     protected $state = self::STATE_CLEAN;
 
     /**
-     * @var string|bool
+     * @var BaseDriver[]
      */
-    protected $lock = '';
-
     protected static $drivers = [];
 
     /**
