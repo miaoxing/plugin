@@ -96,10 +96,10 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         // The init data may from request, contains key like id, name
-        $user = TestUser::findOrInitBy('id', 3, ['name' => 'name', 'id' => '5']);
+        $user = TestUser::findOrInitBy(['id' => 3], ['name' => 'name', 'id' => '5']);
 
         $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
-        $this->assertEquals(3, $user->id);
+        $this->assertSame(3, $user->id);
         $this->assertEquals('name', $user->name);
     }
 
@@ -110,7 +110,7 @@ class ModelTest extends BaseTestCase
         $users = TestUser::findAll([1, 2]);
 
         $this->assertSame('SELECT * FROM `p_users` WHERE `id` IN (1, 2)', $users->getRawSql());
-        $this->assertEquals(2, $users->length());
+        $this->assertCount(2, $users);
         $this->assertEquals(1, $users[0]->id);
     }
 
@@ -141,7 +141,7 @@ class ModelTest extends BaseTestCase
         $users = TestUser::findAllBy('id', '>', 1);
 
         $this->assertSame('SELECT * FROM `p_users` WHERE `id` > 1', $users->getRawSql());
-        $this->assertSame('2', $users[0]->id);
+        $this->assertSame(2, $users[0]->id);
         $this->assertSame('test', $users[0]->name);
     }
 
@@ -172,7 +172,7 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::first();
 
-        $this->assertSame('1', $user->id);
+        $this->assertSame(1, $user->id);
     }
 
     public function testAll()
@@ -547,7 +547,7 @@ class ModelTest extends BaseTestCase
         $count = 0;
         $times = 0;
         $result = $user->chunk(1, function (TestUser $users, $page) use (&$count, &$times) {
-            $count += $users->length();
+            $count += count($users);
             $times++;
             return false;
         });
