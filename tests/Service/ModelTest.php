@@ -8,7 +8,6 @@ use Miaoxing\Services\Service\ServiceTrait;
 use MiaoxingTest\Plugin\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Fixture\Model\TestUser;
 use MiaoxingTest\Plugin\Fixture\Model\TestUserGroup;
-use PHPUnit\Util\Test;
 
 /**
  * @property \Wei\Db db
@@ -1151,15 +1150,6 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::findBy(array('name' => 'twin'));
         $this->assertEquals('test address 3', $user['address']);
-    }
-
-    public function testEmptyFrom()
-    {
-        $sql = TestUser::resetSqlPart('from')->getSql();
-        $this->assertEquals('SELECT * FROM member', $sql);
-
-        $sql = TestUser::from('member m')->getSql();
-        $this->assertEquals('SELECT * FROM member m', $sql);
     }
 
     public function testGetAttribute()

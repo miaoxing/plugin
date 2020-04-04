@@ -97,7 +97,7 @@ class Mysql extends BaseDriver
             $query .= implode(', ', $selects);
         }
 
-        $query .= ' FROM ' . $this->wrap($this->getFrom());
+        $query .= ' FROM ' . $this->getFrom();
 
         // JOIN
         foreach ($parts['join'] as $join) {
@@ -243,7 +243,15 @@ class Mysql extends BaseDriver
      */
     protected function getFrom()
     {
-        return $this->db->getTable($this->sqlParts['from']);
+        $pos = strpos($this->sqlParts['from'], ' ');
+        if (false !== $pos) {
+            [$table, $alias] = explode(' ', $this->sqlParts['from']);
+        } else {
+            $table = $this->sqlParts['from'];
+            $alias = null;
+        }
+
+        return $this->wrap($this->db->getTable($table)) . ($alias ? (' ' . $this->wrap($alias)) : '');
     }
 
     /**

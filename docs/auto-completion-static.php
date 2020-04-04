@@ -339,11 +339,12 @@ class AppModel
     /**
      * Sets table for FROM query
      *
-     * @param string $from The table
+     * @param string $table
+     * @param string|null $alias
      * @return $this
      * @api
      */
-    public function from($from)
+    public function from($table, $alias = null): self
     {
     }
 
@@ -352,7 +353,7 @@ class AppModel
      * @return $this
      * @api
      */
-    public function table(string $table): self
+    public function table(string $table, $alias = null): self
     {
     }
 
@@ -641,6 +642,17 @@ class AppModel
      * @api
      */
     public function asc($field)
+    {
+    }
+
+    /**
+     * Reset single SQL part
+     *
+     * @param string $name
+     * @return $this
+     * @api
+     */
+    public function resetSqlPart($name)
     {
     }
 
@@ -1011,11 +1023,12 @@ if (0) {
         /**
          * Sets table for FROM query
          *
-         * @param string $from The table
+         * @param string $table
+         * @param string|null $alias
          * @return $this
          * @api
          */
-        public static function from($from)
+        public static function from($table, $alias = null): self
         {
         }
     
@@ -1024,7 +1037,7 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function table(string $table): self
+        public static function table(string $table, $alias = null): self
         {
         }
     
@@ -1313,6 +1326,17 @@ if (0) {
          * @api
          */
         public static function asc($field)
+        {
+        }
+    
+        /**
+         * Reset single SQL part
+         *
+         * @param string $name
+         * @return $this
+         * @api
+         */
+        public static function resetSqlPart($name)
         {
         }
     
@@ -1683,11 +1707,12 @@ class Model
     /**
      * Sets table for FROM query
      *
-     * @param string $from The table
+     * @param string $table
+     * @param string|null $alias
      * @return $this
      * @api
      */
-    public function from($from)
+    public function from($table, $alias = null): self
     {
     }
 
@@ -1696,7 +1721,7 @@ class Model
      * @return $this
      * @api
      */
-    public function table(string $table): self
+    public function table(string $table, $alias = null): self
     {
     }
 
@@ -1985,6 +2010,17 @@ class Model
      * @api
      */
     public function asc($field)
+    {
+    }
+
+    /**
+     * Reset single SQL part
+     *
+     * @param string $name
+     * @return $this
+     * @api
+     */
+    public function resetSqlPart($name)
     {
     }
 
@@ -2355,11 +2391,12 @@ if (0) {
         /**
          * Sets table for FROM query
          *
-         * @param string $from The table
+         * @param string $table
+         * @param string|null $alias
          * @return $this
          * @api
          */
-        public static function from($from)
+        public static function from($table, $alias = null): self
         {
         }
     
@@ -2368,7 +2405,7 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function table(string $table): self
+        public static function table(string $table, $alias = null): self
         {
         }
     
@@ -2661,6 +2698,17 @@ if (0) {
         }
     
         /**
+         * Reset single SQL part
+         *
+         * @param string $name
+         * @return $this
+         * @api
+         */
+        public static function resetSqlPart($name)
+        {
+        }
+    
+        /**
          * @return $this
          * @api
          */
@@ -2893,11 +2941,12 @@ class QueryBuilder
     /**
      * Sets table for FROM query
      *
-     * @param string $from The table
+     * @param string $table
+     * @param string|null $alias
      * @return $this
      * @api
      */
-    public function from($from)
+    public function from($table, $alias = null): self
     {
     }
 
@@ -2906,7 +2955,7 @@ class QueryBuilder
      * @return $this
      * @api
      */
-    public function table(string $table): self
+    public function table(string $table, $alias = null): self
     {
     }
 
@@ -3210,6 +3259,17 @@ class QueryBuilder
     }
 
     /**
+     * Reset single SQL part
+     *
+     * @param string $name
+     * @return $this
+     * @api
+     */
+    public function resetSqlPart($name)
+    {
+    }
+
+    /**
      * @return $this
      * @api
      */
@@ -3442,11 +3502,12 @@ if (0) {
         /**
          * Sets table for FROM query
          *
-         * @param string $from The table
+         * @param string $table
+         * @param string|null $alias
          * @return $this
          * @api
          */
-        public static function from($from)
+        public static function from($table, $alias = null): self
         {
         }
     
@@ -3455,7 +3516,7 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function table(string $table): self
+        public static function table(string $table, $alias = null): self
         {
         }
     
@@ -3755,6 +3816,17 @@ if (0) {
          * @api
          */
         public static function indexBy($column)
+        {
+        }
+    
+        /**
+         * Reset single SQL part
+         *
+         * @param string $name
+         * @return $this
+         * @api
+         */
+        public static function resetSqlPart($name)
         {
         }
     
@@ -4259,11 +4331,12 @@ class User
     /**
      * Sets table for FROM query
      *
-     * @param string $from The table
+     * @param string $table
+     * @param string|null $alias
      * @return $this
      * @api
      */
-    public function from($from)
+    public function from($table, $alias = null): self
     {
     }
 
@@ -4272,7 +4345,7 @@ class User
      * @return $this
      * @api
      */
-    public function table(string $table): self
+    public function table(string $table, $alias = null): self
     {
     }
 
@@ -4561,6 +4634,17 @@ class User
      * @api
      */
     public function asc($field)
+    {
+    }
+
+    /**
+     * Reset single SQL part
+     *
+     * @param string $name
+     * @return $this
+     * @api
+     */
+    public function resetSqlPart($name)
     {
     }
 
@@ -5065,11 +5149,12 @@ if (0) {
         /**
          * Sets table for FROM query
          *
-         * @param string $from The table
+         * @param string $table
+         * @param string|null $alias
          * @return $this
          * @api
          */
-        public static function from($from)
+        public static function from($table, $alias = null): self
         {
         }
     
@@ -5078,7 +5163,7 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function table(string $table): self
+        public static function table(string $table, $alias = null): self
         {
         }
     
@@ -5367,6 +5452,17 @@ if (0) {
          * @api
          */
         public static function asc($field)
+        {
+        }
+    
+        /**
+         * Reset single SQL part
+         *
+         * @param string $name
+         * @return $this
+         * @api
+         */
+        public static function resetSqlPart($name)
         {
         }
     
@@ -5790,11 +5886,12 @@ class UserModel
     /**
      * Sets table for FROM query
      *
-     * @param string $from The table
+     * @param string $table
+     * @param string|null $alias
      * @return $this
      * @api
      */
-    public function from($from)
+    public function from($table, $alias = null): self
     {
     }
 
@@ -5803,7 +5900,7 @@ class UserModel
      * @return $this
      * @api
      */
-    public function table(string $table): self
+    public function table(string $table, $alias = null): self
     {
     }
 
@@ -6092,6 +6189,17 @@ class UserModel
      * @api
      */
     public function asc($field)
+    {
+    }
+
+    /**
+     * Reset single SQL part
+     *
+     * @param string $name
+     * @return $this
+     * @api
+     */
+    public function resetSqlPart($name)
     {
     }
 
@@ -6515,11 +6623,12 @@ if (0) {
         /**
          * Sets table for FROM query
          *
-         * @param string $from The table
+         * @param string $table
+         * @param string|null $alias
          * @return $this
          * @api
          */
-        public static function from($from)
+        public static function from($table, $alias = null): self
         {
         }
     
@@ -6528,7 +6637,7 @@ if (0) {
          * @return $this
          * @api
          */
-        public static function table(string $table): self
+        public static function table(string $table, $alias = null): self
         {
         }
     
@@ -6817,6 +6926,17 @@ if (0) {
          * @api
          */
         public static function asc($field)
+        {
+        }
+    
+        /**
+         * Reset single SQL part
+         *
+         * @param string $name
+         * @return $this
+         * @api
+         */
+        public static function resetSqlPart($name)
         {
         }
     

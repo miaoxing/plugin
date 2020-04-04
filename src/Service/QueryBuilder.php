@@ -540,19 +540,15 @@ class QueryBuilder extends Base
     /**
      * Sets table for FROM query
      *
-     * @param string $from The table
+     * @param string $table
+     * @param string|null $alias
      * @return $this
      * @api
      */
-    protected function from($from)
+    protected function from($table, $alias = null): self
     {
-        $pos = strpos($from, ' ');
-        if (false !== $pos) {
-            $this->table = substr($from, 0, $pos);
-        } else {
-            $this->table = $from;
-        }
-        return $this->add('from', $from);
+        $this->table = $table;
+        return $this->add('from', $table . ($alias ? ' ' . $alias : ''));
     }
 
     /**
@@ -560,9 +556,9 @@ class QueryBuilder extends Base
      * @return $this
      * @api
      */
-    protected function table(string $table): self
+    protected function table(string $table, $alias = null): self
     {
-        return $this->from($table);
+        return $this->from($table, $alias);
     }
 
     /**
@@ -1122,8 +1118,9 @@ class QueryBuilder extends Base
      *
      * @param string $name
      * @return $this
+     * @api
      */
-    public function resetSqlPart($name)
+    protected function resetSqlPart($name)
     {
         $this->sqlParts[$name] = is_array($this->sqlParts[$name]) ? array() : null;
         $this->state = self::STATE_DIRTY;

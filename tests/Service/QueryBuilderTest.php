@@ -991,6 +991,15 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals(0, $user->getSqlPart('offset'));
     }
 
+    public function testFromAlias()
+    {
+        $qb = Qb::from('users', 'm');
+        $this->assertEquals('SELECT * FROM `p_users` `m`', $qb->getRawSql());
+
+        $first = $qb->first();
+        $this->assertNotNull($first);
+    }
+
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
      */
