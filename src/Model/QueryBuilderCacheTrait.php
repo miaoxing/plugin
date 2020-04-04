@@ -46,8 +46,9 @@ trait QueryBuilderCacheTrait
      *
      * @param int|null|false $seconds
      * @return $this
+     * @api
      */
-    public function cache($seconds = null)
+    protected function cache($seconds = null)
     {
         if ($seconds === null) {
             $this->cacheTime = $this->defaultCacheTime;
@@ -98,7 +99,7 @@ trait QueryBuilderCacheTrait
      */
     protected function getCacheTags()
     {
-        $tags[] = $this->getFrom();
+        $tags[] = $this->getTable();
         foreach ($this->sqlParts['join'] as $join) {
             $tags[] = $join['table'];
         }

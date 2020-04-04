@@ -303,6 +303,30 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Set guarded columns
+     *
+     * @param array $guarded
+     * @return $this
+     */
+    public function setGuarded(array $guarded)
+    {
+        $this->guarded = $guarded;
+        return $this;
+    }
+
+    /**
+     * Set fillable columns
+     *
+     * @param array $fillable
+     * @return $this
+     */
+    public function setFillable(array $fillable)
+    {
+        $this->fillable = $fillable;
+        return $this;
+    }
+
+    /**
      * Check if the field is assignable through fromArray method
      *
      * @param string $field
@@ -824,17 +848,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             return isset($this->changedData[$field]) ? $this->changedData[$field] : null;
         }
         return $this->changedData;
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function fetchFromCache()
-    {
-        $cache = $this->cacheTags === false ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
-        return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
-            return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
-        });
     }
 
     /**
@@ -2172,7 +2185,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function hasRelation($name)
     {
-        return method_exists($this, $name);
+        // Ignore methods in Model::class
+        return !method_exists(self::class, $name) && method_exists($this, $name);
     }
 
     /**

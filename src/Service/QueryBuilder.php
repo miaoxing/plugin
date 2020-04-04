@@ -13,6 +13,7 @@ use Wei\Base;
  *
  * @author Twin Huang <twinhuang@qq.com>
  * @mixin \DbMixin
+ * @mixin \TagCacheMixin
  */
 class QueryBuilder extends Base
 {
@@ -83,8 +84,8 @@ class QueryBuilder extends Base
      * @var array
      */
     protected $params = [
-        'where' => [],
         'set' => [],
+        'where' => [],
     ];
 
     /**
@@ -225,12 +226,24 @@ class QueryBuilder extends Base
     }
 
     /**
+     * @return mixed
+     */
+    protected function fetchFromCache()
+    {
+        $cache = $this->cacheTags === false ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
+        return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
+            return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
+        });
+    }
+
+    /**
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
      * @return array|null
+     * @api
      */
-    public function fetch($column = null, $operator = null, $value = null)
+    protected function fetch($column = null, $operator = null, $value = null)
     {
         $this->where(...func_get_args());
         $this->limit(1);
@@ -255,8 +268,9 @@ class QueryBuilder extends Base
      *
      * @param mixed $conditions
      * @return array|false
+     * @api
      */
-    public function fetchAll($column = null, $operator = null, $value = null)
+    protected function fetchAll($column = null, $operator = null, $value = null)
     {
         $this->where(...func_get_args());
         $data = $this->execute();
@@ -369,10 +383,11 @@ class QueryBuilder extends Base
     /**
      * Execute a update query with specified data
      *
-     * @param array|string $set
+     * @param array $set
      * @return int
+     * @api
      */
-    public function update($set = [])
+    protected function update(array $set = [])
     {
         $params = [];
         foreach ($set as $field => $param) {

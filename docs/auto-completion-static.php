@@ -187,6 +187,28 @@ class AppModel
     }
 
     /**
+     * Executes the generated query and returns the first array result
+     *
+     * @param mixed $conditions
+     * @return array|null
+     * @api
+     */
+    public function fetch($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * Executes the generated query and returns all array results
+     *
+     * @param mixed $conditions
+     * @return array|false
+     * @api
+     */
+    public function fetchAll($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -214,6 +236,17 @@ class AppModel
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a update query with specified data
+     *
+     * @param array $set
+     * @return int
+     * @api
+     */
+    public function update(array $set = [])
     {
     }
 
@@ -655,6 +688,17 @@ class AppModel
      * @api
      */
     public function unless($value, callable $callback, callable $default = null)
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null|false $seconds
+     * @return $this
+     * @api
+     */
+    public function cache($seconds = null)
     {
     }
 }
@@ -815,6 +859,28 @@ if (0) {
         }
     
         /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed $conditions
+         * @return array|null
+         * @api
+         */
+        public static function fetch($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed $conditions
+         * @return array|false
+         * @api
+         */
+        public static function fetchAll($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -842,6 +908,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array $set
+         * @return int
+         * @api
+         */
+        public static function update(array $set = [])
         {
         }
     
@@ -1285,6 +1362,17 @@ if (0) {
         public static function unless($value, callable $callback, callable $default = null)
         {
         }
+    
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null|false $seconds
+         * @return $this
+         * @api
+         */
+        public static function cache($seconds = null)
+        {
+        }
     }
 }
 
@@ -1443,6 +1531,28 @@ class Model
     }
 
     /**
+     * Executes the generated query and returns the first array result
+     *
+     * @param mixed $conditions
+     * @return array|null
+     * @api
+     */
+    public function fetch($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * Executes the generated query and returns all array results
+     *
+     * @param mixed $conditions
+     * @return array|false
+     * @api
+     */
+    public function fetchAll($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -1470,6 +1580,17 @@ class Model
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a update query with specified data
+     *
+     * @param array $set
+     * @return int
+     * @api
+     */
+    public function update(array $set = [])
     {
     }
 
@@ -1913,6 +2034,17 @@ class Model
     public function unless($value, callable $callback, callable $default = null)
     {
     }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null|false $seconds
+     * @return $this
+     * @api
+     */
+    public function cache($seconds = null)
+    {
+    }
 }
 
 if (0) {
@@ -2071,6 +2203,28 @@ if (0) {
         }
     
         /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed $conditions
+         * @return array|null
+         * @api
+         */
+        public static function fetch($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed $conditions
+         * @return array|false
+         * @api
+         */
+        public static function fetchAll($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -2098,6 +2252,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array $set
+         * @return int
+         * @api
+         */
+        public static function update(array $set = [])
         {
         }
     
@@ -2541,11 +2706,44 @@ if (0) {
         public static function unless($value, callable $callback, callable $default = null)
         {
         }
+    
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null|false $seconds
+         * @return $this
+         * @api
+         */
+        public static function cache($seconds = null)
+        {
+        }
     }
 }
 
 class QueryBuilder
 {
+    /**
+     * Executes the generated query and returns the first array result
+     *
+     * @param mixed $conditions
+     * @return array|null
+     * @api
+     */
+    public function fetch($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * Executes the generated query and returns all array results
+     *
+     * @param mixed $conditions
+     * @return array|false
+     * @api
+     */
+    public function fetchAll($column = null, $operator = null, $value = null)
+    {
+    }
+
     /**
      * Executes the generated SQL and returns the found record object or null if not found
      *
@@ -2592,6 +2790,17 @@ class QueryBuilder
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a update query with specified data
+     *
+     * @param array $set
+     * @return int
+     * @api
+     */
+    public function update(array $set = [])
     {
     }
 
@@ -3046,11 +3255,44 @@ class QueryBuilder
     public function unless($value, callable $callback, callable $default = null)
     {
     }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null|false $seconds
+     * @return $this
+     * @api
+     */
+    public function cache($seconds = null)
+    {
+    }
 }
 
 if (0) {
     class QueryBuilder
     {
+        /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed $conditions
+         * @return array|null
+         * @api
+         */
+        public static function fetch($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed $conditions
+         * @return array|false
+         * @api
+         */
+        public static function fetchAll($column = null, $operator = null, $value = null)
+        {
+        }
+    
         /**
          * Executes the generated SQL and returns the found record object or null if not found
          *
@@ -3097,6 +3339,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array $set
+         * @return int
+         * @api
+         */
+        public static function update(array $set = [])
         {
         }
     
@@ -3551,6 +3804,17 @@ if (0) {
         public static function unless($value, callable $callback, callable $default = null)
         {
         }
+    
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null|false $seconds
+         * @return $this
+         * @api
+         */
+        public static function cache($seconds = null)
+        {
+        }
     }
 }
 
@@ -3843,6 +4107,28 @@ class User
     }
 
     /**
+     * Executes the generated query and returns the first array result
+     *
+     * @param mixed $conditions
+     * @return array|null
+     * @api
+     */
+    public function fetch($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * Executes the generated query and returns all array results
+     *
+     * @param mixed $conditions
+     * @return array|false
+     * @api
+     */
+    public function fetchAll($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -3870,6 +4156,17 @@ class User
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a update query with specified data
+     *
+     * @param array $set
+     * @return int
+     * @api
+     */
+    public function update(array $set = [])
     {
     }
 
@@ -4311,6 +4608,17 @@ class User
      * @api
      */
     public function unless($value, callable $callback, callable $default = null)
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null|false $seconds
+     * @return $this
+     * @api
+     */
+    public function cache($seconds = null)
     {
     }
 }
@@ -4605,6 +4913,28 @@ if (0) {
         }
     
         /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed $conditions
+         * @return array|null
+         * @api
+         */
+        public static function fetch($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed $conditions
+         * @return array|false
+         * @api
+         */
+        public static function fetchAll($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -4632,6 +4962,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array $set
+         * @return int
+         * @api
+         */
+        public static function update(array $set = [])
         {
         }
     
@@ -5075,6 +5416,17 @@ if (0) {
         public static function unless($value, callable $callback, callable $default = null)
         {
         }
+    
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null|false $seconds
+         * @return $this
+         * @api
+         */
+        public static function cache($seconds = null)
+        {
+        }
     }
 }
 
@@ -5286,6 +5638,28 @@ class UserModel
     }
 
     /**
+     * Executes the generated query and returns the first array result
+     *
+     * @param mixed $conditions
+     * @return array|null
+     * @api
+     */
+    public function fetch($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
+     * Executes the generated query and returns all array results
+     *
+     * @param mixed $conditions
+     * @return array|false
+     * @api
+     */
+    public function fetchAll($column = null, $operator = null, $value = null)
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -5313,6 +5687,17 @@ class UserModel
      * @api
      */
     public function cnt($column = '*')
+    {
+    }
+
+    /**
+     * Execute a update query with specified data
+     *
+     * @param array $set
+     * @return int
+     * @api
+     */
+    public function update(array $set = [])
     {
     }
 
@@ -5756,6 +6141,17 @@ class UserModel
     public function unless($value, callable $callback, callable $default = null)
     {
     }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null|false $seconds
+     * @return $this
+     * @api
+     */
+    public function cache($seconds = null)
+    {
+    }
 }
 
 if (0) {
@@ -5967,6 +6363,28 @@ if (0) {
         }
     
         /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed $conditions
+         * @return array|null
+         * @api
+         */
+        public static function fetch($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed $conditions
+         * @return array|false
+         * @api
+         */
+        public static function fetchAll($column = null, $operator = null, $value = null)
+        {
+        }
+    
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -5994,6 +6412,17 @@ if (0) {
          * @api
          */
         public static function cnt($column = '*')
+        {
+        }
+    
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array $set
+         * @return int
+         * @api
+         */
+        public static function update(array $set = [])
         {
         }
     
@@ -6435,6 +6864,17 @@ if (0) {
          * @api
          */
         public static function unless($value, callable $callback, callable $default = null)
+        {
+        }
+    
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null|false $seconds
+         * @return $this
+         * @api
+         */
+        public static function cache($seconds = null)
         {
         }
     }
