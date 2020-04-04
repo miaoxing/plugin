@@ -772,48 +772,47 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('Larry', $users[$larry['id']]['name']);
     }
 
-    public function testDestroyRecordAndFindAgainReturnFalse()
+    public function testSaveOnNoAttributeChanged()
     {
         $this->initFixtures();
 
-        $user = $this->db('users');
-        $result = $user->find(array('id' => 1))->destroy();
+        $user = TestUser::new();
+        $result = $user->save();
 
-        $this->assertInstanceOf('\Wei\Record', $result);
-
-        $user = TestUser::find(array('id' => 1));
-        $this->assertFalse($user);
-    }
-
-    public function testSaveOnNoFiledChanged()
-    {
-        $this->initFixtures();
-        $record = $this->db->init('users', array('id' => 1), false);
-        $record = $record->save();
-
-        $this->assertInstanceOf('\Wei\Record', $record);
+        $this->assertInstanceOf(TestUser::class, $result);
     }
 
     public function testPrimaryKey()
     {
-        $this->initFixtures();
+        $user = TestUser::new();
+        $this->assertEquals('id', $user->getPrimaryKey());
 
-        $record = $this->db->init('users');
-        $this->assertEquals('id', $record->getPrimaryKey());
-
-        $record->setPrimaryKey('testId');
-        $this->assertEquals('testId', $record->getPrimaryKey());
+        $user->setPrimaryKey('testId');
+        $this->assertEquals('testId', $user->getPrimaryKey());
     }
 
     public function testIsNew()
     {
+        $user = TestUser::new();
+
+        $this->assertTrue($user->isNew());
+    }
+
+    public function testIsNewRemainTrueWhenFindOrInitNoRecord()
+    {
+        $user = TestUser::new();
+        $user->findOrInit(99);
+
+        $this->assertTrue($user->isNew());
+    }
+
+    public function testIsNewBecomeFalseAfterSave()
+    {
         $this->initFixtures();
 
-        $record = $this->db->init('users', array('id' => 1), true);
-        $this->assertTrue($record->isNew());
+        $user = TestUser::save();
 
-        $record = $this->db->init('users', array('id' => 1), false);
-        $this->assertFalse($record->isNew());
+        $this->assertFalse($user->isNew());
     }
 
     public function testFindByPrimaryKey()
