@@ -567,13 +567,21 @@ class QueryBuilder extends Base
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @param string $type
      * @return $this
      * @api
      */
-    protected function join($table, $on = null)
-    {
-        return $this->innerJoin($table, $on);
+    protected function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'inner'
+    ) {
+        return $this->add('join', compact('table', 'first', 'operator', 'second', 'type'), true);
     }
 
     /**
@@ -586,7 +594,7 @@ class QueryBuilder extends Base
      */
     protected function innerJoin($table, $on = null)
     {
-        return $this->add('join', array('type' => 'inner', 'table' => $table, 'on' => $on), true);
+        return $this->add('join', ['type' => 'inner', 'table' => $table, 'on' => $on], true);
     }
 
     /**

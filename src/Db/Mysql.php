@@ -102,8 +102,8 @@ class Mysql extends BaseDriver
         // JOIN
         foreach ($parts['join'] as $join) {
             $query .= ' ' . strtoupper($join['type'])
-                . ' JOIN ' . $join['table']
-                . ' ON ' . $join['on'];
+                . ' JOIN ' . $this->wrapTable($join['table'])
+                . ' ON ' . $this->wrap($join['first']) . ' ' . $join['operator'] . ' ' . $this->wrap($join['second']);
         }
 
         if ($parts['where']) {
@@ -251,7 +251,7 @@ class Mysql extends BaseDriver
             $alias = null;
         }
 
-        return $this->wrap($this->db->getTable($table)) . ($alias ? (' ' . $this->wrap($alias)) : '');
+        return $this->wrapTable($table) . ($alias ? (' ' . $this->wrap($alias)) : '');
     }
 
     /**

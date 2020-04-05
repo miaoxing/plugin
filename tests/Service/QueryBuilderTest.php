@@ -1011,6 +1011,17 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals(0, $user->getSqlPart('offset'));
     }
 
+    public function testJoin()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::table('users')->join('user_groups', 'users.group_id', '=', 'user_groups.id');
+        $this->assertSame('SELECT * FROM `p_users` INNER JOIN `p_user_groups` ON `p_users`.`group_id` = `p_user_groups`.`id`', $qb->getRawSql());
+
+        $user = $qb->fetch();
+        $this->assertArrayHasKey('id', $user, '可以正常查询出结果');
+    }
+
     /**
      * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
      */
@@ -1047,17 +1058,6 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId LIMIT 1", $query->getSql());
         $this->assertEquals('1', $user['group_id']);
-
-        // Join
-        $query = $this
-            ->db('users')
-            ->select('prefix_member.*, prefix_member_group.name AS group_name')
-            ->leftJoin('prefix_member_group', 'prefix_member_group.id = prefix_member.group_id');
-        $user = $query->fetch();
-
-        $this->assertEquals("SELECT prefix_member.*, prefix_member_group.name AS group_name FROM prefix_member LEFT JOIN prefix_member_group ON prefix_member_group.id = prefix_member.group_id LIMIT 1",
-            $query->getSql());
-        $this->assertArrayHasKey('group_name', $user);
 
         // Join with table alias
         $query = $this

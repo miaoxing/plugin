@@ -10,9 +10,38 @@ use Wei\Db;
  */
 abstract class BaseDriver extends Base
 {
+    protected $wrapper = '';
+
     protected function wrap($column)
     {
-        return $column === '*' ? '*' : $this->wrapper . $column . $this->wrapper;
+        if (strpos($column, '.') === false) {
+            return $this->wrapValue($column);
+        }
+
+        $items = explode('.', $column);
+
+        // 倒数第二项是数据表名称，例如：db.table.column
+        $tableIndex = count($items) - 2;
+
+        foreach ($items as $i => &$item) {
+            if ($i === $tableIndex) {
+                $item = $this->wrapTable($item);
+            } else {
+                $item = $this->wrapValue($item);
+            }
+        }
+
+        return implode('.', $items);
+    }
+
+    protected function wrapTable($table)
+    {
+        return $this->wrap($this->db->getTable($table));
+    }
+
+    protected function wrapValue(string $value): string
+    {
+        return $value === '*' ? $value : $this->wrapper . $value . $this->wrapper;
     }
 
     protected function getRawValue($expression)
