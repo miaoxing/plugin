@@ -188,8 +188,9 @@ class QueryBuilder extends Base
      * Returns the name of fields of current table
      *
      * @return array
+     * @api
      */
-    public function getFields()
+    protected function getFields()
     {
         if (empty($this->fields)) {
             $this->fields = $this->db->getTableFields($this->getTable());
@@ -1298,6 +1299,9 @@ class QueryBuilder extends Base
 
         if ($value === null) {
             $operator = $operator === 'NOT NULL' ? $operator : 'NULL';
+        } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'])) {
+            $operator = $operator === 'NOT IN' ? $operator : 'IN';
+            $this->params['where'][] = (array) $value;
         } else {
             $this->params['where'][] = (array) $value;
         }

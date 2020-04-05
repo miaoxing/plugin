@@ -4,7 +4,6 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
-use Miaoxing\Services\Service\ServiceTrait;
 use MiaoxingTest\Plugin\Fixture\DbTrait;
 
 /**
@@ -12,7 +11,6 @@ use MiaoxingTest\Plugin\Fixture\DbTrait;
  */
 class QueryBuilderTest extends BaseTestCase
 {
-    use ServiceTrait;
     use DbTrait;
 
     public function setUp(): void
@@ -140,6 +138,22 @@ class QueryBuilderTest extends BaseTestCase
         $sql = Qb::table('users')->where(null)->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_users`', $sql);
+    }
+
+    public function testWhereParamIsArray()
+    {
+        $this->initFixtures();;
+
+        $qb = Qb::table('users')->where('id', [1, 2]);
+
+        $this->assertEquals('SELECT * FROM `p_users` WHERE `id` IN (1, 2)', $qb->getRawSql());
+
+        $user = $qb->fetch();
+        $this->assertSame('1', $user['id']);
+
+        // NOTE: fetch 里面设置了 limit(1)
+        $users = $qb->limit(2)->fetchAll();
+        $this->assertSame('2', $users[1]['id']);
     }
 
     public function testWhereRaw()
