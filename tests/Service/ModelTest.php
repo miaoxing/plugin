@@ -2,16 +2,13 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Miaoxing\Services\Service\ServiceTrait;
 use MiaoxingTest\Plugin\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Fixture\Model\TestUser;
-use MiaoxingTest\Plugin\Fixture\Model\TestUserGroup;
 
 /**
- * @property \Wei\Db db
- * @method Model db($table = null)
+ * @mixin \DbMixin
  */
 class ModelTest extends BaseTestCase
 {
@@ -22,8 +19,6 @@ class ModelTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->db->addRecordClass('users', TestUser::class);
-        $this->db->addRecordClass('user_groups', TestUserGroup::class);
         $this->db->setOption('tablePrefix', 'p_');
     }
 
@@ -584,11 +579,9 @@ class ModelTest extends BaseTestCase
 
     public function testQueryBuilderForEach()
     {
-        $this->markTestSkipped('todo refine');
-
         $this->initFixtures();
 
-        $users = TestUser::where('group_id', 1);
+        $users = TestUser::where('group_id', 1)->all();
         foreach ($users as $user) {
             $this->assertEquals(1, $user['group_id']);
         }
@@ -610,22 +603,20 @@ class ModelTest extends BaseTestCase
 
     public function testNewRecord()
     {
-        $this->markTestSkipped('todo refine');
-
         $this->initFixtures();
 
         // Use record as array
-        $user = TestUser::where('id = 1');
+        $user = TestUser::find(1);
         $this->assertEquals('1', $user['id']);
 
         // Use record as 2d array
-        $users = TestUser::where('group_id = 1');
+        $users = TestUser::where('group_id', 1)->all();
         foreach ($users as $user) {
             $this->assertEquals(1, $user['group_id']);
         }
 
-        $user1 = $this->db('users');
-        $user2 = $this->db('users');
+        $user1 = TestUser::new();
+        $user2 = TestUser::new();
         $this->assertEquals($user1, $user2);
         $this->assertNotSame($user1, $user2);
     }
