@@ -235,6 +235,22 @@ class QueryBuilderTest extends BaseTestCase
             $sql);
     }
 
+    public function testOrWhereParamIsArray()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::table('users')->where('name', 'twin')->orWhere('id', [1, 2]);
+
+        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `id` IN (1, 2)", $qb->getRawSql());
+
+        $user = $qb->fetch();
+        $this->assertSame('1', $user['id']);
+
+        // NOTE: fetch 里面设置了 limit(1)
+        $users = $qb->limit(2)->fetchAll();
+        $this->assertSame('2', $users[1]['id']);
+    }
+
     public function testOrWhereRaw()
     {
         $qb = Qb::table('users')
@@ -1030,23 +1046,6 @@ class QueryBuilderTest extends BaseTestCase
         $this->markTestSkipped('todo');
 
         $this->initFixtures();
-
-        // Subset conditions
-        $query = User::where(array('group_id' => array('1', '2')));
-        $user = $query->find();
-
-        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id IN (?, ?) LIMIT 1", $query->getSql());
-        $this->assertEquals('1', $user['group_id']);
-
-        $query = User::where(array(
-            'id' => '1',
-            'group_id' => array('1', '2'),
-        ));
-        $user = $query->find();
-
-        $this->assertEquals("SELECT * FROM prefix_member WHERE id = ? AND group_id IN (?, ?) LIMIT 1",
-            $query->getSql());
-        $this->assertEquals('1', $user['id']);
 
         // Overwrite where
         $query = $this
