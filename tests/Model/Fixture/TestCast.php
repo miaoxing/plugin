@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property int $intColumn
@@ -12,7 +12,7 @@ use Miaoxing\Plugin\BaseModelV2;
  * @property string $dateColumn
  * @property array $jsonColumn
  */
-class TestCast extends BaseModelV2
+class TestCast extends Model
 {
     protected $primaryKey = 'int_column';
 

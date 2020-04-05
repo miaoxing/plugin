@@ -3,16 +3,16 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\TestCamelCase;
 use Wei\Request;
 
 class CamelCaseTraitTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         static::dropTables();
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
 
         wei()->schema->table('test_camel_cases')
             ->id()
@@ -20,7 +20,7 @@ class CamelCaseTraitTest extends BaseTestCase
             ->exec();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -33,7 +33,7 @@ class CamelCaseTraitTest extends BaseTestCase
 
     public function testFromArray()
     {
-        $camelCase = wei()->testCamelCase();
+        $camelCase = TestCamelCase::new();
 
         $camelCase->fromArray([
             'testUserId' => 1,
@@ -44,7 +44,7 @@ class CamelCaseTraitTest extends BaseTestCase
 
     public function testFromArrayReqIgnoreSnake()
     {
-        $camelCase = wei()->testCamelCase();
+        $camelCase = TestCamelCase::new();
 
         /** @var Request $request */
         $request = wei()->newInstance('request');
@@ -67,7 +67,7 @@ class CamelCaseTraitTest extends BaseTestCase
 
     public function testFromArrayArrayAllowSnake()
     {
-        $camelCase = wei()->testCamelCase();
+        $camelCase = TestCamelCase::new();
 
         $camelCase->fromArray([
             'test_user_id' => 1,
@@ -86,7 +86,7 @@ class CamelCaseTraitTest extends BaseTestCase
 
     public function testToArray()
     {
-        $camelCase = wei()->testCamelCase();
+        $camelCase = TestCamelCase::new();
 
         $camelCase->fromArray([
             'testUserId' => 1,
@@ -100,7 +100,7 @@ class CamelCaseTraitTest extends BaseTestCase
 
     public function testGetSet()
     {
-        $camelCase = wei()->testCamelCase();
+        $camelCase = TestCamelCase::new();
 
         $this->assertEquals(null, $camelCase['testUserId']);
 
@@ -111,7 +111,7 @@ class CamelCaseTraitTest extends BaseTestCase
 
     public function testNoExtraKey()
     {
-        $camelCase = wei()->testCamelCase();
+        $camelCase = TestCamelCase::new();
 
         $camelCase['testUserId'] = 2;
         $this->assertEquals(2, $camelCase['testUserId']);

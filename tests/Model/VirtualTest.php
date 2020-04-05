@@ -3,15 +3,15 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\TestVirtual;
 
 class VirtualTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         static::dropTables();
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
 
         wei()->schema->table('test_virtual')
             ->id()
@@ -20,7 +20,7 @@ class VirtualTest extends BaseTestCase
             ->exec();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -33,7 +33,7 @@ class VirtualTest extends BaseTestCase
 
     public function testGetNew()
     {
-        $virtual = wei()->testVirtual();
+        $virtual = TestVirtual::new();
 
         $this->assertNull($virtual->getVirtualColumnValue());
         $this->assertNull($virtual['virtualColumn']);
@@ -42,7 +42,7 @@ class VirtualTest extends BaseTestCase
 
     public function testGetAfterSet()
     {
-        $virtual = wei()->testVirtual();
+        $virtual = TestVirtual::new();
 
         $virtual->virtualColumn = 'something';
 
@@ -54,7 +54,7 @@ class VirtualTest extends BaseTestCase
 
     public function testOffsetSet()
     {
-        $virtual = wei()->testVirtual();
+        $virtual = TestVirtual::new();
 
         $virtual['virtualColumn'] = 'something';
 
@@ -66,7 +66,7 @@ class VirtualTest extends BaseTestCase
 
     public function testSetMethod()
     {
-        $virtual = wei()->testVirtual();
+        $virtual = TestVirtual::new();
 
         $virtual->set('virtualColumn', 'something');
 
@@ -78,7 +78,7 @@ class VirtualTest extends BaseTestCase
 
     public function testGetFullName()
     {
-        $virtual = wei()->testVirtual();
+        $virtual = TestVirtual::new();
 
         $virtual->firstName = 'Hello';
         $virtual->lastName = 'World';
@@ -88,7 +88,7 @@ class VirtualTest extends BaseTestCase
 
     public function testSetFullName()
     {
-        $virtual = wei()->testVirtual();
+        $virtual = TestVirtual::new();
 
         $virtual->fullName = 'Hello World';
 

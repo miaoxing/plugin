@@ -50,8 +50,9 @@ trait SoftDeleteTrait
     /**
      * @param mixed $conditions
      * @return $this
+     * @api
      */
-    public function reallyDestroy($conditions = false)
+    protected function reallyDestroy($conditions = false)
     {
         $this->reallyDestroy = true;
         $this->destroy($conditions);
@@ -62,16 +63,18 @@ trait SoftDeleteTrait
 
     /**
      * @return $this
+     * @api
      */
-    public function withoutDeleted()
+    protected function withoutDeleted()
     {
-        $this->where($this->deletedAtColumn, '0000-00-00 00:00:00');
+        return $this->where($this->deletedAtColumn, '0000-00-00 00:00:00');
     }
 
     /**
      * @return $this
+     * @api
      */
-    public function onlyDeleted()
+    protected function onlyDeleted()
     {
         return $this->unscoped('withoutDeleted')
             ->where($this->deletedAtColumn, '!=', '0000-00-00 00:00:00');
@@ -79,8 +82,9 @@ trait SoftDeleteTrait
 
     /**
      * @return $this
+     * @api
      */
-    public function withDeleted()
+    protected function withDeleted()
     {
         return $this->unscoped('withoutDeleted');
     }

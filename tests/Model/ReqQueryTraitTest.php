@@ -3,15 +3,15 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\TestReqQuery;
 
 class ReqQueryTraitTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         static::dropTables();
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
 
         wei()->schema->table('test_req_queries')
             ->id('id')
@@ -27,7 +27,7 @@ class ReqQueryTraitTest extends BaseTestCase
             ->exec();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -47,9 +47,8 @@ class ReqQueryTraitTest extends BaseTestCase
                 'name' => '2',
             ],
         ]);
-        $query = wei()->testReqQuery()
-            ->like(['detail.name', 'name'])
-            ->findAll();
+        $query = TestReqQuery::like(['detail.name', 'name'])
+            ->all();
 
         $this->assertEquals(
             implode(' ', [

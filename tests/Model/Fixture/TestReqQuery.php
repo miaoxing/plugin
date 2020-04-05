@@ -2,9 +2,9 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
-class TestReqQuery extends BaseModelV2
+class TestReqQuery extends Model
 {
     public function detail()
     {

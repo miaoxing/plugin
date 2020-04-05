@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property TestProfile $profile
@@ -10,7 +10,7 @@ use Miaoxing\Plugin\BaseModelV2;
  * @property TestArticle|TestArticle[] $customArticles
  * @property string $id
  */
-class TestUser extends BaseModelV2
+class TestUser extends Model
 {
     public function articles()
     {

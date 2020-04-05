@@ -48,8 +48,9 @@ trait DefaultScopeTrait
     /**
      * @param string|array|true $scopes
      * @return $this
+     * @api
      */
-    public function unscoped($scopes = [])
+    protected function unscoped($scopes = [])
     {
         if (!$scopes) {
             $this->withoutScopes = true;

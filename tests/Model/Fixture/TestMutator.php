@@ -2,14 +2,14 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property string $setter
  * @property string $getter
  * @property string $mutator
  */
-class TestMutator extends BaseModelV2
+class TestMutator extends Model
 {
     protected function getGetterAttribute()
     {

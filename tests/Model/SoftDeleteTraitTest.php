@@ -3,15 +3,15 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\TestSoftDelete;
 
 class SoftDeleteTraitTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         static::dropTables();
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
 
         wei()->schema->table('test_soft_deletes')
             ->id()
@@ -31,7 +31,7 @@ class SoftDeleteTraitTest extends BaseTestCase
         ]);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -39,7 +39,7 @@ class SoftDeleteTraitTest extends BaseTestCase
 
     public function testDestroy()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
         // @codingStandardsIgnoreStart
         $this->assertEmpty($record->deleted_at);
         // @codingStandardsIgnoreEnd
@@ -52,7 +52,7 @@ class SoftDeleteTraitTest extends BaseTestCase
 
     public function testRestore()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
 
         $record->destroy();
         $record->restore();
@@ -63,7 +63,7 @@ class SoftDeleteTraitTest extends BaseTestCase
 
     public function testReallyDestroy()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
 
         $record->reallyDestroy();
         // @codingStandardsIgnoreStart
@@ -79,7 +79,7 @@ class SoftDeleteTraitTest extends BaseTestCase
      */
     public function testIsDeleted()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
         $this->assertFalse($record->isDeleted());
 
         $record->destroy();
@@ -88,50 +88,50 @@ class SoftDeleteTraitTest extends BaseTestCase
 
     public function testDefaultScope()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
         $record->destroy();
 
-        $false = wei()->testSoftDelete()->findById($record->id);
-        $this->assertFalse($false);
+        $false = TestSoftDelete::find($record->id);
+        $this->assertNull($false);
 
-        $record = wei()->testSoftDelete()->unscoped()->findById($record->id);
-        $this->assertNotFalse($record);
+        $record = TestSoftDelete::unscoped()->find($record->id);
+        $this->assertNotNull($record);
     }
 
     public function testWithoutDeleted()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
 
-        $record = wei()->testSoftDelete()->withoutDeleted()->findById($record->id);
-        $this->assertNotFalse($record);
+        $record = TestSoftDelete::withoutDeleted()->find($record->id);
+        $this->assertNotNull($record);
 
         $record->destroy();
-        $record = wei()->testSoftDelete()->withoutDeleted()->findById($record->id);
-        $this->assertFalse($record);
+        $record = TestSoftDelete::withoutDeleted()->find($record->id);
+        $this->assertNull($record);
     }
 
     public function testOnlyDeleted()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
 
-        $false = wei()->testSoftDelete()->onlyDeleted()->findById($record->id);
-        $this->assertFalse($false);
+        $false = TestSoftDelete::onlyDeleted()->find($record->id);
+        $this->assertNull($false);
 
         $record->destroy();
-        $record = wei()->testSoftDelete()->onlyDeleted()->findById($record->id);
-        $this->assertNotFalse($record);
+        $record = TestSoftDelete::onlyDeleted()->find($record->id);
+        $this->assertNotNull($record);
     }
 
     public function testWithDeleted()
     {
-        $record = wei()->testSoftDelete()->save(['name' => __FUNCTION__]);
+        $record = TestSoftDelete::save(['name' => __FUNCTION__]);
 
-        $record = wei()->testSoftDelete()->withDeleted()->findById($record->id);
-        $this->assertNotFalse($record);
+        $record = TestSoftDelete::withDeleted()->find($record->id);
+        $this->assertNotNull($record);
 
         $record->destroy();
-        $record = wei()->testSoftDelete()->onlyDeleted()->findById($record->id);
-        $this->assertNotFalse($record);
+        $record = TestSoftDelete::onlyDeleted()->find($record->id);
+        $this->assertNotNull($record);
     }
 
     public static function dropTables()

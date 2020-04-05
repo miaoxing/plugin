@@ -2,14 +2,14 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property int $id
  * @property string $name
  * @property int $userCount
  */
-class TestGetSet extends BaseModelV2
+class TestGetSet extends Model
 {
     protected $casts = [
         'id' => 'int',

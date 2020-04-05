@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property mixed $virtualColumn
@@ -10,7 +10,7 @@ use Miaoxing\Plugin\BaseModelV2;
  * @property string $lastName
  * @property string $fullName
  */
-class TestVirtual extends BaseModelV2
+class TestVirtual extends Model
 {
     protected $table = 'test_virtual';
 
@@ -43,6 +43,6 @@ class TestVirtual extends BaseModelV2
 
     public function setFullNameAttribute($fullName)
     {
-        list($this->firstName, $this->lastName) = explode(' ', $fullName);
+        [$this->firstName, $this->lastName] = explode(' ', $fullName);
     }
 }

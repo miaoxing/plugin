@@ -3,15 +3,15 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\TestCast;
 
 class CastTraitTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         static::dropTables();
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
 
         wei()->schema->table('test_casts')
             ->id('int_column')
@@ -34,7 +34,7 @@ class CastTraitTest extends BaseTestCase
         ]);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -114,7 +114,7 @@ class CastTraitTest extends BaseTestCase
      */
     public function testSetAsDbType($from, $result)
     {
-        $record = wei()->testCast();
+        $record = TestCast::new();
 
         $record->fromArray($from);
 
@@ -126,7 +126,7 @@ class CastTraitTest extends BaseTestCase
 
         // 重新加载,数据会改变
         $record->save();
-        $record = wei()->testCast()->findById((int) $record->intColumn);
+        $record = TestCast::findById((int) $record->intColumn);
         foreach ($result as $key => $value) {
             $this->assertSame($value, $record->$key);
         }
@@ -194,7 +194,7 @@ class CastTraitTest extends BaseTestCase
 
     public function testFind()
     {
-        $record = wei()->testCast()->findById(1);
+        $record = TestCast::findById(1);
 
         $this->assertSame(1, $record->intColumn);
         $this->assertFalse($record->boolColumn);
@@ -206,7 +206,7 @@ class CastTraitTest extends BaseTestCase
 
     public function testSave()
     {
-        wei()->testCast()->save([
+        TestCast::save([
             'intColumn' => '5',
             'boolColumn' => '0',
             'stringColumn' => 1,
@@ -234,7 +234,7 @@ class CastTraitTest extends BaseTestCase
 
     public function testIncr()
     {
-        $cast = wei()->testCast()->save([
+        $cast = TestCast::save([
             'stringColumn' => 6,
         ]);
 
@@ -247,7 +247,7 @@ class CastTraitTest extends BaseTestCase
 
     public function testReloadJson()
     {
-        $cast = wei()->testCast()->save([
+        $cast = TestCast::save([
             'json_column' => [
                 'a' => 'b',
             ],
@@ -260,7 +260,7 @@ class CastTraitTest extends BaseTestCase
 
     public function testSetJsonNotArrayValue()
     {
-        $cast = wei()->testCast()->save([
+        $cast = TestCast::save([
             'json_column' => null,
         ]);
         $this->assertEquals([], $cast->jsonColumn);

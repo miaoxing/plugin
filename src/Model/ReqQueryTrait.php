@@ -220,7 +220,12 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function like($columns)
+    /**
+     * @param array $columns
+     * @return $this
+     * @api
+     */
+    protected function like($columns)
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);

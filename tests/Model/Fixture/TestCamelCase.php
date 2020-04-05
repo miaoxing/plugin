@@ -2,8 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
-class TestCamelCase extends BaseModelV2
+class TestCamelCase extends Model
 {
 }

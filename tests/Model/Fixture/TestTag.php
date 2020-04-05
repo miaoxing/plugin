@@ -2,13 +2,13 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property TestArticle|TestArticle[] $articles
  * @property string $name
  */
-class TestTag extends BaseModelV2
+class TestTag extends Model
 {
     public function articles()
     {
