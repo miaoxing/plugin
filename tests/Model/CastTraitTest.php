@@ -126,7 +126,7 @@ class CastTraitTest extends BaseTestCase
 
         // 重新加载,数据会改变
         $record->save();
-        $record = TestCast::findById((int) $record->intColumn);
+        $record = TestCast::find((int) $record->intColumn);
         foreach ($result as $key => $value) {
             $this->assertSame($value, $record->$key);
         }
@@ -183,7 +183,7 @@ class CastTraitTest extends BaseTestCase
      */
     public function testGetAsPhpType($from, $result)
     {
-        $record = wei()->testCast();
+        $record = TestCast::new();
 
         $record->fromArray($from);
 
@@ -194,7 +194,7 @@ class CastTraitTest extends BaseTestCase
 
     public function testFind()
     {
-        $record = TestCast::findById(1);
+        $record = TestCast::find(1);
 
         $this->assertSame(1, $record->intColumn);
         $this->assertFalse($record->boolColumn);
@@ -227,7 +227,7 @@ class CastTraitTest extends BaseTestCase
 
     public function testGetNewModel()
     {
-        $cast = wei()->testCast();
+        $cast = TestCast::new();
 
         $this->assertSame([], $cast->jsonColumn);
     }
