@@ -43,7 +43,16 @@ class ModelTest extends BaseTestCase
         $this->assertEquals('1', $user->id);
     }
 
-    public function testFindOrFail()
+    public function testFindOrFailFound()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::findOrFail(1);
+
+        $this->assertInstanceOf(TestUser::class, $user);
+    }
+
+    public function testFindOrFailNotFound()
     {
         $this->initFixtures();
 
@@ -94,6 +103,19 @@ class ModelTest extends BaseTestCase
         $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
         $this->assertSame(3, $user->id);
         $this->assertEquals('name', $user->name);
+    }
+
+    public function testFindOrCreate()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::findOrCreate(1, ['name' => 'test']);
+        $this->assertSame(1, $user->id);
+        $this->assertSame('twin', $user->name);
+
+        $user = TestUser::findOrCreate(7, ['name' => 'test']);
+        $this->assertSame(7, $user->id);
+        $this->assertSame('test', $user->name);
     }
 
     public function testFindAll()

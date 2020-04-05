@@ -103,6 +103,18 @@ class AppModel
     }
 
     /**
+     * Find a record by primary key, or save with the specified data if record not found
+     *
+     * @param int|string $id
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function findOrCreate($id, $data = [])
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record collection object or false
      *
      * @param array $ids
@@ -783,6 +795,18 @@ if (0) {
          * @api
          */
         public static function findOrInit($id = null, $data = [])
+        {
+        }
+    
+        /**
+         * Find a record by primary key, or save with the specified data if record not found
+         *
+         * @param int|string $id
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function findOrCreate($id, $data = [])
         {
         }
     
@@ -1471,6 +1495,18 @@ class Model
     }
 
     /**
+     * Find a record by primary key, or save with the specified data if record not found
+     *
+     * @param int|string $id
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function findOrCreate($id, $data = [])
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record collection object or false
      *
      * @param array $ids
@@ -2151,6 +2187,18 @@ if (0) {
          * @api
          */
         public static function findOrInit($id = null, $data = [])
+        {
+        }
+    
+        /**
+         * Find a record by primary key, or save with the specified data if record not found
+         *
+         * @param int|string $id
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function findOrCreate($id, $data = [])
         {
         }
     
@@ -4095,6 +4143,18 @@ class User
     }
 
     /**
+     * Find a record by primary key, or save with the specified data if record not found
+     *
+     * @param int|string $id
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function findOrCreate($id, $data = [])
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record collection object or false
      *
      * @param array $ids
@@ -4913,6 +4973,18 @@ if (0) {
         }
     
         /**
+         * Find a record by primary key, or save with the specified data if record not found
+         *
+         * @param int|string $id
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function findOrCreate($id, $data = [])
+        {
+        }
+    
+        /**
          * Executes the generated SQL and returns the found record collection object or false
          *
          * @param array $ids
@@ -5650,6 +5722,18 @@ class UserModel
     }
 
     /**
+     * Find a record by primary key, or save with the specified data if record not found
+     *
+     * @param int|string $id
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    public function findOrCreate($id, $data = [])
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record collection object or false
      *
      * @param array $ids
@@ -6383,6 +6467,18 @@ if (0) {
          * @api
          */
         public static function findOrInit($id = null, $data = [])
+        {
+        }
+    
+        /**
+         * Find a record by primary key, or save with the specified data if record not found
+         *
+         * @param int|string $id
+         * @param array $data
+         * @return $this
+         * @api
+         */
+        public static function findOrCreate($id, $data = [])
         {
         }
     

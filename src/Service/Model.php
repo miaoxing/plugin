@@ -894,6 +894,23 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Find a record by primary key, or save with the specified data if record not found
+     *
+     * @param int|string $id
+     * @param array $data
+     * @return $this
+     * @api
+     */
+    protected function findOrCreate($id, $data = array())
+    {
+        $this->findOrInit($id, $data);
+        if ($this->isNew) {
+            $this->save();
+        }
+        return $this;
+    }
+
+    /**
      * Find a record by primary key, or throws 404 exception if record not found
      *
      * @param int|string $id
@@ -1857,22 +1874,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function setRawValue($column, $value)
     {
         $this->data[$column] = $value;
-        return $this;
-    }
-
-    /**
-     * 根据条件查找记录,如果是新记录则保存
-     *
-     * @param mixed $conditions
-     * @param array $data
-     * @return $this
-     */
-    public function findOrCreate($conditions, $data = array())
-    {
-        $this->findOrInit($conditions, $data);
-        if ($this->isNew) {
-            $this->save();
-        }
         return $this;
     }
 
