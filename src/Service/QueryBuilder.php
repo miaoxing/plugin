@@ -1232,17 +1232,6 @@ class QueryBuilder extends Base
         return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this->getBindParams());
     }
 
-    protected function addParams($params)
-    {
-        if ($params !== false) {
-            if (is_array($params)) {
-                $this->params = array_merge($this->params, $params);
-            } else {
-                $this->params[] = $params;
-            }
-        }
-    }
-
     /**
      * Returns flatten array for parameter binding.
      *
@@ -1282,13 +1271,7 @@ class QueryBuilder extends Base
         }
 
         if ($append) {
-            if ($sqlPartName == 'where' || $sqlPartName == 'having') {
-                if ($this->sqlParts[$sqlPartName]) {
-                    $this->sqlParts[$sqlPartName] = '(' . $this->sqlParts[$sqlPartName] . ') ' . $type . ' (' . $sqlPart . ')';
-                } else {
-                    $this->sqlParts[$sqlPartName] = $sqlPart;
-                }
-            } elseif ($sqlPartName == 'orderBy' || $sqlPartName == 'groupBy' || $sqlPartName == 'select' || $sqlPartName == 'set') {
+            if ($sqlPartName == 'orderBy' || $sqlPartName == 'groupBy' || $sqlPartName == 'select' || $sqlPartName == 'set') {
                 $this->sqlParts[$sqlPartName] = array_merge($this->sqlParts[$sqlPartName], $sqlPart);
             } elseif ($isMultiple) {
                 $this->sqlParts[$sqlPartName][] = $sqlPart;
