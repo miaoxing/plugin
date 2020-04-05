@@ -534,8 +534,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        /** @var TestUser $user */
-        $user = $this->db->init('users');
+        $user = TestUser::new();
 
         $count = 0;
         $times = 0;

@@ -210,11 +210,12 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Create a new model object
      *
      * @param array $data
+     * @param array $options
      * @return $this
      */
-    public static function new($data = [])
+    public static function new($data = [], array $options = [])
     {
-        return static::newInstance()->fromArray($data);
+        return static::newInstance($options + ['data' => $data]);
     }
 
     /**
@@ -952,7 +953,12 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $records = array();
         foreach ($data as $key => $row) {
             /** @var $records Record[] */
-            $records[$key] = $this->db->init($this->table, $row, false);
+            $records[$key] = static::new($row, [
+                'wei' => $this->wei,
+                'db' => $this->db,
+                'table' => $this->getTable(),
+                'isNew' => false,
+            ]);
             $records[$key]->triggerCallback('afterFind');
         }
 
