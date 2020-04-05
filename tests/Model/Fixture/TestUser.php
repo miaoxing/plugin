@@ -14,18 +14,18 @@ class TestUser extends Model
 {
     public function articles()
     {
-        return $this->hasMany(wei()->testArticle());
+        return $this->hasMany(TestArticle::class);
     }
 
     public function customArticles()
     {
-        return $this->hasMany('testArticle')
-            ->andWhere('title LIKE ?', 'Article%')
+        return $this->hasMany(TestArticle::class)
+            ->where('title', 'LIKE', 'Article%')
             ->desc('id');
     }
 
     public function profile()
     {
-        return $this->hasOne('testProfile');
+        return $this->hasOne(TestProfile::new());
     }
 }

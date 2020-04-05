@@ -222,6 +222,16 @@ class AppModel
     }
 
     /**
+     * Returns the name of fields of current table
+     *
+     * @return array
+     * @api
+     */
+    public function getFields()
+    {
+    }
+
+    /**
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
@@ -396,11 +406,14 @@ class AppModel
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function join($table, $on = null)
+    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
     }
 
@@ -408,11 +421,14 @@ class AppModel
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null)
+    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -420,11 +436,13 @@ class AppModel
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null)
+    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -432,11 +450,13 @@ class AppModel
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null)
+    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -959,6 +979,16 @@ if (0) {
         }
     
         /**
+         * Returns the name of fields of current table
+         *
+         * @return array
+         * @api
+         */
+        public static function getFields()
+        {
+        }
+    
+        /**
          * Executes the generated query and returns the first array result
          *
          * @param mixed $conditions
@@ -1133,11 +1163,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string $first
+         * @param string $operator
+         * @param string $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function join($table, $on = null)
+        public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
         {
         }
     
@@ -1145,11 +1178,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null)
+        public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -1157,11 +1193,13 @@ if (0) {
          * Adds a left join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null)
+        public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -1169,11 +1207,13 @@ if (0) {
          * Adds a right join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null)
+        public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -1696,6 +1736,16 @@ class Model
     }
 
     /**
+     * Returns the name of fields of current table
+     *
+     * @return array
+     * @api
+     */
+    public function getFields()
+    {
+    }
+
+    /**
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
@@ -1870,11 +1920,14 @@ class Model
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function join($table, $on = null)
+    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
     }
 
@@ -1882,11 +1935,14 @@ class Model
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null)
+    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -1894,11 +1950,13 @@ class Model
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null)
+    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -1906,11 +1964,13 @@ class Model
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null)
+    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -2433,6 +2493,16 @@ if (0) {
         }
     
         /**
+         * Returns the name of fields of current table
+         *
+         * @return array
+         * @api
+         */
+        public static function getFields()
+        {
+        }
+    
+        /**
          * Executes the generated query and returns the first array result
          *
          * @param mixed $conditions
@@ -2607,11 +2677,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string $first
+         * @param string $operator
+         * @param string $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function join($table, $on = null)
+        public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
         {
         }
     
@@ -2619,11 +2692,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null)
+        public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -2631,11 +2707,13 @@ if (0) {
          * Adds a left join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null)
+        public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -2643,11 +2721,13 @@ if (0) {
          * Adds a right join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null)
+        public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -2993,6 +3073,16 @@ class QueryBuilder
     }
 
     /**
+     * Returns the name of fields of current table
+     *
+     * @return array
+     * @api
+     */
+    public function getFields()
+    {
+    }
+
+    /**
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
@@ -3185,11 +3275,14 @@ class QueryBuilder
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function join($table, $on = null)
+    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
     }
 
@@ -3197,11 +3290,14 @@ class QueryBuilder
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null)
+    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -3209,11 +3305,13 @@ class QueryBuilder
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null)
+    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -3221,11 +3319,13 @@ class QueryBuilder
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null)
+    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -3564,6 +3664,16 @@ if (0) {
         }
     
         /**
+         * Returns the name of fields of current table
+         *
+         * @return array
+         * @api
+         */
+        public static function getFields()
+        {
+        }
+    
+        /**
          * Executes the generated query and returns the first array result
          *
          * @param mixed $conditions
@@ -3756,11 +3866,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string $first
+         * @param string $operator
+         * @param string $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function join($table, $on = null)
+        public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
         {
         }
     
@@ -3768,11 +3881,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null)
+        public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -3780,11 +3896,13 @@ if (0) {
          * Adds a left join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null)
+        public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -3792,11 +3910,13 @@ if (0) {
          * Adds a right join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null)
+        public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -4446,6 +4566,16 @@ class User
     }
 
     /**
+     * Returns the name of fields of current table
+     *
+     * @return array
+     * @api
+     */
+    public function getFields()
+    {
+    }
+
+    /**
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
@@ -4620,11 +4750,14 @@ class User
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function join($table, $on = null)
+    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
     }
 
@@ -4632,11 +4765,14 @@ class User
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null)
+    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -4644,11 +4780,13 @@ class User
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null)
+    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -4656,11 +4794,13 @@ class User
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null)
+    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -5317,6 +5457,16 @@ if (0) {
         }
     
         /**
+         * Returns the name of fields of current table
+         *
+         * @return array
+         * @api
+         */
+        public static function getFields()
+        {
+        }
+    
+        /**
          * Executes the generated query and returns the first array result
          *
          * @param mixed $conditions
@@ -5491,11 +5641,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string $first
+         * @param string $operator
+         * @param string $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function join($table, $on = null)
+        public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
         {
         }
     
@@ -5503,11 +5656,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null)
+        public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -5515,11 +5671,13 @@ if (0) {
          * Adds a left join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null)
+        public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -5527,11 +5685,13 @@ if (0) {
          * Adds a right join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null)
+        public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -6107,6 +6267,16 @@ class UserModel
     }
 
     /**
+     * Returns the name of fields of current table
+     *
+     * @return array
+     * @api
+     */
+    public function getFields()
+    {
+    }
+
+    /**
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
@@ -6281,11 +6451,14 @@ class UserModel
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function join($table, $on = null)
+    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
     }
 
@@ -6293,11 +6466,14 @@ class UserModel
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
      * @return $this
      * @api
      */
-    public function innerJoin($table, $on = null)
+    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -6305,11 +6481,13 @@ class UserModel
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function leftJoin($table, $on = null)
+    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -6317,11 +6495,13 @@ class UserModel
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    public function rightJoin($table, $on = null)
+    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -6897,6 +7077,16 @@ if (0) {
         }
     
         /**
+         * Returns the name of fields of current table
+         *
+         * @return array
+         * @api
+         */
+        public static function getFields()
+        {
+        }
+    
+        /**
          * Executes the generated query and returns the first array result
          *
          * @param mixed $conditions
@@ -7071,11 +7261,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string $first
+         * @param string $operator
+         * @param string $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function join($table, $on = null)
+        public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
         {
         }
     
@@ -7083,11 +7276,14 @@ if (0) {
          * Adds a inner join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
          * @return $this
          * @api
          */
-        public static function innerJoin($table, $on = null)
+        public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -7095,11 +7291,13 @@ if (0) {
          * Adds a left join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function leftJoin($table, $on = null)
+        public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     
@@ -7107,11 +7305,13 @@ if (0) {
          * Adds a right join to the query
          *
          * @param string $table The table name to join
-         * @param string $on The condition for the join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
          * @return $this
          * @api
          */
-        public static function rightJoin($table, $on = null)
+        public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
         {
         }
     

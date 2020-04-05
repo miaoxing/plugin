@@ -1434,7 +1434,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $foreignKey || $foreignKey = $this->getForeignKey();
         $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
-        $related->where([$foreignKey => $this->getRelatedValue($localKey)]);
+        $related->where($foreignKey, $this->getRelatedValue($localKey));
 
         return $related;
     }
@@ -1454,7 +1454,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string $record
      * @param string|null $foreignKey
      * @param string|null $localKey
-     * @return BaseModel
+     * @return $this
      */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
     {
@@ -1470,7 +1470,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string|null $junctionTable
      * @param string|null $foreignKey
      * @param string|null $relatedKey
-     * @return BaseModel
+     * @return $this
      */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
     {
@@ -1491,10 +1491,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $relatedTable = $related->getTable();
         $related->select($relatedTable . '.*')
             ->where([$junctionTable . '.' . $foreignKey => $this->getRelatedValue($primaryKey)])
-            ->innerJoin(
-                $junctionTable,
-                sprintf('%s.%s = %s.%s', $junctionTable, $relatedKey, $relatedTable, $primaryKey)
-            )
+            ->innerJoin($junctionTable, $junctionTable . '.' . $relatedKey, '=', $relatedTable . '.' . $primaryKey)
             ->beColl();
 
         return $related;
@@ -1502,12 +1499,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string|object $model
-     * @return BaseModel
+     * @return $this
      */
     protected function getRelatedModel($model)
     {
         if ($model instanceof self) {
             return $model;
+        } elseif (is_subclass_of($model, self::class)) {
+            return forward_static_call([$model, 'new']);
         } else {
             return $this->wei->$model();
         }
@@ -1530,7 +1529,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 continue;
             }
 
-            /** @var BaseModel $related */
+            /** @var static $related */
             $related = $this->$name();
             $isColl = $related->isColl();
             $serviceName = $this->getClassServiceName($related);
@@ -1567,10 +1566,10 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this;
     }
 
-    protected function loadHasOne(Record $related = null, $relation, $name)
+    protected function loadHasOne(self $related, $relation, $name)
     {
         if ($related) {
-            $records = $related->findAll()->indexBy($relation['foreignKey']);
+            $records = $related->all()->indexBy($relation['foreignKey']);
         } else {
             $records = [];
         }
@@ -1581,19 +1580,18 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $records;
     }
 
-    protected function loadHasMany(self $related = null, $relation, $name)
+    protected function loadHasMany(self $related, $relation, $name)
     {
-        $serviceName = $this->getClassServiceName($related);
         $records = $related ? $related->fetchAll() : [];
         foreach ($this->data as $row) {
-            $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
+            $rowRelation = $row->$name = $related::newColl();
             foreach ($records as $record) {
-                if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
+                if ($record[$relation['foreignKey']] === $row[$relation['localKey']]) {
                     // Remove external data
                     if (!$related->hasColumn($relation['foreignKey'])) {
                         unset($record[$relation['foreignKey']]);
                     }
-                    $rowRelation[] = $this->wei->$serviceName()->setData($record);
+                    $rowRelation[] = forward_static_call([$related, 'new'])->setData($record);
                 }
             }
         }
@@ -1601,10 +1599,10 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $records;
     }
 
-    protected function loadBelongsToMany(Record $related = null, $relation, $name)
+    protected function loadBelongsToMany(self $related, $relation, $name)
     {
         if ($related) {
-            $related->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
+            $related->select($relation['junctionTable'] . '.' . $relation['foreignKey']);
         }
 
         return $this->loadHasMany($related, $relation, $name);
@@ -1796,7 +1794,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     protected function &getRelationValue($name)
     {
-        /** @var BaseModel $related */
+        /** @var static $related */
         $related = $this->$name();
         $serviceName = $this->getClassServiceName($related);
         $relation = $this->relations[$serviceName];
@@ -1804,13 +1802,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         if ($related->isColl()) {
             if ($localValue) {
-                $this->$name = $related->findAll();
+                $this->$name = $related->all();
             } else {
                 $this->$name = $related;
             }
         } else {
             if ($localValue) {
-                $this->$name = $related->find() ?: null;
+                $this->$name = $related->first() ?: null;
             } else {
                 $this->$name = null;
             }
@@ -2177,7 +2175,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function hasRelation($name)
     {
         // Ignore methods in Model::class
-        return !method_exists(self::class, $name) && method_exists($this, $name);
+        // TODO tags 方法容易冲突，改为其他名称 !method_exists(self::class, $name) &&
+        return method_exists($this, $name);
     }
 
     /**

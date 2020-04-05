@@ -12,6 +12,6 @@ class TestTag extends Model
 {
     public function articles()
     {
-        return $this->belongsToMany('testArticle');
+        return $this->belongsToMany(TestArticle::class);
     }
 }

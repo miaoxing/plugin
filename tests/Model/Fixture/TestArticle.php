@@ -14,7 +14,7 @@ class TestArticle extends Model
 {
     public function user()
     {
-        return $this->belongsTo('testUser');
+        return $this->belongsTo(TestUser::class);
     }
 
     /**
@@ -24,11 +24,11 @@ class TestArticle extends Model
      */
     public function tags($tags = null)
     {
-        return $this->belongsToMany('testTag');
+        return $this->belongsToMany(TestTag::class);
     }
 
     public function customTags()
     {
-        return $this->belongsToMany('testTag')->andWhere('test_tags.id > ?', 0);
+        return $this->belongsToMany(TestTag::class)->where('test_tags.id', '>', 0);
     }
 }
