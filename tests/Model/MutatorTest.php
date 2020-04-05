@@ -8,14 +8,13 @@ use MiaoxingTest\Plugin\Model\Fixture\TestMutator;
 
 class MutatorTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
 
         static::dropTables();
 
-        $table = wei()->testMutator()->getTable();
+        $table = TestMutator::getTable();
         wei()->schema->table($table)
             ->id()
             ->string('getter')
@@ -37,7 +36,7 @@ class MutatorTest extends BaseTestCase
         ]);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -45,19 +44,19 @@ class MutatorTest extends BaseTestCase
 
     public static function dropTables()
     {
-        wei()->schema->dropIfExists(wei()->testMutator()->getTable());
+        wei()->schema->dropIfExists(TestMutator::getTable());
     }
 
     public function testGet()
     {
-        $mutator = wei()->testMutator()->findById(1);
+        $mutator = TestMutator::find(1);
 
         $this->assertEquals('getter', $mutator->get('getter'));
     }
 
     public function testSet()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
         $mutator->set('setter', 'abc');
 
         $data = $mutator->getData();
@@ -66,12 +65,12 @@ class MutatorTest extends BaseTestCase
 
     public function testMagicGet()
     {
-        $this->assertEquals('getter', wei()->testMutator()->findById(1)->getter);
+        $this->assertEquals('getter', TestMutator::find(1)->getter);
     }
 
     public function testMagicSet()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
         $mutator->setter = 'abc';
 
         $data = $mutator->getData();
@@ -80,15 +79,15 @@ class MutatorTest extends BaseTestCase
 
     public function testSetColl()
     {
-        $mutators = wei()->testMutator();
-        $mutators[] = wei()->testMutator();
+        $mutators = TestMutator::new();
+        $mutators[] = TestMutator::new();
 
         $this->assertInstanceOf(TestMutator::class, $mutators[0]);
     }
 
     public function testCreate()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
         $mutator->setter = 'abc';
 
         $mutator->save();
@@ -99,7 +98,7 @@ class MutatorTest extends BaseTestCase
 
     public function testUpdate()
     {
-        $mutator = wei()->testMutator()->findById(1);
+        $mutator = TestMutator::find(1);
         $mutator->setter = 'bbc';
         $mutator->save();
 
@@ -109,7 +108,7 @@ class MutatorTest extends BaseTestCase
 
     public function testIsChange()
     {
-        $mutator = wei()->testMutator()->findById(1);
+        $mutator = TestMutator::find(1);
         $mutator->setter = 'cbc';
 
         $this->assertTrue($mutator->isChanged('setter'));
@@ -117,14 +116,14 @@ class MutatorTest extends BaseTestCase
 
     public function testSetInvalid()
     {
-        $this->setExpectedException(InvalidArgumentException::class, 'Invalid property: invalid');
+        $this->expectExceptionObject(new InvalidArgumentException('Invalid property: invalid'));
 
-        wei()->testMutator()->invalid = 'xx';
+        TestMutator::new()->invalid = 'xx';
     }
 
     public function testSetService()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
         $mutator->cache = wei()->cache;
 
         $this->assertEquals(wei()->cache, $mutator->cache);
@@ -132,7 +131,7 @@ class MutatorTest extends BaseTestCase
 
     public function testSetGet()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
 
         // 转换为内部数据
         $mutator->mutator = 'abc';
@@ -149,7 +148,7 @@ class MutatorTest extends BaseTestCase
 
     public function testGetTwice()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
 
         // 转换为内部数据
         $mutator->mutator = 'abc';
@@ -163,7 +162,7 @@ class MutatorTest extends BaseTestCase
 
     public function testGetterGetTwice()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
 
         $mutator->getter = 'abc';
 
@@ -176,7 +175,7 @@ class MutatorTest extends BaseTestCase
 
     public function testFind()
     {
-        $mutator = wei()->testMutator()->findById(2);
+        $mutator = TestMutator::find(2);
 
         $this->assertEquals('mutator', $mutator->mutator);
         $this->assertEquals('getter', $mutator->getter);
@@ -193,7 +192,7 @@ class MutatorTest extends BaseTestCase
 
     public function testNew()
     {
-        $mutator = wei()->testMutator();
+        $mutator = TestMutator::new();
 
         $this->assertNull($mutator->mutator);
         $this->assertNull($mutator->getter);
@@ -210,7 +209,7 @@ class MutatorTest extends BaseTestCase
 
     public function testSave()
     {
-        $mutator = wei()->testMutator()->save([
+        $mutator = TestMutator::save([
             'mutator' => 'mutator2',
             'getter' => base64_encode('getter2'),
             'setter' => 'setter2',
@@ -231,7 +230,7 @@ class MutatorTest extends BaseTestCase
 
     public function testFindAll()
     {
-        $table = wei()->testMutator()->getTable();
+        $table = TestMutator::getTable();
         wei()->db->batchInsert($table, [
             [
                 'getter' => base64_encode('getter'),
@@ -245,7 +244,7 @@ class MutatorTest extends BaseTestCase
             ],
         ]);
 
-        $mutators = wei()->testMutator()->desc('id')->limit(2)->findAll();
+        $mutators = TestMutator::desc('id')->limit(2)->all();
 
         $this->assertEquals('getter', $mutators[0]->getter);
         $this->assertEquals(base64_encode('setter'), $mutators[0]->setter);

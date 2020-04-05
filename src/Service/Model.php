@@ -232,8 +232,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Return the record table name
      *
      * @return string
+     * @api
      */
-    public function getTable()
+    protected function getTable()
     {
         if (!$this->table) {
             $baseName = $this->baseName();
@@ -600,29 +601,20 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Receives the record field value
      *
      * @param string $name
+     * @throws \InvalidArgumentException When field not found
      * @return mixed|$this
-     * @throws InvalidArgumentException When field not found
      */
     public function origGet($name)
     {
-        $name = $this->filterInputColumn($name);
-
-        $method = 'get' . $this->camel($name) . 'Attribute';
-        if (method_exists($this, $method)) {
-            return $this->$method();
-        }
-
         // Check if field exists when it is not a collection
         if (!$this->isColl && !in_array($name, $this->getFields())) {
-            throw new InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
                 get_class($this)
             ));
         }
-        $value = isset($this->data[$name]) ? $this->data[$name] : null;
-
-        return $this->trigger('getValue', [$value, $name]);
+        return isset($this->data[$name]) ? $this->data[$name] : null;
     }
 
     /**
@@ -630,28 +622,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param string $name
      * @param mixed $value
+     * @throws \InvalidArgumentException
      * @return $this
-     * @throws InvalidArgumentException
      */
     public function origSet($name, $value = null)
     {
-        // Ignore $coll[] = $value
-        if ($name !== null) {
-            $name = $this->filterInputColumn($name);
-
-            $method = 'set' . $this->camel($name) . 'Attribute';
-            if (method_exists($this, $method)) {
-                $this->setChanged($name);
-
-                return $this->$method($value);
-            }
-
-            $value = $this->trigger('setValue', [$value, $name]);
-        }
-
         $this->loaded = true;
 
-        // TODO data 有默认值就失效
         // Set record for collection
         if (!$this->data && $value instanceof static) {
             $this->isColl = true;
@@ -665,7 +642,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             }
         } else {
             if (!$value instanceof static) {
-                throw new InvalidArgumentException('Value for collection must be an instance of Wei\Record');
+                throw new \InvalidArgumentException('Value for collection must be an instance of Wei\Record');
             } else {
                 // Support $coll[] = $value;
                 if ($name === null) {
@@ -947,6 +924,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $this->isColl = false;
         $data = $this->fetch(...func_get_args());
         if ($data) {
+            $this->setDataSource('*', 'db');
             $this->data = $data + $this->data;
             $this->triggerCallback('afterFind');
             return $this;
@@ -2021,7 +1999,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $value = $this->origGet($name);
 
         $source = $this->getDataSource($name);
-
         if ($source === 'php') {
             return $value;
         }

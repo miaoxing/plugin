@@ -35,6 +35,16 @@ if (0) {
 class AppModel
 {
     /**
+     * Return the record table name
+     *
+     * @return string
+     * @api
+     */
+    public function getTable()
+    {
+    }
+
+    /**
      * Import a PHP array in this record
      *
      * @param array|\ArrayAccess $data
@@ -723,6 +733,24 @@ class AppModel
      * @api
      */
     public function cache($seconds = null)
+    {
+    }
+
+    /**
+     * @param array $columns
+     * @return $this
+     * @api
+     */
+    public function like($columns)
+    {
+    }
+
+    /**
+     * @param string|array|true $scopes
+     * @return $this
+     * @api
+     */
+    public function unscoped($scopes = [])
     {
     }
 }
@@ -731,6 +759,16 @@ if (0) {
     class AppModel
     {
         /**
+         * Return the record table name
+         *
+         * @return string
+         * @api
+         */
+        public static function getTable()
+        {
+        }
+    
+        /**
          * Import a PHP array in this record
          *
          * @param array|\ArrayAccess $data
@@ -1421,11 +1459,39 @@ if (0) {
         public static function cache($seconds = null)
         {
         }
+    
+        /**
+         * @param array $columns
+         * @return $this
+         * @api
+         */
+        public static function like($columns)
+        {
+        }
+    
+        /**
+         * @param string|array|true $scopes
+         * @return $this
+         * @api
+         */
+        public static function unscoped($scopes = [])
+        {
+        }
     }
 }
 
 class Model
 {
+    /**
+     * Return the record table name
+     *
+     * @return string
+     * @api
+     */
+    public function getTable()
+    {
+    }
+
     /**
      * Import a PHP array in this record
      *
@@ -2117,11 +2183,39 @@ class Model
     public function cache($seconds = null)
     {
     }
+
+    /**
+     * @param array $columns
+     * @return $this
+     * @api
+     */
+    public function like($columns)
+    {
+    }
+
+    /**
+     * @param string|array|true $scopes
+     * @return $this
+     * @api
+     */
+    public function unscoped($scopes = [])
+    {
+    }
 }
 
 if (0) {
     class Model
     {
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @api
+         */
+        public static function getTable()
+        {
+        }
+    
         /**
          * Import a PHP array in this record
          *
@@ -2813,11 +2907,39 @@ if (0) {
         public static function cache($seconds = null)
         {
         }
+    
+        /**
+         * @param array $columns
+         * @return $this
+         * @api
+         */
+        public static function like($columns)
+        {
+        }
+    
+        /**
+         * @param string|array|true $scopes
+         * @return $this
+         * @api
+         */
+        public static function unscoped($scopes = [])
+        {
+        }
     }
 }
 
 class QueryBuilder
 {
+    /**
+     * Return the record table name
+     *
+     * @return string
+     * @api
+     */
+    public function getTable()
+    {
+    }
+
     /**
      * Executes the generated query and returns the first array result
      *
@@ -3379,6 +3501,16 @@ class QueryBuilder
 if (0) {
     class QueryBuilder
     {
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @api
+         */
+        public static function getTable()
+        {
+        }
+    
         /**
          * Executes the generated query and returns the first array result
          *
@@ -4086,6 +4218,16 @@ class User
     }
 
     /**
+     * Return the record table name
+     *
+     * @return string
+     * @api
+     */
+    public function getTable()
+    {
+    }
+
+    /**
      * Import a PHP array in this record
      *
      * @param array|\ArrayAccess $data
@@ -4765,6 +4907,24 @@ class User
     public function cache($seconds = null)
     {
     }
+
+    /**
+     * @param array $columns
+     * @return $this
+     * @api
+     */
+    public function like($columns)
+    {
+    }
+
+    /**
+     * @param string|array|true $scopes
+     * @return $this
+     * @api
+     */
+    public function unscoped($scopes = [])
+    {
+    }
 }
 
 if (0) {
@@ -4912,6 +5072,16 @@ if (0) {
          * @api
          */
         public static function can($permissionId)
+        {
+        }
+    
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @api
+         */
+        public static function getTable()
         {
         }
     
@@ -5595,6 +5765,24 @@ if (0) {
         public static function cache($seconds = null)
         {
         }
+    
+        /**
+         * @param array $columns
+         * @return $this
+         * @api
+         */
+        public static function like($columns)
+        {
+        }
+    
+        /**
+         * @param string|array|true $scopes
+         * @return $this
+         * @api
+         */
+        public static function unscoped($scopes = [])
+        {
+        }
     }
 }
 
@@ -5650,6 +5838,16 @@ class UserModel
      * @api
      */
     public function can($permissionId)
+    {
+    }
+
+    /**
+     * Return the record table name
+     *
+     * @return string
+     * @api
+     */
+    public function getTable()
     {
     }
 
@@ -6344,6 +6542,24 @@ class UserModel
     public function cache($seconds = null)
     {
     }
+
+    /**
+     * @param array $columns
+     * @return $this
+     * @api
+     */
+    public function like($columns)
+    {
+    }
+
+    /**
+     * @param string|array|true $scopes
+     * @return $this
+     * @api
+     */
+    public function unscoped($scopes = [])
+    {
+    }
 }
 
 if (0) {
@@ -6399,6 +6615,16 @@ if (0) {
          * @api
          */
         public static function can($permissionId)
+        {
+        }
+    
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @api
+         */
+        public static function getTable()
         {
         }
     
@@ -7091,6 +7317,24 @@ if (0) {
          * @api
          */
         public static function cache($seconds = null)
+        {
+        }
+    
+        /**
+         * @param array $columns
+         * @return $this
+         * @api
+         */
+        public static function like($columns)
+        {
+        }
+    
+        /**
+         * @param string|array|true $scopes
+         * @return $this
+         * @api
+         */
+        public static function unscoped($scopes = [])
         {
         }
     }

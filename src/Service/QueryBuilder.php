@@ -144,8 +144,9 @@ class QueryBuilder extends Base
      * Return the record table name
      *
      * @return string
+     * @api
      */
-    public function getTable()
+    protected function getTable()
     {
         return $this->table;
     }
