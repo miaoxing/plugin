@@ -2006,7 +2006,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         $source = $this->getDataSource($name);
         if ($source === 'php') {
-            return $value;
+            // TODO 不返回 value,返回 $this->data 才有ref
+            return $this->data[$name];
         }
 
         // 用户数据则先转换为db数据

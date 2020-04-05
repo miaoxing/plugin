@@ -4,19 +4,18 @@ namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestRef;
+use PDOException;
 use Wei\Request;
 
 class RefTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
-
         static::dropTables();
 
-        $table = wei()->testRef()->getTable();
+        $table = TestRef::getTable();
         wei()->schema->table($table)
             ->id()
             ->string('json')
@@ -32,7 +31,7 @@ class RefTest extends BaseTestCase
         ]);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -40,7 +39,7 @@ class RefTest extends BaseTestCase
 
     public static function dropTables()
     {
-        wei()->schema->dropIfExists(wei()->testRef()->getTable());
+        wei()->schema->dropIfExists(TestRef::getTable());
     }
 
     public function testArrayIncrementOperator()
@@ -136,7 +135,7 @@ class RefTest extends BaseTestCase
 
     public function testArrayGetRefBecomeNull()
     {
-        $this->setExpectedException('PDOException');
+        $this->expectException(PDOException::class);
 
         $model = $this->getModel();
 
@@ -160,7 +159,7 @@ class RefTest extends BaseTestCase
 
     public function testPropGetRefBecomeNull()
     {
-        $this->setExpectedException('PDOException');
+        $this->expectException(PDOException::class);
 
         $model = $this->getModel();
 
@@ -194,12 +193,12 @@ class RefTest extends BaseTestCase
 
     public function testCollGet()
     {
-        $models = wei()->testRef()->beColl();
+        $models = TestRef::newColl();
 
-        $models[] = wei()->testRef();
+        $models[] = TestRef::new();
         $models[0]->id = 2;
 
-        $models[] = wei()->testRef();
+        $models[] = TestRef::new();
 
         $this->assertInstanceOf(TestRef::class, $models[0]);
         $this->assertEquals(2, $models[0]->id);
@@ -209,21 +208,21 @@ class RefTest extends BaseTestCase
 
     public function testGetInvalid()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid property: notExists');
+        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: notExists'));
 
-        wei()->testRef()->get('notExists');
+        TestRef::new()->get('notExists');
     }
 
     public function testSetInvalid()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid property: notExists');
+        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: notExists'));
 
-        wei()->testRef()->set('notExists', 'abc');
+        TestRef::set('notExists', 'abc');
     }
 
     public function testFromArray()
     {
-        $ref = wei()->testRef()->fromArray([
+        $ref = TestRef::fromArray([
             'json' => ['a' => 'b'],
             'mixed' => 'mixed',
             'notExists' => 'notExists',
@@ -235,6 +234,6 @@ class RefTest extends BaseTestCase
 
     protected function getModel()
     {
-        return wei()->testRef();
+        return TestRef::new();
     }
 }
