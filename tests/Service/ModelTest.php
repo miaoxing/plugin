@@ -3,7 +3,6 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
-use Miaoxing\Services\Service\ServiceTrait;
 use MiaoxingTest\Plugin\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Fixture\Model\TestUser;
 
@@ -12,7 +11,6 @@ use MiaoxingTest\Plugin\Fixture\Model\TestUser;
  */
 class ModelTest extends BaseTestCase
 {
-    use ServiceTrait;
     use DbTrait;
 
     public function setUp(): void
