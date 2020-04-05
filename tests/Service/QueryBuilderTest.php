@@ -1035,7 +1035,30 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertSame('SELECT * FROM `p_users` INNER JOIN `p_user_groups` ON `p_users`.`group_id` = `p_user_groups`.`id`', $qb->getRawSql());
 
         $user = $qb->fetch();
-        $this->assertArrayHasKey('id', $user, '可以正常查询出结果');
+        $this->assertArrayHasKey('id', $user);
+    }
+
+    public function testLeftJoin()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::table('users')->leftJoin('user_groups', 'users.group_id', '=', 'user_groups.id');
+        $this->assertSame('SELECT * FROM `p_users` LEFT JOIN `p_user_groups` ON `p_users`.`group_id` = `p_user_groups`.`id`', $qb->getRawSql());
+
+        $user = $qb->fetch();
+        $this->assertArrayHasKey('id', $user);
+    }
+
+
+    public function testRightJoin()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::table('users')->rightJoin('user_groups', 'users.group_id', '=', 'user_groups.id');
+        $this->assertSame('SELECT * FROM `p_users` RIGHT JOIN `p_user_groups` ON `p_users`.`group_id` = `p_user_groups`.`id`', $qb->getRawSql());
+
+        $user = $qb->fetch();
+        $this->assertArrayHasKey('id', $user);
     }
 
     /**

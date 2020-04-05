@@ -579,7 +579,7 @@ class QueryBuilder extends Base
         string $first = null,
         string $operator = '=',
         string $second = null,
-        string $type = 'inner'
+        string $type = 'INNER'
     ) {
         return $this->add('join', compact('table', 'first', 'operator', 'second', 'type'), true);
     }
@@ -588,39 +588,45 @@ class QueryBuilder extends Base
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
      * @return $this
      * @api
      */
-    protected function innerJoin($table, $on = null)
-    {
-        return $this->add('join', ['type' => 'inner', 'table' => $table, 'on' => $on], true);
+    protected function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null) {
+        return $this->join(...func_get_args());
     }
 
     /**
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    protected function leftJoin($table, $on = null)
+    protected function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
-        return $this->add('join', array('type' => 'left', 'table' => $table, 'on' => $on), true);
+        return $this->join($table, $first, $operator, $second, 'LEFT');
     }
 
     /**
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param string $on The condition for the join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
      * @return $this
      * @api
      */
-    protected function rightJoin($table, $on = null)
+    protected function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
-        return $this->add('join', array('type' => 'right', 'table' => $table, 'on' => $on), true);
+        return $this->join($table, $first, $operator, $second, 'RIGHT');
     }
 
     /**
