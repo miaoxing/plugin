@@ -3,10 +3,11 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\TestDefaultScope;
 
 class DefaultScopeTraitTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -44,7 +45,7 @@ class DefaultScopeTraitTest extends BaseTestCase
         ]);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -57,49 +58,49 @@ class DefaultScopeTraitTest extends BaseTestCase
 
     public function testExecuteWithSqlPart()
     {
-        $record = wei()->testDefaultScope()->select('id')->fetchAll();
+        $record = TestDefaultScope::select('id')->fetchAll();
 
         $this->assertCount(1, $record);
     }
 
     public function testExecuteWithoutSqlPart()
     {
-        $record = wei()->testDefaultScope()->fetchAll();
+        $record = TestDefaultScope::fetchAll();
 
         $this->assertCount(1, $record);
     }
 
     public function testExecuteWithWhere()
     {
-        $record = wei()->testDefaultScope()->andWhere(['name' => 'first'])->fetchAll();
+        $record = TestDefaultScope::where('name', 'first')->fetchAll();
 
         $this->assertCount(1, $record);
     }
 
     public function testGetDefaultScopes()
     {
-        $scopes = wei()->testDefaultScope()->getDefaultScopes();
+        $scopes = TestDefaultScope::getDefaultScopes();
 
         $this->assertEquals(['active' => true, 'typeA' => true], $scopes);
     }
 
     public function testUnscopedAll()
     {
-        $count = wei()->testDefaultScope()->unscoped()->count();
+        $count = TestDefaultScope::unscoped()->cnt();
 
         $this->assertEquals(4, $count);
     }
 
     public function testUnscopedOne()
     {
-        $count = wei()->testDefaultScope()->unscoped('active')->count();
+        $count = TestDefaultScope::unscoped('active')->cnt();
 
         $this->assertEquals(2, $count);
     }
 
     public function testUnscopeMulti()
     {
-        $count = wei()->testDefaultScope()->unscoped(['active', 'typeA'])->count();
+        $count = TestDefaultScope::unscoped(['active', 'typeA'])->cnt();
 
         $this->assertEquals(4, $count);
     }

@@ -16,11 +16,11 @@ class TestDefaultScope extends Model
 
     public function active()
     {
-        return $this->andWhere(['active' => true]);
+        return $this->where('active', true);
     }
 
     public function typeA()
     {
-        return $this->andWhere(['type' => 'A']);
+        return $this->where('type', 'A');
     }
 }
