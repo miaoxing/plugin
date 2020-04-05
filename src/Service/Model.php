@@ -601,14 +601,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Receives the record field value
      *
      * @param string $name
-     * @throws \InvalidArgumentException When field not found
      * @return mixed|$this
+     * @throws InvalidArgumentException When field not found
      */
     public function origGet($name)
     {
         // Check if field exists when it is not a collection
         if (!$this->isColl && !in_array($name, $this->getFields())) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
                 get_class($this)
@@ -622,8 +622,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param string $name
      * @param mixed $value
-     * @throws \InvalidArgumentException
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function origSet($name, $value = null)
     {
@@ -642,7 +642,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             }
         } else {
             if (!$value instanceof static) {
-                throw new \InvalidArgumentException('Value for collection must be an instance of Wei\Record');
+                throw new InvalidArgumentException('Value for collection must be an instance of Wei\Record');
             } else {
                 // Support $coll[] = $value;
                 if ($name === null) {
@@ -656,9 +656,15 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * {@inheritdoc}
+     * Set the record field value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param bool $throwException
+     * @return $this
+     * @api
      */
-    public function set($name, $value = null, $throwException = true)
+    protected function set($name, $value = null, $throwException = true)
     {
         if ($this->isCollKey($name) || $this->hasColumn($name)) {
             return $this->setColumnValue($name, $value);

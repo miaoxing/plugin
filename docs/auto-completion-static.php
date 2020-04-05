@@ -78,6 +78,19 @@ class AppModel
     }
 
     /**
+     * Set the record field value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param bool $throwException
+     * @return $this
+     * @api
+     */
+    public function set($name, $value = null, $throwException = true)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -798,6 +811,19 @@ if (0) {
          * @api
          */
         public static function destroy($id = null)
+        {
+        }
+    
+        /**
+         * Set the record field value
+         *
+         * @param string $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this
+         * @api
+         */
+        public static function set($name, $value = null, $throwException = true)
         {
         }
     
@@ -1526,6 +1552,19 @@ class Model
     }
 
     /**
+     * Set the record field value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param bool $throwException
+     * @return $this
+     * @api
+     */
+    public function set($name, $value = null, $throwException = true)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -2246,6 +2285,19 @@ if (0) {
          * @api
          */
         public static function destroy($id = null)
+        {
+        }
+    
+        /**
+         * Set the record field value
+         *
+         * @param string $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this
+         * @api
+         */
+        public static function set($name, $value = null, $throwException = true)
         {
         }
     
@@ -4250,6 +4302,19 @@ class User
     }
 
     /**
+     * Set the record field value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param bool $throwException
+     * @return $this
+     * @api
+     */
+    public function set($name, $value = null, $throwException = true)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -5108,6 +5173,19 @@ if (0) {
         }
     
         /**
+         * Set the record field value
+         *
+         * @param string $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this
+         * @api
+         */
+        public static function set($name, $value = null, $throwException = true)
+        {
+        }
+    
+        /**
          * Executes the generated SQL and returns the found record object or false
          *
          * @param int|string $id
@@ -5885,6 +5963,19 @@ class UserModel
     }
 
     /**
+     * Set the record field value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param bool $throwException
+     * @return $this
+     * @api
+     */
+    public function set($name, $value = null, $throwException = true)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
@@ -6658,6 +6749,19 @@ if (0) {
          * @api
          */
         public static function destroy($id = null)
+        {
+        }
+    
+        /**
+         * Set the record field value
+         *
+         * @param string $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this
+         * @api
+         */
+        public static function set($name, $value = null, $throwException = true)
         {
         }
     

@@ -3,10 +3,11 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\TestGetSet;
 
 class GetSetTraitTest extends BaseTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -22,12 +23,12 @@ class GetSetTraitTest extends BaseTestCase
         wei()->db->batchInsert('test_get_sets', [
             [
                 'id' => 1,
-                'name' => 'abc'
+                'name' => 'abc',
             ],
         ]);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::dropTables();
         parent::tearDownAfterClass();
@@ -40,7 +41,7 @@ class GetSetTraitTest extends BaseTestCase
 
     public function testIsset()
     {
-        $test = wei()->testGetSet();
+        $test = TestGetSet::new();
         $test->id = 2;
 
         $this->assertTrue(isset($test['id']));
@@ -55,7 +56,7 @@ class GetSetTraitTest extends BaseTestCase
 
     public function testGetIdBecomeNull()
     {
-        $test = wei()->testGetSet();
+        $test = TestGetSet::new();
         // receive id
         $test->id;
 
@@ -63,30 +64,29 @@ class GetSetTraitTest extends BaseTestCase
 
         $this->assertNotNull($test->id);
 
-        $this->assertInternalType('int', $test->id);
+        $this->assertIsInt($test->id);
     }
 
     public function testSaveIdShouldBeInt()
     {
-        $test = wei()->testGetSet();
+        $test = TestGetSet::new();
 
         $test->save();
 
-        $this->assertInternalType('int', $test->id);
+        $this->assertIsInt($test->id);
     }
 
     public function testIndexBy()
     {
-        $tests = wei()->testGetSet()
-            ->indexBy('name')
-            ->findAll(['name' => 'abc']);
+        $tests = TestGetSet::indexBy('name')
+            ->findAllBy('name', 'abc');
 
         $this->assertEquals('abc', $tests['abc']->name);
     }
 
     public function testIncrSave()
     {
-        $getSet = wei()->testGetSet();
+        $getSet = TestGetSet::new();
         $getSet->incrSave('userCount', 2);
         $this->assertEquals(2, $getSet->userCount);
         $this->assertFalse($getSet->isChanged('userCount'));
