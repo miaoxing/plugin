@@ -17,7 +17,9 @@ class Mysql extends BaseDriver
 
     public function getSql($type, $sqlParts)
     {
+        $this->aliases = [];
         $this->sqlParts = $sqlParts;
+
         switch ($type) {
             case self::DELETE:
                 return $this->getSqlForDelete();
@@ -102,7 +104,7 @@ class Mysql extends BaseDriver
         // JOIN
         foreach ($parts['join'] as $join) {
             $query .= ' ' . strtoupper($join['type'])
-                . ' JOIN ' . $this->wrapTable($join['table'])
+                . ' JOIN ' . $this->parseTable($join['table'])
                 . ' ON ' . $this->wrap($join['first']) . ' ' . $join['operator'] . ' ' . $this->wrap($join['second']);
         }
 
@@ -243,11 +245,16 @@ class Mysql extends BaseDriver
      */
     protected function getFrom()
     {
-        $pos = strpos($this->sqlParts['from'], ' ');
+        return $this->parseTable($this->sqlParts['from']);
+    }
+
+    protected function parseTable($table)
+    {
+        $pos = strpos($table, ' ');
         if (false !== $pos) {
-            [$table, $alias] = explode(' ', $this->sqlParts['from']);
+            [$table, $alias] = explode(' ', $table);
+            $this->addAlias($alias);
         } else {
-            $table = $this->sqlParts['from'];
             $alias = null;
         }
 

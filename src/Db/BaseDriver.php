@@ -12,6 +12,13 @@ abstract class BaseDriver extends Base
 {
     protected $wrapper = '';
 
+    /**
+     * The table name alias used in the query
+     *
+     * @var array
+     */
+    protected $aliases = [];
+
     protected function wrap($column)
     {
         if (strpos($column, '.') === false) {
@@ -36,7 +43,18 @@ abstract class BaseDriver extends Base
 
     protected function wrapTable($table)
     {
-        return $this->wrap($this->db->getTable($table));
+        return $this->wrap($this->isAlias($table) ? $table : $this->db->getTable($table));
+    }
+
+    protected function addAlias($name)
+    {
+        $this->aliases[$name] = true;
+        return $this;
+    }
+
+    protected function isAlias($name)
+    {
+        return isset($this->aliases[$name]);
     }
 
     protected function wrapValue(string $value): string

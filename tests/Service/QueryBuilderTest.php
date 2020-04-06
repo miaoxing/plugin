@@ -8,6 +8,7 @@ use MiaoxingTest\Plugin\Fixture\DbTrait;
 
 /**
  * @mixin \DbMixin
+ * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
  */
 class QueryBuilderTest extends BaseTestCase
 {
@@ -797,23 +798,6 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertSame(2, $count);
     }
 
-    public function testCountBySubQuery()
-    {
-        $this->markTestIncomplete('todo refactor');
-
-        $this->initFixtures();
-
-        $count = Qb::table('users')::countBySubQuery();
-
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(2, $count);
-
-        $count = User::select('id, name')->limit(1)->offset(2)->countBySubQuery();
-
-        $this->assertInternalType('int', $count);
-        $this->assertEquals(2, $count);
-    }
-
     public function testMax()
     {
         $this->initFixtures();
@@ -1038,6 +1022,17 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertArrayHasKey('id', $user);
     }
 
+    public function testJoinAlias()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::table('users', 'u')->join('user_groups g', 'u.group_id', '=', 'g.id');
+        $this->assertSame('SELECT * FROM `p_users` `u` INNER JOIN `p_user_groups` `g` ON `u`.`group_id` = `g`.`id`', $qb->getRawSql());
+
+        $user = $qb->fetch();
+        $this->assertArrayHasKey('id', $user);
+    }
+
     public function testLeftJoin()
     {
         $this->initFixtures();
@@ -1059,34 +1054,5 @@ class QueryBuilderTest extends BaseTestCase
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
-    }
-
-    /**
-     * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
-     */
-    public function testQuery()
-    {
-        $this->markTestSkipped('todo');
-
-        $this->initFixtures();
-
-        // Overwrite where
-        $query = $this
-            ->db('users')
-            ->where('id = :id')
-            ->where('group_id = :groupId')
-            ->setParameter('groupId', 1);
-        $user = $query->find();
-
-        $this->assertEquals("SELECT * FROM prefix_member WHERE group_id = :groupId LIMIT 1", $query->getSql());
-        $this->assertEquals('1', $user['group_id']);
-
-        // Join with table alias
-        $query = $this
-            ->db('member u')
-            ->rightJoin('prefix_member_group g', 'g.id = u.group_id');
-
-        $this->assertEquals("SELECT * FROM prefix_member u RIGHT JOIN prefix_member_group g ON g.id = u.group_id",
-            $query->getSql());
     }
 }
