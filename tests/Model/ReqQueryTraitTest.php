@@ -25,6 +25,17 @@ class ReqQueryTraitTest extends BaseTestCase
             ->string('name')
             ->timestamps()
             ->exec();
+
+        wei()->db->insert('test_req_queries', [
+            'id' => 1,
+            'name' => 'test',
+        ]);
+
+        wei()->db->insert('test_req_query_details', [
+            'id' => 1,
+            'test_req_query_id' => 1,
+            'name' => 'detail',
+        ]);
     }
 
     public static function tearDownAfterClass(): void
@@ -42,21 +53,18 @@ class ReqQueryTraitTest extends BaseTestCase
     public function testLikeJoin()
     {
         wei()->request->fromArray([
-            'name' => '1',
+            'name' => 'test',
             'detail' => [
-                'name' => '2',
+                'name' => 'detail',
             ],
         ]);
         $query = TestReqQuery::like(['detail.name', 'name'])
             ->all();
 
-        $this->assertEquals(
-            implode(' ', [
-                'SELECT test_req_queries.* FROM test_req_queries',
-                'LEFT JOIN test_req_query_details ON test_req_query_details.test_req_query_id = test_req_queries.id',
-                'WHERE (test_req_query_details.name LIKE ?) AND (test_req_queries.name LIKE ?)',
-            ]),
-            $query->getSql()
-        );
+        $this->assertEquals('test', $query[0]['name']);
+
+        $this->assertEquals(<<<SQL
+SELECT `test_req_queries`.* FROM `test_req_queries` LEFT JOIN `test_req_query_details` ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id` WHERE `test_req_query_details`.`name` LIKE ? AND `test_req_queries`.`name` LIKE ?
+SQL, $query->getSql());
     }
 }

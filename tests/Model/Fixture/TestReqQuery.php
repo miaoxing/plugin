@@ -8,6 +8,6 @@ class TestReqQuery extends Model
 {
     public function detail()
     {
-        return $this->hasOne(wei()->testReqQueryDetail());
+        return $this->hasOne(TestReqQueryDetail::class);
     }
 }

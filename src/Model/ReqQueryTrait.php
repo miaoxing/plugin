@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Services\Service\Request;
 
 /**
@@ -125,7 +126,7 @@ trait ReqQueryTrait
 
         list($name, $op) = $this->parseNameAndOp($name);
 
-        /** @var BaseModelV2 $related */
+        /** @var Model $related */
         $related = $this->$relation();
         if (!$related->hasColumn($name)) {
             return;
@@ -186,6 +187,10 @@ trait ReqQueryTrait
         }
     }
 
+    /**
+     * @param array|string $relations
+     * @return $this
+     */
     public function reqJoin($relations)
     {
         foreach ((array) $relations as $relation) {
@@ -199,7 +204,7 @@ trait ReqQueryTrait
             $this->joins[$relation] = true;
             $this->selectMain();
 
-            /** @var BaseModelV2 $related */
+            /** @var Model $related */
             $related = $this->$relation();
             $name = $related->getClassServiceName();
             $config = $this->relations[$name];
@@ -211,17 +216,14 @@ trait ReqQueryTrait
                 $table = $related->db->getDbname() . '.' . $table;
             }
 
-            $this->leftJoin(
-                $table,
-                $table . '.' . $config['foreignKey'] . ' = ' . $this->getTable() . '.' . $config['localKey']
-            );
+            $this->leftJoin($table, $table . '.' . $config['foreignKey'], '=', $this->getTable() . '.' . $config['localKey']);
         }
 
         return $this;
     }
 
     /**
-     * @param array $columns
+     * @param array|string $columns
      * @return $this
      * @api
      */
@@ -229,7 +231,7 @@ trait ReqQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->filterOutputColumn($column);
-            list($column, $value, $relation) = $this->parseReqColumn($name);
+            [$column, $value, $relation] = $this->parseReqColumn($name);
             if (!wei()->isPresent($value)) {
                 continue;
             }
@@ -357,10 +359,10 @@ trait ReqQueryTrait
             $column = $this->filterInputColumn($column);
         } else {
             // 查询关联表
-            list($relation, $relationColumn) = explode('.', $column, 2);
+            [$relation, $relationColumn] = explode('.', $column, 2);
             $value = $this->request[$relation][$relationColumn];
 
-            /** @var BaseModelV2 $related */
+            /** @var Model $related */
             $related = $this->$relation();
             $column = $related->getTable() . '.' . $relationColumn;
         }

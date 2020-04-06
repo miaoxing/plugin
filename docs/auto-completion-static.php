@@ -770,7 +770,7 @@ class AppModel
     }
 
     /**
-     * @param array $columns
+     * @param array|string $columns
      * @return $this
      * @api
      */
@@ -1527,7 +1527,7 @@ if (0) {
         }
     
         /**
-         * @param array $columns
+         * @param array|string $columns
          * @return $this
          * @api
          */
@@ -2284,7 +2284,7 @@ class Model
     }
 
     /**
-     * @param array $columns
+     * @param array|string $columns
      * @return $this
      * @api
      */
@@ -3041,7 +3041,7 @@ if (0) {
         }
     
         /**
-         * @param array $columns
+         * @param array|string $columns
          * @return $this
          * @api
          */
@@ -5114,7 +5114,7 @@ class User
     }
 
     /**
-     * @param array $columns
+     * @param array|string $columns
      * @return $this
      * @api
      */
@@ -6005,7 +6005,7 @@ if (0) {
         }
     
         /**
-         * @param array $columns
+         * @param array|string $columns
          * @return $this
          * @api
          */
@@ -6815,7 +6815,7 @@ class UserModel
     }
 
     /**
-     * @param array $columns
+     * @param array|string $columns
      * @return $this
      * @api
      */
@@ -7625,7 +7625,7 @@ if (0) {
         }
     
         /**
-         * @param array $columns
+         * @param array|string $columns
          * @return $this
          * @api
          */
