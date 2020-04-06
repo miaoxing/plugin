@@ -3,8 +3,8 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
-use MiaoxingTest\Plugin\Fixture\DbTrait;
-use MiaoxingTest\Plugin\Fixture\Model\TestUser;
+use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
+use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
 /**
  * @mixin \DbMixin
@@ -39,7 +39,7 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::find(1);
 
-        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 1 LIMIT 1', $user->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` = 1 LIMIT 1', $user->getRawSql());
         $this->assertEquals('1', $user->id);
     }
 
@@ -67,7 +67,7 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::find('not-exists');
 
-        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = ? LIMIT 1', $this->db->getLastQuery());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` = ? LIMIT 1', $this->db->getLastQuery());
         $this->assertNull($user);
     }
 
@@ -88,7 +88,7 @@ class ModelTest extends BaseTestCase
             'name' => 'name',
         ]);
 
-        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
         $this->assertTrue($user->isNew());
         $this->assertFalse($user->isDestroyed());
     }
@@ -100,7 +100,7 @@ class ModelTest extends BaseTestCase
         // The init data may from request, contains key like id, name
         $user = TestUser::findOrInitBy(['id' => 3], ['name' => 'name', 'id' => '5']);
 
-        $this->assertSame('SELECT * FROM `p_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
         $this->assertSame(3, $user->id);
         $this->assertEquals('name', $user->name);
     }
@@ -124,7 +124,7 @@ class ModelTest extends BaseTestCase
 
         $users = TestUser::findAll([1, 2]);
 
-        $this->assertSame('SELECT * FROM `p_users` WHERE `id` IN (1, 2)', $users->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` IN (1, 2)', $users->getRawSql());
         $this->assertCount(2, $users);
         $this->assertEquals(1, $users[0]->id);
     }
@@ -135,7 +135,7 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::findBy('name', 'twin');
 
-        $this->assertSame("SELECT * FROM `p_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
         $this->assertEquals(1, $user->id);
     }
 
@@ -145,7 +145,7 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::findBy('id', '>', 1);
 
-        $this->assertSame('SELECT * FROM `p_users` WHERE `id` > 1 LIMIT 1', $user->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` > 1 LIMIT 1', $user->getRawSql());
         $this->assertEquals(2, $user->id);
     }
 
@@ -155,7 +155,7 @@ class ModelTest extends BaseTestCase
 
         $users = TestUser::findAllBy('id', '>', 1);
 
-        $this->assertSame('SELECT * FROM `p_users` WHERE `id` > 1', $users->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` > 1', $users->getRawSql());
         $this->assertSame(2, $users[0]->id);
         $this->assertSame('test', $users[0]->name);
     }
@@ -167,7 +167,7 @@ class ModelTest extends BaseTestCase
         // The init data may from request, contains key like id, name
         $user = TestUser::findOrInitBy(['id' => 3, 'name' => 'tom'], ['name' => 'name', 'id' => '5']);
 
-        $this->assertSame("SELECT * FROM `p_users` WHERE `id` = 3 AND `name` = 'tom' LIMIT 1", $user->getRawSql());
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `id` = 3 AND `name` = 'tom' LIMIT 1", $user->getRawSql());
         $this->assertSame(3, $user->id);
         $this->assertSame('name', $user->name);
     }
@@ -305,7 +305,7 @@ class ModelTest extends BaseTestCase
             ->where('name', 'twin')
             ->first();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
         $this->assertEquals('twin', $user->name);
     }
 
@@ -430,7 +430,7 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::find('1');
 
-        $this->assertEquals('users', $user->getTable());
+        $this->assertEquals('test_users', $user->getTable());
     }
 
     public function testColumnNotFound()
@@ -525,7 +525,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $this->db->batchInsert('users', [
+        $this->db->batchInsert('test_users', [
             [
                 'group_id' => '1',
                 'name' => 'twin',
@@ -891,7 +891,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = $this->db('users');
+        $user = TestUser::new();
 
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: table'));
 

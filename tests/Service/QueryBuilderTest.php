@@ -4,7 +4,7 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
-use MiaoxingTest\Plugin\Fixture\DbTrait;
+use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 
 /**
  * @mixin \DbMixin
@@ -23,112 +23,112 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testSelect()
     {
-        $sql = Qb::table('users')->select('name')->getSql();
+        $sql = Qb::table('test_users')->select('name')->getSql();
 
-        $this->assertEquals('SELECT `name` FROM `p_users`', $sql);
+        $this->assertEquals('SELECT `name` FROM `p_test_users`', $sql);
     }
 
     public function testStaticSelect()
     {
-        $sql = Qb::select('name')->from('users')->getSql();
+        $sql = Qb::select('name')->from('test_users')->getSql();
 
-        $this->assertEquals('SELECT `name` FROM `p_users`', $sql);
+        $this->assertEquals('SELECT `name` FROM `p_test_users`', $sql);
     }
 
     public function testSelectMultipleByArray()
     {
-        $sql = Qb::table('users')->select(['name', 'email'])->getSql();
+        $sql = Qb::table('test_users')->select(['name', 'email'])->getSql();
 
-        $this->assertEquals('SELECT `name`, `email` FROM `p_users`', $sql);
+        $this->assertEquals('SELECT `name`, `email` FROM `p_test_users`', $sql);
     }
 
     public function testSelectMultipleByArguments()
     {
-        $sql = Qb::table('users')->select('name', 'email')->getSql();
+        $sql = Qb::table('test_users')->select('name', 'email')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT `name`, `email` FROM `p_users`', $sql);
+        $this->assertEqualsIgnoringCase('SELECT `name`, `email` FROM `p_test_users`', $sql);
     }
 
     public function testSelectAlias()
     {
-        $sql = Qb::table('users')->select(['name' => 'user_name'])->getSql();
+        $sql = Qb::table('test_users')->select(['name' => 'user_name'])->getSql();
 
-        $this->assertEquals('SELECT `name` AS `user_name` FROM `p_users`', $sql);
+        $this->assertEquals('SELECT `name` AS `user_name` FROM `p_test_users`', $sql);
     }
 
     public function testDistinct()
     {
-        $qb = Qb::table('users')->select('name')->distinct();
+        $qb = Qb::table('test_users')->select('name')->distinct();
 
-        $this->assertEquals('SELECT DISTINCT `name` FROM `p_users`', $qb->getSql());
+        $this->assertEquals('SELECT DISTINCT `name` FROM `p_test_users`', $qb->getSql());
 
-        $this->assertEquals('SELECT `name` FROM `p_users`', $qb->distinct(false)->getSql());
+        $this->assertEquals('SELECT `name` FROM `p_test_users`', $qb->distinct(false)->getSql());
     }
 
     public function testSelectDistinct()
     {
-        $sql = Qb::table('users')->selectDistinct('name')->getSql();
+        $sql = Qb::table('test_users')->selectDistinct('name')->getSql();
 
-        $this->assertEquals('SELECT DISTINCT `name` FROM `p_users`', $sql);
+        $this->assertEquals('SELECT DISTINCT `name` FROM `p_test_users`', $sql);
     }
 
     public function testAddSelect()
     {
-        $sql = Qb::table('users')->select('name')->select('email')->getSql();
+        $sql = Qb::table('test_users')->select('name')->select('email')->getSql();
 
-        $this->assertEquals('SELECT `name`, `email` FROM `p_users`', $sql);
+        $this->assertEquals('SELECT `name`, `email` FROM `p_test_users`', $sql);
     }
 
     public function testSelectRaw()
     {
-        $sql = Qb::table('users')->selectRaw('UPPER(name)')->getSql();
+        $sql = Qb::table('test_users')->selectRaw('UPPER(name)')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT UPPER(name) FROM `p_users`', $sql);
+        $this->assertEqualsIgnoringCase('SELECT UPPER(name) FROM `p_test_users`', $sql);
     }
 
     public function testSelectExcept()
     {
         $this->initFixtures();
 
-        $sql = Qb::table('users')->selectExcept('id')->getSql();
+        $sql = Qb::table('test_users')->selectExcept('id')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT `group_id`, `name`, `address` FROM `p_users`', $sql);
+        $this->assertEqualsIgnoringCase('SELECT `group_id`, `name`, `address` FROM `p_test_users`', $sql);
     }
 
     public function testWhere()
     {
-        $sql = Qb::table('users')->where('name', '=', 'twin')->getRawSql();
+        $sql = Qb::table('test_users')->where('name', '=', 'twin')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhereEqualShorthand()
     {
-        $sql = Qb::table('users')->where('name', 'twin')->getRawSql();
+        $sql = Qb::table('test_users')->where('name', 'twin')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhereArray()
     {
-        $sql = Qb::table('users')->where([
+        $sql = Qb::table('test_users')->where([
             ['name', 'twin'],
             ['email', '!=', 'twin@example.com'],
         ])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' AND `email` != 'twin@example.com'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' AND `email` != 'twin@example.com'", $sql);
     }
 
     public function testWhereClosure()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->where(function (Qb $qb) {
                 $qb->where('email', '=', 'twin@example.com')
                     ->orWhere('score', '>', 100);
             })
             ->getRawSql();
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
             $sql);
     }
 
@@ -136,18 +136,18 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $sql = Qb::table('users')->where(null)->getRawSql();
+        $sql = Qb::table('test_users')->where(null)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users`', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users`', $sql);
     }
 
     public function testWhereParamIsArray()
     {
         $this->initFixtures();;
 
-        $qb = Qb::table('users')->where('id', [1, 2]);
+        $qb = Qb::table('test_users')->where('id', [1, 2]);
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `id` IN (1, 2)', $qb->getRawSql());
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `id` IN (1, 2)', $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertSame('1', $user['id']);
@@ -161,9 +161,9 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users')->whereRaw("name = 'twin'");
+        $qb = Qb::table('test_users')->whereRaw("name = 'twin'");
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
@@ -171,9 +171,9 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users')->whereRaw('name = ?', 'twin');
+        $qb = Qb::table('test_users')->whereRaw('name = ?', 'twin');
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
@@ -181,50 +181,50 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users')->whereRaw('group_id = :groupId AND name = :name', [
+        $qb = Qb::table('test_users')->whereRaw('group_id = :groupId AND name = :name', [
             'groupId' => 1,
             'name' => 'twin',
         ]);
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE group_id = 1 AND name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE group_id = 1 AND name = 'twin'", $qb->getRawSql());
         $this->assertEquals('twin', $qb->fetch()['name']);
     }
 
     public function testOrWhere()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhere('email', '!=', 'twin@example.com')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `email` != 'twin@example.com'",
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` != 'twin@example.com'",
             $sql);
     }
 
     public function testMultipleOrWhere()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhere('email', 'twin@example.com')
             ->orWhere('first_name', '=', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
             $sql);
     }
 
     public function testOrWhereArray()
     {
-        $sql = Qb::table('users')->orWhere([
+        $sql = Qb::table('test_users')->orWhere([
             ['name', 'twin'],
             ['email', 'twin@example.com'],
         ])->getRawSql();
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com'", $sql);
     }
 
     public function testOrWhereClosure()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhere(function (Qb $qb) {
                 $qb->where('email', '=', 'twin@example.com')
@@ -232,7 +232,7 @@ class QueryBuilderTest extends BaseTestCase
             })
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR (`email` = 'twin@example.com' OR `score` > 100)",
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR (`email` = 'twin@example.com' OR `score` > 100)",
             $sql);
     }
 
@@ -240,9 +240,9 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users')->where('name', 'twin')->orWhere('id', [1, 2]);
+        $qb = Qb::table('test_users')->where('name', 'twin')->orWhere('id', [1, 2]);
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `id` IN (1, 2)", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `id` IN (1, 2)", $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertSame('1', $user['id']);
@@ -254,450 +254,450 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testOrWhereRaw()
     {
-        $qb = Qb::table('users')
+        $qb = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereRaw('email = ?', 'twin@example.com');
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR email = 'twin@example.com'",
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR email = 'twin@example.com'",
             $qb->getRawSql());
     }
 
     public function testWhereBetween()
     {
-        $sql = Qb::table('users')->whereBetween('age', [1, 10])->getRawSql();
+        $sql = Qb::table('test_users')->whereBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` BETWEEN 1 AND 10', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `age` BETWEEN 1 AND 10', $sql);
     }
 
     public function testOrWhereBetween()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` BETWEEN 1 AND 10", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `age` BETWEEN 1 AND 10", $sql);
     }
 
     public function testWhereNotBetween()
     {
-        $sql = Qb::table('users')->whereNotBetween('age', [1, 10])->getRawSql();
+        $sql = Qb::table('test_users')->whereNotBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` NOT BETWEEN 1 AND 10', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `age` NOT BETWEEN 1 AND 10', $sql);
     }
 
     public function testOrWhereNotBetween()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereNotBetween('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` NOT BETWEEN 1 AND 10", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `age` NOT BETWEEN 1 AND 10", $sql);
     }
 
     public function testWhereIn()
     {
-        $sql = Qb::table('users')->whereIn('age', [1, 10])->getRawSql();
+        $sql = Qb::table('test_users')->whereIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IN (1, 10)', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `age` IN (1, 10)', $sql);
     }
 
     public function testOrWhereIn()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` IN (1, 10)", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `age` IN (1, 10)", $sql);
     }
 
     public function testWhereNotIn()
     {
-        $sql = Qb::table('users')->whereNotIn('age', [1, 10])->getRawSql();
+        $sql = Qb::table('test_users')->whereNotIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` NOT IN (1, 10)', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `age` NOT IN (1, 10)', $sql);
     }
 
     public function testOrWhereNotIn()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereNotIn('age', [1, 10])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` NOT IN (1, 10)", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `age` NOT IN (1, 10)", $sql);
     }
 
     public function testWhereNull()
     {
-        $sql = Qb::table('users')->whereNull('age')->getRawSql();
+        $sql = Qb::table('test_users')->whereNull('age')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IS NULL', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `age` IS NULL', $sql);
     }
 
     public function testOrWhereNull()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereNull('age')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` IS NULL", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `age` IS NULL", $sql);
     }
 
     public function testWhereNotNull()
     {
-        $sql = Qb::table('users')->whereNotNULL('age')->getRawSql();
+        $sql = Qb::table('test_users')->whereNotNULL('age')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `age` IS NOT NULL', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `age` IS NOT NULL', $sql);
     }
 
     public function testOrWhereNotNull()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereNotNull('age')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `age` IS NOT NULL", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `age` IS NOT NULL", $sql);
     }
 
     public function testWhereDate()
     {
-        $sql = Qb::table('users')->whereDate('created_at', '2020-02-02')->getRawSql();
+        $sql = Qb::table('test_users')->whereDate('created_at', '2020-02-02')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE DATE(`created_at`) = '2020-02-02'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE DATE(`created_at`) = '2020-02-02'", $sql);
     }
 
     public function testOrWhereDate()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereDate('created_at', '2020-02-02')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR DATE(`created_at`) = '2020-02-02'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR DATE(`created_at`) = '2020-02-02'", $sql);
     }
 
     public function testWhereMonth()
     {
-        $sql = Qb::table('users')->whereMonth('created_at', '2')
+        $sql = Qb::table('test_users')->whereMonth('created_at', '2')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE MONTH(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE MONTH(`created_at`) = '2'", $sql);
     }
 
     public function testOrWhereMonth()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereMonth('created_at', '2')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR MONTH(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR MONTH(`created_at`) = '2'", $sql);
     }
 
     public function testWhereDay()
     {
-        $sql = Qb::table('users')->whereDay('created_at', '2')->getRawSql();
+        $sql = Qb::table('test_users')->whereDay('created_at', '2')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE DAY(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE DAY(`created_at`) = '2'", $sql);
     }
 
     public function testOrWhereDay()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereDay('created_at', '2')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR DAY(`created_at`) = '2'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR DAY(`created_at`) = '2'", $sql);
     }
 
     public function testWhereYear()
     {
-        $sql = Qb::table('users')->whereYear('created_at', '2020')->getRawSql();
+        $sql = Qb::table('test_users')->whereYear('created_at', '2020')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE YEAR(`created_at`) = '2020'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE YEAR(`created_at`) = '2020'", $sql);
     }
 
     public function testOrWhereYear()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereYear('created_at', '2020')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR YEAR(`created_at`) = '2020'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR YEAR(`created_at`) = '2020'", $sql);
     }
 
     public function testWhereTime()
     {
-        $sql = Qb::table('users')->whereTime('created_at', '20:20:20')->getRawSql();
+        $sql = Qb::table('test_users')->whereTime('created_at', '20:20:20')->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE TIME(`created_at`) = '20:20:20'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE TIME(`created_at`) = '20:20:20'", $sql);
     }
 
     public function testOrWhereTime()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereTime('created_at', '20:20:20')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'", $sql);
     }
 
     public function testWhereColumn()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->whereColumn('created_at', 'updated_at')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `created_at` = `updated_at`", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `created_at` = `updated_at`", $sql);
     }
 
     public function testOrWhereColumn()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->where('name', 'twin')
             ->orWhereColumn('created_at', 'updated_at')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin' OR `created_at` = `updated_at`", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `created_at` = `updated_at`", $sql);
     }
 
     public function testWhereContains()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->whereContains('name', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` LIKE '%twin%'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` LIKE '%twin%'", $sql);
     }
 
     public function testOrWhereContains()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->whereContains('name', 'twin')
             ->orWhereContains('email', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` LIKE '%twin%' OR `email` LIKE '%twin%'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` LIKE '%twin%' OR `email` LIKE '%twin%'", $sql);
     }
 
     public function testWhereNotContains()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->whereNotContains('name', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` NOT LIKE '%twin%'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` NOT LIKE '%twin%'", $sql);
     }
 
     public function testOrWhereNotContains()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->whereNotContains('name', 'twin')
             ->orWhereNotContains('email', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` NOT LIKE '%twin%' OR `email` NOT LIKE '%twin%'",
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` NOT LIKE '%twin%' OR `email` NOT LIKE '%twin%'",
             $sql);
     }
 
     public function testOrderBy()
     {
-        $sql = Qb::table('users')->orderBy('id')->getRawSql();
+        $sql = Qb::table('test_users')->orderBy('id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` ASC', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` ORDER BY `id` ASC', $sql);
     }
 
     public function testOrderByDesc()
     {
-        $sql = Qb::table('users')->orderBy('id', 'DESC')->getRawSql();
+        $sql = Qb::table('test_users')->orderBy('id', 'DESC')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` DESC', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` ORDER BY `id` DESC', $sql);
     }
 
     public function testOrderByMultiple()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->orderBy('created_at', 'DESC')
             ->orderBy('id', 'ASC')
             ->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `created_at` DESC, `id` ASC', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` ORDER BY `created_at` DESC, `id` ASC', $sql);
     }
 
     public function testAsc()
     {
-        $sql = Qb::table('users')->asc('id')->getRawSql();
+        $sql = Qb::table('test_users')->asc('id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` ASC', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` ORDER BY `id` ASC', $sql);
     }
 
     public function testDesc()
     {
-        $sql = Qb::table('users')->desc('id')->getRawSql();
+        $sql = Qb::table('test_users')->desc('id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` ORDER BY `id` DESC', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` ORDER BY `id` DESC', $sql);
     }
 
     public function testInvalidOrder()
     {
         $this->expectExceptionObject(new \InvalidArgumentException('Parameter for "order" must be "ASC" or "DESC".'));
 
-        Qb::table('users')->orderBy('id', 'as');
+        Qb::table('test_users')->orderBy('id', 'as');
     }
 
     public function testGroupBy()
     {
-        $sql = Qb::table('users')->groupBy('group_id')->getRawSql();
+        $sql = Qb::table('test_users')->groupBy('group_id')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id`', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` GROUP BY `group_id`', $sql);
     }
 
     public function testGroupByMultiply()
     {
-        $sql = Qb::table('users')->groupBy('group_id', 'type')->getRawSql();
+        $sql = Qb::table('test_users')->groupBy('group_id', 'type')->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id`, `type`', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` GROUP BY `group_id`, `type`', $sql);
     }
 
     public function testHaving()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->groupBy('group_id')
             ->having('id', '>', 1)
             ->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id` HAVING `id` > 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` GROUP BY `group_id` HAVING `id` > 1', $sql);
     }
 
     public function testHavingMultiply()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->groupBy('group_id')
             ->having('id', '>', 1)
             ->having('type', 1)
             ->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` GROUP BY `group_id` HAVING `id` > 1 AND `type` = 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` GROUP BY `group_id` HAVING `id` > 1 AND `type` = 1', $sql);
     }
 
     public function testHavingRaw()
     {
-        $qb = Qb::table('users')->havingRaw('name = ?', 'twin');
+        $qb = Qb::table('test_users')->havingRaw('name = ?', 'twin');
 
-        $this->assertEquals("SELECT * FROM `p_users` HAVING name = 'twin'", $qb->getRawSql());
+        $this->assertEquals("SELECT * FROM `p_test_users` HAVING name = 'twin'", $qb->getRawSql());
     }
 
     public function testOrHaving()
     {
-        $sql = Qb::table('users')
+        $sql = Qb::table('test_users')
             ->having('name', 'twin')
             ->orHaving('email', '!=', 'twin@example.com')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
+        $this->assertEquals("SELECT * FROM `p_test_users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
             $sql);
     }
 
     public function testLimit()
     {
-        $sql = Qb::table('users')->limit(1)->getRawSql();
+        $sql = Qb::table('test_users')->limit(1)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` LIMIT 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` LIMIT 1', $sql);
     }
 
     public function testOffset()
     {
-        $sql = Qb::table('users')->offset(1)->getRawSql();
+        $sql = Qb::table('test_users')->offset(1)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` OFFSET 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` OFFSET 1', $sql);
     }
 
     public function testLimitOffset()
     {
-        $sql = Qb::table('users')->limit(2)->offset(1)->getRawSql();
+        $sql = Qb::table('test_users')->limit(2)->offset(1)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` LIMIT 2 OFFSET 1', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` LIMIT 2 OFFSET 1', $sql);
     }
 
     public function testPageLimit()
     {
-        $sql = Qb::table('users')->page(3)->limit(3)->getRawSql();
+        $sql = Qb::table('test_users')->page(3)->limit(3)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` LIMIT 3 OFFSET 6', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` LIMIT 3 OFFSET 6', $sql);
     }
 
     public function testLimitPage()
     {
-        $sql = Qb::table('users')->limit(3)->page(3)->getRawSql();
+        $sql = Qb::table('test_users')->limit(3)->page(3)->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` LIMIT 3 OFFSET 6', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` LIMIT 3 OFFSET 6', $sql);
     }
 
     public function testWhen()
     {
-        $sql = Qb::table('users')->when('twin', function (Qb $qb, $value) {
+        $sql = Qb::table('test_users')->when('twin', function (Qb $qb, $value) {
             $qb->where('name', $value);
         })->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testWhenFalse()
     {
-        $sql = Qb::table('users')->when(false, function (Qb $qb, $value) {
+        $sql = Qb::table('test_users')->when(false, function (Qb $qb, $value) {
             $qb->where('name', $value);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users`', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users`', $sql);
     }
 
     public function testWhenDefault()
     {
-        $sql = Qb::table('users')->when(false, function (Qb $qb, $value) {
+        $sql = Qb::table('test_users')->when(false, function (Qb $qb, $value) {
             $qb->where('name', $value);
         }, function (Qb $qb, $value) {
             $qb->where('type', 0);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `type` = 0', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `type` = 0', $sql);
     }
 
     public function testUnless()
     {
-        $sql = Qb::table('users')->unless(false, function (Qb $qb, $value) {
+        $sql = Qb::table('test_users')->unless(false, function (Qb $qb, $value) {
             $qb->where('name', 'twin');
         })->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_users` WHERE `name` = 'twin'", $sql);
+        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin'", $sql);
     }
 
     public function testUnlessTrue()
     {
-        $sql = Qb::table('users')->unless(true, function (Qb $qb, $value) {
+        $sql = Qb::table('test_users')->unless(true, function (Qb $qb, $value) {
             $qb->where('name', $value);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users`', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users`', $sql);
     }
 
     public function testUnlessDefault()
     {
-        $sql = Qb::table('users')->unless(true, function (Qb $qb, $value) {
+        $sql = Qb::table('test_users')->unless(true, function (Qb $qb, $value) {
             $qb->where('name', $value);
         }, function (Qb $qb, $value) {
             $qb->where('type', 0);
         })->getRawSql();
 
-        $this->assertEquals('SELECT * FROM `p_users` WHERE `type` = 0', $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `type` = 0', $sql);
     }
 
     public function testFetch()
     {
         $this->initFixtures();
 
-        $data = Qb::table('users')->where('id', 1)->fetch();
+        $data = Qb::table('test_users')->where('id', 1)->fetch();
         $this->assertIsArray($data);
         $this->assertEquals('1', $data['id']);
     }
@@ -706,7 +706,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = Qb::table('users')->where('id', -1)->fetch();
+        $data = Qb::table('test_users')->where('id', -1)->fetch();
         $this->assertNull($data);
     }
 
@@ -714,10 +714,10 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $result = Qb::table('users')->selectRaw('COUNT(id)')->fetchColumn();
+        $result = Qb::table('test_users')->selectRaw('COUNT(id)')->fetchColumn();
         $this->assertSame('2', $result);
 
-        $result = Qb::table('users')->where('id', -1)->fetchColumn();
+        $result = Qb::table('test_users')->where('id', -1)->fetchColumn();
         $this->assertNull($result);
     }
 
@@ -725,7 +725,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = Qb::table('users')->fetchAll();
+        $data = Qb::table('test_users')->fetchAll();
 
         $this->assertIsArray($data);
         $this->assertEquals('1', $data[0]['group_id']);
@@ -735,7 +735,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = Qb::table('users')->where('id', 1)->first();
+        $data = Qb::table('test_users')->where('id', 1)->first();
         $this->assertIsArray($data);
         $this->assertEquals('1', $data['id']);
     }
@@ -744,7 +744,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = Qb::table('users')->all();
+        $data = Qb::table('test_users')->all();
 
         $this->assertIsArray($data);
         $this->assertEquals('1', $data[0]['group_id']);
@@ -754,7 +754,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $users = Qb::table('users')->indexBy('name')->fetchAll();
+        $users = Qb::table('test_users')->indexBy('name')->fetchAll();
 
         $this->assertArrayHasKey('twin', $users);
         $this->assertArrayHasKey('test', $users);
@@ -764,7 +764,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $ids = Qb::table('users')->pluck('id');
+        $ids = Qb::table('test_users')->pluck('id');
 
         $this->assertSame(['1', '2'], $ids);
     }
@@ -773,7 +773,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $ids = Qb::table('users')->pluck('name', 'id');
+        $ids = Qb::table('test_users')->pluck('name', 'id');
 
         $this->assertSame([1 => 'twin', 2 => 'test'], $ids);
     }
@@ -782,10 +782,10 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $count = Qb::table('users')->cnt();
+        $count = Qb::table('test_users')->cnt();
         $this->assertSame(2, $count);
 
-        $count = Qb::table('users')->where('id', 1)->cnt();
+        $count = Qb::table('test_users')->where('id', 1)->cnt();
         $this->assertSame(1, $count);
     }
 
@@ -793,7 +793,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $count = Qb::table('users')->limit(1)->offset(2)->cnt();
+        $count = Qb::table('test_users')->limit(1)->offset(2)->cnt();
 
         $this->assertSame(2, $count);
     }
@@ -802,7 +802,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $max = Qb::table('users')->max('id');
+        $max = Qb::table('test_users')->max('id');
 
         $this->assertSame('2', $max);
     }
@@ -827,7 +827,7 @@ class QueryBuilderTest extends BaseTestCase
 
         $count = 0;
         $times = 0;
-        $result = Qb::table('users')->chunk(2, static function ($data, $page) use (&$count, &$times) {
+        $result = Qb::table('test_users')->chunk(2, static function ($data, $page) use (&$count, &$times) {
             $count += count($data);
             $times++;
         });
@@ -841,10 +841,10 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $row = Qb::table('users')->update(['address' => 'test address']);
+        $row = Qb::table('test_users')->update(['address' => 'test address']);
         $this->assertEquals(2, $row);
 
-        $user = Qb::table('users')->where('id', 1)->first();
+        $user = Qb::table('test_users')->where('id', 1)->first();
         $this->assertEquals('test address', $user['address']);
     }
 
@@ -853,7 +853,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $query = Qb::table('users')
+        $query = Qb::table('test_users')
             ->whereRaw('id = :id AND group_id = :groupId')
             ->addParameter([
                 'id' => 1,
@@ -889,7 +889,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $query = Qb::table('users')
+        $query = Qb::table('test_users')
             ->where('id', $value)
             ->where('id', '=', $value)
             ->orWhere('id', $value)
@@ -918,7 +918,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testGetAndResetAllSqlParts()
     {
-        $query = Qb::table('users')->offset(1)->limit(1);
+        $query = Qb::table('test_users')->offset(1)->limit(1);
 
         $this->assertEquals(1, $query->getSqlPart('offset'));
         $this->assertEquals(1, $query->getSqlPart('limit'));
@@ -935,8 +935,8 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testFromAlias()
     {
-        $qb = Qb::from('users', 'm');
-        $this->assertEquals('SELECT * FROM `p_users` `m`', $qb->getRawSql());
+        $qb = Qb::from('test_users', 'm');
+        $this->assertEquals('SELECT * FROM `p_test_users` `m`', $qb->getRawSql());
 
         $first = $qb->first();
         $this->assertNotNull($first);
@@ -944,29 +944,29 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testGetTable()
     {
-        $query = Qb::table('users');
+        $query = Qb::table('test_users');
 
-        $this->assertEquals('users', $query->getTable());
+        $this->assertEquals('test_users', $query->getTable());
 
-        $query->from('users', 'u');
-        $this->assertEquals('users', $query->getTable());
+        $query->from('test_users', 'u');
+        $this->assertEquals('test_users', $query->getTable());
     }
 
     public function testDeleteRecordByQueryBuilder()
     {
         $this->initFixtures();
 
-        $result = Qb::table('users')->where('group_id', 1)->delete();
+        $result = Qb::table('test_users')->where('group_id', 1)->delete();
         $this->assertEquals(2, $result);
 
-        $result = Qb::table('users')->delete(array('group_id' => 1));
+        $result = Qb::table('test_users')->delete(array('group_id' => 1));
         $this->assertEquals(0, $result);
     }
 
     public function testInvalidLimit()
     {
         $this->initFixtures();
-        $user = Qb::table('users');
+        $user = Qb::table('test_users');
 
         $user->limit(-1);
         $this->assertEquals(1, $user->getSqlPart('limit'));
@@ -981,7 +981,7 @@ class QueryBuilderTest extends BaseTestCase
     public function testInvalidOffset()
     {
         $this->initFixtures();
-        $user = Qb::table('users');
+        $user = Qb::table('test_users');
 
         $user->offset(-1);
         $this->assertEquals(0, $user->getSqlPart('offset'));
@@ -999,7 +999,7 @@ class QueryBuilderTest extends BaseTestCase
     public function testInvalidPage()
     {
         $this->initFixtures();
-        $user = Qb::table('users');
+        $user = Qb::table('test_users');
 
         // @link http://php.net/manual/en/language.types.integer.php#language.types.integer.casting.from-float
         // (984851907999915581 - 1) * 10
@@ -1015,8 +1015,8 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users')->join('user_groups', 'users.group_id', '=', 'user_groups.id');
-        $this->assertSame('SELECT * FROM `p_users` INNER JOIN `p_user_groups` ON `p_users`.`group_id` = `p_user_groups`.`id`', $qb->getRawSql());
+        $qb = Qb::table('test_users')->join('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
+        $this->assertSame('SELECT * FROM `p_test_users` INNER JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`', $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
@@ -1026,8 +1026,8 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users', 'u')->join('user_groups g', 'u.group_id', '=', 'g.id');
-        $this->assertSame('SELECT * FROM `p_users` `u` INNER JOIN `p_user_groups` `g` ON `u`.`group_id` = `g`.`id`', $qb->getRawSql());
+        $qb = Qb::table('test_users', 'u')->join('test_user_groups g', 'u.group_id', '=', 'g.id');
+        $this->assertSame('SELECT * FROM `p_test_users` `u` INNER JOIN `p_test_user_groups` `g` ON `u`.`group_id` = `g`.`id`', $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
@@ -1037,8 +1037,8 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users')->leftJoin('user_groups', 'users.group_id', '=', 'user_groups.id');
-        $this->assertSame('SELECT * FROM `p_users` LEFT JOIN `p_user_groups` ON `p_users`.`group_id` = `p_user_groups`.`id`', $qb->getRawSql());
+        $qb = Qb::table('test_users')->leftJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
+        $this->assertSame('SELECT * FROM `p_test_users` LEFT JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`', $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
@@ -1049,8 +1049,8 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::table('users')->rightJoin('user_groups', 'users.group_id', '=', 'user_groups.id');
-        $this->assertSame('SELECT * FROM `p_users` RIGHT JOIN `p_user_groups` ON `p_users`.`group_id` = `p_user_groups`.`id`', $qb->getRawSql());
+        $qb = Qb::table('test_users')->rightJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
+        $this->assertSame('SELECT * FROM `p_test_users` RIGHT JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`', $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
