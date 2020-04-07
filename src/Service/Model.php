@@ -386,7 +386,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
             // Deletes the record when it's waiting to remove from database
             if ($this->detached) {
-                $this->db->delete($this->table, array($this->primaryKey => $this->data[$this->primaryKey]));
+                $this->db->delete($this->getTable(), array($this->primaryKey => $this->data[$this->primaryKey]));
                 $this->isDestroyed = true;
                 return $this;
             }
@@ -403,7 +403,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                     unset($this->data[$this->primaryKey]);
                 }
 
-                $this->db->insert($this->table, $this->data);
+                $this->db->insert($this->getTable(), $this->data);
                 $this->isNew = false;
 
                 // Receives primary key value when it's empty
@@ -416,7 +416,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             } else {
                 if ($this->isChanged) {
                     $data = array_intersect_key($this->data, $this->changedData);
-                    $this->db->update($this->table, $data, array(
+                    $this->db->update($this->getTable(), $data, array(
                         $this->primaryKey => $this->data[$this->primaryKey],
                     ));
                 }
@@ -479,7 +479,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     protected function executeDestroy()
     {
-        $this->db->delete($this->table, array($this->primaryKey => $this->data[$this->primaryKey]));
+        $this->db->delete($this->getTable(), array($this->primaryKey => $this->data[$this->primaryKey]));
     }
 
     /**
@@ -2176,6 +2176,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         // Ignore methods in Model::class
         // TODO tags 方法容易冲突，改为其他名称 !method_exists(self::class, $name) &&
+        // testSetInvalidPropertyName
         return method_exists($this, $name);
     }
 

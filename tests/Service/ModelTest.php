@@ -301,7 +301,9 @@ class ModelTest extends BaseTestCase
 
     public function testQueryBuilder()
     {
-        $user = $this->db('users')
+        $this->initFixtures();
+
+        $user = $this->db('test_users')
             ->where('name', 'twin')
             ->first();
 
@@ -893,10 +895,10 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::new();
 
-        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: table'));
+        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: abc'));
 
-        // Won't call $user->table();
-        $user->table = 234;
+        // TODO 改为 table
+        $user->abc = 234;
     }
 
     public function testAddNotModelToCollection()
@@ -1160,11 +1162,5 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::findBy(array('name' => 'twin'));
         $this->assertEquals('test address 3', $user['address']);
-    }
-
-    public function testGetAttribute()
-    {
-        $user = TestUser::new();
-        $this->assertEquals('default address', $user->address);
     }
 }

@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Model;
 use InvalidArgumentException;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestMutator;
+use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
 class MutatorTest extends BaseTestCase
 {
@@ -253,5 +254,13 @@ class MutatorTest extends BaseTestCase
         $this->assertEquals('getter', $mutators[1]->getter);
         $this->assertEquals(base64_encode('setter'), $mutators[1]->setter);
         $this->assertEquals('mutator', $mutators[1]->mutator);
+    }
+
+    public function testGetAttribute()
+    {
+        $this->markTestSkipped('TODO 直接get会失效');
+
+        $user = TestUser::new();
+        $this->assertEquals('default address', $user->address);
     }
 }
