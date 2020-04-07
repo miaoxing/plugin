@@ -811,7 +811,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $this->db->batchInsert('users', [
+        $this->db->batchInsert('test_users', [
             [
                 'group_id' => '1',
                 'name' => 'twin',
@@ -1054,5 +1054,108 @@ class QueryBuilderTest extends BaseTestCase
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
+    }
+
+    public function testCache()
+    {
+        $this->initFixtures();
+
+        $getUser = static function () {
+            return Qb::table('test_users')->cache(600)->where('id', 1)->first();
+        };
+
+        $user = $getUser();
+        $this->assertEquals('twin', $user['name']);
+
+        $rows = Qb::table('test_users')->where('name', 'twin')->update(['name' => 'twin2']);
+        $this->assertSame(1, $rows);
+
+        $user = $getUser();
+        $this->assertEquals('twin', $user['name']);
+
+        Qb::table('test_users')->clearTagCache();
+
+        $user = $getUser();
+        $this->assertEquals('twin2', $user['name']);
+
+        wei()->cache->clear();
+    }
+
+    public function testCacheWithJoin()
+    {
+        $this->markTestSkipped('todo join');
+
+        $this->initFixtures();
+
+        $user = $this->db('users')
+            ->select('prefix_member.*')
+            ->leftJoin('prefix_member_group', 'prefix_member.group_id = prefix_member_group.id')
+            ->where('prefix_member.id = 1')
+            ->tags()
+            ->cache();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        TestUser::where('id = 1')->update("name = 'twin2'");
+
+        // Fetch from cache
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        // Clear cache
+        wei()->tagCache('prefix_member')->clear();
+        wei()->tagCache('prefix_member', 'prefix_member_group')->reload();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin2', $data['name']);
+    }
+
+    public function testCustomCacheTags()
+    {
+        $this->initFixtures();
+
+        $user = Qb::table('test_users')
+            ->select('test_users.*')
+            ->leftJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id')
+            ->where('test_users.id', 1)
+            ->tags(array('users', 'user_group'))
+            ->cache();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        Qb::table('test_users')->where('id', 1)->update(['name' => 'twin2']);
+
+        // Fetch from cache
+        $data = $user->fetch();
+        $this->assertEquals('twin', $data['name']);
+
+        // Clear cache
+        wei()->tagCache('users')->clear();
+        wei()->tagCache('users', 'user_group')->reload();
+
+        // Fetch from db
+        $data = $user->fetch();
+        $this->assertEquals('twin2', $data['name']);
+
+        wei()->cache->clear();
+    }
+
+    public function testCustomCacheKey()
+    {
+        $this->initFixtures();
+
+        $user = Qb::table('test_users')->cache()->setCacheKey('member-1')->tags(false)->where('id', 1)->first();
+
+        $this->assertEquals(1, $user['id']);
+
+        $cacheData = wei()->cache->get('member-1');
+        $this->assertEquals('1', $cacheData[0]['id']);
+
+        wei()->cache->clear();
     }
 }
