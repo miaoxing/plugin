@@ -21,6 +21,7 @@ class MutatorTest extends BaseTestCase
             ->string('getter')
             ->string('setter')
             ->string('mutator')
+            ->string('default_value')
             ->exec();
 
         wei()->db->batchInsert($table, [
@@ -256,11 +257,9 @@ class MutatorTest extends BaseTestCase
         $this->assertEquals('mutator', $mutators[1]->mutator);
     }
 
-    public function testGetAttribute()
+    public function testNewModelCallGetAttribute()
     {
-        $this->markTestSkipped('TODO 直接get会失效');
-
-        $user = TestUser::new();
-        $this->assertEquals('default address', $user->address);
+        $mutator = TestMutator::new();
+        $this->assertEquals('default value', $mutator->defaultValue);
     }
 }

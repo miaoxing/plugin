@@ -176,6 +176,15 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         'datetime' => '0000-00-00 00:00:00',
     ];
 
+    /**
+     * 数组来源
+     *
+     * php：数据经过代码处理，例如默认值
+     * db：数据来自数据库，是一个未解码/未转换类型的字符串。如果经过处理，则变成php
+     * user：数据来自用户设置
+     *
+     * @var array
+     */
     protected $dataSources = [
         '*' => 'php',
     ];
@@ -2004,6 +2013,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         $source = $this->getDataSource($name);
         if ($source === 'php') {
+            if ($this->isNew()) {
+                // TODO 整理
+                // 如果是新数据，进行转换
+                $this->data[$name] = $this->getGetValue($name, $value);
+            }
             // TODO 不返回 value,返回 $this->data 才有ref
             return $this->data[$name];
         }

@@ -8,6 +8,7 @@ use Miaoxing\Plugin\Service\Model;
  * @property string $setter
  * @property string $getter
  * @property string $mutator
+ * @property string $defaultValue
  */
 class TestMutator extends Model
 {
@@ -29,5 +30,10 @@ class TestMutator extends Model
     protected function setMutatorAttribute($value)
     {
         $this->data['mutator'] = base64_encode($value);
+    }
+
+    protected function getDefaultValueAttribute()
+    {
+        return $this->data['default_value'] ?: 'default value';
     }
 }
