@@ -2,8 +2,12 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Services\Service\StaticTrait;
+
 class Event extends \Wei\Event
 {
+    use StaticTrait;
+
     /**
      * @param string $name
      * @param array $args
