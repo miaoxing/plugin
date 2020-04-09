@@ -20,6 +20,30 @@ class AppModel extends Model
 {
 }
 
+class Event extends \Wei\Event
+{
+    /**
+     * @param string $name
+     * @param array $args
+     * @param bool $halt
+     * @return array|mixed
+     * @see Event::trig
+     */
+    public function trig($name, $args = [], $halt = false)
+    {
+    }
+
+    /**
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     * @see Event::trigUtil
+     */
+    public function trigUtil($name, $args = [])
+    {
+    }
+}
+
 class Model extends QueryBuilder
 {
     /**
