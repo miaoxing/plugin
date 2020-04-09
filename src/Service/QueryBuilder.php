@@ -58,7 +58,7 @@ class QueryBuilder extends Base
     protected $primaryKey = 'id';
 
     /**
-     * @var string|callable
+     * @var callable
      */
     protected $identifierConverter = [self::class, 'snake'];
 
@@ -1439,7 +1439,7 @@ class QueryBuilder extends Base
     }
 
     /**
-     * @return callable|string
+     * @return callable
      */
     public function getIdentifierConverter()
     {
