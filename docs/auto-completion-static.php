@@ -9,7 +9,7 @@ class App extends \Wei\App
      *
      * @param string $domain
      * @return string|false
-     * @api
+     * @see App::getIdByDomain
      */
     public static function getIdByDomain($domain)
     {
@@ -26,7 +26,7 @@ class Model extends QueryBuilder
      * Return the record table name
      *
      * @return string
-     * @api
+     * @see Model::getTable
      */
     public static function getTable()
     {
@@ -37,7 +37,7 @@ class Model extends QueryBuilder
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @api
+     * @see Model::fromArray
      */
     public static function fromArray($data)
     {
@@ -48,7 +48,7 @@ class Model extends QueryBuilder
      *
      * @param array $data
      * @return $this
-     * @api
+     * @see Model::save
      */
     public static function save($data = [])
     {
@@ -59,7 +59,7 @@ class Model extends QueryBuilder
      *
      * @param string|int $id
      * @return $this
-     * @api
+     * @see Model::destroy
      */
     public static function destroy($id = null)
     {
@@ -72,7 +72,7 @@ class Model extends QueryBuilder
      * @param mixed $value
      * @param bool $throwException
      * @return $this
-     * @api
+     * @see Model::set
      */
     public static function set($name, $value = null, $throwException = true)
     {
@@ -83,7 +83,7 @@ class Model extends QueryBuilder
      *
      * @param int|string $id
      * @return $this|null
-     * @api
+     * @see Model::find
      */
     public static function find($id)
     {
@@ -95,7 +95,7 @@ class Model extends QueryBuilder
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @api
+     * @see Model::findOrFail
      */
     public static function findOrFail($id)
     {
@@ -107,7 +107,7 @@ class Model extends QueryBuilder
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @api
+     * @see Model::findOrInit
      */
     public static function findOrInit($id = null, $data = [])
     {
@@ -119,7 +119,7 @@ class Model extends QueryBuilder
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @api
+     * @see Model::findOrCreate
      */
     public static function findOrCreate($id, $data = [])
     {
@@ -130,7 +130,7 @@ class Model extends QueryBuilder
      *
      * @param array $ids
      * @return $this|$this[]
-     * @api
+     * @see Model::findAll
      */
     public static function findAll($ids)
     {
@@ -141,7 +141,7 @@ class Model extends QueryBuilder
      * @param null $operator
      * @param null $value
      * @return $this|null
-     * @api
+     * @see Model::findBy
      */
     public static function findBy($column, $operator = null, $value = null)
     {
@@ -152,7 +152,7 @@ class Model extends QueryBuilder
      * @param null $operator
      * @param null $value
      * @return $this|$this[]
-     * @api
+     * @see Model::findAllBy
      */
     public static function findAllBy($column, $operator = null, $value = null)
     {
@@ -162,7 +162,7 @@ class Model extends QueryBuilder
      * @param $attributes
      * @param array $data
      * @return $this
-     * @api
+     * @see Model::findOrInitBy
      */
     public static function findOrInitBy($attributes, $data = [])
     {
@@ -176,7 +176,7 @@ class Model extends QueryBuilder
      * @param mixed $value
      * @return $this
      * @throws \Exception
-     * @api
+     * @see Model::findByOrFail
      */
     public static function findByOrFail($column, $operator = null, $value = null)
     {
@@ -186,7 +186,7 @@ class Model extends QueryBuilder
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @api
+     * @see Model::first
      */
     public static function first()
     {
@@ -194,7 +194,7 @@ class Model extends QueryBuilder
 
     /**
      * @return $this
-     * @api
+     * @see Model::all
      */
     public static function all()
     {
@@ -203,7 +203,7 @@ class Model extends QueryBuilder
     /**
      * @param string $column
      * @return $this
-     * @api
+     * @see Model::indexBy
      */
     public static function indexBy($column)
     {
@@ -212,7 +212,7 @@ class Model extends QueryBuilder
     /**
      * @param array|string $columns
      * @return $this
-     * @api
+     * @see Model::like
      */
     public static function like($columns)
     {
@@ -221,7 +221,7 @@ class Model extends QueryBuilder
     /**
      * @param string|array|true $scopes
      * @return $this
-     * @api
+     * @see Model::unscoped
      */
     public static function unscoped($scopes = [])
     {
@@ -238,7 +238,7 @@ class QueryBuilder extends \Wei\Base
      * Return the record table name
      *
      * @return string
-     * @api
+     * @see QueryBuilder::getTable
      */
     public static function getTable()
     {
@@ -248,7 +248,7 @@ class QueryBuilder extends \Wei\Base
      * Returns the name of fields of current table
      *
      * @return array
-     * @api
+     * @see QueryBuilder::getFields
      */
     public static function getFields()
     {
@@ -259,7 +259,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param mixed $conditions
      * @return array|null
-     * @api
+     * @see QueryBuilder::fetch
      */
     public static function fetch($column = null, $operator = null, $value = null)
     {
@@ -270,7 +270,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param mixed $conditions
      * @return array|false
-     * @api
+     * @see QueryBuilder::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -280,7 +280,7 @@ class QueryBuilder extends \Wei\Base
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return array|null
-     * @api
+     * @see QueryBuilder::first
      */
     public static function first()
     {
@@ -288,7 +288,7 @@ class QueryBuilder extends \Wei\Base
 
     /**
      * @return array|null
-     * @api
+     * @see QueryBuilder::all
      */
     public static function all()
     {
@@ -298,7 +298,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $column
      * @param string|null $index
      * @return array
-     * @api
+     * @see QueryBuilder::pluck
      */
     public static function pluck(string $column, string $index = null)
     {
@@ -308,7 +308,7 @@ class QueryBuilder extends \Wei\Base
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @api
+     * @see QueryBuilder::chunk
      */
     public static function chunk(int $count, callable $callback)
     {
@@ -319,7 +319,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param string $column
      * @return int
-     * @api
+     * @see QueryBuilder::cnt
      */
     public static function cnt($column = '*')
     {
@@ -330,7 +330,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param array $set
      * @return int
-     * @api
+     * @see QueryBuilder::update
      */
     public static function update(array $set = [])
     {
@@ -341,7 +341,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param mixed $conditions
      * @return mixed
-     * @api
+     * @see QueryBuilder::delete
      */
     public static function delete($column = null, $operator = null, $value = null)
     {
@@ -352,7 +352,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param integer $offset The first result to return
      * @return $this
-     * @api
+     * @see QueryBuilder::offset
      */
     public static function offset($offset)
     {
@@ -363,7 +363,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param integer $limit The maximum number of results to retrieve
      * @return $this
-     * @api
+     * @see QueryBuilder::limit
      */
     public static function limit($limit)
     {
@@ -374,7 +374,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param int $page The page number
      * @return $this
-     * @api
+     * @see QueryBuilder::page
      */
     public static function page($page)
     {
@@ -386,7 +386,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param string|array $columns The selection expressions.
      * @return $this
-     * @api
+     * @see QueryBuilder::select
      */
     public static function select($columns = ['*']): self
     {
@@ -395,7 +395,7 @@ class QueryBuilder extends \Wei\Base
     /**
      * @param $columns
      * @return $this
-     * @api
+     * @see QueryBuilder::selectDistinct
      */
     public static function selectDistinct($columns)
     {
@@ -404,7 +404,7 @@ class QueryBuilder extends \Wei\Base
     /**
      * @param string $expression
      * @return $this
-     * @api
+     * @see QueryBuilder::selectRaw
      */
     public static function selectRaw($expression)
     {
@@ -416,7 +416,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param string|array $columns
      * @return $this
-     * @api
+     * @see QueryBuilder::selectExcept
      */
     public static function selectExcept($columns)
     {
@@ -428,7 +428,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @api
+     * @see QueryBuilder::from
      */
     public static function from($table, $alias = null): self
     {
@@ -437,7 +437,7 @@ class QueryBuilder extends \Wei\Base
     /**
      * @param string $table
      * @return $this
-     * @api
+     * @see QueryBuilder::table
      */
     public static function table(string $table, $alias = null): self
     {
@@ -452,7 +452,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $second
      * @param string $type
      * @return $this
-     * @api
+     * @see QueryBuilder::join
      */
     public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -467,7 +467,7 @@ class QueryBuilder extends \Wei\Base
      * @param string|null $second
      * @param string $type
      * @return $this
-     * @api
+     * @see QueryBuilder::innerJoin
      */
     public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -481,7 +481,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @api
+     * @see QueryBuilder::leftJoin
      */
     public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -495,7 +495,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @api
+     * @see QueryBuilder::rightJoin
      */
     public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -516,7 +516,7 @@ class QueryBuilder extends \Wei\Base
      * @param null $operator
      * @param null $value
      * @return $this
-     * @api
+     * @see QueryBuilder::where
      */
     public static function where($column = null, $operator = null, $value = null)
     {
@@ -526,7 +526,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $expression
      * @param array $params
      * @return $this
-     * @api
+     * @see QueryBuilder::whereRaw
      */
     public static function whereRaw($expression, $params = [])
     {
@@ -536,7 +536,7 @@ class QueryBuilder extends \Wei\Base
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @see QueryBuilder::whereBetween
      */
     public static function whereBetween($column, array $params)
     {
@@ -546,7 +546,7 @@ class QueryBuilder extends \Wei\Base
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @see QueryBuilder::whereNotBetween
      */
     public static function whereNotBetween($column, array $params)
     {
@@ -556,7 +556,7 @@ class QueryBuilder extends \Wei\Base
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @see QueryBuilder::whereIn
      */
     public static function whereIn($column, array $params)
     {
@@ -566,7 +566,7 @@ class QueryBuilder extends \Wei\Base
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @see QueryBuilder::whereNotIn
      */
     public static function whereNotIn($column, array $params)
     {
@@ -575,7 +575,7 @@ class QueryBuilder extends \Wei\Base
     /**
      * @param $column
      * @return $this
-     * @api
+     * @see QueryBuilder::whereNull
      */
     public static function whereNull($column)
     {
@@ -584,7 +584,7 @@ class QueryBuilder extends \Wei\Base
     /**
      * @param $column
      * @return $this
-     * @api
+     * @see QueryBuilder::whereNotNULL
      */
     public static function whereNotNULL($column)
     {
@@ -595,7 +595,7 @@ class QueryBuilder extends \Wei\Base
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @see QueryBuilder::whereDate
      */
     public static function whereDate($column, $opOrValue, $value = null)
     {
@@ -606,7 +606,7 @@ class QueryBuilder extends \Wei\Base
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @see QueryBuilder::whereMonth
      */
     public static function whereMonth($column, $opOrValue, $value = null)
     {
@@ -617,7 +617,7 @@ class QueryBuilder extends \Wei\Base
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @see QueryBuilder::whereDay
      */
     public static function whereDay($column, $opOrValue, $value = null)
     {
@@ -628,7 +628,7 @@ class QueryBuilder extends \Wei\Base
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @see QueryBuilder::whereYear
      */
     public static function whereYear($column, $opOrValue, $value = null)
     {
@@ -639,7 +639,7 @@ class QueryBuilder extends \Wei\Base
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @see QueryBuilder::whereTime
      */
     public static function whereTime($column, $opOrValue, $value = null)
     {
@@ -650,7 +650,7 @@ class QueryBuilder extends \Wei\Base
      * @param $opOrColumn2
      * @param null $column2
      * @return $this
-     * @api
+     * @see QueryBuilder::whereColumn
      */
     public static function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -663,7 +663,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $value
      * @param string $condition
      * @return $this
-     * @api
+     * @see QueryBuilder::whereContains
      */
     public static function whereContains($column, $value, string $condition = 'AND')
     {
@@ -674,7 +674,7 @@ class QueryBuilder extends \Wei\Base
      * @param $value
      * @param string $condition
      * @return $this
-     * @api
+     * @see QueryBuilder::whereNotContains
      */
     public static function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -686,7 +686,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param mixed $column The grouping column.
      * @return $this
-     * @api
+     * @see QueryBuilder::groupBy
      */
     public static function groupBy($column)
     {
@@ -700,7 +700,7 @@ class QueryBuilder extends \Wei\Base
      * @param array $params The condition parameters
      * @param array $types The parameter types
      * @return $this
-     * @api
+     * @see QueryBuilder::having
      */
     public static function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -713,7 +713,7 @@ class QueryBuilder extends \Wei\Base
      * @param string $column The ordering expression.
      * @param string $order The ordering direction.
      * @return $this
-     * @api
+     * @see QueryBuilder::orderBy
      */
     public static function orderBy($column, $order = 'ASC')
     {
@@ -724,7 +724,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param string $field The name of field
      * @return $this
-     * @api
+     * @see QueryBuilder::desc
      */
     public static function desc($field)
     {
@@ -735,7 +735,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param string $field The name of field
      * @return $this
-     * @api
+     * @see QueryBuilder::asc
      */
     public static function asc($field)
     {
@@ -746,7 +746,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param string $column
      * @return $this
-     * @api
+     * @see QueryBuilder::indexBy
      */
     public static function indexBy($column)
     {
@@ -757,7 +757,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param string $name
      * @return $this
-     * @api
+     * @see QueryBuilder::resetSqlPart
      */
     public static function resetSqlPart($name)
     {
@@ -765,7 +765,7 @@ class QueryBuilder extends \Wei\Base
 
     /**
      * @return $this
-     * @api
+     * @see QueryBuilder::forUpdate
      */
     public static function forUpdate()
     {
@@ -773,7 +773,7 @@ class QueryBuilder extends \Wei\Base
 
     /**
      * @return $this
-     * @api
+     * @see QueryBuilder::forShare
      */
     public static function forShare()
     {
@@ -782,7 +782,7 @@ class QueryBuilder extends \Wei\Base
     /**
      * @param string $lock
      * @return $this
-     * @api
+     * @see QueryBuilder::lock
      */
     public static function lock($lock)
     {
@@ -793,7 +793,7 @@ class QueryBuilder extends \Wei\Base
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @api
+     * @see QueryBuilder::when
      */
     public static function when($value, $callback, callable $default = null)
     {
@@ -804,7 +804,7 @@ class QueryBuilder extends \Wei\Base
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @api
+     * @see QueryBuilder::unless
      */
     public static function unless($value, callable $callback, callable $default = null)
     {
@@ -815,7 +815,7 @@ class QueryBuilder extends \Wei\Base
      *
      * @param int|null|false $seconds
      * @return $this
-     * @api
+     * @see QueryBuilder::cache
      */
     public static function cache($seconds = null)
     {
@@ -830,7 +830,7 @@ class User extends UserModel
 {
     /**
      * @return int|null
-     * @api
+     * @see User::id
      */
     public static function id()
     {
@@ -838,7 +838,7 @@ class User extends UserModel
 
     /**
      * @return UserModel
-     * @api
+     * @see User::cur
      */
     public static function cur()
     {
@@ -848,7 +848,7 @@ class User extends UserModel
      * 判断用户是否登录
      *
      * @return bool
-     * @api
+     * @see User::isLogin
      */
     public static function isLogin()
     {
@@ -859,7 +859,7 @@ class User extends UserModel
      *
      * @param mixed $data
      * @return array
-     * @api
+     * @see User::login
      */
     public static function login($data)
     {
@@ -870,7 +870,7 @@ class User extends UserModel
      *
      * @param int $id
      * @return array
-     * @api
+     * @see User::loginById
      */
     public static function loginById($id)
     {
@@ -882,7 +882,7 @@ class User extends UserModel
      * @param mixed $conditions
      * @param array $data
      * @return $this
-     * @api
+     * @see User::loginBy
      */
     public static function loginBy($conditions, $data = [])
     {
@@ -893,7 +893,7 @@ class User extends UserModel
      *
      * @param UserModel $user
      * @return array
-     * @api
+     * @see User::loginByModel
      */
     public static function loginByModel(UserModel $user)
     {
@@ -903,7 +903,7 @@ class User extends UserModel
      * 销毁用户会话,退出登录
      *
      * @return $this
-     * @api
+     * @see User::logout
      */
     public static function logout()
     {
@@ -914,7 +914,7 @@ class User extends UserModel
      *
      * @param UserModel $user
      * @return $this
-     * @api
+     * @see User::refresh
      */
     public static function refresh(UserModel $user)
     {
@@ -928,7 +928,7 @@ class UserModel extends Model
      *
      * @param string $mobile
      * @return array
-     * @api
+     * @see UserModel::checkMobile
      */
     public static function checkMobile(string $mobile)
     {
@@ -939,7 +939,7 @@ class UserModel extends Model
      *
      * @param array|\ArrayAccess $data
      * @return array
-     * @api
+     * @see UserModel::bindMobile
      */
     public static function bindMobile($data)
     {
@@ -950,7 +950,7 @@ class UserModel extends Model
      *
      * @param array|\ArrayAccess $data
      * @return array
-     * @api
+     * @see UserModel::updateData
      */
     public static function updateData($data)
     {
@@ -959,7 +959,7 @@ class UserModel extends Model
     /**
      * @param array|\ArrayAccess $req
      * @return array
-     * @api
+     * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
     {
@@ -970,7 +970,7 @@ class UserModel extends Model
      *
      * @param string $permissionId
      * @return bool
-     * @api
+     * @see UserModel::can
      */
     public static function can($permissionId)
     {

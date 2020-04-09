@@ -194,8 +194,9 @@ PHP;
 
             $methods = [];
             $staticMethods = [];
+            $see = '@see ' . $refClass->getShortName() . '::';
             foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
-                // NOTE: 如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
+                // NOTE: 单文件下，如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
                 if ($this->excludeParentMethods && $refMethod->getDeclaringClass()->getName() !== $serviceClass) {
                     continue;
                 }
@@ -203,6 +204,8 @@ PHP;
                 if ($this->isApi($refMethod)) {
                     // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
                     $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
+
+                    $method->setComment(str_replace('@api', $see . $refMethod->getName(), $method->getComment()));
 
                     $methods[] = $method;
                     $staticMethods[] = (clone $method)->setStatic();
