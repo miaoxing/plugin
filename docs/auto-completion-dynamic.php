@@ -11,7 +11,7 @@ class App extends \Wei\App
      * @return string|false
      * @api
      */
-    public static function getIdByDomain($domain)
+    public function getIdByDomain($domain)
     {
     }
 }
@@ -28,7 +28,7 @@ class Model extends QueryBuilder
      * @return string
      * @api
      */
-    public static function getTable()
+    public function getTable()
     {
     }
 
@@ -39,7 +39,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function fromArray($data)
+    public function fromArray($data)
     {
     }
 
@@ -50,7 +50,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function save($data = [])
+    public function save($data = [])
     {
     }
 
@@ -61,7 +61,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function destroy($id = null)
+    public function destroy($id = null)
     {
     }
 
@@ -74,7 +74,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function set($name, $value = null, $throwException = true)
+    public function set($name, $value = null, $throwException = true)
     {
     }
 
@@ -85,7 +85,7 @@ class Model extends QueryBuilder
      * @return $this|null
      * @api
      */
-    public static function find($id)
+    public function find($id)
     {
     }
 
@@ -97,7 +97,7 @@ class Model extends QueryBuilder
      * @throws \Exception
      * @api
      */
-    public static function findOrFail($id)
+    public function findOrFail($id)
     {
     }
 
@@ -109,7 +109,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function findOrInit($id = null, $data = [])
+    public function findOrInit($id = null, $data = [])
     {
     }
 
@@ -121,7 +121,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function findOrCreate($id, $data = [])
+    public function findOrCreate($id, $data = [])
     {
     }
 
@@ -132,7 +132,7 @@ class Model extends QueryBuilder
      * @return $this|$this[]
      * @api
      */
-    public static function findAll($ids)
+    public function findAll($ids)
     {
     }
 
@@ -143,7 +143,7 @@ class Model extends QueryBuilder
      * @return $this|null
      * @api
      */
-    public static function findBy($column, $operator = null, $value = null)
+    public function findBy($column, $operator = null, $value = null)
     {
     }
 
@@ -154,7 +154,7 @@ class Model extends QueryBuilder
      * @return $this|$this[]
      * @api
      */
-    public static function findAllBy($column, $operator = null, $value = null)
+    public function findAllBy($column, $operator = null, $value = null)
     {
     }
 
@@ -164,7 +164,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function findOrInitBy($attributes, $data = [])
+    public function findOrInitBy($attributes, $data = [])
     {
     }
 
@@ -178,7 +178,7 @@ class Model extends QueryBuilder
      * @throws \Exception
      * @api
      */
-    public static function findByOrFail($column, $operator = null, $value = null)
+    public function findByOrFail($column, $operator = null, $value = null)
     {
     }
 
@@ -188,7 +188,7 @@ class Model extends QueryBuilder
      * @return $this|null
      * @api
      */
-    public static function first()
+    public function first()
     {
     }
 
@@ -196,7 +196,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function all()
+    public function all()
     {
     }
 
@@ -205,7 +205,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function indexBy($column)
+    public function indexBy($column)
     {
     }
 
@@ -214,7 +214,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function like($columns)
+    public function like($columns)
     {
     }
 
@@ -223,7 +223,7 @@ class Model extends QueryBuilder
      * @return $this
      * @api
      */
-    public static function unscoped($scopes = [])
+    public function unscoped($scopes = [])
     {
     }
 }
@@ -240,7 +240,7 @@ class QueryBuilder extends \Wei\Base
      * @return string
      * @api
      */
-    public static function getTable()
+    public function getTable()
     {
     }
 
@@ -250,7 +250,7 @@ class QueryBuilder extends \Wei\Base
      * @return array
      * @api
      */
-    public static function getFields()
+    public function getFields()
     {
     }
 
@@ -261,7 +261,7 @@ class QueryBuilder extends \Wei\Base
      * @return array|null
      * @api
      */
-    public static function fetch($column = null, $operator = null, $value = null)
+    public function fetch($column = null, $operator = null, $value = null)
     {
     }
 
@@ -272,7 +272,7 @@ class QueryBuilder extends \Wei\Base
      * @return array|false
      * @api
      */
-    public static function fetchAll($column = null, $operator = null, $value = null)
+    public function fetchAll($column = null, $operator = null, $value = null)
     {
     }
 
@@ -282,7 +282,7 @@ class QueryBuilder extends \Wei\Base
      * @return array|null
      * @api
      */
-    public static function first()
+    public function first()
     {
     }
 
@@ -290,7 +290,7 @@ class QueryBuilder extends \Wei\Base
      * @return array|null
      * @api
      */
-    public static function all()
+    public function all()
     {
     }
 
@@ -300,7 +300,7 @@ class QueryBuilder extends \Wei\Base
      * @return array
      * @api
      */
-    public static function pluck(string $column, string $index = null)
+    public function pluck(string $column, string $index = null)
     {
     }
 
@@ -310,7 +310,7 @@ class QueryBuilder extends \Wei\Base
      * @return bool
      * @api
      */
-    public static function chunk(int $count, callable $callback)
+    public function chunk(int $count, callable $callback)
     {
     }
 
@@ -321,7 +321,7 @@ class QueryBuilder extends \Wei\Base
      * @return int
      * @api
      */
-    public static function cnt($column = '*')
+    public function cnt($column = '*')
     {
     }
 
@@ -332,7 +332,7 @@ class QueryBuilder extends \Wei\Base
      * @return int
      * @api
      */
-    public static function update(array $set = [])
+    public function update(array $set = [])
     {
     }
 
@@ -343,7 +343,7 @@ class QueryBuilder extends \Wei\Base
      * @return mixed
      * @api
      */
-    public static function delete($column = null, $operator = null, $value = null)
+    public function delete($column = null, $operator = null, $value = null)
     {
     }
 
@@ -354,7 +354,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function offset($offset)
+    public function offset($offset)
     {
     }
 
@@ -365,7 +365,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function limit($limit)
+    public function limit($limit)
     {
     }
 
@@ -376,7 +376,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function page($page)
+    public function page($page)
     {
     }
 
@@ -388,7 +388,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function select($columns = ['*']): self
+    public function select($columns = ['*']): self
     {
     }
 
@@ -397,7 +397,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function selectDistinct($columns)
+    public function selectDistinct($columns)
     {
     }
 
@@ -406,7 +406,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function selectRaw($expression)
+    public function selectRaw($expression)
     {
     }
 
@@ -418,7 +418,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function selectExcept($columns)
+    public function selectExcept($columns)
     {
     }
 
@@ -430,7 +430,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function from($table, $alias = null): self
+    public function from($table, $alias = null): self
     {
     }
 
@@ -439,7 +439,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function table(string $table, $alias = null): self
+    public function table(string $table, $alias = null): self
     {
     }
 
@@ -454,7 +454,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
+    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
     }
 
@@ -469,7 +469,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
+    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -483,7 +483,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
+    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -497,7 +497,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
+    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
     }
 
@@ -518,7 +518,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function where($column = null, $operator = null, $value = null)
+    public function where($column = null, $operator = null, $value = null)
     {
     }
 
@@ -528,7 +528,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereRaw($expression, $params = [])
+    public function whereRaw($expression, $params = [])
     {
     }
 
@@ -538,7 +538,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereBetween($column, array $params)
+    public function whereBetween($column, array $params)
     {
     }
 
@@ -548,7 +548,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereNotBetween($column, array $params)
+    public function whereNotBetween($column, array $params)
     {
     }
 
@@ -558,7 +558,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereIn($column, array $params)
+    public function whereIn($column, array $params)
     {
     }
 
@@ -568,7 +568,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereNotIn($column, array $params)
+    public function whereNotIn($column, array $params)
     {
     }
 
@@ -577,7 +577,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereNull($column)
+    public function whereNull($column)
     {
     }
 
@@ -586,18 +586,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereNotNULL($column)
-    {
-    }
-
-    /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
-     * @return $this
-     * @api
-     */
-    public static function whereDate($column, $opOrValue, $value = null)
+    public function whereNotNULL($column)
     {
     }
 
@@ -608,7 +597,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereMonth($column, $opOrValue, $value = null)
+    public function whereDate($column, $opOrValue, $value = null)
     {
     }
 
@@ -619,7 +608,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereDay($column, $opOrValue, $value = null)
+    public function whereMonth($column, $opOrValue, $value = null)
     {
     }
 
@@ -630,7 +619,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereYear($column, $opOrValue, $value = null)
+    public function whereDay($column, $opOrValue, $value = null)
     {
     }
 
@@ -641,7 +630,18 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereTime($column, $opOrValue, $value = null)
+    public function whereYear($column, $opOrValue, $value = null)
+    {
+    }
+
+    /**
+     * @param $column
+     * @param $opOrValue
+     * @param null $value
+     * @return $this
+     * @api
+     */
+    public function whereTime($column, $opOrValue, $value = null)
     {
     }
 
@@ -652,7 +652,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereColumn($column, $opOrColumn2, $column2 = null)
+    public function whereColumn($column, $opOrColumn2, $column2 = null)
     {
     }
 
@@ -665,7 +665,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereContains($column, $value, string $condition = 'AND')
+    public function whereContains($column, $value, string $condition = 'AND')
     {
     }
 
@@ -676,7 +676,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function whereNotContains($column, $value, string $condition = 'OR')
+    public function whereNotContains($column, $value, string $condition = 'OR')
     {
     }
 
@@ -688,7 +688,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function groupBy($column)
+    public function groupBy($column)
     {
     }
 
@@ -702,7 +702,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function having($column, $operator, $value = null, $condition = 'AND')
+    public function having($column, $operator, $value = null, $condition = 'AND')
     {
     }
 
@@ -715,7 +715,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function orderBy($column, $order = 'ASC')
+    public function orderBy($column, $order = 'ASC')
     {
     }
 
@@ -726,7 +726,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function desc($field)
+    public function desc($field)
     {
     }
 
@@ -737,7 +737,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function asc($field)
+    public function asc($field)
     {
     }
 
@@ -748,7 +748,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function indexBy($column)
+    public function indexBy($column)
     {
     }
 
@@ -759,7 +759,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function resetSqlPart($name)
+    public function resetSqlPart($name)
     {
     }
 
@@ -767,7 +767,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function forUpdate()
+    public function forUpdate()
     {
     }
 
@@ -775,7 +775,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function forShare()
+    public function forShare()
     {
     }
 
@@ -784,7 +784,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function lock($lock)
+    public function lock($lock)
     {
     }
 
@@ -795,7 +795,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function when($value, $callback, callable $default = null)
+    public function when($value, $callback, callable $default = null)
     {
     }
 
@@ -806,7 +806,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function unless($value, callable $callback, callable $default = null)
+    public function unless($value, callable $callback, callable $default = null)
     {
     }
 
@@ -817,7 +817,7 @@ class QueryBuilder extends \Wei\Base
      * @return $this
      * @api
      */
-    public static function cache($seconds = null)
+    public function cache($seconds = null)
     {
     }
 }
@@ -832,7 +832,7 @@ class User extends UserModel
      * @return int|null
      * @api
      */
-    public static function id()
+    public function id()
     {
     }
 
@@ -840,7 +840,7 @@ class User extends UserModel
      * @return UserModel
      * @api
      */
-    public static function cur()
+    public function cur()
     {
     }
 
@@ -850,7 +850,7 @@ class User extends UserModel
      * @return bool
      * @api
      */
-    public static function isLogin()
+    public function isLogin()
     {
     }
 
@@ -861,7 +861,7 @@ class User extends UserModel
      * @return array
      * @api
      */
-    public static function login($data)
+    public function login($data)
     {
     }
 
@@ -872,7 +872,7 @@ class User extends UserModel
      * @return array
      * @api
      */
-    public static function loginById($id)
+    public function loginById($id)
     {
     }
 
@@ -884,7 +884,7 @@ class User extends UserModel
      * @return $this
      * @api
      */
-    public static function loginBy($conditions, $data = [])
+    public function loginBy($conditions, $data = [])
     {
     }
 
@@ -895,7 +895,7 @@ class User extends UserModel
      * @return array
      * @api
      */
-    public static function loginByModel(UserModel $user)
+    public function loginByModel(UserModel $user)
     {
     }
 
@@ -905,7 +905,7 @@ class User extends UserModel
      * @return $this
      * @api
      */
-    public static function logout()
+    public function logout()
     {
     }
 
@@ -916,7 +916,7 @@ class User extends UserModel
      * @return $this
      * @api
      */
-    public static function refresh(UserModel $user)
+    public function refresh(UserModel $user)
     {
     }
 }
@@ -930,7 +930,7 @@ class UserModel extends Model
      * @return array
      * @api
      */
-    public static function checkMobile(string $mobile)
+    public function checkMobile(string $mobile)
     {
     }
 
@@ -941,7 +941,7 @@ class UserModel extends Model
      * @return array
      * @api
      */
-    public static function bindMobile($data)
+    public function bindMobile($data)
     {
     }
 
@@ -952,7 +952,7 @@ class UserModel extends Model
      * @return array
      * @api
      */
-    public static function updateData($data)
+    public function updateData($data)
     {
     }
 
@@ -961,7 +961,7 @@ class UserModel extends Model
      * @return array
      * @api
      */
-    public static function updatePassword($req)
+    public function updatePassword($req)
     {
     }
 
@@ -972,7 +972,7 @@ class UserModel extends Model
      * @return bool
      * @api
      */
-    public static function can($permissionId)
+    public function can($permissionId)
     {
     }
 }

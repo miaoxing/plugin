@@ -13,12 +13,49 @@ use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
+ * 生成自动完成的代码文件
+ *
+ * 可行方案
+ * 1. FILE_MODE_SINGLE + excludeParentMethods=false
+ * 2. FILE_MODE_BY_TYPE + excludeParentMethods=true（推荐，生成的代码少）
+ *
  * @mixin \PluginMixin
  * @mixin \ClassMapMixin
+ * @see StaticCallTest
  */
 class GAutoCompletion extends BaseCommand
 {
+    /**
+     * 所有的类生成一个文件
+     */
+    public const FILE_MODE_SINGLE = 1;
+
+    /**
+     * 生成两个文件，一个存放静态方法，一个存放动态方法
+     */
+    public const FILE_MODE_BY_TYPE = 2;
+
+    /**
+     * 每个类生成一个文件
+     */
+    public const FILE_MODE_BY_CLASS = 3;
+
     protected static $defaultName = 'g:auto-completion';
+
+    /**
+     * @var bool
+     */
+    protected $generateEmptyClass = true;
+
+    /**
+     * @var bool
+     */
+    protected $excludeParentMethods = true;
+
+    /**
+     * @var int
+     */
+    protected $fileMode = self::FILE_MODE_BY_TYPE;
 
     /**
      * @inheritDoc
@@ -138,8 +175,9 @@ PHP;
     {
         $file = new PhpFile();
         $printer = new PsrPrinter;
-        $content = '';
-        $dynamic = '';
+
+        $statics = [];
+        $dynamics = [];
 
         foreach ($services as $name => $serviceClass) {
             $refClass = new ReflectionClass($serviceClass);
@@ -148,7 +186,9 @@ PHP;
 
             $class = new ClassType($refClass->getShortName());
             // NOTE: 如果增加了继承，Service目录之外的子类没有代码提示（如果还无效不断重启直到生效）
-            //$class->addExtend($refClass->getParentClass()->getName());
+            if ($this->excludeParentMethods) {
+                $class->addExtend($refClass->getParentClass()->getName());
+            }
 
             $staticClass = clone $class;
 
@@ -156,9 +196,9 @@ PHP;
             $staticMethods = [];
             foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
                 // NOTE: 如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
-                /*if ($refMethod->getDeclaringClass()->getName() !== $serviceClass) {
+                if ($this->excludeParentMethods && $refMethod->getDeclaringClass()->getName() !== $serviceClass) {
                     continue;
-                }*/
+                }
 
                 if ($this->isApi($refMethod)) {
                     // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
@@ -168,33 +208,48 @@ PHP;
                     $staticMethods[] = (clone $method)->setStatic();
                 }
             }
-            $class->setMethods($methods);
-            $staticClass->setMethods($staticMethods);
 
-            if ($methods) {
-                if ($content) {
-                    $content .= "\n";
-                }
-                $content .= $printer->printClass($class, $namespace);
+            if ($this->generateEmptyClass || $staticMethods) {
+                $staticClass->setMethods($staticMethods);
+                $statics[$name] = $printer->printClass($staticClass, $namespace);
             }
-            if ($staticMethods) {
-                $content .= "\nif (0) {\n" . $this->intent(rtrim($printer->printClass($staticClass,
-                        $namespace))) . "\n}\n";
+            if ($this->generateEmptyClass || $methods) {
                 // NOTE: 分多个文件反而出现第二，三级的子类(例如AppModel)没有代码提示，魔术方法识别失败等问题
-                //$dynamic .= $printer->printClass($staticClass, $namespace);
+                $class->setMethods($methods);
+                $dynamics[$name] = $printer->printClass($class, $namespace);
             }
         }
 
-        if (!$content && !$dynamic) {
+        if (!$statics && !$dynamics) {
             $this->suc('API method not found!');
             return;
         }
 
-        $content = $printer->printFile($file) . "\n" . $content;
-        //$dynamic = $printer->printFile($file) . $dynamic;
+        $header = $printer->printFile($file) . "\n";
+        switch ($this->fileMode) {
+            case self::FILE_MODE_SINGLE:
+                $content = $header . implode("\n", $statics);
+                $content .= "\nif (0) {\n" . $this->intent(rtrim(implode("\n", $dynamics))) . "\n}\n";
+                $this->createFile($path . '/docs/auto-completion-static.php', $content);
+                break;
 
-        $this->createFile($path . '/docs/auto-completion-static.php', $content);
-        //$this->createFile($plugin->getBasePath() . '/docs/auto-completion-dynamic.php', $dynamic);
+            case self::FILE_MODE_BY_TYPE:
+                $statics = $header . implode("\n", $statics);
+                $this->createFile($path . '/docs/auto-completion-static.php', $statics);
+
+                $dynamics = $header . implode("\n", $dynamics);
+                $this->createFile($path . '/docs/auto-completion-dynamic.php', $dynamics);
+                break;
+
+            case self::FILE_MODE_BY_CLASS:
+                foreach ($statics as $name => $content) {
+                    $this->createFile($path . '/docs/auto-completion-static-' . $name . '.php', $header . $content);
+                }
+                foreach ($dynamics as $name => $content) {
+                    $this->createFile($path . '/docs/auto-completion-dynamic-' . $name . '.php', $header . $content);
+                }
+                break;
+        }
     }
 
     /**
