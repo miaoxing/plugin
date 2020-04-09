@@ -395,15 +395,20 @@ class QueryBuilder extends Base
     /**
      * Execute a update query with specified data
      *
-     * @param array $set
+     * @param array|string $set
+     * @param null $value
      * @return int
      * @api
      */
-    protected function update(array $set = [])
+    protected function update($set = [], $value = null)
     {
+        if (func_num_args() === 2) {
+            $set = [$set => $value];
+        }
+
         $params = [];
         foreach ($set as $field => $param) {
-            $this->add('set', $field . ' = ?', true);
+            $this->add('set', $field, true);
             $params[] = $param;
         }
         $this->params['set'][] = array_merge($this->params['set'], $params);
@@ -1239,8 +1244,6 @@ class QueryBuilder extends Base
      */
     public function getSql()
     {
-        //$this->convertIdentifier = [$this, 'camel'];
-
         if ($this->sql !== null && $this->state === self::STATE_CLEAN) {
             return $this->sql;
         }

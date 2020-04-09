@@ -328,11 +328,12 @@ class QueryBuilder extends \Wei\Base
     /**
      * Execute a update query with specified data
      *
-     * @param array $set
+     * @param array|string $set
+     * @param null $value
      * @return int
      * @see QueryBuilder::update
      */
-    public static function update(array $set = [])
+    public static function update($set = [], $value = null)
     {
     }
 

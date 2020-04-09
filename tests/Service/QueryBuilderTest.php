@@ -843,11 +843,32 @@ class QueryBuilderTest extends BaseTestCase
 
         $row = Qb::table('test_users')->update(['address' => 'test address']);
         $this->assertEquals(2, $row);
+        $this->assertSame('UPDATE `p_test_users` SET `address` = ?', $this->db->getLastQuery());
 
         $user = Qb::table('test_users')->where('id', 1)->first();
         $this->assertEquals('test address', $user['address']);
     }
 
+    public function testUpdateKeyValue()
+    {
+        $this->initFixtures();
+
+        $row = Qb::table('test_users')->update('address', 'test address');
+        $this->assertEquals(2, $row);
+        $this->assertSame('UPDATE `p_test_users` SET `address` = ?', $this->db->getLastQuery());
+    }
+
+    public function testUpdateWhere()
+    {
+        $this->initFixtures();
+
+        $row = Qb::table('test_users')->where('id', 1)->update(['address' => 'test address']);
+        $this->assertEquals(1, $row);
+        $this->assertSame('UPDATE `p_test_users` SET `address` = ? WHERE `id` = ?', $this->db->getLastQuery());
+
+        $user = Qb::table('test_users')->where('id', 1)->first();
+        $this->assertEquals('test address', $user['address']);
+    }
 
     public function testParameters()
     {

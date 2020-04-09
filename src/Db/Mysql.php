@@ -227,9 +227,18 @@ class Mysql extends BaseDriver
      */
     protected function getSqlForUpdate()
     {
-        $query = 'UPDATE ' . $this->getFrom()
-            . ' SET ' . implode(', ', $this->sqlParts['set'])
-            . ($this->sqlParts['where'] ? ' WHERE ' . $this->buildWhere($this->sqlParts['where']) : '');
+        $query = 'UPDATE ' . $this->getFrom() . ' SET ';
+
+        $sets = [];
+        foreach ($this->sqlParts['set'] as $set) {
+            $sets[] = $this->wrap($set) . ' = ?';
+        }
+        $query .= implode(', ', $sets);
+
+        if ($this->sqlParts['where']) {
+            $query .= ' WHERE ' . $this->buildWhere($this->sqlParts['where']);
+        }
+
         return $query;
     }
 
