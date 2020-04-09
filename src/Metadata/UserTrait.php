@@ -42,7 +42,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $updatedAt
  * @property int $createdBy
  * @property int $updatedBy
- * @property  $isMobileVerified
+ * @property  $displayName
  */
 trait UserTrait
 {

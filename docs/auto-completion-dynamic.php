@@ -924,48 +924,6 @@ class User extends UserModel
 class UserModel extends Model
 {
     /**
-     * Record: 检查指定的手机号码能否绑定当前用户
-     *
-     * @param string $mobile
-     * @return array
-     * @see UserModel::checkMobile
-     */
-    public function checkMobile(string $mobile)
-    {
-    }
-
-    /**
-     * Record: 绑定手机
-     *
-     * @param array|\ArrayAccess $data
-     * @return array
-     * @see UserModel::bindMobile
-     */
-    public function bindMobile($data)
-    {
-    }
-
-    /**
-     * Record: 更新当前用户资料
-     *
-     * @param array|\ArrayAccess $data
-     * @return array
-     * @see UserModel::updateData
-     */
-    public function updateData($data)
-    {
-    }
-
-    /**
-     * @param array|\ArrayAccess $req
-     * @return array
-     * @see UserModel::updatePassword
-     */
-    public function updatePassword($req)
-    {
-    }
-
-    /**
      * 通过外部检查用户是否有某个权限
      *
      * @param string $permissionId
