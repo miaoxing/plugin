@@ -60,7 +60,7 @@ class QueryBuilder extends Base
     /**
      * @var string|callable
      */
-    protected $identifierConverter = null;
+    protected $identifierConverter = [self::class, 'snake'];
 
     /**
      * The parts of SQL
@@ -131,6 +131,11 @@ class QueryBuilder extends Base
      * @var BaseDriver[]
      */
     protected static $drivers = [];
+
+    /**
+     * @var array
+     */
+    public static $snakeCache = [];
 
     /**
      * @param string|null $table
@@ -1452,5 +1457,25 @@ class QueryBuilder extends Base
             static::$drivers[$driver] = new $class;
         }
         return static::$drivers[$driver];
+    }
+
+    /**
+     * Convert a input to snake case
+     *
+     * @param string $input
+     * @return string
+     */
+    protected function snake($input)
+    {
+        if (isset(static::$snakeCache[$input])) {
+            return static::$snakeCache[$input];
+        }
+
+        $value = $input;
+        if (!ctype_lower($input)) {
+            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+        }
+
+        return static::$snakeCache[$input] = $value;
     }
 }

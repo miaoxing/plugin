@@ -152,8 +152,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected $hidden = [];
 
-    protected static $snakeCache = [];
-
     protected static $camelCache = [];
 
     protected static $booted = [];
@@ -1634,26 +1632,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         // Receive other services
         return $this->getServiceValue($name);
-    }
-
-    /**
-     * Convert a input to snake case
-     *
-     * @param string $input
-     * @return string
-     */
-    protected function snake($input)
-    {
-        if (isset(static::$snakeCache[$input])) {
-            return static::$snakeCache[$input];
-        }
-
-        $value = $input;
-        if (!ctype_lower($input)) {
-            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
-        }
-
-        return static::$snakeCache[$input] = $value;
     }
 
     /**

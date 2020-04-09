@@ -1176,4 +1176,13 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertSame(__METHOD__, $qb->getIdentifierConverter());
     }
+
+    public function testDD()
+    {
+        $qb = Qb::table('testUsers')->where('groupId', 1);
+
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `group_id` = 1', $qb->getRawSql());
+
+        $this->assertSame('1', $qb->fetch()['group_id']);
+    }
 }
