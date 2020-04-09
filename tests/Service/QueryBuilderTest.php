@@ -1158,4 +1158,22 @@ class QueryBuilderTest extends BaseTestCase
 
         wei()->cache->clear();
     }
+
+    public function testSetIdentifierConvert()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::setIdentifierConverter([wei()->str, 'snake'])->table('testUsers')->where('groupId', 1);
+
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `group_id` = 1', $qb->getRawSql());
+
+        $this->assertSame('1', $qb->fetch()['group_id']);
+    }
+
+    public function testGetIdentifierConvert()
+    {
+        $qb = Qb::setIdentifierConverter(__METHOD__);
+
+        $this->assertSame(__METHOD__, $qb->getIdentifierConverter());
+    }
 }

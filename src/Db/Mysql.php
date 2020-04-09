@@ -15,10 +15,11 @@ class Mysql extends BaseDriver
 
     protected $sqlParts = [];
 
-    public function getSql($type, $sqlParts)
+    public function getSql($type, $sqlParts, $identifierConverter = null)
     {
         $this->aliases = [];
         $this->sqlParts = $sqlParts;
+        $this->identifierConverter = $identifierConverter;
 
         switch ($type) {
             case self::DELETE:
@@ -36,12 +37,16 @@ class Mysql extends BaseDriver
     /**
      * Returns the interpolated query.
      *
+     * @param $type
+     * @param $sqlParts
+     * @param $identifierConverter
+     * @param array $values
      * @return string
      * @link https://stackoverflow.com/a/8403150
      */
-    public function getRawSql($type, $sqlParts, array $values)
+    public function getRawSql($type, $sqlParts, $identifierConverter, array $values)
     {
-        $query = $this->getSql($type, $sqlParts);
+        $query = $this->getSql($type, $sqlParts, $identifierConverter);
         $keys = [];
 
         // build a regular expression for each parameter

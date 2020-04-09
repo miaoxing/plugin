@@ -58,6 +58,11 @@ class QueryBuilder extends Base
     protected $primaryKey = 'id';
 
     /**
+     * @var string|callable
+     */
+    protected $identifierConverter = null;
+
+    /**
      * The parts of SQL
      *
      * @var array
@@ -595,7 +600,8 @@ class QueryBuilder extends Base
      * @return $this
      * @api
      */
-    protected function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null) {
+    protected function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
+    {
         return $this->join(...func_get_args());
     }
 
@@ -1228,6 +1234,8 @@ class QueryBuilder extends Base
      */
     public function getSql()
     {
+        //$this->convertIdentifier = [$this, 'camel'];
+
         if ($this->sql !== null && $this->state === self::STATE_CLEAN) {
             return $this->sql;
         }
@@ -1236,7 +1244,7 @@ class QueryBuilder extends Base
             $this->sqlParts['from'] = $this->getTable();
         }
 
-        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts);
+        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts, $this->identifierConverter);
 
         $this->state = self::STATE_CLEAN;
 
@@ -1245,7 +1253,8 @@ class QueryBuilder extends Base
 
     public function getRawSql()
     {
-        return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this->getBindParams());
+        return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this->identifierConverter,
+            $this->getBindParams());
     }
 
     /**
@@ -1411,6 +1420,25 @@ class QueryBuilder extends Base
         $this->paramTypes = [];
 
         return $this->resetSqlParts();
+    }
+
+    /**
+     * @param callable $identifierConverter
+     * @return $this
+     * @api
+     */
+    protected function setIdentifierConverter(callable $identifierConverter)
+    {
+        $this->identifierConverter = $identifierConverter;
+        return $this;
+    }
+
+    /**
+     * @return callable|string
+     */
+    public function getIdentifierConverter()
+    {
+        return $this->identifierConverter;
     }
 
     /**

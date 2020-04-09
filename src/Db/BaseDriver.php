@@ -10,7 +10,15 @@ use Wei\Db;
  */
 abstract class BaseDriver extends Base
 {
+    /**
+     * @var string
+     */
     protected $wrapper = '';
+
+    /**
+     * @var callable
+     */
+    protected $identifierConverter;
 
     /**
      * The table name alias used in the query
@@ -59,7 +67,15 @@ abstract class BaseDriver extends Base
 
     protected function wrapValue(string $value): string
     {
-        return $value === '*' ? $value : $this->wrapper . $value . $this->wrapper;
+        if ($value === '*') {
+            return $value;
+        }
+
+        if ($this->identifierConverter) {
+            $value = call_user_func($this->identifierConverter, $value);
+        }
+
+        return $this->wrapper . $value . $this->wrapper;
     }
 
     protected function getRawValue($expression)

@@ -811,6 +811,15 @@ class QueryBuilder extends \Wei\Base
     }
 
     /**
+     * @param callable $identifierConverter
+     * @return $this
+     * @see QueryBuilder::setIdentifierConverter
+     */
+    public function setIdentifierConverter(callable $identifierConverter)
+    {
+    }
+
+    /**
      * Set or remove cache time for the query
      *
      * @param int|null|false $seconds
