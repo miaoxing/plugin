@@ -18,7 +18,6 @@ class RelationTest extends BaseTestCase
         parent::setUpBeforeClass();
 
         static::dropTables();
-        wei()->import(dirname(__DIR__) . '/Fixture', 'MiaoxingTest\Services\Model\Fixture');
 
         wei()->schema->table('test_users')
             ->id()

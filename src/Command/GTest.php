@@ -2,14 +2,9 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Services\Service\Cli;
 use Symfony\Component\Console\Input\InputArgument;
 
-/**
- * @property Cli $cli
- */
 class GTest extends BaseCommand
 {
     protected function configure()

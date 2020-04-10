@@ -2,10 +2,7 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Plugin\Command\BaseCommand;
-use Miaoxing\Services\CliDefinitionTrait;
 use Symfony\Component\Console\Input\InputArgument;
 
 class GModel extends BaseCommand
