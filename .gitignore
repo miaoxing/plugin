@@ -1,5 +1,6 @@
 vendor/
 composer.lock
 phpunit.xml
+.phpunit.result.cache
 .php_cs.cache
 tests/config-local.php
