@@ -152,8 +152,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected $hidden = [];
 
-    protected static $camelCache = [];
-
     protected static $booted = [];
 
     protected static $events = [];
@@ -1632,21 +1630,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         // Receive other services
         return $this->getServiceValue($name);
-    }
-
-    /**
-     * Convert a input to camel case
-     *
-     * @param string $input
-     * @return string
-     */
-    protected function camel($input)
-    {
-        if (isset(static::$camelCache[$input])) {
-            return static::$camelCache[$input];
-        }
-
-        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
     }
 
     protected function getClassServiceName($object = null)

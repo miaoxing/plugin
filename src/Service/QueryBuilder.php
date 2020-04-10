@@ -140,7 +140,12 @@ class QueryBuilder extends Base
     /**
      * @var array
      */
-    public static $snakeCache = [];
+    protected static $snakeCache = [];
+
+    /*
+     * @var array
+     */
+    protected static $camelCache = [];
 
     /**
      * @param string|null $table
@@ -1505,5 +1510,20 @@ class QueryBuilder extends Base
         }
 
         return static::$snakeCache[$input] = $value;
+    }
+
+    /**
+     * Convert a input to camel case
+     *
+     * @param string $input
+     * @return string
+     */
+    protected function camel($input)
+    {
+        if (isset(static::$camelCache[$input])) {
+            return static::$camelCache[$input];
+        }
+
+        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
     }
 }
