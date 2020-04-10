@@ -17,7 +17,6 @@ use Wei\Response;
 class App extends \Wei\App
 {
     use ConfigTrait;
-    use StaticTrait;
 
     /**
      * 插件控制器不使用该格式,留空可减少类查找
