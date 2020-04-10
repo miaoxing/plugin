@@ -3,9 +3,9 @@
 namespace Miaoxing\Plugin\Service;
 
 use Closure;
+use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Db\BaseDriver;
 use Miaoxing\Plugin\Model\QueryBuilderCacheTrait;
-use Miaoxing\Services\Service\StaticTrait;
 use Wei\Base;
 
 /**
@@ -15,9 +15,8 @@ use Wei\Base;
  * @mixin \DbMixin
  * @mixin \TagCacheMixin
  */
-class QueryBuilder extends Base
+class QueryBuilder extends BaseService
 {
-    use StaticTrait;
     use QueryBuilderCacheTrait;
 
     /* The query types. */

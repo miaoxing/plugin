@@ -256,7 +256,7 @@ class Plugin extends \Miaoxing\Plugin\BaseService
 {
 }
 
-class QueryBuilder extends \Wei\Base
+class QueryBuilder extends \Miaoxing\Plugin\BaseService
 {
     /**
      * Return the record table name
