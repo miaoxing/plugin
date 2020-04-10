@@ -60,7 +60,12 @@ class QueryBuilder extends Base
     /**
      * @var callable
      */
-    protected $identifierConverter = [self::class, 'snake'];
+    protected $inputIdentifierConverter = [self::class, 'snake'];
+
+    /**
+     * @var callable
+     */
+    protected $outputIdentifierConverter = [self::class, 'camel'];
 
     /**
      * The parts of SQL
@@ -1252,7 +1257,7 @@ class QueryBuilder extends Base
             $this->sqlParts['from'] = $this->getTable();
         }
 
-        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts, $this->identifierConverter);
+        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts, $this->inputIdentifierConverter);
 
         $this->state = self::STATE_CLEAN;
 
@@ -1261,7 +1266,7 @@ class QueryBuilder extends Base
 
     public function getRawSql()
     {
-        return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this->identifierConverter,
+        return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this->inputIdentifierConverter,
             $this->getBindParams());
     }
 
@@ -1431,22 +1436,42 @@ class QueryBuilder extends Base
     }
 
     /**
-     * @param callable $identifierConverter
+     * @param callable $converter
      * @return $this
      * @api
      */
-    protected function setIdentifierConverter(callable $identifierConverter)
+    protected function setInputIdentifierConverter(callable $converter)
     {
-        $this->identifierConverter = $identifierConverter;
+        $this->inputIdentifierConverter = $converter;
         return $this;
     }
 
     /**
      * @return callable
      */
-    public function getIdentifierConverter()
+    public function getInputIdentifierConverter()
     {
-        return $this->identifierConverter;
+        return $this->inputIdentifierConverter;
+    }
+
+    /**
+     * @param string $identifier
+     * @return string
+     */
+    protected function convertInputIdentifier($identifier)
+    {
+        return $this->inputIdentifierConverter ? call_user_func($this->inputIdentifierConverter,
+            $identifier) : $identifier;
+    }
+
+    /**
+     * @param string $identifier
+     * @return string
+     */
+    protected function convertOutputIdentifier($identifier)
+    {
+        return $this->outputIdentifierConverter ? call_user_func($this->outputIdentifierConverter,
+            $identifier) : $identifier;
     }
 
     /**

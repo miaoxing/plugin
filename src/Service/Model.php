@@ -269,7 +269,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             $data = [];
             $columns = $this->getToArrayColumns($returnFields ?: $this->getFields());
             foreach ($columns as $column) {
-                $data[$this->filterOutputColumn($column)] = $this->get($column);
+                $data[$this->convertOutputIdentifier($column)] = $this->get($column);
             }
 
             return $data + $this->virtualToArray();
@@ -347,7 +347,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             return false;
         }
 
-        $field = $this->filterInputColumn($field);
+        $field = $this->convertInputIdentifier($field);
 
         return !in_array($field, $this->guarded) && !$this->fillable || in_array($field, $this->fillable);
     }
@@ -730,7 +730,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function remove($name)
     {
-        $name = $this->filterInputColumn($name);
+        $name = $this->convertInputIdentifier($name);
 
         if (!$this->isColl) {
             if (array_key_exists($name, $this->data)) {
@@ -751,7 +751,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function incr($name, $offset = 1)
     {
-        $name = $this->filterInputColumn($name);
+        $name = $this->convertInputIdentifier($name);
         $this[$name] = (object) ($name . ' + ' . $offset);
         return $this;
     }
@@ -765,7 +765,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function decr($name, $offset = 1)
     {
-        $name = $this->filterInputColumn($name);
+        $name = $this->convertInputIdentifier($name);
         $this[$name] = (object) ($name . ' - ' . $offset);
         return $this;
     }
@@ -1420,7 +1420,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $data = [];
         foreach ($this->virtual as $column) {
-            $data[$this->filterOutputColumn($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
+            $data[$this->convertOutputIdentifier($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
         }
 
         return $data;
@@ -1688,23 +1688,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function hasColumn($name)
     {
-        $name = $this->filterInputColumn($name);
+        $name = $this->convertInputIdentifier($name);
 
         return in_array($name, $this->getFields());
-    }
-
-    /**
-     * @param string $column
-     * @return array|mixed|null
-     */
-    protected function filterInputColumn($column)
-    {
-        return $this->trigger('inputColumn', $column);
-    }
-
-    protected function filterOutputColumn($column)
-    {
-        return $this->trigger('outputColumn', $column);
     }
 
     public function trigger($event, $data = [])
@@ -1753,7 +1739,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     protected function resetChanged($name)
     {
-        $name = $this->filterInputColumn($name);
+        $name = $this->convertInputIdentifier($name);
 
         if (array_key_exists($name, $this->changedData)) {
             unset($this->changedData[$name]);
@@ -1773,7 +1759,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function isChanged($field = null)
     {
         if ($field) {
-            $field = $this->filterInputColumn($field);
+            $field = $this->convertInputIdentifier($field);
             return array_key_exists($field, $this->changedData);
         }
         return $this->isChanged;
@@ -1967,7 +1953,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         // Ignore $coll[] = $value
         if ($name !== null) {
-            $name = $this->filterInputColumn($name);
+            $name = $this->convertInputIdentifier($name);
 
             // 直接设置就行
             $this->origSet($name, $value);
@@ -1986,7 +1972,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function &getColumnValue($name)
     {
-        $name = $this->filterInputColumn($name);
+        $name = $this->convertInputIdentifier($name);
         $value = $this->origGet($name);
 
         $source = $this->getDataSource($name);
@@ -2139,7 +2125,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function hasVirtual($name)
     {
-        $name = $this->filterInputColumn($name);
+        $name = $this->convertInputIdentifier($name);
 
         return in_array($name, $this->virtual);
     }

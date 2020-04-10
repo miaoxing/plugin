@@ -836,11 +836,11 @@ class QueryBuilder extends \Wei\Base
     }
 
     /**
-     * @param callable $identifierConverter
+     * @param callable $converter
      * @return $this
-     * @see QueryBuilder::setIdentifierConverter
+     * @see QueryBuilder::setInputIdentifierConverter
      */
-    public function setIdentifierConverter(callable $identifierConverter)
+    public function setInputIdentifierConverter(callable $converter)
     {
     }
 

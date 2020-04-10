@@ -1184,7 +1184,7 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $qb = Qb::setIdentifierConverter([wei()->str, 'snake'])->table('testUsers')->where('groupId', 1);
+        $qb = Qb::setInputIdentifierConverter([wei()->str, 'snake'])->table('testUsers')->where('groupId', 1);
 
         $this->assertSame('SELECT * FROM `p_test_users` WHERE `group_id` = 1', $qb->getRawSql());
 
@@ -1193,9 +1193,9 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testGetIdentifierConvert()
     {
-        $qb = Qb::setIdentifierConverter(__METHOD__);
+        $qb = Qb::setInputIdentifierConverter(__METHOD__);
 
-        $this->assertSame(__METHOD__, $qb->getIdentifierConverter());
+        $this->assertSame(__METHOD__, $qb->getInputIdentifierConverter());
     }
 
     public function testDD()

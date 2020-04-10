@@ -14,10 +14,6 @@ trait CamelCaseTrait
 {
     public static function bootCamelCaseTrait()
     {
-        static::on('inputColumn', 'snake');
-
-        static::on('outputColumn', 'camel');
-
         static::on('checkInputColumn', 'checkCamelCaseColumn');
     }
 

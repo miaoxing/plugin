@@ -97,7 +97,7 @@ trait ReqQueryTrait
         list($name, $op) = $this->parseNameAndOp($name);
 
         // 检查字段是否存在
-        $column = $this->filterInputColumn($name);
+        $column = $this->convertInputIdentifier($name);
         if (!$this->hasColumn($column)) {
             return;
         }
@@ -230,7 +230,7 @@ trait ReqQueryTrait
     protected function like($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->filterOutputColumn($column);
+            $name = $this->convertOutputIdentifier($column);
             [$column, $value, $relation] = $this->parseReqColumn($name);
             if (!wei()->isPresent($value)) {
                 continue;
@@ -248,7 +248,7 @@ trait ReqQueryTrait
     public function equals($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->filterOutputColumn($column);
+            $name = $this->convertOutputIdentifier($column);
             if ($this->request->has($name)) {
                 $this->andWhere([$column => $this->request[$name]]);
             }
@@ -266,12 +266,12 @@ trait ReqQueryTrait
         }
 
         foreach ((array) $columns as $column) {
-            $min = $this->filterOutputColumn($column . '_min');
+            $min = $this->convertOutputIdentifier($column . '_min');
             if ($this->request->has($min)) {
                 $this->andWhere($prefix . $column . ' >= ?', $this->request[$min]);
             }
 
-            $max = $this->filterOutputColumn($column . '_max');
+            $max = $this->convertOutputIdentifier($column . '_max');
             if ($this->request->has($max)) {
                 $this->andWhere($prefix . $column . ' <= ?', $this->processMaxDate($column, $this->request[$max]));
             }
@@ -294,7 +294,7 @@ trait ReqQueryTrait
     public function reqHas($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->filterOutputColumn($column);
+            $name = $this->convertOutputIdentifier($column);
             if ($this->request->has($name)) {
                 $this->whereHas($column, $this->request[$name]);
             }
@@ -306,7 +306,7 @@ trait ReqQueryTrait
     public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
     {
         if ($this->request->has('sort')) {
-            $name = $this->filterInputColumn($this->request['sort']);
+            $name = $this->convertInputIdentifier($this->request['sort']);
             if (in_array($name, $this->getFields())) {
                 $sort = $name;
             } else {
@@ -356,7 +356,7 @@ trait ReqQueryTrait
                 $column = $this->getTable() . '.' . $column;
             }
 
-            $column = $this->filterInputColumn($column);
+            $column = $this->convertInputIdentifier($column);
         } else {
             // 查询关联表
             [$relation, $relationColumn] = explode('.', $column, 2);
