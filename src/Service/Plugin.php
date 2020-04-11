@@ -188,7 +188,8 @@ class Plugin extends BaseService
             $this->pluginClasses = [];
             $classes = $this->classMap->generate($this->basePaths, '/*Plugin.php', '', false, true);
             foreach ($classes as $class) {
-                $name = last(explode('\\', $class));
+                $parts = explode('\\', $class);
+                $name = end($parts);
                 $name = substr($name, 0, -6 /* length of "Plugin" */);
                 $name = $this->dash($name);
                 $this->pluginClasses[$name] = $class;
