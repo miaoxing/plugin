@@ -32,6 +32,14 @@
   "extra": {
     "branch-alias": {
       "dev-master": "2.0.x-dev"
+    },
+    "installer-types": [
+      "miaoxing-plugin"
+    ],
+    "installer-paths": {
+      "plugins/{$name}/": [
+        "type:miaoxing-plugin"
+      ]
     }
   }
 }
