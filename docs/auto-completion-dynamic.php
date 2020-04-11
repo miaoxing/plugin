@@ -860,6 +860,10 @@ class Session extends \Wei\Session
 {
 }
 
+class Str extends \Miaoxing\Plugin\BaseService
+{
+}
+
 class User extends UserModel
 {
     /**

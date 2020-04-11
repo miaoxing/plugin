@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Services\ConfigTrait;
-use Miaoxing\Services\Service\StaticTrait;
 use Wei\Response;
 
 /**

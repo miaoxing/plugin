@@ -48,6 +48,12 @@ class SessionMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Str $str 字符串操作服务
+ */
+class StrMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\User $user 用户
  * @method      Miaoxing\Plugin\Service\User|Miaoxing\Plugin\Service\User[] user($table = null)
  */
@@ -69,6 +75,7 @@ class UserModelMixin {
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
  * @mixin SessionMixin
+ * @mixin StrMixin
  * @mixin UserMixin
  * @mixin UserModelMixin
  */
@@ -106,6 +113,9 @@ $queryBuilder = wei()->queryBuilder;
 
 /** @var Miaoxing\Plugin\Service\Session $session */
 $session = wei()->session;
+
+/** @var Miaoxing\Plugin\Service\Str $str */
+$str = wei()->str;
 
 /** @var Miaoxing\Plugin\Service\User $user */
 $user = wei()->user;

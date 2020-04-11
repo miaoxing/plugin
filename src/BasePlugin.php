@@ -2,8 +2,6 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Services\Service\Str;
-
 /**
  * @mixin \EnvMixin
  * @mixin \ViewMixin
