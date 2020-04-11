@@ -180,6 +180,11 @@ PHP;
         $dynamics = [];
 
         foreach ($services as $name => $serviceClass) {
+            // 忽略 trait
+            if (!class_exists($serviceClass)) {
+                continue;
+            }
+
             $refClass = new ReflectionClass($serviceClass);
 
             $namespace = $file->addNamespace($refClass->getNamespaceName());
