@@ -14,6 +14,7 @@ return [
         'aliases' => [
             'plugin' => \Miaoxing\Plugin\Service\Plugin::class,
             'request' => \Miaoxing\Services\Service\Request::class,
+            'classMap' => \Miaoxing\Services\Service\ClassMap::class,
         ],
         'providers' => [
             'cache' => 'arrayCache',
