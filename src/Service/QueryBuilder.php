@@ -1485,7 +1485,7 @@ class QueryBuilder extends BaseService
     {
         $driver = $this->db->getDriver();
         if (!isset(static::$drivers[$driver])) {
-            $class = 'Miaoxing\Plugin\Db\\' . $driver;
+            $class = 'Miaoxing\Plugin\Db\\' . ucfirst($driver);
             static::$drivers[$driver] = new $class;
         }
         return static::$drivers[$driver];
