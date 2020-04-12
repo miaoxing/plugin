@@ -1111,14 +1111,12 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testCacheWithJoin()
     {
-        $this->markTestSkipped('todo join');
-
         $this->initFixtures();
 
-        $user = $this->db('users')
-            ->select('prefix_member.*')
-            ->leftJoin('prefix_member_group', 'prefix_member.group_id = prefix_member_group.id')
-            ->where('prefix_member.id = 1')
+        $user = Qb::table('test_users')
+            ->select('test_users.*')
+            ->leftJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id')
+            ->where('test_users.id', 1)
             ->tags()
             ->cache();
 
@@ -1126,15 +1124,15 @@ class QueryBuilderTest extends BaseTestCase
         $data = $user->fetch();
         $this->assertEquals('twin', $data['name']);
 
-        TestUser::where('id = 1')->update("name = 'twin2'");
+        Qb::table('test_users')->where('id', 1)->update('name', 'twin2');
 
         // Fetch from cache
         $data = $user->fetch();
         $this->assertEquals('twin', $data['name']);
 
         // Clear cache
-        wei()->tagCache('prefix_member')->clear();
-        wei()->tagCache('prefix_member', 'prefix_member_group')->reload();
+        wei()->tagCache('test_users')->clear();
+        wei()->tagCache('test_users', 'test_user_groups')->reload();
 
         // Fetch from db
         $data = $user->fetch();
@@ -1149,7 +1147,7 @@ class QueryBuilderTest extends BaseTestCase
             ->select('test_users.*')
             ->leftJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id')
             ->where('test_users.id', 1)
-            ->tags(array('users', 'user_group'))
+            ->tags(array('users', 'user_groups'))
             ->cache();
 
         // Fetch from db
@@ -1164,7 +1162,7 @@ class QueryBuilderTest extends BaseTestCase
 
         // Clear cache
         wei()->tagCache('users')->clear();
-        wei()->tagCache('users', 'user_group')->reload();
+        wei()->tagCache('users', 'user_groups')->reload();
 
         // Fetch from db
         $data = $user->fetch();
