@@ -20,6 +20,13 @@ class ModelTest extends BaseTestCase
         $this->db->setOption('tablePrefix', 'p_');
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->db->setOption('tablePrefix', '');
+    }
+
     public function testSetter()
     {
         $this->initFixtures();

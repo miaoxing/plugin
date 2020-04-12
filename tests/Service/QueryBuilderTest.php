@@ -21,6 +21,13 @@ class QueryBuilderTest extends BaseTestCase
         $this->db->setOption('tablePrefix', 'p_');
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->db->setOption('tablePrefix', '');
+    }
+
     public function testSelect()
     {
         $sql = Qb::table('test_users')->select('name')->getSql();
