@@ -12,6 +12,7 @@ matrix:
     - php: nightly
 
 services:
+  - mysql
   - memcached
 
 cache:
