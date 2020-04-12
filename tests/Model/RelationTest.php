@@ -3,6 +3,7 @@
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestArticle;
 use MiaoxingTest\Plugin\Model\Fixture\TestProfile;
 use MiaoxingTest\Plugin\Model\Fixture\TestTag;
@@ -13,40 +14,14 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUser;
  */
 class RelationTest extends BaseTestCase
 {
+    use DbTrait;
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
-        static::dropTables();
-
-        wei()->schema->table('test_users')
-            ->id()
-            ->string('name', 32)
-            ->exec();
-
-        wei()->schema->table('test_profiles')
-            ->id()
-            ->int('test_user_id')
-            ->string('description')
-            ->exec();
-
-        wei()->schema->table('test_articles')
-            ->id()
-            ->int('test_user_id')
-            ->string('title', 128)
-            ->text('content')
-            ->exec();
-
-        wei()->schema->table('test_tags')
-            ->id()
-            ->string('name')
-            ->exec();
-
-        wei()->schema->table('test_articles_test_tags')
-            ->id()
-            ->int('test_article_id')
-            ->int('test_tag_id')
-            ->exec();
+        static::dropRelationTables();
+        static::createRelationTables();
 
         wei()->db->batchInsert('test_users', [
             [
@@ -120,13 +95,42 @@ class RelationTest extends BaseTestCase
 
     public static function tearDownAfterClass(): void
     {
-        static::dropTables();
+        static::dropRelationTables();
         parent::tearDownAfterClass();
     }
 
-    public static function dropTables()
+    private static function createRelationTables()
     {
-        wei()->schema->dropIfExists('test_users');
+        static::createTables();
+
+        wei()->schema->table('test_profiles')
+            ->id()
+            ->int('test_user_id')
+            ->string('description')
+            ->exec();
+
+        wei()->schema->table('test_articles')
+            ->id()
+            ->int('test_user_id')
+            ->string('title', 128)
+            ->text('content')
+            ->exec();
+
+        wei()->schema->table('test_tags')
+            ->id()
+            ->string('name')
+            ->exec();
+
+        wei()->schema->table('test_articles_test_tags')
+            ->id()
+            ->int('test_article_id')
+            ->int('test_tag_id')
+            ->exec();
+    }
+
+    private static function dropRelationTables()
+    {
+        static::dropTables();
         wei()->schema->dropIfExists('test_profiles');
         wei()->schema->dropIfExists('test_articles');
         wei()->schema->dropIfExists('test_tags');
@@ -323,7 +327,7 @@ class RelationTest extends BaseTestCase
         $this->assertEquals(<<<SQL
 SELECT `test_tags`.* FROM `test_tags` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id` WHERE `test_articles_test_tags`.`test_article_id` = ?
 SQL
-, $queries[1]);
+            , $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -342,7 +346,7 @@ SQL
         $this->assertEquals(<<<SQL
 SELECT `test_articles`.* FROM `test_articles` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_article_id` = `test_articles`.`id` WHERE `test_articles_test_tags`.`test_tag_id` = ?
 SQL
-, $queries[1]);
+            , $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -368,7 +372,7 @@ SQL
         $this->assertEquals(<<<SQL
 SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id` WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?)
 SQL
-, $queries[1]);
+            , $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -394,7 +398,7 @@ SQL
         $this->assertEquals(<<<SQL
 SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id` WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?) AND `test_tags`.`id` > ?
 SQL
-, $queries[1]);
+            , $queries[1]);
         $this->assertCount(2, $queries);
     }
 
