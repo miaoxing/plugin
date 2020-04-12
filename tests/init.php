@@ -22,12 +22,15 @@ $files = [
 ];
 
 // Add configuration file for CI
+$isCi = false;
 foreach (['TRAVIS', 'WERCKER'] as $ci) {
     if (getenv($ci)) {
+        $isCi = true;
         $files[] = 'config-' . strtolower($ci) . '.php';
     }
 }
 
+$isCi = true;
 $config = [];
 foreach ($files as $file) {
     if (stream_resolve_include_path($file)) {
@@ -35,4 +38,27 @@ foreach ($files as $file) {
     }
 }
 
-return wei($config);
+$wei = wei($config);
+
+// NOTE: 安装需依赖CI环境的配置，暂时放到这里
+if ($isCi) {
+    // 1. 初始化数据库
+    $db = $wei->db;
+    $db->executeUpdate('CREATE DATABASE IF NOT EXISTS ' . $db->getDbname());
+    $db->useDb($db->getDbname());
+
+    // 2. 执行迁移语句
+    $wei->migration->migrate();
+
+    // 3. 逐个安装插件
+    foreach ($wei->plugin->getAll() as $plugin) {
+        $ret = $wei->plugin->install($plugin->getId());
+        out($plugin->getId() . ': ' . $ret['message']);
+    }
+
+    out('Install successfully');
+}
+
+function out($message) {
+    fwrite(STDOUT, $message . "\n");
+}

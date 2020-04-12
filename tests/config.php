@@ -60,7 +60,7 @@ return [
         'dir' => 'data/logs',
     ],
     'error.logger' => [
-
+        'dir' => 'data/logs',
     ],
     'mail' => [
         'options' => [
