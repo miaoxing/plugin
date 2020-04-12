@@ -10,7 +10,7 @@ class PluginTest extends BaseTestCase
     {
         $plugin = wei()->plugin->getById('plugin');
 
-        $this->assertInstanceOf('Miaoxing\Plugin\Plugin', $plugin);
+        $this->assertInstanceOf(\Miaoxing\Plugin\BasePlugin::class, $plugin);
     }
 
     public function testGetByIdButPluginNotExists()
@@ -24,12 +24,12 @@ class PluginTest extends BaseTestCase
     {
         $plugin = wei()->plugin->getOneById('plugin');
 
-        $this->assertInstanceOf(\Miaoxing\Plugin\Plugin::class, $plugin);
+        $this->assertInstanceOf(\Miaoxing\Plugin\BasePlugin::class, $plugin);
     }
 
     public function testGetOneByIdButPluginNotExists()
     {
-        $this->setExpectedException('Exception', 'Plugin "not-exists" not found');
+        $this->expectExceptionObject(new \Exception('Plugin "not-exists" not found'));
 
         wei()->plugin->getOneById('not-exists');
     }
