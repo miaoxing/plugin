@@ -62,7 +62,7 @@ class MutatorTest extends BaseTestCase
         $mutator->set('setter', 'abc');
 
         $data = $mutator->getData();
-        $this->assertEquals('abc', $data['setter'], 'Set不会直接更改数据,保存时才改');
+        $this->assertEquals('YWJj', $data['setter'], '由mutator管理数据');
     }
 
     public function testMagicGet()
@@ -76,7 +76,7 @@ class MutatorTest extends BaseTestCase
         $mutator->setter = 'abc';
 
         $data = $mutator->getData();
-        $this->assertEquals('abc', $data['setter']);
+        $this->assertEquals('YWJj', $data['setter']);
     }
 
     public function testSetColl()
@@ -196,8 +196,8 @@ class MutatorTest extends BaseTestCase
     {
         $mutator = TestMutator::new();
 
-        $this->assertNull($mutator->mutator);
-        $this->assertNull($mutator->getter);
+        $this->assertSame('', $mutator->mutator); // 经 getMutatorAttribute 转换
+        $this->assertSame('', $mutator->getter); // 经 getGetterAttribute 转换
         $this->assertNull($mutator->setter);
 
         $mutator->mutator = 'mutator2';

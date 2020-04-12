@@ -1938,6 +1938,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         if ($name !== null) {
             $name = $this->convertInputIdentifier($name);
 
+            // 如果有mutator，由mutator管理数据
+            $result = $this->callSetter($name, $value);
+            if ($result) {
+                $this->setDataSource($name, 'db');
+                // TODO 整理逻辑
+                $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
+                $this->isChanged = true;
+                return $this;
+            }
+
             // 直接设置就行
             $this->origSet($name, $value);
 
@@ -1956,6 +1966,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function &getColumnValue($name)
     {
         $name = $this->convertInputIdentifier($name);
+        $result = $this->callGetter($name, $value);
+        if ($result) {
+            return $value;
+        }
+
         $value = $this->origGet($name);
 
         $source = $this->getDataSource($name);
