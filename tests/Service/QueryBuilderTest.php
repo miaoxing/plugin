@@ -135,8 +135,10 @@ class QueryBuilderTest extends BaseTestCase
                     ->orWhere('score', '>', 100);
             })
             ->getRawSql();
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
-            $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
+            $sql
+        );
     }
 
     public function testWhereIgnoreNullColumn()
@@ -150,7 +152,8 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereParamIsArray()
     {
-        $this->initFixtures();;
+        $this->initFixtures();
+        ;
 
         $qb = Qb::table('test_users')->where('id', [1, 2]);
 
@@ -204,8 +207,10 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhere('email', '!=', 'twin@example.com')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` != 'twin@example.com'",
-            $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` != 'twin@example.com'",
+            $sql
+        );
     }
 
     public function testMultipleOrWhere()
@@ -216,8 +221,10 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhere('first_name', '=', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
-            $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
+            $sql
+        );
     }
 
     public function testOrWhereArray()
@@ -239,8 +246,10 @@ class QueryBuilderTest extends BaseTestCase
             })
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR (`email` = 'twin@example.com' OR `score` > 100)",
-            $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR (`email` = 'twin@example.com' OR `score` > 100)",
+            $sql
+        );
     }
 
     public function testOrWhereParamIsArray()
@@ -265,8 +274,10 @@ class QueryBuilderTest extends BaseTestCase
             ->where('name', 'twin')
             ->orWhereRaw('email = ?', 'twin@example.com');
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR email = 'twin@example.com'",
-            $qb->getRawSql());
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR email = 'twin@example.com'",
+            $qb->getRawSql()
+        );
     }
 
     public function testWhereBetween()
@@ -505,8 +516,10 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereNotContains('email', 'twin')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` NOT LIKE '%twin%' OR `email` NOT LIKE '%twin%'",
-            $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` NOT LIKE '%twin%' OR `email` NOT LIKE '%twin%'",
+            $sql
+        );
     }
 
     public function testOrderBy()
@@ -603,8 +616,10 @@ class QueryBuilderTest extends BaseTestCase
             ->orHaving('email', '!=', 'twin@example.com')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
-            $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` HAVING `name` = 'twin' OR `email` != 'twin@example.com'",
+            $sql
+        );
     }
 
     public function testLimit()

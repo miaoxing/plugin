@@ -59,6 +59,7 @@ if ($isCi) {
     out('Install successfully');
 }
 
-function out($message) {
+function out($message)
+{
     fwrite(STDOUT, $message . "\n");
 }

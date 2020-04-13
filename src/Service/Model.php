@@ -383,7 +383,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         // 2.1 Saves single record
         if (!$this->isColl) {
-
             // 2.1.1 Returns when record has been destroy to avoid store dirty data
             if ($this->isDestroyed) {
                 return $this;
@@ -496,8 +495,10 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $this->dataSources = ['*' => 'db'];
 
-        $this->data = (array) $this->db->select($this->table,
-            array($this->primaryKey => $this->get($this->primaryKey)));
+        $this->data = (array) $this->db->select(
+            $this->table,
+            array($this->primaryKey => $this->get($this->primaryKey))
+        );
         $this->changedData = array();
         $this->isChanged = false;
         $this->triggerCallback('afterLoad');

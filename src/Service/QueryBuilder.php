@@ -19,12 +19,14 @@ class QueryBuilder extends BaseService
 {
     use QueryBuilderCacheTrait;
 
-    /* The query types. */
+    // The query types.
+
     const SELECT = 0;
     const DELETE = 1;
     const UPDATE = 2;
 
-    /* The builder states. */
+    // The builder states.
+
     const STATE_DIRTY = 0;
     const STATE_CLEAN = 1;
 
@@ -1270,8 +1272,12 @@ class QueryBuilder extends BaseService
 
     public function getRawSql()
     {
-        return $this->getDriver()->getRawSql($this->type, $this->sqlParts, $this->inputIdentifierConverter,
-            $this->getBindParams());
+        return $this->getDriver()->getRawSql(
+            $this->type,
+            $this->sqlParts,
+            $this->inputIdentifierConverter,
+            $this->getBindParams()
+        );
     }
 
     /**
@@ -1464,8 +1470,10 @@ class QueryBuilder extends BaseService
      */
     protected function convertInputIdentifier($identifier)
     {
-        return $this->inputIdentifierConverter ? call_user_func($this->inputIdentifierConverter,
-            $identifier) : $identifier;
+        return $this->inputIdentifierConverter ? call_user_func(
+            $this->inputIdentifierConverter,
+            $identifier
+        ) : $identifier;
     }
 
     /**
@@ -1474,8 +1482,10 @@ class QueryBuilder extends BaseService
      */
     protected function convertOutputIdentifier($identifier)
     {
-        return $this->outputIdentifierConverter ? call_user_func($this->outputIdentifierConverter,
-            $identifier) : $identifier;
+        return $this->outputIdentifierConverter ? call_user_func(
+            $this->outputIdentifierConverter,
+            $identifier
+        ) : $identifier;
     }
 
     /**

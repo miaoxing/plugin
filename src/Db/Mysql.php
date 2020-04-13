@@ -6,7 +6,8 @@ use Miaoxing\Plugin\Service\QueryBuilder;
 
 class Mysql extends BaseDriver
 {
-    /* The query types. */
+    // The query types.
+
     const SELECT = 0;
     const DELETE = 1;
     const UPDATE = 2;
@@ -195,8 +196,10 @@ class Mysql extends BaseDriver
 
                 case 'IN':
                 case 'NOT IN':
-                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' (' . implode(', ',
-                            array_pad([], count($where['value']), '?')) . ')');
+                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' (' . implode(
+                        ', ',
+                        array_pad([], count($where['value']), '?')
+                    ) . ')');
                     break;
 
                 case 'NULL':
