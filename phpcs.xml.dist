@@ -5,5 +5,5 @@
   <rule ref="Miaoxing">
   </rule>
 
-  <exclude-pattern type="relative">node_modules/*</exclude-pattern>
+  <exclude-pattern type="relative">plugins/*</exclude-pattern>
 </ruleset>
