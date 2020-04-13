@@ -373,7 +373,7 @@ class RelationTest extends BaseTestCase
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
-        $this->assertEquals(implode([
+        $this->assertEquals(implode(' ', [
             'SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags`',
             'INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id`',
             'WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?)',
