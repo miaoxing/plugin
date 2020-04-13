@@ -196,10 +196,8 @@ class Mysql extends BaseDriver
 
                 case 'IN':
                 case 'NOT IN':
-                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' (' . implode(
-                        ', ',
-                        array_pad([], count($where['value']), '?')
-                    ) . ')');
+                    $placeholder = implode(', ', array_pad([], count($where['value']), '?'));
+                    $query .= $this->processCondition($column . ' ' . $where['operator'] . ' (' . $placeholder . ')');
                     break;
 
                 case 'NULL':
@@ -252,7 +250,8 @@ class Mysql extends BaseDriver
      */
     protected function getSqlForDelete()
     {
-        return 'DELETE FROM ' . $this->getFrom() . ($this->sqlParts['where'] ? ' WHERE ' . $this->buildWhere($this->sqlParts['where']) : '');
+        return 'DELETE FROM ' . $this->getFrom()
+            . ($this->sqlParts['where'] ? ' WHERE ' . $this->buildWhere($this->sqlParts['where']) : '');
     }
 
     /**

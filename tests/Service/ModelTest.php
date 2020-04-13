@@ -915,7 +915,9 @@ class ModelTest extends BaseTestCase
         $users = TestUser::newColl();
         $user = TestUser::new();
 
-        $this->expectExceptionObject(new \InvalidArgumentException('Value for collection must be an instance of Wei\Record'));
+        $this->expectExceptionObject(new \InvalidArgumentException(
+            'Value for collection must be an instance of Wei\Record'
+        ));
 
         // Assign non record value to raise an exception
         $users[] = 234;

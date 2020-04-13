@@ -123,7 +123,10 @@ class QueryBuilderTest extends BaseTestCase
             ['email', '!=', 'twin@example.com'],
         ])->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' AND `email` != 'twin@example.com'", $sql);
+        $this->assertEquals(implode(' ', [
+            'SELECT * FROM `p_test_users`',
+            "WHERE `name` = 'twin' AND `email` != 'twin@example.com'",
+        ]), $sql);
     }
 
     public function testWhereClosure()
@@ -135,10 +138,10 @@ class QueryBuilderTest extends BaseTestCase
                     ->orWhere('score', '>', 100);
             })
             ->getRawSql();
-        $this->assertEquals(
-            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
-            $sql
-        );
+        $this->assertEquals(implode(' ', [
+            'SELECT * FROM `p_test_users`',
+            "WHERE `name` = 'twin' AND (`email` = 'twin@example.com' OR `score` > 100)",
+        ]), $sql);
     }
 
     public function testWhereIgnoreNullColumn()
@@ -222,7 +225,10 @@ class QueryBuilderTest extends BaseTestCase
             ->getRawSql();
 
         $this->assertEquals(
-            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
+            implode(' ', [
+            'SELECT * FROM `p_test_users`',
+            "WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
+            ]),
             $sql
         );
     }
@@ -390,7 +396,10 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereDate('created_at', '2020-02-02')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR DATE(`created_at`) = '2020-02-02'", $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR DATE(`created_at`) = '2020-02-02'",
+            $sql
+        );
     }
 
     public function testWhereMonth()
@@ -459,7 +468,10 @@ class QueryBuilderTest extends BaseTestCase
             ->orWhereTime('created_at', '20:20:20')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'", $sql);
+        $this->assertEquals(
+            "SELECT * FROM `p_test_users` WHERE `name` = 'twin' OR TIME(`created_at`) = '20:20:20'",
+            $sql
+        );
     }
 
     public function testWhereColumn()
@@ -1059,7 +1071,10 @@ class QueryBuilderTest extends BaseTestCase
         $this->initFixtures();
 
         $qb = Qb::table('test_users')->join('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
-        $this->assertSame('SELECT * FROM `p_test_users` INNER JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`', $qb->getRawSql());
+        $this->assertSame(implode(' ', [
+            'SELECT * FROM `p_test_users`',
+            'INNER JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`',
+        ]), $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
@@ -1070,7 +1085,10 @@ class QueryBuilderTest extends BaseTestCase
         $this->initFixtures();
 
         $qb = Qb::table('test_users', 'u')->join('test_user_groups g', 'u.group_id', '=', 'g.id');
-        $this->assertSame('SELECT * FROM `p_test_users` `u` INNER JOIN `p_test_user_groups` `g` ON `u`.`group_id` = `g`.`id`', $qb->getRawSql());
+        $this->assertSame(
+            'SELECT * FROM `p_test_users` `u` INNER JOIN `p_test_user_groups` `g` ON `u`.`group_id` = `g`.`id`',
+            $qb->getRawSql()
+        );
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
@@ -1081,7 +1099,10 @@ class QueryBuilderTest extends BaseTestCase
         $this->initFixtures();
 
         $qb = Qb::table('test_users')->leftJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
-        $this->assertSame('SELECT * FROM `p_test_users` LEFT JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`', $qb->getRawSql());
+        $this->assertSame(implode(' ', [
+            'SELECT * FROM `p_test_users`',
+            'LEFT JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`',
+        ]), $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
@@ -1093,7 +1114,10 @@ class QueryBuilderTest extends BaseTestCase
         $this->initFixtures();
 
         $qb = Qb::table('test_users')->rightJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
-        $this->assertSame('SELECT * FROM `p_test_users` RIGHT JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`', $qb->getRawSql());
+        $this->assertSame(implode(' ', [
+            'SELECT * FROM `p_test_users`',
+            'RIGHT JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`',
+        ]), $qb->getRawSql());
 
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);

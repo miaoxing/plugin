@@ -284,8 +284,10 @@ class RelationTest extends BaseTestCase
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[0]);
-        $sql = 'SELECT * FROM `test_articles` WHERE `test_user_id` = ? AND `title` LIKE ? AND `id` >= ? ORDER BY `id` DESC, `id` DESC';
-        $this->assertEquals($sql, $queries[1]);
+        $this->assertEquals(implode(' ', [
+            'SELECT * FROM `test_articles` WHERE `test_user_id` = ? AND `title` LIKE ? AND `id` >= ?',
+            'ORDER BY `id` DESC, `id` DESC',
+        ]), $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -324,10 +326,11 @@ class RelationTest extends BaseTestCase
 
         $this->assertEquals('SELECT * FROM `test_articles` WHERE `id` = ? LIMIT 1', $queries[0]);
 
-        $this->assertEquals(<<<SQL
-SELECT `test_tags`.* FROM `test_tags` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id` WHERE `test_articles_test_tags`.`test_article_id` = ?
-SQL
-            , $queries[1]);
+        $this->assertEquals(implode(' ', [
+            'SELECT `test_tags`.* FROM `test_tags`',
+            'INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id`',
+            'WHERE `test_articles_test_tags`.`test_article_id` = ?',
+        ]), $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -343,10 +346,11 @@ SQL
         $queries = wei()->db->getQueries();
 
         $this->assertEquals('SELECT * FROM `test_tags` WHERE `id` = ? LIMIT 1', $queries[0]);
-        $this->assertEquals(<<<SQL
-SELECT `test_articles`.* FROM `test_articles` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_article_id` = `test_articles`.`id` WHERE `test_articles_test_tags`.`test_tag_id` = ?
-SQL
-            , $queries[1]);
+        $this->assertEquals(implode(' ', [
+            'SELECT `test_articles`.* FROM `test_articles` INNER JOIN',
+            '`test_articles_test_tags` ON `test_articles_test_tags`.`test_article_id` = `test_articles`.`id`',
+            'WHERE `test_articles_test_tags`.`test_tag_id` = ?',
+        ]), $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -369,10 +373,11 @@ SQL
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
-        $this->assertEquals(<<<SQL
-SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id` WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?)
-SQL
-            , $queries[1]);
+        $this->assertEquals(implode([
+            'SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags`',
+            'INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id`',
+            'WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?)',
+        ]), $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -395,10 +400,11 @@ SQL
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
-        $this->assertEquals(<<<SQL
-SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags` INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id` WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?) AND `test_tags`.`id` > ?
-SQL
-            , $queries[1]);
+        $this->assertEquals(implode(' ', [
+            'SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags`',
+            'INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id`',
+            'WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?) AND `test_tags`.`id` > ?'
+        ]), $queries[1]);
         $this->assertCount(2, $queries);
     }
 

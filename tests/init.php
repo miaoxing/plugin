@@ -42,6 +42,10 @@ $wei = wei($config);
 
 // NOTE: 安装需依赖CI环境的配置，暂时放到这里
 if ($isCi) {
+    $out = static function ($message) {
+        fwrite(STDOUT, $message . "\n");
+    };
+
     // 1. 初始化数据库
     $db = $wei->db;
     $db->executeUpdate('CREATE DATABASE IF NOT EXISTS ' . $db->getDbname());
@@ -53,13 +57,8 @@ if ($isCi) {
     // 3. 逐个安装插件
     foreach ($wei->plugin->getAll() as $plugin) {
         $ret = $wei->plugin->install($plugin->getId());
-        out($plugin->getId() . ': ' . $ret['message']);
+        $out($plugin->getId() . ': ' . $ret['message']);
     }
 
-    out('Install successfully');
-}
-
-function out($message)
-{
-    fwrite(STDOUT, $message . "\n");
+    $out('Install successfully');
 }

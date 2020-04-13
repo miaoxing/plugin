@@ -216,7 +216,12 @@ trait ReqQueryTrait
                 $table = $related->db->getDbname() . '.' . $table;
             }
 
-            $this->leftJoin($table, $table . '.' . $config['foreignKey'], '=', $this->getTable() . '.' . $config['localKey']);
+            $this->leftJoin(
+                $table,
+                $table . '.' . $config['foreignKey'],
+                '=',
+                $this->getTable() . '.' . $config['localKey']
+            );
         }
 
         return $this;

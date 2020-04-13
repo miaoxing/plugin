@@ -143,7 +143,7 @@ class QueryBuilder extends BaseService
      */
     protected static $snakeCache = [];
 
-    /*
+    /**
      * @var array
      */
     protected static $camelCache = [];
@@ -1319,7 +1319,11 @@ class QueryBuilder extends BaseService
         }
 
         if ($append) {
-            if ($sqlPartName == 'orderBy' || $sqlPartName == 'groupBy' || $sqlPartName == 'select' || $sqlPartName == 'set') {
+            if ($sqlPartName === 'orderBy'
+                || $sqlPartName === 'groupBy'
+                || $sqlPartName === 'select'
+                || $sqlPartName === 'set'
+            ) {
                 $this->sqlParts[$sqlPartName] = array_merge($this->sqlParts[$sqlPartName], $sqlPart);
             } elseif ($isMultiple) {
                 $this->sqlParts[$sqlPartName][] = $sqlPart;

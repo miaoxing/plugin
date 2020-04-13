@@ -190,7 +190,8 @@ class Plugin extends BaseService
             foreach ($classes as $class) {
                 $parts = explode('\\', $class);
                 $name = end($parts);
-                $name = substr($name, 0, -6 /* length of "Plugin" */);
+                // Remove "Plugin" suffix
+                $name = substr($name, 0, -6);
                 $name = $this->dash($name);
                 $this->pluginClasses[$name] = $class;
             }

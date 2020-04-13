@@ -4,67 +4,77 @@
  * @property    Miaoxing\Plugin\Service\App $app 应用
  * @method      mixed app($options = [])
  */
-class AppMixin {
+class AppMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\AppModel $appModel 应用模型
  * @method      Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] appModel($table = null)
  */
-class AppModelMixin {
+class AppModelMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Event $event
  */
-class EventMixin {
+class EventMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Model $model
  * @method      Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] model($table = null)
  */
-class ModelMixin {
+class ModelMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
  */
-class PluginMixin {
+class PluginMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\QueryBuilder $queryBuilder A SQL query builder class
  * @method      Miaoxing\Plugin\Service\QueryBuilder queryBuilder($table = null)
  */
-class QueryBuilderMixin {
+class QueryBuilderMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Session $session
  * @method      mixed session($key, $value = null) Get or set session
  */
-class SessionMixin {
+class SessionMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Str $str 字符串操作服务
  */
-class StrMixin {
+class StrMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\User $user 用户
  * @method      Miaoxing\Plugin\Service\User|Miaoxing\Plugin\Service\User[] user($table = null)
  */
-class UserMixin {
+class UserMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\UserModel $userModel
  * @method      Miaoxing\Plugin\Service\UserModel|Miaoxing\Plugin\Service\UserModel[] userModel($table = null)
  */
-class UserModelMixin {
+class UserModelMixin
+{
 }
 
 /**
@@ -79,7 +89,8 @@ class UserModelMixin {
  * @mixin UserMixin
  * @mixin UserModelMixin
  */
-class AutoCompletion {
+class AutoCompletion
+{
 }
 
 /**
