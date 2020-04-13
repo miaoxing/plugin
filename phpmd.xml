@@ -50,11 +50,11 @@
   <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod" />
   <!--<rule ref="rulesets/unusedcode.xml/UnusedFormalParameter" />-->
 
-  <rule ref="resources/rulesets/phpmd-extension/cleancode.xml/ConstructorNewOperator" />
-  <rule ref="resources/rulesets/phpmd-extension/cleancode.xml/PublicFieldDeclaration" />
-  <!--<rule ref="resources/rulesets/phpmd-extension/cleancode.xml/ReturnStatement" />-->
+  <rule ref="plugins/build/resources/rulesets/phpmd-extension/cleancode.xml/ConstructorNewOperator" />
+  <rule ref="plugins/build/resources/rulesets/phpmd-extension/cleancode.xml/PublicFieldDeclaration" />
+  <!--<rule ref="plugins/build/resources/rulesets/phpmd-extension/cleancode.xml/ReturnStatement" />-->
 
-  <rule ref="resources/rulesets/phpmd-extension/naming.xml/ClassNameSuffix" />
-  <!--<rule ref="resources/rulesets/phpmd-extension/naming.xml/ControllerMethodName" />-->
-  <!--<rule ref="resources/rulesets/phpmd-extension/naming.xml/MethodName" />-->
+  <rule ref="plugins/build/resources/rulesets/phpmd-extension/naming.xml/ClassNameSuffix" />
+  <!--<rule ref="plugins/build/resources/rulesets/phpmd-extension/naming.xml/ControllerMethodName" />-->
+  <!--<rule ref="plugins/build/resources/rulesets/phpmd-extension/naming.xml/MethodName" />-->
 </ruleset>
