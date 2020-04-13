@@ -65,6 +65,7 @@ class ReqQueryTraitTest extends BaseTestCase
 
         $this->assertEquals(<<<SQL
 SELECT `test_req_queries`.* FROM `test_req_queries` LEFT JOIN `test_req_query_details` ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id` WHERE `test_req_query_details`.`name` LIKE ? AND `test_req_queries`.`name` LIKE ?
-SQL, $query->getSql());
+SQL
+            , $query->getSql());
     }
 }
