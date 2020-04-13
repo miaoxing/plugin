@@ -27,6 +27,7 @@ before_install:
   - sudo mysql -e 'CREATE DATABASE miaoxing;'
 
 install:
+  - composer install --no-interaction
   - bash plugins/build/bin/install-travis.sh
 
 script:
