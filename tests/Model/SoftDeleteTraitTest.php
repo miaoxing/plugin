@@ -22,7 +22,7 @@ class SoftDeleteTraitTest extends BaseTestCase
         wei()->db->batchInsert('test_soft_deletes', [
             [
                 'name' => 'normal',
-                'deleted_at' => '',
+                'deleted_at' => null,
             ],
             [
                 'name' => 'deleted',

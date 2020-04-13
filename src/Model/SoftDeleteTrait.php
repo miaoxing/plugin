@@ -27,13 +27,10 @@ trait SoftDeleteTrait
 
     /**
      * @return bool
-     * @throws \Exception
      */
     public function isDeleted()
     {
-        $value = $this->get($this->deletedAtColumn);
-
-        return $value && $value !== '0000-00-00 00:00:00';
+        return (bool) $this->get($this->deletedAtColumn);
     }
 
     /**
@@ -67,7 +64,7 @@ trait SoftDeleteTrait
      */
     protected function withoutDeleted()
     {
-        return $this->where($this->deletedAtColumn, '0000-00-00 00:00:00');
+        return $this->whereNull($this->deletedAtColumn);
     }
 
     /**
@@ -76,8 +73,7 @@ trait SoftDeleteTrait
      */
     protected function onlyDeleted()
     {
-        return $this->unscoped('withoutDeleted')
-            ->where($this->deletedAtColumn, '!=', '0000-00-00 00:00:00');
+        return $this->unscoped('withoutDeleted')->whereNotNull($this->deletedAtColumn);
     }
 
     /**
@@ -99,7 +95,7 @@ trait SoftDeleteTrait
         } else {
             $this->saveData([
                 $this->deletedAtColumn => Time::now(),
-                $this->deletedByColumn => User::id(),
+                $this->deletedByColumn => User::id() ?: 0,
             ]);
         }
     }
