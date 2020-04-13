@@ -14,6 +14,7 @@ use Wei\Base;
  * @author Twin Huang <twinhuang@qq.com>
  * @mixin \DbMixin
  * @mixin \TagCacheMixin
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength) Allow long query builder class
  */
 class QueryBuilder extends BaseService
 {
