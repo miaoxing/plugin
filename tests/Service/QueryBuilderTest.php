@@ -156,7 +156,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereParamIsArray()
     {
-        $this->initFixtures();;
+        $this->initFixtures();
 
         $qb = Qb::table('test_users')->where('id', [1, 2]);
 
