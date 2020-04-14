@@ -13,25 +13,19 @@ class ModelTest extends BaseTestCase
 {
     use DbTrait;
 
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        wei()->db->setOption('tablePrefix', 'p_');
+    }
+
     public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 
         self::dropTables();
-    }
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->db->setOption('tablePrefix', 'p_');
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->db->setOption('tablePrefix', '');
+        wei()->db->setOption('tablePrefix', '');
     }
 
     public function testSetter()

@@ -14,25 +14,19 @@ class QueryBuilderTest extends BaseTestCase
 {
     use DbTrait;
 
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        wei()->db->setOption('tablePrefix', 'p_');
+    }
+
     public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 
         self::dropTables();
-    }
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->db->setOption('tablePrefix', 'p_');
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->db->setOption('tablePrefix', '');
+        wei()->db->setOption('tablePrefix', '');
     }
 
     public function testSelect()
@@ -162,8 +156,7 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testWhereParamIsArray()
     {
-        $this->initFixtures();
-        ;
+        $this->initFixtures();;
 
         $qb = Qb::table('test_users')->where('id', [1, 2]);
 
@@ -233,8 +226,8 @@ class QueryBuilderTest extends BaseTestCase
 
         $this->assertEquals(
             implode(' ', [
-            'SELECT * FROM `p_test_users`',
-            "WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
+                'SELECT * FROM `p_test_users`',
+                "WHERE `name` = 'twin' OR `email` = 'twin@example.com' OR `first_name` = 'twin'",
             ]),
             $sql
         );
