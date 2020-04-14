@@ -15,7 +15,6 @@ use Wei\RetTrait;
 
 /**
  * @mixin \UserMixin
- * @SuppressWarnings(PHPMD.ExcessiveClassLength) Allow long model class
  */
 class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
 {
