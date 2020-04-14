@@ -13,6 +13,13 @@ class ModelTest extends BaseTestCase
 {
     use DbTrait;
 
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+
+        self::dropTables();
+    }
+
     public function setUp(): void
     {
         parent::setUp();
