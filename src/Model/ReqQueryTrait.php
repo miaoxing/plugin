@@ -230,7 +230,7 @@ trait ReqQueryTrait
     /**
      * @param array|string $columns
      * @return $this
-     * @api
+     * @svc
      */
     protected function like($columns)
     {

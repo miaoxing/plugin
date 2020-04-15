@@ -430,7 +430,7 @@ class App extends \Wei\App
      *
      * @param string $domain
      * @return string|false
-     * @api
+     * @svc
      */
     protected function getIdByDomain($domain)
     {

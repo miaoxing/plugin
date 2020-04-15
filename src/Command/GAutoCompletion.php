@@ -210,7 +210,7 @@ PHP;
                     // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
                     $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
 
-                    $method->setComment(str_replace('@api', $see . $refMethod->getName(), $method->getComment()));
+                    $method->setComment(str_replace('@svc', $see . $refMethod->getName(), $method->getComment()));
 
                     $methods[] = $method;
                     $staticMethods[] = (clone $method)->setStatic();
@@ -437,7 +437,7 @@ PHP;
 
     protected function isApi(ReflectionMethod $method)
     {
-        return strpos($method->getDocComment(), '* @api');
+        return strpos($method->getDocComment(), '* @svc');
     }
 
     protected function generateClass($class, $comment)

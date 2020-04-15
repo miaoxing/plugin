@@ -46,7 +46,7 @@ trait QueryBuilderCacheTrait
      *
      * @param int|null|false $seconds
      * @return $this
-     * @api
+     * @svc
      */
     protected function cache($seconds = null)
     {

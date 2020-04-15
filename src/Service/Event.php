@@ -13,7 +13,7 @@ class Event extends \Wei\Event
      * @param array $args
      * @param bool $halt
      * @return array|mixed
-     * @api
+     * @svc
      */
     protected function trig($name, $args = array(), $halt = false)
     {
@@ -24,7 +24,7 @@ class Event extends \Wei\Event
      * @param string $name
      * @param array $args
      * @return mixed
-     * @api
+     * @svc
      */
     protected function trigUtil($name, $args = array())
     {

@@ -48,7 +48,7 @@ trait DefaultScopeTrait
     /**
      * @param string|array|true $scopes
      * @return $this
-     * @api
+     * @svc
      */
     protected function unscoped($scopes = [])
     {

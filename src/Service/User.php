@@ -192,7 +192,7 @@ class User extends UserModel
 
     /**
      * @return int|null
-     * @api
+     * @svc
      */
     protected function id()
     {
@@ -201,7 +201,7 @@ class User extends UserModel
 
     /**
      * @return UserModel
-     * @api
+     * @svc
      */
     protected function cur()
     {
@@ -212,7 +212,7 @@ class User extends UserModel
      * 判断用户是否登录
      *
      * @return bool
-     * @api
+     * @svc
      */
     protected function isLogin()
     {
@@ -224,7 +224,7 @@ class User extends UserModel
      *
      * @param mixed $data
      * @return array
-     * @api
+     * @svc
      */
     protected function login($data)
     {
@@ -290,7 +290,7 @@ class User extends UserModel
      *
      * @param int $id
      * @return array
-     * @api
+     * @svc
      */
     protected function loginById($id)
     {
@@ -308,7 +308,7 @@ class User extends UserModel
      * @param mixed $conditions
      * @param array $data
      * @return $this
-     * @api
+     * @svc
      */
     protected function loginBy($conditions, $data = [])
     {
@@ -323,7 +323,7 @@ class User extends UserModel
      *
      * @param UserModel $user
      * @return array
-     * @api
+     * @svc
      */
     protected function loginByModel(UserModel $user)
     {
@@ -338,7 +338,7 @@ class User extends UserModel
      * 销毁用户会话,退出登录
      *
      * @return $this
-     * @api
+     * @svc
      */
     protected function logout()
     {
@@ -353,7 +353,7 @@ class User extends UserModel
      *
      * @param UserModel $user
      * @return $this
-     * @api
+     * @svc
      */
     protected function refresh(UserModel $user)
     {

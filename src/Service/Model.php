@@ -237,7 +237,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Return the record table name
      *
      * @return string
-     * @api
+     * @svc
      */
     protected function getTable()
     {
@@ -297,7 +297,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @api
+     * @svc
      */
     protected function fromArray($data)
     {
@@ -369,7 +369,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param array $data
      * @return $this
-     * @api
+     * @svc
      */
     protected function save($data = array())
     {
@@ -460,7 +460,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param string|int $id
      * @return $this
-     * @api
+     * @svc
      */
     protected function destroy($id = null)
     {
@@ -668,7 +668,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param mixed $value
      * @param bool $throwException
      * @return $this
-     * @api
+     * @svc
      */
     protected function set($name, $value = null, $throwException = true)
     {
@@ -845,7 +845,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param int|string $id
      * @return $this|null
-     * @api
+     * @svc
      */
     protected function find($id)
     {
@@ -858,7 +858,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @api
+     * @svc
      */
     protected function findOrFail($id)
     {
@@ -875,7 +875,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @api
+     * @svc
      */
     protected function findOrInit($id = null, $data = [])
     {
@@ -888,7 +888,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @api
+     * @svc
      */
     protected function findOrCreate($id, $data = array())
     {
@@ -917,7 +917,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param array $ids
      * @return $this|$this[]
-     * @api
+     * @svc
      */
     protected function findAll($ids)
     {
@@ -929,7 +929,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param null $operator
      * @param null $value
      * @return $this|null
-     * @api
+     * @svc
      */
     protected function findBy($column, $operator = null, $value = null)
     {
@@ -950,7 +950,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param null $operator
      * @param null $value
      * @return $this|$this[]
-     * @api
+     * @svc
      */
     protected function findAllBy($column, $operator = null, $value = null)
     {
@@ -977,7 +977,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param $attributes
      * @param array $data
      * @return $this
-     * @api
+     * @svc
      */
     protected function findOrInitBy($attributes, $data = [])
     {
@@ -1004,7 +1004,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param mixed $value
      * @return $this
      * @throws \Exception
-     * @api
+     * @svc
      */
     protected function findByOrFail($column, $operator = null, $value = null)
     {
@@ -1019,7 +1019,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @api
+     * @svc
      */
     protected function first()
     {
@@ -1028,7 +1028,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @return $this
-     * @api
+     * @svc
      */
     protected function all()
     {
@@ -1857,7 +1857,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * @param string $column
      * @return $this
-     * @api
+     * @svc
      */
     protected function indexBy($column)
     {

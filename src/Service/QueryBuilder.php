@@ -165,7 +165,7 @@ class QueryBuilder extends BaseService
      * Return the record table name
      *
      * @return string
-     * @api
+     * @svc
      */
     protected function getTable()
     {
@@ -209,7 +209,7 @@ class QueryBuilder extends BaseService
      * Returns the name of fields of current table
      *
      * @return array
-     * @api
+     * @svc
      */
     protected function getFields()
     {
@@ -264,7 +264,7 @@ class QueryBuilder extends BaseService
      *
      * @param mixed $conditions
      * @return array|null
-     * @api
+     * @svc
      */
     protected function fetch($column = null, $operator = null, $value = null)
     {
@@ -291,7 +291,7 @@ class QueryBuilder extends BaseService
      *
      * @param mixed $conditions
      * @return array|false
-     * @api
+     * @svc
      */
     protected function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -307,7 +307,7 @@ class QueryBuilder extends BaseService
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return array|null
-     * @api
+     * @svc
      */
     protected function first()
     {
@@ -316,7 +316,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @return array|null
-     * @api
+     * @svc
      */
     protected function all()
     {
@@ -327,7 +327,7 @@ class QueryBuilder extends BaseService
      * @param string $column
      * @param string|null $index
      * @return array
-     * @api
+     * @svc
      */
     protected function pluck(string $column, string $index = null)
     {
@@ -341,7 +341,7 @@ class QueryBuilder extends BaseService
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @api
+     * @svc
      */
     protected function chunk(int $count, callable $callback)
     {
@@ -372,7 +372,7 @@ class QueryBuilder extends BaseService
      *
      * @param string $column
      * @return int
-     * @api
+     * @svc
      */
     protected function cnt($column = '*')
     {
@@ -409,7 +409,7 @@ class QueryBuilder extends BaseService
      * @param array|string $set
      * @param null $value
      * @return int
-     * @api
+     * @svc
      */
     protected function update($set = [], $value = null)
     {
@@ -433,7 +433,7 @@ class QueryBuilder extends BaseService
      *
      * @param mixed $conditions
      * @return mixed
-     * @api
+     * @svc
      */
     protected function delete($column = null, $operator = null, $value = null)
     {
@@ -447,7 +447,7 @@ class QueryBuilder extends BaseService
      *
      * @param integer $offset The first result to return
      * @return $this
-     * @api
+     * @svc
      */
     protected function offset($offset)
     {
@@ -461,7 +461,7 @@ class QueryBuilder extends BaseService
      *
      * @param integer $limit The maximum number of results to retrieve
      * @return $this
-     * @api
+     * @svc
      */
     protected function limit($limit)
     {
@@ -481,7 +481,7 @@ class QueryBuilder extends BaseService
      *
      * @param int $page The page number
      * @return $this
-     * @api
+     * @svc
      */
     protected function page($page)
     {
@@ -502,7 +502,7 @@ class QueryBuilder extends BaseService
      *
      * @param string|array $columns The selection expressions.
      * @return $this
-     * @api
+     * @svc
      */
     protected function select($columns = ['*']): self
     {
@@ -525,7 +525,7 @@ class QueryBuilder extends BaseService
     /**
      * @param $columns
      * @return $this
-     * @api
+     * @svc
      */
     protected function selectDistinct($columns)
     {
@@ -536,7 +536,7 @@ class QueryBuilder extends BaseService
     /**
      * @param string $expression
      * @return $this
-     * @api
+     * @svc
      */
     protected function selectRaw($expression)
     {
@@ -551,7 +551,7 @@ class QueryBuilder extends BaseService
      *
      * @param string|array $columns
      * @return $this
-     * @api
+     * @svc
      */
     protected function selectExcept($columns)
     {
@@ -571,7 +571,7 @@ class QueryBuilder extends BaseService
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @api
+     * @svc
      */
     protected function from($table, $alias = null): self
     {
@@ -582,7 +582,7 @@ class QueryBuilder extends BaseService
     /**
      * @param string $table
      * @return $this
-     * @api
+     * @svc
      */
     protected function table(string $table, $alias = null): self
     {
@@ -598,7 +598,7 @@ class QueryBuilder extends BaseService
      * @param string $second
      * @param string $type
      * @return $this
-     * @api
+     * @svc
      */
     protected function join(
         string $table,
@@ -619,7 +619,7 @@ class QueryBuilder extends BaseService
      * @param string|null $second
      * @param string $type
      * @return $this
-     * @api
+     * @svc
      */
     protected function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -634,7 +634,7 @@ class QueryBuilder extends BaseService
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @api
+     * @svc
      */
     protected function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -649,7 +649,7 @@ class QueryBuilder extends BaseService
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @api
+     * @svc
      */
     protected function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -671,7 +671,7 @@ class QueryBuilder extends BaseService
      * @param null $operator
      * @param null $value
      * @return $this
-     * @api
+     * @svc
      */
     protected function where($column = null, $operator = null, $value = null)
     {
@@ -703,7 +703,7 @@ class QueryBuilder extends BaseService
      * @param string $expression
      * @param array $params
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereRaw($expression, $params = [])
     {
@@ -745,7 +745,7 @@ class QueryBuilder extends BaseService
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereBetween($column, array $params)
     {
@@ -761,7 +761,7 @@ class QueryBuilder extends BaseService
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereNotBetween($column, array $params)
     {
@@ -777,7 +777,7 @@ class QueryBuilder extends BaseService
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereIn($column, array $params)
     {
@@ -793,7 +793,7 @@ class QueryBuilder extends BaseService
      * @param $column
      * @param array $params
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereNotIn($column, array $params)
     {
@@ -808,7 +808,7 @@ class QueryBuilder extends BaseService
     /**
      * @param $column
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereNull($column)
     {
@@ -823,7 +823,7 @@ class QueryBuilder extends BaseService
     /**
      * @param $column
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereNotNULL($column)
     {
@@ -840,7 +840,7 @@ class QueryBuilder extends BaseService
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereDate($column, $opOrValue, $value = null)
     {
@@ -857,7 +857,7 @@ class QueryBuilder extends BaseService
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereMonth($column, $opOrValue, $value = null)
     {
@@ -874,7 +874,7 @@ class QueryBuilder extends BaseService
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereDay($column, $opOrValue, $value = null)
     {
@@ -891,7 +891,7 @@ class QueryBuilder extends BaseService
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereYear($column, $opOrValue, $value = null)
     {
@@ -908,7 +908,7 @@ class QueryBuilder extends BaseService
      * @param $opOrValue
      * @param null $value
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereTime($column, $opOrValue, $value = null)
     {
@@ -925,7 +925,7 @@ class QueryBuilder extends BaseService
      * @param $opOrColumn2
      * @param null $column2
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -944,7 +944,7 @@ class QueryBuilder extends BaseService
      * @param string $value
      * @param string $condition
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereContains($column, $value, string $condition = 'AND')
     {
@@ -961,7 +961,7 @@ class QueryBuilder extends BaseService
      * @param $value
      * @param string $condition
      * @return $this
-     * @api
+     * @svc
      */
     protected function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -979,7 +979,7 @@ class QueryBuilder extends BaseService
      *
      * @param mixed $column The grouping column.
      * @return $this
-     * @api
+     * @svc
      */
     protected function groupBy($column)
     {
@@ -995,7 +995,7 @@ class QueryBuilder extends BaseService
      * @param array $params The condition parameters
      * @param array $types The parameter types
      * @return $this
-     * @api
+     * @svc
      */
     protected function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -1019,7 +1019,7 @@ class QueryBuilder extends BaseService
      * @param $expression
      * @param array $params
      * @return $this
-     * @api
+     * @svc
      */
     public function havingRaw($expression, $params = [])
     {
@@ -1051,7 +1051,7 @@ class QueryBuilder extends BaseService
      * @param string $column The ordering expression.
      * @param string $order The ordering direction.
      * @return $this
-     * @api
+     * @svc
      */
     protected function orderBy($column, $order = 'ASC')
     {
@@ -1068,7 +1068,7 @@ class QueryBuilder extends BaseService
      *
      * @param string $field The name of field
      * @return $this
-     * @api
+     * @svc
      */
     protected function desc($field)
     {
@@ -1080,7 +1080,7 @@ class QueryBuilder extends BaseService
      *
      * @param string $field The name of field
      * @return $this
-     * @api
+     * @svc
      */
     protected function asc($field)
     {
@@ -1092,7 +1092,7 @@ class QueryBuilder extends BaseService
      *
      * @param string $column
      * @return $this
-     * @api
+     * @svc
      */
     protected function indexBy($column)
     {
@@ -1161,7 +1161,7 @@ class QueryBuilder extends BaseService
      *
      * @param string $name
      * @return $this
-     * @api
+     * @svc
      */
     protected function resetSqlPart($name)
     {
@@ -1374,7 +1374,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @return $this
-     * @api
+     * @svc
      */
     protected function forUpdate()
     {
@@ -1383,7 +1383,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @return $this
-     * @api
+     * @svc
      */
     protected function forShare()
     {
@@ -1393,7 +1393,7 @@ class QueryBuilder extends BaseService
     /**
      * @param string $lock
      * @return $this
-     * @api
+     * @svc
      */
     protected function lock($lock)
     {
@@ -1407,7 +1407,7 @@ class QueryBuilder extends BaseService
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @api
+     * @svc
      */
     protected function when($value, $callback, callable $default = null)
     {
@@ -1424,7 +1424,7 @@ class QueryBuilder extends BaseService
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @api
+     * @svc
      */
     protected function unless($value, callable $callback, callable $default = null)
     {
@@ -1452,7 +1452,7 @@ class QueryBuilder extends BaseService
     /**
      * @param callable $converter
      * @return $this
-     * @api
+     * @svc
      */
     protected function setInputIdentifierConverter(callable $converter)
     {

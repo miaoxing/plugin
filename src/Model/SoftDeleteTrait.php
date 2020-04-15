@@ -47,7 +47,7 @@ trait SoftDeleteTrait
     /**
      * @param mixed $conditions
      * @return $this
-     * @api
+     * @svc
      */
     protected function reallyDestroy($conditions = false)
     {
@@ -60,7 +60,7 @@ trait SoftDeleteTrait
 
     /**
      * @return $this
-     * @api
+     * @svc
      */
     protected function withoutDeleted()
     {
@@ -69,7 +69,7 @@ trait SoftDeleteTrait
 
     /**
      * @return $this
-     * @api
+     * @svc
      */
     protected function onlyDeleted()
     {
@@ -78,7 +78,7 @@ trait SoftDeleteTrait
 
     /**
      * @return $this
-     * @api
+     * @svc
      */
     protected function withDeleted()
     {

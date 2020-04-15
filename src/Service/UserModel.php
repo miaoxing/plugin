@@ -54,7 +54,7 @@ class UserModel extends Model
      *
      * @param string $permissionId
      * @return bool
-     * @api
+     * @svc
      */
     protected function can($permissionId)
     {
