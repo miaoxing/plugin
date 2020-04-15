@@ -3,9 +3,9 @@
 namespace Miaoxing\Plugin {
 
     /**
-     * @property    \Wei\Event $event
-     * @property    \Miaoxing\Plugin\Service\App $app 应用管理服务
-     * @property    \Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
+     * @mixin \AppMixin
+     * @mixin \PluginMixin
+     * @mixin \EventMixin
      */
     class BaseService extends \Wei\Base
     {
