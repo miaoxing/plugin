@@ -2,8 +2,6 @@
 
 namespace Miaoxing\Plugin {
 
-    use Miaoxing\Services\Service\StaticTrait;
-
     /**
      * @property    \Wei\Event $event
      * @property    \Miaoxing\Plugin\Service\App $app 应用管理服务
@@ -11,7 +9,6 @@ namespace Miaoxing\Plugin {
      */
     class BaseService extends \Wei\Base
     {
-        use StaticTrait;
     }
 }
 
