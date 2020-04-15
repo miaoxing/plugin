@@ -3,6 +3,7 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\App\Fixture\Controller\Test;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
@@ -48,6 +49,16 @@ class ModelTest extends BaseTestCase
         $user = TestUser::find(1);
 
         $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` = 1 LIMIT 1', $user->getRawSql());
+        $this->assertEquals('1', $user->id);
+    }
+
+    public function testFindWithArray()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::find([1, 2]);
+
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` IN (1, 2) LIMIT 1', $user->getRawSql());
         $this->assertEquals('1', $user->id);
     }
 
