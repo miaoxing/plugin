@@ -191,8 +191,8 @@ PHP;
 
             $class = new ClassType($refClass->getShortName());
             // NOTE: 如果增加了继承，Service目录之外的子类没有代码提示（如果还无效不断重启直到生效）
-            if ($this->excludeParentMethods) {
-                $class->addExtend($refClass->getParentClass()->getName());
+            if ($this->excludeParentMethods && $parent = $refClass->getParentClass()) {
+                $class->addExtend($parent->getName());
             }
 
             $staticClass = clone $class;
