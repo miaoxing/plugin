@@ -39,7 +39,7 @@ class User extends UserModel
      *
      * @var bool
      */
-    protected static $createNewInstance = false;
+    public static $createNewInstance = false;
 
     protected $configs = [
         'enablePinCode' => [
