@@ -220,7 +220,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public static function new($data = [], array $options = [])
     {
-        return static::newInstance($options + ['data' => $data]);
+        return static::createNewInstance($options + ['data' => $data]);
     }
 
     /**
@@ -230,7 +230,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public static function newColl($data = [])
     {
-        return static::newInstance()->beColl()->fromArray($data);
+        return static::createNewInstance()->beColl()->fromArray($data);
     }
 
     /**
