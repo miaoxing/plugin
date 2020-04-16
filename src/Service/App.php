@@ -410,7 +410,7 @@ class App extends \Wei\App
      */
     public function isApi()
     {
-        return substr($this->getController(), 0, 3) === 'api';
+        return strpos($this->getController(), 'api') === 0;
     }
 
     /**
