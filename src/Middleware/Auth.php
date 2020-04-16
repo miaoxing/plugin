@@ -29,13 +29,19 @@ class Auth extends BaseMiddleware
             return $next();
         }
 
-        if ($this->user->isLogin() && ($this->event->until('isAuthed') ?? true)) {
+        $ret = $this->event->until('checkAuth');
+        if (!$ret && !$this->user->isLogin()) {
+            $ret = $this->err([
+                'message' => '您好,请登录',
+                'next' => $this->url('users/login'),
+            ]);
+        }
+
+        if (!$ret) {
             return $next();
         }
 
-        // 跳转到相应的登录页面
-        $url = $this->event->until('loginUrl') ?: $this->url('users/login');
-        return $this->redirectLogin($url);
+        return $this->redirectLogin($ret);
     }
 
     /**
@@ -44,20 +50,14 @@ class Auth extends BaseMiddleware
      * @param string $url
      * @return array|\Wei\Response
      */
-    protected function redirectLogin($url)
+    protected function redirectLogin($ret)
     {
         if ($this->request->acceptJson()) {
-            $url = $this->url->append($url, ['next' => $this->request->getReferer()]);
-
-            return $this->err([
-                'code' => 401,
-                'message' => '您好,请登录',
-                'next' => $url,
-            ]);
-        } else {
-            $url = $this->url->append($url, ['next' => $this->request->getUrl()]);
-
-            return $this->response->redirect($url);
+            $ret['code'] = $ret['code'] !== -1 ? $ret['code'] : 401;
+            $ret['next'] = $this->url->append($ret['next'], ['next' => $this->request->getReferer()]);
+            return $ret;
         }
+
+        return $this->response->redirect($this->url->append($ret['url'], ['next' => $this->request->getUrl()]));
     }
 }
