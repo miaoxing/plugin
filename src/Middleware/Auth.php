@@ -8,6 +8,7 @@ use Miaoxing\Services\Middleware\BaseMiddleware;
 /**
  * @mixin \UserMixin
  * @mixin \UrlMixin
+ * @mixin \EventMixin
  */
 class Auth extends BaseMiddleware
 {
@@ -28,12 +29,12 @@ class Auth extends BaseMiddleware
             return $next();
         }
 
-        if ($this->user->isLogin()) {
+        if ($this->user->isLogin() && ($this->event->until('isAuthed') ?? true)) {
             return $next();
         }
 
         // 跳转到相应的登录页面
-        $url = wei()->event->until('loginUrl') ?: $this->url('users/login');
+        $url = $this->event->until('loginUrl') ?: $this->url('users/login');
         return $this->redirectLogin($url);
     }
 
@@ -51,7 +52,7 @@ class Auth extends BaseMiddleware
             return $this->err([
                 'code' => 401,
                 'message' => '您好,请登录',
-                'redirect' => $url,
+                'next' => $url,
             ]);
         } else {
             $url = $this->url->append($url, ['next' => $this->request->getUrl()]);
