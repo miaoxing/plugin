@@ -173,11 +173,9 @@ PHP;
      */
     public function generateStaticCalls(array $services, string $path)
     {
-        $file = new PhpFile();
         $printer = new PsrPrinter;
-
-        $statics = [];
-        $dynamics = [];
+        $staticFile = new PhpFile;
+        $dynamicFile = new PhpFile;
 
         foreach ($services as $name => $serviceClass) {
             // 忽略 trait
@@ -187,7 +185,8 @@ PHP;
 
             $refClass = new ReflectionClass($serviceClass);
 
-            $namespace = $file->addNamespace($refClass->getNamespaceName());
+            $staticNamespace = $staticFile->addNamespace($refClass->getNamespaceName());
+            $dynamicNamespace = $dynamicFile->addNamespace($refClass->getNamespaceName());
 
             $class = new ClassType($refClass->getShortName());
             // NOTE: 如果增加了继承，Service目录之外的子类没有代码提示（如果还无效不断重启直到生效）
@@ -219,37 +218,40 @@ PHP;
 
             if ($this->generateEmptyClass || $staticMethods) {
                 $staticClass->setMethods($staticMethods);
-                $statics[$name] = $printer->printClass($staticClass, $namespace);
+                $staticNamespace->add($staticClass);
             }
             if ($this->generateEmptyClass || $methods) {
                 // NOTE: 分多个文件反而出现第二，三级的子类(例如AppModel)没有代码提示，魔术方法识别失败等问题
                 $class->setMethods($methods);
-                $dynamics[$name] = $printer->printClass($class, $namespace);
+                $dynamicNamespace->add($class);
             }
         }
 
-        if (!$statics && !$dynamics) {
+        if (!isset($staticNamespace) || !$staticNamespace->getClasses()) {
             $this->suc('API method not found!');
             return;
         }
 
-        $header = $printer->printFile($file) . "\n";
         switch ($this->fileMode) {
             case self::FILE_MODE_SINGLE:
+                throw new \RuntimeException('Not supported yet');
+                $header = $printer->printFile($staticFile) . "\n";
                 $content = $header . implode("\n", $statics);
                 $content .= "\nif (0) {\n" . $this->intent(rtrim(implode("\n", $dynamics))) . "\n}\n";
                 $this->createFile($path . '/docs/auto-completion-static.php', $content);
                 break;
 
             case self::FILE_MODE_BY_TYPE:
-                $statics = $header . implode("\n", $statics);
+                $statics = $printer->printFile($staticFile);
                 $this->createFile($path . '/docs/auto-completion-static.php', $statics);
 
-                $dynamics = $header . implode("\n", $dynamics);
+                $dynamics = $printer->printFile($dynamicFile);
                 $this->createFile($path . '/docs/auto-completion-dynamic.php', $dynamics);
                 break;
 
             case self::FILE_MODE_BY_CLASS:
+                throw new \RuntimeException('Not supported yet');
+                $header = $printer->printFile($staticFile) . "\n";
                 foreach ($statics as $name => $content) {
                     $this->createFile($path . '/docs/auto-completion-static-' . $name . '.php', $header . $content);
                 }
