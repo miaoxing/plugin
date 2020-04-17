@@ -230,6 +230,27 @@ class Model extends QueryBuilder
 
 class Plugin extends \Miaoxing\Plugin\BaseService
 {
+    /**
+     * Check if a plugin exists
+     *
+     * @param string $id
+     * @return bool
+     * @see Plugin::has
+     */
+    public static function has($id)
+    {
+    }
+
+    /**
+     * Check if a plugin is installed
+     *
+     * @param string $id
+     * @return bool
+     * @see Plugin::isInstalled
+     */
+    public static function isInstalled($id)
+    {
+    }
 }
 
 class QueryBuilder extends \Miaoxing\Plugin\BaseService

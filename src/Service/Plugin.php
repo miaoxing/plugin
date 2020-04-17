@@ -436,8 +436,9 @@ class Plugin extends BaseService
      *
      * @param string $id
      * @return bool
+     * @svc
      */
-    public function has($id)
+    protected function has($id)
     {
         return class_exists($this->getPluginClass($id));
     }
@@ -447,8 +448,9 @@ class Plugin extends BaseService
      *
      * @param string $id
      * @return bool
+     * @svc
      */
-    public function isInstalled($id)
+    protected function isInstalled($id)
     {
         return $this->isBuildIn($id) || in_array($id, $this->getInstalledIds());
     }
