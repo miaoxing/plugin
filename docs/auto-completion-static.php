@@ -941,7 +941,7 @@ class User extends UserModel
     /**
      * 销毁用户会话,退出登录
      *
-     * @return $this
+     * @return array
      * @see User::logout
      */
     public static function logout()

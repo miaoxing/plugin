@@ -337,7 +337,7 @@ class User extends UserModel
     /**
      * 销毁用户会话,退出登录
      *
-     * @return $this
+     * @return array
      * @svc
      */
     protected function logout()
@@ -345,7 +345,7 @@ class User extends UserModel
         $this->data = [];
         unset($this->session['user']);
 
-        return $this;
+        return $this->suc();
     }
 
     /**
