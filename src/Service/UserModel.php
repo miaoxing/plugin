@@ -74,4 +74,14 @@ class UserModel extends Model
             }
         }
     }
+
+    /**
+     * Model: 判断用户是否为超级管理员
+     *
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        return $this->id === 1;
+    }
 }
