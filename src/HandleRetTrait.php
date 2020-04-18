@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin;
 
+use Miaoxing\Plugin\Service\Ret;
+
 trait HandleRetTrait
 {
     /**

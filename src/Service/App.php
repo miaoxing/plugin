@@ -3,10 +3,8 @@
 namespace Miaoxing\Plugin\Service;
 
 use JsonSerializable;
-use Miaoxing\Plugin\Ret;
 use Miaoxing\Plugin\RetException;
 use Miaoxing\Services\ConfigTrait;
-use Miaoxing\Services\Service\StaticTrait;
 use Wei\Response;
 
 /**
@@ -380,7 +378,8 @@ class App extends \Wei\App
         if ($this->request->acceptJson() || php_sapi_name() == 'cli' || $this->isApi()) {
             return $this->response->json($ret);
         } else {
-            $type = isset($ret['retType']) ? $ret['retType'] : ($ret['code'] === 1 ? 'success' : 'warning');
+            $ret instanceof Ret && $ret = $ret->toArray();
+            $type = $ret['retType'] ?? ($ret['code'] === 1 ? 'success' : 'warning');
             $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
 
             return $this->response->setContent($content);

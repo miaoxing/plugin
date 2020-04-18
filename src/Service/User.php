@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\Ret;
+use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Services\ConfigTrait;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-use Miaoxing\Plugin\Ret;
+use Miaoxing\Plugin\Service\Ret;
 
 if (!function_exists('suc')) {
     /**
@@ -11,7 +11,7 @@ if (!function_exists('suc')) {
      */
     function suc($message = null)
     {
-        return Ret::createSuc($message);
+        return Ret::suc($message);
     }
 }
 
@@ -26,7 +26,7 @@ if (!function_exists('err')) {
      */
     function err($message, $code = -1, $level = 'info')
     {
-        return Ret::createErr(...func_get_args());
+        return Ret::err(...func_get_args());
     }
 }
 
@@ -41,6 +41,6 @@ if (!function_exists('ret')) {
      */
     function ret($message, $code = 1, $type = 'success')
     {
-        return new Ret(...func_get_args());
+        return wei()->ret->__invoke(...func_get_args());
     }
 }
