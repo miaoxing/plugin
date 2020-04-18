@@ -21,7 +21,7 @@ class Ret implements \JsonSerializable, \ArrayAccess
         if (is_array($message)) {
             $this->data = $message + ['code' => $code] + $this->defaults;
         } else {
-            $this->data = ['message' => (string)$message, 'code' => $code];
+            $this->data = ['message' => (string)$message ?: $this->defaults['message'], 'code' => $code];
         }
 
         // Record error result
