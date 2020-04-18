@@ -375,7 +375,7 @@ class App extends \Wei\App
      */
     protected function handleRet($ret)
     {
-        if ($this->request->acceptJson() || php_sapi_name() == 'cli' || $this->isApi()) {
+        if ($this->request->acceptJson() || $this->isApi()) {
             return $this->response->json($ret);
         } else {
             $ret instanceof Ret && $ret = $ret->toArray();
@@ -417,7 +417,7 @@ class App extends \Wei\App
      */
     public function isApi()
     {
-        return strpos($this->getController(), 'api') === 0;
+        return strpos($this->getController(), 'api') === 0 || strpos($this->getController(), 'adminApi') === 0;
     }
 
     /**
