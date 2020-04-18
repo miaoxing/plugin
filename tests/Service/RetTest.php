@@ -88,7 +88,28 @@ class RetTest extends BaseTestCase
 
     public function testRetSuc()
     {
-        $ret = Ret::suc('c');
-        $this->assertSame('x', 'x');
+        $ret = Ret::suc('suc');
+        $this->assertSame([
+            'message' => 'suc',
+            'code' => 1,
+        ], $ret->toArray());
+    }
+
+    public function testRetErr()
+    {
+        $ret = Ret::err('err');
+        $this->assertSame([
+            'message' => 'err',
+            'code' => 0,
+        ], $ret->toArray());
+    }
+
+    public function testCreateNewInstance()
+    {
+        $ret1 = Ret::suc();
+        $ret2 = Ret::suc();
+
+        $this->assertEquals($ret1, $ret2);
+        $this->assertNotSame($ret1, $ret2);
     }
 }

@@ -51,8 +51,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      */
     protected function suc($message = null)
     {
-        // TODO 1. 动态调用支持$createNewInstance 2. 静态调用也要传入配置
-        return (new static())->__invoke($message ?: $this->defaults['message'], 1, 'success');
+        return $this->__invoke($message ?: $this->defaults['message'], 1, 'success');
     }
 
     /**
@@ -66,7 +65,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      */
     protected function err($message, $code = 0, $level = 'info')
     {
-        return (new static())->__invoke($message, $code, $level);
+        return $this->__invoke($message, $code, $level);
     }
 
     /**
