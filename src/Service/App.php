@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use JsonSerializable;
+use Miaoxing\Plugin\Ret;
 use Miaoxing\Services\ConfigTrait;
 use Miaoxing\Services\Service\StaticTrait;
 use Wei\Response;
@@ -348,7 +350,7 @@ class App extends \Wei\App
      */
     public function handleResponse($response)
     {
-        if ($this->isRet($response)) {
+        if ($response instanceof JsonSerializable || $this->isRet($response)) {
             return $this->handleRet($response);
         } elseif (is_array($response)) {
             $template = $this->getDefaultTemplate();
@@ -363,11 +365,11 @@ class App extends \Wei\App
     /**
      * 转换Ret结构为response
      *
-     * @param array $ret
+     * @param Ret|array $ret
      * @return Response
      * @throws \Exception
      */
-    protected function handleRet(array $ret)
+    protected function handleRet($ret)
     {
         if ($this->request->acceptJson() || php_sapi_name() == 'cli' || $this->isApi()) {
             return $this->response->json($ret);

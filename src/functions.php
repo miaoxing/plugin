@@ -1,15 +1,17 @@
 <?php
 
+use Miaoxing\Plugin\Ret;
+
 if (!function_exists('suc')) {
     /**
      * Return operation successful result
      *
      * @param string $message
-     * @return array
+     * @return Ret
      */
     function suc($message = null)
     {
-        return wei()->ret->suc(...func_get_args());
+        return Ret::createSuc($message);
     }
 }
 
@@ -20,11 +22,11 @@ if (!function_exists('err')) {
      * @param string|array $message
      * @param int $code
      * @param string $level
-     * @return array
+     * @return Ret
      */
     function err($message, $code = -1, $level = 'info')
     {
-        return wei()->ret->err(...func_get_args());
+        return Ret::createErr(...func_get_args());
     }
 }
 
@@ -39,6 +41,6 @@ if (!function_exists('ret')) {
      */
     function ret($message, $code = 1, $type = 'success')
     {
-        return wei()->ret(...func_get_args());
+        return new Ret(...func_get_args());
     }
 }
