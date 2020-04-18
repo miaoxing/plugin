@@ -2,8 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Ret;
 use Miaoxing\Services\ConfigTrait;
-use Wei\RetTrait;
 
 /**
  * 用户
@@ -29,7 +29,6 @@ use Wei\RetTrait;
  */
 class User extends UserModel
 {
-    use RetTrait;
     use ConfigTrait {
         __get as getConfig;
     }
@@ -223,7 +222,7 @@ class User extends UserModel
      * 根据用户账号密码,登录用户
      *
      * @param mixed $data
-     * @return array
+     * @return Ret
      * @svc
      */
     protected function login($data)
@@ -246,7 +245,7 @@ class User extends UserModel
         ]);
 
         if (!$validator->isValid()) {
-            return ['code' => -1, 'message' => $validator->getFirstMessage()];
+            return err($validator->getFirstMessage());
         }
 
         // 2. 检查手机/邮箱/用户名是否存在
@@ -268,17 +267,17 @@ class User extends UserModel
         $user = $user->findBy($column, $data['username']);
 
         if (!$user) {
-            return $this->err('用户名不存在或密码错误', 2);
+            return err('用户名不存在或密码错误', 2);
         }
 
         // 3. 检查用户是否有效
         if (!$user->enable) {
-            return $this->err('用户未启用,无法登录', 3);
+            return err('用户未启用,无法登录', 3);
         }
 
         // 4. 验证密码是否正确
         if (!$user->verifyPassword($data['password'])) {
-            return $this->err('用户不存在或密码错误', 4);
+            return err('用户不存在或密码错误', 4);
         }
 
         // 5. 验证通过,登录用户
@@ -289,14 +288,14 @@ class User extends UserModel
      * 根据用户ID直接登录用户
      *
      * @param int $id
-     * @return array
+     * @return Ret
      * @svc
      */
     protected function loginById($id)
     {
         $user = wei()->userModel()->find($id);
         if (!$user) {
-            return $this->err('用户不存在');
+            return err('用户不存在');
         } else {
             return $this->loginByModel($user);
         }
@@ -322,7 +321,7 @@ class User extends UserModel
      * 根据用户对象登录用户
      *
      * @param UserModel $user
-     * @return array
+     * @return Ret
      * @svc
      */
     protected function loginByModel(UserModel $user)
@@ -331,13 +330,13 @@ class User extends UserModel
         $this->session['user'] = $user->toArray($this->sessionFields);
         $this->event->trigger('userLogin', [$user]);
 
-        return $this->suc('登录成功');
+        return suc('登录成功');
     }
 
     /**
      * 销毁用户会话,退出登录
      *
-     * @return array
+     * @return Ret
      * @svc
      */
     protected function logout()
@@ -345,7 +344,7 @@ class User extends UserModel
         $this->data = [];
         unset($this->session['user']);
 
-        return $this->suc();
+        return suc();
     }
 
     /**
