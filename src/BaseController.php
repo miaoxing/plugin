@@ -18,6 +18,8 @@ use Miaoxing\Services\Service\Page;
  */
 abstract class BaseController extends \Miaoxing\Services\App\BaseController
 {
+    use HandleRetTrait;
+
     /**
      * @var array
      * @deprecated

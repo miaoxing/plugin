@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use JsonSerializable;
 use Miaoxing\Plugin\Ret;
+use Miaoxing\Plugin\RetException;
 use Miaoxing\Services\ConfigTrait;
 use Miaoxing\Services\Service\StaticTrait;
 use Wei\Response;
@@ -149,7 +150,11 @@ class App extends \Wei\App
             $instance->before($app->request, $app->response);
 
             $method = $app->getActionMethod($action);
-            $response = $instance->$method($app->request, $app->response);
+            try {
+                $response = $instance->$method($app->request, $app->response);
+            } catch (RetException $e) {
+                return $e->getRet();
+            }
 
             $instance->after($app->request, $response);
 
