@@ -150,6 +150,7 @@ class App extends \Wei\App
             $instance->before($app->request, $app->response);
 
             $method = $app->getActionMethod($action);
+            // TODO 和 forward 异常合并一起处理
             try {
                 $response = $instance->$method($app->request, $app->response);
             } catch (RetException $e) {
