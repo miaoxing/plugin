@@ -94,16 +94,14 @@ class UserModel extends Model
     protected function updatePassword($req)
     {
         // 1. 校验
-        $v = V::key('oldPassword', '旧密码')
-            ->key('password', '新密码');
-
-        if (wei()->user->enablePinCode) {
-            $v->digit()->length(6);
-        } else {
-            $v->minLength(6);
-        }
-
-        $ret = $v->key('passwordConfirm', '重复密码')
+        $ret = V::key('oldPassword', '旧密码')
+            ->key('password', '新密码')
+            ->when(wei()->user->enablePinCode, static function (V $v) {
+                $v->digit()->length(6);
+            }, static function (V $v) {
+                $v->minLength(6);
+            })
+            ->key('passwordConfirm', '重复密码')
             ->equalTo($req['password'])
             ->message('equalTo', '两次输入的密码不相等')
             ->check($req);
@@ -112,11 +110,8 @@ class UserModel extends Model
         }
 
         // 2. 验证旧密码
-        if ($this['password'] && $this['salt']) {
-            $isSuc = $this->verifyPassword($req['oldPassword']);
-            if (!$isSuc) {
-                return $this->err('旧密码错误！请重新输入');
-            }
+        if ($this['password'] && $this['salt'] && !$this->verifyPassword($req['oldPassword'])) {
+            return $this->err('旧密码错误！请重新输入');
         }
 
         // 3. 更新新密码
