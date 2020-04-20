@@ -162,22 +162,22 @@ trait ReqQueryTrait
     {
         switch ($op) {
             case 'eq':
-                return $this->andWhere($column . ' = ?', $value);
+                return $this->where($column, '=', $value);
 
             case 'ct':
                 return $this->whereContains($column, $value);
 
             case 'ge':
-                return $this->andWhere($column . ' >= ?', $value);
+                return $this->where($column, '>=', $value);
 
             case 'le':
-                return $this->andWhere($column . ' <= ?', $this->processMaxDate($column, $value));
+                return $this->where($column, '<=', $this->processMaxDate($column, $value));
 
             case 'gt':
-                return $this->andWhere($column . ' > ?', $value);
+                return $this->where($column, '>', $value);
 
             case 'lt':
-                return $this->andWhere($column . ' < ?', $this->processMaxDate($column, $value));
+                return $this->where($column, '<', $this->processMaxDate($column, $value));
 
             case 'hs':
                 return $this->whereHas($column, $value);
@@ -255,7 +255,7 @@ trait ReqQueryTrait
         foreach ((array) $columns as $column) {
             $name = $this->convertOutputIdentifier($column);
             if ($this->request->has($name)) {
-                $this->andWhere([$column => $this->request[$name]]);
+                $this->where($column, $this->request[$name]);
             }
         }
 
@@ -273,12 +273,12 @@ trait ReqQueryTrait
         foreach ((array) $columns as $column) {
             $min = $this->convertOutputIdentifier($column . '_min');
             if ($this->request->has($min)) {
-                $this->andWhere($prefix . $column . ' >= ?', $this->request[$min]);
+                $this->where($prefix . $column, '>=', $this->request[$min]);
             }
 
             $max = $this->convertOutputIdentifier($column . '_max');
             if ($this->request->has($max)) {
-                $this->andWhere($prefix . $column . ' <= ?', $this->processMaxDate($column, $this->request[$max]));
+                $this->where($prefix . $column, '<=', $this->processMaxDate($column, $this->request[$max]));
             }
         }
 
