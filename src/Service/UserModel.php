@@ -3,11 +3,13 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Metadata\UserTrait;
+use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Miaoxing\Services\Service\V;
 
 class UserModel extends Model
 {
     use UserTrait;
+    use ReqQueryTrait;
 
     protected $hidden = [
         'salt',

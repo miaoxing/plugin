@@ -35,6 +35,13 @@ class QueryBuilderMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Ret $ret
+ * @method      Miaoxing\Plugin\Service\Ret ret($message, $code = 1, $type = 'success') Return operation result data
+ */
+class RetMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Schema $schema
  */
 class SchemaMixin {
@@ -73,6 +80,7 @@ class UserModelMixin {
  * @mixin ModelMixin
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
+ * @mixin RetMixin
  * @mixin SchemaMixin
  * @mixin SessionMixin
  * @mixin StrMixin
@@ -107,6 +115,9 @@ $plugin = wei()->plugin;
 
 /** @var Miaoxing\Plugin\Service\QueryBuilder $queryBuilder */
 $queryBuilder = wei()->queryBuilder;
+
+/** @var Miaoxing\Plugin\Service\Ret $ret */
+$ret = wei()->ret;
 
 /** @var Miaoxing\Plugin\Service\Schema $schema */
 $schema = wei()->schema;

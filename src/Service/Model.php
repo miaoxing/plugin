@@ -20,7 +20,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 {
     use CamelCaseTrait;
     use CastTrait;
-    use ReqQueryTrait;
     use RetTrait;
     use DefaultScopeTrait;
 

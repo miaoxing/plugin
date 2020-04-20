@@ -210,15 +210,6 @@ class Model extends QueryBuilder
     }
 
     /**
-     * @param array|string $columns
-     * @return $this
-     * @see Model::like
-     */
-    public static function like($columns)
-    {
-    }
-
-    /**
      * @param string|array|true $scopes
      * @return $this
      * @see Model::unscoped
@@ -853,6 +844,44 @@ class QueryBuilder extends \Miaoxing\Plugin\BaseService
     }
 }
 
+class Ret extends \Wei\Base
+{
+    /**
+     * Return operation successful result
+     *
+     * ```php
+     * // Specified message
+     * $this->suc('Payment successful');
+     *
+     * // Format
+     * $this->suc(['me%sage', 'ss']);
+     *
+     * // More data
+     * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
+     * ```
+     *
+     * @param string|array|null $message
+     * @return $this
+     * @see Ret::suc
+     */
+    public static function suc($message = null)
+    {
+    }
+
+    /**
+     * Return operation failed result, and logs with an info level
+     *
+     * @param string|array $message
+     * @param int $code
+     * @param string $level
+     * @return $this
+     * @see Ret::err
+     */
+    public static function err($message, $code = 0, $level = 'info')
+    {
+    }
+}
+
 class Schema extends \Wei\Schema
 {
 }
@@ -897,7 +926,7 @@ class User extends UserModel
      * 根据用户账号密码,登录用户
      *
      * @param mixed $data
-     * @return array
+     * @return Ret
      * @see User::login
      */
     public static function login($data)
@@ -908,7 +937,7 @@ class User extends UserModel
      * 根据用户ID直接登录用户
      *
      * @param int $id
-     * @return array
+     * @return Ret
      * @see User::loginById
      */
     public static function loginById($id)
@@ -931,7 +960,7 @@ class User extends UserModel
      * 根据用户对象登录用户
      *
      * @param UserModel $user
-     * @return array
+     * @return Ret
      * @see User::loginByModel
      */
     public static function loginByModel(UserModel $user)
@@ -941,7 +970,7 @@ class User extends UserModel
     /**
      * 销毁用户会话,退出登录
      *
-     * @return array
+     * @return Ret
      * @see User::logout
      */
     public static function logout()
@@ -970,6 +999,24 @@ class UserModel extends Model
      * @see UserModel::can
      */
     public static function can($permissionId)
+    {
+    }
+
+    /**
+     * @param array|\ArrayAccess $req
+     * @return Ret
+     * @see UserModel::updatePassword
+     */
+    public static function updatePassword($req)
+    {
+    }
+
+    /**
+     * @param array|string $columns
+     * @return $this
+     * @see UserModel::like
+     */
+    public static function like($columns)
     {
     }
 }
