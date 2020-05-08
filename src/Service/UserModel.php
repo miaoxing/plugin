@@ -5,6 +5,7 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\Metadata\UserTrait;
 use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Miaoxing\Services\Service\V;
+use Wei\Password;
 
 class UserModel extends Model
 {
@@ -12,7 +13,6 @@ class UserModel extends Model
     use ReqQueryTrait;
 
     protected $hidden = [
-        'salt',
         'password',
     ];
 
@@ -35,8 +35,7 @@ class UserModel extends Model
      */
     public function setPlainPassword($password)
     {
-        $this['salt'] || $this['salt'] = wei()->password->generateSalt();
-        $this['password'] = wei()->password->hash($password, $this['salt']);
+        $this->password = Password::hash($password);
 
         return $this;
     }
@@ -49,7 +48,7 @@ class UserModel extends Model
      */
     public function verifyPassword($password)
     {
-        return password_verify($password, $this->password);
+        return Password::verify($password, $this->password);
     }
 
     /**
@@ -112,7 +111,7 @@ class UserModel extends Model
         }
 
         // 2. 验证旧密码
-        if ($this['password'] && $this['salt'] && !$this->verifyPassword($req['oldPassword'])) {
+        if ($this['password'] && !$this->verifyPassword($req['oldPassword'])) {
             return $this->err('旧密码错误！请重新输入');
         }
 

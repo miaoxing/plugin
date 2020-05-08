@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Migration;
 
+use Wei\Password;
 use Miaoxing\Services\Migration\BaseMigration;
 use Miaoxing\Services\Service\Time;
 
@@ -26,8 +27,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->string('mobile', 16)
             ->timestamp('mobile_verified_at')->comment('手机校验时间')
             ->string('phone', 16)
-            ->string('salt', 32)
-            ->string('password', 128)
+            ->string('password', 255)
             ->tinyInt('sex')->defaults(1)
             ->string('country', 32)
             ->string('province', 32)
@@ -43,12 +43,10 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->userstamps()
             ->exec();
 
-        $salt = wei()->password->generateSalt();
         $this->db->insert('users', [
             'username' => 'admin',
             'is_admin' => true,
-            'salt' => $salt,
-            'password' => wei()->password->hash('password', $salt),
+            'password' => Password::hash('password'),
             'created_at' => Time::now(),
             'updated_at' => Time::now(),
         ]);
