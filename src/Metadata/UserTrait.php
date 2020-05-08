@@ -8,9 +8,10 @@ namespace Miaoxing\Plugin\Metadata;
  * @property int $id
  * @property int $appId
  * @property string $outId
+ * @property int $groupId 用户组
  * @property string $wechatOpenId 微信的OpenID
  * @property string $wechatUnionId
- * @property bool $admin
+ * @property bool $isAdmin
  * @property string $nickName
  * @property string $remarkName
  * @property string $username
@@ -28,20 +29,22 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $area
  * @property string $address
  * @property string $signature
+ * @property bool $isEnabled 是否启用
  * @property string $avatar
- * @property int $groupId 用户组
- * @property float $money 账户余额
- * @property float $rechargeMoney 充值账户余额
- * @property int $score 积分
  * @property string $lastLoginAt
- * @property string $unsubscribedAt 取关时间
- * @property bool $isSubscribed
- * @property bool $enable 是否启用
- * @property string $source 用户来源
  * @property string $createdAt
  * @property string $updatedAt
  * @property int $createdBy
  * @property int $updatedBy
+ * @property int $score 积分
+ * @property float $money 账户余额
+ * @property float $rechargeMoney 充值账户余额
+ * @property bool $isSubscribed 是否关注
+ * @property string $subscribedAt 关注时间
+ * @property string $unsubscribedAt 取关时间
+ * @property string $source 用户来源
+ * @property  $isMobileVerified
+ * @property  $avatar
  * @property  $displayName
  */
 trait UserTrait
@@ -54,9 +57,10 @@ trait UserTrait
         'id' => 'int',
         'app_id' => 'int',
         'out_id' => 'string',
+        'group_id' => 'int',
         'wechat_open_id' => 'string',
         'wechat_union_id' => 'string',
-        'admin' => 'bool',
+        'is_admin' => 'bool',
         'nick_name' => 'string',
         'remark_name' => 'string',
         'username' => 'string',
@@ -74,19 +78,19 @@ trait UserTrait
         'area' => 'string',
         'address' => 'string',
         'signature' => 'string',
+        'is_enabled' => 'bool',
         'avatar' => 'string',
-        'group_id' => 'int',
-        'money' => 'float',
-        'recharge_money' => 'float',
-        'score' => 'int',
         'last_login_at' => 'datetime',
-        'unsubscribed_at' => 'datetime',
-        'is_subscribed' => 'bool',
-        'enable' => 'bool',
-        'source' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'created_by' => 'int',
         'updated_by' => 'int',
+        'score' => 'int',
+        'money' => 'float',
+        'recharge_money' => 'float',
+        'is_subscribed' => 'bool',
+        'subscribed_at' => 'datetime',
+        'unsubscribed_at' => 'datetime',
+        'source' => 'string',
     ];
 }

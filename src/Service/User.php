@@ -271,7 +271,7 @@ class User extends UserModel
         }
 
         // 3. 检查用户是否有效
-        if (!$user->enable) {
+        if (!$user->isEnabled) {
             return err('用户未启用,无法登录', 3);
         }
 

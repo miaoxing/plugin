@@ -17,7 +17,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->id()
             ->int('app_id')
             ->string('out_id', 32)
-            ->bool('admin')
+            ->bool('is_admin')
             ->string('nick_name', 32)
             ->string('remark_name', 32)
             ->string('username', 64)
@@ -36,7 +36,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->string('address', 128)
             ->string('signature', 64);
 
-        $table->bool('enable')->defaults(1)->comment('是否启用')
+        $table->bool('is_enabled')->defaults(1)->comment('是否启用')
             ->string('avatar')
             ->timestamp('last_login_at')
             ->timestamps()
@@ -46,7 +46,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
         $salt = wei()->password->generateSalt();
         $this->db->insert('users', [
             'username' => 'admin',
-            'admin' => 1,
+            'is_admin' => true,
             'salt' => $salt,
             'password' => wei()->password->hash('password', $salt),
             'created_at' => Time::now(),
