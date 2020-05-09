@@ -2,9 +2,7 @@
 
 namespace Miaoxing\Plugin\Migration;
 
-use Wei\Password;
 use Miaoxing\Services\Migration\BaseMigration;
-use Miaoxing\Services\Service\Time;
 
 class V20161030000000CreateUsersTable extends BaseMigration
 {
@@ -42,14 +40,6 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->timestamps()
             ->userstamps()
             ->exec();
-
-        $this->db->insert('users', [
-            'username' => 'admin',
-            'is_admin' => true,
-            'password' => Password::hash('password'),
-            'created_at' => Time::now(),
-            'updated_at' => Time::now(),
-        ]);
     }
 
     /**
