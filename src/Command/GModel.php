@@ -34,7 +34,7 @@ class GModel extends BaseCommand
         $this->createFile($file, $namespace, $class);
 
         $this->plugin->getConfig(true);
-        $this->runCommand('g:doc', ['plugin-id' => $id]);
+        $this->runCommand('g:auto-completion', ['plugin-id' => $id]);
         $this->runCommand('g:metadata', ['plugin-id' => $id]);
 
         return $this->suc('创建成功');
