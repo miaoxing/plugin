@@ -20,8 +20,8 @@ class PluginInstall extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->argument('app'));
-        $ret = wei()->plugin->install($this->argument('id'));
+        wei()->app->setNamespace($this->getArgument('app'));
+        $ret = wei()->plugin->install($this->getArgument('id'));
         $this->ret($ret);
     }
 }
