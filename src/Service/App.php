@@ -295,7 +295,7 @@ class App extends \Wei\App
     }
 
     /**
-     * 获取App数据表对象
+     * 获取当前应用模型对象
      *
      * @return \Miaoxing\Plugin\Service\AppModel
      */
@@ -311,6 +311,18 @@ class App extends \Wei\App
         }
 
         return $this->records[$namespace];
+    }
+
+    /**
+     * 设置当前应用模型对象
+     *
+     * @param AppModel $model
+     * @return $this
+     */
+    public function setModel(AppModel $model)
+    {
+        $this->records[$this->getNamespace()] = $model;
+        return $this;
     }
 
     /**
