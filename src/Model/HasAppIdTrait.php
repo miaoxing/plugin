@@ -2,15 +2,15 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Service\App;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * @property-read string appIdColumn
  */
 trait HasAppIdTrait
 {
-    public static function bootHasAppIdTrait(BaseModel $initModel)
+    public static function bootHasAppIdTrait(Model $initModel)
     {
         $initModel->addDefaultScope('curApp');
 
@@ -28,7 +28,7 @@ trait HasAppIdTrait
         $app = $this->wei->app;
         $appId = $app->getId();
 
-        return $this->andWhere([$this->fullTable . '.' . $this->appIdColumn => $appId]);
+        return $this->where($this->table . '.' . $this->appIdColumn, $appId);
     }
 
     /**
