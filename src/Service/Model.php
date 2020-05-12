@@ -901,6 +901,17 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * @param $attributes
+     * @param array $data
+     * @return $this
+     * @svc
+     */
+    protected function findByOrCreate($attributes, $data = [])
+    {
+        return $this->findOrInitBy($attributes, $data)->save();
+    }
+
+    /**
      * Find a record by primary key, or throws 404 exception if record not found
      *
      * @param int|string $id

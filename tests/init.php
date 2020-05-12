@@ -2,6 +2,8 @@
 
 use Composer\Autoload\ClassLoader;
 use Miaoxing\Plugin\Service\AppModel;
+use Miaoxing\Plugin\Service\UserModel;
+use Wei\Password;
 
 // NOTE：解决 PHPStorm 2019.2 的 PHPUnit 在测试目录下运行导致加载不到类错误
 $dir = getcwd();
@@ -55,10 +57,14 @@ if ($isCi) {
     // 2. 执行迁移语句
     $wei->migration->migrate();
 
-    // 3. 创建默认应用
-    AppModel::save([
+    // 3. 创建默认应用和用户
+    AppModel::findByOrCreate([
         'userId' => 1,
         'name' => 'app',
+    ]);
+    UserModel::findByOrCreate([
+        'username' => 'admin',
+        'password' => Password::hash('password'),
     ]);
 
     // 4. 逐个安装插件

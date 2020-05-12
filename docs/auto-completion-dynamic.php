@@ -143,6 +143,16 @@ class Model extends QueryBuilder
     }
 
     /**
+     * @param $attributes
+     * @param array $data
+     * @return $this
+     * @see Model::findByOrCreate
+     */
+    public function findByOrCreate($attributes, $data = [])
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record collection object or false
      *
      * @param array $ids
