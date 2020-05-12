@@ -15,6 +15,12 @@ class AppModelMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Config $config
+ */
+class ConfigMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Model $model
  * @method      Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] model($table = null)
  */
@@ -77,6 +83,7 @@ class UserModelMixin {
 /**
  * @mixin AppMixin
  * @mixin AppModelMixin
+ * @mixin ConfigMixin
  * @mixin ModelMixin
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
@@ -106,6 +113,9 @@ $app = wei()->appModel();
 
 /** @var Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] $appModels */
 $apps = wei()->appModel();
+
+/** @var Miaoxing\Plugin\Service\Config $config */
+$config = wei()->config;
 
 /** @var Miaoxing\Plugin\Service\Model $model */
 $model = wei()->model;

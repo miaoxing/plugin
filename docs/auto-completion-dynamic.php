@@ -20,6 +20,23 @@ class AppModel extends Model
 {
 }
 
+class Config extends \Miaoxing\Plugin\BaseService
+{
+    /**
+     * @see Config::save
+     */
+    public function save(string $name, $value)
+    {
+    }
+
+    /**
+     * @see Config::write
+     */
+    public function write()
+    {
+    }
+}
+
 class Model extends QueryBuilder
 {
     /**
