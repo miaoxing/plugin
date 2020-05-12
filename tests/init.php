@@ -1,6 +1,7 @@
 <?php
 
 use Composer\Autoload\ClassLoader;
+use Miaoxing\Plugin\Service\AppModel;
 
 // NOTE：解决 PHPStorm 2019.2 的 PHPUnit 在测试目录下运行导致加载不到类错误
 $dir = getcwd();
@@ -54,7 +55,13 @@ if ($isCi) {
     // 2. 执行迁移语句
     $wei->migration->migrate();
 
-    // 3. 逐个安装插件
+    // 3. 创建默认应用
+    AppModel::save([
+        'userId' => 1,
+        'name' => 'app',
+    ]);
+
+    // 4. 逐个安装插件
     foreach ($wei->plugin->getAll() as $plugin) {
         $ret = $wei->plugin->install($plugin->getId());
         $out($plugin->getId() . ': ' . $ret['message']);
