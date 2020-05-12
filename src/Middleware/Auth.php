@@ -58,6 +58,6 @@ class Auth extends BaseMiddleware
             return $ret;
         }
 
-        return $this->response->redirect($this->url->append($ret['url'], ['next' => $this->request->getUrl()]));
+        return $this->response->redirect($this->url->append($ret['next'], ['next' => $this->request->getUrl()]));
     }
 }
