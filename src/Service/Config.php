@@ -38,7 +38,7 @@ class Config extends BaseService
     protected function set(string $name, $value)
     {
         if (isset($this->configs[$name])) {
-            $this->configs[$name] = array_merge($value, $this->configs[$name]);
+            $this->configs[$name] = array_merge($this->configs[$name], $value);
         } else {
             $this->configs[$name] = $value;
         }
@@ -109,6 +109,9 @@ class Config extends BaseService
                 return "[\n" . implode(",\n", $r) . ($r ? ',' : '') . "\n" . $indent . ']';
             case 'boolean':
                 return $var ? 'true' : 'false';
+
+            case 'NULL':
+                return 'null';
 
             case 'object' && isset($var->express):
                 return $var->express;
