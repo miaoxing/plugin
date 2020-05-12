@@ -219,7 +219,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public static function new($data = [], array $options = [])
     {
-        return new static($options + ['data' => $data]);
+        $class = static::getServiceClass();
+        return new $class($options + ['data' => $data]);
     }
 
     /**
@@ -229,7 +230,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public static function newColl($data = [])
     {
-        return (new static)->beColl()->fromArray($data);
+        $class = static::getServiceClass();
+        return (new $class)->beColl()->fromArray($data);
     }
 
     /**
@@ -2195,5 +2197,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     private function pluralize($word)
     {
         return wei()->str->pluralize($word);
+    }
+
+    /**
+     * 获取当前类的服务名称对应的类
+     *
+     * @return string
+     */
+    private static function getServiceClass()
+    {
+        $wei = wei();
+        return $wei->has($wei->getServiceName(get_called_class())) ?: get_called_class();
     }
 }

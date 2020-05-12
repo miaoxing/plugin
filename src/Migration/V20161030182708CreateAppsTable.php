@@ -28,20 +28,6 @@ class V20161030182708CreateAppsTable extends BaseMigration
             ->timestamps()
             ->userstamps()
             ->exec();
-
-        $now = date('Y-m-d H:i:s');
-        $this->db->batchInsert($this->table, [
-            [
-                'user_id' => 1,
-                'name' => 'app',
-                'title' => 'app',
-                'plugin_ids' => '',
-                'created_at' => $now,
-                'created_by' => 1,
-                'updated_at' => $now,
-                'updated_by' => 1,
-            ],
-        ]);
     }
 
     /**
