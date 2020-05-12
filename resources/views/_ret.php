@@ -2,7 +2,7 @@
 
 <?= $block->css() ?>
 <style>
-  <?= file_get_contents('plugins/plugin/resources/css/ret.css') ?>
+  <?= file_get_contents(__DIR__ . '/../css/ret.css') ?>
 </style>
 <?= $block->end() ?>
 

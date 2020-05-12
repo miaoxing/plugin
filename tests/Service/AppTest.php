@@ -21,6 +21,8 @@ class AppTest extends BaseTestCase
         $app = wei()->app;
         $app->setControllerMap(['test' => TestController::class]);
 
+        $app->request->set('_format', 'json');
+
         // 更改视图为测试的目录
         $origDirs = $app->view->getOption('dirs');
         $app->view->setDirs([dirname(__DIR__) . '/Fixture/views']);
