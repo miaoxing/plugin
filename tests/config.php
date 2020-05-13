@@ -32,4 +32,11 @@ return [
     'error.logger' => [
 
     ],
+    // Optional
+    'phpFileCache' => [
+        'dir' => 'data/cache',
+    ],
+    'logger' => [
+        'dir' => 'data/logs',
+    ],
 ];
