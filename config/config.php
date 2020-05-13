@@ -9,6 +9,9 @@ return [
             'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED,
             'date.timezone' => 'Asia/Shanghai',
         ],
+        'aliases' => [
+            'request' => Miaoxing\Services\Service\Request::class,
+        ],
         'providers' => [
             'cache' => 'phpFileCache',
         ],
