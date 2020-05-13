@@ -12,7 +12,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     /**
      * @var bool
      */
-    public static $createNewInstance = true;
+    protected static $createNewInstance = true;
 
     /**
      * The default operation result data

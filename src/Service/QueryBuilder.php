@@ -33,7 +33,7 @@ class QueryBuilder extends BaseService
     /**
      * @var bool
      */
-    public static $createNewInstance = true;
+    protected static $createNewInstance = true;
 
     /**
      * The record table name
