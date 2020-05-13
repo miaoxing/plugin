@@ -5,6 +5,16 @@ use Miaoxing\Plugin\Service\AppModel;
 use Miaoxing\Plugin\Service\UserModel;
 use Wei\Password;
 
+function getConfig($files) {
+    $config = [];
+    foreach ($files as $file) {
+        if (stream_resolve_include_path($file)) {
+            $config = array_replace_recursive($config, require $file);
+        }
+    }
+    return $config;
+}
+
 // NOTE：解决 PHPStorm 2019.2 的 PHPUnit 在测试目录下运行导致加载不到类错误
 $dir = getcwd();
 while ($dir !== '/') {
@@ -23,25 +33,18 @@ $files = [
     'tests/config.php',
     'tests/config-local.php',
 ];
+$wei = wei(getConfig($files));
 
 // Add configuration file for CI
 $isCi = false;
+$files = [];
 foreach (['TRAVIS', 'WERCKER'] as $ci) {
     if (getenv($ci)) {
         $isCi = true;
         $files[] = 'config-' . strtolower($ci) . '.php';
     }
 }
-
-$isCi = true;
-$config = [];
-foreach ($files as $file) {
-    if (stream_resolve_include_path($file)) {
-        $config = array_replace_recursive($config, require $file);
-    }
-}
-
-$wei = wei($config);
+$wei->setConfig(getConfig($files));
 
 // NOTE: 安装需依赖CI环境的配置，暂时放到这里
 if ($isCi) {
