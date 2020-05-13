@@ -1237,7 +1237,8 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testGetIdentifierConvert()
     {
-        $fn = function () {};
+        $fn = function () {
+        };
         $qb = Qb::setInputIdentifierConverter($fn);
 
         $this->assertSame($fn, $qb->getInputIdentifierConverter());

@@ -90,7 +90,7 @@ class Config extends BaseService
      * @param mixed $var
      * @param string $indent
      * @return string
-     * @see BaseMiddleware on https://stackoverflow.com/questions/24316347/how-to-format-var-export-to-php5-4-array-syntax
+     * @see Base on https://stackoverflow.com/questions/24316347/how-to-format-var-export-to-php5-4-array-syntax
      */
     protected function varExport($var, $indent = '')
     {

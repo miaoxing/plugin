@@ -3,7 +3,8 @@
 use Miaoxing\Plugin\Service\Model;
 
 return [
-    /* @see \Wei\Wei 服务容器 */
+    // @see \Wei\Wei 服务容器
+
     'wei' => [
         'debug' => true,
         'inis' => [
@@ -21,7 +22,8 @@ return [
             'plugin',
         ],
     ],
-    /* @see \Wei\Db 数据库 */
+    // @see \Wei\Db 数据库
+
     'db' => [
         'host' => 'mysql',
         'user' => 'root',

@@ -235,11 +235,11 @@ PHP;
         switch ($this->fileMode) {
             case self::FILE_MODE_SINGLE:
                 throw new \RuntimeException('Not supported yet');
-                $header = $printer->printFile($staticFile) . "\n";
-                $content = $header . implode("\n", $statics);
-                $content .= "\nif (0) {\n" . $this->intent(rtrim(implode("\n", $dynamics))) . "\n}\n";
-                $this->createFile($path . '/docs/auto-completion-static.php', $content);
-                break;
+//                $header = $printer->printFile($staticFile) . "\n";
+//                $content = $header . implode("\n", $statics);
+//                $content .= "\nif (0) {\n" . $this->intent(rtrim(implode("\n", $dynamics))) . "\n}\n";
+//                $this->createFile($path . '/docs/auto-completion-static.php', $content);
+//                break;
 
             case self::FILE_MODE_BY_TYPE:
                 $statics = $printer->printFile($staticFile);
@@ -251,14 +251,14 @@ PHP;
 
             case self::FILE_MODE_BY_CLASS:
                 throw new \RuntimeException('Not supported yet');
-                $header = $printer->printFile($staticFile) . "\n";
-                foreach ($statics as $name => $content) {
-                    $this->createFile($path . '/docs/auto-completion-static-' . $name . '.php', $header . $content);
-                }
-                foreach ($dynamics as $name => $content) {
-                    $this->createFile($path . '/docs/auto-completion-dynamic-' . $name . '.php', $header . $content);
-                }
-                break;
+//                $header = $printer->printFile($staticFile) . "\n";
+//                foreach ($statics as $name => $content) {
+//                    $this->createFile($path . '/docs/auto-completion-static-' . $name . '.php', $header . $content);
+//                }
+//                foreach ($dynamics as $name => $content) {
+//                    $this->createFile($path . '/docs/auto-completion-dynamic-' . $name . '.php', $header . $content);
+//                }
+//                break;
         }
     }
 
