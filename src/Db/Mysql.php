@@ -170,7 +170,7 @@ class Mysql extends BaseDriver
             }
 
             $column = $this->wrap($where['column']);
-            switch ($where['type']) {
+            switch ($where['type'] ?? '') {
                 case 'DATE':
                 case 'MONTH':
                 case 'DAY':

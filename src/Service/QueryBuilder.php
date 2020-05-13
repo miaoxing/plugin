@@ -75,6 +75,7 @@ class QueryBuilder extends BaseService
      */
     protected $sqlParts = [
         'select' => [],
+        'distinct' => null,
         'from' => null,
         'join' => [],
         'set' => [],

@@ -1237,12 +1237,13 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testGetIdentifierConvert()
     {
-        $qb = Qb::setInputIdentifierConverter(__METHOD__);
+        $fn = function () {};
+        $qb = Qb::setInputIdentifierConverter($fn);
 
-        $this->assertSame(__METHOD__, $qb->getInputIdentifierConverter());
+        $this->assertSame($fn, $qb->getInputIdentifierConverter());
     }
 
-    public function testDD()
+    public function testInputCamelCaseColumn()
     {
         $qb = Qb::table('testUsers')->where('groupId', 1);
 

@@ -38,7 +38,7 @@ trait DefaultScopeTrait
         return $this;
     }
 
-    public function getDefaultScopes()
+    public static function getDefaultScopes()
     {
         $class = get_called_class();
 

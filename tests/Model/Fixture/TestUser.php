@@ -94,6 +94,6 @@ class TestUser extends Model
 
     public function getAddressAttribute()
     {
-        return $this->data['address'] ?: 'default address';
+        return $this->data['address'] ?? 'default address';
     }
 }
