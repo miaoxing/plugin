@@ -29,14 +29,8 @@ return [
         'password' => 'password',
         'recordClass' => Model::class,
     ],
-    'error.logger' => [
-
-    ],
     // Optional
     'phpFileCache' => [
         'dir' => 'data/cache',
-    ],
-    'logger' => [
-        'dir' => 'data/logs',
     ],
 ];
