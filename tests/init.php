@@ -5,15 +5,7 @@ use Miaoxing\Plugin\Service\AppModel;
 use Miaoxing\Plugin\Service\UserModel;
 use Wei\Password;
 
-function getConfig($files) {
-    $config = [];
-    foreach ($files as $file) {
-        if (stream_resolve_include_path($file)) {
-            $config = array_replace_recursive($config, require $file);
-        }
-    }
-    return $config;
-}
+require 'functions.php';
 
 // NOTE：解决 PHPStorm 2019.2 的 PHPUnit 在测试目录下运行导致加载不到类错误
 $dir = getcwd();
