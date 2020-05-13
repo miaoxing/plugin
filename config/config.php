@@ -37,8 +37,8 @@ return [
 
     /* @see Wei\Error */
     'error' => [
-        'view' => 'plugins/app/resources/views/errors/500.php',
-        'view404' => 'plugins/app/resources/views/errors/404.php',
+        'view' => __DIR__ . '/../resources/views/errors/500.php',
+        'view404' => __DIR__ . '/../resources/views/errors/404.php',
     ],
 
     /* @see Wei\Http */
