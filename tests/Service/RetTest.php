@@ -11,7 +11,7 @@ class RetTest extends BaseTestCase
     {
         $ret = wei()->ret->suc();
         $this->assertSame([
-            'message' => 'Operation successful',
+            'message' => '操作成功',
             'code' => 1,
         ], $ret->toArray());
     }
