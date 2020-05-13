@@ -99,14 +99,14 @@ class Config extends BaseService
                 return '\'' . addcslashes($var, "\\\$\'\r\n\t\v\f") . '\'';
             case 'array':
                 $indexed = array_keys($var) === range(0, count($var) - 1);
-                $r = [];
+                $result = [];
                 foreach ($var as $key => $value) {
-                    $r[] = $indent . '    '
+                    $result[] = $indent . '    '
                         . ($indexed ? '' : $this->varExport($key) . ' => ')
                         . $this->varExport($value, "$indent    ");
                 }
 
-                return "[\n" . implode(",\n", $r) . ($r ? ',' : '') . "\n" . $indent . ']';
+                return "[\n" . implode(",\n", $result) . ($result ? ',' : '') . "\n" . $indent . ']';
             case 'boolean':
                 return $var ? 'true' : 'false';
 
