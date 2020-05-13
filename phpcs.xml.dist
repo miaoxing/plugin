@@ -3,6 +3,8 @@
   <description>The coding standard for Miaoxing.</description>
 
   <rule ref="Miaoxing">
+    <!-- Allow /* @see Xxx */ for code hint -->
+    <exclude name="Squiz.Commenting.BlockComment.SingleLine" />
   </rule>
 
   <exclude-pattern type="relative">docs/*</exclude-pattern>
