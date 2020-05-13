@@ -97,14 +97,15 @@ class Plugin extends BaseService
 
         parent::__construct($options);
 
-        $config = $this->getConfig();
-
         // If the plugin service is not constructed, the service container can't set config for it
         if (!$this->wei->isInstanced('plugin')) {
             $this->wei->set('plugin', $this);
         }
 
+        $this->wei->env->loadConfigFile(__DIR__ . '/../../config/config.php');
+
         // Load configs to services
+        $config = $this->getConfig();
         $this->wei->setConfig($config + [
                 'event' => [
                     'loadEvent' => [$this, 'loadEvent'],
