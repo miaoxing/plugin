@@ -26,9 +26,8 @@ trait HasAppIdTrait
     {
         /** @var App $app */
         $app = $this->wei->app;
-        $appId = $app->getId();
 
-        return $this->where($this->table . '.' . $this->appIdColumn, $appId);
+        return $this->where($this->getTable() . '.' . $this->appIdColumn, $app->getId());
     }
 
     /**
