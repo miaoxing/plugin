@@ -119,11 +119,11 @@ class User extends UserModel
     /**
      * {@inheritdoc}
      */
-    public function toArray($returnFields = [])
+    public function toArray($returnFields = [], callable $prepend = null)
     {
         $this->loadDbUser();
 
-        return parent::toArray($returnFields);
+        return parent::toArray($returnFields, $prepend);
     }
 
     /**
