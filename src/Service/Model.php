@@ -256,9 +256,10 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Returns the record data as array
      *
      * @param array $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
      * @return array
      */
-    public function toArray($returnFields = array())
+    public function toArray($returnFields = array(), callable $prepend = null)
     {
         if (!$this->isLoaded()) {
             $this->loadData($this->isColl() ? 0 : 'id');
@@ -273,10 +274,18 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
             return $data + $this->virtualToArray();
         } else {
+            if (is_callable($returnFields)) {
+                $prepend = $returnFields;
+                $returnFields = [];
+            }
+
             $data = array();
             /** @var $record Record */
             foreach ($this->data as $key => $record) {
                 $data[$key] = $record->toArray($returnFields);
+                if ($prepend) {
+                    $data[$key] = $prepend($record) + $data[$key];
+                }
             }
             return $data;
         }

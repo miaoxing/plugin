@@ -382,6 +382,29 @@ class ModelTest extends BaseTestCase
         TestUser::new()->toArray(['notExistColumn']);
     }
 
+    public function testToArrayWithPrepend()
+    {
+        $this->initFixtures();
+
+        $users = TestUser::limit(1)->all();
+
+        $data = $users->toArray(function (TestUser $user) {
+            return [
+                'newId' => $user->id + 1,
+            ];
+        });
+        $this->assertSame(2, $data[0]['newId']);
+        $this->assertArrayHasKey('id', $data[0]);
+
+        $data = $users->toArray(['name'], function ($user) {
+            return [
+                'newId' => $user->id + 1,
+            ];
+        });
+        $this->assertSame(2, $data[0]['newId']);
+        $this->assertArrayNotHasKey('id', $data[0]);
+    }
+
     public function testNewModelToArrayWithoutReturnFields()
     {
         $this->initFixtures();
