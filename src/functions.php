@@ -44,3 +44,10 @@ if (!function_exists('ret')) {
         return wei()->ret->__invoke(...func_get_args());
     }
 }
+
+if (!function_exists('req')) {
+    function req($name = null)
+    {
+        return $name === null ? wei()->request : wei()->request[$name];
+    }
+}
