@@ -29,7 +29,6 @@ return [
         'dbname' => 'miaoxing',
         'user' => 'root',
         'password' => 'password',
-        'tablePrefix' => '',
         'charset' => 'utf8mb4',
         'recordClass' => Miaoxing\Plugin\Service\Model::class,
         'beforeQuery' => [Miaoxing\Services\Callback\Db::class, 'beforeQuery'],
