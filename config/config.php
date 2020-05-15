@@ -3,7 +3,7 @@
 return [
     /* @see Wei\Wei */
     'wei' => [
-        'debug' => true,
+        'debug' => false,
         'inis' => [
             'display_errors' => true,
             'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED,
@@ -41,6 +41,7 @@ return [
     'error' => [
         'view' => __DIR__ . '/../resources/views/errors/500.php',
         'view404' => __DIR__ . '/../resources/views/errors/404.php',
+        'view400' => __DIR__ . '/../resources/views/errors/400.php',
     ],
 
     /* @see Wei\Http */
