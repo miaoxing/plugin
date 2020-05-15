@@ -5,6 +5,8 @@ namespace Miaoxing\Plugin\Service;
 use JsonSerializable;
 use Miaoxing\Plugin\RetException;
 use Miaoxing\Services\ConfigTrait;
+use ReflectionException;
+use ReflectionMethod;
 use Wei\Response;
 
 /**
@@ -150,7 +152,8 @@ class App extends \Wei\App
             $method = $app->getActionMethod($action);
             // TODO 和 forward 异常合并一起处理
             try {
-                $response = $instance->$method($app->request, $app->response);
+                $params = $this->buildParams($instance, $method);
+                $response = $instance->$method(...$params);
             } catch (RetException $e) {
                 return $e->getRet();
             }
@@ -174,6 +177,37 @@ class App extends \Wei\App
         };
 
         return $this->handleResponse($next())->send();
+    }
+
+    /**
+     * @param object $instance
+     * @param string $method
+     * @return array
+     * @throws ReflectionException
+     */
+    protected function buildParams($instance, string $method)
+    {
+        $ref = new ReflectionMethod($instance, $method);
+        $params = $ref->getParameters();
+        if (!$params || $params[0]->getName() === 'req') {
+            return [$this->request, $this->response];
+        }
+
+        $reqParams = [];
+        foreach ($params as $param) {
+            $reqParam = $this->request[$param->getName()];
+            if ($reqParam === null) {
+                if ($param->isDefaultValueAvailable()) {
+                    $reqParam = $param->getDefaultValue();
+                } else {
+                    throw new \Exception('Bad Request: ' . $param->getName(), 400);
+                }
+            } elseif ($type = $param->getType()) {
+                settype($reqParam, $type->getName());
+            }
+            $reqParams[] = $reqParam;
+        }
+        return $reqParams;
     }
 
     public function getNamespace()

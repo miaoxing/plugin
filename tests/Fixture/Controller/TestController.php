@@ -77,4 +77,24 @@ class TestController extends BaseController
     {
         throw new \Exception('test error');
     }
+
+    public function paramAction($id)
+    {
+        return $id;
+    }
+
+    public function paramWithTypeAction(int $id)
+    {
+        return gettype($id) . '-' . $id;
+    }
+
+    public function paramWithDefaultValueAction($id = 'test')
+    {
+        return $id;
+    }
+
+    public function paramWithTypeAndDefaultValueAction(bool $isEnabled = null)
+    {
+        return var_export($isEnabled, true);
+    }
 }
