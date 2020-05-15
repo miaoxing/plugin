@@ -82,17 +82,6 @@ return [
     /* @see Wei\Router */
     'router' => [
         'namespaces' => ['api', 'admin-api', 'admin'],
-        'routes' => [
-            [
-                'pattern' => '/<controller>/<action>',
-            ],
-            [
-                'pattern' => '/<controller>',
-                'defaults' => [
-                    'action' => 'index',
-                ],
-            ],
-        ],
     ],
 
     /* @see Wei\Schema */
