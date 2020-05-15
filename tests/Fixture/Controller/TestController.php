@@ -3,6 +3,7 @@
 namespace MiaoxingTest\Plugin\Fixture\Controller;
 
 use Miaoxing\Plugin\BaseController;
+use Miaoxing\Plugin\Service\UserModel;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnResponse;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnRet;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnString;
@@ -96,5 +97,10 @@ class TestController extends BaseController
     public function paramWithTypeAndDefaultValueAction(bool $isEnabled = null)
     {
         return var_export($isEnabled, true);
+    }
+
+    public function paramModelAction(UserModel $user)
+    {
+        return 'user:' . $user->id;
     }
 }

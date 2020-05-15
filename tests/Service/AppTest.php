@@ -79,6 +79,13 @@ class AppTest extends BaseTestCase
         $this->execute('param');
     }
 
+    public function testParamModelAction()
+    {
+        wei()->request->set('id', '1');
+        $response = $this->execute('paramModel');
+        $this->assertSame('user:1', $response);
+    }
+
     /**
      * 测试返回数据
      *

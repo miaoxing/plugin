@@ -2,11 +2,13 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Exception;
 use JsonSerializable;
 use Miaoxing\Plugin\RetException;
 use Miaoxing\Services\ConfigTrait;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionParameter;
 use Wei\Response;
 
 /**
@@ -152,8 +154,8 @@ class App extends \Wei\App
             $method = $app->getActionMethod($action);
             // TODO 和 forward 异常合并一起处理
             try {
-                $params = $this->buildParams($instance, $method);
-                $response = $instance->$method(...$params);
+                $args = $this->buildActionArgs($instance, $method);
+                $response = $instance->$method(...$args);
             } catch (RetException $e) {
                 return $e->getRet();
             }
@@ -185,7 +187,7 @@ class App extends \Wei\App
      * @return array
      * @throws ReflectionException
      */
-    protected function buildParams($instance, string $method)
+    protected function buildActionArgs($instance, string $method)
     {
         $ref = new ReflectionMethod($instance, $method);
         $params = $ref->getParameters();
@@ -193,21 +195,50 @@ class App extends \Wei\App
             return [$this->request, $this->response];
         }
 
-        $reqParams = [];
+        $args = [];
         foreach ($params as $param) {
-            $reqParam = $this->request[$param->getName()];
-            if ($reqParam === null) {
-                if ($param->isDefaultValueAvailable()) {
-                    $reqParam = $param->getDefaultValue();
-                } else {
-                    throw new \Exception('Bad Request: ' . $param->getName(), 400);
-                }
-            } elseif ($type = $param->getType()) {
-                settype($reqParam, $type->getName());
-            }
-            $reqParams[] = $reqParam;
+            $args[] = $this->buildActionArg($param);
         }
-        return $reqParams;
+        return $args;
+    }
+
+    /**
+     * @param ReflectionParameter $param
+     * @return mixed
+     * @throws ReflectionException
+     */
+    protected function buildActionArg(ReflectionParameter $param)
+    {
+        $type = $param->getType();
+
+        // Handle Model class
+        if (
+            $type
+            && !$type->isBuiltin()
+            && is_a($type->getName(), Model::class, true)
+        ) {
+            return $type->getName()::findOrFail($this->request['id']);
+        }
+
+        // Handle other class
+        if ($type && !$type->isBuiltin()) {
+            throw new Exception('Unsupported action parameter type: ' . $type);
+        }
+
+        // TODO Throw exception for unsupported builtin type
+        // Handle builtin type
+        $arg = $this->request[$param->getName()];
+        if ($arg === null) {
+            if ($param->isDefaultValueAvailable()) {
+                $arg = $param->getDefaultValue();
+            } else {
+                throw new Exception('Bad Request: ' . $param->getName(), 400);
+            }
+        } elseif ($type) {
+            settype($arg, $type->getName());
+        }
+
+        return $arg;
     }
 
     public function getNamespace()
@@ -363,7 +394,7 @@ class App extends \Wei\App
      * Record: 获取当前项目的编号
      *
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function getId()
     {
@@ -396,7 +427,7 @@ class App extends \Wei\App
      *
      * @param mixed $response
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function handleResponse($response)
     {
@@ -417,7 +448,7 @@ class App extends \Wei\App
      *
      * @param Ret|array $ret
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     protected function handleRet($ret)
     {
