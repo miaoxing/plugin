@@ -4,12 +4,11 @@ namespace Miaoxing\Plugin\Service;
 
 use Closure;
 use InvalidArgumentException;
-use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
 use Miaoxing\Plugin\Model\CastTrait;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;
-use Miaoxing\Plugin\Model\ReqQueryTrait;
+use Miaoxing\Services\Service\Request;
 use Wei\Record;
 use Wei\RetTrait;
 
@@ -1034,6 +1033,21 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         } else {
             throw new \Exception('Record not found', 404);
         }
+    }
+
+    /**
+     * @param Request|array|null $request
+     * @return $this
+     * @throws \Exception
+     * @svc
+     */
+    protected function findFromRequest($request = null)
+    {
+        $request || $request = $this->wei->request;
+        if (in_array($request['action'], ['edit', 'update'])) {
+            $this->findOrFail($request[$this->getPrimaryKey()]);
+        }
+        return $this;
     }
 
     /**

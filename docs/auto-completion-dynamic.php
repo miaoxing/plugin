@@ -210,6 +210,16 @@ class Model extends QueryBuilder
     }
 
     /**
+     * @param Request|array|null $request
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromRequest
+     */
+    public function findFromRequest($request = null)
+    {
+    }
+
+    /**
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null

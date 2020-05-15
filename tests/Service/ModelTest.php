@@ -200,6 +200,23 @@ class ModelTest extends BaseTestCase
         TestUser::findByOrFail('name', 'not-exists');
     }
 
+    public function testFindFromRequest()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::findFromRequest(['action' => 'new', 'id' => 1]);
+        $this->assertTrue($user->isNew());
+        $this->assertNull($user->id);
+
+        $user = TestUser::findFromRequest(['action' => 'edit', 'id' => 1]);
+        $this->assertFalse($user->isNew());
+        $this->assertSame(1, $user->id);
+
+        $user = TestUser::findFromRequest(['action' => 'update', 'id' => 1]);
+        $this->assertFalse($user->isNew());
+        $this->assertSame(1, $user->id);
+    }
+
     public function testFirst()
     {
         $this->initFixtures();
