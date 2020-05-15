@@ -1291,20 +1291,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @return string
-     * @todo 移到视图hepler?
-     */
-    public function getFormAction()
-    {
-        return $this->isNew ? 'create' : 'update';
-    }
-
-    public function getHttpMethod()
-    {
-        return $this->isNew ? 'POST' : 'PUT';
-    }
-
-    /**
      * @return $this|$this[]
      */
     public function beColl()
