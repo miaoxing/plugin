@@ -232,7 +232,7 @@ class App extends \Wei\App
             if ($param->isDefaultValueAvailable()) {
                 $arg = $param->getDefaultValue();
             } else {
-                throw new Exception('Bad Request: ' . $param->getName(), 400);
+                throw new Exception('Missing required parameter: ' . $param->getName(), 400);
             }
         } elseif ($type) {
             settype($arg, $type->getName());

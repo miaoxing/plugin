@@ -75,7 +75,7 @@ class AppTest extends BaseTestCase
 
     public function testParamRequiredAction()
     {
-        $this->expectExceptionObject(new \Exception('Bad Request: id', 400));
+        $this->expectExceptionObject(new \Exception('Missing required parameter: id', 400));
         $this->execute('param');
     }
 
