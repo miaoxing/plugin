@@ -3,7 +3,7 @@
 return [
     /* @see Wei\Wei */
     'wei' => [
-        'debug' => false,
+        'debug' => true,
         'inis' => [
             'display_errors' => true,
             'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED,
@@ -82,6 +82,7 @@ return [
     /* @see Wei\Router */
     'router' => [
         'namespaces' => ['api', 'admin-api', 'admin'],
+        'scopes' => [],
     ],
 
     /* @see Wei\Schema */
