@@ -110,7 +110,7 @@ class App extends \Wei\App
 
         // Parse the path info to parameter set
         $request = $this->request;
-        $paramSet = $this->router->matchParamSet($request->getPathInfo(), $request->getMethod());
+        $paramSet = $this->router->matchParamSet($request->getRouterPathInfo(), $request->getMethod());
 
         // TODO router 负责转换为 camel?
         foreach ($paramSet as $i => $params) {
@@ -484,7 +484,7 @@ class App extends \Wei\App
     public function isAdmin()
     {
         // NOTE: 控制器不存在时，回退的控制器不带有 admin
-        return strpos($this->request->getPathInfo(), '/admin') === 0;
+        return strpos($this->request->getRouterPathInfo(), '/admin') === 0;
     }
 
     /**
