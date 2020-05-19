@@ -24,8 +24,11 @@ class Config extends \Miaoxing\Plugin\BaseService
 {
     /**
      * @see Config::save
+     * @param string|array $name
+     * @param mixed $value
+     * @return void
      */
-    public function save(string $name, $value)
+    public function save($name, $value = null)
     {
     }
 
@@ -33,6 +36,13 @@ class Config extends \Miaoxing\Plugin\BaseService
      * @see Config::write
      */
     public function write()
+    {
+    }
+
+    /**
+     * @see Config::load
+     */
+    public function load()
     {
     }
 }

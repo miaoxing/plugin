@@ -6,7 +6,7 @@ use Miaoxing\Plugin\BaseService;
 use Wei\Env;
 
 /**
- * @mixin Env
+ * @mixin \EnvMixin
  */
 class Config extends BaseService
 {
@@ -34,9 +34,20 @@ class Config extends BaseService
 
     /**
      * 设置一项配置的值
+     *
+     * @param string|array $name
+     * @param mixed $value
+     * @return $this
      */
-    protected function set(string $name, $value)
+    protected function set($name, $value = null)
     {
+        if (is_array($name)) {
+            foreach ($name as $item => $value) {
+                $this->set($item, $value);
+            }
+            return $this;
+        }
+
         if (isset($this->configs[$name])) {
             $this->configs[$name] = array_merge($this->configs[$name], $value);
         } else {
@@ -47,8 +58,11 @@ class Config extends BaseService
 
     /**
      * @svc
+     * @param string|array $name
+     * @param mixed $value
+     * @return void
      */
-    protected function save(string $name, $value)
+    protected function save($name, $value = null)
     {
         return $this->set($name, $value)->write();
     }
@@ -63,6 +77,15 @@ class Config extends BaseService
         file_put_contents($file, $content);
 
         function_exists('opcache_invalidate') && opcache_invalidate($file);
+    }
+
+    /**
+     * @svc
+     */
+    protected function load()
+    {
+        $this->env->loadConfigFile($this->getConfigFile());
+        return $this;
     }
 
     /**
