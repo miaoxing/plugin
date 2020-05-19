@@ -16,8 +16,16 @@ use Symfony\Component\Console\Input\InputArgument;
  * 生成自动完成的代码文件
  *
  * 可行方案
- * 1. FILE_MODE_SINGLE + excludeParentMethods=false
- * 2. FILE_MODE_BY_TYPE + excludeParentMethods=true（推荐，生成的代码少）
+ * 1. FILE_MODE_SINGLE + excludeParentMethods=false (推荐)
+ * - PHPStorm 识别稳定
+ * - 生成代码多
+ *
+ * 2. FILE_MODE_BY_TYPE + excludeParentMethods=true
+ * - PHPStorm 识别不稳定，多次重启后能识别到
+ * - 生成代码少
+ *
+ * 3. FILE_MODE_BY_CLASS
+ * - 暂无区别，未实现
  *
  * @mixin \PluginMixin
  * @mixin \ClassMapMixin
@@ -50,12 +58,12 @@ class GAutoCompletion extends BaseCommand
     /**
      * @var bool
      */
-    protected $excludeParentMethods = true;
+    protected $excludeParentMethods = false;
 
     /**
      * @var int
      */
-    protected $fileMode = self::FILE_MODE_BY_TYPE;
+    protected $fileMode = self::FILE_MODE_SINGLE;
 
     /**
      * @inheritDoc
@@ -209,7 +217,8 @@ PHP;
                     // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
                     $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
 
-                    $method->setComment(str_replace('@svc', $see . $refMethod->getName(), $method->getComment()));
+                    $see = '@see ' . $refMethod->getDeclaringClass()->getShortName() . '::' . $refMethod->getName();
+                    $method->setComment(str_replace('@svc', $see, $method->getComment()));
 
                     $methods[] = $method;
                     $staticMethods[] = (clone $method)->setStatic();
@@ -234,12 +243,22 @@ PHP;
 
         switch ($this->fileMode) {
             case self::FILE_MODE_SINGLE:
-                throw new \RuntimeException('Not supported yet');
-//                $header = $printer->printFile($staticFile) . "\n";
-//                $content = $header . implode("\n", $statics);
-//                $content .= "\nif (0) {\n" . $this->intent(rtrim(implode("\n", $dynamics))) . "\n}\n";
-//                $this->createFile($path . '/docs/auto-completion-static.php', $content);
-//                break;
+                $statics = $printer->printFile($staticFile);
+                $dynamics = $printer->printFile($dynamicFile);
+
+                $content = $statics;
+
+                // Remove "<?php namespace ..." and last line break
+                $pos = strpos($dynamics, 'class');
+                $content .= "\nif (0) {\n" . $this->intent(substr($dynamics, $pos, -1)) . "\n}\n";
+
+                $this->createFile($path . '/docs/auto-completion-static.php', $content);
+
+                $file = $path . '/docs/auto-completion-dynamic.php';
+                if (is_file($file)) {
+                    unlink($file);
+                }
+                break;
 
             case self::FILE_MODE_BY_TYPE:
                 $statics = $printer->printFile($staticFile);
