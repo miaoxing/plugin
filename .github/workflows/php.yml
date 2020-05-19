@@ -76,4 +76,4 @@ jobs:
           bash plugins/build/bin/install-travis.sh
 
       - name: Run
-          bash plugins/build/bin/build-travis.sh --coverage 1
+        run: bash plugins/build/bin/build-travis.sh --coverage 1
