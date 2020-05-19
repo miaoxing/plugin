@@ -28,7 +28,6 @@ class AppTest extends BaseTestCase
             $app->dispatch('test', $action);
         } catch (\Exception $e) {
             throw $e;
-
         } finally {
             $response = ob_get_clean();
 
