@@ -61,6 +61,11 @@ class GAutoCompletion extends BaseCommand
     protected $excludeParentMethods = false;
 
     /**
+     * @var bool
+     */
+    protected $addNoinspectionComment = false;
+
+    /**
      * @var int
      */
     protected $fileMode = self::FILE_MODE_SINGLE;
@@ -185,6 +190,12 @@ PHP;
         $staticFile = new PhpFile;
         $dynamicFile = new PhpFile;
 
+        if ($this->addNoinspectionComment) {
+            $staticFile->addComment('@noinspection PhpDocSignatureInspection')
+                ->addComment('@noinspection PhpFullyQualifiedNameUsageInspection')
+                ->addComment('@noinspection PhpInconsistentReturnPointsInspection');
+        }
+
         foreach ($services as $name => $serviceClass) {
             // 忽略 trait
             if (!class_exists($serviceClass)) {
@@ -246,12 +257,19 @@ PHP;
                 $statics = $printer->printFile($staticFile);
                 $dynamics = $printer->printFile($dynamicFile);
 
-                $content = $statics;
+                // Remove first (<?php\n) line
+                $dynamics = substr($dynamics, strpos($dynamics, "\n") + 1);
 
-                // Remove "<?php namespace ..." and last line break
-                $pos = strpos($dynamics, 'class');
-                $content .= "\nif (0) {\n" . $this->intent(substr($dynamics, $pos, -1)) . "\n}\n";
+                // Wrap `if (0) ` outside class definition
+                $i = 0;
+                $dynamics = preg_replace_callback('/namespace (.+?)\n/mi', function ($matches) use (&$i) {
+                    $i++;
+                    $prefix = $i === 1 ? '' : "\n}\n";
+                    return $prefix . $matches[0] . "\nif (0) {";
+                }, $dynamics);
+                $dynamics .= "}\n";
 
+                $content = $statics . $dynamics;
                 $this->createFile($path . '/docs/auto-completion-static.php', $content);
 
                 $file = $path . '/docs/auto-completion-dynamic.php';
