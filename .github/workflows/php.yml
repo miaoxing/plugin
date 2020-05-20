@@ -77,3 +77,6 @@ jobs:
 
       - name: Run
         run: bash plugins/build/bin/build-travis.sh --coverage 1
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          REDIS_PORT: ${{ job.services.redis.ports[6379] }}
