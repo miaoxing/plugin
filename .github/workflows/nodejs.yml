@@ -36,7 +36,9 @@ jobs:
 
       - name: Run
         run: |
-          yarn eslint .
+          if [[ -e ".eslintignore" ]]; then cp "plugins/plugin/.eslintignore" ".eslintignore"; fi
+          if [[ -e ".eslintrc.json" ]]; then CONFIG=".eslintrc.json"; else CONFIG="plugins/plugin/.eslintrc.json"; fi
+          yarn eslint --config=${CONFIG} .
 
   stylelint:
 
@@ -71,4 +73,5 @@ jobs:
 
       - name: Run
         run: |
-          yarn stylelint "{src,resources}/**/*.{css,scss,sass}"
+          if [[ -e ".stylelintrc.json" ]]; then CONFIG=".stylelintrc.json"; else CONFIG="plugins/plugin/.stylelintrc.json"; fi
+          yarn stylelint --config ${CONFIG} "{src,resources}/**/*.{css,scss,sass}"
