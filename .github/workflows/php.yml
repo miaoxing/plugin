@@ -2,6 +2,10 @@ name: PHP CI
 
 on: [push, pull_request]
 
+env:
+  extensions: mbstring, mysql
+  key: cache-v1 # can be any string, change to clear the extension cache.
+
 jobs:
   phpunit:
     runs-on: ${{ matrix.operating-system }}
@@ -11,9 +15,6 @@ jobs:
         operating-system: [ubuntu-latest]
         php-versions: ['7.2', '7.3', '7.4']
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
-    env:
-      extensions: mbstring, mysql
-      key: cache-v1 # can be any string, change to clear the extension cache.
     services:
       mysql:
         image: mysql:5.7
@@ -92,9 +93,6 @@ jobs:
         operating-system: [ubuntu-latest]
         php-versions: ['7.4']
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
-    env:
-      extensions: mbstring, mysql
-      key: cache-v1 # can be any string, change to clear the extension cache.
     steps:
       - name: Checkout
         uses: actions/checkout@v2
