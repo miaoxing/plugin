@@ -21,7 +21,7 @@ trait CamelCaseTrait
     {
         // 对用户数据进行检查,避免使用两种格式造成混乱
         if ($data instanceof Request) {
-            return strpos($column, '_') === false;
+            return false === strpos($column, '_');
         }
 
         return true;

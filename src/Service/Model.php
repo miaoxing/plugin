@@ -59,7 +59,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * The record data
      *
-     * @var array|$this[]
+     * @var $this[]|array
      */
     protected $data = array();
 
@@ -193,7 +193,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function __construct(array $options = array())
     {
-        if (isset($options['isNew']) && $options['isNew'] === false) {
+        if (isset($options['isNew']) && false === $options['isNew']) {
             $this->setRawData($options['data']);
             unset($options['data']);
         }
@@ -243,7 +243,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         if (!$this->table) {
             $baseName = $this->baseName();
-            if (substr($baseName, -5) === 'Model') {
+            if ('Model' === substr($baseName, -5)) {
                 $baseName = substr($baseName, 0, -5);
             }
             $this->table = $this->pluralize($this->snake($baseName));
@@ -255,7 +255,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Returns the record data as array
      *
      * @param array $returnFields A indexed array specified the fields to return
-     * @param callable|null $prepend
+     * @param null|callable $prepend
      * @return array
      */
     public function toArray($returnFields = array(), callable $prepend = null)
@@ -350,7 +350,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function isFillable($field, $data = null)
     {
-        if ($this->trigger('checkInputColumn', [$field, $data]) === false) {
+        if (false === $this->trigger('checkInputColumn', [$field, $data])) {
             return false;
         }
 
@@ -467,7 +467,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @svc
      */
@@ -549,7 +549,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         // 3. Removes missing rows
         $existIds = array();
         foreach ($data as $row) {
-            if (isset($row[$this->primaryKey]) && $row[$this->primaryKey] !== null) {
+            if (isset($row[$this->primaryKey]) && null !== $row[$this->primaryKey]) {
                 $existIds[] = $row[$this->primaryKey];
             }
         }
@@ -581,7 +581,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Receives the record field value
      *
      * @param string $name
-     * @return mixed|$this
+     * @return $this|mixed
      * @throws InvalidArgumentException When field not found
      */
     public function &get($name, &$exists = null, $throwException = true)
@@ -616,7 +616,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Receives the record field value
      *
      * @param string $name
-     * @return mixed|$this
+     * @return $this|mixed
      * @throws InvalidArgumentException When field not found
      */
     public function origGet($name)
@@ -660,7 +660,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 throw new InvalidArgumentException('Value for collection must be an instance of Wei\Record');
             } else {
                 // Support $coll[] = $value;
-                if ($name === null) {
+                if (null === $name) {
                     $this->data[] = $value;
                 } else {
                     $this->data[$name] = $value;
@@ -839,7 +839,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Return the field data before changed
      *
      * @param string $field
-     * @return string|array
+     * @return array|string
      */
     public function getChangedData($field = null)
     {
@@ -853,7 +853,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
-     * @return $this|null
+     * @return null|$this
      * @svc
      */
     protected function find($id)
@@ -948,7 +948,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param $column
      * @param null $operator
      * @param null $value
-     * @return $this|null
+     * @return null|$this
      * @svc
      */
     protected function findBy($column, $operator = null, $value = null)
@@ -1036,7 +1036,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param Request|array|null $request
+     * @param null|array|Request $request
      * @return $this
      * @throws \Exception
      * @svc
@@ -1053,7 +1053,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Executes the generated SQL and returns the found record object or null if not found
      *
-     * @return $this|null
+     * @return null|$this
      * @svc
      */
     protected function first()
@@ -1364,7 +1364,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Record: 获取当前记录的缓存键名
      *
-     * @param int|null $id
+     * @param null|int $id
      * @return string
      */
     public function getRecordCacheKey($id = null)
@@ -1448,8 +1448,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param string|null $foreignKey
-     * @param string|null $localKey
+     * @param null|string $foreignKey
+     * @param null|string $localKey
      * @return $this
      */
     public function hasOne($record, $foreignKey = null, $localKey = null)
@@ -1468,8 +1468,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param string|null $foreignKey
-     * @param string|null $localKey
+     * @param null|string $foreignKey
+     * @param null|string $localKey
      * @return $this
      */
     public function hasMany($record, $foreignKey = null, $localKey = null)
@@ -1479,8 +1479,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param string|null $foreignKey
-     * @param string|null $localKey
+     * @param null|string $foreignKey
+     * @param null|string $localKey
      * @return $this
      */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
@@ -1494,9 +1494,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param string|null $junctionTable
-     * @param string|null $foreignKey
-     * @param string|null $relatedKey
+     * @param null|string $junctionTable
+     * @param null|string $foreignKey
+     * @param null|string $relatedKey
      * @return $this
      */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
@@ -1525,7 +1525,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param string|object $model
+     * @param object|string $model
      * @return $this
      */
     protected function getRelatedModel($model)
@@ -1542,7 +1542,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Eager load relations
      *
-     * @param string|array $names
+     * @param array|string $names
      * @return $this|$this[]
      */
     public function load($names)
@@ -1660,7 +1660,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $parts = explode('\\', get_class($object));
         $name = lcfirst(end($parts));
 
-        if (substr($name, -5) == 'Model') {
+        if ('Model' == substr($name, -5)) {
             $name = substr($name, 0, -5);
         }
 
@@ -1823,7 +1823,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function isCollKey($key)
     {
-        return $key === null || is_numeric($key);
+        return null === $key || is_numeric($key);
     }
 
     /**
@@ -1957,7 +1957,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function setColumnValue($name, $value)
     {
         // Ignore $coll[] = $value
-        if ($name !== null) {
+        if (null !== $name) {
             $name = $this->convertInputIdentifier($name);
 
             // 如果有mutator，由mutator管理数据
@@ -1996,7 +1996,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $value = $this->origGet($name);
 
         $source = $this->getDataSource($name);
-        if ($source === 'php') {
+        if ('php' === $source) {
             if ($this->isNew()) {
                 // TODO 整理
                 // 如果是新数据，进行转换
@@ -2007,7 +2007,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         // 用户数据则先转换为db数据
-        if ($source === 'user') {
+        if ('user' === $source) {
             $value = $this->getSetValue($name, $value);
         }
 
@@ -2080,7 +2080,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $dbData = [];
         foreach ($this->data as $name => $value) {
-            if ($this->getDataSource($name) !== 'db') {
+            if ('db' !== $this->getDataSource($name)) {
                 $dbData[$name] = $this->getSetValue($name, $value);
             } else {
                 $dbData[$name] = $value;

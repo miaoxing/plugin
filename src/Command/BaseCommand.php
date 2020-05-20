@@ -30,7 +30,7 @@ abstract class BaseCommand extends Command
     protected $wei;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function __construct(string $name = null)
     {
@@ -53,7 +53,7 @@ abstract class BaseCommand extends Command
     abstract protected function handle();
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -77,7 +77,7 @@ abstract class BaseCommand extends Command
      *
      * @param string $name The argument name
      *
-     * @return string|string[]|null The argument value
+     * @return null|string|string[] The argument value
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      */
@@ -101,7 +101,7 @@ abstract class BaseCommand extends Command
      *
      * @param string $name The option name
      *
-     * @return string|string[]|bool|null The option value
+     * @return null|bool|string|string[] The option value
      *
      * @throws InvalidArgumentException When option given doesn't exist
      */
@@ -144,7 +144,7 @@ abstract class BaseCommand extends Command
      */
     protected function ret(array $ret): int
     {
-        $type = $ret['code'] === 1 ? 'suc' : 'err';
+        $type = 1 === $ret['code'] ? 'suc' : 'err';
         return $this->$type($ret['message'], $ret['code']);
     }
 

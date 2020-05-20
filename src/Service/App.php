@@ -33,7 +33,7 @@ class App extends \Wei\App
     /**
      * 当前运行的插件名称
      *
-     * @var string|false
+     * @var false|string
      */
     protected $plugin = false;
 
@@ -137,7 +137,7 @@ class App extends \Wei\App
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute($instance, $action)
     {
@@ -191,7 +191,7 @@ class App extends \Wei\App
     {
         $ref = new ReflectionMethod($instance, $method);
         $params = $ref->getParameters();
-        if (!$params || $params[0]->getName() === 'req') {
+        if (!$params || 'req' === $params[0]->getName()) {
             return [$this->request, $this->response];
         }
 
@@ -227,7 +227,7 @@ class App extends \Wei\App
         // TODO Throw exception for unsupported builtin type
         // Handle builtin type
         $arg = $this->request[$param->getName()];
-        if ($arg === null) {
+        if (null === $arg) {
             if ($param->isDefaultValueAvailable()) {
                 $arg = $param->getDefaultValue();
             } else {
@@ -266,7 +266,7 @@ class App extends \Wei\App
     }
 
     /**
-     * @return string|false
+     * @return false|string
      */
     protected function getNamespaceFromDomain()
     {
@@ -445,7 +445,7 @@ class App extends \Wei\App
     /**
      * 转换Ret结构为response
      *
-     * @param Ret|array $ret
+     * @param array|Ret $ret
      * @return Response
      * @throws Exception
      */
@@ -455,7 +455,7 @@ class App extends \Wei\App
             return $this->response->json($ret);
         } else {
             $ret instanceof Ret && $ret = $ret->toArray();
-            $type = $ret['retType'] ?? ($ret['code'] === 1 ? 'success' : 'warning');
+            $type = $ret['retType'] ?? (1 === $ret['code'] ? 'success' : 'warning');
             $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
 
             return $this->response->setContent($content);
@@ -483,7 +483,7 @@ class App extends \Wei\App
     public function isAdmin()
     {
         // NOTE: 控制器不存在时，回退的控制器不带有 admin
-        return strpos($this->request->getRouterPathInfo(), '/admin') === 0;
+        return 0 === strpos($this->request->getRouterPathInfo(), '/admin');
     }
 
     /**
@@ -493,7 +493,7 @@ class App extends \Wei\App
      */
     public function isApi()
     {
-        return strpos($this->getController(), 'api') === 0 || strpos($this->getController(), 'adminApi') === 0;
+        return 0 === strpos($this->getController(), 'api') || 0 === strpos($this->getController(), 'adminApi');
     }
 
     /**
@@ -512,7 +512,7 @@ class App extends \Wei\App
      * 根据域名查找应用名称
      *
      * @param string $domain
-     * @return string|false
+     * @return false|string
      * @svc
      */
     protected function getIdByDomain($domain)

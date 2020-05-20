@@ -29,7 +29,7 @@ abstract class BaseDriver extends Base
 
     protected function wrap($column)
     {
-        if (strpos($column, '.') === false) {
+        if (false === strpos($column, '.')) {
             return $this->wrapValue($column);
         }
 
@@ -67,7 +67,7 @@ abstract class BaseDriver extends Base
 
     protected function wrapValue(string $value): string
     {
-        if ($value === '*') {
+        if ('*' === $value) {
             return $value;
         }
 

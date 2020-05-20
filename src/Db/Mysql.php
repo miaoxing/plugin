@@ -62,7 +62,7 @@ class Mysql extends BaseDriver
                 $values[$key] = "'" . $value . "'";
             } elseif (is_array($value)) {
                 $values[$key] = "'" . implode("','", $value) . "'";
-            } elseif ($value === null) {
+            } elseif (null === $value) {
                 $values[$key] = 'NULL';
             }
         }
@@ -141,8 +141,8 @@ class Mysql extends BaseDriver
                 $query .= implode(', ', $orderBys);
             }
 
-            $query .= ($parts['limit'] !== null ? ' LIMIT ' . $parts['limit'] : '')
-                . ($parts['offset'] !== null ? ' OFFSET ' . $parts['offset'] : '');
+            $query .= (null !== $parts['limit'] ? ' LIMIT ' . $parts['limit'] : '')
+                . (null !== $parts['offset'] ? ' OFFSET ' . $parts['offset'] : '');
         }
 
         $query .= $this->generateLockSql();
@@ -154,7 +154,7 @@ class Mysql extends BaseDriver
     {
         $query = '';
         foreach ($wheres as $i => $where) {
-            if ($i !== 0) {
+            if (0 !== $i) {
                 $query .= ' ' . $where['condition'] . ' ';
             }
 
@@ -310,7 +310,7 @@ class Mysql extends BaseDriver
      */
     protected function generateLockSql()
     {
-        if ($this->sqlParts['lock'] === '') {
+        if ('' === $this->sqlParts['lock']) {
             return '';
         }
 

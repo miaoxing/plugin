@@ -190,7 +190,7 @@ class User extends UserModel
     }
 
     /**
-     * @return int|null
+     * @return null|int
      * @svc
      */
     protected function id()

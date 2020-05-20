@@ -227,13 +227,13 @@ class Plugin extends BaseService
     public function parseResource($resource)
     {
         $pluginId = $file = null;
-        if (isset($resource[0]) && $resource[0] == '@') {
+        if (isset($resource[0]) && '@' == $resource[0]) {
             list($pluginId, $file) = explode('/', $resource, 2);
             $pluginId = substr($pluginId, 1);
         }
 
         // @deprecated
-        if (strpos($resource, ':') !== false) {
+        if (false !== strpos($resource, ':')) {
             wei()->logger->warning('deprecated view', $resource);
             list($pluginId, $file) = explode(':', $resource, 2);
         }
@@ -272,8 +272,8 @@ class Plugin extends BaseService
     protected function isRefresh()
     {
         return $this->wei->isDebug()
-            && $this->request->getServer('HTTP_PRAGMA') == 'no-cache'
-            && strpos($this->request->getServer('HTTP_USER_AGENT'), 'wechatdevtools') === false;
+            && 'no-cache' == $this->request->getServer('HTTP_PRAGMA')
+            && false === strpos($this->request->getServer('HTTP_USER_AGENT'), 'wechatdevtools');
     }
 
     /**
@@ -334,7 +334,7 @@ class Plugin extends BaseService
      * 根据插件ID获取插件对象
      *
      * @param string $id
-     * @return \Miaoxing\Plugin\BasePlugin|false
+     * @return false|\Miaoxing\Plugin\BasePlugin
      */
     public function getById($id)
     {
@@ -368,7 +368,7 @@ class Plugin extends BaseService
         }
 
         $ret = $plugin->install();
-        if ($ret['code'] !== 1) {
+        if (1 !== $ret['code']) {
             return $ret;
         }
 
@@ -403,7 +403,7 @@ class Plugin extends BaseService
         }
 
         $ret = $plugin->uninstall();
-        if ($ret['code'] !== 1) {
+        if (1 !== $ret['code']) {
             return $ret;
         }
 
@@ -474,7 +474,7 @@ class Plugin extends BaseService
      */
     public function getEvents($fresh = false)
     {
-        if (!$this->events || $fresh == true) {
+        if (!$this->events || true == $fresh) {
             $cacheKey = 'plugin-events-' . $this->app->getNamespace();
 
             // 清除已有缓存
@@ -513,7 +513,7 @@ class Plugin extends BaseService
         $methods = get_class_methods($this->getPluginClass($id));
         foreach ($methods as $method) {
             // The event naming is onName[Priority],eg onProductShowItem50
-            if (substr($method, 0, 2) != 'on') {
+            if ('on' != substr($method, 0, 2)) {
                 continue;
             }
             $event = lcfirst(substr($method, 2));
@@ -610,7 +610,7 @@ class Plugin extends BaseService
      */
     protected function autoload($class)
     {
-        if (strpos($class, 'Miaoxing\\') !== 0) {
+        if (0 !== strpos($class, 'Miaoxing\\')) {
             return false;
         }
 

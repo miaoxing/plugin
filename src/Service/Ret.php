@@ -45,7 +45,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
      * ```
      *
-     * @param string|array|null $message
+     * @param null|array|string $message
      * @return $this
      * @svc
      */
@@ -57,7 +57,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     /**
      * Return operation failed result, and logs with an info level
      *
-     * @param string|array $message
+     * @param array|string $message
      * @param int $code
      * @param string $level
      * @return $this
@@ -71,7 +71,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     /**
      * Return operation result data
      *
-     * @param string|array $message
+     * @param array|string $message
      * @param int $code
      * @param string $type
      * @return $this
@@ -97,7 +97,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
         $this->data = $data;
 
         // Record error result
-        if ($code !== 1) {
+        if (1 !== $code) {
             !isset($rawMessage) && $rawMessage = $data['message'];
             !isset($params) && $params = $data;
             $this->logger->log($type, $rawMessage, $params);
@@ -119,7 +119,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      */
     public function isErr()
     {
-        return $this->data['code'] !== 1;
+        return 1 !== $this->data['code'];
     }
 
     /**
@@ -131,7 +131,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -139,7 +139,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function offsetExists($offset)
     {
@@ -147,7 +147,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function offsetGet($offset)
     {
@@ -155,7 +155,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -163,7 +163,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function offsetUnset($offset)
     {

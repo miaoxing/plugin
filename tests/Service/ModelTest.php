@@ -527,7 +527,7 @@ class ModelTest extends BaseTestCase
         $users = TestUser::all();
 
         $oneUsers = $users->filter(static function (TestUser $user) {
-            return $user->id === 1;
+            return 1 === $user->id;
         });
 
         $this->assertCount(1, $oneUsers);

@@ -150,7 +150,7 @@ class QueryBuilder extends BaseService
     protected static $camelCache = [];
 
     /**
-     * @param string|null $table
+     * @param null|string $table
      * @return $this
      */
     public function __invoke(string $table = null)
@@ -237,9 +237,9 @@ class QueryBuilder extends BaseService
      */
     public function execute()
     {
-        if ($this->type == self::SELECT) {
+        if (self::SELECT == $this->type) {
             $this->loaded = true;
-            if ($this->cacheTime !== false) {
+            if (false !== $this->cacheTime) {
                 return $this->fetchFromCache();
             } else {
                 return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
@@ -254,7 +254,7 @@ class QueryBuilder extends BaseService
      */
     protected function fetchFromCache()
     {
-        $cache = $this->cacheTags === false ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
+        $cache = false === $this->cacheTags ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
         return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
             return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
         });
@@ -264,7 +264,7 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
-     * @return array|null
+     * @return null|array
      * @svc
      */
     protected function fetch($column = null, $operator = null, $value = null)
@@ -279,7 +279,7 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns a column value of the first row
      *
      * @param mixed $conditions
-     * @return array|null
+     * @return null|array
      */
     public function fetchColumn($colum = null, $operator = null, $value = null)
     {
@@ -307,7 +307,7 @@ class QueryBuilder extends BaseService
     /**
      * Executes the generated SQL and returns the found record object or null if not found
      *
-     * @return array|null
+     * @return null|array
      * @svc
      */
     protected function first()
@@ -316,7 +316,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @return array|null
+     * @return null|array
      * @svc
      */
     protected function all()
@@ -326,7 +326,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @param string $column
-     * @param string|null $index
+     * @param null|string $index
      * @return array
      * @svc
      */
@@ -354,11 +354,11 @@ class QueryBuilder extends BaseService
             $data = $qb->page($page)->all();
 
             // Do not execute callback when no new records are founded
-            if (count($data) === 0) {
+            if (0 === count($data)) {
                 break;
             }
 
-            if ($callback($data, $page) === false) {
+            if (false === $callback($data, $page)) {
                 return false;
             }
 
@@ -414,7 +414,7 @@ class QueryBuilder extends BaseService
      */
     protected function update($set = [], $value = null)
     {
-        if (func_num_args() === 2) {
+        if (2 === func_num_args()) {
             $set = [$set => $value];
         }
 
@@ -501,7 +501,7 @@ class QueryBuilder extends BaseService
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns The selection expressions.
      * @return $this
      * @svc
      */
@@ -550,7 +550,7 @@ class QueryBuilder extends BaseService
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @svc
      */
@@ -570,7 +570,7 @@ class QueryBuilder extends BaseService
      * Sets table for FROM query
      *
      * @param string $table
-     * @param string|null $alias
+     * @param null|string $alias
      * @return $this
      * @svc
      */
@@ -615,9 +615,9 @@ class QueryBuilder extends BaseService
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string|null $first
+     * @param null|string $first
      * @param string $operator
-     * @param string|null $second
+     * @param null|string $second
      * @param string $type
      * @return $this
      * @svc
@@ -631,9 +631,9 @@ class QueryBuilder extends BaseService
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param string|null $first
+     * @param null|string $first
      * @param string $operator
-     * @param string|null $second
+     * @param null|string $second
      * @return $this
      * @svc
      */
@@ -646,9 +646,9 @@ class QueryBuilder extends BaseService
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param string|null $first
+     * @param null|string $first
      * @param string $operator
-     * @param string|null $second
+     * @param null|string $second
      * @return $this
      * @svc
      */
@@ -668,7 +668,7 @@ class QueryBuilder extends BaseService
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param null|array|Closure|string $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -677,7 +677,7 @@ class QueryBuilder extends BaseService
     protected function where($column = null, $operator = null, $value = null)
     {
         //
-        if ($column === null) {
+        if (null === $column) {
             return $this;
         }
 
@@ -692,7 +692,7 @@ class QueryBuilder extends BaseService
             return $this;
         }
 
-        if (func_num_args() === 2) {
+        if (2 === func_num_args()) {
             $value = $operator;
             $operator = '=';
         }
@@ -729,7 +729,7 @@ class QueryBuilder extends BaseService
             return $this;
         }
 
-        if (func_num_args() === 2) {
+        if (2 === func_num_args()) {
             $value = $operator;
             $operator = '=';
         }
@@ -1000,13 +1000,13 @@ class QueryBuilder extends BaseService
      */
     protected function having($column, $operator, $value = null, $condition = 'AND')
     {
-        if (func_num_args() === 2) {
+        if (2 === func_num_args()) {
             $value = $operator;
             $operator = '=';
         }
 
-        if ($value === null) {
-            $operator = $operator === 'NOT NULL' ? $operator : 'NULL';
+        if (null === $value) {
+            $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
         } else {
             $this->params['having'][] = (array) $value;
         }
@@ -1038,7 +1038,7 @@ class QueryBuilder extends BaseService
      */
     public function orHaving($column, $operator, $value = null)
     {
-        if (func_num_args() === 2) {
+        if (2 === func_num_args()) {
             $value = $operator;
             $operator = '=';
         }
@@ -1174,15 +1174,15 @@ class QueryBuilder extends BaseService
     /**
      * Sets a query parameter for the query being constructed
      *
-     * @param string|integer $key The parameter position or name
+     * @param integer|string $key The parameter position or name
      * @param mixed $value The parameter value
-     * @param string|null $type PDO::PARAM_*
+     * @param null|string $type PDO::PARAM_*
      * @return $this
      * @todo refactor 暂不支持
      */
     public function setParameter($key, $value, $type = null)
     {
-        if ($type !== null) {
+        if (null !== $type) {
             $this->paramTypes[$key] = $type;
         }
 
@@ -1227,7 +1227,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param string|array $parameter
+     * @param array|string $parameter
      * @param string $type
      * @return $this
      */
@@ -1256,7 +1256,7 @@ class QueryBuilder extends BaseService
      */
     public function getSql()
     {
-        if ($this->sql !== null && $this->state === self::STATE_CLEAN) {
+        if (null !== $this->sql && self::STATE_CLEAN === $this->state) {
             return $this->sql;
         }
 
@@ -1320,10 +1320,10 @@ class QueryBuilder extends BaseService
         }
 
         if ($append) {
-            if ($sqlPartName === 'orderBy'
-                || $sqlPartName === 'groupBy'
-                || $sqlPartName === 'select'
-                || $sqlPartName === 'set'
+            if ('orderBy' === $sqlPartName
+                || 'groupBy' === $sqlPartName
+                || 'select' === $sqlPartName
+                || 'set' === $sqlPartName
             ) {
                 $this->sqlParts[$sqlPartName] = array_merge($this->sqlParts[$sqlPartName], $sqlPart);
             } elseif ($isMultiple) {
@@ -1348,10 +1348,10 @@ class QueryBuilder extends BaseService
             $this->params['where'] = array_merge($this->params['where'], $query->getParameters()['where']);
         }
 
-        if ($value === null) {
-            $operator = $operator === 'NOT NULL' ? $operator : 'NULL';
+        if (null === $value) {
+            $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
         } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'])) {
-            $operator = $operator === 'NOT IN' ? $operator : 'IN';
+            $operator = 'NOT IN' === $operator ? $operator : 'IN';
             $this->params['where'][] = (array) $value;
         } else {
             $this->params['where'][] = (array) $value;
@@ -1364,7 +1364,7 @@ class QueryBuilder extends BaseService
 
     protected function addWhereArgs($args, $condition = 'AND', $type = null)
     {
-        if (count($args) === 2) {
+        if (2 === count($args)) {
             $operator = '=';
             [$column, $value] = $args;
         } else {
@@ -1406,7 +1406,7 @@ class QueryBuilder extends BaseService
     /**
      * @param mixed $value
      * @param callable $callback
-     * @param callable|null $default
+     * @param null|callable $default
      * @return $this
      * @svc
      */
@@ -1423,7 +1423,7 @@ class QueryBuilder extends BaseService
     /**
      * @param mixed $value
      * @param callable $callback
-     * @param callable|null $default
+     * @param null|callable $default
      * @return $this
      * @svc
      */

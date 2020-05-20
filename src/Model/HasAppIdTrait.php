@@ -33,7 +33,7 @@ trait HasAppIdTrait
     /**
      * Record: Set value for app id column
      *
-     * @param int|null $appId
+     * @param null|int $appId
      * @return $this
      */
     public function setAppId($appId = null)

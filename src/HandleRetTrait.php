@@ -14,7 +14,7 @@ trait HandleRetTrait
      */
     protected function tie($ret)
     {
-        if (isset($ret['code']) && $ret['code'] !== 1) {
+        if (isset($ret['code']) && 1 !== $ret['code']) {
             throw new RetException($ret);
         }
     }

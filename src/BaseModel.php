@@ -332,7 +332,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function isSoftDeleted()
     {
-        return $this[$this->deletedAtColumn] && $this[$this->deletedAtColumn] != '0000-00-00 00:00:00';
+        return $this[$this->deletedAtColumn] && '0000-00-00 00:00:00' != $this[$this->deletedAtColumn];
     }
 
     /**
@@ -405,7 +405,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * Record: 获取当前记录的缓存键名
      *
-     * @param int|null $id
+     * @param null|int $id
      * @return string
      */
     public function getRecordCacheKey($id = null)
@@ -454,7 +454,7 @@ class BaseModel extends Record implements JsonSerializable
             $basename = end($parts);
 
             // TODO V2
-            $endWiths = substr($basename, -5) === 'Model';
+            $endWiths = 'Model' === substr($basename, -5);
             if ($this->tableV2 || $endWiths) {
                 $endWiths && $basename = substr($basename, 0, -5);
                 $this->table = $this->str->pluralize($this->snake($basename));
@@ -491,7 +491,7 @@ class BaseModel extends Record implements JsonSerializable
      * Specifies an item that is not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $fields
+     * @param array|string $fields
      * @return $this
      */
     public function selectExcept($fields)
@@ -507,7 +507,7 @@ class BaseModel extends Record implements JsonSerializable
     protected function loadData($offset)
     {
         if (!$this->loaded && !$this->isNew) {
-            if ($this->table !== 'user') {
+            if ('user' !== $this->table) {
                 wei()->statsD->increment('record.loadData.' . $this->table);
             }
         }
@@ -591,8 +591,8 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param string|null $foreignKey
-     * @param string|null $localKey
+     * @param null|string $foreignKey
+     * @param null|string $localKey
      * @return $this
      */
     public function hasOne($record, $foreignKey = null, $localKey = null)
@@ -611,8 +611,8 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param string|null $foreignKey
-     * @param string|null $localKey
+     * @param null|string $foreignKey
+     * @param null|string $localKey
      * @return $this
      */
     public function hasMany($record, $foreignKey = null, $localKey = null)
@@ -622,8 +622,8 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param string|null $foreignKey
-     * @param string|null $localKey
+     * @param null|string $foreignKey
+     * @param null|string $localKey
      * @return BaseModel
      */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
@@ -637,9 +637,9 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param string|null $junctionTable
-     * @param string|null $foreignKey
-     * @param string|null $relatedKey
+     * @param null|string $junctionTable
+     * @param null|string $foreignKey
+     * @param null|string $relatedKey
      * @return BaseModel
      */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
@@ -671,7 +671,7 @@ class BaseModel extends Record implements JsonSerializable
     }
 
     /**
-     * @param string|object $model
+     * @param object|string $model
      * @return BaseModel
      */
     protected function getRelatedModel($model)
@@ -686,7 +686,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * Eager load relations
      *
-     * @param string|array $names
+     * @param array|string $names
      * @return $this|$this[]
      */
     public function load($names)
@@ -843,11 +843,11 @@ class BaseModel extends Record implements JsonSerializable
         $name = lcfirst(end($parts));
 
         // TODO deprecated
-        if (substr($name, -6) == 'Record') {
+        if ('Record' == substr($name, -6)) {
             $name = substr($name, 0, -6);
         }
 
-        if (substr($name, -5) == 'Model') {
+        if ('Model' == substr($name, -5)) {
             $name = substr($name, 0, -5);
         }
 
@@ -908,7 +908,7 @@ class BaseModel extends Record implements JsonSerializable
     public function set($name, $value = null)
     {
         // Ignore $coll[] = $value
-        if ($name !== null) {
+        if (null !== $name) {
             $name = $this->filterInputColumn($name);
 
             $method = 'set' . $this->camel($name) . 'Attribute';
@@ -939,7 +939,7 @@ class BaseModel extends Record implements JsonSerializable
 
     public function isFillable($field, $data = null)
     {
-        if ($this->trigger('checkInputColumn', [$field, $data]) === false) {
+        if (false === $this->trigger('checkInputColumn', [$field, $data])) {
             return false;
         }
 
@@ -1107,7 +1107,7 @@ class BaseModel extends Record implements JsonSerializable
      */
     protected function isCollKey($key)
     {
-        return $key === null || is_numeric($key);
+        return null === $key || is_numeric($key);
     }
 
     /**

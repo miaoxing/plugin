@@ -157,7 +157,7 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
             $this->basePath = substr(dirname($class->getFileName()), strlen(getcwd()) + 1);
 
             // TODO 改为默认
-            if (substr($class->getName(), 0, 8) == 'Miaoxing') {
+            if ('Miaoxing' == substr($class->getName(), 0, 8)) {
                 $this->basePath = dirname($this->basePath);
             }
         }

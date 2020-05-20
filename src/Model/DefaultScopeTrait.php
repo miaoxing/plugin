@@ -46,7 +46,7 @@ trait DefaultScopeTrait
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @svc
      */
@@ -68,7 +68,7 @@ trait DefaultScopeTrait
         }
         $this->applyDefaultScope = true;
 
-        if ($this->withoutScopes === true) {
+        if (true === $this->withoutScopes) {
             return;
         }
 
@@ -90,7 +90,7 @@ trait DefaultScopeTrait
     protected function applyDefaultScopePreBuildQuery($sqlPartName)
     {
         // 忽略初始化时设置table使用了from
-        if ($sqlPartName !== 'from') {
+        if ('from' !== $sqlPartName) {
             $this->applyDefaultScope();
         }
     }

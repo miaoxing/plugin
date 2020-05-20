@@ -41,7 +41,7 @@ abstract class BaseController extends \Miaoxing\Services\App\BaseController
     /**
      * 从权限配置中获取当前操作的名称
      *
-     * @return string|null
+     * @return null|string
      * @deprecated
      */
     public function getActionName()

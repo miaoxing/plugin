@@ -55,7 +55,7 @@ class BaseControllerTestCase extends BaseTestCase
         $controller = $this->getController();
         $controllerClass = last($this->app->getControllerClasses($controller));
         $actions = get_class_methods($controllerClass);
-        if ($actions === null) {
+        if (null === $actions) {
             throw new RuntimeException(sprintf(
                 'Action method not found in controller %s class %s',
                 $controller,
@@ -65,7 +65,7 @@ class BaseControllerTestCase extends BaseTestCase
 
         $params = [];
         foreach ($actions as $action) {
-            if (substr($action, -6) === 'Action') {
+            if ('Action' === substr($action, -6)) {
                 $action = substr($action, 0, -6);
                 $params[] = [
                     $action,
@@ -117,7 +117,7 @@ class BaseControllerTestCase extends BaseTestCase
     /**
      * @param string $controller
      * @param string $action
-     * @return \Wei\Response|\Exception
+     * @return \Exception|\Wei\Response
      */
     public function dispatch($controller, $action = 'index')
     {

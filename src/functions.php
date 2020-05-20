@@ -19,7 +19,7 @@ if (!function_exists('err')) {
     /**
      * Return operation failed result, and logs with an info level
      *
-     * @param string|array $message
+     * @param array|string $message
      * @param int $code
      * @param string $level
      * @return Ret
@@ -34,7 +34,7 @@ if (!function_exists('ret')) {
     /**
      * Return operation result data
      *
-     * @param string|array $message
+     * @param array|string $message
      * @param int $code
      * @param string $type
      * @return mixed|string
@@ -48,6 +48,6 @@ if (!function_exists('ret')) {
 if (!function_exists('req')) {
     function req($name = null)
     {
-        return $name === null ? wei()->request : wei()->request[$name];
+        return null === $name ? wei()->request : wei()->request[$name];
     }
 }

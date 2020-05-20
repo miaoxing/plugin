@@ -97,7 +97,7 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
 
         $expected = ['code' => 1];
-        if ($message !== null) {
+        if (null !== $message) {
             $expected['message'] = $message;
         }
 
@@ -109,7 +109,7 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
 
         $expected = ['code' => $code];
-        if ($message !== null) {
+        if (null !== $message) {
             $expected['message'] = $message;
         }
 

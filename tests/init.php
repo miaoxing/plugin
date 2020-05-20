@@ -9,7 +9,7 @@ require 'functions.php';
 
 // NOTE：解决 PHPStorm 2019.2 的 PHPUnit 在测试目录下运行导致加载不到类错误
 $dir = getcwd();
-while ($dir !== '/') {
+while ('/' !== $dir) {
     if (is_file($dir . '/vendor/autoload.php')) {
         chdir($dir);
         break;

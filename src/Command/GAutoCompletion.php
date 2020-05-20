@@ -71,7 +71,7 @@ class GAutoCompletion extends BaseCommand
     protected $fileMode = self::FILE_MODE_SINGLE;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -87,7 +87,7 @@ class GAutoCompletion extends BaseCommand
     protected function handle()
     {
         $id = $this->getArgument('plugin-id');
-        if ($id === 'wei') {
+        if ('wei' === $id) {
             [$services, $path, $generateViewVars] = $this->getWeiConfig();
         } else {
             $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
@@ -122,7 +122,7 @@ class GAutoCompletion extends BaseCommand
         foreach ($files as $file) {
             $name = basename($file, '.php');
             // TODO Null 类 php7 不支持
-            if ($name === 'Null') {
+            if ('Null' === $name) {
                 continue;
             }
             $services['is' . $name] = 'Wei\\Validator\\' . $name;
@@ -280,7 +280,7 @@ PHP;
         $index = 0;
         $dynamics = preg_replace_callback('/namespace (.+?)\n/mi', function ($matches) use (&$index) {
             $index++;
-            $prefix = $index === 1 ? '' : "\n}\n";
+            $prefix = 1 === $index ? '' : "\n}\n";
             return $prefix . $matches[0] . "\nif (0) {";
         }, $dynamics);
         $dynamics .= "}\n";

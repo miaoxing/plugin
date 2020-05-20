@@ -82,7 +82,7 @@ class Str extends BaseService
     /**
      * 获取对象的基础类名
      *
-     * @param string|object $object
+     * @param object|string $object
      * @return string
      */
     public function baseName($object)

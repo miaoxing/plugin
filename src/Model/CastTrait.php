@@ -32,7 +32,7 @@ trait CastTrait
      */
     protected function castToPhp($value, $column)
     {
-        if ($value !== null && $this->hasCast($column) && !$this->isIgnoreCast($value)) {
+        if (null !== $value && $this->hasCast($column) && !$this->isIgnoreCast($value)) {
             $value = $this->toPhpType($value, $this->casts[$column]);
         }
 
@@ -83,10 +83,10 @@ trait CastTrait
                 return (string) $value;
 
             case 'datetime':
-                return $value === '0000-00-00 00:00:00' ? '' : $value;
+                return '0000-00-00 00:00:00' === $value ? '' : $value;
 
             case 'date':
-                return $value === '0000-00-00' ? '' : $value;
+                return '0000-00-00' === $value ? '' : $value;
 
             case 'bool':
                 return (bool) $value;

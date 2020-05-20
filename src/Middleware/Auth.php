@@ -18,14 +18,14 @@ class Auth extends BaseMiddleware
     public function __invoke($next, BaseController $controller = null)
     {
         // 检查控制器是否需要登录
-        if ($controller->getOption('controllerAuth') === false) {
+        if (false === $controller->getOption('controllerAuth')) {
             return $next();
         }
 
         // 检查操作是否需要登录
         $action = $this->app->getAction();
         $auths = $controller->getOption('actionAuths');
-        if (isset($auths[$action]) && $auths[$action] === false) {
+        if (isset($auths[$action]) && false === $auths[$action]) {
             return $next();
         }
 
@@ -53,7 +53,7 @@ class Auth extends BaseMiddleware
     protected function redirectLogin($ret)
     {
         if ($this->request->acceptJson()) {
-            $ret['code'] = $ret['code'] !== -1 ? $ret['code'] : 401;
+            $ret['code'] = -1 !== $ret['code'] ? $ret['code'] : 401;
             $ret['next'] = $this->url->append($ret['next'], ['next' => $this->request->getReferer()]);
             return $ret;
         }

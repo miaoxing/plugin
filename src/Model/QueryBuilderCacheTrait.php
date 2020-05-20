@@ -14,7 +14,7 @@ trait QueryBuilderCacheTrait
     /**
      * The specified cache time
      *
-     * @var int|false
+     * @var false|int
      */
     protected $cacheTime = false;
 
@@ -44,15 +44,15 @@ trait QueryBuilderCacheTrait
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param null|false|int $seconds
      * @return $this
      * @svc
      */
     protected function cache($seconds = null)
     {
-        if ($seconds === null) {
+        if (null === $seconds) {
             $this->cacheTime = $this->defaultCacheTime;
-        } elseif ($seconds === false) {
+        } elseif (false === $seconds) {
             $this->cacheTime = false;
         } else {
             $this->cacheTime = (int) $seconds;
@@ -63,12 +63,12 @@ trait QueryBuilderCacheTrait
     /**
      * Set or remove cache tags
      *
-     * @param array|null|false $tags
+     * @param null|array|false $tags
      * @return $this
      */
     public function tags($tags = null)
     {
-        $this->cacheTags = $tags === false ? false : $tags;
+        $this->cacheTags = false === $tags ? false : $tags;
         return $this;
     }
 

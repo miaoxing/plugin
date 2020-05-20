@@ -143,7 +143,7 @@ trait ReqQueryTrait
      */
     protected function parseNameAndOp($name)
     {
-        if (strpos($name, '$') === false) {
+        if (false === strpos($name, '$')) {
             return [$name, 'eq'];
         } else {
             return explode('$', $name, 2);
@@ -288,7 +288,7 @@ trait ReqQueryTrait
     protected function processMaxDate($column, $value)
     {
         if (isset($this->casts[$column])
-            && $this->casts[$column] == 'datetime'
+            && 'datetime' == $this->casts[$column]
             && wei()->isDate($value)
         ) {
             return $value . ' 23:59:59';
@@ -351,7 +351,7 @@ trait ReqQueryTrait
 
     protected function parseReqColumn($column)
     {
-        if (strpos($column, '.') === false) {
+        if (false === strpos($column, '.')) {
             // 查询当前表
             $value = $this->request[$column];
             $relation = null;

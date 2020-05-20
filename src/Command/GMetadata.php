@@ -98,7 +98,7 @@ class GMetadata extends BaseCommand
                 return 'int';
 
             case 'tinyint':
-                return $length === 1 ? 'bool' : 'int';
+                return 1 === $length ? 'bool' : 'int';
 
             case 'varchar':
             case 'char':

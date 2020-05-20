@@ -35,7 +35,7 @@ class Config extends BaseService
     /**
      * 设置一项配置的值
      *
-     * @param string|array $name
+     * @param array|string $name
      * @param mixed $value
      * @return $this
      */
@@ -58,7 +58,7 @@ class Config extends BaseService
 
     /**
      * @svc
-     * @param string|array $name
+     * @param array|string $name
      * @param mixed $value
      * @return void
      */

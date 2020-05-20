@@ -61,7 +61,7 @@ class UserModel extends Model
     protected function can($permissionId)
     {
         $result = $this->event->until('userCan', [$permissionId, $this]);
-        if ($result === null) {
+        if (null === $result) {
             $result = true;
         }
 
@@ -84,7 +84,7 @@ class UserModel extends Model
      */
     public function isSuperAdmin()
     {
-        return $this->id === 1;
+        return 1 === $this->id;
     }
 
     /**
