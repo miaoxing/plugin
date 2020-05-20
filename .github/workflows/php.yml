@@ -54,7 +54,6 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: ${{ env.extensions }}
           coverage: xdebug
-          tools: php-cs-fixer, phpunit
 
       - name: Start mysql service
         run: sudo /etc/init.d/mysql start
