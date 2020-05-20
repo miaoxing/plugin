@@ -80,3 +80,10 @@ jobs:
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
           REDIS_PORT: ${{ job.services.redis.ports[6379] }}
+
+      - name: Upload coverage results to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          composer global require cedx/coveralls
+          coveralls build/logs/clover.xml
