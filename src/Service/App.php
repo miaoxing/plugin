@@ -155,7 +155,7 @@ class App extends \Wei\App
             // TODO 和 forward 异常合并一起处理
             try {
                 $args = $this->buildActionArgs($instance, $method);
-                $response = $instance->$method(...$args);
+                $response = $instance->{$method}(...$args);
             } catch (RetException $e) {
                 return $e->getRet();
             }

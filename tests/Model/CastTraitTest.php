@@ -128,7 +128,7 @@ class CastTraitTest extends BaseTestCase
         $record->save();
         $record = TestCast::find((int) $record->intColumn);
         foreach ($result as $key => $value) {
-            $this->assertSame($value, $record->$key);
+            $this->assertSame($value, $record->{$key});
         }
     }
 
@@ -188,7 +188,7 @@ class CastTraitTest extends BaseTestCase
         $record->fromArray($from);
 
         foreach ($result as $key => $value) {
-            $this->assertSame($value, $record->$key);
+            $this->assertSame($value, $record->{$key});
         }
     }
 

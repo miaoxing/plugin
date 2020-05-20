@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
-use Wei\Env;
 
 /**
  * @mixin \EnvMixin

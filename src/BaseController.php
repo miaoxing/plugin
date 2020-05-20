@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Services\Service\Page;
 
 /**
  * @mixin \UserMixin

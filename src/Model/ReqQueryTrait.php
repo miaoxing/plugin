@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\BaseModelV2;
 use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Services\Service\Request;
 
@@ -127,7 +126,7 @@ trait ReqQueryTrait
         list($name, $op) = $this->parseNameAndOp($name);
 
         /** @var Model $related */
-        $related = $this->$relation();
+        $related = $this->{$relation}();
         if (!$related->hasColumn($name)) {
             return;
         }
@@ -205,7 +204,7 @@ trait ReqQueryTrait
             $this->selectMain();
 
             /** @var Model $related */
-            $related = $this->$relation();
+            $related = $this->{$relation}();
             $name = $related->getClassServiceName();
             $config = $this->relations[$name];
 
@@ -368,7 +367,7 @@ trait ReqQueryTrait
             $value = $this->request[$relation][$relationColumn];
 
             /** @var Model $related */
-            $related = $this->$relation();
+            $related = $this->{$relation}();
             $column = $related->getTable() . '.' . $relationColumn;
         }
 

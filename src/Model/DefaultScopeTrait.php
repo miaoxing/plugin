@@ -78,7 +78,7 @@ trait DefaultScopeTrait
 
         $scopes = array_diff(array_keys($defaultScopes), $this->withoutScopes);
         foreach ($scopes as $scope) {
-            $this->$scope();
+            $this->{$scope}();
         }
 
         return $this;

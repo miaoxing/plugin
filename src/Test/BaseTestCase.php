@@ -40,7 +40,7 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
 
         // 还原被mock的服务
         foreach ($this->mockServices as $name => $service) {
-            $wei->$name = $service;
+            $wei->{$name} = $service;
         }
 
         $wei->request->clear();
@@ -60,7 +60,7 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
      */
     public function getServiceMock($name, $methods = [], array $arguments = [])
     {
-        $service = $this->wei->$name;
+        $service = $this->wei->{$name};
         $this->mockServices[$name] = $service;
 
         $class = get_class($service);
@@ -71,14 +71,14 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
             $mock = $this->createMock($class);
         }
 
-        $this->wei->$name = $mock;
+        $this->wei->{$name} = $mock;
 
         return $mock;
     }
 
     public function getModelServiceMock($name, $methods = [], array $arguments = [])
     {
-        $table = wei()->$name()->getTable();
+        $table = wei()->{$name}()->getTable();
 
         // TODO PHPUnit?空方法会导致其他方法都返回null,
         $methods || $methods = ['__fake'];

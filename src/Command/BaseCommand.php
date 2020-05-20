@@ -145,7 +145,7 @@ abstract class BaseCommand extends Command
     protected function ret(array $ret): int
     {
         $type = 1 === $ret['code'] ? 'suc' : 'err';
-        return $this->$type($ret['message'], $ret['code']);
+        return $this->{$type}($ret['message'], $ret['code']);
     }
 
     /**

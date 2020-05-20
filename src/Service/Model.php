@@ -1167,7 +1167,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function triggerCallback($name)
     {
         $this->trigger($name);
-        $this->$name();
+        $this->{$name}();
     }
 
     /**
@@ -1270,7 +1270,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             $parts = explode('\\', $trait);
             $method = 'boot' . array_pop($parts);
             if (method_exists($class, $method)) {
-                $this->$method($this);
+                $this->{$method}($this);
             }
         }
     }
@@ -1535,7 +1535,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         } elseif (is_subclass_of($model, self::class)) {
             return forward_static_call([$model, 'new']);
         } else {
-            return $this->wei->$model();
+            return $this->wei->{$model}();
         }
     }
 
@@ -1557,7 +1557,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             }
 
             /** @var static $related */
-            $related = $this->$name();
+            $related = $this->{$name}();
             $isColl = $related->isColl();
             $serviceName = $this->getClassServiceName($related);
             $relation = $this->relations[$serviceName];
@@ -1567,7 +1567,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             $ids = array_unique(array_filter($ids));
             if ($ids) {
                 $this->relatedValue = $ids;
-                $related = $this->$name();
+                $related = $this->{$name}();
                 $this->relatedValue = null;
             } else {
                 $related = null;
@@ -1601,7 +1601,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             $records = [];
         }
         foreach ($this->data as $row) {
-            $row->$name = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
+            $row->{$name} = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
         }
 
         return $records;
@@ -1611,7 +1611,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $records = $related ? $related->fetchAll() : [];
         foreach ($this->data as $row) {
-            $rowRelation = $row->$name = $related::newColl();
+            $rowRelation = $row->{$name} = $related::newColl();
             foreach ($records as $record) {
                 if ($record[$relation['foreignKey']] === $row[$relation['localKey']]) {
                     // Remove external data
@@ -1773,26 +1773,26 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function &getRelationValue($name)
     {
         /** @var static $related */
-        $related = $this->$name();
+        $related = $this->{$name}();
         $serviceName = $this->getClassServiceName($related);
         $relation = $this->relations[$serviceName];
         $localValue = $this[$relation['localKey']];
 
         if ($related->isColl()) {
             if ($localValue) {
-                $this->$name = $related->all();
+                $this->{$name} = $related->all();
             } else {
-                $this->$name = $related;
+                $this->{$name} = $related;
             }
         } else {
             if ($localValue) {
-                $this->$name = $related->first() ?: null;
+                $this->{$name} = $related->first() ?: null;
             } else {
-                $this->$name = null;
+                $this->{$name} = null;
             }
         }
 
-        return $this->$name;
+        return $this->{$name};
     }
 
     /**
@@ -1934,7 +1934,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         // Required services first
         if (in_array($name, $this->requiredServices)) {
-            return $this->$name = $value;
+            return $this->{$name} = $value;
         }
 
         $result = $this->set($name, $value, false);
@@ -1943,7 +1943,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if ($this->wei->has($name)) {
-            return $this->$name = $value;
+            return $this->{$name} = $value;
         }
 
         throw new InvalidArgumentException('Invalid property: ' . $name);
@@ -2101,7 +2101,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         parent::__get($name);
 
-        return $this->$name;
+        return $this->{$name};
     }
 
     /**
@@ -2159,7 +2159,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function setRelationValue($name, $value)
     {
-        $this->$name = $value;
+        $this->{$name} = $value;
 
         return $this;
     }
@@ -2187,7 +2187,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $method = 'get' . $this->camel($name) . 'Attribute';
         if ($result = method_exists($this, $method)) {
-            $value = $this->$method();
+            $value = $this->{$method}();
         }
 
         return $result;
@@ -2202,7 +2202,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $method = 'set' . $this->camel($name) . 'Attribute';
         if ($result = method_exists($this, $method)) {
-            $this->$method($value);
+            $this->{$method}($value);
         }
 
         return $result;

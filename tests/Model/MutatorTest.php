@@ -5,7 +5,6 @@ namespace MiaoxingTest\Plugin\Model;
 use InvalidArgumentException;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestMutator;
-use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
 class MutatorTest extends BaseTestCase
 {

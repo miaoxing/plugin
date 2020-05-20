@@ -6,7 +6,6 @@ use Closure;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Db\BaseDriver;
 use Miaoxing\Plugin\Model\QueryBuilderCacheTrait;
-use Wei\Base;
 
 /**
  * A SQL query builder class

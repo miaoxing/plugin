@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Middleware;
 
-use Miaoxing\Plugin\Service\User;
 use Miaoxing\Services\Middleware\BaseMiddleware;
 
 /**

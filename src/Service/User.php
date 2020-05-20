@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Services\ConfigTrait;
 
 /**
@@ -375,7 +374,7 @@ class User extends UserModel
         // __set start
         // Required services first
         if (in_array($name, $this->requiredServices)) {
-            return $this->$name = $value;
+            return $this->{$name} = $value;
         }
 
         // NOTE: 设置前需主动加载，否则状态变为loaded，不会再去加载
@@ -387,7 +386,7 @@ class User extends UserModel
         }
 
         if ($this->wei->has($name)) {
-            return $this->$name = $value;
+            return $this->{$name} = $value;
         }
 
         throw new \InvalidArgumentException('Invalid property: ' . $name);

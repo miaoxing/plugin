@@ -154,7 +154,7 @@ class BaseModel extends Record implements JsonSerializable
             $parts = explode('\\', $trait);
             $method = 'boot' . array_pop($parts);
             if (method_exists($class, $method)) {
-                $this->$method($this);
+                $this->{$method}($this);
             }
         }
     }
@@ -679,7 +679,7 @@ class BaseModel extends Record implements JsonSerializable
         if ($model instanceof self) {
             return $model;
         } else {
-            return $this->wei->$model();
+            return $this->wei->{$model}();
         }
     }
 
@@ -701,7 +701,7 @@ class BaseModel extends Record implements JsonSerializable
             }
 
             /** @var BaseModel $related */
-            $related = $this->$name();
+            $related = $this->{$name}();
             $isColl = $related->isColl();
             $serviceName = $this->getClassServiceName($related);
             $relation = $this->relations[$serviceName];
@@ -711,7 +711,7 @@ class BaseModel extends Record implements JsonSerializable
             $ids = array_unique(array_filter($ids));
             if ($ids) {
                 $this->relatedValue = $ids;
-                $related = $this->$name();
+                $related = $this->{$name}();
                 $this->relatedValue = null;
             } else {
                 $related = null;
@@ -745,7 +745,7 @@ class BaseModel extends Record implements JsonSerializable
             $records = [];
         }
         foreach ($this->data as $row) {
-            $row->$name = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
+            $row->{$name} = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
         }
 
         return $records;
@@ -756,14 +756,14 @@ class BaseModel extends Record implements JsonSerializable
         $serviceName = $this->getClassServiceName($related);
         $records = $related ? $related->fetchAll() : [];
         foreach ($this->data as $row) {
-            $rowRelation = $row->$name = $this->wei->$serviceName()->beColl();
+            $rowRelation = $row->{$name} = $this->wei->{$serviceName}()->beColl();
             foreach ($records as $record) {
                 if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
                     // Remove external data
                     if (!$related->hasColumn($relation['foreignKey'])) {
                         unset($record[$relation['foreignKey']]);
                     }
-                    $rowRelation[] = $this->wei->$serviceName()->setData($record);
+                    $rowRelation[] = $this->wei->{$serviceName}()->setData($record);
                 }
             }
         }
@@ -897,7 +897,7 @@ class BaseModel extends Record implements JsonSerializable
 
         $method = 'get' . $this->camel($name) . 'Attribute';
         if (method_exists($this, $method)) {
-            return $this->$method();
+            return $this->{$method}();
         }
 
         $value = parent::get($name);
@@ -915,7 +915,7 @@ class BaseModel extends Record implements JsonSerializable
             if (method_exists($this, $method)) {
                 $this->setChanged($name);
 
-                return $this->$method($value);
+                return $this->{$method}($value);
             }
 
             $value = $this->trigger('setValue', [$value, $name]);
@@ -1057,26 +1057,26 @@ class BaseModel extends Record implements JsonSerializable
     protected function &getRelationValue($name)
     {
         /** @var BaseModel $related */
-        $related = $this->$name();
+        $related = $this->{$name}();
         $serviceName = $this->getClassServiceName($related);
         $relation = $this->relations[$serviceName];
         $localValue = $this[$relation['localKey']];
 
         if ($related->isColl()) {
             if ($localValue) {
-                $this->$name = $related->findAll();
+                $this->{$name} = $related->findAll();
             } else {
-                $this->$name = $related;
+                $this->{$name} = $related;
             }
         } else {
             if ($localValue) {
-                $this->$name = $related->find() ?: null;
+                $this->{$name} = $related->find() ?: null;
             } else {
-                $this->$name = null;
+                $this->{$name} = null;
             }
         }
 
-        return $this->$name;
+        return $this->{$name};
     }
 
     /**

@@ -12,7 +12,7 @@ class PluginUninstall extends BaseCommand
             ->addArgument('id', InputArgument::REQUIRED, 'The id of the plugin')
             ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
     }
-    
+
     public function handle()
     {
         wei()->app->setNamespace($this->getArgument('app'));
