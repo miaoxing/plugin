@@ -218,7 +218,7 @@ class Mysql extends BaseDriver
      */
     protected function getSqlForCount()
     {
-        return "SELECT COUNT(*) FROM (" . $this->getSqlForSelect() . ") wei_count";
+        return 'SELECT COUNT(*) FROM (' . $this->getSqlForSelect() . ') wei_count';
     }
 
     /**
@@ -295,7 +295,7 @@ class Mysql extends BaseDriver
                     $where[] = $field . ' IN (' . implode(', ', array_pad([], count($condition), '?')) . ')';
                     $params = array_merge($params, $condition);
                 } else {
-                    $where[] = $field . " = ?";
+                    $where[] = $field . ' = ?';
                     $params[] = $condition;
                 }
             }

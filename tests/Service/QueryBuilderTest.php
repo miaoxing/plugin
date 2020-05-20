@@ -482,7 +482,7 @@ final class QueryBuilderTest extends BaseTestCase
             ->whereColumn('created_at', 'updated_at')
             ->getRawSql();
 
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `created_at` = `updated_at`", $sql);
+        $this->assertEquals('SELECT * FROM `p_test_users` WHERE `created_at` = `updated_at`', $sql);
     }
 
     public function testOrWhereColumn()
