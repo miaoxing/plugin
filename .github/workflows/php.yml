@@ -74,6 +74,7 @@ jobs:
 
       - name: Run
         run: |
+#         TODO create-tests, check-coverage, check-migration
           vendor/bin/phpunit --verbose --stderr --coverage-clover build/logs/clover.xml --coverage-text
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
