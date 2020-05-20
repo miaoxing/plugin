@@ -10,4 +10,11 @@ return PhpCsFixer\Config::create()
         '@PSR2' => true,
         '@PhpCsFixer' => true,
         'array_syntax' => ['syntax' => 'short'],
+        'single_line_comment_style' => [
+            // Allow /* @see xxx */
+            'comment_types' => ['hash'],
+        ],
+        'concat_space' => [
+            'spacing' => 'one',
+        ],
     ]);
