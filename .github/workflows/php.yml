@@ -244,4 +244,4 @@ jobs:
 
       - name: Run
         run: |
-          vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --stop-on-violation --using-cache=no
+          vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --using-cache=no
