@@ -8,8 +8,10 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
 /**
  * @mixin \DbMixin
+ *
+ * @internal
  */
-class ModelTest extends BaseTestCase
+final class ModelTest extends BaseTestCase
 {
     use DbTrait;
 

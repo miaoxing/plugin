@@ -6,7 +6,10 @@ use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestCamelCase;
 use Wei\Request;
 
-class CamelCaseTraitTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class CamelCaseTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

@@ -8,8 +8,10 @@ use RuntimeException;
 
 /**
  * @mixin \AppMixin
+ *
+ * @internal
  */
-class BaseControllerTestCase extends BaseTestCase
+final class BaseControllerTestCase extends BaseTestCase
 {
     /**
      * 当前控制器名称

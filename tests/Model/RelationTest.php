@@ -11,8 +11,10 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
 /**
  * 数据库关联测试
+ *
+ * @internal
  */
-class RelationTest extends BaseTestCase
+final class RelationTest extends BaseTestCase
 {
     use DbTrait;
 

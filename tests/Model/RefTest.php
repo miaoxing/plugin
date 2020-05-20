@@ -7,7 +7,10 @@ use MiaoxingTest\Plugin\Model\Fixture\TestRef;
 use PDOException;
 use Wei\Request;
 
-class RefTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class RefTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin\Service;
 use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class RetTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class RetTest extends BaseTestCase
 {
     public function testSuc()
     {

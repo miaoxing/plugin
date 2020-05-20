@@ -4,7 +4,10 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class PluginTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class PluginTest extends BaseTestCase
 {
     public function testGetById()
     {

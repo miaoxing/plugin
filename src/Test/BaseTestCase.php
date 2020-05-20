@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Test;
 use Miaoxing\Services\Service\ServiceTrait;
 use Wei\Wei;
 
-class BaseTestCase extends \PHPUnit\Framework\TestCase
+abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 {
     use ServiceTrait;
 

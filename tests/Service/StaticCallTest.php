@@ -9,7 +9,10 @@ use Miaoxing\Plugin\Service\UserModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
-class StaticCallTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class StaticCallTest extends BaseTestCase
 {
     public function testCallSelf()
     {

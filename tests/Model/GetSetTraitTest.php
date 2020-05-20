@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestGetSet;
 
-class GetSetTraitTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class GetSetTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

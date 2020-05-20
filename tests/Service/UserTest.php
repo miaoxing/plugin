@@ -6,7 +6,10 @@ use Miaoxing\Plugin\Service\User;
 use Miaoxing\Plugin\Service\UserModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class UserTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class UserTest extends BaseTestCase
 {
     public function testCur()
     {

@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestCast;
 
-class CastTraitTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class CastTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

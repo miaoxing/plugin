@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestDefaultScope;
 
-class DefaultScopeTraitTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class DefaultScopeTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

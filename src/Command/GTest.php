@@ -5,7 +5,10 @@ namespace Miaoxing\Plugin\Command;
 use Miaoxing\Plugin\BasePlugin;
 use Symfony\Component\Console\Input\InputArgument;
 
-class GTest extends BaseCommand
+/**
+ * @internal
+ */
+final class GTest extends BaseCommand
 {
     protected function configure()
     {

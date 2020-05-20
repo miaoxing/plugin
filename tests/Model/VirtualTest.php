@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestVirtual;
 
-class VirtualTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class VirtualTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

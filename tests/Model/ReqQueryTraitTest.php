@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestReqQuery;
 
-class ReqQueryTraitTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class ReqQueryTraitTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

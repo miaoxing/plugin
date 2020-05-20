@@ -6,7 +6,10 @@ use InvalidArgumentException;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestMutator;
 
-class MutatorTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class MutatorTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void
     {

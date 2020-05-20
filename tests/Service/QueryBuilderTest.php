@@ -9,8 +9,10 @@ use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 /**
  * @mixin \DbMixin
  * @link http://edgeguides.rubyonrails.org/active_record_querying.html#conditions
+ *
+ * @internal
  */
-class QueryBuilderTest extends BaseTestCase
+final class QueryBuilderTest extends BaseTestCase
 {
     use DbTrait;
 

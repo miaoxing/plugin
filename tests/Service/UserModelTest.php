@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin\Service;
 use Miaoxing\Plugin\Service\UserModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class UserModelTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class UserModelTest extends BaseTestCase
 {
     public function testDisplayName()
     {

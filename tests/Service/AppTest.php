@@ -8,7 +8,10 @@ use Miaoxing\Plugin\Service\User;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\Controller\TestController;
 
-class AppTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class AppTest extends BaseTestCase
 {
     protected function execute($action)
     {
