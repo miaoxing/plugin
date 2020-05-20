@@ -19,7 +19,6 @@ class GMetadata extends BaseCommand
             ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
     }
 
-
     public function handle()
     {
         $id = $this->input->getArgument('plugin-id');

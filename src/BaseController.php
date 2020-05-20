@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin;
 
-
 /**
  * @mixin \UserMixin
  * @mixin \AppMixin

@@ -363,6 +363,20 @@ class User extends UserModel
     }
 
     /**
+     * @param string $a
+     * @return string
+     * @throws \Exception
+     */
+    public function te(string $a)
+    {
+        if ($a) {
+            throw new \Exception('x');
+        }
+
+        return 'b';
+    }
+
+    /**
      * NOTE: 暂时只有__set有效
      *
      * @param string $name

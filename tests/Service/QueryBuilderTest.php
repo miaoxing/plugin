@@ -858,7 +858,6 @@ class QueryBuilderTest extends BaseTestCase
             ],
         ]);
 
-
         $count = 0;
         $times = 0;
         $result = Qb::table('test_users')->chunk(2, static function ($data, $page) use (&$count, &$times) {
@@ -969,7 +968,6 @@ class QueryBuilderTest extends BaseTestCase
             [[null]],
         ];
     }
-
 
     public function testGetAndResetAllSqlParts()
     {
@@ -1107,7 +1105,6 @@ class QueryBuilderTest extends BaseTestCase
         $user = $qb->fetch();
         $this->assertArrayHasKey('id', $user);
     }
-
 
     public function testRightJoin()
     {

@@ -2018,7 +2018,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this->data[$name];
     }
 
-
     /**
      * @param string $name
      * @param string $source
