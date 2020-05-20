@@ -253,50 +253,66 @@ PHP;
         }
 
         switch ($this->fileMode) {
+            default:
             case self::FILE_MODE_SINGLE:
-                $statics = $printer->printFile($staticFile);
-                $dynamics = $printer->printFile($dynamicFile);
-
-                // Remove first (<?php\n) line
-                $dynamics = substr($dynamics, strpos($dynamics, "\n") + 1);
-
-                // Wrap `if (0) ` outside class definition
-                $i = 0;
-                $dynamics = preg_replace_callback('/namespace (.+?)\n/mi', function ($matches) use (&$i) {
-                    $i++;
-                    $prefix = $i === 1 ? '' : "\n}\n";
-                    return $prefix . $matches[0] . "\nif (0) {";
-                }, $dynamics);
-                $dynamics .= "}\n";
-
-                $content = $statics . $dynamics;
-                $this->createFile($path . '/docs/auto-completion-static.php', $content);
-
-                $file = $path . '/docs/auto-completion-dynamic.php';
-                if (is_file($file)) {
-                    unlink($file);
-                }
+                $this->writeSingle($printer, $staticFile, $dynamicFile, $path);
                 break;
 
             case self::FILE_MODE_BY_TYPE:
-                $statics = $printer->printFile($staticFile);
-                $this->createFile($path . '/docs/auto-completion-static.php', $statics);
-
-                $dynamics = $printer->printFile($dynamicFile);
-                $this->createFile($path . '/docs/auto-completion-dynamic.php', $dynamics);
+                $this->writeByType($printer, $staticFile, $dynamicFile, $path);
                 break;
 
             case self::FILE_MODE_BY_CLASS:
-                throw new \RuntimeException('Not supported yet');
-//                $header = $printer->printFile($staticFile) . "\n";
-//                foreach ($statics as $name => $content) {
-//                    $this->createFile($path . '/docs/auto-completion-static-' . $name . '.php', $header . $content);
-//                }
-//                foreach ($dynamics as $name => $content) {
-//                    $this->createFile($path . '/docs/auto-completion-dynamic-' . $name . '.php', $header . $content);
-//                }
-//                break;
+                $this->writeByClass($printer, $staticFile, $dynamicFile, $path);
+                break;
         }
+    }
+
+    protected function writeSingle(PsrPrinter $printer, PhpFile $staticFile, PhpFile $dynamicFile, string $path)
+    {
+        $statics = $printer->printFile($staticFile);
+        $dynamics = $printer->printFile($dynamicFile);
+
+        // Remove first (<?php\n) line
+        $dynamics = substr($dynamics, strpos($dynamics, "\n") + 1);
+
+        // Wrap `if (0) ` outside class definition
+        $index = 0;
+        $dynamics = preg_replace_callback('/namespace (.+?)\n/mi', function ($matches) use (&$index) {
+            $index++;
+            $prefix = $index === 1 ? '' : "\n}\n";
+            return $prefix . $matches[0] . "\nif (0) {";
+        }, $dynamics);
+        $dynamics .= "}\n";
+
+        $content = $statics . $dynamics;
+        $this->createFile($path . '/docs/auto-completion-static.php', $content);
+
+        $file = $path . '/docs/auto-completion-dynamic.php';
+        if (is_file($file)) {
+            unlink($file);
+        }
+    }
+
+    protected function writeByType(PsrPrinter $printer, PhpFile $staticFile, PhpFile $dynamicFile, string $path)
+    {
+        $statics = $printer->printFile($staticFile);
+        $this->createFile($path . '/docs/auto-completion-static.php', $statics);
+
+        $dynamics = $printer->printFile($dynamicFile);
+        $this->createFile($path . '/docs/auto-completion-dynamic.php', $dynamics);
+    }
+
+    protected function writeByClass(PsrPrinter $printer, PhpFile $staticFile, PhpFile $dynamicFile, string $path)
+    {
+        throw new \RuntimeException('Not supported yet');
+//        $header = $printer->printFile($staticFile) . "\n";
+//        foreach ($statics as $name => $content) {
+//            $this->createFile($path . '/docs/auto-completion-static-' . $name . '.php', $header . $content);
+//        }
+//        foreach ($dynamics as $name => $content) {
+//            $this->createFile($path . '/docs/auto-completion-dynamic-' . $name . '.php', $header . $content);
+//        }
     }
 
     /**
