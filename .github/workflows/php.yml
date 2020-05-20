@@ -191,4 +191,4 @@ jobs:
 
       - name: Run
         run: |
-          vendor/bin/phpmd . text phpmd.xml --exclude vendor,plugins,docs,src/Lib,public/comps,public/libs --ignore-violations-on-exit
+          vendor/bin/phpmd . text phpmd.xml --exclude vendor,plugins,docs,src/Lib,public/comps,public/libs
