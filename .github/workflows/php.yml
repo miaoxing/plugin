@@ -14,7 +14,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: ['7.2', '7.3', '7.4']
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHPUnit - PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
     services:
       mysql:
         image: mysql:5.7
@@ -92,7 +92,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: ['7.4']
-    name: PHPCS PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHPCS - ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -147,7 +147,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: ['7.4']
-    name: PHPMD PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHPMD - PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -200,7 +200,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: ['7.4']
-    name: PHPMD PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHP CS Fixer - PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
