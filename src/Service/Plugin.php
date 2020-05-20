@@ -126,7 +126,7 @@ class Plugin extends BaseService
         $this->autoload = (bool) $autoload;
         call_user_func(
             $autoload ? 'spl_autoload_register' : 'spl_autoload_unregister',
-            array($this, 'autoload')
+            [$this, 'autoload']
         );
         return $this;
     }

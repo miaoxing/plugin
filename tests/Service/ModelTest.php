@@ -302,11 +302,11 @@ class ModelTest extends BaseTestCase
         // New member save with data
         $user = TestUser::new();
         $this->assertTrue($user->isNew());
-        $user->fromArray(array(
+        $user->fromArray([
             'group_id' => '1',
             'name' => 'save',
             'address' => 'save',
-        ));
+        ]);
         $result = $user->save();
 
         $this->assertFalse($user->isNew());
@@ -358,14 +358,14 @@ class ModelTest extends BaseTestCase
         $this->assertArrayHasKey('name', $user);
         $this->assertArrayHasKey('address', $user);
 
-        $user = TestUser::find(1)->toArray(array('id', 'groupId'));
+        $user = TestUser::find(1)->toArray(['id', 'groupId']);
         $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
         $this->assertArrayHasKey('groupId', $user);
         $this->assertArrayNotHasKey('name', $user);
         $this->assertArrayNotHasKey('address', $user);
 
-        $user = TestUser::find(1)->toArray(array('id', 'groupId'));
+        $user = TestUser::find(1)->toArray(['id', 'groupId']);
         $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
         $this->assertArrayHasKey('groupId', $user);
@@ -383,7 +383,7 @@ class ModelTest extends BaseTestCase
         $this->assertNull($user['name']);
         $this->assertSame('default address', $user['address']); // getAddressAttribute
 
-        $users = TestUser::all()->toArray(array('id', 'groupId'));
+        $users = TestUser::all()->toArray(['id', 'groupId']);
         $this->assertIsArray($users);
         $this->assertArrayHasKey(0, $users);
         $this->assertArrayHasKey('id', $users[0]);
@@ -425,7 +425,7 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = TestUser::findOrInitBy(array('id' => 9999));
+        $user = TestUser::findOrInitBy(['id' => 9999]);
 
         $this->assertTrue($user->isNew());
 
@@ -440,11 +440,11 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = TestUser::findOrInitBy(array('id' => 9999));
+        $user = TestUser::findOrInitBy(['id' => 9999]);
 
         $this->assertTrue($user->isNew());
 
-        $data = $user->toArray(array('groupId', 'name'));
+        $data = $user->toArray(['groupId', 'name']);
 
         $this->assertArrayNotHasKey('id', $data);
         $this->assertArrayHasKey('groupId', $data);
@@ -704,11 +704,11 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = TestUser::fromArray(array(
+        $user = TestUser::fromArray([
             'group_id' => 1,
             'name' => 'John',
             'address' => 'xx street',
-        ));
+        ]);
         $result = $user->save();
 
         $this->assertSame($result, $user);
@@ -718,11 +718,11 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = TestUser::fromArray(array(
+        $user = TestUser::fromArray([
             'group_id' => 1,
             'name' => 'twin',
             'address' => 'xx street',
-        ));
+        ]);
 
         $user->save();
 
@@ -746,18 +746,18 @@ class ModelTest extends BaseTestCase
 
         $users = TestUser::new();
 
-        $users->fromArray(array(
-            array(
+        $users->fromArray([
+            [
                 'group_id' => 1,
                 'name' => 'John',
                 'address' => 'xx street',
-            ),
-            array(
+            ],
+            [
                 'group_id' => 2,
                 'name' => 'Tome',
                 'address' => 'xx street',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertFalse($users->isColl());
     }
@@ -810,22 +810,22 @@ class ModelTest extends BaseTestCase
         // Creates a user collection
         $users = TestUser::newColl();
 
-        $john = TestUser::fromArray(array(
+        $john = TestUser::fromArray([
             'group_id' => 2,
             'name' => 'John',
             'address' => 'xx street',
-        ));
+        ]);
 
-        $larry = TestUser::fromArray(array(
+        $larry = TestUser::fromArray([
             'group_id' => 3,
             'name' => 'Larry',
             'address' => 'xx street',
-        ));
+        ]);
 
         // Adds record to collection
-        $users->fromArray(array(
+        $users->fromArray([
             $john,
-        ));
+        ]);
 
         // Or adds by [] operator
         $users[] = $larry;
@@ -835,7 +835,7 @@ class ModelTest extends BaseTestCase
         $this->assertSame($result, $users);
 
         // Find out member by id
-        $users = TestUser::indexBy('id')->whereIn('id', array($john['id'], $larry['id']))->all();
+        $users = TestUser::indexBy('id')->whereIn('id', [$john['id'], $larry['id']])->all();
 
         $this->assertEquals('John', $users[$john['id']]['name']);
         $this->assertEquals('Larry', $users[$larry['id']]['name']);
@@ -913,22 +913,22 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         $user = TestUser::new();
-        $user->save(array(
+        $user->save([
             'id' => null,
             'group_id' => '1',
             'name' => 'twin',
             'address' => 'test',
-        ));
+        ]);
 
         $this->assertNotNull($user['id']);
 
         $user = TestUser::new();
-        $user->save(array(
+        $user->save([
             'id' => '',
             'group_id' => '1',
             'name' => 'twin',
             'address' => 'test',
-        ));
+        ]);
 
         $this->assertNotNull($user['id']);
     }
@@ -1000,20 +1000,20 @@ class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         $id = null;
-        $user = TestUser::findOrInit($id, array(
+        $user = TestUser::findOrInit($id, [
             'group_id' => 2,
             'name' => 'twin',
             'address' => 'xx street',
-        ));
+        ]);
 
         $this->assertTrue($user->isNew());
         $this->assertEquals(2, $user['group_id']);
 
-        $user = TestUser::findOrInit(1, array(
+        $user = TestUser::findOrInit(1, [
             'group_id' => 2,
             'name' => 'twin',
             'address' => 'xx street',
-        ));
+        ]);
 
         $this->assertFalse($user->isNew());
     }
@@ -1046,7 +1046,7 @@ class ModelTest extends BaseTestCase
         $count = TestUser::selectRaw('COUNT(id)')->fetchColumn();
         $this->assertEquals(2, $count);
 
-        $count = TestUser::selectRaw('COUNT(id)')->fetchColumn(array('id' => 1));
+        $count = TestUser::selectRaw('COUNT(id)')->fetchColumn(['id' => 1]);
         $this->assertEquals(1, $count);
     }
 
@@ -1056,13 +1056,13 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::new();
 
-        $user->setFillable(array('name'));
+        $user->setFillable(['name']);
         $this->assertEquals(true, $user->isFillable('name'));
 
-        $user->fromArray(array(
+        $user->fromArray([
             'id' => '1',
             'name' => 'name',
-        ));
+        ]);
 
         $this->assertNull($user->id);
         $this->assertEquals('name', $user->name);
@@ -1074,16 +1074,16 @@ class ModelTest extends BaseTestCase
 
         $user = TestUser::new();
 
-        $user->setGuarded(array('id', 'name'));
+        $user->setGuarded(['id', 'name']);
 
         $this->assertEquals(false, $user->isFillable('id'));
         $this->assertEquals(false, $user->isFillable('name'));
 
-        $user->fromArray(array(
+        $user->fromArray([
             'id' => '1',
             'group_id' => '2',
             'name' => 'name',
-        ));
+        ]);
 
         $this->assertNull($user['id']);
         $this->assertEquals('2', $user['group_id']);
@@ -1094,26 +1094,26 @@ class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $row = TestUser::update(array('address' => 'test address'));
+        $row = TestUser::update(['address' => 'test address']);
         $this->assertSame(2, $row);
 
         $user = TestUser::first();
         $this->assertSame('test address', $user['address']);
 
         // Update with where clause
-        $row = TestUser::where(array('name' => 'twin'))->update(array('address' => 'test address 2'));
+        $row = TestUser::where(['name' => 'twin'])->update(['address' => 'test address 2']);
         $this->assertEquals(1, $row);
 
-        $user = TestUser::findBy(array('name' => 'twin'));
+        $user = TestUser::findBy(['name' => 'twin']);
         $this->assertEquals('test address 2', $user['address']);
 
         // Update with two where clauses
-        $row = TestUser::where(array('name' => 'twin'))
-            ->where(array('group_id' => 1))
-            ->update(array('address' => 'test address 3'));
+        $row = TestUser::where(['name' => 'twin'])
+            ->where(['group_id' => 1])
+            ->update(['address' => 'test address 3']);
         $this->assertEquals(1, $row);
 
-        $user = TestUser::findBy(array('name' => 'twin'));
+        $user = TestUser::findBy(['name' => 'twin']);
         $this->assertEquals('test address 3', $user['address']);
     }
 }

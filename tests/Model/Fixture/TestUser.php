@@ -26,9 +26,9 @@ class TestUser extends Model
         'group_id' => 'int',
     ];
 
-    protected $data = array(
+    protected $data = [
         'group_id' => 0,
-    );
+    ];
 
     public function articles()
     {

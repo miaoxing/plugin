@@ -6,7 +6,7 @@ use Wei\Wei;
 
 class Session extends \Wei\Session
 {
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!isset($options['namespace'])) {
             /** @var Wei $wei */

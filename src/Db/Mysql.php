@@ -80,7 +80,7 @@ class Mysql extends BaseDriver
         $parts = $this->sqlParts;
 
         if (!$parts['select']) {
-            $parts['select'] = array('*');
+            $parts['select'] = ['*'];
         }
 
         $query = 'SELECT ';
@@ -288,11 +288,11 @@ class Mysql extends BaseDriver
     protected function processCondition($conditions)
     {
         if (is_array($conditions)) {
-            $where = array();
-            $params = array();
+            $where = [];
+            $params = [];
             foreach ($conditions as $field => $condition) {
                 if (is_array($condition)) {
-                    $where[] = $field . ' IN (' . implode(', ', array_pad(array(), count($condition), '?')) . ')';
+                    $where[] = $field . ' IN (' . implode(', ', array_pad([], count($condition), '?')) . ')';
                     $params = array_merge($params, $condition);
                 } else {
                     $where[] = $field . " = ?";

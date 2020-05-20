@@ -104,7 +104,7 @@ class App extends \Wei\App
         return $this->invokeApp($options);
     }
 
-    protected function invokeApp(array $options = array())
+    protected function invokeApp(array $options = [])
     {
         $options && $this->setOption($options);
 
@@ -124,7 +124,7 @@ class App extends \Wei\App
         ];
 
         // Find out exiting controller action and execute
-        $notFound = array();
+        $notFound = [];
         foreach ($paramSet as $params) {
             $response = $this->dispatch($params['controller'], $params['action'], $params, false);
             if (is_array($response)) {
@@ -169,7 +169,7 @@ class App extends \Wei\App
             $config = array_splice($middleware, 0, 1);
             if ($config) {
                 $class = key($config);
-                $service = new $class(array('wei' => $wei) + $config[$class]);
+                $service = new $class(['wei' => $wei] + $config[$class]);
                 $result = $service($next, $instance);
             } else {
                 $result = $callback();

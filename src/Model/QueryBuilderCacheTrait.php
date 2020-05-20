@@ -28,7 +28,7 @@ trait QueryBuilderCacheTrait
      *
      * @var array
      */
-    protected $cacheTags = array();
+    protected $cacheTags = [];
 
     /**
      * Clear cache that tagged with current table name

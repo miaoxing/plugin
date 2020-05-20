@@ -1160,7 +1160,7 @@ class BaseModel extends Record implements JsonSerializable
      * @param array $data
      * @return $this
      */
-    public function findOrCreate($conditions, $data = array())
+    public function findOrCreate($conditions, $data = [])
     {
         $this->findOrInit($conditions, $data);
         if ($this->isNew) {
@@ -1219,7 +1219,7 @@ class BaseModel extends Record implements JsonSerializable
      * @param array $types
      * @return $this
      */
-    public function whenWhere($bool, $conditions, $params = array(), $types = array())
+    public function whenWhere($bool, $conditions, $params = [], $types = [])
     {
         if ($bool) {
             return $this->andWhere($conditions, $params, $types);

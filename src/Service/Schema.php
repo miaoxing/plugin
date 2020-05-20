@@ -7,7 +7,7 @@ class Schema extends \Wei\Schema
     /**
      * @var array
      */
-    protected $typeDefaults = array(
+    protected $typeDefaults = [
         self::TYPE_BIG_INT => '0',
         self::TYPE_BOOL => '0',
         self::TYPE_CHAR => '',
@@ -24,5 +24,5 @@ class Schema extends \Wei\Schema
         self::TYPE_STRING => '',
         self::TYPE_TEXT => false,
         self::TYPE_TIMESTAMP => null,
-    );
+    ];
 }

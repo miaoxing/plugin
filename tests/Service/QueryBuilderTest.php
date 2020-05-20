@@ -916,10 +916,10 @@ class QueryBuilderTest extends BaseTestCase
             ]);
         $user = $query->fetch();
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => 1,
             'groupId' => 1,
-        ), $query->getBindParams());
+        ], $query->getBindParams());
 
         $this->assertEquals(1, $query->getParameter('id'));
         $this->assertNull($query->getParameter('no'));
@@ -1014,7 +1014,7 @@ class QueryBuilderTest extends BaseTestCase
         $result = Qb::table('test_users')->where('group_id', 1)->delete();
         $this->assertEquals(2, $result);
 
-        $result = Qb::table('test_users')->delete(array('group_id' => 1));
+        $result = Qb::table('test_users')->delete(['group_id' => 1]);
         $this->assertEquals(0, $result);
     }
 
@@ -1186,7 +1186,7 @@ class QueryBuilderTest extends BaseTestCase
             ->select('test_users.*')
             ->leftJoin('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id')
             ->where('test_users.id', 1)
-            ->tags(array('users', 'user_groups'))
+            ->tags(['users', 'user_groups'])
             ->cache();
 
         // Fetch from db

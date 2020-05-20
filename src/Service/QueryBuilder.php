@@ -48,7 +48,7 @@ class QueryBuilder extends BaseService
      *
      * @var array
      */
-    protected $fields = array();
+    protected $fields = [];
 
     /**
      * The primary key field
@@ -104,7 +104,7 @@ class QueryBuilder extends BaseService
      *
      * @var array
      */
-    protected $paramTypes = array();
+    protected $paramTypes = [];
 
     /**
      * A field to be the key of the fetched array, if not provided, return
@@ -1111,7 +1111,7 @@ class QueryBuilder extends BaseService
             return $data;
         }
 
-        $newData = array();
+        $newData = [];
         foreach ($data as $row) {
             $newData[$row[$column]] = $row;
         }
@@ -1165,7 +1165,7 @@ class QueryBuilder extends BaseService
      */
     protected function resetSqlPart($name)
     {
-        $this->sqlParts[$name] = is_array($this->sqlParts[$name]) ? array() : null;
+        $this->sqlParts[$name] = is_array($this->sqlParts[$name]) ? [] : null;
         $this->state = self::STATE_DIRTY;
         return $this;
     }
@@ -1208,7 +1208,7 @@ class QueryBuilder extends BaseService
      * @param array $types The query parameters types to set
      * @return $this
      */
-    public function setParameters(array $params, array $types = array())
+    public function setParameters(array $params, array $types = [])
     {
         $this->paramTypes = $types;
         $this->params = $params;
@@ -1315,7 +1315,7 @@ class QueryBuilder extends BaseService
         $isMultiple = is_array($this->sqlParts[$sqlPartName]);
 
         if ($isMultiple && !$isArray) {
-            $sqlPart = array($sqlPart);
+            $sqlPart = [$sqlPart];
         }
 
         if ($append) {

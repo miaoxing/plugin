@@ -33,21 +33,21 @@ trait DbTrait
         static::dropTables();
         static::createTables();
 
-        $db->insert('test_user_groups', array(
+        $db->insert('test_user_groups', [
             'id' => '1',
             'name' => 'vip',
-        ));
+        ]);
 
-        $db->insert('test_users', array(
+        $db->insert('test_users', [
             'group_id' => '1',
             'name' => 'twin',
             'address' => 'test',
-        ));
+        ]);
 
-        $db->insert('test_users', array(
+        $db->insert('test_users', [
             'group_id' => '1',
             'name' => 'test',
             'address' => 'test',
-        ));
+        ]);
     }
 }

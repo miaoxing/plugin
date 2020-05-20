@@ -61,14 +61,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @var $this[]|array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * The fields that are assignable through fromArray method
      *
      * @var array
      */
-    protected $fillable = array();
+    protected $fillable = [];
 
     /**
      * The fields that aren't assignable through fromArray method
@@ -89,7 +89,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @var array
      */
-    protected $changedData = array();
+    protected $changedData = [];
 
     /**
      * Whether the record has been removed from database
@@ -191,7 +191,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (isset($options['isNew']) && false === $options['isNew']) {
             $this->setRawData($options['data']);
@@ -201,7 +201,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         parent::__construct($options);
 
         // Clear changed status after created
-        $this->changedData = array();
+        $this->changedData = [];
         $this->isChanged = false;
 
         $this->triggerCallback('afterLoad');
@@ -258,7 +258,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param null|callable $prepend
      * @return array
      */
-    public function toArray($returnFields = array(), callable $prepend = null)
+    public function toArray($returnFields = [], callable $prepend = null)
     {
         if (!$this->isLoaded()) {
             $this->loadData($this->isColl() ? 0 : 'id');
@@ -278,7 +278,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 $returnFields = [];
             }
 
-            $data = array();
+            $data = [];
             /** @var $record Record */
             foreach ($this->data as $key => $record) {
                 $data[$key] = $record->toArray($returnFields);
@@ -296,7 +296,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param array $returnFields A indexed array specified the fields to return
      * @return string
      */
-    public function toJson($returnFields = array())
+    public function toJson($returnFields = [])
     {
         return json_encode($this->toArray($returnFields));
     }
@@ -380,7 +380,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @return $this
      * @svc
      */
-    protected function save($data = array())
+    protected function save($data = [])
     {
         // 1. Merges data from parameters
         $data && $this->fromArray($data);
@@ -399,7 +399,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
             // Deletes the record when it's waiting to remove from database
             if ($this->detached) {
-                $this->db->delete($this->getTable(), array($this->primaryKey => $this->data[$this->primaryKey]));
+                $this->db->delete($this->getTable(), [$this->primaryKey => $this->data[$this->primaryKey]]);
                 $this->isDestroyed = true;
                 return $this;
             }
@@ -429,14 +429,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             } else {
                 if ($this->isChanged) {
                     $data = array_intersect_key($this->data, $this->changedData);
-                    $this->db->update($this->getTable(), $data, array(
+                    $this->db->update($this->getTable(), $data, [
                         $this->primaryKey => $this->data[$this->primaryKey],
-                    ));
+                    ]);
                 }
             }
 
             // 2.1.4 Reset changed data and changed status
-            $this->changedData = array();
+            $this->changedData = [];
             $this->isChanged = false;
 
             // 2.1.5. Triggers after callbacks
@@ -492,7 +492,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     protected function executeDestroy()
     {
-        $this->db->delete($this->getTable(), array($this->primaryKey => $this->data[$this->primaryKey]));
+        $this->db->delete($this->getTable(), [$this->primaryKey => $this->data[$this->primaryKey]]);
     }
 
     /**
@@ -506,9 +506,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         $this->data = (array) $this->db->select(
             $this->table,
-            array($this->primaryKey => $this->get($this->primaryKey))
+            [$this->primaryKey => $this->get($this->primaryKey)]
         );
-        $this->changedData = array();
+        $this->changedData = [];
         $this->isChanged = false;
         $this->triggerCallback('afterLoad');
         return $this;
@@ -522,14 +522,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param bool $sort
      * @return $this
      */
-    public function saveColl($data, $extraData = array(), $sort = false)
+    public function saveColl($data, $extraData = [], $sort = false)
     {
         if (!is_array($data)) {
             return $this;
         }
 
         // 1. Uses primary key as data index
-        $newData = array();
+        $newData = [];
         foreach ($this->data as $key => $record) {
             unset($this->data[$key]);
             // Ignore default data
@@ -547,7 +547,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         // 3. Removes missing rows
-        $existIds = array();
+        $existIds = [];
         foreach ($data as $row) {
             if (isset($row[$this->primaryKey]) && null !== $row[$this->primaryKey]) {
                 $existIds[] = $row[$this->primaryKey];
@@ -723,7 +723,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function getAll($name)
     {
-        $data = array();
+        $data = [];
         foreach ($this->data as $record) {
             $data[] = $record[$name];
         }
@@ -899,7 +899,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @return $this
      * @svc
      */
-    protected function findOrCreate($id, $data = array())
+    protected function findOrCreate($id, $data = [])
     {
         $this->findOrInit($id, $data);
         if ($this->isNew) {
@@ -977,7 +977,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $this->isColl = true;
         $data = $this->fetchAll(...func_get_args());
 
-        $records = array();
+        $records = [];
         foreach ($data as $key => $row) {
             /** @var $records Record[] */
             $records[$key] = static::new($row, [
@@ -1152,7 +1152,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function filter(Closure $fn)
     {
         $data = array_filter($this->data, $fn);
-        $records = $this->db->init($this->table, array(), $this->isNew);
+        $records = $this->db->init($this->table, [], $this->isNew);
         $records->data = $data;
         $records->isColl = true;
         $records->loaded = $this->loaded;
