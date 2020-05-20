@@ -1,10 +1,12 @@
-vendor/
-composer.lock
-phpunit.xml
-.phpunit.result.cache
-.php_cs.cache
-tests/config-local.php
+/vendor/
+/phpunit.xml
+/.phpunit.result.cache
+/.php_cs.cache
+/composer.lock
+
+/yarn.lock
 
 # miaoxing
-data/
-plugins/
+/data/
+/plugins/
+/tests/config-local.php
