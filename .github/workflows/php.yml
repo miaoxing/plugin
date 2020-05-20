@@ -70,7 +70,6 @@ jobs:
       - name: Install
         run: |
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-          bash plugins/build/bin/install-travis.sh
 
       - name: Run
         run: bash plugins/build/bin/build-travis.sh --coverage 1
@@ -136,7 +135,6 @@ jobs:
       - name: Install
         run: |
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-          bash plugins/build/bin/install-travis.sh
 
       - name: Run
         run: |
