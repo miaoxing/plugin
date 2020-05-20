@@ -4,6 +4,7 @@
 /.php_cs.cache
 /composer.lock
 
+/node_modules/
 /yarn.lock
 
 # miaoxing
