@@ -984,8 +984,8 @@ final class QueryBuilderTest extends BaseTestCase
 
         $query->resetSqlParts();
 
-        $this->assertEquals(null, $query->getSqlPart('offset'));
-        $this->assertEquals(null, $query->getSqlPart('limit'));
+        $this->assertNull($query->getSqlPart('offset'));
+        $this->assertNull($query->getSqlPart('limit'));
     }
 
     public function testFromAlias()

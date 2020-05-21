@@ -105,7 +105,7 @@ final class CamelCaseTraitTest extends BaseTestCase
     {
         $camelCase = TestCamelCase::new();
 
-        $this->assertEquals(null, $camelCase['testUserId']);
+        $this->assertNull($camelCase['testUserId']);
 
         $camelCase['testUserId'] = 1;
 

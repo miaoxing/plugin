@@ -139,7 +139,7 @@ final class RelationTest extends BaseTestCase
         wei()->schema->dropIfExists('test_articles_test_tags');
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -416,7 +416,7 @@ final class RelationTest extends BaseTestCase
 
         $user->find(3);
 
-        $this->assertEquals(null, $user->profile);
+        $this->assertNull($user->profile);
     }
 
     public function testNestedRelation()

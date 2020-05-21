@@ -551,11 +551,11 @@ final class ModelTest extends BaseTestCase
         $this->assertEquals('twin', $user['name']);
         $this->assertEquals('1', $user['groupId']);
 
-        unset($user['name']);
-        unset($user['groupId']);
+        unset($user['name'], $user['groupId']);
+        
 
-        $this->assertEquals(null, $user['name']);
-        $this->assertEquals(null, $user['groupId']);
+        $this->assertNull($user['name']);
+        $this->assertNull($user['groupId']);
     }
 
     public function testCount()
@@ -1059,7 +1059,7 @@ final class ModelTest extends BaseTestCase
         $user = TestUser::new();
 
         $user->setFillable(['name']);
-        $this->assertEquals(true, $user->isFillable('name'));
+        $this->assertTrue($user->isFillable('name'));
 
         $user->fromArray([
             'id' => '1',
@@ -1078,8 +1078,8 @@ final class ModelTest extends BaseTestCase
 
         $user->setGuarded(['id', 'name']);
 
-        $this->assertEquals(false, $user->isFillable('id'));
-        $this->assertEquals(false, $user->isFillable('name'));
+        $this->assertFalse($user->isFillable('id'));
+        $this->assertFalse($user->isFillable('name'));
 
         $user->fromArray([
             'id' => '1',
