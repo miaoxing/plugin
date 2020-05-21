@@ -171,10 +171,10 @@ final class MutatorTest extends BaseTestCase
         $mutator->getter = 'abc';
 
         // 只有Getter没有Setter,所以返回值是直接对abc做decode
-        $this->assertEquals(base64_decode('abc'), $mutator->getter);
+        $this->assertEquals(base64_decode('abc', true), $mutator->getter);
 
         // 再次调用也是一样的结果
-        $this->assertEquals(base64_decode('abc'), $mutator->getter);
+        $this->assertEquals(base64_decode('abc', true), $mutator->getter);
     }
 
     public function testFind()

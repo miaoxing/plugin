@@ -311,7 +311,7 @@ trait ReqQueryTrait
     {
         if ($this->request->has('sort')) {
             $name = $this->convertInputIdentifier($this->request['sort']);
-            if (in_array($name, $this->getFields())) {
+            if (in_array($name, $this->getFields(), true)) {
                 $sort = $name;
             } else {
                 $sort = $defaultColumn;
@@ -322,7 +322,7 @@ trait ReqQueryTrait
 
         if ($this->request->has('order')) {
             $order = strtoupper($this->request['order']);
-            if (!in_array($order, ['ASC', 'DESC'])) {
+            if (!in_array($order, ['ASC', 'DESC'], true)) {
                 $order = $defaultOrder;
             }
         } else {

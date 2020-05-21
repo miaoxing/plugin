@@ -290,7 +290,7 @@ class App extends \Wei\App
             return false;
         }
 
-        if (in_array($namespace, $this->predefinedNames)) {
+        if (in_array($namespace, $this->predefinedNames, true)) {
             return true;
         }
 

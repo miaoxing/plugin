@@ -408,7 +408,7 @@ class Plugin extends BaseService
         }
 
         $pluginIds = $this->getInstalledIds();
-        $key = array_search($id, $pluginIds);
+        $key = array_search($id, $pluginIds, true);
         if (false === $key) {
             return ['code' => -6, 'message' => 'Plugin not installed'];
         }
@@ -428,7 +428,7 @@ class Plugin extends BaseService
      */
     public function isBuildIn($id)
     {
-        return in_array($id, $this->builtIns);
+        return in_array($id, $this->builtIns, true);
     }
 
     /**
@@ -452,7 +452,7 @@ class Plugin extends BaseService
      */
     protected function isInstalled($id)
     {
-        return $this->isBuildIn($id) || in_array($id, $this->getInstalledIds());
+        return $this->isBuildIn($id) || in_array($id, $this->getInstalledIds(), true);
     }
 
     /**

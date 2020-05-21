@@ -195,11 +195,11 @@ class BaseModel extends Record implements JsonSerializable
     {
         $fields = $this->getFields();
 
-        if (in_array($this->createdAtColumn, $fields) && !$this[$this->createdAtColumn]) {
+        if (in_array($this->createdAtColumn, $fields, true) && !$this[$this->createdAtColumn]) {
             $this[$this->createdAtColumn] = date('Y-m-d H:i:s');
         }
 
-        if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
+        if (in_array($this->createdByColumn, $fields, true) && !$this[$this->createdByColumn]) {
             $this[$this->createdByColumn] = User::id();
         }
     }
@@ -208,11 +208,11 @@ class BaseModel extends Record implements JsonSerializable
     {
         $fields = $this->getFields();
 
-        if (in_array($this->updatedAtColumn, $fields)) {
+        if (in_array($this->updatedAtColumn, $fields, true)) {
             $this[$this->updatedAtColumn] = date('Y-m-d H:i:s');
         }
 
-        if (in_array($this->updatedByColumn, $fields)) {
+        if (in_array($this->updatedByColumn, $fields, true)) {
             $this[$this->updatedByColumn] = User::id();
         }
     }
@@ -788,7 +788,7 @@ class BaseModel extends Record implements JsonSerializable
     public function __get($name)
     {
         // Receive service that conflict with record method name
-        if (in_array($name, $this->requiredServices)) {
+        if (in_array($name, $this->requiredServices, true)) {
             return parent::__get($name);
         }
 
@@ -934,7 +934,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         $name = $this->filterInputColumn($name);
 
-        return in_array($name, $this->getFields());
+        return in_array($name, $this->getFields(), true);
     }
 
     public function isFillable($field, $data = null)

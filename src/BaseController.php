@@ -51,7 +51,7 @@ abstract class BaseController extends \Miaoxing\Services\App\BaseController
 
         foreach ($this->actionPermissions as $actions => $name) {
             $actions = explode(',', $actions);
-            if (in_array($action, $actions)) {
+            if (in_array($action, $actions, true)) {
                 return $name;
             }
         }

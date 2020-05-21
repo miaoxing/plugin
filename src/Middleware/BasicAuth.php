@@ -21,7 +21,7 @@ class BasicAuth extends BaseMiddleware
         $password = $this->request->getServer('PHP_AUTH_PW');
 
         // 检查用户名是否有效
-        if (!in_array($username, $this->validUsers)) {
+        if (!in_array($username, $this->validUsers, true)) {
             return $this->responseNotAuthorized();
         }
 

@@ -387,7 +387,7 @@ class User extends UserModel
     {
         // __set start
         // Required services first
-        if (in_array($name, $this->requiredServices)) {
+        if (in_array($name, $this->requiredServices, true)) {
             return $this->{$name} = $value;
         }
 

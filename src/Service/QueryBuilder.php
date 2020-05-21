@@ -1078,7 +1078,7 @@ class QueryBuilder extends BaseService
     protected function orderBy($column, $order = 'ASC')
     {
         $order = strtoupper($order);
-        if (!in_array($order, ['ASC', 'DESC'])) {
+        if (!in_array($order, ['ASC', 'DESC'], true)) {
             throw new \InvalidArgumentException('Parameter for "order" must be "ASC" or "DESC".');
         }
 
@@ -1371,7 +1371,7 @@ class QueryBuilder extends BaseService
 
         if (null === $value) {
             $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
-        } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'])) {
+        } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'], true)) {
             $operator = 'NOT IN' === $operator ? $operator : 'IN';
             $this->params['where'][] = (array) $value;
         } else {

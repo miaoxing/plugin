@@ -14,7 +14,7 @@ class TestMutator extends Model
 {
     protected function getGetterAttribute()
     {
-        return base64_decode($this->data['getter'] ?? '');
+        return base64_decode($this->data['getter'] ?? '', true);
     }
 
     protected function setSetterAttribute($value)
@@ -24,7 +24,7 @@ class TestMutator extends Model
 
     protected function getMutatorAttribute()
     {
-        return base64_decode($this->data['mutator'] ?? '');
+        return base64_decode($this->data['mutator'] ?? '', true);
     }
 
     protected function setMutatorAttribute($value)

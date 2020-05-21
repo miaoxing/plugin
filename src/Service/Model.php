@@ -357,7 +357,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         $field = $this->convertInputIdentifier($field);
 
-        return !in_array($field, $this->guarded) && !$this->fillable || in_array($field, $this->fillable);
+        return !in_array($field, $this->guarded, true) && !$this->fillable || in_array($field, $this->fillable, true);
     }
 
     /**
@@ -556,7 +556,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
         /** @var $record Record */
         foreach ($this->data as $key => $record) {
-            if (!in_array($record[$this->primaryKey], $existIds)) {
+            if (!in_array($record[$this->primaryKey], $existIds, true)) {
                 $record->destroy();
                 unset($this->data[$key]);
             }
@@ -625,7 +625,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function origGet($name)
     {
         // Check if field exists when it is not a collection
-        if (!$this->isColl && !in_array($name, $this->getFields())) {
+        if (!$this->isColl && !in_array($name, $this->getFields(), true)) {
             throw new InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
@@ -653,7 +653,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         if (!$this->isColl) {
-            if (in_array($name, $this->getFields())) {
+            if (in_array($name, $this->getFields(), true)) {
                 $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
                 $this->data[$name] = $value;
                 $this->isChanged = true;
@@ -1047,7 +1047,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function findFromRequest($request = null)
     {
         $request || $request = $this->wei->request;
-        if (in_array($request['action'], ['edit', 'update'])) {
+        if (in_array($request['action'], ['edit', 'update'], true)) {
             $this->findOrFail($request[$this->getPrimaryKey()]);
         }
         return $this;
@@ -1194,11 +1194,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $fields = $this->getFields();
 
-        if (in_array($this->updatedAtColumn, $fields)) {
+        if (in_array($this->updatedAtColumn, $fields, true)) {
             $this[$this->updatedAtColumn] = date('Y-m-d H:i:s');
         }
 
-        if (in_array($this->updatedByColumn, $fields)) {
+        if (in_array($this->updatedByColumn, $fields, true)) {
             $this[$this->updatedByColumn] = (int) $this->user->id;
         }
     }
@@ -1217,11 +1217,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $fields = $this->getFields();
 
-        if (in_array($this->createdAtColumn, $fields) && !$this[$this->createdAtColumn]) {
+        if (in_array($this->createdAtColumn, $fields, true) && !$this[$this->createdAtColumn]) {
             $this[$this->createdAtColumn] = date('Y-m-d H:i:s');
         }
 
-        if (in_array($this->createdByColumn, $fields) && !$this[$this->createdByColumn]) {
+        if (in_array($this->createdByColumn, $fields, true) && !$this[$this->createdByColumn]) {
             $this[$this->createdByColumn] = (int) $this->user->id;
         }
     }
@@ -1644,7 +1644,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function &__get($name)
     {
         // Receive service that conflict with record method name
-        if (in_array($name, $this->requiredServices)) {
+        if (in_array($name, $this->requiredServices, true)) {
             return $this->getServiceValue($name);
         }
 
@@ -1698,7 +1698,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $name = $this->convertInputIdentifier($name);
 
-        return in_array($name, $this->getFields());
+        return in_array($name, $this->getFields(), true);
     }
 
     public function trigger($event, $data = [])
@@ -1936,7 +1936,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function __set($name, $value = null)
     {
         // Required services first
-        if (in_array($name, $this->requiredServices)) {
+        if (in_array($name, $this->requiredServices, true)) {
             return $this->{$name} = $value;
         }
 
@@ -2149,7 +2149,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $name = $this->convertInputIdentifier($name);
 
-        return in_array($name, $this->virtual);
+        return in_array($name, $this->virtual, true);
     }
 
     /**
