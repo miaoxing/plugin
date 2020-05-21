@@ -90,7 +90,7 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
      */
     public function getId()
     {
-        $class = get_class($this);
+        $class = static::class;
         $id = lcfirst(explode('\\', $class)[1]);
         $id = $this->str->dash($id);
 
@@ -108,7 +108,7 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
         $plugin = $this->plugin->getById($id);
         $basePath = $plugin->getBasePath();
 
-        $class = get_class($this);
+        $class = static::class;
         $namespace = substr($class, 0, strrpos($class, '\\'));
 
         // 1. 加载项目配置

@@ -108,7 +108,7 @@ class User extends UserModel
     /**
      * 获取存储在session中的用户数据
      *
-     * @return null|array
+     * @return array|null
      */
     public function getSessionData()
     {
@@ -189,7 +189,7 @@ class User extends UserModel
     }
 
     /**
-     * @return null|int
+     * @return int|null
      * @svc
      */
     protected function id()

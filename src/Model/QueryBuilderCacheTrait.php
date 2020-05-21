@@ -44,7 +44,7 @@ trait QueryBuilderCacheTrait
     /**
      * Set or remove cache time for the query
      *
-     * @param null|false|int $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @svc
      */
@@ -63,7 +63,7 @@ trait QueryBuilderCacheTrait
     /**
      * Set or remove cache tags
      *
-     * @param null|array|false $tags
+     * @param array|false|null $tags
      * @return $this
      */
     public function tags($tags = null)

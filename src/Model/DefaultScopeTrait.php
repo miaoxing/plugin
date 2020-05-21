@@ -31,7 +31,7 @@ trait DefaultScopeTrait
      */
     public function addDefaultScope($method)
     {
-        $class = get_called_class();
+        $class = static::class;
 
         static::$defaultScopes[$class][$method] = true;
 
@@ -40,7 +40,7 @@ trait DefaultScopeTrait
 
     public static function getDefaultScopes()
     {
-        $class = get_called_class();
+        $class = static::class;
 
         return isset(static::$defaultScopes[$class]) ? static::$defaultScopes[$class] : [];
     }

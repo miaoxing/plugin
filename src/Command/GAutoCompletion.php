@@ -159,7 +159,7 @@ class GAutoCompletion extends BaseCommand
         }
 
         $content .= $this->generateClass('AutoCompletion', rtrim($autoComplete));
-        $content .= <<<PHP
+        $content .= <<<'PHP'
 
 /**
  * @return AutoCompletion
@@ -435,17 +435,14 @@ PHP;
         return $return ?: false;
     }
 
+    /**
+     * 返回注释的标题（第一行）
+     *
+     * @param string $docComment
+     * @return bool|mixed
+     */
     protected function getDocCommentTitle($docComment)
     {
-        /**
-         * Xxx
-         *
-         * xxx
-         * xxx
-         *
-         * @xxx xx
-         */
-        // 如上注释,返回 Xxx
         preg_match('#\* ([^@]+?)\n#is', $docComment, $matches);
         if ($matches) {
             return $matches[1];

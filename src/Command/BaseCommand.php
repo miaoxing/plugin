@@ -77,7 +77,7 @@ abstract class BaseCommand extends Command
      *
      * @param string $name The argument name
      *
-     * @return null|string|string[] The argument value
+     * @return string|string[]|null The argument value
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      */
@@ -101,7 +101,7 @@ abstract class BaseCommand extends Command
      *
      * @param string $name The option name
      *
-     * @return null|bool|string|string[] The option value
+     * @return bool|string|string[]|null The option value
      *
      * @throws InvalidArgumentException When option given doesn't exist
      */

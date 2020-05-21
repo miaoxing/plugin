@@ -45,7 +45,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
      * ```
      *
-     * @param null|array|string $message
+     * @param array|string|null $message
      * @return $this
      * @svc
      */

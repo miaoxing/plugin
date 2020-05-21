@@ -59,7 +59,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * The record data
      *
-     * @var $this []|array
+     * @var []|array
      */
     protected $data = [];
 
@@ -255,7 +255,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Returns the record data as array
      *
      * @param array $returnFields A indexed array specified the fields to return
-     * @param null|callable $prepend
+     * @param callable|null $prepend
      * @return array
      */
     public function toArray($returnFields = [], callable $prepend = null)
@@ -346,7 +346,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Check if the field is assignable through fromArray method
      *
      * @param string $field
-     * @param null|mixed $data
+     * @param mixed|null $data
      * @return bool
      */
     public function isFillable($field, $data = null)
@@ -443,7 +443,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
             $this->triggerCallback('afterSave');
-            // 2.2 Loop and save collection records
+        // 2.2 Loop and save collection records
         } else {
             foreach ($this->data as $record) {
                 $record->save();
@@ -567,7 +567,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             if ($sort) {
                 $row[$sort] = $index;
             }
-            if (isset($row[$this->primaryKey]) && isset($this->data[$row[$this->primaryKey]])) {
+            if (isset($row[$this->primaryKey], $this->data[$row[$this->primaryKey]])) {
                 $this->data[$row[$this->primaryKey]]->fromArray($row);
             } else {
                 $this[] = $this->db($this->table)->fromArray($extraData + $row);
@@ -582,7 +582,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Receives the record field value
      *
      * @param string $name
-     * @param null|mixed $exists
+     * @param mixed|null $exists
      * @param mixed $throwException
      * @return $this|mixed
      * @throws InvalidArgumentException When field not found
@@ -629,7 +629,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             throw new InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
-                get_class($this)
+                static::class
             ));
         }
         return isset($this->data[$name]) ? $this->data[$name] : null;
@@ -856,7 +856,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Executes the generated SQL and returns the found record object or false
      *
      * @param int|string $id
-     * @return null|$this
+     * @return $this|null
      * @svc
      */
     protected function find($id)
@@ -951,7 +951,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param $column
      * @param null $operator
      * @param null $value
-     * @return null|$this
+     * @return $this|null
      * @svc
      */
     protected function findBy($column, $operator = null, $value = null)
@@ -1039,7 +1039,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param null|array|Request $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @svc
@@ -1056,7 +1056,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Executes the generated SQL and returns the found record object or null if not found
      *
-     * @return null|$this
+     * @return $this|null
      * @svc
      */
     protected function first()
@@ -1263,7 +1263,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     public function boot()
     {
-        $class = get_called_class();
+        $class = static::class;
         if (isset(static::$booted[$class])) {
             return;
         }
@@ -1302,7 +1302,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     public function __invoke(string $table = null)
     {
-        $this->db->addRecordClass($this->getTable(), get_class($this));
+        $this->db->addRecordClass($this->getTable(), static::class);
 
         return $this->db($this->table);
     }
@@ -1367,7 +1367,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Record: 获取当前记录的缓存键名
      *
-     * @param null|int $id
+     * @param int|null $id
      * @return string
      */
     public function getRecordCacheKey($id = null)
@@ -1451,8 +1451,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param null|string $foreignKey
-     * @param null|string $localKey
+     * @param string|null $foreignKey
+     * @param string|null $localKey
      * @return $this
      */
     public function hasOne($record, $foreignKey = null, $localKey = null)
@@ -1471,8 +1471,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param null|string $foreignKey
-     * @param null|string $localKey
+     * @param string|null $foreignKey
+     * @param string|null $localKey
      * @return $this
      */
     public function hasMany($record, $foreignKey = null, $localKey = null)
@@ -1482,8 +1482,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param null|string $foreignKey
-     * @param null|string $localKey
+     * @param string|null $foreignKey
+     * @param string|null $localKey
      * @return $this
      */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
@@ -1497,9 +1497,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param string $record
-     * @param null|string $junctionTable
-     * @param null|string $foreignKey
-     * @param null|string $relatedKey
+     * @param string|null $junctionTable
+     * @param string|null $foreignKey
+     * @param string|null $relatedKey
      * @return $this
      */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
@@ -1704,7 +1704,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function trigger($event, $data = [])
     {
         $result = null;
-        $class = get_called_class();
+        $class = static::class;
         if (isset(static::$events[$class][$event])) {
             foreach (static::$events[$class][$event] as $callback) {
                 // 优先使用自身方法
@@ -1722,7 +1722,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     public static function on($event, $method)
     {
-        static::$events[get_called_class()][$event][] = $method;
+        static::$events[static::class][$event][] = $method;
     }
 
     public function execute()
@@ -2212,7 +2212,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     private function baseName()
     {
-        $parts = explode('\\', get_class($this));
+        $parts = explode('\\', static::class);
         return end($parts);
     }
 
@@ -2229,6 +2229,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     private static function getServiceClass()
     {
         $wei = wei();
-        return $wei->has($wei->getServiceName(get_called_class())) ?: get_called_class();
+        return $wei->has($wei->getServiceName(static::class)) ?: static::class;
     }
 }

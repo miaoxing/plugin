@@ -617,7 +617,7 @@ class Plugin extends BaseService
         // Ignore prefix namespace
         [$ignore, $name, $path] = explode('\\', $class, 3);
 
-        $ds = DIRECTORY_SEPARATOR;
+        $ds = \DIRECTORY_SEPARATOR;
         $file = implode($ds, ['plugins', $this->dash($name), 'src', strtr($path, ['\\' => $ds])]) . '.php';
         if (file_exists($file)) {
             require_once $file;

@@ -1,7 +1,6 @@
 <?php
 
 namespace Miaoxing\Plugin {
-
     /**
      * @mixin \AppMixin
      * @mixin \PluginMixin
@@ -13,7 +12,6 @@ namespace Miaoxing\Plugin {
 }
 
 namespace {
-
     if (!function_exists('wei')) {
         /**
          * @return \Miaoxing\Plugin\BaseService

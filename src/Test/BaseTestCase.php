@@ -155,7 +155,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
     {
         // 类名如 MiaoxingTest\App\PluginTest
         // 分为3部分取第2部分
-        return explode('\\', get_class($this), 3)[1];
+        return explode('\\', static::class, 3)[1];
     }
 
     /**

@@ -32,7 +32,7 @@ final class BaseControllerTestCase extends BaseTestCase
      *
      * @dataProvider providerForActions
      * @param string $action
-     * @param null|int $code
+     * @param int|null $code
      */
     public function testActions($action, $code = null)
     {

@@ -122,14 +122,14 @@ class QueryBuilder extends BaseService
     /**
      * The type of query this is. Can be select, update or delete
      *
-     * @var integer
+     * @var int
      */
     protected $type = self::SELECT;
 
     /**
      * The state of the query object. Can be dirty or clean
      *
-     * @var integer
+     * @var int
      */
     protected $state = self::STATE_CLEAN;
 
@@ -149,7 +149,7 @@ class QueryBuilder extends BaseService
     protected static $camelCache = [];
 
     /**
-     * @param null|string $table
+     * @param string|null $table
      * @return $this
      */
     public function __invoke(string $table = null)
@@ -222,7 +222,7 @@ class QueryBuilder extends BaseService
     /**
      * Get the state of this query builder instance
      *
-     * @return integer
+     * @return int
      */
     public function getState()
     {
@@ -263,10 +263,10 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
-     * @param null|mixed $column
-     * @param null|mixed $operator
-     * @param null|mixed $value
-     * @return null|array
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return array|null
      * @svc
      */
     protected function fetch($column = null, $operator = null, $value = null)
@@ -281,10 +281,10 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns a column value of the first row
      *
      * @param mixed $conditions
-     * @param null|mixed $colum
-     * @param null|mixed $operator
-     * @param null|mixed $value
-     * @return null|array
+     * @param mixed|null $colum
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return array|null
      */
     public function fetchColumn($colum = null, $operator = null, $value = null)
     {
@@ -296,9 +296,9 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
-     * @param null|mixed $column
-     * @param null|mixed $operator
-     * @param null|mixed $value
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @svc
      */
@@ -315,7 +315,7 @@ class QueryBuilder extends BaseService
     /**
      * Executes the generated SQL and returns the found record object or null if not found
      *
-     * @return null|array
+     * @return array|null
      * @svc
      */
     protected function first()
@@ -324,7 +324,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @return null|array
+     * @return array|null
      * @svc
      */
     protected function all()
@@ -334,7 +334,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @param string $column
-     * @param null|string $index
+     * @param string|null $index
      * @return array
      * @svc
      */
@@ -441,9 +441,9 @@ class QueryBuilder extends BaseService
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
-     * @param null|mixed $column
-     * @param null|mixed $operator
-     * @param null|mixed $value
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @svc
      */
@@ -457,7 +457,7 @@ class QueryBuilder extends BaseService
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @svc
      */
@@ -471,7 +471,7 @@ class QueryBuilder extends BaseService
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @svc
      */
@@ -581,7 +581,7 @@ class QueryBuilder extends BaseService
      * Sets table for FROM query
      *
      * @param string $table
-     * @param null|string $alias
+     * @param string|null $alias
      * @return $this
      * @svc
      */
@@ -593,7 +593,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @param string $table
-     * @param null|mixed $alias
+     * @param mixed|null $alias
      * @return $this
      * @svc
      */
@@ -627,9 +627,9 @@ class QueryBuilder extends BaseService
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param null|string $first
+     * @param string|null $first
      * @param string $operator
-     * @param null|string $second
+     * @param string|null $second
      * @param string $type
      * @return $this
      * @svc
@@ -643,9 +643,9 @@ class QueryBuilder extends BaseService
      * Adds a left join to the query
      *
      * @param string $table The table name to join
-     * @param null|string $first
+     * @param string|null $first
      * @param string $operator
-     * @param null|string $second
+     * @param string|null $second
      * @return $this
      * @svc
      */
@@ -658,9 +658,9 @@ class QueryBuilder extends BaseService
      * Adds a right join to the query
      *
      * @param string $table The table name to join
-     * @param null|string $first
+     * @param string|null $first
      * @param string $operator
-     * @param null|string $second
+     * @param string|null $second
      * @return $this
      * @svc
      */
@@ -680,7 +680,7 @@ class QueryBuilder extends BaseService
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param null|array|Closure|string $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -688,7 +688,6 @@ class QueryBuilder extends BaseService
      */
     protected function where($column = null, $operator = null, $value = null)
     {
-
         if (null === $column) {
             return $this;
         }
@@ -731,8 +730,8 @@ class QueryBuilder extends BaseService
      * @param array $params The condition parameters
      * @param array $types The parameter types
      * @param mixed $column
-     * @param null|mixed $operator
-     * @param null|mixed $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      */
     public function orWhere($column, $operator = null, $value = null)
@@ -1012,7 +1011,7 @@ class QueryBuilder extends BaseService
      * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
-     * @param null|mixed $value
+     * @param mixed|null $value
      * @param mixed $condition
      * @return $this
      * @svc
@@ -1055,7 +1054,7 @@ class QueryBuilder extends BaseService
      * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
-     * @param null|mixed $value
+     * @param mixed|null $value
      * @return $this
      */
     public function orHaving($column, $operator, $value = null)
@@ -1196,9 +1195,9 @@ class QueryBuilder extends BaseService
     /**
      * Sets a query parameter for the query being constructed
      *
-     * @param integer|string $key The parameter position or name
+     * @param int|string $key The parameter position or name
      * @param mixed $value The parameter value
-     * @param null|string $type PDO::PARAM_*
+     * @param string|null $type PDO::PARAM_*
      * @return $this
      * @todo refactor 暂不支持
      */
@@ -1325,7 +1324,7 @@ class QueryBuilder extends BaseService
      *
      * @param string $sqlPartName
      * @param mixed $sqlPart
-     * @param boolean $append
+     * @param bool $append
      * @param string $type
      * @return $this
      */
@@ -1428,7 +1427,7 @@ class QueryBuilder extends BaseService
     /**
      * @param mixed $value
      * @param callable $callback
-     * @param null|callable $default
+     * @param callable|null $default
      * @return $this
      * @svc
      */
@@ -1445,7 +1444,7 @@ class QueryBuilder extends BaseService
     /**
      * @param mixed $value
      * @param callable $callback
-     * @param null|callable $default
+     * @param callable|null $default
      * @return $this
      * @svc
      */

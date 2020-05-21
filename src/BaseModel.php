@@ -144,7 +144,7 @@ class BaseModel extends Record implements JsonSerializable
 
     public function boot()
     {
-        $class = get_called_class();
+        $class = static::class;
         if (isset(static::$booted[$class])) {
             return;
         }
@@ -186,7 +186,7 @@ class BaseModel extends Record implements JsonSerializable
         if (!$this->table) {
             $this->detectTable();
         }
-        $this->db->addRecordClass($this->table, get_class($this));
+        $this->db->addRecordClass($this->table, static::class);
 
         return $this->db($this->table);
     }
@@ -405,7 +405,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * Record: 获取当前记录的缓存键名
      *
-     * @param null|int $id
+     * @param int|null $id
      * @return string
      */
     public function getRecordCacheKey($id = null)
@@ -450,7 +450,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         if (!$this->table) {
             // 适合类名: Miaoxing\Plugin\Service\User
-            $parts = explode('\\', get_class($this));
+            $parts = explode('\\', static::class);
             $basename = end($parts);
 
             // TODO V2
@@ -591,8 +591,8 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param null|string $foreignKey
-     * @param null|string $localKey
+     * @param string|null $foreignKey
+     * @param string|null $localKey
      * @return $this
      */
     public function hasOne($record, $foreignKey = null, $localKey = null)
@@ -611,8 +611,8 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param null|string $foreignKey
-     * @param null|string $localKey
+     * @param string|null $foreignKey
+     * @param string|null $localKey
      * @return $this
      */
     public function hasMany($record, $foreignKey = null, $localKey = null)
@@ -622,8 +622,8 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param null|string $foreignKey
-     * @param null|string $localKey
+     * @param string|null $foreignKey
+     * @param string|null $localKey
      * @return BaseModel
      */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
@@ -637,9 +637,9 @@ class BaseModel extends Record implements JsonSerializable
 
     /**
      * @param string $record
-     * @param null|string $junctionTable
-     * @param null|string $foreignKey
-     * @param null|string $relatedKey
+     * @param string|null $junctionTable
+     * @param string|null $foreignKey
+     * @param string|null $relatedKey
      * @return BaseModel
      */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
@@ -959,7 +959,7 @@ class BaseModel extends Record implements JsonSerializable
     public function trigger($event, $data = [])
     {
         $result = null;
-        $class = get_called_class();
+        $class = static::class;
         if (isset(static::$events[$class][$event])) {
             foreach (static::$events[$class][$event] as $callback) {
                 // 优先使用自身方法
@@ -977,7 +977,7 @@ class BaseModel extends Record implements JsonSerializable
 
     public static function on($event, $method)
     {
-        static::$events[get_called_class()][$event][] = $method;
+        static::$events[static::class][$event][] = $method;
     }
 
     public function execute()
