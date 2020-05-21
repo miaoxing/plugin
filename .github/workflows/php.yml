@@ -249,4 +249,4 @@ jobs:
       - name: Run
         run: |
           if [[ -e ".php_cs" ]]; then CONFIG=".php_cs"; else CONFIG="plugins/plugin/.php_cs"; fi
-          vendor/bin/php-cs-fixer fix --config=${CONFIG} -v --dry-run --using-cache=no
+          vendor/bin/php-cs-fixer fix --config=${CONFIG} -v --allow-risky yes --dry-run --using-cache=no
