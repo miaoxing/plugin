@@ -14,7 +14,7 @@
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
-    "miaoxing/coding-standards": "^3.0",
+    "miaoxing/coding-standards": "dev-master@dev",
     "phpunit/phpunit": "^8 || ^9",
     "friendsofphp/php-cs-fixer": "^2.16"
   },
@@ -33,6 +33,15 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../../codes/coding-standards",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "extra": {
     "branch-alias": {
       "dev-master": "2.0.x-dev"

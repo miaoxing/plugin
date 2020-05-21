@@ -135,11 +135,7 @@ jobs:
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       - name: Run
-        run: |
-          vendor/bin/phpcs --config-set installed_paths vendor/miaoxing/coding-standards
-          vendor/bin/phpcs -i
-          if [[ -e "phpcs.xml.dist" ]]; then STANDARD="phpcs.xml.dist"; else STANDARD="phpcs.xml.dist"; fi
-          vendor/bin/phpcs --standard=${STANDARD} .
+        run: ./vendor/bin/miaoxing-phpcs
 
   phpmd:
     runs-on: ${{ matrix.operating-system }}
