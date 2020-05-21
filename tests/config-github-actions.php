@@ -3,7 +3,7 @@
 return [
     'wei' => [
         'providers' => [
-            'cache' => 'phpFileCache',
+            'cache' => 'redis',
         ],
     ],
     'db' => [
