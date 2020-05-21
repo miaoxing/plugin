@@ -279,7 +279,7 @@ PHP;
         // Wrap `if (0) ` outside class definition
         $index = 0;
         $dynamics = preg_replace_callback('/namespace (.+?)\n/mi', function ($matches) use (&$index) {
-            $index++;
+            ++$index;
             $prefix = 1 === $index ? '' : "\n}\n";
             return $prefix . $matches[0] . "\nif (0) {";
         }, $dynamics);

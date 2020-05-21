@@ -361,7 +361,7 @@ class QueryBuilder extends BaseService
                 return false;
             }
 
-            $page++;
+            ++$page;
         } while (count($data) === $count);
 
         return true;

@@ -606,7 +606,7 @@ final class ModelTest extends BaseTestCase
         $times = 0;
         $result = $user->chunk(2, function (TestUser $users, $page) use (&$count, &$times) {
             $count += count($users);
-            $times++;
+            ++$times;
         });
 
         $this->assertEquals(4, $count);
@@ -624,7 +624,7 @@ final class ModelTest extends BaseTestCase
         $times = 0;
         $result = $user->chunk(1, function (TestUser $users, $page) use (&$count, &$times) {
             $count += count($users);
-            $times++;
+            ++$times;
             return false;
         });
 

@@ -49,7 +49,7 @@ class TestUser extends Model
 
     public function afterLoad()
     {
-        $this->loadTimes++;
+        ++$this->loadTimes;
     }
 
     public function getLoadTimes()

@@ -16,7 +16,7 @@ class TestVirtual extends Model
 
     protected $virtual = [
         'virtual_column',
-        'full_name'
+        'full_name',
     ];
 
     protected $virtualColumnValue;

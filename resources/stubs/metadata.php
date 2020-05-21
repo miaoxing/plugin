@@ -14,8 +14,8 @@ trait <?= $class, "\n" ?>
      * @see CastTrait::$casts
      */
     protected $casts = [
-<?php foreach ($casts as $column => $type) : ?>
+<?php foreach ($casts as $column => $type) { ?>
         '<?= $column ?>' => '<?= $type ?>',
-<?php endforeach ?>
+<?php } ?>
     ];
 }

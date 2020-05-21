@@ -864,7 +864,7 @@ final class QueryBuilderTest extends BaseTestCase
         $times = 0;
         $result = Qb::table('test_users')->chunk(2, static function ($data, $page) use (&$count, &$times) {
             $count += count($data);
-            $times++;
+            ++$times;
         });
 
         $this->assertEquals(4, $count);

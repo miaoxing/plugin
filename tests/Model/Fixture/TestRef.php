@@ -17,6 +17,6 @@ class TestRef extends Model
     ];
 
     protected $data = [
-        'json' => []
+        'json' => [],
     ];
 }
