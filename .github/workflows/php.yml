@@ -239,6 +239,4 @@ jobs:
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       - name: Run
-        run: |
-          if [[ -e ".php_cs" ]]; then CONFIG=".php_cs"; else CONFIG="plugins/plugin/.php_cs"; fi
-          vendor/bin/php-cs-fixer fix --config=${CONFIG} -v --allow-risky yes --dry-run --using-cache=no
+        run: ./vendor/bin/miaoxing-php-cs-fixer
