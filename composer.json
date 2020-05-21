@@ -33,15 +33,6 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../../../codes/coding-standards",
-      "options": {
-        "symlink": true
-      }
-    }
-  ],
   "extra": {
     "branch-alias": {
       "dev-master": "2.0.x-dev"
