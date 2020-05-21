@@ -415,7 +415,7 @@ class QueryBuilder extends BaseService
      */
     public function getSqlPart($name)
     {
-        return isset($this->sqlParts[$name]) ? $this->sqlParts[$name] : false;
+        return $this->sqlParts[$name] ?? null;
     }
 
     /**
