@@ -1130,6 +1130,9 @@ final class QueryBuilderTest extends BaseTestCase
             return Qb::table('test_users')->cache(600)->where('id', 1)->first();
         };
 
+        wei()->cache->set('a', ['b' => 'c']);
+        var_dump(wei()->cache->get('a'));
+
         $user = $getUser();
         $this->assertEquals('twin', $user['name']);
 
