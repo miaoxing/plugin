@@ -186,20 +186,6 @@ class User extends UserModel
         }
     }
 
-    /**
-     * @param string $a
-     * @return string
-     * @throws \Exception
-     */
-    public function te(string $a)
-    {
-        if ($a) {
-            throw new \Exception('x');
-        }
-
-        return 'b';
-    }
-
     public function &__get($name)
     {
         $result = $this->getConfig($name);
