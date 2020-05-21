@@ -94,6 +94,7 @@ final class AppTest extends BaseTestCase
      * @dataProvider dataForResponse
      * @param $action
      * @param $content
+     * @param mixed|null $before
      */
     public function testResponse($action, $content, $before = null)
     {

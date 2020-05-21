@@ -230,7 +230,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public static function newColl($data = [])
     {
         $class = static::getServiceClass();
-        return (new $class)->beColl()->fromArray($data);
+        return (new $class())->beColl()->fromArray($data);
     }
 
     /**

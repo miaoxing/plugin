@@ -552,7 +552,6 @@ final class ModelTest extends BaseTestCase
         $this->assertEquals('1', $user['groupId']);
 
         unset($user['name'], $user['groupId']);
-        
 
         $this->assertNull($user['name']);
         $this->assertNull($user['groupId']);

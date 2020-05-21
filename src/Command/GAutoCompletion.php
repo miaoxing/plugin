@@ -186,9 +186,9 @@ PHP;
      */
     public function generateStaticCalls(array $services, string $path)
     {
-        $printer = new PsrPrinter;
-        $staticFile = new PhpFile;
-        $dynamicFile = new PhpFile;
+        $printer = new PsrPrinter();
+        $staticFile = new PhpFile();
+        $dynamicFile = new PhpFile();
 
         if ($this->addNoinspectionComment) {
             $staticFile->addComment('@noinspection PhpDocSignatureInspection')
