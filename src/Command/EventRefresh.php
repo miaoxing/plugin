@@ -6,7 +6,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class EventRefresh extends BaseCommand
 {
-
     /**
      * Execute the console command.
      *
@@ -18,6 +17,7 @@ class EventRefresh extends BaseCommand
         wei()->plugin->getEvents(true);
         $this->suc('Refreshed the event cache!');
     }
+
     protected function configure()
     {
         $this->setDescription('Refreshed the event cache');

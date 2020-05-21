@@ -13,7 +13,6 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class GMetadata extends BaseCommand
 {
-
     public function handle()
     {
         $id = $this->input->getArgument('plugin-id');
@@ -59,6 +58,7 @@ class GMetadata extends BaseCommand
 
         return array_unique($traits);
     }
+
     protected function configure()
     {
         $this

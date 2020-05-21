@@ -4,7 +4,6 @@ namespace Miaoxing\Plugin\Command;
 
 class PluginRefresh extends BaseCommand
 {
-
     /**
      * Execute the console command.
      *
@@ -15,6 +14,7 @@ class PluginRefresh extends BaseCommand
         wei()->plugin->getConfig(true);
         $this->suc('Refreshed the plugin config!');
     }
+
     protected function configure()
     {
         $this->setDescription('Refresh the plugin cache');

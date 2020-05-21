@@ -4,7 +4,6 @@ namespace Miaoxing\Plugin\Command;
 
 class Install extends BaseCommand
 {
-
     /**
      * Execute the console command.
      *
@@ -31,6 +30,7 @@ class Install extends BaseCommand
 
         $this->suc('Install successfully');
     }
+
     protected function configure()
     {
         $this->setDescription('Install the application');

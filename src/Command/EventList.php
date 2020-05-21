@@ -6,7 +6,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class EventList extends BaseCommand
 {
-
     /**
      * Execute the console command.
      *
@@ -18,6 +17,7 @@ class EventList extends BaseCommand
         $events = wei()->plugin->getEvents();
         dump($events);
     }
+
     protected function configure()
     {
         $this->setDescription('List the available events');

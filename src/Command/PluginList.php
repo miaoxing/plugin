@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class PluginList extends BaseCommand
 {
-
     /**
      * Execute the console command.
      *
@@ -29,6 +28,7 @@ class PluginList extends BaseCommand
         }
         $table->render();
     }
+
     protected function configure()
     {
         $this->setDescription('List the plugins')

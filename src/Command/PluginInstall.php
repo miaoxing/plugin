@@ -6,7 +6,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class PluginInstall extends BaseCommand
 {
-
     /**
      * Execute the console command.
      *
@@ -18,6 +17,7 @@ class PluginInstall extends BaseCommand
         $ret = wei()->plugin->install($this->getArgument('id'));
         $this->ret($ret);
     }
+
     protected function configure()
     {
         $this->setDescription('Install the plugin')

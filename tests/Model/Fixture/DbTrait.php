@@ -4,7 +4,6 @@ namespace MiaoxingTest\Plugin\Model\Fixture;
 
 trait DbTrait
 {
-
     public function initFixtures()
     {
         $db = $this->db;
@@ -29,6 +28,7 @@ trait DbTrait
             'address' => 'test',
         ]);
     }
+
     protected static function createTables()
     {
         wei()->schema->table('test_users')

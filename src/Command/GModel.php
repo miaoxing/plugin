@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class GModel extends BaseCommand
 {
-
     /**
      * @return int
      * @throws \Exception
@@ -33,6 +32,7 @@ class GModel extends BaseCommand
 
         return $this->suc('创建成功');
     }
+
     protected function configure()
     {
         $this

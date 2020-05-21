@@ -13,7 +13,6 @@ use MiaoxingTest\Plugin\Fixture\Controller\TestController;
  */
 final class AppTest extends BaseTestCase
 {
-
     public function testParamAction()
     {
         wei()->request->set('id', 'id');
@@ -159,6 +158,7 @@ final class AppTest extends BaseTestCase
 
         $app->destroy();
     }
+
     protected function execute($action)
     {
         User::loginById(1);
