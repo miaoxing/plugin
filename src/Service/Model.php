@@ -59,7 +59,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * The record data
      *
-     * @var $this[]|array
+     * @var $this []|array
      */
     protected $data = [];
 
@@ -346,6 +346,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Check if the field is assignable through fromArray method
      *
      * @param string $field
+     * @param null|mixed $data
      * @return bool
      */
     public function isFillable($field, $data = null)
@@ -581,6 +582,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Receives the record field value
      *
      * @param string $name
+     * @param null|mixed $exists
+     * @param mixed $throwException
      * @return $this|mixed
      * @throws InvalidArgumentException When field not found
      */
@@ -1135,7 +1138,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function loadData($offset)
     {
         if (!$this->loaded && !$this->isNew) {
-            if (is_numeric($offset) || is_null($offset)) {
+            if (is_numeric($offset) || null === $offset) {
                 $this->all();
             } else {
                 $this->first();

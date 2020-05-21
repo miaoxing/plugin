@@ -21,6 +21,7 @@ class TestArticle extends Model
      * NOTE: 使用参数是避免和父类方法冲突
      *
      * @link https://travis-ci.org/miaoxing/plugin/jobs/211982291
+     * @param null|mixed $tags
      */
     public function tags($tags = null)
     {

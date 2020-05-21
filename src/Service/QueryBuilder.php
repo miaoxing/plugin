@@ -115,7 +115,7 @@ class QueryBuilder extends BaseService
     protected $indexBy;
 
     /**
-     * @var string The complete SQL string for this query.
+     * @var string the complete SQL string for this query
      */
     protected $sql;
 
@@ -263,6 +263,9 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param null|mixed $column
+     * @param null|mixed $operator
+     * @param null|mixed $value
      * @return null|array
      * @svc
      */
@@ -278,6 +281,9 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns a column value of the first row
      *
      * @param mixed $conditions
+     * @param null|mixed $colum
+     * @param null|mixed $operator
+     * @param null|mixed $value
      * @return null|array
      */
     public function fetchColumn($colum = null, $operator = null, $value = null)
@@ -290,6 +296,9 @@ class QueryBuilder extends BaseService
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param null|mixed $column
+     * @param null|mixed $operator
+     * @param null|mixed $value
      * @return array|false
      * @svc
      */
@@ -432,6 +441,9 @@ class QueryBuilder extends BaseService
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param null|mixed $column
+     * @param null|mixed $operator
+     * @param null|mixed $value
      * @return mixed
      * @svc
      */
@@ -500,7 +512,7 @@ class QueryBuilder extends BaseService
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param array|string $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @svc
      */
@@ -581,6 +593,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @param string $table
+     * @param null|mixed $alias
      * @return $this
      * @svc
      */
@@ -675,7 +688,7 @@ class QueryBuilder extends BaseService
      */
     protected function where($column = null, $operator = null, $value = null)
     {
-        //
+
         if (null === $column) {
             return $this;
         }
@@ -717,6 +730,9 @@ class QueryBuilder extends BaseService
      * @param string $conditions The WHERE conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param null|mixed $operator
+     * @param null|mixed $value
      * @return $this
      */
     public function orWhere($column, $operator = null, $value = null)
@@ -977,7 +993,7 @@ class QueryBuilder extends BaseService
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @svc
      */
@@ -994,6 +1010,10 @@ class QueryBuilder extends BaseService
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param null|mixed $value
+     * @param mixed $condition
      * @return $this
      * @svc
      */
@@ -1033,6 +1053,9 @@ class QueryBuilder extends BaseService
      * @param string $conditions The HAVING conditions to add
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param null|mixed $value
      * @return $this
      */
     public function orHaving($column, $operator, $value = null)
@@ -1048,8 +1071,8 @@ class QueryBuilder extends BaseService
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @svc
      */
@@ -1147,7 +1170,7 @@ class QueryBuilder extends BaseService
      */
     public function resetSqlParts($name = null)
     {
-        if (is_null($name)) {
+        if (null === $name) {
             $name = array_keys($this->sqlParts);
         }
         foreach ($name as $queryPartName) {
@@ -1218,7 +1241,7 @@ class QueryBuilder extends BaseService
     /**
      * Gets all defined query parameters for the query being constructed.
      *
-     * @return array The currently defined query parameters.
+     * @return array the currently defined query parameters
      */
     public function getParameters()
     {

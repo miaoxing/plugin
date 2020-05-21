@@ -48,6 +48,7 @@ class Auth extends BaseMiddleware
      * 跳转到登录地址,或者返回包含登录信息的JSON
      *
      * @param string $url
+     * @param mixed $ret
      * @return array|\Wei\Response
      */
     protected function redirectLogin($ret)
