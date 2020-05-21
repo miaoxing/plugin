@@ -36,7 +36,7 @@ jobs:
 
       - name: Run
         run: |
-          if [[ -e ".eslintignore" ]]; then cp "plugins/plugin/.eslintignore" ".eslintignore"; fi
+          if [[ ! -e ".eslintignore" ]]; then cp "plugins/plugin/.eslintignore" ".eslintignore"; fi
           if [[ -e ".eslintrc.json" ]]; then CONFIG=".eslintrc.json"; else CONFIG="plugins/plugin/.eslintrc.json"; fi
           yarn eslint --config=${CONFIG} .
 
