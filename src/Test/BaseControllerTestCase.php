@@ -93,29 +93,6 @@ final class BaseControllerTestCase extends BaseTestCase
         return $this->controller;
     }
 
-    protected function getAction()
-    {
-        preg_match('/test(.+?)Action/', $this->getName(), $matches);
-        if (!isset($matches[1])) {
-            throw new \Exception('Invalid test case naming');
-        }
-
-        return lcfirst($matches[1]);
-    }
-
-    /**
-     * @param array $request
-     * @return Tester
-     */
-    protected function visitCurPage(array $request = [])
-    {
-        $controller = $this->getController();
-        $action = $this->getAction();
-
-        return wei()->tester($controller, $action)
-            ->request($request);
-    }
-
     /**
      * @param string $controller
      * @param string $action
@@ -137,6 +114,29 @@ final class BaseControllerTestCase extends BaseTestCase
         ob_end_clean();
 
         return $response;
+    }
+
+    protected function getAction()
+    {
+        preg_match('/test(.+?)Action/', $this->getName(), $matches);
+        if (!isset($matches[1])) {
+            throw new \Exception('Invalid test case naming');
+        }
+
+        return lcfirst($matches[1]);
+    }
+
+    /**
+     * @param array $request
+     * @return Tester
+     */
+    protected function visitCurPage(array $request = [])
+    {
+        $controller = $this->getController();
+        $action = $this->getAction();
+
+        return wei()->tester($controller, $action)
+            ->request($request);
     }
 
     /**

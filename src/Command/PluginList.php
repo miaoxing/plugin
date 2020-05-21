@@ -7,11 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class PluginList extends BaseCommand
 {
-    protected function configure()
-    {
-        $this->setDescription('List the plugins')
-            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
-    }
 
     /**
      * Execute the console command.
@@ -33,5 +28,10 @@ class PluginList extends BaseCommand
                 ]);
         }
         $table->render();
+    }
+    protected function configure()
+    {
+        $this->setDescription('List the plugins')
+            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
     }
 }

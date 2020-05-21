@@ -13,33 +13,6 @@ use MiaoxingTest\Plugin\Fixture\Controller\TestController;
  */
 final class AppTest extends BaseTestCase
 {
-    protected function execute($action)
-    {
-        User::loginById(1);
-
-        $app = wei()->app;
-        $app->setControllerMap(['test' => TestController::class]);
-
-        $app->request->set('_format', 'json');
-
-        // 更改视图为测试的目录
-        $origDirs = $app->view->getOption('dirs');
-        $app->view->setDirs([dirname(__DIR__) . '/Fixture/views']);
-
-        ob_start();
-        try {
-            $app->dispatch('test', $action);
-        } catch (\Exception $e) {
-            throw $e;
-        } finally {
-            $response = ob_get_clean();
-
-            // 还原视图目录
-            $app->view->setDirs($origDirs);
-        }
-
-        return $response;
-    }
 
     public function testParamAction()
     {
@@ -185,5 +158,32 @@ final class AppTest extends BaseTestCase
         $this->assertEquals('domain', App::getIdByDomain('t.test.com'));
 
         $app->destroy();
+    }
+    protected function execute($action)
+    {
+        User::loginById(1);
+
+        $app = wei()->app;
+        $app->setControllerMap(['test' => TestController::class]);
+
+        $app->request->set('_format', 'json');
+
+        // 更改视图为测试的目录
+        $origDirs = $app->view->getOption('dirs');
+        $app->view->setDirs([dirname(__DIR__) . '/Fixture/views']);
+
+        ob_start();
+        try {
+            $app->dispatch('test', $action);
+        } catch (\Exception $e) {
+            throw $e;
+        } finally {
+            $response = ob_get_clean();
+
+            // 还原视图目录
+            $app->view->setDirs($origDirs);
+        }
+
+        return $response;
     }
 }

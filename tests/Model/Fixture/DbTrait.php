@@ -4,27 +4,6 @@ namespace MiaoxingTest\Plugin\Model\Fixture;
 
 trait DbTrait
 {
-    protected static function createTables()
-    {
-        wei()->schema->table('test_users')
-            ->id()
-            ->int('group_id')
-            ->string('name')
-            ->string('address')
-            ->exec();
-
-        wei()->schema->table('test_user_groups')
-            ->id()
-            ->string('name')
-            ->exec();
-    }
-
-    protected static function dropTables()
-    {
-        wei()->schema
-            ->dropIfExists('test_users')
-            ->dropIfExists('test_user_groups');
-    }
 
     public function initFixtures()
     {
@@ -49,5 +28,26 @@ trait DbTrait
             'name' => 'test',
             'address' => 'test',
         ]);
+    }
+    protected static function createTables()
+    {
+        wei()->schema->table('test_users')
+            ->id()
+            ->int('group_id')
+            ->string('name')
+            ->string('address')
+            ->exec();
+
+        wei()->schema->table('test_user_groups')
+            ->id()
+            ->string('name')
+            ->exec();
+    }
+
+    protected static function dropTables()
+    {
+        wei()->schema
+            ->dropIfExists('test_users')
+            ->dropIfExists('test_user_groups');
     }
 }

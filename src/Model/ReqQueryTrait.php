@@ -81,6 +81,134 @@ trait ReqQueryTrait
     }
 
     /**
+     * @param array|string $relations
+     * @return $this
+     */
+    public function reqJoin($relations)
+    {
+        foreach ((array) $relations as $relation) {
+            if (isset($this->joins[$relation])
+                || !$this->request->has($relation)
+                || !$this->hasRelation($relation)
+            ) {
+                continue;
+            }
+
+            $this->joins[$relation] = true;
+            $this->selectMain();
+
+            /** @var Model $related */
+            $related = $this->{$relation}();
+            $name = $related->getClassServiceName();
+            $config = $this->relations[$name];
+
+            $table = $related->getTable();
+
+            // 处理跨数据库的情况
+            if ($related->db != $this->db) {
+                $table = $related->db->getDbname() . '.' . $table;
+            }
+
+            $this->leftJoin(
+                $table,
+                $table . '.' . $config['foreignKey'],
+                '=',
+                $this->getTable() . '.' . $config['localKey']
+            );
+        }
+
+        return $this;
+    }
+
+    public function equals($columns)
+    {
+        foreach ((array) $columns as $column) {
+            $name = $this->convertOutputIdentifier($column);
+            if ($this->request->has($name)) {
+                $this->where($column, $this->request[$name]);
+            }
+        }
+
+        return $this;
+    }
+
+    public function between($columns)
+    {
+        if ($this->getSqlPart('join')) {
+            $prefix = $this->getTable() . '.';
+        } else {
+            $prefix = '';
+        }
+
+        foreach ((array) $columns as $column) {
+            $min = $this->convertOutputIdentifier($column . '_min');
+            if ($this->request->has($min)) {
+                $this->where($prefix . $column, '>=', $this->request[$min]);
+            }
+
+            $max = $this->convertOutputIdentifier($column . '_max');
+            if ($this->request->has($max)) {
+                $this->where($prefix . $column, '<=', $this->processMaxDate($column, $this->request[$max]));
+            }
+        }
+
+        return $this;
+    }
+
+    public function reqHas($columns)
+    {
+        foreach ((array) $columns as $column) {
+            $name = $this->convertOutputIdentifier($column);
+            if ($this->request->has($name)) {
+                $this->whereHas($column, $this->request[$name]);
+            }
+        }
+
+        return $this;
+    }
+
+    public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
+    {
+        if ($this->request->has('sort')) {
+            $name = $this->convertInputIdentifier($this->request['sort']);
+            if (in_array($name, $this->getFields(), true)) {
+                $sort = $name;
+            } else {
+                $sort = $defaultColumn;
+            }
+        } else {
+            $sort = $defaultColumn;
+        }
+
+        if ($this->request->has('order')) {
+            $order = strtoupper($this->request['order']);
+            if (!in_array($order, ['ASC', 'DESC'], true)) {
+                $order = $defaultOrder;
+            }
+        } else {
+            $order = $defaultOrder;
+        }
+
+        if ($this->getSqlPart('join')) {
+            $sort = $this->getTable() . '.' . $sort;
+        }
+
+        $this->orderBy($sort, $order);
+
+        return $this;
+    }
+
+    public function paginate()
+    {
+        $limit = $this->request['rows'] ?: 10;
+        $page = $this->request['page'] ?: 1;
+
+        $this->limit($limit)->page($page);
+
+        return $this;
+    }
+
+    /**
      * 查询当前模型的值
      *
      * @param string $name
@@ -187,46 +315,6 @@ trait ReqQueryTrait
     }
 
     /**
-     * @param array|string $relations
-     * @return $this
-     */
-    public function reqJoin($relations)
-    {
-        foreach ((array) $relations as $relation) {
-            if (isset($this->joins[$relation])
-                || !$this->request->has($relation)
-                || !$this->hasRelation($relation)
-            ) {
-                continue;
-            }
-
-            $this->joins[$relation] = true;
-            $this->selectMain();
-
-            /** @var Model $related */
-            $related = $this->{$relation}();
-            $name = $related->getClassServiceName();
-            $config = $this->relations[$name];
-
-            $table = $related->getTable();
-
-            // 处理跨数据库的情况
-            if ($related->db != $this->db) {
-                $table = $related->db->getDbname() . '.' . $table;
-            }
-
-            $this->leftJoin(
-                $table,
-                $table . '.' . $config['foreignKey'],
-                '=',
-                $this->getTable() . '.' . $config['localKey']
-            );
-        }
-
-        return $this;
-    }
-
-    /**
      * @param array|string $columns
      * @return $this
      * @svc
@@ -249,41 +337,6 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function equals($columns)
-    {
-        foreach ((array) $columns as $column) {
-            $name = $this->convertOutputIdentifier($column);
-            if ($this->request->has($name)) {
-                $this->where($column, $this->request[$name]);
-            }
-        }
-
-        return $this;
-    }
-
-    public function between($columns)
-    {
-        if ($this->getSqlPart('join')) {
-            $prefix = $this->getTable() . '.';
-        } else {
-            $prefix = '';
-        }
-
-        foreach ((array) $columns as $column) {
-            $min = $this->convertOutputIdentifier($column . '_min');
-            if ($this->request->has($min)) {
-                $this->where($prefix . $column, '>=', $this->request[$min]);
-            }
-
-            $max = $this->convertOutputIdentifier($column . '_max');
-            if ($this->request->has($max)) {
-                $this->where($prefix . $column, '<=', $this->processMaxDate($column, $this->request[$max]));
-            }
-        }
-
-        return $this;
-    }
-
     protected function processMaxDate($column, $value)
     {
         if (isset($this->casts[$column])
@@ -293,59 +346,6 @@ trait ReqQueryTrait
             return $value . ' 23:59:59';
         }
         return $value;
-    }
-
-    public function reqHas($columns)
-    {
-        foreach ((array) $columns as $column) {
-            $name = $this->convertOutputIdentifier($column);
-            if ($this->request->has($name)) {
-                $this->whereHas($column, $this->request[$name]);
-            }
-        }
-
-        return $this;
-    }
-
-    public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
-    {
-        if ($this->request->has('sort')) {
-            $name = $this->convertInputIdentifier($this->request['sort']);
-            if (in_array($name, $this->getFields(), true)) {
-                $sort = $name;
-            } else {
-                $sort = $defaultColumn;
-            }
-        } else {
-            $sort = $defaultColumn;
-        }
-
-        if ($this->request->has('order')) {
-            $order = strtoupper($this->request['order']);
-            if (!in_array($order, ['ASC', 'DESC'], true)) {
-                $order = $defaultOrder;
-            }
-        } else {
-            $order = $defaultOrder;
-        }
-
-        if ($this->getSqlPart('join')) {
-            $sort = $this->getTable() . '.' . $sort;
-        }
-
-        $this->orderBy($sort, $order);
-
-        return $this;
-    }
-
-    public function paginate()
-    {
-        $limit = $this->request['rows'] ?: 10;
-        $page = $this->request['page'] ?: 1;
-
-        $this->limit($limit)->page($page);
-
-        return $this;
     }
 
     protected function parseReqColumn($column)

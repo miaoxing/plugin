@@ -155,52 +155,6 @@ class Plugin extends BaseService
     }
 
     /**
-     * Get services defined in plugins
-     *
-     * @return array
-     */
-    protected function getWeiAliases()
-    {
-        return $this->classMap->generate($this->basePaths, '/Service/*.php', 'Service');
-    }
-
-    /**
-     * Get controllers defined in plugins
-     *
-     * @return array
-     * @todo v3 要求以 Controller 结尾
-     */
-    protected function getAppControllerMap()
-    {
-        return $this->classMap->generate($this->basePaths, '/Controller/{*,*/*}.php', 'Controller', true, true);
-    }
-
-    /**
-     * Get all plugin classes
-     *
-     * @param bool $refresh
-     * @return array
-     * @throws Exception
-     */
-    protected function getPluginClasses($refresh = false)
-    {
-        if ($refresh || !$this->pluginClasses) {
-            $this->pluginClasses = [];
-            $classes = $this->classMap->generate($this->basePaths, '/*Plugin.php', '', false, true);
-            foreach ($classes as $class) {
-                $parts = explode('\\', $class);
-                $name = end($parts);
-                // Remove "Plugin" suffix
-                $name = substr($name, 0, -6);
-                $name = $this->dash($name);
-                $this->pluginClasses[$name] = $class;
-            }
-        }
-
-        return $this->pluginClasses;
-    }
-
-    /**
      * 将@开头的文件路径,转换为真实的路径
      *
      * @param string $file
@@ -262,37 +216,6 @@ class Plugin extends BaseService
         }
 
         return $components;
-    }
-
-    /**
-     * 判断请求是否要求刷新缓存
-     *
-     * @return bool
-     */
-    protected function isRefresh()
-    {
-        return $this->wei->isDebug()
-            && 'no-cache' == $this->request->getServer('HTTP_PRAGMA')
-            && false === strpos($this->request->getServer('HTTP_USER_AGENT'), 'wechatdevtools');
-    }
-
-    /**
-     * 执行指定的回调,并存储到缓存中
-     *
-     * @param string $key
-     * @param bool $refresh
-     * @param callable $fn
-     * @return mixed
-     */
-    protected function getCache($key, $refresh, callable $fn)
-    {
-        if ($refresh || $this->isRefresh()) {
-            $this->configCache->remove($key);
-        }
-
-        return $this->configCache->get($key, function () use ($fn) {
-            return $fn();
-        });
     }
 
     /**
@@ -432,41 +355,6 @@ class Plugin extends BaseService
     }
 
     /**
-     * Check if a plugin exists
-     *
-     * @param string $id
-     * @return bool
-     * @svc
-     */
-    protected function has($id)
-    {
-        return class_exists($this->getPluginClass($id));
-    }
-
-    /**
-     * Check if a plugin is installed
-     *
-     * @param string $id
-     * @return bool
-     * @svc
-     */
-    protected function isInstalled($id)
-    {
-        return $this->isBuildIn($id) || in_array($id, $this->getInstalledIds(), true);
-    }
-
-    /**
-     * Returns the plugin class by plugin ID
-     *
-     * @param string $id
-     * @return string
-     */
-    protected function getPluginClass($id)
-    {
-        return isset($this->pluginClasses[$id]) ? $this->pluginClasses[$id] : null;
-    }
-
-    /**
      * 获取所有已安装插件的事件
      *
      * @param bool $fresh 是否刷新缓存,获得最新配置
@@ -499,33 +387,6 @@ class Plugin extends BaseService
         }
 
         return $this->events;
-    }
-
-    /**
-     * Returns the event definitions by plugin ID
-     *
-     * @param string $id
-     * @return array
-     */
-    protected function getEventsById($id)
-    {
-        $events = [];
-        $methods = get_class_methods($this->getPluginClass($id));
-        foreach ($methods as $method) {
-            // The event naming is onName[Priority],eg onProductShowItem50
-            if ('on' != substr($method, 0, 2)) {
-                continue;
-            }
-            $event = lcfirst(substr($method, 2));
-            if (is_numeric(substr($event, -1))) {
-                preg_match('/(.+?)(\d+)$/', $event, $matches);
-                $events[] = ['name' => $matches[1], 'priority' => (int) $matches[2]];
-            } else {
-                $events[] = ['name' => $event, 'priority' => static::DEFAULT_PRIORITY];
-            }
-        }
-
-        return $events;
     }
 
     /**
@@ -593,6 +454,145 @@ class Plugin extends BaseService
     public function getBasePaths()
     {
         return $this->basePaths;
+    }
+
+    /**
+     * Get services defined in plugins
+     *
+     * @return array
+     */
+    protected function getWeiAliases()
+    {
+        return $this->classMap->generate($this->basePaths, '/Service/*.php', 'Service');
+    }
+
+    /**
+     * Get controllers defined in plugins
+     *
+     * @return array
+     * @todo v3 要求以 Controller 结尾
+     */
+    protected function getAppControllerMap()
+    {
+        return $this->classMap->generate($this->basePaths, '/Controller/{*,*/*}.php', 'Controller', true, true);
+    }
+
+    /**
+     * Get all plugin classes
+     *
+     * @param bool $refresh
+     * @return array
+     * @throws Exception
+     */
+    protected function getPluginClasses($refresh = false)
+    {
+        if ($refresh || !$this->pluginClasses) {
+            $this->pluginClasses = [];
+            $classes = $this->classMap->generate($this->basePaths, '/*Plugin.php', '', false, true);
+            foreach ($classes as $class) {
+                $parts = explode('\\', $class);
+                $name = end($parts);
+                // Remove "Plugin" suffix
+                $name = substr($name, 0, -6);
+                $name = $this->dash($name);
+                $this->pluginClasses[$name] = $class;
+            }
+        }
+
+        return $this->pluginClasses;
+    }
+
+    /**
+     * 判断请求是否要求刷新缓存
+     *
+     * @return bool
+     */
+    protected function isRefresh()
+    {
+        return $this->wei->isDebug()
+            && 'no-cache' == $this->request->getServer('HTTP_PRAGMA')
+            && false === strpos($this->request->getServer('HTTP_USER_AGENT'), 'wechatdevtools');
+    }
+
+    /**
+     * 执行指定的回调,并存储到缓存中
+     *
+     * @param string $key
+     * @param bool $refresh
+     * @param callable $fn
+     * @return mixed
+     */
+    protected function getCache($key, $refresh, callable $fn)
+    {
+        if ($refresh || $this->isRefresh()) {
+            $this->configCache->remove($key);
+        }
+
+        return $this->configCache->get($key, function () use ($fn) {
+            return $fn();
+        });
+    }
+
+    /**
+     * Check if a plugin exists
+     *
+     * @param string $id
+     * @return bool
+     * @svc
+     */
+    protected function has($id)
+    {
+        return class_exists($this->getPluginClass($id));
+    }
+
+    /**
+     * Check if a plugin is installed
+     *
+     * @param string $id
+     * @return bool
+     * @svc
+     */
+    protected function isInstalled($id)
+    {
+        return $this->isBuildIn($id) || in_array($id, $this->getInstalledIds(), true);
+    }
+
+    /**
+     * Returns the plugin class by plugin ID
+     *
+     * @param string $id
+     * @return string
+     */
+    protected function getPluginClass($id)
+    {
+        return isset($this->pluginClasses[$id]) ? $this->pluginClasses[$id] : null;
+    }
+
+    /**
+     * Returns the event definitions by plugin ID
+     *
+     * @param string $id
+     * @return array
+     */
+    protected function getEventsById($id)
+    {
+        $events = [];
+        $methods = get_class_methods($this->getPluginClass($id));
+        foreach ($methods as $method) {
+            // The event naming is onName[Priority],eg onProductShowItem50
+            if ('on' != substr($method, 0, 2)) {
+                continue;
+            }
+            $event = lcfirst(substr($method, 2));
+            if (is_numeric(substr($event, -1))) {
+                preg_match('/(.+?)(\d+)$/', $event, $matches);
+                $events[] = ['name' => $matches[1], 'priority' => (int) $matches[2]];
+            } else {
+                $events[] = ['name' => $event, 'priority' => static::DEFAULT_PRIORITY];
+            }
+        }
+
+        return $events;
     }
 
     /**

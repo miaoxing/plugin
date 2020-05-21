@@ -7,12 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class GModel extends BaseCommand
 {
-    protected function configure()
-    {
-        $this
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of model')
-            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
-    }
 
     /**
      * @return int
@@ -38,6 +32,12 @@ class GModel extends BaseCommand
         $this->runCommand('g:metadata', ['plugin-id' => $id]);
 
         return $this->suc('创建成功');
+    }
+    protected function configure()
+    {
+        $this
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of model')
+            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
     }
 
     protected function getFile(BasePlugin $plugin, $name)

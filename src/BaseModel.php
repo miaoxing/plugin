@@ -142,6 +142,40 @@ class BaseModel extends Record implements JsonSerializable
         $this->boot();
     }
 
+    /**
+     * @return BaseModel|BaseModel[]
+     */
+    public function __invoke()
+    {
+        if (!$this->table) {
+            $this->detectTable();
+        }
+        $this->db->addRecordClass($this->table, static::class);
+
+        return $this->db($this->table);
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \Exception
+     */
+    public function __get($name)
+    {
+        // Receive service that conflict with record method name
+        if (in_array($name, $this->requiredServices, true)) {
+            return parent::__get($name);
+        }
+
+        // Receive relation
+        if (method_exists($this, $name)) {
+            return $this->getRelationValue($name);
+        }
+
+        // Receive service
+        return parent::__get($name);
+    }
+
     public function boot()
     {
         $class = static::class;
@@ -176,19 +210,6 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return array_unique($traits);
-    }
-
-    /**
-     * @return BaseModel|BaseModel[]
-     */
-    public function __invoke()
-    {
-        if (!$this->table) {
-            $this->detectTable();
-        }
-        $this->db->addRecordClass($this->table, static::class);
-
-        return $this->db($this->table);
     }
 
     public function beforeCreate()
@@ -444,27 +465,6 @@ class BaseModel extends Record implements JsonSerializable
     }
 
     /**
-     * 将类名的最后一段作为数据表名称
-     */
-    protected function detectTable()
-    {
-        if (!$this->table) {
-            // 适合类名: Miaoxing\Plugin\Service\User
-            $parts = explode('\\', static::class);
-            $basename = end($parts);
-
-            // TODO V2
-            $endWiths = 'Model' === substr($basename, -5);
-            if ($this->tableV2 || $endWiths) {
-                $endWiths && $basename = substr($basename, 0, -5);
-                $this->table = $this->str->pluralize($this->snake($basename));
-            } else {
-                $this->table = lcfirst($basename);
-            }
-        }
-    }
-
-    /**
      * Returns the record data
      *
      * @return $this[]|array
@@ -499,19 +499,6 @@ class BaseModel extends Record implements JsonSerializable
         $fields = array_diff($this->getFields(), is_array($fields) ? $fields : [$fields]);
 
         return $this->select($fields);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function loadData($offset)
-    {
-        if (!$this->loaded && !$this->isNew) {
-            if ('user' !== $this->table) {
-                wei()->statsD->increment('record.loadData.' . $this->table);
-            }
-        }
-        parent::loadData($offset);
     }
 
     /**
@@ -563,30 +550,11 @@ class BaseModel extends Record implements JsonSerializable
         return $result;
     }
 
-    protected function getToArrayColumns(array $columns)
-    {
-        if ($this->hidden) {
-            $columns = array_diff($columns, $this->hidden);
-        }
-
-        return $columns;
-    }
-
     public function setHidden($hidden)
     {
         $this->hidden = (array) $hidden;
 
         return $this;
-    }
-
-    protected function virtualToArray()
-    {
-        $data = [];
-        foreach ($this->virtual as $column) {
-            $data[$this->filterOutputColumn($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
-        }
-
-        return $data;
     }
 
     /**
@@ -671,19 +639,6 @@ class BaseModel extends Record implements JsonSerializable
     }
 
     /**
-     * @param object|string $model
-     * @return BaseModel
-     */
-    protected function getRelatedModel($model)
-    {
-        if ($model instanceof self) {
-            return $model;
-        } else {
-            return $this->wei->{$model}();
-        }
-    }
-
-    /**
      * Eager load relations
      *
      * @param array|string $names
@@ -735,141 +690,6 @@ class BaseModel extends Record implements JsonSerializable
         }
 
         return $this;
-    }
-
-    protected function loadHasOne(Record $related = null, $relation, $name)
-    {
-        if ($related) {
-            $records = $related->findAll()->indexBy($relation['foreignKey']);
-        } else {
-            $records = [];
-        }
-        foreach ($this->data as $row) {
-            $row->{$name} = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
-        }
-
-        return $records;
-    }
-
-    protected function loadHasMany(self $related = null, $relation, $name)
-    {
-        $serviceName = $this->getClassServiceName($related);
-        $records = $related ? $related->fetchAll() : [];
-        foreach ($this->data as $row) {
-            $rowRelation = $row->{$name} = $this->wei->{$serviceName}()->beColl();
-            foreach ($records as $record) {
-                if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
-                    // Remove external data
-                    if (!$related->hasColumn($relation['foreignKey'])) {
-                        unset($record[$relation['foreignKey']]);
-                    }
-                    $rowRelation[] = $this->wei->{$serviceName}()->setData($record);
-                }
-            }
-        }
-
-        return $records;
-    }
-
-    protected function loadBelongsToMany(Record $related = null, $relation, $name)
-    {
-        if ($related) {
-            $related->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
-        }
-
-        return $this->loadHasMany($related, $relation, $name);
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     * @throws \Exception
-     */
-    public function __get($name)
-    {
-        // Receive service that conflict with record method name
-        if (in_array($name, $this->requiredServices, true)) {
-            return parent::__get($name);
-        }
-
-        // Receive relation
-        if (method_exists($this, $name)) {
-            return $this->getRelationValue($name);
-        }
-
-        // Receive service
-        return parent::__get($name);
-    }
-
-    /**
-     * Convert a input to snake case
-     *
-     * @param string $input
-     * @return string
-     */
-    protected function snake($input)
-    {
-        if (isset(static::$snakeCache[$input])) {
-            return static::$snakeCache[$input];
-        }
-
-        $value = $input;
-        if (!ctype_lower($input)) {
-            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
-        }
-
-        return static::$snakeCache[$input] = $value;
-    }
-
-    /**
-     * Convert a input to camel case
-     *
-     * @param string $input
-     * @return string
-     */
-    protected function camel($input)
-    {
-        if (isset(static::$camelCache[$input])) {
-            return static::$camelCache[$input];
-        }
-
-        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
-    }
-
-    protected function getClassServiceName($object = null)
-    {
-        !$object && $object = $this;
-        $parts = explode('\\', get_class($object));
-        $name = lcfirst(end($parts));
-
-        // TODO deprecated
-        if ('Record' == substr($name, -6)) {
-            $name = substr($name, 0, -6);
-        }
-
-        if ('Model' == substr($name, -5)) {
-            $name = substr($name, 0, -5);
-        }
-
-        return $name;
-    }
-
-    protected function getForeignKey()
-    {
-        return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
-    }
-
-    protected function getJunctionTable(self $related)
-    {
-        $tables = [$this->getTable(), $related->getTable()];
-        sort($tables);
-
-        return implode('_', $tables);
-    }
-
-    protected function getRelatedValue($field)
-    {
-        return $this->relatedValue ?: (array_key_exists($field, $this->data) ? $this->get($field) : null);
     }
 
     /**
@@ -946,16 +766,6 @@ class BaseModel extends Record implements JsonSerializable
         return parent::isFillable($this->filterInputColumn($field));
     }
 
-    protected function filterInputColumn($column)
-    {
-        return $this->trigger('inputColumn', $column);
-    }
-
-    protected function filterOutputColumn($column)
-    {
-        return $this->trigger('outputColumn', $column);
-    }
-
     public function trigger($event, $data = [])
     {
         $result = null;
@@ -1000,25 +810,6 @@ class BaseModel extends Record implements JsonSerializable
         parent::triggerCallback($name);
     }
 
-    protected function setChanged($name)
-    {
-        $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
-        $this->isChanged = true;
-    }
-
-    protected function resetChanged($name)
-    {
-        $name = $this->filterInputColumn($name);
-
-        if (array_key_exists($name, $this->changedData)) {
-            unset($this->changedData[$name]);
-        }
-        if (!$this->changedData) {
-            $this->isChanged = false;
-        }
-        return $this;
-    }
-
     /**
      * Check if the record's data or specified field is changed
      *
@@ -1054,31 +845,6 @@ class BaseModel extends Record implements JsonSerializable
         return $this;
     }
 
-    protected function &getRelationValue($name)
-    {
-        /** @var BaseModel $related */
-        $related = $this->{$name}();
-        $serviceName = $this->getClassServiceName($related);
-        $relation = $this->relations[$serviceName];
-        $localValue = $this[$relation['localKey']];
-
-        if ($related->isColl()) {
-            if ($localValue) {
-                $this->{$name} = $related->findAll();
-            } else {
-                $this->{$name} = $related;
-            }
-        } else {
-            if ($localValue) {
-                $this->{$name} = $related->find() ?: null;
-            } else {
-                $this->{$name} = null;
-            }
-        }
-
-        return $this->{$name};
-    }
-
     /**
      * Returns the success result with model data
      *
@@ -1097,17 +863,6 @@ class BaseModel extends Record implements JsonSerializable
         } else {
             return $this->suc($merge + ['data' => $this]);
         }
-    }
-
-    /**
-     * Check if collection key
-     *
-     * @param string $key
-     * @return bool
-     */
-    protected function isCollKey($key)
-    {
-        return null === $key || is_numeric($key);
     }
 
     /**
@@ -1225,5 +980,250 @@ class BaseModel extends Record implements JsonSerializable
             return $this->andWhere($conditions, $params, $types);
         }
         return $this;
+    }
+
+    /**
+     * 将类名的最后一段作为数据表名称
+     */
+    protected function detectTable()
+    {
+        if (!$this->table) {
+            // 适合类名: Miaoxing\Plugin\Service\User
+            $parts = explode('\\', static::class);
+            $basename = end($parts);
+
+            // TODO V2
+            $endWiths = 'Model' === substr($basename, -5);
+            if ($this->tableV2 || $endWiths) {
+                $endWiths && $basename = substr($basename, 0, -5);
+                $this->table = $this->str->pluralize($this->snake($basename));
+            } else {
+                $this->table = lcfirst($basename);
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function loadData($offset)
+    {
+        if (!$this->loaded && !$this->isNew) {
+            if ('user' !== $this->table) {
+                wei()->statsD->increment('record.loadData.' . $this->table);
+            }
+        }
+        parent::loadData($offset);
+    }
+
+    protected function getToArrayColumns(array $columns)
+    {
+        if ($this->hidden) {
+            $columns = array_diff($columns, $this->hidden);
+        }
+
+        return $columns;
+    }
+
+    protected function virtualToArray()
+    {
+        $data = [];
+        foreach ($this->virtual as $column) {
+            $data[$this->filterOutputColumn($column)] = $this->{'get' . $this->camel($column) . 'Attribute'}();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param object|string $model
+     * @return BaseModel
+     */
+    protected function getRelatedModel($model)
+    {
+        if ($model instanceof self) {
+            return $model;
+        } else {
+            return $this->wei->{$model}();
+        }
+    }
+
+    protected function loadHasOne(Record $related = null, $relation, $name)
+    {
+        if ($related) {
+            $records = $related->findAll()->indexBy($relation['foreignKey']);
+        } else {
+            $records = [];
+        }
+        foreach ($this->data as $row) {
+            $row->{$name} = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
+        }
+
+        return $records;
+    }
+
+    protected function loadHasMany(self $related = null, $relation, $name)
+    {
+        $serviceName = $this->getClassServiceName($related);
+        $records = $related ? $related->fetchAll() : [];
+        foreach ($this->data as $row) {
+            $rowRelation = $row->{$name} = $this->wei->{$serviceName}()->beColl();
+            foreach ($records as $record) {
+                if ($record[$relation['foreignKey']] == $row[$relation['localKey']]) {
+                    // Remove external data
+                    if (!$related->hasColumn($relation['foreignKey'])) {
+                        unset($record[$relation['foreignKey']]);
+                    }
+                    $rowRelation[] = $this->wei->{$serviceName}()->setData($record);
+                }
+            }
+        }
+
+        return $records;
+    }
+
+    protected function loadBelongsToMany(Record $related = null, $relation, $name)
+    {
+        if ($related) {
+            $related->addSelect($relation['junctionTable'] . '.' . $relation['foreignKey']);
+        }
+
+        return $this->loadHasMany($related, $relation, $name);
+    }
+
+    /**
+     * Convert a input to snake case
+     *
+     * @param string $input
+     * @return string
+     */
+    protected function snake($input)
+    {
+        if (isset(static::$snakeCache[$input])) {
+            return static::$snakeCache[$input];
+        }
+
+        $value = $input;
+        if (!ctype_lower($input)) {
+            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+        }
+
+        return static::$snakeCache[$input] = $value;
+    }
+
+    /**
+     * Convert a input to camel case
+     *
+     * @param string $input
+     * @return string
+     */
+    protected function camel($input)
+    {
+        if (isset(static::$camelCache[$input])) {
+            return static::$camelCache[$input];
+        }
+
+        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
+    }
+
+    protected function getClassServiceName($object = null)
+    {
+        !$object && $object = $this;
+        $parts = explode('\\', get_class($object));
+        $name = lcfirst(end($parts));
+
+        // TODO deprecated
+        if ('Record' == substr($name, -6)) {
+            $name = substr($name, 0, -6);
+        }
+
+        if ('Model' == substr($name, -5)) {
+            $name = substr($name, 0, -5);
+        }
+
+        return $name;
+    }
+
+    protected function getForeignKey()
+    {
+        return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
+    }
+
+    protected function getJunctionTable(self $related)
+    {
+        $tables = [$this->getTable(), $related->getTable()];
+        sort($tables);
+
+        return implode('_', $tables);
+    }
+
+    protected function getRelatedValue($field)
+    {
+        return $this->relatedValue ?: (array_key_exists($field, $this->data) ? $this->get($field) : null);
+    }
+
+    protected function filterInputColumn($column)
+    {
+        return $this->trigger('inputColumn', $column);
+    }
+
+    protected function filterOutputColumn($column)
+    {
+        return $this->trigger('outputColumn', $column);
+    }
+
+    protected function setChanged($name)
+    {
+        $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
+        $this->isChanged = true;
+    }
+
+    protected function resetChanged($name)
+    {
+        $name = $this->filterInputColumn($name);
+
+        if (array_key_exists($name, $this->changedData)) {
+            unset($this->changedData[$name]);
+        }
+        if (!$this->changedData) {
+            $this->isChanged = false;
+        }
+        return $this;
+    }
+
+    protected function &getRelationValue($name)
+    {
+        /** @var BaseModel $related */
+        $related = $this->{$name}();
+        $serviceName = $this->getClassServiceName($related);
+        $relation = $this->relations[$serviceName];
+        $localValue = $this[$relation['localKey']];
+
+        if ($related->isColl()) {
+            if ($localValue) {
+                $this->{$name} = $related->findAll();
+            } else {
+                $this->{$name} = $related;
+            }
+        } else {
+            if ($localValue) {
+                $this->{$name} = $related->find() ?: null;
+            } else {
+                $this->{$name} = null;
+            }
+        }
+
+        return $this->{$name};
+    }
+
+    /**
+     * Check if collection key
+     *
+     * @param string $key
+     * @return bool
+     */
+    protected function isCollKey($key)
+    {
+        return null === $key || is_numeric($key);
     }
 }

@@ -6,12 +6,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class PluginInstall extends BaseCommand
 {
-    protected function configure()
-    {
-        $this->setDescription('Install the plugin')
-            ->addArgument('id', InputArgument::REQUIRED, 'The id of the plugin')
-            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
-    }
 
     /**
      * Execute the console command.
@@ -23,5 +17,11 @@ class PluginInstall extends BaseCommand
         wei()->app->setNamespace($this->getArgument('app'));
         $ret = wei()->plugin->install($this->getArgument('id'));
         $this->ret($ret);
+    }
+    protected function configure()
+    {
+        $this->setDescription('Install the plugin')
+            ->addArgument('id', InputArgument::REQUIRED, 'The id of the plugin')
+            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
     }
 }

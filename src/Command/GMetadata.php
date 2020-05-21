@@ -13,11 +13,6 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class GMetadata extends BaseCommand
 {
-    protected function configure()
-    {
-        $this
-            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
-    }
 
     public function handle()
     {
@@ -44,6 +39,30 @@ class GMetadata extends BaseCommand
         }
 
         return $this->suc('创建成功');
+    }
+
+    /**
+     * @param $class
+     * @param bool $autoload
+     * @return array
+     * @see http://php.net/manual/en/function.class-uses.php#110752
+     */
+    public function classUsesDeep($class, $autoload = true)
+    {
+        $traits = [];
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+
+        return array_unique($traits);
+    }
+    protected function configure()
+    {
+        $this
+            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
     }
 
     protected function createClass($model, $plugin, $camelCase)
@@ -225,24 +244,5 @@ class GMetadata extends BaseCommand
         }
 
         return false;
-    }
-
-    /**
-     * @param $class
-     * @param bool $autoload
-     * @return array
-     * @see http://php.net/manual/en/function.class-uses.php#110752
-     */
-    public function classUsesDeep($class, $autoload = true)
-    {
-        $traits = [];
-        do {
-            $traits = array_merge(class_uses($class, $autoload), $traits);
-        } while ($class = get_parent_class($class));
-        foreach ($traits as $trait => $same) {
-            $traits = array_merge(class_uses($trait, $autoload), $traits);
-        }
-
-        return array_unique($traits);
     }
 }

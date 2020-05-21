@@ -162,17 +162,6 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * Return the record table name
-     *
-     * @return string
-     * @svc
-     */
-    protected function getTable()
-    {
-        return $this->table;
-    }
-
-    /**
      * Set the record table name
      *
      * @param string $table
@@ -206,20 +195,6 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * Returns the name of fields of current table
-     *
-     * @return array
-     * @svc
-     */
-    protected function getFields()
-    {
-        if (empty($this->fields)) {
-            $this->fields = $this->db->getTableFields($this->getTable());
-        }
-        return $this->fields;
-    }
-
-    /**
      * Get the state of this query builder instance
      *
      * @return int
@@ -249,6 +224,398 @@ class QueryBuilder extends BaseService
     }
 
     /**
+     * Executes the generated query and returns a column value of the first row
+     *
+     * @param mixed $conditions
+     * @param mixed|null $colum
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return array|null
+     */
+    public function fetchColumn($colum = null, $operator = null, $value = null)
+    {
+        $data = $this->fetch(...func_get_args());
+        return $data ? current($data) : null;
+    }
+
+    /**
+     * Executes a sub query to receive the rows number
+     *
+     * @param mixed $conditions
+     * @return int
+     * @todo 改为自动识别
+     */
+    public function countBySubQuery()
+    {
+        $this->where(...func_get_args());
+        return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
+    }
+
+    public function max($column)
+    {
+        return $this->aggregate('MAX', $column);
+    }
+
+    public function aggregate($function, $columns = ['*'])
+    {
+        $this->add('aggregate', compact('function', 'columns'));
+        return $this->fetchColumn(null);
+    }
+
+    /**
+     * @param bool $distinct
+     * @return $this
+     */
+    public function distinct(bool $distinct = true)
+    {
+        return $this->add('distinct', $distinct);
+    }
+
+    public function raw($expression)
+    {
+        return (object) $expression;
+    }
+
+    /**
+     * Adds one or more restrictions to the query results, forming a logical
+     * disjunction with any previously specified restrictions.
+     *
+     * @param string $conditions The WHERE conditions
+     * @param array $params The condition parameters
+     * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orWhere($column, $operator = null, $value = null)
+    {
+        if (is_array($column)) {
+            foreach ($column as $arg) {
+                $this->orWhere(...$arg);
+            }
+            return $this;
+        }
+
+        if (2 === func_num_args()) {
+            $value = $operator;
+            $operator = '=';
+        }
+
+        return $this->addWhere($column, $operator, $value, 'OR');
+    }
+
+    public function orWhereRaw($expression, $params = null)
+    {
+        return $this->orWhere($this->raw($expression), null, $params);
+    }
+
+    public function orWhereNotBetween($column, array $params)
+    {
+        return $this->addWhere($column, 'NOT BETWEEN', $params, 'OR');
+    }
+
+    public function orWhereIn($column, array $params)
+    {
+        return $this->addWhere($column, 'IN', $params, 'OR');
+    }
+
+    public function orWhereNotIn($column, array $params)
+    {
+        return $this->addWhere($column, 'NOT IN', $params, 'OR');
+    }
+
+    public function orWhereNull($column)
+    {
+        return $this->addWhere($column, 'NULL', null, 'OR');
+    }
+
+    public function orWhereNotNull($column)
+    {
+        return $this->addWhere($column, 'NOT NULL', null, 'OR');
+    }
+
+    public function orWhereDate($column, $opOrValue, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'DATE');
+    }
+
+    public function orWhereMonth($column, $opOrValue, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'MONTH');
+    }
+
+    public function orWhereDay($column, $opOrValue, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'DAY');
+    }
+
+    public function orWhereYear($column, $opOrValue, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'YEAR');
+    }
+
+    public function orWhereTime($column, $opOrValue, $value = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'TIME');
+    }
+
+    public function orWhereColumn($column, $opOrColumn2, $column2 = null)
+    {
+        return $this->addWhereArgs(func_get_args(), 'OR', 'COLUMN');
+    }
+
+    public function orWhereContains($column, $value)
+    {
+        return $this->whereContains($column, $value, 'OR');
+    }
+
+    public function orWhereNotContains($column, $value)
+    {
+        return $this->whereNotContains($column, $value, 'OR');
+    }
+
+    /**
+     * @param $expression
+     * @param array $params
+     * @return $this
+     * @svc
+     */
+    public function havingRaw($expression, $params = [])
+    {
+        return $this->having($this->raw($expression), null, $params);
+    }
+
+    /**
+     * Adds a restriction over the groups of the query, forming a logical
+     * disjunction with any existing having restrictions.
+     *
+     * @param string $conditions The HAVING conditions to add
+     * @param array $params The condition parameters
+     * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orHaving($column, $operator, $value = null)
+    {
+        if (2 === func_num_args()) {
+            $value = $operator;
+            $operator = '=';
+        }
+        return $this->having($column, $operator, $value, 'OR');
+    }
+
+    /**
+     * Returns a SQL query part by its name
+     *
+     * @param string $name The name of SQL part
+     * @return mixed
+     */
+    public function getSqlPart($name)
+    {
+        return isset($this->sqlParts[$name]) ? $this->sqlParts[$name] : false;
+    }
+
+    /**
+     * Get all SQL parts
+     *
+     * @return array $sqlParts
+     */
+    public function getSqlParts()
+    {
+        return $this->sqlParts;
+    }
+
+    /**
+     * Reset all SQL parts
+     *
+     * @param array $name
+     * @return $this
+     */
+    public function resetSqlParts($name = null)
+    {
+        if (null === $name) {
+            $name = array_keys($this->sqlParts);
+        }
+        foreach ($name as $queryPartName) {
+            $this->resetSqlPart($queryPartName);
+        }
+        return $this;
+    }
+
+    /**
+     * Sets a query parameter for the query being constructed
+     *
+     * @param int|string $key The parameter position or name
+     * @param mixed $value The parameter value
+     * @param string|null $type PDO::PARAM_*
+     * @return $this
+     * @todo refactor 暂不支持
+     */
+    public function setParameter($key, $value, $type = null)
+    {
+        if (null !== $type) {
+            $this->paramTypes[$key] = $type;
+        }
+
+        $this->params[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * Gets a (previously set) query parameter of the query being constructed
+     *
+     * @param mixed $key The key (index or name) of the bound parameter
+     * @param string $type
+     * @return mixed The value of the bound parameter
+     */
+    public function getParameter($key, $type = 'where')
+    {
+        return $this->getBindParams()[$key] ?? null;
+    }
+
+    /**
+     * Sets a collection of query parameters for the query being constructed
+     *
+     * @param array $params The query parameters to set
+     * @param array $types The query parameters types to set
+     * @return $this
+     */
+    public function setParameters(array $params, array $types = [])
+    {
+        $this->paramTypes = $types;
+        $this->params = $params;
+        return $this;
+    }
+
+    /**
+     * Gets all defined query parameters for the query being constructed.
+     *
+     * @return array the currently defined query parameters
+     */
+    public function getParameters()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param array|string $parameter
+     * @param string $type
+     * @return $this
+     */
+    public function addParameter($parameter, $type = 'where')
+    {
+        $this->params[$type][] = (array) $parameter;
+        return $this;
+    }
+
+    public function removeParameters($type = null)
+    {
+        if ($type) {
+            $this->params[$type] = [];
+        } else {
+            foreach ($this->params as $paramType => $params) {
+                $this->params[$paramType] = [];
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Get the complete SQL string formed by the current specifications of this QueryBuilder
+     *
+     * @return string The sql query string
+     */
+    public function getSql()
+    {
+        if (null !== $this->sql && self::STATE_CLEAN === $this->state) {
+            return $this->sql;
+        }
+
+        if (!$this->sqlParts['from']) {
+            $this->sqlParts['from'] = $this->getTable();
+        }
+
+        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts, $this->inputIdentifierConverter);
+
+        $this->state = self::STATE_CLEAN;
+
+        return $this->sql;
+    }
+
+    public function getRawSql()
+    {
+        return $this->getDriver()->getRawSql(
+            $this->type,
+            $this->sqlParts,
+            $this->inputIdentifierConverter,
+            $this->getBindParams()
+        );
+    }
+
+    /**
+     * Returns flatten array for parameter binding.
+     *
+     * @return array
+     */
+    public function getBindParams()
+    {
+        $params = [];
+        foreach ($this->params as $value) {
+            $params[] = array_merge([], ...$value);
+        }
+        return array_merge([], ...$params);
+    }
+
+    /**
+     * Reset all SQL parts and parameters
+     *
+     * @return $this
+     */
+    public function resetQuery()
+    {
+        $this->params = [];
+        $this->paramTypes = [];
+
+        return $this->resetSqlParts();
+    }
+
+    /**
+     * @return callable
+     */
+    public function getInputIdentifierConverter()
+    {
+        return $this->inputIdentifierConverter;
+    }
+
+    /**
+     * Return the record table name
+     *
+     * @return string
+     * @svc
+     */
+    protected function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * Returns the name of fields of current table
+     *
+     * @return array
+     * @svc
+     */
+    protected function getFields()
+    {
+        if (empty($this->fields)) {
+            $this->fields = $this->db->getTableFields($this->getTable());
+        }
+        return $this->fields;
+    }
+
+    /**
      * @return mixed
      */
     protected function fetchFromCache()
@@ -275,21 +642,6 @@ class QueryBuilder extends BaseService
         $this->limit(1);
         $data = $this->execute();
         return $data ? $data[0] : null;
-    }
-
-    /**
-     * Executes the generated query and returns a column value of the first row
-     *
-     * @param mixed $conditions
-     * @param mixed|null $colum
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array|null
-     */
-    public function fetchColumn($colum = null, $operator = null, $value = null)
-    {
-        $data = $this->fetch(...func_get_args());
-        return $data ? current($data) : null;
     }
 
     /**
@@ -386,30 +738,6 @@ class QueryBuilder extends BaseService
     protected function cnt($column = '*')
     {
         return (int) $this->aggregate('COUNT', $column);
-    }
-
-    /**
-     * Executes a sub query to receive the rows number
-     *
-     * @param mixed $conditions
-     * @return int
-     * @todo 改为自动识别
-     */
-    public function countBySubQuery()
-    {
-        $this->where(...func_get_args());
-        return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
-    }
-
-    public function max($column)
-    {
-        return $this->aggregate('MAX', $column);
-    }
-
-    public function aggregate($function, $columns = ['*'])
-    {
-        $this->add('aggregate', compact('function', 'columns'));
-        return $this->fetchColumn(null);
     }
 
     /**
@@ -526,15 +854,6 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param bool $distinct
-     * @return $this
-     */
-    public function distinct(bool $distinct = true)
-    {
-        return $this->add('distinct', $distinct);
-    }
-
-    /**
      * @param $columns
      * @return $this
      * @svc
@@ -570,11 +889,6 @@ class QueryBuilder extends BaseService
         $columns = array_diff($this->getFields(), is_array($columns) ? $columns : [$columns]);
 
         return $this->select($columns);
-    }
-
-    public function raw($expression)
-    {
-        return (object) $expression;
     }
 
     /**
@@ -723,40 +1037,6 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * Adds one or more restrictions to the query results, forming a logical
-     * disjunction with any previously specified restrictions.
-     *
-     * @param string $conditions The WHERE conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     */
-    public function orWhere($column, $operator = null, $value = null)
-    {
-        if (is_array($column)) {
-            foreach ($column as $arg) {
-                $this->orWhere(...$arg);
-            }
-            return $this;
-        }
-
-        if (2 === func_num_args()) {
-            $value = $operator;
-            $operator = '=';
-        }
-
-        return $this->addWhere($column, $operator, $value, 'OR');
-    }
-
-    public function orWhereRaw($expression, $params = null)
-    {
-        return $this->orWhere($this->raw($expression), null, $params);
-    }
-
-    /**
      * @param $column
      * @param array $params
      * @return $this
@@ -783,11 +1063,6 @@ class QueryBuilder extends BaseService
         return $this->addWhere($column, 'NOT BETWEEN', $params);
     }
 
-    public function orWhereNotBetween($column, array $params)
-    {
-        return $this->addWhere($column, 'NOT BETWEEN', $params, 'OR');
-    }
-
     /**
      * @param $column
      * @param array $params
@@ -797,11 +1072,6 @@ class QueryBuilder extends BaseService
     protected function whereIn($column, array $params)
     {
         return $this->addWhere($column, 'IN', $params);
-    }
-
-    public function orWhereIn($column, array $params)
-    {
-        return $this->addWhere($column, 'IN', $params, 'OR');
     }
 
     /**
@@ -815,11 +1085,6 @@ class QueryBuilder extends BaseService
         return $this->addWhere($column, 'NOT IN', $params);
     }
 
-    public function orWhereNotIn($column, array $params)
-    {
-        return $this->addWhere($column, 'NOT IN', $params, 'OR');
-    }
-
     /**
      * @param $column
      * @return $this
@@ -830,11 +1095,6 @@ class QueryBuilder extends BaseService
         return $this->addWhere($column, 'NULL');
     }
 
-    public function orWhereNull($column)
-    {
-        return $this->addWhere($column, 'NULL', null, 'OR');
-    }
-
     /**
      * @param $column
      * @return $this
@@ -843,11 +1103,6 @@ class QueryBuilder extends BaseService
     protected function whereNotNULL($column)
     {
         return $this->addWhere($column, 'NOT NULL');
-    }
-
-    public function orWhereNotNull($column)
-    {
-        return $this->addWhere($column, 'NOT NULL', null, 'OR');
     }
 
     /**
@@ -862,11 +1117,6 @@ class QueryBuilder extends BaseService
         return $this->addWhereArgs(func_get_args(), 'AND', 'DATE');
     }
 
-    public function orWhereDate($column, $opOrValue, $value = null)
-    {
-        return $this->addWhereArgs(func_get_args(), 'OR', 'DATE');
-    }
-
     /**
      * @param $column
      * @param $opOrValue
@@ -877,11 +1127,6 @@ class QueryBuilder extends BaseService
     protected function whereMonth($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'MONTH');
-    }
-
-    public function orWhereMonth($column, $opOrValue, $value = null)
-    {
-        return $this->addWhereArgs(func_get_args(), 'OR', 'MONTH');
     }
 
     /**
@@ -896,11 +1141,6 @@ class QueryBuilder extends BaseService
         return $this->addWhereArgs(func_get_args(), 'AND', 'DAY');
     }
 
-    public function orWhereDay($column, $opOrValue, $value = null)
-    {
-        return $this->addWhereArgs(func_get_args(), 'OR', 'DAY');
-    }
-
     /**
      * @param $column
      * @param $opOrValue
@@ -911,11 +1151,6 @@ class QueryBuilder extends BaseService
     protected function whereYear($column, $opOrValue, $value = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'YEAR');
-    }
-
-    public function orWhereYear($column, $opOrValue, $value = null)
-    {
-        return $this->addWhereArgs(func_get_args(), 'OR', 'YEAR');
     }
 
     /**
@@ -930,11 +1165,6 @@ class QueryBuilder extends BaseService
         return $this->addWhereArgs(func_get_args(), 'AND', 'TIME');
     }
 
-    public function orWhereTime($column, $opOrValue, $value = null)
-    {
-        return $this->addWhereArgs(func_get_args(), 'OR', 'TIME');
-    }
-
     /**
      * @param $column
      * @param $opOrColumn2
@@ -945,11 +1175,6 @@ class QueryBuilder extends BaseService
     protected function whereColumn($column, $opOrColumn2, $column2 = null)
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'COLUMN');
-    }
-
-    public function orWhereColumn($column, $opOrColumn2, $column2 = null)
-    {
-        return $this->addWhereArgs(func_get_args(), 'OR', 'COLUMN');
     }
 
     /**
@@ -966,11 +1191,6 @@ class QueryBuilder extends BaseService
         return $this->addWhere($column, 'LIKE', '%' . $value . '%', $condition);
     }
 
-    public function orWhereContains($column, $value)
-    {
-        return $this->whereContains($column, $value, 'OR');
-    }
-
     /**
      * @param $column
      * @param $value
@@ -981,11 +1201,6 @@ class QueryBuilder extends BaseService
     protected function whereNotContains($column, $value, string $condition = 'OR')
     {
         return $this->addWhere($column, 'NOT LIKE', '%' . $value . '%', $condition);
-    }
-
-    public function orWhereNotContains($column, $value)
-    {
-        return $this->whereNotContains($column, $value, 'OR');
     }
 
     /**
@@ -1032,38 +1247,6 @@ class QueryBuilder extends BaseService
         $this->sqlParts['having'][] = compact('column', 'operator', 'value', 'condition');
 
         return $this;
-    }
-
-    /**
-     * @param $expression
-     * @param array $params
-     * @return $this
-     * @svc
-     */
-    public function havingRaw($expression, $params = [])
-    {
-        return $this->having($this->raw($expression), null, $params);
-    }
-
-    /**
-     * Adds a restriction over the groups of the query, forming a logical
-     * disjunction with any existing having restrictions.
-     *
-     * @param string $conditions The HAVING conditions to add
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
-     * @param mixed $column
-     * @param mixed $operator
-     * @param mixed|null $value
-     * @return $this
-     */
-    public function orHaving($column, $operator, $value = null)
-    {
-        if (2 === func_num_args()) {
-            $value = $operator;
-            $operator = '=';
-        }
-        return $this->having($column, $operator, $value, 'OR');
     }
 
     /**
@@ -1141,44 +1324,6 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * Returns a SQL query part by its name
-     *
-     * @param string $name The name of SQL part
-     * @return mixed
-     */
-    public function getSqlPart($name)
-    {
-        return isset($this->sqlParts[$name]) ? $this->sqlParts[$name] : false;
-    }
-
-    /**
-     * Get all SQL parts
-     *
-     * @return array $sqlParts
-     */
-    public function getSqlParts()
-    {
-        return $this->sqlParts;
-    }
-
-    /**
-     * Reset all SQL parts
-     *
-     * @param array $name
-     * @return $this
-     */
-    public function resetSqlParts($name = null)
-    {
-        if (null === $name) {
-            $name = array_keys($this->sqlParts);
-        }
-        foreach ($name as $queryPartName) {
-            $this->resetSqlPart($queryPartName);
-        }
-        return $this;
-    }
-
-    /**
      * Reset single SQL part
      *
      * @param string $name
@@ -1190,130 +1335,6 @@ class QueryBuilder extends BaseService
         $this->sqlParts[$name] = is_array($this->sqlParts[$name]) ? [] : null;
         $this->state = self::STATE_DIRTY;
         return $this;
-    }
-
-    /**
-     * Sets a query parameter for the query being constructed
-     *
-     * @param int|string $key The parameter position or name
-     * @param mixed $value The parameter value
-     * @param string|null $type PDO::PARAM_*
-     * @return $this
-     * @todo refactor 暂不支持
-     */
-    public function setParameter($key, $value, $type = null)
-    {
-        if (null !== $type) {
-            $this->paramTypes[$key] = $type;
-        }
-
-        $this->params[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * Gets a (previously set) query parameter of the query being constructed
-     *
-     * @param mixed $key The key (index or name) of the bound parameter
-     * @param string $type
-     * @return mixed The value of the bound parameter
-     */
-    public function getParameter($key, $type = 'where')
-    {
-        return $this->getBindParams()[$key] ?? null;
-    }
-
-    /**
-     * Sets a collection of query parameters for the query being constructed
-     *
-     * @param array $params The query parameters to set
-     * @param array $types The query parameters types to set
-     * @return $this
-     */
-    public function setParameters(array $params, array $types = [])
-    {
-        $this->paramTypes = $types;
-        $this->params = $params;
-        return $this;
-    }
-
-    /**
-     * Gets all defined query parameters for the query being constructed.
-     *
-     * @return array the currently defined query parameters
-     */
-    public function getParameters()
-    {
-        return $this->params;
-    }
-
-    /**
-     * @param array|string $parameter
-     * @param string $type
-     * @return $this
-     */
-    public function addParameter($parameter, $type = 'where')
-    {
-        $this->params[$type][] = (array) $parameter;
-        return $this;
-    }
-
-    public function removeParameters($type = null)
-    {
-        if ($type) {
-            $this->params[$type] = [];
-        } else {
-            foreach ($this->params as $paramType => $params) {
-                $this->params[$paramType] = [];
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Get the complete SQL string formed by the current specifications of this QueryBuilder
-     *
-     * @return string The sql query string
-     */
-    public function getSql()
-    {
-        if (null !== $this->sql && self::STATE_CLEAN === $this->state) {
-            return $this->sql;
-        }
-
-        if (!$this->sqlParts['from']) {
-            $this->sqlParts['from'] = $this->getTable();
-        }
-
-        $this->sql = $this->getDriver()->getSql($this->type, $this->sqlParts, $this->inputIdentifierConverter);
-
-        $this->state = self::STATE_CLEAN;
-
-        return $this->sql;
-    }
-
-    public function getRawSql()
-    {
-        return $this->getDriver()->getRawSql(
-            $this->type,
-            $this->sqlParts,
-            $this->inputIdentifierConverter,
-            $this->getBindParams()
-        );
-    }
-
-    /**
-     * Returns flatten array for parameter binding.
-     *
-     * @return array
-     */
-    public function getBindParams()
-    {
-        $params = [];
-        foreach ($this->params as $value) {
-            $params[] = array_merge([], ...$value);
-        }
-        return array_merge([], ...$params);
     }
 
     /**
@@ -1459,19 +1480,6 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * Reset all SQL parts and parameters
-     *
-     * @return $this
-     */
-    public function resetQuery()
-    {
-        $this->params = [];
-        $this->paramTypes = [];
-
-        return $this->resetSqlParts();
-    }
-
-    /**
      * @param callable $converter
      * @return $this
      * @svc
@@ -1480,14 +1488,6 @@ class QueryBuilder extends BaseService
     {
         $this->inputIdentifierConverter = $converter;
         return $this;
-    }
-
-    /**
-     * @return callable
-     */
-    public function getInputIdentifierConverter()
-    {
-        return $this->inputIdentifierConverter;
     }
 
     /**

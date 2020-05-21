@@ -106,6 +106,37 @@ class User extends UserModel
     ];
 
     /**
+     * NOTE: 暂时只有__set有效
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
+    public function __set($name, $value = null)
+    {
+        // __set start
+        // Required services first
+        if (in_array($name, $this->requiredServices, true)) {
+            return $this->{$name} = $value;
+        }
+
+        // NOTE: 设置前需主动加载，否则状态变为loaded，不会再去加载
+        $this->loadDbUser();
+
+        $result = $this->set($name, $value, false);
+        if ($result) {
+            return;
+        }
+
+        if ($this->wei->has($name)) {
+            return $this->{$name} = $value;
+        }
+
+        throw new \InvalidArgumentException('Invalid property: ' . $name);
+        // __set end
+    }
+
+    /**
      * 获取存储在session中的用户数据
      *
      * @return array|null
@@ -153,6 +184,26 @@ class User extends UserModel
 
             return parent::get($name, $exists, $throwException);
         }
+    }
+
+    /**
+     * @param string $a
+     * @return string
+     * @throws \Exception
+     */
+    public function te(string $a)
+    {
+        if ($a) {
+            throw new \Exception('x');
+        }
+
+        return 'b';
+    }
+
+    public function &__get($name)
+    {
+        $result = $this->getConfig($name);
+        return $result;
     }
 
     /**
@@ -360,56 +411,5 @@ class User extends UserModel
         }
 
         return $this;
-    }
-
-    /**
-     * @param string $a
-     * @return string
-     * @throws \Exception
-     */
-    public function te(string $a)
-    {
-        if ($a) {
-            throw new \Exception('x');
-        }
-
-        return 'b';
-    }
-
-    /**
-     * NOTE: 暂时只有__set有效
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    public function __set($name, $value = null)
-    {
-        // __set start
-        // Required services first
-        if (in_array($name, $this->requiredServices, true)) {
-            return $this->{$name} = $value;
-        }
-
-        // NOTE: 设置前需主动加载，否则状态变为loaded，不会再去加载
-        $this->loadDbUser();
-
-        $result = $this->set($name, $value, false);
-        if ($result) {
-            return;
-        }
-
-        if ($this->wei->has($name)) {
-            return $this->{$name} = $value;
-        }
-
-        throw new \InvalidArgumentException('Invalid property: ' . $name);
-        // __set end
-    }
-
-    public function &__get($name)
-    {
-        $result = $this->getConfig($name);
-        return $result;
     }
 }

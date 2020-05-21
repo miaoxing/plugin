@@ -101,44 +101,6 @@ final class RelationTest extends BaseTestCase
         parent::tearDownAfterClass();
     }
 
-    private static function createRelationTables()
-    {
-        static::createTables();
-
-        wei()->schema->table('test_profiles')
-            ->id()
-            ->int('test_user_id')
-            ->string('description')
-            ->exec();
-
-        wei()->schema->table('test_articles')
-            ->id()
-            ->int('test_user_id')
-            ->string('title', 128)
-            ->text('content')
-            ->exec();
-
-        wei()->schema->table('test_tags')
-            ->id()
-            ->string('name')
-            ->exec();
-
-        wei()->schema->table('test_articles_test_tags')
-            ->id()
-            ->int('test_article_id')
-            ->int('test_tag_id')
-            ->exec();
-    }
-
-    private static function dropRelationTables()
-    {
-        static::dropTables();
-        wei()->schema->dropIfExists('test_profiles');
-        wei()->schema->dropIfExists('test_articles');
-        wei()->schema->dropIfExists('test_tags');
-        wei()->schema->dropIfExists('test_articles_test_tags');
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -519,5 +481,43 @@ final class RelationTest extends BaseTestCase
         TestTag::getFields();
 
         wei()->db->setOption('queries', []);
+    }
+
+    private static function createRelationTables()
+    {
+        static::createTables();
+
+        wei()->schema->table('test_profiles')
+            ->id()
+            ->int('test_user_id')
+            ->string('description')
+            ->exec();
+
+        wei()->schema->table('test_articles')
+            ->id()
+            ->int('test_user_id')
+            ->string('title', 128)
+            ->text('content')
+            ->exec();
+
+        wei()->schema->table('test_tags')
+            ->id()
+            ->string('name')
+            ->exec();
+
+        wei()->schema->table('test_articles_test_tags')
+            ->id()
+            ->int('test_article_id')
+            ->int('test_tag_id')
+            ->exec();
+    }
+
+    private static function dropRelationTables()
+    {
+        static::dropTables();
+        wei()->schema->dropIfExists('test_profiles');
+        wei()->schema->dropIfExists('test_articles');
+        wei()->schema->dropIfExists('test_tags');
+        wei()->schema->dropIfExists('test_articles_test_tags');
     }
 }

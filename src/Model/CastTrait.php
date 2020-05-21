@@ -16,6 +16,17 @@ trait CastTrait
      */
     protected static $castCache = [];
 
+    /**
+     * Check if the specified column should be cast
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasCast($name)
+    {
+        return isset($this->casts) && isset($this->casts[$name]);
+    }
+
     protected static function bootCastTrait()
     {
         static::on('getValue', 'castToPhp');
@@ -53,17 +64,6 @@ trait CastTrait
         }
 
         return $value;
-    }
-
-    /**
-     * Check if the specified column should be cast
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function hasCast($name)
-    {
-        return isset($this->casts) && isset($this->casts[$name]);
     }
 
     /**

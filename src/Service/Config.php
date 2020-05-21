@@ -32,6 +32,16 @@ class Config extends BaseService
     }
 
     /**
+     * 获取配置文件
+     *
+     * @return string
+     */
+    public function getConfigFile()
+    {
+        return str_replace('%env%', $this->env->getName(), $this->configFile);
+    }
+
+    /**
      * 设置一项配置的值
      *
      * @param array|string $name
@@ -85,16 +95,6 @@ class Config extends BaseService
     {
         $this->env->loadConfigFile($this->getConfigFile());
         return $this;
-    }
-
-    /**
-     * 获取配置文件
-     *
-     * @return string
-     */
-    public function getConfigFile()
-    {
-        return str_replace('%env%', $this->env->getName(), $this->configFile);
     }
 
     /**

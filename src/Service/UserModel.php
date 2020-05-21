@@ -51,23 +51,6 @@ class UserModel extends Model
         return Password::verify($password, $this->password);
     }
 
-    /**
-     * 通过外部检查用户是否有某个权限
-     *
-     * @param string $permissionId
-     * @return bool
-     * @svc
-     */
-    protected function can($permissionId)
-    {
-        $result = $this->event->until('userCan', [$permissionId, $this]);
-        if (null === $result) {
-            $result = true;
-        }
-
-        return (bool) $result;
-    }
-
     public function getDisplayNameAttribute()
     {
         foreach (['nickName', 'username', 'name'] as $column) {
@@ -85,6 +68,23 @@ class UserModel extends Model
     public function isSuperAdmin()
     {
         return 1 === $this->id;
+    }
+
+    /**
+     * 通过外部检查用户是否有某个权限
+     *
+     * @param string $permissionId
+     * @return bool
+     * @svc
+     */
+    protected function can($permissionId)
+    {
+        $result = $this->event->until('userCan', [$permissionId, $this]);
+        if (null === $result) {
+            $result = true;
+        }
+
+        return (bool) $result;
     }
 
     /**

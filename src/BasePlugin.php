@@ -98,6 +98,36 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
     }
 
     /**
+     * Returns the web path for this plugin
+     *
+     * @return string
+     */
+    public function getBasePath()
+    {
+        if (!$this->basePath) {
+            $class = new \ReflectionClass($this);
+            $this->basePath = substr(dirname($class->getFileName()), strlen(getcwd()) + 1);
+
+            // TODO 改为默认
+            if ('Miaoxing' == substr($class->getName(), 0, 8)) {
+                $this->basePath = dirname($this->basePath);
+            }
+        }
+
+        return $this->basePath;
+    }
+
+    /**
+     * @return array
+     */
+    public function getControllerMap()
+    {
+        $basePath = $this->getBasePath() . '/src';
+
+        return wei()->classMap->generate([$basePath], '/Controller/{*,*/*}.php', 'Controller', false);
+    }
+
+    /**
      * 加载插件的各项资源
      *
      * @param string $id
@@ -143,35 +173,5 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
         $name = '@' . $id . '/' . $id . '/' . $event . $this->view->getExtension();
 
         $this->view->display($name, $data);
-    }
-
-    /**
-     * Returns the web path for this plugin
-     *
-     * @return string
-     */
-    public function getBasePath()
-    {
-        if (!$this->basePath) {
-            $class = new \ReflectionClass($this);
-            $this->basePath = substr(dirname($class->getFileName()), strlen(getcwd()) + 1);
-
-            // TODO 改为默认
-            if ('Miaoxing' == substr($class->getName(), 0, 8)) {
-                $this->basePath = dirname($this->basePath);
-            }
-        }
-
-        return $this->basePath;
-    }
-
-    /**
-     * @return array
-     */
-    public function getControllerMap()
-    {
-        $basePath = $this->getBasePath() . '/src';
-
-        return wei()->classMap->generate([$basePath], '/Controller/{*,*/*}.php', 'Controller', false);
     }
 }

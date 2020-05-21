@@ -104,141 +104,6 @@ class App extends \Wei\App
         return $this->invokeApp($options);
     }
 
-    protected function invokeApp(array $options = [])
-    {
-        $options && $this->setOption($options);
-
-        // Parse the path info to parameter set
-        $request = $this->request;
-        $paramSet = $this->router->matchParamSet($request->getRouterPathInfo(), $request->getMethod());
-
-        // TODO router 负责转换为 camel?
-        foreach ($paramSet as $i => $params) {
-            $paramSet[$i]['controller'] = $this->str->camel($params['controller']);
-        }
-
-        // 当控制器不存在时，回退到该控制器，适用于前后端分离的情况
-        $paramSet[] = [
-            'controller' => $this->fallbackController,
-            'action' => $this->fallbackAction,
-        ];
-
-        // Find out exiting controller action and execute
-        $notFound = [];
-        foreach ($paramSet as $params) {
-            $response = $this->dispatch($params['controller'], $params['action'], $params, false);
-            if (is_array($response)) {
-                $notFound = array_merge($notFound, $response);
-            } else {
-                return $response;
-            }
-        }
-        throw $this->buildException($notFound);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute($instance, $action)
-    {
-        $app = $this;
-        $wei = $this->wei;
-
-        $instance->init();
-        $middleware = $this->getMiddleware($instance, $action);
-
-        $callback = function () use ($instance, $action, $app) {
-            $instance->before($app->request, $app->response);
-
-            $method = $app->getActionMethod($action);
-            // TODO 和 forward 异常合并一起处理
-            try {
-                $args = $this->buildActionArgs($instance, $method);
-                $response = $instance->{$method}(...$args);
-            } catch (RetException $e) {
-                return $e->getRet();
-            }
-
-            $instance->after($app->request, $response);
-
-            return $response;
-        };
-
-        $next = function () use (&$middleware, &$next, $callback, $wei, $instance) {
-            $config = array_splice($middleware, 0, 1);
-            if ($config) {
-                $class = key($config);
-                $service = new $class(['wei' => $wei] + $config[$class]);
-                $result = $service($next, $instance);
-            } else {
-                $result = $callback();
-            }
-
-            return $result;
-        };
-
-        return $this->handleResponse($next())->send();
-    }
-
-    /**
-     * @param object $instance
-     * @param string $method
-     * @return array
-     * @throws ReflectionException
-     */
-    protected function buildActionArgs($instance, string $method)
-    {
-        $ref = new ReflectionMethod($instance, $method);
-        $params = $ref->getParameters();
-        if (!$params || 'req' === $params[0]->getName()) {
-            return [$this->request, $this->response];
-        }
-
-        $args = [];
-        foreach ($params as $param) {
-            $args[] = $this->buildActionArg($param);
-        }
-        return $args;
-    }
-
-    /**
-     * @param ReflectionParameter $param
-     * @return mixed
-     * @throws ReflectionException
-     */
-    protected function buildActionArg(ReflectionParameter $param)
-    {
-        $type = $param->getType();
-
-        // Handle Model class
-        if ($type
-            && !$type->isBuiltin()
-            && is_a($type->getName(), Model::class, true)
-        ) {
-            return $type->getName()::findOrFail($this->request['id']);
-        }
-
-        // Handle other class
-        if ($type && !$type->isBuiltin()) {
-            throw new Exception('Unsupported action parameter type: ' . $type);
-        }
-
-        // TODO Throw exception for unsupported builtin type
-        // Handle builtin type
-        $arg = $this->request[$param->getName()];
-        if (null === $arg) {
-            if ($param->isDefaultValueAvailable()) {
-                $arg = $param->getDefaultValue();
-            } else {
-                throw new Exception('Missing required parameter: ' . $param->getName(), 400);
-            }
-        } elseif ($type) {
-            settype($arg, $type->getName());
-        }
-
-        return $arg;
-    }
-
     public function getNamespace()
     {
         if (!$this->namespace) {
@@ -246,35 +111,6 @@ class App extends \Wei\App
         }
 
         return $this->namespace;
-    }
-
-    protected function detectNamespace()
-    {
-        // 1. 域名
-        if ($namespace = $this->getNamespaceFromDomain()) {
-            return $namespace;
-        }
-
-        // 2. 请求参数
-        if ($namespace = parent::getNamespace()) {
-            return $namespace;
-        }
-
-        // 3. 默认
-        return $this->defaultNamespace;
-    }
-
-    /**
-     * @return false|string
-     */
-    protected function getNamespaceFromDomain()
-    {
-        $domain = $this->request->getHost();
-        if (!$domain || in_array($domain, $this->domains, true)) {
-            return false;
-        }
-
-        return $this->getIdByDomain($domain);
     }
 
     /**
@@ -442,39 +278,6 @@ class App extends \Wei\App
     }
 
     /**
-     * 转换Ret结构为response
-     *
-     * @param array|Ret $ret
-     * @return Response
-     * @throws Exception
-     */
-    protected function handleRet($ret)
-    {
-        if ($this->request->acceptJson() || $this->isApi()) {
-            return $this->response->json($ret);
-        } else {
-            $ret instanceof Ret && $ret = $ret->toArray();
-            $type = $ret['retType'] ?? (1 === $ret['code'] ? 'success' : 'warning');
-            $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
-
-            return $this->response->setContent($content);
-        }
-    }
-
-    /**
-     * 检查是否返回了Ret结构
-     *
-     * @param mixed $response
-     * @return bool
-     */
-    protected function isRet($response)
-    {
-        return is_array($response)
-            && array_key_exists('code', $response)
-            && array_key_exists('message', $response);
-    }
-
-    /**
      * 判断是否请求到后台页面
      *
      * @return bool
@@ -505,6 +308,203 @@ class App extends \Wei\App
     {
         $this->defaultViewFile = $defaultViewFile;
         return $this;
+    }
+
+    protected function invokeApp(array $options = [])
+    {
+        $options && $this->setOption($options);
+
+        // Parse the path info to parameter set
+        $request = $this->request;
+        $paramSet = $this->router->matchParamSet($request->getRouterPathInfo(), $request->getMethod());
+
+        // TODO router 负责转换为 camel?
+        foreach ($paramSet as $i => $params) {
+            $paramSet[$i]['controller'] = $this->str->camel($params['controller']);
+        }
+
+        // 当控制器不存在时，回退到该控制器，适用于前后端分离的情况
+        $paramSet[] = [
+            'controller' => $this->fallbackController,
+            'action' => $this->fallbackAction,
+        ];
+
+        // Find out exiting controller action and execute
+        $notFound = [];
+        foreach ($paramSet as $params) {
+            $response = $this->dispatch($params['controller'], $params['action'], $params, false);
+            if (is_array($response)) {
+                $notFound = array_merge($notFound, $response);
+            } else {
+                return $response;
+            }
+        }
+        throw $this->buildException($notFound);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute($instance, $action)
+    {
+        $app = $this;
+        $wei = $this->wei;
+
+        $instance->init();
+        $middleware = $this->getMiddleware($instance, $action);
+
+        $callback = function () use ($instance, $action, $app) {
+            $instance->before($app->request, $app->response);
+
+            $method = $app->getActionMethod($action);
+            // TODO 和 forward 异常合并一起处理
+            try {
+                $args = $this->buildActionArgs($instance, $method);
+                $response = $instance->{$method}(...$args);
+            } catch (RetException $e) {
+                return $e->getRet();
+            }
+
+            $instance->after($app->request, $response);
+
+            return $response;
+        };
+
+        $next = function () use (&$middleware, &$next, $callback, $wei, $instance) {
+            $config = array_splice($middleware, 0, 1);
+            if ($config) {
+                $class = key($config);
+                $service = new $class(['wei' => $wei] + $config[$class]);
+                $result = $service($next, $instance);
+            } else {
+                $result = $callback();
+            }
+
+            return $result;
+        };
+
+        return $this->handleResponse($next())->send();
+    }
+
+    /**
+     * @param object $instance
+     * @param string $method
+     * @return array
+     * @throws ReflectionException
+     */
+    protected function buildActionArgs($instance, string $method)
+    {
+        $ref = new ReflectionMethod($instance, $method);
+        $params = $ref->getParameters();
+        if (!$params || 'req' === $params[0]->getName()) {
+            return [$this->request, $this->response];
+        }
+
+        $args = [];
+        foreach ($params as $param) {
+            $args[] = $this->buildActionArg($param);
+        }
+        return $args;
+    }
+
+    /**
+     * @param ReflectionParameter $param
+     * @return mixed
+     * @throws ReflectionException
+     */
+    protected function buildActionArg(ReflectionParameter $param)
+    {
+        $type = $param->getType();
+
+        // Handle Model class
+        if ($type
+            && !$type->isBuiltin()
+            && is_a($type->getName(), Model::class, true)
+        ) {
+            return $type->getName()::findOrFail($this->request['id']);
+        }
+
+        // Handle other class
+        if ($type && !$type->isBuiltin()) {
+            throw new Exception('Unsupported action parameter type: ' . $type);
+        }
+
+        // TODO Throw exception for unsupported builtin type
+        // Handle builtin type
+        $arg = $this->request[$param->getName()];
+        if (null === $arg) {
+            if ($param->isDefaultValueAvailable()) {
+                $arg = $param->getDefaultValue();
+            } else {
+                throw new Exception('Missing required parameter: ' . $param->getName(), 400);
+            }
+        } elseif ($type) {
+            settype($arg, $type->getName());
+        }
+
+        return $arg;
+    }
+
+    protected function detectNamespace()
+    {
+        // 1. 域名
+        if ($namespace = $this->getNamespaceFromDomain()) {
+            return $namespace;
+        }
+
+        // 2. 请求参数
+        if ($namespace = parent::getNamespace()) {
+            return $namespace;
+        }
+
+        // 3. 默认
+        return $this->defaultNamespace;
+    }
+
+    /**
+     * @return false|string
+     */
+    protected function getNamespaceFromDomain()
+    {
+        $domain = $this->request->getHost();
+        if (!$domain || in_array($domain, $this->domains, true)) {
+            return false;
+        }
+
+        return $this->getIdByDomain($domain);
+    }
+
+    /**
+     * 转换Ret结构为response
+     *
+     * @param array|Ret $ret
+     * @return Response
+     * @throws Exception
+     */
+    protected function handleRet($ret)
+    {
+        if ($this->request->acceptJson() || $this->isApi()) {
+            return $this->response->json($ret);
+        } else {
+            $ret instanceof Ret && $ret = $ret->toArray();
+            $type = $ret['retType'] ?? (1 === $ret['code'] ? 'success' : 'warning');
+            $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
+
+            return $this->response->setContent($content);
+        }
+    }
+
+    /**
+     * 检查是否返回了Ret结构
+     *
+     * @param mixed $response
+     * @return bool
+     */
+    protected function isRet($response)
+    {
+        return is_array($response)
+            && array_key_exists('code', $response)
+            && array_key_exists('message', $response);
     }
 
     /**

@@ -71,6 +71,97 @@ class GAutoCompletion extends BaseCommand
     protected $fileMode = self::FILE_MODE_SINGLE;
 
     /**
+     * Generate static calls code completion
+     *
+     * @param BasePlugin $plugin
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function generateStaticCalls(array $services, string $path)
+    {
+        $printer = new PsrPrinter();
+        $staticFile = new PhpFile();
+        $dynamicFile = new PhpFile();
+
+        if ($this->addNoinspectionComment) {
+            $staticFile->addComment('@noinspection PhpDocSignatureInspection')
+                ->addComment('@noinspection PhpFullyQualifiedNameUsageInspection')
+                ->addComment('@noinspection PhpInconsistentReturnPointsInspection');
+        }
+
+        foreach ($services as $name => $serviceClass) {
+            // 忽略 trait
+            if (!class_exists($serviceClass)) {
+                continue;
+            }
+
+            $refClass = new ReflectionClass($serviceClass);
+
+            $staticNamespace = $staticFile->addNamespace($refClass->getNamespaceName());
+            $dynamicNamespace = $dynamicFile->addNamespace($refClass->getNamespaceName());
+
+            $class = new ClassType($refClass->getShortName());
+            // NOTE: 如果增加了继承，Service目录之外的子类没有代码提示（如果还无效不断重启直到生效）
+            if ($this->excludeParentMethods && $parent = $refClass->getParentClass()) {
+                $class->addExtend($parent->getName());
+            }
+
+            $staticClass = clone $class;
+
+            $methods = [];
+            $staticMethods = [];
+            $see = '@see ' . $refClass->getShortName() . '::';
+            foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
+                // NOTE: 单文件下，如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
+                if ($this->excludeParentMethods && $refMethod->getDeclaringClass()->getName() !== $serviceClass) {
+                    continue;
+                }
+
+                if ($this->isApi($refMethod)) {
+                    // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
+                    $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
+
+                    $see = '@see ' . $refMethod->getDeclaringClass()->getShortName() . '::' . $refMethod->getName();
+                    $method->setComment(str_replace('@svc', $see, $method->getComment()));
+
+                    $methods[] = $method;
+                    $staticMethods[] = (clone $method)->setStatic();
+                }
+            }
+
+            if ($this->generateEmptyClass || $staticMethods) {
+                $staticClass->setMethods($staticMethods);
+                $staticNamespace->add($staticClass);
+            }
+            if ($this->generateEmptyClass || $methods) {
+                // NOTE: 分多个文件反而出现第二，三级的子类(例如AppModel)没有代码提示，魔术方法识别失败等问题
+                $class->setMethods($methods);
+                $dynamicNamespace->add($class);
+            }
+        }
+
+        if (!isset($staticNamespace) || !$staticNamespace->getClasses()) {
+            $this->suc('API method not found!');
+            return;
+        }
+
+        switch ($this->fileMode) {
+            default:
+            case self::FILE_MODE_SINGLE:
+                $this->writeSingle($printer, $staticFile, $dynamicFile, $path);
+                break;
+
+            case self::FILE_MODE_BY_TYPE:
+                $this->writeByType($printer, $staticFile, $dynamicFile, $path);
+                break;
+
+            case self::FILE_MODE_BY_CLASS:
+                $this->writeByClass($printer, $staticFile, $dynamicFile, $path);
+                break;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -175,97 +266,6 @@ PHP;
         $generateViewVars && $content .= $this->generateViewVars($services);
 
         $this->createFile($path . '/docs/auto-completion.php', $content);
-    }
-
-    /**
-     * Generate static calls code completion
-     *
-     * @param BasePlugin $plugin
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
-    public function generateStaticCalls(array $services, string $path)
-    {
-        $printer = new PsrPrinter();
-        $staticFile = new PhpFile();
-        $dynamicFile = new PhpFile();
-
-        if ($this->addNoinspectionComment) {
-            $staticFile->addComment('@noinspection PhpDocSignatureInspection')
-                ->addComment('@noinspection PhpFullyQualifiedNameUsageInspection')
-                ->addComment('@noinspection PhpInconsistentReturnPointsInspection');
-        }
-
-        foreach ($services as $name => $serviceClass) {
-            // 忽略 trait
-            if (!class_exists($serviceClass)) {
-                continue;
-            }
-
-            $refClass = new ReflectionClass($serviceClass);
-
-            $staticNamespace = $staticFile->addNamespace($refClass->getNamespaceName());
-            $dynamicNamespace = $dynamicFile->addNamespace($refClass->getNamespaceName());
-
-            $class = new ClassType($refClass->getShortName());
-            // NOTE: 如果增加了继承，Service目录之外的子类没有代码提示（如果还无效不断重启直到生效）
-            if ($this->excludeParentMethods && $parent = $refClass->getParentClass()) {
-                $class->addExtend($parent->getName());
-            }
-
-            $staticClass = clone $class;
-
-            $methods = [];
-            $staticMethods = [];
-            $see = '@see ' . $refClass->getShortName() . '::';
-            foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
-                // NOTE: 单文件下，如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
-                if ($this->excludeParentMethods && $refMethod->getDeclaringClass()->getName() !== $serviceClass) {
-                    continue;
-                }
-
-                if ($this->isApi($refMethod)) {
-                    // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
-                    $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
-
-                    $see = '@see ' . $refMethod->getDeclaringClass()->getShortName() . '::' . $refMethod->getName();
-                    $method->setComment(str_replace('@svc', $see, $method->getComment()));
-
-                    $methods[] = $method;
-                    $staticMethods[] = (clone $method)->setStatic();
-                }
-            }
-
-            if ($this->generateEmptyClass || $staticMethods) {
-                $staticClass->setMethods($staticMethods);
-                $staticNamespace->add($staticClass);
-            }
-            if ($this->generateEmptyClass || $methods) {
-                // NOTE: 分多个文件反而出现第二，三级的子类(例如AppModel)没有代码提示，魔术方法识别失败等问题
-                $class->setMethods($methods);
-                $dynamicNamespace->add($class);
-            }
-        }
-
-        if (!isset($staticNamespace) || !$staticNamespace->getClasses()) {
-            $this->suc('API method not found!');
-            return;
-        }
-
-        switch ($this->fileMode) {
-            default:
-            case self::FILE_MODE_SINGLE:
-                $this->writeSingle($printer, $staticFile, $dynamicFile, $path);
-                break;
-
-            case self::FILE_MODE_BY_TYPE:
-                $this->writeByType($printer, $staticFile, $dynamicFile, $path);
-                break;
-
-            case self::FILE_MODE_BY_CLASS:
-                $this->writeByClass($printer, $staticFile, $dynamicFile, $path);
-                break;
-        }
     }
 
     protected function writeSingle(PsrPrinter $printer, PhpFile $staticFile, PhpFile $dynamicFile, string $path)

@@ -116,11 +116,6 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         $this->assertArrayContains($expected, $ret, $assertMessage);
     }
 
-    protected function buildRetMessage($ret, $assertMessage = null)
-    {
-        return $assertMessage . ' ret is ' . json_encode($ret, JSON_UNESCAPED_UNICODE);
-    }
-
     public static function assertArrayContains($subset, $array, $message = '')
     {
         $array = array_intersect_key($array, array_flip(array_keys($subset)));
@@ -147,6 +142,21 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $message
+     * @param string $args
+     * @deprecated 使用 asset 的 message
+     */
+    public function step($message, $args = null)
+    {
+        // do nothing
+    }
+
+    protected function buildRetMessage($ret, $assertMessage = null)
+    {
+        return $assertMessage . ' ret is ' . json_encode($ret, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * 获取当前测试类所在的插件名称
      *
      * @return string
@@ -156,15 +166,5 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         // 类名如 MiaoxingTest\App\PluginTest
         // 分为3部分取第2部分
         return explode('\\', static::class, 3)[1];
-    }
-
-    /**
-     * @param string $message
-     * @param string $args
-     * @deprecated 使用 asset 的 message
-     */
-    public function step($message, $args = null)
-    {
-        // do nothing
     }
 }

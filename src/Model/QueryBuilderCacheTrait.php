@@ -42,25 +42,6 @@ trait QueryBuilderCacheTrait
     }
 
     /**
-     * Set or remove cache time for the query
-     *
-     * @param false|int|null $seconds
-     * @return $this
-     * @svc
-     */
-    protected function cache($seconds = null)
-    {
-        if (null === $seconds) {
-            $this->cacheTime = $this->defaultCacheTime;
-        } elseif (false === $seconds) {
-            $this->cacheTime = false;
-        } else {
-            $this->cacheTime = (int) $seconds;
-        }
-        return $this;
-    }
-
-    /**
      * Set or remove cache tags
      *
      * @param array|false|null $tags
@@ -93,6 +74,25 @@ trait QueryBuilderCacheTrait
     {
         return $this->cacheKey ?:
             md5($this->db->getDbname() . $this->getSql() . serialize($this->params) . serialize($this->paramTypes));
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param false|int|null $seconds
+     * @return $this
+     * @svc
+     */
+    protected function cache($seconds = null)
+    {
+        if (null === $seconds) {
+            $this->cacheTime = $this->defaultCacheTime;
+        } elseif (false === $seconds) {
+            $this->cacheTime = false;
+        } else {
+            $this->cacheTime = (int) $seconds;
+        }
+        return $this;
     }
 
     /**

@@ -32,43 +32,6 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     protected $data = [];
 
     /**
-     * Return operation successful result
-     *
-     * ```php
-     * // Specified message
-     * $this->suc('Payment successful');
-     *
-     * // Format
-     * $this->suc(['me%sage', 'ss']);
-     *
-     * // More data
-     * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
-     * ```
-     *
-     * @param array|string|null $message
-     * @return $this
-     * @svc
-     */
-    protected function suc($message = null)
-    {
-        return $this->__invoke($message ?: $this->defaults['message'], 1, 'success');
-    }
-
-    /**
-     * Return operation failed result, and logs with an info level
-     *
-     * @param array|string $message
-     * @param int $code
-     * @param string $level
-     * @return $this
-     * @svc
-     */
-    protected function err($message, $code = 0, $level = 'info')
-    {
-        return $this->__invoke($message, $code, $level);
-    }
-
-    /**
      * Return operation result data
      *
      * @param array|string $message
@@ -168,5 +131,42 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
+    }
+
+    /**
+     * Return operation successful result
+     *
+     * ```php
+     * // Specified message
+     * $this->suc('Payment successful');
+     *
+     * // Format
+     * $this->suc(['me%sage', 'ss']);
+     *
+     * // More data
+     * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
+     * ```
+     *
+     * @param array|string|null $message
+     * @return $this
+     * @svc
+     */
+    protected function suc($message = null)
+    {
+        return $this->__invoke($message ?: $this->defaults['message'], 1, 'success');
+    }
+
+    /**
+     * Return operation failed result, and logs with an info level
+     *
+     * @param array|string $message
+     * @param int $code
+     * @param string $level
+     * @return $this
+     * @svc
+     */
+    protected function err($message, $code = 0, $level = 'info')
+    {
+        return $this->__invoke($message, $code, $level);
     }
 }
