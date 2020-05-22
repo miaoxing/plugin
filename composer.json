@@ -14,7 +14,7 @@
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
-    "miaoxing/coding-standards": "dev-master@dev"
+    "miaoxing/coding-standards": "^4.0"
   },
   "autoload": {
     "files": [
