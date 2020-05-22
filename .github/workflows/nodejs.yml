@@ -69,6 +69,4 @@ jobs:
         run: yarn install
 
       - name: Run
-        run: |
-          if [[ -e ".stylelintrc.json" ]]; then CONFIG=".stylelintrc.json"; else CONFIG="plugins/plugin/.stylelintrc.json"; fi
-          yarn stylelint --config ${CONFIG} "{src,resources}/**/*.{css,scss,sass}"
+        run: yarn miaoxing-stylelint
