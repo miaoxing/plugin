@@ -14,9 +14,7 @@
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
-    "miaoxing/coding-standards": "dev-master@dev",
-    "phpunit/phpunit": "^8 || ^9",
-    "friendsofphp/php-cs-fixer": "^2.16"
+    "miaoxing/coding-standards": "dev-master@dev"
   },
   "autoload": {
     "files": [
