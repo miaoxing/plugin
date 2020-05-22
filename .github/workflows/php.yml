@@ -186,9 +186,7 @@ jobs:
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       - name: Run
-        run: |
-          if [[ -e "phpmd.xml" ]]; then CONFIG="phpmd.xml"; else CONFIG="plugins/build/phpmd-for-vendors.xml"; fi
-          vendor/bin/phpmd . text ${CONFIG} --exclude vendor,plugins,docs,src/Lib,public/comps,public/libs
+        run: ./vendor/bin/miaoxing-phpmd
 
   php-cs-fixer:
     runs-on: ${{ matrix.operating-system }}
