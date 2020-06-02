@@ -212,7 +212,7 @@ class GMetadata extends BaseCommand
         $this->suc('生成文件 ' . $file);
 
         ob_start();
-        require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/metadata.php';
+        require $this->plugin->getById('plugin')->getBasePath() . '/stubs/metadata.php';
         $content = ob_get_clean();
 
         file_put_contents($file, $content);

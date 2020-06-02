@@ -67,7 +67,7 @@ class GModel extends BaseCommand
         $this->suc('生成文件 ' . $file);
 
         ob_start();
-        require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/model.php';
+        require $this->plugin->getById('plugin')->getBasePath() . '/stubs/model.php';
         $content = ob_get_clean();
 
         file_put_contents($file, $content);

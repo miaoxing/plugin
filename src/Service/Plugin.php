@@ -194,7 +194,7 @@ class Plugin extends BaseService
 
         if ($pluginId) {
             $plugin = $this->getOneById($pluginId);
-            $path = $plugin->getBasePath() . '/resources';
+            $path = $plugin->getBasePath() . '/views';
 
             return ['path' => $path, 'file' => $file];
         } else {
@@ -212,7 +212,7 @@ class Plugin extends BaseService
     {
         $components = $this->parseResource($resource);
         if ($components['path']) {
-            $components['path'] .= '/views';
+            $components['path'] .= '/';
         }
 
         return $components;

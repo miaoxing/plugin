@@ -154,7 +154,7 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
         $this->app->setControllerFormat($namespace . '\Controller\%controller%');
 
         // 4. 视图继承
-        $this->view->setDirs([$basePath . '/resources/views'] + $this->view->getDirs());
+        $this->view->setDirs([$basePath . '/views'] + $this->view->getDirs());
     }
 
     /**

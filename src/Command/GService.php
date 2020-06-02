@@ -67,7 +67,7 @@ class GService extends BaseCommand
         $this->suc('生成文件 ' . $file);
 
         ob_start();
-        require $this->plugin->getById('plugin')->getBasePath() . '/resources/stubs/service.php';
+        require $this->plugin->getById('plugin')->getBasePath() . '/stubs/service.php';
         $content = ob_get_clean();
 
         file_put_contents($file, $content);
