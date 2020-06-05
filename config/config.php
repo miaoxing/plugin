@@ -39,9 +39,9 @@ return [
 
     /* @see Wei\Error */
     'error' => [
-        'message' => '系统繁忙',
         'view' => __DIR__ . '/../views/errors/error.php',
-        'view404' => __DIR__ . '/../views/errors/404.php',
+        'message' => '很抱歉，系统繁忙，请稍后再试。',
+        'message404' => '很抱歉，您访问的页面不存在，请检查后再试。',
     ],
 
     /* @see Wei\Http */
