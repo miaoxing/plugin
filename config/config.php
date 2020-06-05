@@ -39,9 +39,9 @@ return [
 
     /* @see Wei\Error */
     'error' => [
-        'view' => __DIR__ . '/../views/errors/500.php',
+        'message' => '系统繁忙',
+        'view' => __DIR__ . '/../views/errors/error.php',
         'view404' => __DIR__ . '/../views/errors/404.php',
-        'view400' => __DIR__ . '/../views/errors/400.php',
     ],
 
     /* @see Wei\Http */
