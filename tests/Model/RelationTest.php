@@ -122,6 +122,10 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM `test_profiles` WHERE `test_user_id` = ? LIMIT 1', $queries[1]);
         $this->assertCount(2, $queries);
+
+        $array = $user->toArray();
+        $this->assertArrayHasKey('profile', $array);
+        $this->assertEquals(1, $array['profile']['testUserId']);
     }
 
     public function testCollHasOne()
@@ -139,6 +143,10 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_users`', $queries[0]);
         $this->assertEquals('SELECT * FROM `test_profiles` WHERE `test_user_id` IN (?, ?, ?)', $queries[1]);
         $this->assertCount(2, $queries);
+
+        $array = $users->toArray();
+        $this->assertArrayHasKey('profile', $array[0]);
+        $this->assertEquals(1, $array[0]['profile']['testUserId']);
     }
 
     public function testCollHasOneLazyLoad()
@@ -158,6 +166,10 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_profiles` WHERE `test_user_id` = ? LIMIT 1', $queries[1]);
         $this->assertEquals('SELECT * FROM `test_profiles` WHERE `test_user_id` = ? LIMIT 1', $queries[1]);
         $this->assertCount(4, $queries);
+
+        $array = $users->toArray();
+        $this->assertArrayHasKey('profile', $array[0]);
+        $this->assertEquals(1, $array[0]['profile']['testUserId']);
     }
 
     public function testRecordBelongsTo()
@@ -175,6 +187,10 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_articles` WHERE `id` = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[1]);
         $this->assertCount(2, $queries);
+
+        $array = $article->toArray();
+        $this->assertArrayHasKey('user', $array);
+        $this->assertEquals(1, $array['user']['id']);
     }
 
     public function testCollBelongsTo()
@@ -192,6 +208,10 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[1]);
         $this->assertCount(2, $queries);
+
+        $array = $articles->toArray();
+        $this->assertArrayHasKey('user', $array[0]);
+        $this->assertEquals(1, $array[0]['user']['id']);
     }
 
     public function testCollBelongsToLazyLoad()
@@ -211,6 +231,10 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[1]);
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[1]);
         $this->assertCount(4, $queries);
+
+        $array = $articles->toArray();
+        $this->assertArrayHasKey('user', $array[0]);
+        $this->assertEquals(1, $array[0]['user']['id']);
     }
 
     public function testRecordHasMany()
@@ -228,6 +252,10 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[0]);
         $this->assertEquals('SELECT * FROM `test_articles` WHERE `test_user_id` = ?', $queries[1]);
         $this->assertCount(2, $queries);
+
+        $array = $user->toArray();
+        $this->assertArrayHasKey('articles', $array);
+        $this->assertEquals(1, $array['articles'][0]['id']);
     }
 
     public function testRecordHasManyWithQuery()
@@ -296,6 +324,10 @@ final class RelationTest extends BaseTestCase
             'WHERE `test_articles_test_tags`.`test_article_id` = ?',
         ]), $queries[1]);
         $this->assertCount(2, $queries);
+
+        $array = $article->toArray();
+        $this->assertArrayHasKey('tags', $array);
+        $this->assertEquals(1, $array['tags'][0]['id']);
     }
 
     public function testRecordBelongsToMany2()
@@ -343,6 +375,10 @@ final class RelationTest extends BaseTestCase
             'WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?)',
         ]), $queries[1]);
         $this->assertCount(2, $queries);
+
+        $array = $articles->toArray();
+        $this->assertArrayHasKey('tags', $array[0]);
+        $this->assertEquals(1, $array[0]['tags'][0]['id']);
     }
 
     public function testCollBelongsToManyWithQuery()
@@ -372,13 +408,17 @@ final class RelationTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
-    public function testGetHasOneReturnFalse()
+    public function testGetHasOneReturnsNull()
     {
         $user = TestUser::new();
 
         $user->find(3);
 
         $this->assertNull($user->profile);
+
+        $array = $user->toArray();
+        $this->assertArrayHasKey('profile', $array);
+        $this->assertNull($user['profile']);
     }
 
     public function testNestedRelation()
@@ -396,6 +436,11 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[1]);
         $this->assertEquals('SELECT * FROM `test_profiles` WHERE `test_user_id` IN (?, ?)', $queries[2]);
         $this->assertCount(3, $queries);
+
+        $array = $articles->toArray();
+        $this->assertArrayHasKey('user', $array[0]);
+        $this->assertArrayHasKey('profile', $array[0]['user']);
+        $this->assertEquals(1, $array[0]['user']['profile']['id']);
     }
 
     public function testLoadCache()

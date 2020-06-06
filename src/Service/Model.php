@@ -134,6 +134,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected $loadedRelations = [];
 
     /**
+     * @var array
+     */
+    protected $relationValues = [];
+
+    /**
      * The value for relation base query
      *
      * @var mixed
@@ -287,7 +292,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 $data[$this->convertOutputIdentifier($column)] = $this->get($column);
             }
 
-            return $data + $this->virtualToArray();
+            return $data + $this->virtualToArray() + $this->relationToArray();
         } else {
             if (is_callable($returnFields)) {
                 $prepend = $returnFields;
@@ -1797,6 +1802,15 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $data;
     }
 
+    protected function relationToArray()
+    {
+        $data = [];
+        foreach ($this->relationValues as $name => $value) {
+            $data[$name] = $value ? $value->toArray() : null;
+        }
+        return $data;
+    }
+
     /**
      * @param object|string $model
      * @return $this
@@ -2161,6 +2175,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function setRelationValue($name, $value)
     {
+        $this->relationValues[$name] = $value;
         $this->{$name} = $value;
 
         return $this;
