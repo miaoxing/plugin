@@ -62,7 +62,7 @@ return [
 
     /* @see Wei\PhpFileCache */
     'phpFileCache' => [
-        'dir' => 'data/cache',
+        'dir' => 'storage/cache',
     ],
 
     /* @see Wei\Redis */

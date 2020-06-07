@@ -19,7 +19,7 @@ class Config extends BaseService
      *
      * @var string
      */
-    protected $configFile = 'data/configs/%env%.php';
+    protected $configFile = 'storage/configs/%env%.php';
 
     public function __construct($options)
     {

@@ -16,6 +16,6 @@ return [
 
     /* @see Wei\Env */
     'env' => [
-        'configFile' => 'data/configs/%env%.php',
+        'configFile' => 'storage/configs/%env%.php',
     ],
 ];
