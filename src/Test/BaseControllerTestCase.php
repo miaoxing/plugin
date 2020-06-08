@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Test;
 
 use Miaoxing\Plugin\Service\User;
-use Miaoxing\Services\Service\Tester;
+use Miaoxing\Plugin\Service\Tester;
 use RuntimeException;
 
 /**
