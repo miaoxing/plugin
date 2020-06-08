@@ -8,7 +8,7 @@ use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
 use Miaoxing\Plugin\Model\CastTrait;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;
-use Miaoxing\Services\Service\Request;
+use Wei\Request;
 use Wei\Record;
 use Wei\RetTrait;
 
