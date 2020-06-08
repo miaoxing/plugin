@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Services\ConfigTrait;
+use Miaoxing\Plugin\ConfigTrait;
 
 /**
  * 用户
