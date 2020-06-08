@@ -10,7 +10,6 @@
   "require": {
     "wei/wei": "dev-master@dev",
     "doctrine/inflector": "^v1.1.0",
-    "miaoxing/services": "dev-master@dev",
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
