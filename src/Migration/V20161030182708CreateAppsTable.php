@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Migration;
 
-use Miaoxing\Services\Migration\BaseMigration;
+use Wei\Migration\BaseMigration;
 
 class V20161030182708CreateAppsTable extends BaseMigration
 {

@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Services\Service\Migration;
+use Wei\Migration;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputArgument;
 
