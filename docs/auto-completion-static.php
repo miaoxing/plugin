@@ -2314,6 +2314,10 @@ class Str
 {
 }
 
+class Tester
+{
+}
+
 class User
 {
     /**
@@ -6347,6 +6351,10 @@ class Session
 }
 
 class Str
+{
+}
+
+class Tester
 {
 }
 

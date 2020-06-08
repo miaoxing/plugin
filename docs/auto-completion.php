@@ -67,6 +67,13 @@ class StrMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Tester $tester 测试
+ * @method      Miaoxing\Plugin\Service\Tester tester($controller = null, $action = null)
+ */
+class TesterMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\User $user 用户
  * @method      Miaoxing\Plugin\Service\User|Miaoxing\Plugin\Service\User[] user($table = null)
  */
@@ -91,6 +98,7 @@ class UserModelMixin {
  * @mixin SchemaMixin
  * @mixin SessionMixin
  * @mixin StrMixin
+ * @mixin TesterMixin
  * @mixin UserMixin
  * @mixin UserModelMixin
  */
@@ -137,6 +145,9 @@ $session = wei()->session;
 
 /** @var Miaoxing\Plugin\Service\Str $str */
 $str = wei()->str;
+
+/** @var Miaoxing\Plugin\Service\Tester $tester */
+$tester = wei()->tester;
 
 /** @var Miaoxing\Plugin\Service\User $user */
 $user = wei()->user;
