@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Test;
 
-use Miaoxing\Services\Service\ServiceTrait;
+use Wei\ServiceTrait;
 use Wei\Wei;
 
 abstract class BaseTestCase extends \PHPUnit\Framework\TestCase

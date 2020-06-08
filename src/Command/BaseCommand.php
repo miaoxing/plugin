@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Services\Service\ServiceTrait;
+use Wei\ServiceTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\ArrayInput;
