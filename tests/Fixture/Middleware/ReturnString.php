@@ -2,13 +2,10 @@
 
 namespace MiaoxingTest\Plugin\Fixture\Middleware;
 
-use Miaoxing\Services\Middleware\BaseMiddleware;
+use Wei\Base;
 
-class ReturnString extends BaseMiddleware
+class ReturnString extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __invoke($next)
     {
         return 'returnStringInMiddleware';

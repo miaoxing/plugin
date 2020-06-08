@@ -2,9 +2,12 @@
 
 namespace MiaoxingTest\Plugin\Fixture\Middleware;
 
-use Miaoxing\Services\Middleware\BaseMiddleware;
+use Wei\Base;
 
-class ReturnResponse extends BaseMiddleware
+/**
+ * @mixin \ResponseMixin
+ */
+class ReturnResponse extends Base
 {
     /**
      * {@inheritdoc}

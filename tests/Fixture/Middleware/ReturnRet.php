@@ -2,10 +2,10 @@
 
 namespace MiaoxingTest\Plugin\Fixture\Middleware;
 
-use Miaoxing\Services\Middleware\BaseMiddleware;
+use Wei\Base;
 use Wei\RetTrait;
 
-class ReturnRet extends BaseMiddleware
+class ReturnRet extends Base
 {
     use RetTrait;
 
