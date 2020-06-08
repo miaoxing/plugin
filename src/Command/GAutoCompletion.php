@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Services\Service\ClassMap;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpFile;
