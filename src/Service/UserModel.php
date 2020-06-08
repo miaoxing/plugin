@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Metadata\UserTrait;
 use Miaoxing\Plugin\Model\ReqQueryTrait;
-use Miaoxing\Services\Service\V;
+use Wei\V;
 use Wei\Password;
 
 class UserModel extends Model
