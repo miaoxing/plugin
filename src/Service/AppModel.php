@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Metadata\AppTrait;
-use Miaoxing\Services\ConstTrait;
+use Miaoxing\Plugin\ConstTrait;
 
 /**
  * 应用模型
