@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Service\User;
-use Miaoxing\Services\Service\Time;
+use Wei\Time;
 
 /**
  * @property-read string deletedAtColumn
