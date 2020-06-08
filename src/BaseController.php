@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin;
 
+use Wei\RetTrait;
+
 /**
  * @mixin \UserMixin
  * @mixin \AppMixin
@@ -11,11 +13,13 @@ namespace Miaoxing\Plugin;
  * @mixin \PluginMixin
  * @mixin \RetMixin
  * @mixin \PageMixin
+ * @mixin \EventMixin
  * @property bool controllerAuth
  * @property array actionAuths
  */
-abstract class BaseController extends \Miaoxing\Services\App\BaseController
+abstract class BaseController extends \Wei\BaseController
 {
+    use RetTrait;
     use HandleRetTrait;
 
     /**
@@ -23,6 +27,28 @@ abstract class BaseController extends \Miaoxing\Services\App\BaseController
      * @deprecated
      */
     protected $actionPermissions = [];
+
+    /**
+     * The name of controller
+     *
+     * @var string
+     */
+    protected $controllerName;
+
+    /**
+     * The names of action
+     *
+     * @var array
+     */
+    protected $actionNames = [];
+
+    /**
+     * Initialize the controller, can be used to register middleware
+     */
+    public function init()
+    {
+        $this->event->trigger('controllerInit', [$this]);
+    }
 
     /**
      * 获取当前控制器的名称
