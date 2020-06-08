@@ -85,7 +85,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 
         $model = $this->getServiceMock($name, $methods, $arguments);
 
-        // TODO 通过db服务调用getTableFields会出现错误 Illegal offset type in isset or empty in services/Db.php on line 16
+        // TODO 通过db服务调用getTableFields会出现错误 Illegal offset type in isset or empty in services/DbCallback.php on line 16
         $fields = wei()->db->getTableFields($table);
         $model->setOption('fields', $fields);
 

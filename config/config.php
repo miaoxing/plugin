@@ -31,7 +31,7 @@ return [
         'password' => 'password',
         'charset' => 'utf8mb4',
         'recordClass' => Miaoxing\Plugin\Service\Model::class,
-        'beforeQuery' => [Miaoxing\Services\Callback\Db::class, 'beforeQuery'],
+        'beforeQuery' => [Miaoxing\Plugin\Callback\DbCallback::class, 'beforeQuery'],
         'providers' => [
             'cache' => 'nearCache',
         ],
@@ -48,8 +48,8 @@ return [
     'http' => [
         'timeout' => 5000,
         'retries' => 2,
-        'success' => [Miaoxing\Services\Callback\Http::class, 'success'],
-        'error' => [Miaoxing\Services\Callback\Http::class, 'error'],
+        'success' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'success'],
+        'error' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'error'],
     ],
 
     /* @see Wei\NearCache */
