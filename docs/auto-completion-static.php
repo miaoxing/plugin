@@ -8,7 +8,7 @@ class App
      * 根据域名查找应用名称
      *
      * @param string $domain
-     * @return string|false
+     * @return false|string
      * @see App::getIdByDomain
      */
     public static function getIdByDomain($domain)
@@ -53,7 +53,7 @@ class AppModel
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -189,7 +189,7 @@ class AppModel
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -239,6 +239,9 @@ class AppModel
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -250,6 +253,9 @@ class AppModel
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -304,6 +310,9 @@ class AppModel
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -314,7 +323,7 @@ class AppModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -325,7 +334,7 @@ class AppModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -348,7 +357,7 @@ class AppModel
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -378,7 +387,7 @@ class AppModel
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -400,6 +409,7 @@ class AppModel
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -476,7 +486,7 @@ class AppModel
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -648,7 +658,7 @@ class AppModel
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -663,6 +673,10 @@ class AppModel
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -674,8 +688,8 @@ class AppModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -775,7 +789,7 @@ class AppModel
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -784,7 +798,7 @@ class AppModel
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
@@ -797,7 +811,7 @@ class Config
 {
     /**
      * @see Config::save
-     * @param string|array $name
+     * @param array|string $name
      * @param mixed $value
      * @return void
      */
@@ -857,7 +871,7 @@ class Model
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -993,7 +1007,7 @@ class Model
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -1043,6 +1057,9 @@ class Model
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -1054,6 +1071,9 @@ class Model
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -1108,6 +1128,9 @@ class Model
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -1118,7 +1141,7 @@ class Model
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -1129,7 +1152,7 @@ class Model
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -1152,7 +1175,7 @@ class Model
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -1182,7 +1205,7 @@ class Model
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -1204,6 +1227,7 @@ class Model
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -1280,7 +1304,7 @@ class Model
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -1452,7 +1476,7 @@ class Model
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -1467,6 +1491,10 @@ class Model
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -1478,8 +1506,8 @@ class Model
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -1579,7 +1607,7 @@ class Model
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -1588,7 +1616,7 @@ class Model
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
@@ -1648,6 +1676,9 @@ class QueryBuilder
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -1659,6 +1690,9 @@ class QueryBuilder
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -1731,6 +1765,9 @@ class QueryBuilder
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -1741,7 +1778,7 @@ class QueryBuilder
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -1752,7 +1789,7 @@ class QueryBuilder
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -1775,7 +1812,7 @@ class QueryBuilder
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -1805,7 +1842,7 @@ class QueryBuilder
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -1827,6 +1864,7 @@ class QueryBuilder
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -1903,7 +1941,7 @@ class QueryBuilder
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -2075,7 +2113,7 @@ class QueryBuilder
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -2090,6 +2128,10 @@ class QueryBuilder
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -2101,8 +2143,8 @@ class QueryBuilder
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -2213,7 +2255,7 @@ class QueryBuilder
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -2238,7 +2280,7 @@ class Ret
      * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
      * ```
      *
-     * @param string|array|null $message
+     * @param array|string|null $message
      * @return $this
      * @see Ret::suc
      */
@@ -2249,7 +2291,7 @@ class Ret
     /**
      * Return operation failed result, and logs with an info level
      *
-     * @param string|array $message
+     * @param array|string $message
      * @param int $code
      * @param string $level
      * @return $this
@@ -2410,7 +2452,7 @@ class User
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -2546,7 +2588,7 @@ class User
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -2596,6 +2638,9 @@ class User
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -2607,6 +2652,9 @@ class User
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -2661,6 +2709,9 @@ class User
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -2671,7 +2722,7 @@ class User
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -2682,7 +2733,7 @@ class User
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -2705,7 +2756,7 @@ class User
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -2735,7 +2786,7 @@ class User
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -2757,6 +2808,7 @@ class User
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -2833,7 +2885,7 @@ class User
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -3005,7 +3057,7 @@ class User
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -3020,6 +3072,10 @@ class User
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -3031,8 +3087,8 @@ class User
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -3132,7 +3188,7 @@ class User
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -3141,7 +3197,7 @@ class User
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
@@ -3216,7 +3272,7 @@ class UserModel
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -3352,7 +3408,7 @@ class UserModel
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -3402,6 +3458,9 @@ class UserModel
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -3413,6 +3472,9 @@ class UserModel
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -3467,6 +3529,9 @@ class UserModel
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -3477,7 +3542,7 @@ class UserModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -3488,7 +3553,7 @@ class UserModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -3511,7 +3576,7 @@ class UserModel
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -3541,7 +3606,7 @@ class UserModel
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -3563,6 +3628,7 @@ class UserModel
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -3639,7 +3705,7 @@ class UserModel
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -3811,7 +3877,7 @@ class UserModel
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -3826,6 +3892,10 @@ class UserModel
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -3837,8 +3907,8 @@ class UserModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -3938,7 +4008,7 @@ class UserModel
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -3947,7 +4017,7 @@ class UserModel
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
@@ -3974,7 +4044,7 @@ class App
      * 根据域名查找应用名称
      *
      * @param string $domain
-     * @return string|false
+     * @return false|string
      * @see App::getIdByDomain
      */
     public function getIdByDomain($domain)
@@ -4019,7 +4089,7 @@ class AppModel
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -4155,7 +4225,7 @@ class AppModel
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -4205,6 +4275,9 @@ class AppModel
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -4216,6 +4289,9 @@ class AppModel
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -4270,6 +4346,9 @@ class AppModel
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -4280,7 +4359,7 @@ class AppModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -4291,7 +4370,7 @@ class AppModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -4314,7 +4393,7 @@ class AppModel
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -4344,7 +4423,7 @@ class AppModel
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -4366,6 +4445,7 @@ class AppModel
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -4442,7 +4522,7 @@ class AppModel
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -4614,7 +4694,7 @@ class AppModel
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -4629,6 +4709,10 @@ class AppModel
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -4640,8 +4724,8 @@ class AppModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -4741,7 +4825,7 @@ class AppModel
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -4750,7 +4834,7 @@ class AppModel
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
@@ -4763,7 +4847,7 @@ class Config
 {
     /**
      * @see Config::save
-     * @param string|array $name
+     * @param array|string $name
      * @param mixed $value
      * @return void
      */
@@ -4823,7 +4907,7 @@ class Model
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -4959,7 +5043,7 @@ class Model
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -5009,6 +5093,9 @@ class Model
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -5020,6 +5107,9 @@ class Model
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -5074,6 +5164,9 @@ class Model
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -5084,7 +5177,7 @@ class Model
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -5095,7 +5188,7 @@ class Model
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -5118,7 +5211,7 @@ class Model
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -5148,7 +5241,7 @@ class Model
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -5170,6 +5263,7 @@ class Model
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -5246,7 +5340,7 @@ class Model
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -5418,7 +5512,7 @@ class Model
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -5433,6 +5527,10 @@ class Model
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -5444,8 +5542,8 @@ class Model
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -5545,7 +5643,7 @@ class Model
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -5554,7 +5652,7 @@ class Model
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
@@ -5614,6 +5712,9 @@ class QueryBuilder
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -5625,6 +5726,9 @@ class QueryBuilder
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -5697,6 +5801,9 @@ class QueryBuilder
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -5707,7 +5814,7 @@ class QueryBuilder
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -5718,7 +5825,7 @@ class QueryBuilder
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -5741,7 +5848,7 @@ class QueryBuilder
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -5771,7 +5878,7 @@ class QueryBuilder
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -5793,6 +5900,7 @@ class QueryBuilder
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -5869,7 +5977,7 @@ class QueryBuilder
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -6041,7 +6149,7 @@ class QueryBuilder
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -6056,6 +6164,10 @@ class QueryBuilder
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -6067,8 +6179,8 @@ class QueryBuilder
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -6179,7 +6291,7 @@ class QueryBuilder
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -6204,7 +6316,7 @@ class Ret
      * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
      * ```
      *
-     * @param string|array|null $message
+     * @param array|string|null $message
      * @return $this
      * @see Ret::suc
      */
@@ -6215,7 +6327,7 @@ class Ret
     /**
      * Return operation failed result, and logs with an info level
      *
-     * @param string|array $message
+     * @param array|string $message
      * @param int $code
      * @param string $level
      * @return $this
@@ -6376,7 +6488,7 @@ class User
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -6512,7 +6624,7 @@ class User
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -6562,6 +6674,9 @@ class User
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -6573,6 +6688,9 @@ class User
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -6627,6 +6745,9 @@ class User
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -6637,7 +6758,7 @@ class User
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -6648,7 +6769,7 @@ class User
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -6671,7 +6792,7 @@ class User
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -6701,7 +6822,7 @@ class User
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -6723,6 +6844,7 @@ class User
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -6799,7 +6921,7 @@ class User
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -6971,7 +7093,7 @@ class User
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -6986,6 +7108,10 @@ class User
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -6997,8 +7123,8 @@ class User
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -7098,7 +7224,7 @@ class User
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -7107,7 +7233,7 @@ class User
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
@@ -7182,7 +7308,7 @@ class UserModel
     /**
      * Delete the current record and trigger the beforeDestroy and afterDestroy callback
      *
-     * @param string|int $id
+     * @param int|string $id
      * @return $this
      * @see Model::destroy
      */
@@ -7318,7 +7444,7 @@ class UserModel
     }
 
     /**
-     * @param Request|array|null $request
+     * @param array|Request|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -7368,6 +7494,9 @@ class UserModel
      * Executes the generated query and returns the first array result
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|null
      * @see QueryBuilder::fetch
      */
@@ -7379,6 +7508,9 @@ class UserModel
      * Executes the generated query and returns all array results
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return array|false
      * @see QueryBuilder::fetchAll
      */
@@ -7433,6 +7565,9 @@ class UserModel
      * Execute a delete query with specified conditions
      *
      * @param mixed $conditions
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return mixed
      * @see QueryBuilder::delete
      */
@@ -7443,7 +7578,7 @@ class UserModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param integer $offset The first result to return
+     * @param int $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -7454,7 +7589,7 @@ class UserModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param integer $limit The maximum number of results to retrieve
+     * @param int $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -7477,7 +7612,7 @@ class UserModel
      * Specifies an item that is to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns The selection expressions.
+     * @param array|string $columns the selection expressions
      * @return $this
      * @see QueryBuilder::select
      */
@@ -7507,7 +7642,7 @@ class UserModel
      * Specifies columns that are not to be returned in the query result.
      * Replaces any previously specified selections, if any.
      *
-     * @param string|array $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectExcept
      */
@@ -7529,6 +7664,7 @@ class UserModel
 
     /**
      * @param string $table
+     * @param mixed|null $alias
      * @return $this
      * @see QueryBuilder::table
      */
@@ -7605,7 +7741,7 @@ class UserModel
      * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
-     * @param string|array|Closure|null $column
+     * @param array|Closure|string|null $column
      * @param null $operator
      * @param null $value
      * @return $this
@@ -7777,7 +7913,7 @@ class UserModel
      * Specifies a grouping over the results of the query.
      * Replaces any previously specified groupings, if any.
      *
-     * @param mixed $column The grouping column.
+     * @param mixed $column the grouping column
      * @return $this
      * @see QueryBuilder::groupBy
      */
@@ -7792,6 +7928,10 @@ class UserModel
      * @param string $conditions The having conditions
      * @param array $params The condition parameters
      * @param array $types The parameter types
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
      * @return $this
      * @see QueryBuilder::having
      */
@@ -7803,8 +7943,8 @@ class UserModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
      * @return $this
      * @see QueryBuilder::orderBy
      */
@@ -7904,7 +8044,7 @@ class UserModel
     /**
      * Set or remove cache time for the query
      *
-     * @param int|null|false $seconds
+     * @param false|int|null $seconds
      * @return $this
      * @see QueryBuilder::cache
      */
@@ -7913,7 +8053,7 @@ class UserModel
     }
 
     /**
-     * @param string|array|true $scopes
+     * @param array|string|true $scopes
      * @return $this
      * @see Model::unscoped
      */
