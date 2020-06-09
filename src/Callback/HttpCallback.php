@@ -4,8 +4,6 @@ namespace Miaoxing\Plugin\Callback;
 
 abstract class HttpCallback
 {
-    public static $lastErrorHttp = null;
-
     /**
      * @param $response
      * @param \Wei\Http $http
@@ -54,7 +52,5 @@ abstract class HttpCallback
             'code' => $exception->getCode(),
             'exception' => (string) $exception,
         ]);
-
-        static::$lastErrorHttp = $http;
     }
 }
