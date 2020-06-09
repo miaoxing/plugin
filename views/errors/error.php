@@ -4,6 +4,8 @@
  * @link https://ant.design/components/result-cn/ UI from antd
  */
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var int $statusCode */
 $statusCode = $this->response->getStatusCode();
 

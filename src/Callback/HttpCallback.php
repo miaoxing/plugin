@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Callback;
 
 abstract class HttpCallback
 {
-    static public $lastErrorHttp = null;
+    public static $lastErrorHttp = null;
 
     /**
      * @param $response
