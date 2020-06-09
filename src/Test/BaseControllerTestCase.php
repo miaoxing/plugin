@@ -2,8 +2,8 @@
 
 namespace Miaoxing\Plugin\Test;
 
-use Miaoxing\Plugin\Service\User;
 use Miaoxing\Plugin\Service\Tester;
+use Miaoxing\Plugin\Service\User;
 use RuntimeException;
 
 /**

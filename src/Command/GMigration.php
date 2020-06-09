@@ -2,9 +2,9 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Wei\Migration;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputArgument;
+use Wei\Migration;
 
 class GMigration extends BaseCommand
 {

@@ -16,7 +16,7 @@ trait ConfigTrait
     public function __get($name)
     {
         // 如果是配置项,至少返回null
-        if (isset($this->configs) && isset($this->configs[$name])) {
+        if (isset($this->configs, $this->configs[$name])) {
             if (isset($this->configs[$name]['default'])) {
                 return $this->configs[$name]['default'];
             } else {

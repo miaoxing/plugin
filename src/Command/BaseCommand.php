@@ -2,12 +2,12 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Wei\ServiceTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Wei\ServiceTrait;
 use Wei\Wei;
 
 abstract class BaseCommand extends Command

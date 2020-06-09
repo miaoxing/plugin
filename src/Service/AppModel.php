@@ -2,8 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\Metadata\AppTrait;
 use Miaoxing\Plugin\ConstTrait;
+use Miaoxing\Plugin\Metadata\AppTrait;
 
 /**
  * 应用模型

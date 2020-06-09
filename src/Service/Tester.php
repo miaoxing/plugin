@@ -178,23 +178,6 @@ class Tester extends \Miaoxing\Plugin\BaseService
         return $this->dataType('json');
     }
 
-    protected function getControllerByClass($class)
-    {
-        $parts = explode('Controller\\', $class);
-        $controller = substr($parts[1], 0, -4);
-        return implode('/', array_map('lcfirst', explode('\\', $controller)));
-    }
-
-    protected function getActionByMethod($method)
-    {
-        preg_match('/^test(.+?)Action/', $method, $match);
-        if (isset($match[1])) {
-            return lcfirst($match[1]);
-        }
-
-        return null;
-    }
-
     /**
      * 调用指定的控制器盒方法
      *
@@ -205,7 +188,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
     {
         if (!$this->controller) {
             $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
-            if (isset($traces[1]['class']) && $traces[1]['class'] !== get_class()) {
+            if (isset($traces[1]['class']) && __CLASS__ !== $traces[1]['class']) {
                 $match = $traces[1];
             } else {
                 $match = $traces[2];
@@ -267,50 +250,6 @@ class Tester extends \Miaoxing\Plugin\BaseService
     }
 
     /**
-     * Parse response data by specified type
-     *
-     * @param string $data
-     * @param null $exception A variable to store exception when parsing error
-     * @return mixed
-     */
-    protected function parseResponse($data, &$exception)
-    {
-        switch ($this->dataType) {
-            case 'json':
-            case 'jsonObject':
-                $data = json_decode($data, 'json' === $this->dataType);
-                if (null === $data && JSON_ERROR_NONE != json_last_error()) {
-                    $exception = new \ErrorException('JSON parsing error', json_last_error());
-                }
-                break;
-
-            case 'xml':
-            case 'serialize':
-                $methods = [
-                    'xml' => 'simplexml_load_string',
-                    'serialize' => 'unserialize',
-                ];
-                // @codingStandardsIgnoreLine
-                $data = @$methods[$this->dataType]($data);
-                if (false === $data && $e = error_get_last()) {
-                    $exception = new \ErrorException($e['message'], $e['type'], 0, $e['file'], $e['line']);
-                }
-                break;
-
-            case 'query':
-                // Parse $data(string) and assign the result to $data(array)
-                parse_str($data, $data);
-                break;
-
-            case 'text':
-            default:
-                break;
-        }
-
-        return $data;
-    }
-
-    /**
      * Helper: 设置登录用户
      *
      * @param int $userId
@@ -369,30 +308,6 @@ class Tester extends \Miaoxing\Plugin\BaseService
             ->response();
     }
 
-    protected function initWechatApp($content)
-    {
-        $wei = wei();
-
-        $account = wei()->wechatAccount->getCurrentAccount();
-        $account->setData([
-            'authed' => false,
-            'applicationId' => 'wxbad0b45542aa0b5e',
-            'token' => 'wei',
-            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG',
-        ]);
-
-        // 模拟自定义回复
-        $wei->weChatApp = new \Wei\WeChatApp([
-            'wei' => $wei,
-            'query' => [
-                'signature' => '1273e279da5a3a236a8f20f40d18e5ecc7d84bc6',
-                'timestamp' => '1366032735',
-                'nonce' => '136587223',
-            ],
-            'postData' => $content,
-        ]);
-    }
-
     /**
      * 运行任务
      *
@@ -426,5 +341,90 @@ class Tester extends \Miaoxing\Plugin\BaseService
             ->json()
             ->exec()
             ->response();
+    }
+
+    protected function getControllerByClass($class)
+    {
+        $parts = explode('Controller\\', $class);
+        $controller = substr($parts[1], 0, -4);
+        return implode('/', array_map('lcfirst', explode('\\', $controller)));
+    }
+
+    protected function getActionByMethod($method)
+    {
+        preg_match('/^test(.+?)Action/', $method, $match);
+        if (isset($match[1])) {
+            return lcfirst($match[1]);
+        }
+
+        return null;
+    }
+
+    /**
+     * Parse response data by specified type
+     *
+     * @param string $data
+     * @param null $exception A variable to store exception when parsing error
+     * @return mixed
+     */
+    protected function parseResponse($data, &$exception)
+    {
+        switch ($this->dataType) {
+            case 'json':
+            case 'jsonObject':
+                $data = json_decode($data, 'json' === $this->dataType);
+                if (null === $data && JSON_ERROR_NONE != json_last_error()) {
+                    $exception = new \ErrorException('JSON parsing error', json_last_error());
+                }
+                break;
+
+            case 'xml':
+            case 'serialize':
+                $methods = [
+                    'xml' => 'simplexml_load_string',
+                    'serialize' => 'unserialize',
+                ];
+                /** @codingStandardsIgnoreLine */
+                $data = @$methods[$this->dataType]($data);
+                if (false === $data && $e = error_get_last()) {
+                    $exception = new \ErrorException($e['message'], $e['type'], 0, $e['file'], $e['line']);
+                }
+                break;
+
+            case 'query':
+                // Parse $data(string) and assign the result to $data(array)
+                parse_str($data, $data);
+                break;
+
+            case 'text':
+            default:
+                break;
+        }
+
+        return $data;
+    }
+
+    protected function initWechatApp($content)
+    {
+        $wei = wei();
+
+        $account = wei()->wechatAccount->getCurrentAccount();
+        $account->setData([
+            'authed' => false,
+            'applicationId' => 'wxbad0b45542aa0b5e',
+            'token' => 'wei',
+            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG',
+        ]);
+
+        // 模拟自定义回复
+        $wei->weChatApp = new \Wei\WeChatApp([
+            'wei' => $wei,
+            'query' => [
+                'signature' => '1273e279da5a3a236a8f20f40d18e5ecc7d84bc6',
+                'timestamp' => '1366032735',
+                'nonce' => '136587223',
+            ],
+            'postData' => $content,
+        ]);
     }
 }

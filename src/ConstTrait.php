@@ -45,8 +45,8 @@ trait ConstTrait
 
         // 2. Use exiting constant configs
         $property = lcfirst(str_replace('_', '', ucwords($prefix, '_'))) . 'Names';
-        if (isset($this->$property)) {
-            $names = $this->$property;
+        if (isset($this->{$property})) {
+            $names = $this->{$property};
         } else {
             $names = [];
         }
@@ -59,7 +59,7 @@ trait ConstTrait
             if (0 !== stripos($name, $prefix)) {
                 continue;
             }
-            if (in_array($name, $this->constExcludes)) {
+            if (in_array($name, $this->constExcludes, true)) {
                 continue;
             }
             $data[$id]['id'] = $id;
