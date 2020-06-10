@@ -53,7 +53,8 @@ abstract class BaseControllerTestCase extends BaseTestCase
     public function providerForActions()
     {
         $controller = $this->getController();
-        $controllerClass = last($this->app->getControllerClasses($controller));
+        $controllerClasses = $this->app->getControllerClasses($controller);
+        $controllerClass = end($controllerClasses);
         $actions = get_class_methods($controllerClass);
         if (null === $actions) {
             throw new RuntimeException(sprintf(
