@@ -86,8 +86,50 @@ jobs:
           composer global require twinh/php-coveralls
           php-coveralls --coverage_clover=build/logs/clover.xml -vvv
 
+  jest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install
+        run: yarn install
+
+      - name: Run
+        run: |
+          yarn jest --passWithNoTests --coverage --coverageReporters text lcovonly
+          mkdir -p coverage && touch coverage/lcov.info
+
+      - name: Coveralls
+        if: !startsWith(hashFiles('**/coverage/lcov.info'), '5df6e0e2761359d30')
+        env:
+          COVERALLS_FLAG_NAME: node-${{ matrix.node-version }}
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+
   coveralls-finish:
-    needs: [phpunit]
+    needs: [phpunit, jest]
     runs-on: ubuntu-18.04
     steps:
       - name: Coveralls Finished
