@@ -117,10 +117,9 @@ jobs:
       - name: Run
         run: |
           yarn jest --passWithNoTests --coverage --coverageReporters text lcovonly
-          mkdir -p coverage && touch coverage/lcov.info
 
       - name: Coveralls
-        if: startsWith(hashFiles('**/coverage/lcov.info'), '5df6e0e27') == false
+        if: hashFiles('coverage/lcov.info')
         env:
           COVERALLS_FLAG_NAME: node-${{ matrix.node-version }}
         uses: coverallsapp/github-action@master
