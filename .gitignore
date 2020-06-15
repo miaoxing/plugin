@@ -1,13 +1,20 @@
-/vendor/
-/phpunit.xml
-/.phpunit.result.cache
-/.php_cs.cache
-/composer.lock
+.idea/
 
+# js
 /node_modules/
+/dist/
+/coverage/
 /yarn.lock
+/yarn-error.log
+
+# php
+/vendor/
+composer.lock
+phpunit.xml
+.php_cs.cache
+.phpunit.result.cache
 
 # miaoxing
-/data/
 /plugins/
+/storage/
 /tests/config-local.php
