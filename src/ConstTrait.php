@@ -6,6 +6,7 @@ use Wei\Request;
 
 /**
  * @property Request $request
+ * @todo 支持 name 之外 ？
  */
 trait ConstTrait
 {

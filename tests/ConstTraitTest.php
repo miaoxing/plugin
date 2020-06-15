@@ -42,10 +42,10 @@ class ConstTraitTest extends BaseTestCase
         $this->assertEquals(SexConst::SEX_MALE, $sex->getConstId('sex', 'male'));
     }
 
-    public function testGetConstValue()
+    public function testGetConsts()
     {
         $sex = new SexConst();
 
-        $this->assertEquals('男', $sex->getConstValue('sex', SexConst::SEX_MALE, 'label'));
+        $this->assertEquals('男', $sex->getConsts('sex')[SexConst::SEX_MALE]['name']);
     }
 }
