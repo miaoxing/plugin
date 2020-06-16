@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Test;
 
+use Miaoxing\Plugin\Service\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;
 
@@ -92,8 +93,17 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         return $model;
     }
 
-    public function assertRetSuc(array $ret, $message = null, $assertMessage = null)
+    /**
+     * @param array|Ret $ret
+     * @param string $message
+     * @param string $assertMessage
+     */
+    public function assertRetSuc($ret, $message = null, $assertMessage = null)
     {
+        if ($ret instanceof Ret) {
+            $ret = $ret->toArray();
+        }
+
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
 
         $expected = ['code' => 1];
@@ -104,8 +114,17 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         $this->assertArrayContains($expected, $ret, $assertMessage);
     }
 
-    public function assertRetErr(array $ret, $code, $message = null, $assertMessage = null)
+    /**
+     * @param array|Ret $ret
+     * @param string $message
+     * @param string $assertMessage
+     */
+    public function assertRetErr($ret, $code, $message = null, $assertMessage = null)
     {
+        if ($ret instanceof Ret) {
+            $ret = $ret->toArray();
+        }
+
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
 
         $expected = ['code' => $code];
