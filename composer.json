@@ -13,7 +13,7 @@
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
-    "miaoxing/coding-standards": "^4.1.1"
+    "miaoxing/coding-standards": "^5.0.0@beta"
   },
   "autoload": {
     "files": [
@@ -31,9 +31,6 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
-    "branch-alias": {
-      "dev-master": "2.0.x-dev"
-    },
     "installer-types": [
       "miaoxing-plugin"
     ],
