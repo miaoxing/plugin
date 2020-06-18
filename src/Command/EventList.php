@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Command;
 
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 
 class EventList extends BaseCommand
@@ -15,7 +16,20 @@ class EventList extends BaseCommand
     {
         wei()->app->setNamespace($this->getArgument('app'));
         $events = wei()->plugin->getEvents();
-        dump($events);
+
+        $table = new Table($this->output);
+        $table->setHeaders(['Name', 'Priority', 'Plugins']);
+
+        foreach ($events as $name => $priorityToPlugins) {
+            foreach ($priorityToPlugins as $priority => $plugins) {
+                $table->addRow([
+                    $name,
+                    $priority,
+                    implode(',', $plugins),
+                ]);
+            }
+        }
+        $table->render();
     }
 
     protected function configure()
