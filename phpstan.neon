@@ -1,0 +1,8 @@
+includes:
+	- phpstan-baseline.neon
+
+parameters:
+    level: 1
+    ignoreErrors:
+        # 允许服务静态调用动态方法
+        - '/^Static call to instance method/'
