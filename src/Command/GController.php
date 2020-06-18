@@ -5,6 +5,10 @@ namespace Miaoxing\Plugin\Command;
 use Miaoxing\Plugin\BasePlugin;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \StrMixin
+ * @mixin \PluginMixin
+ */
 class GController extends BaseCommand
 {
     protected function configure()

@@ -13,6 +13,7 @@ use Miaoxing\Plugin\Model\QueryBuilderCacheTrait;
  * @author Twin Huang <twinhuang@qq.com>
  * @mixin \DbMixin
  * @mixin \TagCacheMixin
+ * @mixin \CacheMixin
  */
 class QueryBuilder extends BaseService
 {
@@ -212,7 +213,6 @@ class QueryBuilder extends BaseService
     public function execute()
     {
         if (self::SELECT == $this->type) {
-            $this->loaded = true;
             if (false !== $this->cacheTime) {
                 return $this->fetchFromCache();
             } else {
@@ -248,7 +248,7 @@ class QueryBuilder extends BaseService
     public function countBySubQuery()
     {
         $this->where(...func_get_args());
-        return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
+        //return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
     }
 
     public function max($column)
@@ -1351,7 +1351,6 @@ class QueryBuilder extends BaseService
      */
     protected function add($sqlPartName, $sqlPart, $append = false, $type = null)
     {
-        $this->isNew = false;
         $this->state = self::STATE_DIRTY;
 
         $isArray = is_array($sqlPart);

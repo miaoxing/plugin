@@ -1229,12 +1229,18 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $this->trigger('preExecute');
 
+        if (self::SELECT == $this->type) {
+            $this->loaded = true;
+        }
+
         return parent::execute();
     }
 
     public function add($sqlPartName, $sqlPart, $append = false, $type = null)
     {
         $this->trigger('preBuildQuery', func_get_args());
+
+        $this->isNew = false;
 
         return parent::add($sqlPartName, $sqlPart, $append, $type);
     }
@@ -1465,7 +1471,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
             $this->triggerCallback('afterSave');
-        // 2.2 Loop and save collection records
+            // 2.2 Loop and save collection records
         } else {
             foreach ($this->data as $record) {
                 $record->save();

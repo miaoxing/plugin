@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin;
 
+use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Wei\Request;
 
 /**
@@ -137,8 +138,10 @@ trait ConstTrait
 
         $id = $this->getConstId($prefix, $reqKey);
         if ('' !== $id) {
+            /* @see ReqQueryTrait::parseReqColumn */
+            // @phpstan-ignore-next-line
             list($column) = $this->parseReqColumn($prefix);
-            $this->andWhere([$column => $id]);
+            $this->where($column, $id);
         }
 
         return $this;

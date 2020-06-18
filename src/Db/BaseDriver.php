@@ -3,10 +3,9 @@
 namespace Miaoxing\Plugin\Db;
 
 use Wei\Base;
-use Wei\Db;
 
 /**
- * @property Db db
+ * @mixin \DbMixin
  */
 abstract class BaseDriver extends Base
 {

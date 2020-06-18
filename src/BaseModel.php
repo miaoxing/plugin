@@ -886,7 +886,9 @@ class BaseModel extends Record implements JsonSerializable
      */
     public function whereHas($column, $value = true)
     {
+        // @phpstan-ignore-next-line
         if (isset($this->defaultValues[$this->casts[$column]])) {
+            // @phpstan-ignore-next-line
             $default = $this->defaultValues[$this->casts[$column]];
         } else {
             $default = '';

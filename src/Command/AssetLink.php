@@ -2,6 +2,9 @@
 
 namespace Miaoxing\Plugin\Command;
 
+/**
+ * @mixin \PluginMixin
+ */
 class AssetLink extends BaseCommand
 {
     /**

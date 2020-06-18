@@ -5,6 +5,9 @@ namespace Miaoxing\Plugin\Command;
 use Miaoxing\Plugin\BasePlugin;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \PluginMixin
+ */
 class GModel extends BaseCommand
 {
     /**

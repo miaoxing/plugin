@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * @internal
+ * @mixin \PluginMixin
  */
 final class GTest extends BaseCommand
 {

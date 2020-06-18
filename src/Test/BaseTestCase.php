@@ -57,7 +57,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      * @param string $name
      * @param array $methods
      * @param array $arguments
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getServiceMock($name, $methods = [], array $arguments = [])
     {
@@ -65,13 +65,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         $this->mockServices[$name] = $service;
 
         $class = get_class($service);
-        if (!method_exists($this, 'createMock')) {
-            $mock = $this->getMock($class, $methods, $arguments);
-        } else {
-            // For PHPUnit 5.4+
-            $mock = $this->createMock($class);
-        }
-
+        $mock = $this->createMock($class);
         $this->wei->{$name} = $mock;
 
         return $mock;

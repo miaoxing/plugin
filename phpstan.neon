@@ -3,6 +3,11 @@ includes:
 
 parameters:
     level: 1
+
+    scanDirectories:
+        - docs
+        - vendor/wei/wei/docs
+
     ignoreErrors:
         # 允许服务静态调用动态方法
         - '/^Static call to instance method/'

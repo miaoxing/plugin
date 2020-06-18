@@ -61,9 +61,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
 
         // Record error result
         if (1 !== $code) {
-            !isset($rawMessage) && $rawMessage = $data['message'];
-            !isset($params) && $params = $data;
-            $this->logger->log($type, $rawMessage, $params);
+            $this->logger->log($type, $rawMessage ?? $data['message'], $params ?? $data);
         }
 
         return $this;
