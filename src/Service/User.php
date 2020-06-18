@@ -7,20 +7,20 @@ use Miaoxing\Plugin\ConfigTrait;
 /**
  * 用户
  *
- * @property bool enableRegister
- * @property string disableRegisterTips
- * @property bool enableLoginCaptcha
- * @property int defaultGroupId
- * @property bool enablePasswordRest
- * @property bool enableMobileVerify
- * @property bool enableLogin
- * @property string disableLoginTips
- * @property string bgImage
- * @property int defaultTagId
- * @property int agreementArticleId
- * @property bool enableExport
- * @property bool enableCreate
- * @property string defaultAvatar
+ * @property bool $enableRegister
+ * @property string $disableRegisterTips
+ * @property bool $enableLoginCaptcha
+ * @property int $defaultGroupId
+ * @property bool $enablePasswordRest
+ * @property bool $enableMobileVerify
+ * @property bool $enableLogin
+ * @property string $disableLoginTips
+ * @property string $bgImage
+ * @property int $defaultTagId
+ * @property int $agreementArticleId
+ * @property bool $enableExport
+ * @property bool $enableCreate
+ * @property string $defaultAvatar
  * @mixin \EventMixin
  * @mixin \SessionMixin
  * @mixin \RequestMixin
