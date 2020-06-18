@@ -381,7 +381,7 @@ class Plugin extends BaseService
                         $events[$event['name']][$event['priority']][] = $id;
                     }
                 }
-
+                ksort($events);
                 return $events;
             });
         }
