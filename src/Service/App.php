@@ -344,16 +344,15 @@ class App extends \Wei\App
      */
     protected function execute($instance, $action)
     {
-        $app = $this;
         $wei = $this->wei;
 
         $instance->init();
         $middleware = $this->getMiddleware($instance, $action);
 
-        $callback = function () use ($instance, $action, $app) {
-            $instance->before($app->request, $app->response);
+        $callback = function () use ($instance, $action) {
+            $instance->before($this->request, $this->response);
 
-            $method = $app->getActionMethod($action);
+            $method = $this->getActionMethod($action);
             // TODO 和 forward 异常合并一起处理
             try {
                 $args = $this->buildActionArgs($instance, $method);
@@ -362,7 +361,7 @@ class App extends \Wei\App
                 return $e->getRet();
             }
 
-            $instance->after($app->request, $response);
+            $instance->after($this->request, $response);
 
             return $response;
         };

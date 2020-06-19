@@ -226,13 +226,12 @@ class QueryBuilder extends BaseService
     /**
      * Executes the generated query and returns a column value of the first row
      *
-     * @param mixed $conditions
-     * @param mixed|null $colum
+     * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|null
+     * @return string|null
      */
-    public function fetchColumn($colum = null, $operator = null, $value = null)
+    public function fetchColumn($column = null, $operator = null, $value = null)
     {
         $data = $this->fetch(...func_get_args());
         return $data ? current($data) : null;
@@ -241,13 +240,12 @@ class QueryBuilder extends BaseService
     /**
      * Executes a sub query to receive the rows number
      *
-     * @param mixed $conditions
      * @return int
      * @todo 改为自动识别
      */
     public function countBySubQuery()
     {
-        $this->where(...func_get_args());
+        return (int) $this->where(...func_get_args())->fetchColumn();
         //return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
     }
 
@@ -280,9 +278,6 @@ class QueryBuilder extends BaseService
      * Adds one or more restrictions to the query results, forming a logical
      * disjunction with any previously specified restrictions.
      *
-     * @param string $conditions The WHERE conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -376,7 +371,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $expression
+     * @param string $expression
      * @param array $params
      * @return $this
      * @svc
@@ -390,9 +385,6 @@ class QueryBuilder extends BaseService
      * Adds a restriction over the groups of the query, forming a logical
      * disjunction with any existing having restrictions.
      *
-     * @param string $conditions The HAVING conditions to add
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -629,7 +621,6 @@ class QueryBuilder extends BaseService
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -647,7 +638,6 @@ class QueryBuilder extends BaseService
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -768,7 +758,6 @@ class QueryBuilder extends BaseService
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -854,7 +843,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @svc
      */
@@ -944,7 +933,6 @@ class QueryBuilder extends BaseService
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @svc
      */
@@ -1037,7 +1025,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @svc
@@ -1047,13 +1035,19 @@ class QueryBuilder extends BaseService
         return $this->addWhere($column, 'BETWEEN', $params);
     }
 
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @svc
+     */
     protected function orWhereBetween($column, array $params)
     {
         return $this->addWhere($column, 'BETWEEN', $params, 'OR');
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @svc
@@ -1064,7 +1058,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @svc
@@ -1075,7 +1069,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @svc
@@ -1086,7 +1080,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @svc
      */
@@ -1096,7 +1090,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @svc
      */
@@ -1106,9 +1100,9 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @svc
      */
@@ -1118,9 +1112,9 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @svc
      */
@@ -1130,9 +1124,9 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @svc
      */
@@ -1142,9 +1136,9 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @svc
      */
@@ -1154,9 +1148,9 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @svc
      */
@@ -1166,9 +1160,9 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @svc
      */
@@ -1192,8 +1186,8 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @svc
@@ -1221,9 +1215,6 @@ class QueryBuilder extends BaseService
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value

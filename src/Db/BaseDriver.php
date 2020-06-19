@@ -26,6 +26,23 @@ abstract class BaseDriver extends Base
      */
     protected $aliases = [];
 
+    /**
+     * @param string $type
+     * @param array $sqlParts
+     * @param callable|null $identifierConverter
+     * @return string
+     */
+    abstract function getSql($type, $sqlParts, $identifierConverter = null);
+
+    /**
+     * @param string $type
+     * @param array $sqlParts
+     * @param callable|null $identifierConverter
+     * @param array $values
+     * @return string
+     */
+    abstract function getRawSql($type, $sqlParts, $identifierConverter, array $values);
+
     protected function wrap($column)
     {
         if (false === strpos($column, '.')) {

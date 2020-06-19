@@ -59,7 +59,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * The record data
      *
-     * @var []|array
+     * @var array
      */
     protected $data = [];
 
@@ -300,7 +300,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             }
 
             $data = [];
-            /** @var $record Record */
+            /** @var static $record */
             foreach ($this->data as $key => $record) {
                 $data[$key] = $record->toArray($returnFields);
                 if ($prepend) {
@@ -436,7 +436,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 $existIds[] = $row[$this->primaryKey];
             }
         }
-        /** @var $record Record */
+        /** @var static $record */
         foreach ($this->data as $key => $record) {
             if (!in_array($record[$this->primaryKey], $existIds, true)) {
                 $record->destroy();
@@ -783,6 +783,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function filter(Closure $fn)
     {
         $data = array_filter($this->data, $fn);
+        /** @var static[] $records */
         $records = $this->db->init($this->table, [], $this->isNew);
         $records->data = $data;
         $records->isColl = true;
@@ -896,7 +897,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param $class
+     * @param string $class
      * @param bool $autoload
      * @return array
      * @see http://php.net/manual/en/function.class-uses.php#110752
@@ -1614,7 +1615,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @svc
@@ -1637,9 +1638,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @svc
      */
@@ -1658,9 +1659,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @svc
      */
@@ -1671,7 +1672,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
         $records = [];
         foreach ($data as $key => $row) {
-            /** @var $records Record[] */
+            /** @var static[] $records */
             $records[$key] = static::new($row, [
                 'wei' => $this->wei,
                 'db' => $this->db,
@@ -1686,7 +1687,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @svc
@@ -1711,9 +1712,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @svc

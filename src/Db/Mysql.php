@@ -281,8 +281,6 @@ class Mysql extends BaseDriver
      * Generate condition string for WHERE or Having statement
      *
      * @param mixed $conditions
-     * @param array $params
-     * @param array $types
      * @return string
      */
     protected function processCondition($conditions)
