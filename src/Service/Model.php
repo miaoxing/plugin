@@ -221,6 +221,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $this->db->addRecordClass($this->getTable(), static::class);
 
+        // @phpstan-ignore-next-line 待 db 服务更新后再移除
         return $this->db($this->table);
     }
 
@@ -452,7 +453,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             if (isset($row[$this->primaryKey], $this->data[$row[$this->primaryKey]])) {
                 $this->data[$row[$this->primaryKey]]->fromArray($row);
             } else {
-                $this[] = $this->__invoke($this->table)->fromArray($extraData + $row);
+                $this->offsetSet(null, $this->__invoke($this->table)->fromArray($extraData + $row));
             }
         }
 
@@ -1040,7 +1041,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string $record
      * @param string|null $foreignKey
      * @param string|null $localKey
-     * @return $this
+     * @return static
      */
     public function hasOne($record, $foreignKey = null, $localKey = null)
     {
@@ -1071,7 +1072,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string $record
      * @param string|null $foreignKey
      * @param string|null $localKey
-     * @return $this
+     * @return static
      */
     public function belongsTo($record, $foreignKey = null, $localKey = null)
     {
@@ -1087,7 +1088,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string|null $junctionTable
      * @param string|null $foreignKey
      * @param string|null $relatedKey
-     * @return $this
+     * @return static
      */
     public function belongsToMany($record, $junctionTable = null, $foreignKey = null, $relatedKey = null)
     {
@@ -1170,6 +1171,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * {@inheritdoc}
+     *
+     * @return $this|BaseService
      */
     public function &__get($name)
     {
@@ -1529,7 +1532,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @svc
      */
     protected function set($name, $value = null, $throwException = true)
@@ -1753,7 +1756,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @svc
      */
     protected function all()
@@ -1818,11 +1821,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param object|string $model
-     * @return $this
+     * @return static
      */
     protected function getRelatedModel($model)
     {
-        if ($model instanceof self) {
+        if ($model instanceof static) {
             return $model;
         } elseif (is_subclass_of($model, self::class)) {
             return forward_static_call([$model, 'new']);

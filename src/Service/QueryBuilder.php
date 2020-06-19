@@ -151,7 +151,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @param string|null $table
-     * @return $this
+     * @return static
      */
     public function __invoke(string $table = null)
     {
@@ -641,7 +641,7 @@ class QueryBuilder extends BaseService
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @svc
      */
     protected function fetchAll($column = null, $operator = null, $value = null)
@@ -666,7 +666,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @return array|null
+     * @return array
      * @svc
      */
     protected function all()

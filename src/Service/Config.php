@@ -73,7 +73,7 @@ class Config extends BaseService
      */
     protected function save($name, $value = null)
     {
-        return $this->set($name, $value)->write();
+        $this->set($name, $value)->write();
     }
 
     /**

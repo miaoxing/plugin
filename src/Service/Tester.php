@@ -60,7 +60,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
     /**
      * @param string|null $controller
      * @param string|null $action
-     * @return $this
+     * @return static
      */
     public function __invoke($controller = null, $action = null)
     {

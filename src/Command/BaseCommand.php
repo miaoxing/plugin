@@ -48,7 +48,7 @@ abstract class BaseCommand extends Command
     /**
      * Executes the current command
      *
-     * @return int
+     * @return int|void
      */
     abstract protected function handle();
 
@@ -59,7 +59,8 @@ abstract class BaseCommand extends Command
     {
         $this->input = $input;
         $this->output = $output;
-        return $this->handle();
+        $code =  $this->handle();
+        return is_int($code) ? $code : 0;
     }
 
     /**

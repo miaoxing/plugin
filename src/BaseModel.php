@@ -574,6 +574,7 @@ class BaseModel extends Record implements JsonSerializable
 
         $related->andWhere([$foreignKey => $this->getRelatedValue($localKey)]);
 
+        // @phpstan-ignore-next-line 忽略待废弃的类
         return $related;
     }
 

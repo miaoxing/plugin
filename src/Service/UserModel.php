@@ -115,7 +115,7 @@ class UserModel extends Model
 
         // 2. 验证旧密码
         if ($this['password'] && !$this->verifyPassword($req['oldPassword'])) {
-            return $this->err('旧密码错误！请重新输入');
+            return err('旧密码错误！请重新输入');
         }
 
         // 3. 更新新密码
@@ -124,6 +124,6 @@ class UserModel extends Model
 
         User::logout();
 
-        return $this->suc();
+        return suc();
     }
 }

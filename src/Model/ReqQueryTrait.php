@@ -15,7 +15,7 @@ trait ReqQueryTrait
     protected $reqMaps = [];
 
     /**
-     * @param array|\ArrayAccess $request
+     * @param Request $request
      * @return $this
      */
     public function setRequest($request)
