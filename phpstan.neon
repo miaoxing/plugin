@@ -6,18 +6,10 @@ includes:
 parameters:
     level: 5
 
-#    stubFiles:
-#        - docs/auto-completion.php
-#        - docs/auto-completion-static.php
-#        - vendor/wei/wei/docs/auto-completion.php
-#        - vendor/wei/wei/docs/auto-completion-static.php
-
-    scanDirectories:
-        - docs
-        - vendor/wei/wei/docs
-#
-#    scanFiles:
-#        - vendor/wei/wei/docs/auto-completion.php
+    scanFiles:
+        # 引入 *Mixin 类
+        - docs/auto-completion.php
+        - vendor/wei/wei/docs/auto-completion.php
 
     excludes_analyse:
         - src/BaseModel.php
@@ -25,9 +17,11 @@ parameters:
     ignoreErrors:
         # 用于快速判断赋值，例如 !$a && $a = 'xx';
         - "#^Right side of (\\|\\||&&) is always (true|false)\\.$#"
-        # 允许服务静态调用动态方法
+
+        # 允许服务静态调用动态方法，动态调用保护方法（NOTE: 可通过 mixin 解决，mixin 需在检查路径中，不能是 Symbols 或 Stub）
         - '#^Static call to instance method#'
-        # TODO 为 phpstan 生成 Stub 文件或 docs 兼容 phpstan
-        - "#^Access to an undefined property Wei\\\\Wei\\:\\:\\$(.+?)\\.$#"
         - "#^Call to protected method (.+?) of class (.+?).$#"
+
+        # 允许 wei()->xxx (NOTE: 使用 stubFiles 后面定义覆盖前面)
+        - "#^Access to an undefined property Wei\\\\Wei\\:\\:\\$(.+?)\\.$#"
         - "#^Call to an undefined method Wei\\\\Wei\\:\\:(.+?)\\(\\)\\.$#"
