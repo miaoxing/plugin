@@ -44,7 +44,7 @@ trait QueryBuilderCacheTrait
     /**
      * Set or remove cache tags
      *
-     * @param array|false|null $tags
+     * @param array|string|false|null $tags
      * @return $this
      */
     public function tags($tags = null)

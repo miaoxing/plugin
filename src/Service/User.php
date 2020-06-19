@@ -214,7 +214,7 @@ class User extends UserModel
     /**
      * 加载外部记录的数据
      *
-     * @param User $user
+     * @param UserModel $user
      */
     protected function loadRecordData(UserModel $user)
     {

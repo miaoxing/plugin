@@ -27,7 +27,7 @@ abstract class BaseDriver extends Base
     protected $aliases = [];
 
     /**
-     * @param string $type
+     * @param int $type
      * @param array $sqlParts
      * @param callable|null $identifierConverter
      * @return string
@@ -35,7 +35,7 @@ abstract class BaseDriver extends Base
     abstract function getSql($type, $sqlParts, $identifierConverter = null);
 
     /**
-     * @param string $type
+     * @param int $type
      * @param array $sqlParts
      * @param callable|null $identifierConverter
      * @param array $values

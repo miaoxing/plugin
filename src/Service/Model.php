@@ -744,7 +744,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Set the offset value
      *
-     * @param string $offset
+     * @param string|int|null $offset
      * @param mixed $value
      */
     public function offsetSet($offset, $value)
@@ -896,7 +896,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param string $class
+     * @param object $class
      * @param bool $autoload
      * @return array
      * @see http://php.net/manual/en/function.class-uses.php#110752
@@ -1038,7 +1038,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param string $record
+     * @param static|string $record
      * @param string|null $foreignKey
      * @param string|null $localKey
      * @return static

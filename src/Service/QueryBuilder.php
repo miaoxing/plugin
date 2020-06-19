@@ -983,8 +983,8 @@ class QueryBuilder extends BaseService
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @svc
      */
@@ -1424,7 +1424,7 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @svc
      */
