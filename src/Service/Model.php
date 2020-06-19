@@ -452,7 +452,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             if (isset($row[$this->primaryKey], $this->data[$row[$this->primaryKey]])) {
                 $this->data[$row[$this->primaryKey]]->fromArray($row);
             } else {
-                $this[] = $this->db($this->table)->fromArray($extraData + $row);
+                $this[] = $this->__invoke($this->table)->fromArray($extraData + $row);
             }
         }
 
@@ -783,12 +783,10 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     public function filter(Closure $fn)
     {
         $data = array_filter($this->data, $fn);
-        /** @var static[] $records */
-        $records = $this->db->init($this->table, [], $this->isNew);
-        $records->data = $data;
-        $records->isColl = true;
-        $records->loaded = $this->loaded;
-        return $records;
+        return static::newColl($data)->setOption([
+            'isNew' => $this->isNew,
+            'loaded' => $this->loaded,
+        ]);
     }
 
     /**

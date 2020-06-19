@@ -6,12 +6,18 @@ includes:
 parameters:
     level: 2
 
+#    stubFiles:
+#        - docs/auto-completion.php
+#        - docs/auto-completion-static.php
+#        - vendor/wei/wei/docs/auto-completion.php
+#        - vendor/wei/wei/docs/auto-completion-static.php
+
     scanDirectories:
         - docs
         - vendor/wei/wei/docs
-
-    scanFiles:
-        - vendor/wei/wei/docs/auto-completion.php
+#
+#    scanFiles:
+#        - vendor/wei/wei/docs/auto-completion.php
 
     ignoreErrors:
         # 允许服务静态调用动态方法

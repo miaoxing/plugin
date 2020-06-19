@@ -54,10 +54,13 @@ trait DefaultScopeTrait
     {
         if (!$scopes) {
             $this->withoutScopes = true;
-        } else {
-            $this->withoutScopes += (array) $scopes;
+            return $this;
         }
 
+        if ($this->withoutScopes === true) {
+            $this->withoutScopes = [];
+        }
+        $this->withoutScopes += (array) $scopes;
         return $this;
     }
 

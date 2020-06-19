@@ -52,7 +52,7 @@ class UserModel extends Model
     }
 
     /**
-     * @return string|null
+     * @return string|void
      */
     public function getDisplayNameAttribute()
     {
