@@ -1222,7 +1222,7 @@ class BaseModel extends Record implements JsonSerializable
     /**
      * Check if collection key
      *
-     * @param string $key
+     * @param string|null $key
      * @return bool
      */
     protected function isCollKey($key)

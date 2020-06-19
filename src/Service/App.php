@@ -416,7 +416,7 @@ class App extends \Wei\App
     protected function buildActionArg(ReflectionParameter $param)
     {
         // @link https://github.com/phpstan/phpstan/issues/1133
-        /** @var \ReflectionNamedType $type */
+        /** @var \ReflectionNamedType|null $type */
         $type = $param->getType();
 
         // Handle Model class

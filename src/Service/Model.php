@@ -521,7 +521,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Set the record field value
      *
-     * @param string $name
+     * @param string|null|int $name
      * @param mixed $value
      * @return $this
      * @throws InvalidArgumentException
@@ -1689,7 +1689,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     /**
      * @param array $attributes
-     * @param array $data
+     * @param array|object $data
      * @return $this
      * @svc
      */
@@ -1767,7 +1767,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Load record by array offset
      *
-     * @param int|string $offset
+     * @param int|string|null $offset
      */
     protected function loadData($offset)
     {
@@ -1834,7 +1834,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
     }
 
-    protected function loadHasOne(self $related, $relation, $name)
+    /**
+     * @param self|null $related
+     * @param array $relation
+     * @param string $name
+     * @return array|$this|$this[]
+     */
+    protected function loadHasOne($related, $relation, $name)
     {
         if ($related) {
             $records = $related->all()->indexBy($relation['foreignKey']);
@@ -1848,7 +1854,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $records;
     }
 
-    protected function loadHasMany(self $related, $relation, $name)
+    /**
+     * @param self|null $related
+     * @param array $relation
+     * @param string $name
+     * @return array|$this|$this[]
+     */
+    protected function loadHasMany($related, $relation, $name)
     {
         $records = $related ? $related->fetchAll() : [];
         foreach ($this->data as $row) {
@@ -1867,7 +1879,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $records;
     }
 
-    protected function loadBelongsToMany(self $related, $relation, $name)
+    /**
+     * @param self|null $related
+     * @param array $relation
+     * @param string $name
+     * @return array|$this|$this[]
+     */
+    protected function loadBelongsToMany($related, $relation, $name)
     {
         if ($related) {
             $related->select($relation['junctionTable'] . '.' . $relation['foreignKey']);
@@ -1954,10 +1972,10 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Check if collection key
      *
-     * @param string $key
+     * @param string|null $key
      * @return bool
      */
-    protected function isCollKey($key)
+    protected function isCollKey(string $key = null)
     {
         return null === $key || is_numeric($key);
     }
@@ -1975,7 +1993,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      * @param mixed $value
      * @return $this
      */

@@ -26,7 +26,7 @@ trait QueryBuilderCacheTrait
     /**
      * The cache tags
      *
-     * @var array
+     * @var array|false
      */
     protected $cacheTags = [];
 

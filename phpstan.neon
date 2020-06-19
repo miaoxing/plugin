@@ -4,7 +4,7 @@ includes:
 	- vendor/phpstan/phpstan-phpunit/extension.neon
 
 parameters:
-    level: 3
+    level: 4
 
 #    stubFiles:
 #        - docs/auto-completion.php
@@ -20,6 +20,8 @@ parameters:
 #        - vendor/wei/wei/docs/auto-completion.php
 
     ignoreErrors:
+        # 用于快速判断赋值，例如 !$a && $a = 'xx';
+        - "#^Right side of (\\|\\||&&) is always (true|false)\\.$#"
         # 允许服务静态调用动态方法
         - '#^Static call to instance method#'
         # TODO 为 phpstan 生成 Stub 文件或 docs 兼容 phpstan

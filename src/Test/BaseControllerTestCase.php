@@ -56,7 +56,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
         $controllerClasses = $this->app->getControllerClasses($controller);
         $controllerClass = end($controllerClasses);
         $actions = get_class_methods($controllerClass);
-        if (null === $actions) {
+        if (!$actions) {
             throw new RuntimeException(sprintf(
                 'Action method not found in controller %s class %s',
                 $controller,

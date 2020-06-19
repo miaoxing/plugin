@@ -15,7 +15,7 @@ abstract class BaseDriver extends Base
     protected $wrapper = '';
 
     /**
-     * @var callable
+     * @var callable|null
      */
     protected $identifierConverter;
 

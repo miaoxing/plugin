@@ -135,8 +135,12 @@ class Config extends BaseService
             case 'NULL':
                 return 'null';
 
-            case 'object' && isset($var->express):
-                return $var->express;
+
+            case 'object':
+                if (isset($var->express)) {
+                    return $var->express;
+                }
+            // no break
 
             default:
                 return var_export($var, true);

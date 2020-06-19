@@ -59,12 +59,12 @@ class QueryBuilder extends BaseService
     protected $primaryKey = 'id';
 
     /**
-     * @var callable
+     * @var callable|null
      */
     protected $inputIdentifierConverter = [self::class, 'snake'];
 
     /**
-     * @var callable
+     * @var callable|null
      */
     protected $outputIdentifierConverter = [self::class, 'camel'];
 
