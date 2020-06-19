@@ -12,10 +12,9 @@ use Wei\RetTrait;
  * @mixin \LoggerMixin
  * @mixin \PluginMixin
  * @mixin \RetMixin
- * @mixin \PageMixin
  * @mixin \EventMixin
- * @property bool controllerAuth
- * @property array actionAuths
+ * @property bool $controllerAuth
+ * @property array $actionAuths
  */
 abstract class BaseController extends \Wei\BaseController
 {

@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Callback;
 abstract class HttpCallback
 {
     /**
-     * @param $response
+     * @param mixed $response
      * @param \Wei\Http $http
      */
     public static function success($response, \Wei\Http $http)

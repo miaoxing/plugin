@@ -7,8 +7,8 @@ use Miaoxing\Plugin\Service\User;
 use Wei\Time;
 
 /**
- * @property-read string deletedAtColumn
- * @property-read string deletedByColumn
+ * @property-read string $deletedAtColumn
+ * @property-read string $deletedByColumn
  */
 trait SoftDeleteTrait
 {

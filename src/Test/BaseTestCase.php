@@ -20,11 +20,6 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      */
     protected $mockServices = [];
 
-    /**
-     * @var BaseFixture
-     */
-    protected $fixture;
-
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
@@ -82,7 +77,10 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 
         // TODO 通过db服务调用getTableFields会出现错误 Illegal offset type in isset or empty in services/DbCallback.php on line 16
         $fields = wei()->db->getTableFields($table);
+        // @phpstan-ignore-next-line
         $model->setOption('fields', $fields);
+
+        wei()->plugin->getPluginIdByClass('ss');
 
         return $model;
     }
@@ -138,8 +136,8 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
     /**
      * 根据类名,查找HTML文本中的节点
      *
-     * @param $html
-     * @param $class
+     * @param string $html
+     * @param string $class
      * @return \DOMNodeList
      * @todo 换为DomCrawler或codecption
      */

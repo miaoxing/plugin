@@ -194,7 +194,7 @@ class BaseModel extends Record implements JsonSerializable
     }
 
     /**
-     * @param $class
+     * @param string $class
      * @param bool $autoload
      * @return array
      * @see http://php.net/manual/en/function.class-uses.php#110752

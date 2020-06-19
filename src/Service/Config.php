@@ -100,7 +100,7 @@ class Config extends BaseService
     /**
      * 将数据库读出的对象生成文件内容
      *
-     * @param @param ConfigModel[] $configs
+     * @param array $configs
      * @return string
      */
     protected function generateContent($configs)

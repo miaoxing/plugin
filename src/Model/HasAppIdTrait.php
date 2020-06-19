@@ -6,7 +6,7 @@ use Miaoxing\Plugin\Service\App;
 use Miaoxing\Plugin\Service\Model;
 
 /**
- * @property-read string appIdColumn
+ * @property-read string $appIdColumn
  */
 trait HasAppIdTrait
 {

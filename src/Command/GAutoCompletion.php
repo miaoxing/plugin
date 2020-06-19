@@ -72,9 +72,9 @@ class GAutoCompletion extends BaseCommand
     /**
      * Generate static calls code completion
      *
-     * @param BasePlugin $plugin
+     * @param array $services
+     * @param string $path
      * @throws \ReflectionException
-     * @throws \Exception
      */
     public function generateStaticCalls(array $services, string $path)
     {

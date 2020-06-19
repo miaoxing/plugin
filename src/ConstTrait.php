@@ -115,7 +115,7 @@ trait ConstTrait
     /**
      * 获取key和id关联数组
      *
-     * @param $prefix
+     * @param string $prefix
      * @return array
      */
     public function getConstKeyToIds($prefix)

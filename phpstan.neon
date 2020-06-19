@@ -1,5 +1,7 @@
 includes:
 	- phpstan-baseline.neon
+	- vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- vendor/phpstan/phpstan-phpunit/extension.neon
 
 parameters:
     level: 2
@@ -8,6 +10,13 @@ parameters:
         - docs
         - vendor/wei/wei/docs
 
+    scanFiles:
+        - vendor/wei/wei/docs/auto-completion.php
+
     ignoreErrors:
         # 允许服务静态调用动态方法
-        - '/^Static call to instance method/'
+        - '#^Static call to instance method#'
+        # TODO 为 phpstan 生成 Stub 文件或 docs 兼容 phpstan
+        - "#^Access to an undefined property Wei\\\\Wei\\:\\:\\$(.+?)\\.$#"
+        - "#^Call to protected method (.+?) of class (.+?).$#"
+        - "#^Call to an undefined method Wei\\\\Wei\\:\\:(.+?)\\(\\)\\.$#"

@@ -42,7 +42,7 @@ class GMetadata extends BaseCommand
     }
 
     /**
-     * @param $class
+     * @param string $class
      * @param bool $autoload
      * @return array
      * @see http://php.net/manual/en/function.class-uses.php#110752

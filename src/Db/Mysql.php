@@ -38,9 +38,9 @@ class Mysql extends BaseDriver
     /**
      * Returns the interpolated query.
      *
-     * @param $type
-     * @param $sqlParts
-     * @param $identifierConverter
+     * @param string $type
+     * @param array $sqlParts
+     * @param callable $identifierConverter
      * @param array $values
      * @return string
      * @link https://stackoverflow.com/a/8403150
