@@ -51,6 +51,9 @@ class UserModel extends Model
         return Password::verify($password, $this->password);
     }
 
+    /**
+     * @return string|null
+     */
     public function getDisplayNameAttribute()
     {
         foreach (['nickName', 'username', 'name'] as $column) {

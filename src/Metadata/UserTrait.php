@@ -42,9 +42,8 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $subscribedAt 关注时间
  * @property string $unsubscribedAt 取关时间
  * @property string $source 用户来源
- * @property  $isMobileVerified
- * @property  $avatar
- * @property  $displayName
+ * @property bool $isMobileVerified
+ * @property string|null $displayName
  */
 trait UserTrait
 {

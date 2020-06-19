@@ -92,10 +92,14 @@ class GMetadata extends BaseCommand
         preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($modelObject)), $matches);
         foreach ($matches[1] as $key => $attr) {
             $propertyName = $camelCase ? lcfirst($attr) : $this->str->snake($attr);
+            if (isset($casts[$propertyName])) {
+                continue;
+            }
+
             $method = rtrim($matches[0][$key], ';');
             $reflectionMethod = $reflectionClass->getMethod($method);
             $name = $this->getDocCommentTitle($reflectionMethod->getDocComment());
-            $return = $this->getMethodReturn($reflectionClass, $reflectionMethod);
+            $return = $this->getMethodReturn($reflectionClass, $reflectionMethod) ?: 'mixed';
             $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, $name)) . "\n";
         }
 

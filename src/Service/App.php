@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use Exception;
 use JsonSerializable;
+use Miaoxing\Plugin\BaseController;
 use Miaoxing\Plugin\RetException;
 use ReflectionException;
 use ReflectionMethod;
@@ -339,8 +340,12 @@ class App extends \Wei\App
         throw $this->buildException($notFound);
     }
 
+
     /**
-     * {@inheritdoc}
+     * @param BaseController $instance
+     * @param string $action
+     * @return Response
+     * @throws Exception
      */
     protected function execute($instance, $action)
     {
@@ -410,6 +415,8 @@ class App extends \Wei\App
      */
     protected function buildActionArg(ReflectionParameter $param)
     {
+        // @link https://github.com/phpstan/phpstan/issues/1133
+        /** @var \ReflectionNamedType $type */
         $type = $param->getType();
 
         // Handle Model class
@@ -482,7 +489,9 @@ class App extends \Wei\App
         if ($this->request->acceptJson() || $this->isApi()) {
             return $this->response->json($ret);
         } else {
-            $ret instanceof Ret && $ret = $ret->toArray();
+            if ($ret instanceof Ret) {
+                $ret = $ret->toArray();
+            }
             $type = $ret['retType'] ?? (1 === $ret['code'] ? 'success' : 'warning');
             $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
 

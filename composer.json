@@ -23,8 +23,8 @@
       "src/functions.php"
     ],
     "psr-4": {
-      "Wei\\": "vendor/wei/wei/lib",
-      "Miaoxing\\Plugin\\": "src"
+      "Miaoxing\\Plugin\\": "src",
+      "Wei\\": "vendor/wei/wei/lib"
     }
   },
   "autoload-dev": {
