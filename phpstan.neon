@@ -22,18 +22,16 @@ parameters:
         # 用于快速判断赋值，例如 !$a && $a = 'xx';
         - "#^Right side of (\\|\\||&&) is always (true|false)\\.$#"
 
-        - "#^Call to an undefined method Wei\\\\Wei\\:\\:(.+?)\\(\\)\\.$#"
-
 services:
     -
         class: Miaoxing\Plugin\PHPStan\ServiceExtension
         tags:
             - phpstan.broker.methodsClassReflectionExtension
 
-#    -
-#        class: Miaoxing\Plugin\PHPStan\MethodExtension
-#        tags:
-#            - phpstan.broker.methodsClassReflectionExtension
+    -
+        class: Miaoxing\Plugin\PHPStan\MethodExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension
 
     -
         class: Miaoxing\Plugin\PHPStan\PropertyExtension

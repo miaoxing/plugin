@@ -9,7 +9,7 @@ use PHPStan\Reflection\PropertyReflection;
 use Wei\Wei;
 
 /**
- * 允许通过 wei()->xxx 调用服务
+ * 允许通过 wei()->xxx 获取服务
  *
  * 对应错误：
  *  "#^Access to an undefined property Wei\\\\Wei\\:\\:\\$(.+?)\\.$#"

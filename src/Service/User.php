@@ -290,7 +290,7 @@ class User extends UserModel
         switch (true) {
             case wei()->isMobileCn($data['username']):
                 $column = 'mobile';
-                $user->mobileVerified();
+                $user->whereNotNULL('mobile_verified_at');
                 break;
 
             case wei()->isEmail($data['username']):
