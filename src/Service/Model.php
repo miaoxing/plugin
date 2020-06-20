@@ -1559,7 +1559,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|null|array $id
      * @return $this|null
      * @svc
      */

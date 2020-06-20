@@ -22,10 +22,12 @@ parameters:
         # 用于快速判断赋值，例如 !$a && $a = 'xx';
         - "#^Right side of (\\|\\||&&) is always (true|false)\\.$#"
 
-        # 允许服务静态调用动态方法，动态调用保护方法（NOTE: 可通过 mixin 解决，mixin 需在检查路径中，不能是 Symbols 或 Stub）
-        - '#^Static call to instance method#'
-        - "#^Call to protected method (.+?) of class (.+?).$#"
-
         # 允许 wei()->xxx (NOTE: 使用 stubFiles 后面定义覆盖前面)
         - "#^Access to an undefined property Wei\\\\Wei\\:\\:\\$(.+?)\\.$#"
         - "#^Call to an undefined method Wei\\\\Wei\\:\\:(.+?)\\(\\)\\.$#"
+
+services:
+    -
+        class: Miaoxing\Plugin\PHPStan\ServiceExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension

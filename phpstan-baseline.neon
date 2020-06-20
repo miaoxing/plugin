@@ -11,6 +11,11 @@ parameters:
 			path: src/Service/Tester.php
 
 		-
+			message: "#^Static call to instance method Miaoxing\\\\Plugin\\\\Service\\\\User\\:\\:logout\\(\\)\\.$#"
+			count: 1
+			path: src/Service/UserModel.php
+
+		-
 			message: "#^Method CacheMixin\\:\\:cache\\(\\) invoked with 0 parameters, 1\\-3 required\\.$#"
 			count: 3
 			path: tests/Service/QueryBuilderTest.php
