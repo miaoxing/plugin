@@ -227,7 +227,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
         $wei->request->setOption('posts', []);
         $wei->request->setMethod('GET');
         $wei->request->set('_format', '');
-        $wei->request->setContent(null);
+        $wei->request->setContent('');
 
         foreach ($this->session as $key => $value) {
             $wei->session->remove($key);
@@ -271,43 +271,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
 
         return $this;
     }
-
-    /**
-     * Helper: 触发微信回复
-     *
-     * @param string $content
-     * @return $this
-     * @todo 转到微信相关服务
-     */
-    public function wechatReply($content)
-    {
-        $wei = wei();
-
-        $this->initWechatApp($content);
-
-        return $wei->tester()
-            ->login()
-            ->controller('wechat')
-            ->action('reply')
-            ->request(['accountId' => '768861673'])
-            ->exec()
-            ->response();
-    }
-
-    public function wechatDeviceReply($content)
-    {
-        $wei = wei();
-
-        $this->initWechatApp($content);
-
-        return $wei->tester()
-            ->login()
-            ->controller('wechatDeviceReplies')
-            ->action('index')
-            ->exec()
-            ->response();
-    }
-
+    
     /**
      * 运行任务
      *
@@ -402,29 +366,5 @@ class Tester extends \Miaoxing\Plugin\BaseService
         }
 
         return $data;
-    }
-
-    protected function initWechatApp($content)
-    {
-        $wei = wei();
-
-        $account = wei()->wechatAccount->getCurrentAccount();
-        $account->setData([
-            'authed' => false,
-            'applicationId' => 'wxbad0b45542aa0b5e',
-            'token' => 'wei',
-            'encodingAesKey' => 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG',
-        ]);
-
-        // 模拟自定义回复
-        $wei->weChatApp = new \Wei\WeChatApp([
-            'wei' => $wei,
-            'query' => [
-                'signature' => '1273e279da5a3a236a8f20f40d18e5ecc7d84bc6',
-                'timestamp' => '1366032735',
-                'nonce' => '136587223',
-            ],
-            'postData' => $content,
-        ]);
     }
 }

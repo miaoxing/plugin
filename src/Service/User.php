@@ -21,6 +21,7 @@ use Miaoxing\Plugin\ConfigTrait;
  * @property bool $enableExport
  * @property bool $enableCreate
  * @property string $defaultAvatar
+ * @property bool $enablePinCode
  * @mixin \EventMixin
  * @mixin \SessionMixin
  * @mixin \RequestMixin

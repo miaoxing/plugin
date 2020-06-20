@@ -22,8 +22,6 @@ parameters:
         # 用于快速判断赋值，例如 !$a && $a = 'xx';
         - "#^Right side of (\\|\\||&&) is always (true|false)\\.$#"
 
-        # 允许 wei()->xxx (NOTE: 使用 stubFiles 后面定义覆盖前面)
-        - "#^Access to an undefined property Wei\\\\Wei\\:\\:\\$(.+?)\\.$#"
         - "#^Call to an undefined method Wei\\\\Wei\\:\\:(.+?)\\(\\)\\.$#"
 
 services:
@@ -31,3 +29,13 @@ services:
         class: Miaoxing\Plugin\PHPStan\ServiceExtension
         tags:
             - phpstan.broker.methodsClassReflectionExtension
+
+#    -
+#        class: Miaoxing\Plugin\PHPStan\MethodExtension
+#        tags:
+#            - phpstan.broker.methodsClassReflectionExtension
+
+    -
+        class: Miaoxing\Plugin\PHPStan\PropertyExtension
+        tags:
+            - phpstan.broker.propertiesClassReflectionExtension
