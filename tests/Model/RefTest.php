@@ -189,6 +189,7 @@ final class RefTest extends BaseTestCase
         $model = $this->getModel();
 
         // 通过&__get获取服务不会返回Only variable references should be returned by reference错误
+        // @phpstan-ignore-next-line
         $model->request;
 
         $this->assertInstanceOf(Request::class, $model->request);

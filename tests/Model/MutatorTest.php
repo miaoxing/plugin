@@ -122,6 +122,7 @@ final class MutatorTest extends BaseTestCase
     {
         $this->expectExceptionObject(new InvalidArgumentException('Invalid property: invalid'));
 
+        // @phpstan-ignore-next-line
         TestMutator::new()->invalid = 'xx';
     }
 

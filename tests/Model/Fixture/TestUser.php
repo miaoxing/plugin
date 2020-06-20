@@ -5,13 +5,13 @@ namespace MiaoxingTest\Plugin\Model\Fixture;
 use Miaoxing\Plugin\Service\Model;
 
 /**
- * @property TestProfile $profile
+ * @property TestProfile|null $profile
  * @property TestArticle|TestArticle[] $articles
  * @property TestArticle|TestArticle[] $customArticles
- * @property int $id
- * @property string name
- * @property int groupId
- * @property string address
+ * @property int|null $id
+ * @property string|null $name
+ * @property int|null $groupId
+ * @property string|null $address
  */
 class TestUser extends Model
 {

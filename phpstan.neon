@@ -6,6 +6,10 @@ includes:
 parameters:
     level: 5
 
+    paths:
+        - src
+        - tests
+
     scanFiles:
         # 引入 *Mixin 类
         - docs/auto-completion.php

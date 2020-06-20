@@ -5,7 +5,7 @@ namespace MiaoxingTest\Plugin\Model\Fixture;
 use Miaoxing\Plugin\Service\Model;
 
 /**
- * @property TestUser $user
+ * @property TestUser|null $user
  * @property TestTag|TestTag[] $tags
  * @property string $testUserId
  * @property string $title
@@ -21,6 +21,7 @@ class TestArticle extends Model
      * NOTE: 使用参数是避免和父类方法冲突
      *
      * @param mixed|null $tags
+     * @return static
      */
     public function tags($tags = null)
     {

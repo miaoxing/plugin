@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Model\ReqQueryTrait;
+use Miaoxing\Plugin\Service\Model;
 use Wei\Request;
 
 /**
@@ -129,17 +130,21 @@ trait ConstTrait
      * @param string $prefix
      * @param string $reqKey
      * @return $this
+     * @throws \Exception
+     * @todo 改为判断是model才允许操作，或改为独立trait
      */
     public function whereConstKey($prefix, $reqKey = null)
     {
+        if (!$this instanceof ReqQueryTrait) {
+            throw new \Exception('Not support');
+        }
+
         if (1 === func_num_args()) {
             $reqKey = $this->request->get($prefix);
         }
 
         $id = $this->getConstId($prefix, $reqKey);
         if ('' !== $id) {
-            /* @see ReqQueryTrait::parseReqColumn */
-            // @phpstan-ignore-next-line
             list($column) = $this->parseReqColumn($prefix);
             $this->where($column, $id);
         }

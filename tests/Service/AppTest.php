@@ -64,11 +64,10 @@ final class AppTest extends BaseTestCase
      * 测试返回数据
      *
      * @dataProvider dataForResponse
-     * @param $action
-     * @param $content
-     * @param mixed|null $before
+     * @param string $action
+     * @param string $content
      */
-    public function testResponse($action, $content, $before = null)
+    public function testResponse(string $action, string $content)
     {
         User::loginById(1);
 
@@ -76,7 +75,6 @@ final class AppTest extends BaseTestCase
         $app->setControllerMap(['test' => TestController::class]);
 
         $app->request->set('_format', 'json');
-        $before && $before($app);
 
         // 更改视图为测试的目录
         $origDirs = $app->view->getOption('dirs');

@@ -5,7 +5,7 @@ namespace MiaoxingTest\Plugin\Model\Fixture;
 use Miaoxing\Plugin\Service\Model;
 
 /**
- * @property string $testUserId
+ * @property string|null $testUserId
  */
 class TestProfile extends Model
 {

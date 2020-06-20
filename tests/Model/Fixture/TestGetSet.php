@@ -5,9 +5,9 @@ namespace MiaoxingTest\Plugin\Model\Fixture;
 use Miaoxing\Plugin\Service\Model;
 
 /**
- * @property int $id
- * @property string $name
- * @property int $userCount
+ * @property int|null $id
+ * @property string|null $name
+ * @property int|null $userCount
  */
 class TestGetSet extends Model
 {

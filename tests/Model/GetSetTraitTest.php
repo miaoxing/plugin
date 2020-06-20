@@ -60,6 +60,7 @@ final class GetSetTraitTest extends BaseTestCase
     {
         $test = TestGetSet::new();
         // receive id
+        // @phpstan-ignore-next-line
         $test->id;
 
         $test->save();

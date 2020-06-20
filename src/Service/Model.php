@@ -276,7 +276,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Returns the record data as array
      *
-     * @param array $returnFields A indexed array specified the fields to return
+     * @param array|callable $returnFields A indexed array specified the fields to return
      * @param callable|null $prepend
      * @return array
      */
@@ -695,7 +695,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Return the field data before changed
      *
      * @param string $field
-     * @return array|string
+     * @return array|string|null
      */
     public function getChangedData($field = null)
     {
@@ -1038,7 +1038,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param static|string $record
+     * @param self|string $record
      * @param string|null $foreignKey
      * @param string|null $localKey
      * @return static
@@ -1058,7 +1058,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param string $record
+     * @param self|string $record
      * @param string|null $foreignKey
      * @param string|null $localKey
      * @return $this
@@ -1069,7 +1069,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param string $record
+     * @param self|string $record
      * @param string|null $foreignKey
      * @param string|null $localKey
      * @return static
@@ -1084,7 +1084,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param string $record
+     * @param self|string $record
      * @param string|null $junctionTable
      * @param string|null $foreignKey
      * @param string|null $relatedKey

@@ -13,6 +13,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUser;
  * 数据库关联测试
  *
  * @internal
+ * @mixin \DbMixin
  */
 final class RelationTest extends BaseTestCase
 {
@@ -470,6 +471,7 @@ final class RelationTest extends BaseTestCase
 
         $article->find($id);
         $user = $article->user;
+        // @phpstan-ignore-next-line user 识别为了 UserMixin 的 Miaoxing\Plugin\Service\User
         $this->assertNull($user);
 
         $queries = wei()->db->getQueries();

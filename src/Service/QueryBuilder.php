@@ -372,7 +372,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @svc
      */
@@ -734,7 +734,7 @@ class QueryBuilder extends BaseService
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @svc
      */
@@ -774,7 +774,7 @@ class QueryBuilder extends BaseService
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @svc
      */
@@ -788,7 +788,7 @@ class QueryBuilder extends BaseService
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @svc
      */
@@ -1015,7 +1015,7 @@ class QueryBuilder extends BaseService
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @svc
      */

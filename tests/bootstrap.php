@@ -2,6 +2,7 @@
 
 require 'init.php';
 
+$loader = require 'vendor/autoload.php';
 $wei = wei();
 
 $app = isset($_SERVER['WEI_APP']) ? $_SERVER['WEI_APP'] : 'app';

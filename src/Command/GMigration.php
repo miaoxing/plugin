@@ -6,6 +6,9 @@ use ReflectionClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Wei\Migration;
 
+/**
+ * @mixin \PluginMixin
+ */
 class GMigration extends BaseCommand
 {
     protected function configure()
@@ -22,7 +25,7 @@ class GMigration extends BaseCommand
      */
     protected function handle()
     {
-        $plugin = wei()->plugin->getOneById($this->getArgument('plugin'));
+        $plugin = $this->plugin->getOneById($this->getArgument('plugin'));
         $path = $plugin->getBasePath() . '/src/Migration';
         $reflection = new ReflectionClass($plugin);
         $namespace = $reflection->getNamespaceName() . '\\Migration';

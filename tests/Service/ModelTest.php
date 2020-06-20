@@ -2,6 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
+use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
@@ -340,11 +341,12 @@ final class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = $this->db('test_users')
-            ->where('name', 'twin')
-            ->first();
+        /** @var Model $user */
+        $user = $this->db('test_users');
+        $user = $user->where('name', 'twin')->first();
 
         $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
+        // @phpstan-ignore-next-line
         $this->assertEquals('twin', $user->name);
     }
 
@@ -503,6 +505,7 @@ final class ModelTest extends BaseTestCase
 
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: notFound'));
 
+        // @phpstan-ignore-next-line
         $user['notFound'];
     }
 
@@ -640,7 +643,7 @@ final class ModelTest extends BaseTestCase
         $this->assertFalse($user->isChanged());
 
         $user->name = 'tt';
-        $user->groupId = '1';
+        $user->groupId = 1;
         $user->address = 'address';
         $this->assertFalse($user->isChanged('id'));
         $this->assertTrue($user->isChanged('name'));
@@ -957,6 +960,7 @@ final class ModelTest extends BaseTestCase
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: abc'));
 
         // TODO 改为 table
+        // @phpstan-ignore-next-line
         $user->abc = 234;
     }
 
