@@ -340,7 +340,6 @@ class App extends \Wei\App
         throw $this->buildException($notFound);
     }
 
-
     /**
      * @param BaseController $instance
      * @param string $action
@@ -415,7 +414,7 @@ class App extends \Wei\App
      */
     protected function buildActionArg(ReflectionParameter $param)
     {
-        // @link https://github.com/phpstan/phpstan/issues/1133
+        /** @link https://github.com/phpstan/phpstan/issues/1133 */
         /** @var \ReflectionNamedType|null $type */
         $type = $param->getType();
 

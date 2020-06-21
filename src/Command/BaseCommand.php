@@ -59,7 +59,7 @@ abstract class BaseCommand extends Command
     {
         $this->input = $input;
         $this->output = $output;
-        $code =  $this->handle();
+        $code = $this->handle();
         return is_int($code) ? $code : 0;
     }
 

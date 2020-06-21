@@ -4,7 +4,10 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 
-class StrTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class StrTest extends BaseTestCase
 {
     public function providerForSnake()
     {

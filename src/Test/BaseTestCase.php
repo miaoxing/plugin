@@ -110,6 +110,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      * @param array|Ret $ret
      * @param string $message
      * @param string $assertMessage
+     * @param mixed $code
      */
     public function assertRetErr($ret, $code, $message = null, $assertMessage = null)
     {

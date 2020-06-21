@@ -521,7 +521,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Set the record field value
      *
-     * @param string|null|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @return $this
      * @throws InvalidArgumentException
@@ -1473,7 +1473,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
             $this->triggerCallback('afterSave');
-            // 2.2 Loop and save collection records
+        // 2.2 Loop and save collection records
         } else {
             foreach ($this->data as $record) {
                 $record->save();
@@ -1559,7 +1559,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string|null|array $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @svc
      */

@@ -889,7 +889,7 @@ class BaseModel extends Record implements JsonSerializable
     {
         // @phpstan-ignore-next-line
         if (isset($this->defaultValues[$this->casts[$column]])) {
-            // @phpstan-ignore-next-line
+            /** @phpstan-ignore-next-line */
             $default = $this->defaultValues[$this->casts[$column]];
         } else {
             $default = '';

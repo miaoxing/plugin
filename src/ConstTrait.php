@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Model\ReqQueryTrait;
-use Miaoxing\Plugin\Service\Model;
 use Wei\Request;
 
 /**

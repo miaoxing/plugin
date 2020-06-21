@@ -271,7 +271,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
 
         return $this;
     }
-    
+
     /**
      * 运行任务
      *

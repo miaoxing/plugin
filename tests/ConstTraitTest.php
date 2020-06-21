@@ -5,7 +5,10 @@ namespace MiaoxingTest\Plugin;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\SexConst;
 
-class ConstTraitTest extends BaseTestCase
+/**
+ * @internal
+ */
+final class ConstTraitTest extends BaseTestCase
 {
     public function testGetConstants()
     {

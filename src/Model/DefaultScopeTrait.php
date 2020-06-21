@@ -57,7 +57,7 @@ trait DefaultScopeTrait
             return $this;
         }
 
-        if ($this->withoutScopes === true) {
+        if (true === $this->withoutScopes) {
             $this->withoutScopes = [];
         }
         $this->withoutScopes += (array) $scopes;

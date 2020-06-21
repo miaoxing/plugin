@@ -32,7 +32,7 @@ abstract class BaseDriver extends Base
      * @param callable|null $identifierConverter
      * @return string
      */
-    abstract function getSql($type, $sqlParts, $identifierConverter = null);
+    abstract public function getSql($type, $sqlParts, $identifierConverter = null);
 
     /**
      * @param int $type
@@ -41,7 +41,7 @@ abstract class BaseDriver extends Base
      * @param array $values
      * @return string
      */
-    abstract function getRawSql($type, $sqlParts, $identifierConverter, array $values);
+    abstract public function getRawSql($type, $sqlParts, $identifierConverter, array $values);
 
     protected function wrap($column)
     {
