@@ -13,7 +13,7 @@ use Miaoxing\Plugin\Model\QueryBuilderCacheTrait;
  * @author Twin Huang <twinhuang@qq.com>
  * @mixin \DbMixin
  * @mixin \TagCacheMixin
- * @mixin \CacheMixin
+ * @property \Wei\Cache $cache A cache service proxy 不引入 \CacheMixin 以免 phpstan 识别为 mixin 的 cache 方法
  */
 class QueryBuilder extends BaseService
 {
