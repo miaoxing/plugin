@@ -6,7 +6,7 @@ if (!function_exists('suc')) {
     /**
      * Return operation successful result
      *
-     * @param string $message
+     * @param string|array|null $message
      * @return Ret
      */
     function suc($message = null)
