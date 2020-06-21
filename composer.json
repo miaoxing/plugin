@@ -13,7 +13,7 @@
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
-    "miaoxing/coding-standards": "dev-beta",
+    "miaoxing/coding-standards": "^5.0",
     "nette/php-generator": "^3.4"
   },
   "autoload": {
