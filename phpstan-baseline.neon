@@ -9,9 +9,3 @@ parameters:
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
 			count: 1
 			path: src/Service/Tester.php
-
-		-
-			message: "#^Static call to instance method Miaoxing\\\\Plugin\\\\Service\\\\User\\:\\:logout\\(\\)\\.$#"
-			count: 1
-			path: src/Service/UserModel.php
-

@@ -22,6 +22,12 @@ parameters:
         # 用于快速判断赋值，例如 !$a && $a = 'xx';
         - "#^Right side of (\\|\\||&&) is always (true|false)\\.$#"
 
+        # 自定义扩展未能识别到，暂时忽略
+        -
+            message: "#^Static call to instance method Miaoxing\\\\Plugin\\\\Service\\\\User\\:\\:logout\\(\\)\\.$#"
+            count: 1
+            path: src/Service/UserModel.php
+
 services:
     -
         class: Miaoxing\Plugin\PHPStan\ServiceExtension
