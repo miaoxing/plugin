@@ -13,18 +13,15 @@
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
-    "miaoxing/coding-standards": "^5.0.0@beta",
-    "phpstan/phpstan": "^0.12.29",
-    "nette/php-generator": "^3.4",
-    "phpstan/phpstan-phpunit": "^0.12.11"
+    "miaoxing/coding-standards": "dev-beta",
+    "nette/php-generator": "^3.4"
   },
   "autoload": {
     "files": [
       "src/functions.php"
     ],
     "psr-4": {
-      "Miaoxing\\Plugin\\": "src",
-      "Wei\\": "vendor/wei/wei/lib"
+      "Miaoxing\\Plugin\\": "src"
     }
   },
   "autoload-dev": {
