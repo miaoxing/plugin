@@ -7,6 +7,8 @@ use Miaoxing\Plugin\BaseService;
 
 /**
  * 字符串操作服务
+ *
+ * @stable
  */
 class Str extends BaseService
 {
