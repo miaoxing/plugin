@@ -14,6 +14,6 @@ class ReturnResponse extends Base
      */
     public function __invoke($next)
     {
-        return $this->response->setContent('returnResponseInMiddleware');
+        return $this->res->setContent('returnResponseInMiddleware');
     }
 }

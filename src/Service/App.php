@@ -9,7 +9,7 @@ use Miaoxing\Plugin\RetException;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
-use Wei\Response;
+use Wei\Res;
 
 /**
  * 应用
@@ -258,7 +258,7 @@ class App extends \Wei\App
      * 重写handleResponse,支持Ret结构
      *
      * @param mixed $response
-     * @return Response
+     * @return Res
      * @throws Exception
      */
     public function handleResponse($response)
@@ -269,7 +269,7 @@ class App extends \Wei\App
             $template = $this->getDefaultTemplate();
             $file = $this->view->resolveFile($template) ? $template : $this->defaultViewFile;
             $content = $this->view->render($file, $response);
-            return $this->response->setContent($content);
+            return $this->res->setContent($content);
         } else {
             return parent::handleResponse($response);
         }
@@ -343,7 +343,7 @@ class App extends \Wei\App
     /**
      * @param BaseController $instance
      * @param string $action
-     * @return Response
+     * @return Res
      * @throws Exception
      */
     protected function execute($instance, $action)
@@ -354,7 +354,7 @@ class App extends \Wei\App
         $middleware = $this->getMiddleware($instance, $action);
 
         $callback = function () use ($instance, $action) {
-            $instance->before($this->req, $this->response);
+            $instance->before($this->req, $this->res);
 
             $method = $this->getActionMethod($action);
             // TODO 和 forward 异常合并一起处理
@@ -397,7 +397,7 @@ class App extends \Wei\App
         $ref = new ReflectionMethod($instance, $method);
         $params = $ref->getParameters();
         if (!$params || 'req' === $params[0]->getName()) {
-            return [$this->req, $this->response];
+            return [$this->req, $this->res];
         }
 
         $args = [];
@@ -480,13 +480,13 @@ class App extends \Wei\App
      * 转换Ret结构为response
      *
      * @param array|Ret $ret
-     * @return Response
+     * @return Res
      * @throws Exception
      */
     protected function handleRet($ret)
     {
         if ($this->req->acceptJson() || $this->isApi()) {
-            return $this->response->json($ret);
+            return $this->res->json($ret);
         } else {
             if ($ret instanceof Ret) {
                 $ret = $ret->toArray();
@@ -494,7 +494,7 @@ class App extends \Wei\App
             $type = $ret['retType'] ?? (1 === $ret['code'] ? 'success' : 'warning');
             $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
 
-            return $this->response->setContent($content);
+            return $this->res->setContent($content);
         }
     }
 

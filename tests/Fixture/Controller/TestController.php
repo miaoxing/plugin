@@ -56,7 +56,7 @@ class TestController extends BaseController
 
     public function returnResponseAction()
     {
-        return $this->response->setContent('returnResponse');
+        return $this->res->setContent('returnResponse');
     }
 
     public function returnEmptyArrayWillRenderViewAction()

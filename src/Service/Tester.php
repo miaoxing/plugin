@@ -4,6 +4,8 @@ namespace Miaoxing\Plugin\Service;
 
 /**
  * 测试
+ *
+ * @mixin \ReqMixin
  */
 class Tester extends \Miaoxing\Plugin\BaseService
 {

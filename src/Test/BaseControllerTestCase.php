@@ -95,7 +95,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
     /**
      * @param string $controller
      * @param string $action
-     * @return \Exception|\Wei\Response
+     * @return \Exception|\Wei\Res
      */
     public function dispatch($controller, $action = 'index')
     {
@@ -103,7 +103,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
 
         ob_start();
         try {
-            $response = $this->app->dispatch($controller, $action);
+            $res = $this->app->dispatch($controller, $action);
         } catch (\Exception $e) {
             ob_end_clean();
 
@@ -112,7 +112,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
 
         ob_end_clean();
 
-        return $response;
+        return $res;
     }
 
     protected function getAction()

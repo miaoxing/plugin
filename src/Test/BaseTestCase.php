@@ -41,7 +41,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 
         $wei->req->clear();
         $wei->req->setOption('gets', []);
-        $wei->response->setStatusCode(200);
+        $wei->res->setStatusCode(200);
         $wei->app->setOption('plugin', null);
         $wei->block->setOption('data', []);
     }

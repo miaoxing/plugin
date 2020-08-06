@@ -7,7 +7,7 @@
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var int $statusCode */
-$statusCode = $this->response->getStatusCode();
+$statusCode = $this->res->getStatusCode();
 
 /** @var string $title */
 $title;
