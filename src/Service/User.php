@@ -24,7 +24,7 @@ use Miaoxing\Plugin\ConfigTrait;
  * @property bool $enablePinCode
  * @mixin \EventMixin
  * @mixin \SessionMixin
- * @mixin \RequestMixin
+ * @mixin \ReqMixin
  * @mixin \PasswordMixin
  */
 class User extends UserModel

@@ -9,7 +9,7 @@ use Miaoxing\Plugin\Model\CamelCaseTrait;
 use Miaoxing\Plugin\Model\CastTrait;
 use Miaoxing\Plugin\Model\DefaultScopeTrait;
 use Wei\Record;
-use Wei\Request;
+use Wei\Req;
 use Wei\RetTrait;
 
 /**
@@ -1730,14 +1730,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @svc
      */
     protected function findFromRequest($request = null)
     {
-        $request || $request = $this->wei->request;
+        $request || $request = $this->wei->req;
         if (in_array($request['action'], ['edit', 'update'], true)) {
             $this->findOrFail($request[$this->getPrimaryKey()]);
         }

@@ -5,7 +5,7 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestRef;
 use PDOException;
-use Wei\Request;
+use Wei\Req;
 
 /**
  * @internal
@@ -190,9 +190,9 @@ final class RefTest extends BaseTestCase
 
         // 通过&__get获取服务不会返回Only variable references should be returned by reference错误
         // @phpstan-ignore-next-line
-        $model->request;
+        $model->req;
 
-        $this->assertInstanceOf(Request::class, $model->request);
+        $this->assertInstanceOf(Req::class, $model->req);
     }
 
     public function testCollGet()

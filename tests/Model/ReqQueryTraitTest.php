@@ -55,7 +55,7 @@ final class ReqQueryTraitTest extends BaseTestCase
 
     public function testLikeJoin()
     {
-        wei()->request->fromArray([
+        wei()->req->fromArray([
             'name' => 'test',
             'detail' => [
                 'name' => 'detail',

@@ -67,7 +67,7 @@ class AppModel
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public static function set($name, $value = null, $throwException = true)
@@ -77,7 +77,7 @@ class AppModel
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -122,7 +122,7 @@ class AppModel
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -143,9 +143,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -154,9 +154,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -165,8 +165,8 @@ class AppModel
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -177,9 +177,9 @@ class AppModel
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -189,7 +189,7 @@ class AppModel
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -209,7 +209,7 @@ class AppModel
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public static function all()
@@ -238,7 +238,6 @@ class AppModel
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -252,11 +251,10 @@ class AppModel
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
@@ -298,7 +296,7 @@ class AppModel
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -309,7 +307,6 @@ class AppModel
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -323,7 +320,7 @@ class AppModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -334,7 +331,7 @@ class AppModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -366,7 +363,7 @@ class AppModel
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -439,7 +436,6 @@ class AppModel
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -487,8 +483,8 @@ class AppModel
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -498,7 +494,7 @@ class AppModel
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -507,7 +503,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -517,7 +513,17 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public static function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -527,7 +533,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -537,7 +543,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -547,7 +553,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -556,7 +562,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -565,9 +571,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -576,9 +582,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -587,9 +593,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -598,9 +604,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -609,9 +615,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -620,9 +626,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -644,8 +650,8 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -670,9 +676,6 @@ class AppModel
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -747,7 +750,7 @@ class AppModel
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -885,7 +888,7 @@ class Model
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public static function set($name, $value = null, $throwException = true)
@@ -895,7 +898,7 @@ class Model
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -940,7 +943,7 @@ class Model
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -961,9 +964,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -972,9 +975,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -983,8 +986,8 @@ class Model
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -995,9 +998,9 @@ class Model
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -1007,7 +1010,7 @@ class Model
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -1027,7 +1030,7 @@ class Model
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public static function all()
@@ -1056,7 +1059,6 @@ class Model
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -1070,11 +1072,10 @@ class Model
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
@@ -1116,7 +1117,7 @@ class Model
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -1127,7 +1128,6 @@ class Model
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -1141,7 +1141,7 @@ class Model
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -1152,7 +1152,7 @@ class Model
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -1184,7 +1184,7 @@ class Model
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -1257,7 +1257,6 @@ class Model
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -1305,8 +1304,8 @@ class Model
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -1316,7 +1315,7 @@ class Model
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -1325,7 +1324,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -1335,7 +1334,17 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public static function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -1345,7 +1354,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -1355,7 +1364,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -1365,7 +1374,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -1374,7 +1383,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -1383,9 +1392,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -1394,9 +1403,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -1405,9 +1414,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -1416,9 +1425,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -1427,9 +1436,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -1438,9 +1447,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -1462,8 +1471,8 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -1488,9 +1497,6 @@ class Model
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -1565,7 +1571,7 @@ class Model
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -1675,7 +1681,6 @@ class QueryBuilder
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -1689,11 +1694,10 @@ class QueryBuilder
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
@@ -1711,7 +1715,7 @@ class QueryBuilder
     }
 
     /**
-     * @return array|null
+     * @return array
      * @see QueryBuilder::all
      */
     public static function all()
@@ -1753,7 +1757,7 @@ class QueryBuilder
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -1764,7 +1768,6 @@ class QueryBuilder
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -1778,7 +1781,7 @@ class QueryBuilder
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -1789,7 +1792,7 @@ class QueryBuilder
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -1821,7 +1824,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -1894,7 +1897,6 @@ class QueryBuilder
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -1942,8 +1944,8 @@ class QueryBuilder
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -1953,7 +1955,7 @@ class QueryBuilder
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -1962,7 +1964,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -1972,7 +1974,17 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public static function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -1982,7 +1994,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -1992,7 +2004,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -2002,7 +2014,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -2011,7 +2023,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -2020,9 +2032,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -2031,9 +2043,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -2042,9 +2054,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -2053,9 +2065,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -2064,9 +2076,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -2075,9 +2087,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -2099,8 +2111,8 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -2125,9 +2137,6 @@ class QueryBuilder
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -2213,7 +2222,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -2470,7 +2479,7 @@ class User
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public static function set($name, $value = null, $throwException = true)
@@ -2480,7 +2489,7 @@ class User
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -2525,7 +2534,7 @@ class User
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -2546,9 +2555,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -2557,9 +2566,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -2568,8 +2577,8 @@ class User
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -2580,9 +2589,9 @@ class User
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -2592,7 +2601,7 @@ class User
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -2612,7 +2621,7 @@ class User
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public static function all()
@@ -2641,7 +2650,6 @@ class User
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -2655,11 +2663,10 @@ class User
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
@@ -2701,7 +2708,7 @@ class User
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -2712,7 +2719,6 @@ class User
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -2726,7 +2732,7 @@ class User
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -2737,7 +2743,7 @@ class User
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -2769,7 +2775,7 @@ class User
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -2842,7 +2848,6 @@ class User
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -2890,8 +2895,8 @@ class User
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -2901,7 +2906,7 @@ class User
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -2910,7 +2915,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -2920,7 +2925,17 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public static function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -2930,7 +2945,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -2940,7 +2955,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -2950,7 +2965,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -2959,7 +2974,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -2968,9 +2983,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -2979,9 +2994,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -2990,9 +3005,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -3001,9 +3016,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -3012,9 +3027,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -3023,9 +3038,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -3047,8 +3062,8 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -3073,9 +3088,6 @@ class User
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -3150,7 +3162,7 @@ class User
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -3290,7 +3302,7 @@ class UserModel
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public static function set($name, $value = null, $throwException = true)
@@ -3300,7 +3312,7 @@ class UserModel
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -3345,7 +3357,7 @@ class UserModel
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -3366,9 +3378,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -3377,9 +3389,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -3388,8 +3400,8 @@ class UserModel
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -3400,9 +3412,9 @@ class UserModel
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -3412,7 +3424,7 @@ class UserModel
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -3432,7 +3444,7 @@ class UserModel
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public static function all()
@@ -3461,7 +3473,6 @@ class UserModel
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -3475,11 +3486,10 @@ class UserModel
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
@@ -3521,7 +3531,7 @@ class UserModel
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -3532,7 +3542,6 @@ class UserModel
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -3546,7 +3555,7 @@ class UserModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -3557,7 +3566,7 @@ class UserModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -3589,7 +3598,7 @@ class UserModel
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -3662,7 +3671,6 @@ class UserModel
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -3710,8 +3718,8 @@ class UserModel
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -3721,7 +3729,7 @@ class UserModel
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -3730,7 +3738,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -3740,7 +3748,17 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public static function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -3750,7 +3768,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -3760,7 +3778,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -3770,7 +3788,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -3779,7 +3797,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -3788,9 +3806,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -3799,9 +3817,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -3810,9 +3828,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -3821,9 +3839,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -3832,9 +3850,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -3843,9 +3861,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -3867,8 +3885,8 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -3893,9 +3911,6 @@ class UserModel
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -3970,7 +3985,7 @@ class UserModel
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -4107,7 +4122,7 @@ class AppModel
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public function set($name, $value = null, $throwException = true)
@@ -4117,7 +4132,7 @@ class AppModel
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -4162,7 +4177,7 @@ class AppModel
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -4183,9 +4198,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -4194,9 +4209,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -4205,8 +4220,8 @@ class AppModel
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -4217,9 +4232,9 @@ class AppModel
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -4229,7 +4244,7 @@ class AppModel
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -4249,7 +4264,7 @@ class AppModel
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public function all()
@@ -4278,7 +4293,6 @@ class AppModel
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -4292,11 +4306,10 @@ class AppModel
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
@@ -4338,7 +4351,7 @@ class AppModel
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -4349,7 +4362,6 @@ class AppModel
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -4363,7 +4375,7 @@ class AppModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -4374,7 +4386,7 @@ class AppModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -4406,7 +4418,7 @@ class AppModel
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -4479,7 +4491,6 @@ class AppModel
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -4527,8 +4538,8 @@ class AppModel
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -4538,7 +4549,7 @@ class AppModel
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -4547,7 +4558,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -4557,7 +4568,17 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -4567,7 +4588,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -4577,7 +4598,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -4587,7 +4608,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -4596,7 +4617,7 @@ class AppModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -4605,9 +4626,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -4616,9 +4637,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -4627,9 +4648,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -4638,9 +4659,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -4649,9 +4670,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -4660,9 +4681,9 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -4684,8 +4705,8 @@ class AppModel
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -4710,9 +4731,6 @@ class AppModel
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -4787,7 +4805,7 @@ class AppModel
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -4925,7 +4943,7 @@ class Model
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public function set($name, $value = null, $throwException = true)
@@ -4935,7 +4953,7 @@ class Model
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -4980,7 +4998,7 @@ class Model
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -5001,9 +5019,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -5012,9 +5030,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -5023,8 +5041,8 @@ class Model
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -5035,9 +5053,9 @@ class Model
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -5047,7 +5065,7 @@ class Model
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -5067,7 +5085,7 @@ class Model
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public function all()
@@ -5096,7 +5114,6 @@ class Model
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -5110,11 +5127,10 @@ class Model
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
@@ -5156,7 +5172,7 @@ class Model
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -5167,7 +5183,6 @@ class Model
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -5181,7 +5196,7 @@ class Model
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -5192,7 +5207,7 @@ class Model
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -5224,7 +5239,7 @@ class Model
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -5297,7 +5312,6 @@ class Model
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -5345,8 +5359,8 @@ class Model
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -5356,7 +5370,7 @@ class Model
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -5365,7 +5379,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -5375,7 +5389,17 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -5385,7 +5409,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -5395,7 +5419,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -5405,7 +5429,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -5414,7 +5438,7 @@ class Model
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -5423,9 +5447,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -5434,9 +5458,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -5445,9 +5469,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -5456,9 +5480,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -5467,9 +5491,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -5478,9 +5502,9 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -5502,8 +5526,8 @@ class Model
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -5528,9 +5552,6 @@ class Model
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -5605,7 +5626,7 @@ class Model
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -5715,7 +5736,6 @@ class QueryBuilder
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -5729,11 +5749,10 @@ class QueryBuilder
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
@@ -5751,7 +5770,7 @@ class QueryBuilder
     }
 
     /**
-     * @return array|null
+     * @return array
      * @see QueryBuilder::all
      */
     public function all()
@@ -5793,7 +5812,7 @@ class QueryBuilder
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -5804,7 +5823,6 @@ class QueryBuilder
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -5818,7 +5836,7 @@ class QueryBuilder
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -5829,7 +5847,7 @@ class QueryBuilder
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -5861,7 +5879,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -5934,7 +5952,6 @@ class QueryBuilder
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -5982,8 +5999,8 @@ class QueryBuilder
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -5993,7 +6010,7 @@ class QueryBuilder
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -6002,7 +6019,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -6012,7 +6029,17 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -6022,7 +6049,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -6032,7 +6059,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -6042,7 +6069,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -6051,7 +6078,7 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -6060,9 +6087,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -6071,9 +6098,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -6082,9 +6109,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -6093,9 +6120,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -6104,9 +6131,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -6115,9 +6142,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -6139,8 +6166,8 @@ class QueryBuilder
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -6165,9 +6192,6 @@ class QueryBuilder
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -6253,7 +6277,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -6510,7 +6534,7 @@ class User
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public function set($name, $value = null, $throwException = true)
@@ -6520,7 +6544,7 @@ class User
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -6565,7 +6589,7 @@ class User
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -6586,9 +6610,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -6597,9 +6621,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -6608,8 +6632,8 @@ class User
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -6620,9 +6644,9 @@ class User
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -6632,7 +6656,7 @@ class User
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -6652,7 +6676,7 @@ class User
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public function all()
@@ -6681,7 +6705,6 @@ class User
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -6695,11 +6718,10 @@ class User
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
@@ -6741,7 +6763,7 @@ class User
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -6752,7 +6774,6 @@ class User
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -6766,7 +6787,7 @@ class User
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -6777,7 +6798,7 @@ class User
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -6809,7 +6830,7 @@ class User
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -6882,7 +6903,6 @@ class User
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -6930,8 +6950,8 @@ class User
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -6941,7 +6961,7 @@ class User
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -6950,7 +6970,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -6960,7 +6980,17 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -6970,7 +7000,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -6980,7 +7010,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -6990,7 +7020,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -6999,7 +7029,7 @@ class User
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -7008,9 +7038,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -7019,9 +7049,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -7030,9 +7060,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -7041,9 +7071,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -7052,9 +7082,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -7063,9 +7093,9 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -7087,8 +7117,8 @@ class User
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -7113,9 +7143,6 @@ class User
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -7190,7 +7217,7 @@ class User
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */
@@ -7330,7 +7357,7 @@ class UserModel
      * @param string $name
      * @param mixed $value
      * @param bool $throwException
-     * @return $this
+     * @return $this|false
      * @see Model::set
      */
     public function set($name, $value = null, $throwException = true)
@@ -7340,7 +7367,7 @@ class UserModel
     /**
      * Executes the generated SQL and returns the found record object or false
      *
-     * @param int|string $id
+     * @param int|string|array|null $id
      * @return $this|null
      * @see Model::find
      */
@@ -7385,7 +7412,7 @@ class UserModel
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      * @param array $data
      * @return $this
      * @see Model::findByOrCreate
@@ -7406,9 +7433,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|null
      * @see Model::findBy
      */
@@ -7417,9 +7444,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this|$this[]
      * @see Model::findAllBy
      */
@@ -7428,8 +7455,8 @@ class UserModel
     }
 
     /**
-     * @param $attributes
-     * @param array $data
+     * @param array $attributes
+     * @param array|object $data
      * @return $this
      * @see Model::findOrInitBy
      */
@@ -7440,9 +7467,9 @@ class UserModel
     /**
      * Find a record by primary key value and throws 404 exception if record not found
      *
-     * @param $column
-     * @param $operator
-     * @param mixed $value
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @throws \Exception
      * @see Model::findByOrFail
@@ -7452,7 +7479,7 @@ class UserModel
     }
 
     /**
-     * @param array|Request|null $request
+     * @param array|Req|null $request
      * @return $this
      * @throws \Exception
      * @see Model::findFromRequest
@@ -7472,7 +7499,7 @@ class UserModel
     }
 
     /**
-     * @return $this
+     * @return $this|array
      * @see Model::all
      */
     public function all()
@@ -7501,7 +7528,6 @@ class UserModel
     /**
      * Executes the generated query and returns the first array result
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -7515,11 +7541,10 @@ class UserModel
     /**
      * Executes the generated query and returns all array results
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return array|false
+     * @return array
      * @see QueryBuilder::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
@@ -7561,7 +7586,7 @@ class UserModel
      * Execute a update query with specified data
      *
      * @param array|string $set
-     * @param null $value
+     * @param mixed $value
      * @return int
      * @see QueryBuilder::update
      */
@@ -7572,7 +7597,6 @@ class UserModel
     /**
      * Execute a delete query with specified conditions
      *
-     * @param mixed $conditions
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
@@ -7586,7 +7610,7 @@ class UserModel
     /**
      * Sets the position of the first result to retrieve (the "offset")
      *
-     * @param int $offset The first result to return
+     * @param int|float|string $offset The first result to return
      * @return $this
      * @see QueryBuilder::offset
      */
@@ -7597,7 +7621,7 @@ class UserModel
     /**
      * Sets the maximum number of results to retrieve (the "limit")
      *
-     * @param int $limit The maximum number of results to retrieve
+     * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
      * @see QueryBuilder::limit
      */
@@ -7629,7 +7653,7 @@ class UserModel
     }
 
     /**
-     * @param $columns
+     * @param array|string $columns
      * @return $this
      * @see QueryBuilder::selectDistinct
      */
@@ -7702,7 +7726,6 @@ class UserModel
      * @param string|null $first
      * @param string $operator
      * @param string|null $second
-     * @param string $type
      * @return $this
      * @see QueryBuilder::innerJoin
      */
@@ -7750,8 +7773,8 @@ class UserModel
      * ```
      *
      * @param array|Closure|string|null $column
-     * @param null $operator
-     * @param null $value
+     * @param mixed|null $operator
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::where
      */
@@ -7761,7 +7784,7 @@ class UserModel
 
     /**
      * @param string $expression
-     * @param array $params
+     * @param mixed $params
      * @return $this
      * @see QueryBuilder::whereRaw
      */
@@ -7770,7 +7793,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereBetween
@@ -7780,7 +7803,17 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see QueryBuilder::orWhereBetween
+     */
+    public function orWhereBetween($column, array $params)
+    {
+    }
+
+    /**
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotBetween
@@ -7790,7 +7823,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereIn
@@ -7800,7 +7833,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @param array $params
      * @return $this
      * @see QueryBuilder::whereNotIn
@@ -7810,7 +7843,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNull
      */
@@ -7819,7 +7852,7 @@ class UserModel
     }
 
     /**
-     * @param $column
+     * @param string $column
      * @return $this
      * @see QueryBuilder::whereNotNULL
      */
@@ -7828,9 +7861,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDate
      */
@@ -7839,9 +7872,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereMonth
      */
@@ -7850,9 +7883,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereDay
      */
@@ -7861,9 +7894,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereYear
      */
@@ -7872,9 +7905,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrValue
-     * @param null $value
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
      * @return $this
      * @see QueryBuilder::whereTime
      */
@@ -7883,9 +7916,9 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $opOrColumn2
-     * @param null $column2
+     * @param string $column
+     * @param string $opOrColumn2
+     * @param string|null $column2
      * @return $this
      * @see QueryBuilder::whereColumn
      */
@@ -7907,8 +7940,8 @@ class UserModel
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param mixed $column
+     * @param mixed $value
      * @param string $condition
      * @return $this
      * @see QueryBuilder::whereNotContains
@@ -7933,9 +7966,6 @@ class UserModel
      * Specifies a restriction over the groups of the query.
      * Replaces any previous having restrictions, if any.
      *
-     * @param string $conditions The having conditions
-     * @param array $params The condition parameters
-     * @param array $types The parameter types
      * @param mixed $column
      * @param mixed $operator
      * @param mixed|null $value
@@ -8010,7 +8040,7 @@ class UserModel
     }
 
     /**
-     * @param string $lock
+     * @param string|bool $lock
      * @return $this
      * @see QueryBuilder::lock
      */

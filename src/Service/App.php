@@ -283,7 +283,7 @@ class App extends \Wei\App
     public function isAdmin()
     {
         // NOTE: 控制器不存在时，回退的控制器不带有 admin
-        return 0 === strpos($this->request->getRouterPathInfo(), '/admin');
+        return 0 === strpos($this->req->getRouterPathInfo(), '/admin');
     }
 
     /**
@@ -313,7 +313,7 @@ class App extends \Wei\App
         $options && $this->setOption($options);
 
         // Parse the path info to parameter set
-        $request = $this->request;
+        $request = $this->req;
         $paramSet = $this->router->matchParamSet($request->getRouterPathInfo(), $request->getMethod());
 
         // TODO router 负责转换为 camel?
@@ -354,7 +354,7 @@ class App extends \Wei\App
         $middleware = $this->getMiddleware($instance, $action);
 
         $callback = function () use ($instance, $action) {
-            $instance->before($this->request, $this->response);
+            $instance->before($this->req, $this->response);
 
             $method = $this->getActionMethod($action);
             // TODO 和 forward 异常合并一起处理
@@ -365,7 +365,7 @@ class App extends \Wei\App
                 return $e->getRet();
             }
 
-            $instance->after($this->request, $response);
+            $instance->after($this->req, $response);
 
             return $response;
         };
@@ -397,7 +397,7 @@ class App extends \Wei\App
         $ref = new ReflectionMethod($instance, $method);
         $params = $ref->getParameters();
         if (!$params || 'req' === $params[0]->getName()) {
-            return [$this->request, $this->response];
+            return [$this->req, $this->response];
         }
 
         $args = [];
@@ -423,7 +423,7 @@ class App extends \Wei\App
             && !$type->isBuiltin()
             && is_a($type->getName(), Model::class, true)
         ) {
-            return $type->getName()::findOrFail($this->request['id']);
+            return $type->getName()::findOrFail($this->req['id']);
         }
 
         // Handle other class
@@ -433,7 +433,7 @@ class App extends \Wei\App
 
         // TODO Throw exception for unsupported builtin type
         // Handle builtin type
-        $arg = $this->request[$param->getName()];
+        $arg = $this->req[$param->getName()];
         if (null === $arg) {
             if ($param->isDefaultValueAvailable()) {
                 $arg = $param->getDefaultValue();
@@ -468,7 +468,7 @@ class App extends \Wei\App
      */
     protected function getNamespaceFromDomain()
     {
-        $domain = $this->request->getHost();
+        $domain = $this->req->getHost();
         if (!$domain || in_array($domain, $this->domains, true)) {
             return false;
         }
@@ -485,7 +485,7 @@ class App extends \Wei\App
      */
     protected function handleRet($ret)
     {
-        if ($this->request->acceptJson() || $this->isApi()) {
+        if ($this->req->acceptJson() || $this->isApi()) {
             return $this->response->json($ret);
         } else {
             if ($ret instanceof Ret) {

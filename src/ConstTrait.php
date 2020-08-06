@@ -3,10 +3,10 @@
 namespace Miaoxing\Plugin;
 
 use Miaoxing\Plugin\Model\ReqQueryTrait;
-use Wei\Request;
+use Wei\Req;
 
 /**
- * @property Request $request
+ * @property Req $request
  * @todo 支持 name 之外 ？
  */
 trait ConstTrait
@@ -139,7 +139,7 @@ trait ConstTrait
         }
 
         if (1 === func_num_args()) {
-            $reqKey = $this->request->get($prefix);
+            $reqKey = $this->req->get($prefix);
         }
 
         $id = $this->getConstId($prefix, $reqKey);

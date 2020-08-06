@@ -10,7 +10,7 @@ return [
             'date.timezone' => 'Asia/Shanghai',
         ],
         'aliases' => [
-            'request' => Wei\Request::class,
+            'request' => Wei\Req::class,
         ],
         'providers' => [
             'cache' => 'phpFileCache',

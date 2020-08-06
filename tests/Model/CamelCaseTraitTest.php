@@ -4,7 +4,7 @@ namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestCamelCase;
-use Wei\Request;
+use Wei\Req;
 
 /**
  * @internal
@@ -49,7 +49,7 @@ final class CamelCaseTraitTest extends BaseTestCase
     {
         $camelCase = TestCamelCase::new();
 
-        /** @var Request $request */
+        /** @var Req $request */
         $request = wei()->newInstance('request');
         $request->fromArray([
             'test_user_id' => 1,

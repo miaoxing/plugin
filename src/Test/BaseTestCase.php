@@ -39,8 +39,8 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
             $wei->{$name} = $service;
         }
 
-        $wei->request->clear();
-        $wei->request->setOption('gets', []);
+        $wei->req->clear();
+        $wei->req->setOption('gets', []);
         $wei->response->setStatusCode(200);
         $wei->app->setOption('plugin', null);
         $wei->block->setOption('data', []);

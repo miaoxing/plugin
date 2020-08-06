@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Model;
 
 use Wei\Logger;
-use Wei\Request;
+use Wei\Req;
 use Wei\Wei;
 
 /**
@@ -20,7 +20,7 @@ trait CamelCaseTrait
     protected function checkCamelCaseColumn($column, $data)
     {
         // 对用户数据进行检查,避免使用两种格式造成混乱
-        if ($data instanceof Request) {
+        if ($data instanceof Req) {
             return false === strpos($column, '_');
         }
 

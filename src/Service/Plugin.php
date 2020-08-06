@@ -14,7 +14,7 @@ use Miaoxing\Plugin\BaseService;
  * @property \Wei\BaseCache $configCache 记录生成的配置数组,使用phpFileCache速度最快,但需要在开发过程中生成,
  *                                       或者线上服务器可写,否则可改为memcached,redis等缓存
  * @mixin \EventMixin
- * @mixin \RequestMixin
+ * @mixin \ReqMixin
  * @mixin \AppMixin
  * @mixin \ClassMapMixin
  */
@@ -510,8 +510,8 @@ class Plugin extends BaseService
     protected function isRefresh()
     {
         return $this->wei->isDebug()
-            && 'no-cache' == $this->request->getServer('HTTP_PRAGMA')
-            && false === strpos($this->request->getServer('HTTP_USER_AGENT'), 'wechatdevtools');
+            && 'no-cache' == $this->req->getServer('HTTP_PRAGMA')
+            && false === strpos($this->req->getServer('HTTP_USER_AGENT'), 'wechatdevtools');
     }
 
     /**

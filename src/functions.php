@@ -48,6 +48,6 @@ if (!function_exists('ret')) {
 if (!function_exists('req')) {
     function req($name = null)
     {
-        return null === $name ? wei()->request : wei()->request[$name];
+        return null === $name ? wei()->req : wei()->req[$name];
     }
 }

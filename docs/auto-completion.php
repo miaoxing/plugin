@@ -35,7 +35,7 @@ class PluginMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\QueryBuilder $queryBuilder A SQL query builder class
- * @method      Miaoxing\Plugin\Service\QueryBuilder queryBuilder($table = null)
+ * @method      static queryBuilder($table = null)
  */
 class QueryBuilderMixin {
 }
@@ -68,7 +68,7 @@ class StrMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\Tester $tester 测试
- * @method      Miaoxing\Plugin\Service\Tester tester($controller = null, $action = null)
+ * @method      static tester($controller = null, $action = null)
  */
 class TesterMixin {
 }

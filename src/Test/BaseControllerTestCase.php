@@ -135,7 +135,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
         $action = $this->getAction();
 
         return wei()->tester($controller, $action)
-            ->request($request);
+            ->req($request);
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
             ->login(1)
             ->controller($controller)
             ->action($action)
-            ->request($data)
+            ->req($data)
             ->json()
             ->exec()
             ->response();

@@ -110,7 +110,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     public function request(array $request)
     {
-        $this->request = $request;
+        $this->req = $request;
 
         return $this;
     }
@@ -200,13 +200,13 @@ class Tester extends \Miaoxing\Plugin\BaseService
         $wei = $this->wei;
 
         // 1. 注入各种配置
-        $wei->request->clear();
-        $wei->request->set($this->request);
-        $wei->request->setOption('gets', $this->query);
-        $wei->request->setOption('posts', $this->post);
-        $wei->request->setMethod($this->method);
-        $wei->request->set('_format', $this->dataType);
-        $wei->request->setContent($this->content);
+        $wei->req->clear();
+        $wei->req->set($this->req);
+        $wei->req->setOption('gets', $this->query);
+        $wei->req->setOption('posts', $this->post);
+        $wei->req->setMethod($this->method);
+        $wei->req->set('_format', $this->dataType);
+        $wei->req->setContent($this->content);
 
         $wei->session->set($this->session);
 
@@ -222,12 +222,12 @@ class Tester extends \Miaoxing\Plugin\BaseService
         ob_end_clean();
 
         // 3. 还原原来的配置
-        $wei->request->clear();
-        $wei->request->setOption('gets', []);
-        $wei->request->setOption('posts', []);
-        $wei->request->setMethod('GET');
-        $wei->request->set('_format', '');
-        $wei->request->setContent('');
+        $wei->req->clear();
+        $wei->req->setOption('gets', []);
+        $wei->req->setOption('posts', []);
+        $wei->req->setMethod('GET');
+        $wei->req->set('_format', '');
+        $wei->req->setContent('');
 
         foreach ($this->session as $key => $value) {
             $wei->session->remove($key);
@@ -289,7 +289,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
             ->login(1)
             ->controller($controller)
             ->action($action)
-            ->request($data)
+            ->req($data)
             ->json()
             ->exec()
             ->response();
@@ -301,7 +301,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
             $this->login();
         }
 
-        return $this->request($data)
+        return $this->req($data)
             ->json()
             ->exec()
             ->response();

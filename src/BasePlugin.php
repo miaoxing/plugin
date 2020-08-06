@@ -7,7 +7,7 @@ namespace Miaoxing\Plugin;
  * @mixin \ViewMixin
  * @mixin \EventMixin
  * @mixin \LoggerMixin
- * @mixin \RequestMixin
+ * @mixin \ReqMixin
  * @mixin \StrMixin
  */
 abstract class BasePlugin extends \Miaoxing\Plugin\BaseService

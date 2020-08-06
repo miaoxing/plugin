@@ -15,14 +15,14 @@ final class AppTest extends BaseTestCase
 {
     public function testParamAction()
     {
-        wei()->request->set('id', 'id');
+        wei()->req->set('id', 'id');
         $response = $this->execute('param');
         $this->assertSame('id', $response);
     }
 
     public function testParamWithTypeAction()
     {
-        wei()->request->set('id', '1');
+        wei()->req->set('id', '1');
         $response = $this->execute('paramWithType');
         $this->assertSame('integer-1', $response);
     }
@@ -38,11 +38,11 @@ final class AppTest extends BaseTestCase
         $response = $this->execute('paramWithTypeAndDefaultValue');
         $this->assertSame('NULL', $response);
 
-        wei()->request->set('isEnabled', '1');
+        wei()->req->set('isEnabled', '1');
         $response = $this->execute('paramWithTypeAndDefaultValue');
         $this->assertSame('true', $response);
 
-        wei()->request->set('isEnabled', '0');
+        wei()->req->set('isEnabled', '0');
         $response = $this->execute('paramWithTypeAndDefaultValue');
         $this->assertSame('false', $response);
     }
@@ -55,7 +55,7 @@ final class AppTest extends BaseTestCase
 
     public function testParamModelAction()
     {
-        wei()->request->set('id', '1');
+        wei()->req->set('id', '1');
         $response = $this->execute('paramModel');
         $this->assertSame('user:1', $response);
     }
@@ -74,7 +74,7 @@ final class AppTest extends BaseTestCase
         $app = wei()->app;
         $app->setControllerMap(['test' => TestController::class]);
 
-        $app->request->set('_format', 'json');
+        $app->req->set('_format', 'json');
 
         // 更改视图为测试的目录
         $origDirs = $app->view->getOption('dirs');
@@ -164,7 +164,7 @@ final class AppTest extends BaseTestCase
         $app = wei()->app;
         $app->setControllerMap(['test' => TestController::class]);
 
-        $app->request->set('_format', 'json');
+        $app->req->set('_format', 'json');
 
         // 更改视图为测试的目录
         $origDirs = $app->view->getOption('dirs');

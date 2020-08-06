@@ -3,10 +3,10 @@
 namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Service\Model;
-use Wei\Request;
+use Wei\Req;
 
 /**
- * @property Request $request
+ * @property Req $request
  */
 trait ReqQueryTrait
 {
@@ -15,12 +15,12 @@ trait ReqQueryTrait
     protected $reqMaps = [];
 
     /**
-     * @param Request $request
+     * @param Req $request
      * @return $this
      */
     public function setRequest($request)
     {
-        $this->request = $request;
+        $this->req = $request;
 
         return $this;
     }
@@ -38,7 +38,7 @@ trait ReqQueryTrait
             $options['only'] = $options;
         }
 
-        $req = $this->request->getData();
+        $req = $this->req->getData();
         if (isset($options['only'])) {
             $req = array_intersect_key($req, array_flip((array) $options['only']));
         }
@@ -88,7 +88,7 @@ trait ReqQueryTrait
     {
         foreach ((array) $relations as $relation) {
             if (isset($this->joins[$relation])
-                || !$this->request->has($relation)
+                || !$this->req->has($relation)
                 || !$this->hasRelation($relation)
             ) {
                 continue;
@@ -124,8 +124,8 @@ trait ReqQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->convertOutputIdentifier($column);
-            if ($this->request->has($name)) {
-                $this->where($column, $this->request[$name]);
+            if ($this->req->has($name)) {
+                $this->where($column, $this->req[$name]);
             }
         }
 
@@ -142,13 +142,13 @@ trait ReqQueryTrait
 
         foreach ((array) $columns as $column) {
             $min = $this->convertOutputIdentifier($column . '_min');
-            if ($this->request->has($min)) {
-                $this->where($prefix . $column, '>=', $this->request[$min]);
+            if ($this->req->has($min)) {
+                $this->where($prefix . $column, '>=', $this->req[$min]);
             }
 
             $max = $this->convertOutputIdentifier($column . '_max');
-            if ($this->request->has($max)) {
-                $this->where($prefix . $column, '<=', $this->processMaxDate($column, $this->request[$max]));
+            if ($this->req->has($max)) {
+                $this->where($prefix . $column, '<=', $this->processMaxDate($column, $this->req[$max]));
             }
         }
 
@@ -159,8 +159,8 @@ trait ReqQueryTrait
     {
         foreach ((array) $columns as $column) {
             $name = $this->convertOutputIdentifier($column);
-            if ($this->request->has($name)) {
-                $this->whereHas($column, $this->request[$name]);
+            if ($this->req->has($name)) {
+                $this->whereHas($column, $this->req[$name]);
             }
         }
 
@@ -169,8 +169,8 @@ trait ReqQueryTrait
 
     public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
     {
-        if ($this->request->has('sort')) {
-            $name = $this->convertInputIdentifier($this->request['sort']);
+        if ($this->req->has('sort')) {
+            $name = $this->convertInputIdentifier($this->req['sort']);
             if (in_array($name, $this->getFields(), true)) {
                 $sort = $name;
             } else {
@@ -180,8 +180,8 @@ trait ReqQueryTrait
             $sort = $defaultColumn;
         }
 
-        if ($this->request->has('order')) {
-            $order = strtoupper($this->request['order']);
+        if ($this->req->has('order')) {
+            $order = strtoupper($this->req['order']);
             if (!in_array($order, ['ASC', 'DESC'], true)) {
                 $order = $defaultOrder;
             }
@@ -200,8 +200,8 @@ trait ReqQueryTrait
 
     public function paginate()
     {
-        $limit = $this->request['rows'] ?: 10;
-        $page = $this->request['page'] ?: 1;
+        $limit = $this->req['rows'] ?: 10;
+        $page = $this->req['page'] ?: 1;
 
         $this->limit($limit)->page($page);
 
@@ -352,7 +352,7 @@ trait ReqQueryTrait
     {
         if (false === strpos($column, '.')) {
             // 查询当前表
-            $value = $this->request[$column];
+            $value = $this->req[$column];
             $relation = null;
 
             // 有连表查询,加上表名
@@ -364,7 +364,7 @@ trait ReqQueryTrait
         } else {
             // 查询关联表
             [$relation, $relationColumn] = explode('.', $column, 2);
-            $value = $this->request[$relation][$relationColumn];
+            $value = $this->req[$relation][$relationColumn];
 
             /** @var Model $related */
             $related = $this->{$relation}();
