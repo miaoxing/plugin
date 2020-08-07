@@ -1730,16 +1730,28 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @deprecated Use `findFromReq` instead
+     * @svc
+     */
+    protected function findFromRequest($req = null)
+    {
+        return $this->findFromReq($req);
+    }
+
+    /**
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
      * @svc
      */
-    protected function findFromRequest($request = null)
+    protected function findFromReq($req = null)
     {
-        $request || $request = $this->wei->req;
-        if (in_array($request['action'], ['edit', 'update'], true)) {
-            $this->findOrFail($request[$this->getPrimaryKey()]);
+        $req || $req = $this->wei->req;
+        if (in_array($req['action'], ['edit', 'update'], true)) {
+            $this->findOrFail($req[$this->getPrimaryKey()]);
         }
         return $this;
     }

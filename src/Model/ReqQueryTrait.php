@@ -6,7 +6,7 @@ use Miaoxing\Plugin\Service\Model;
 use Wei\Req;
 
 /**
- * @property Req $request
+ * @mixin \ReqMixin
  */
 trait ReqQueryTrait
 {
@@ -15,13 +15,22 @@ trait ReqQueryTrait
     protected $reqMaps = [];
 
     /**
+     * @param Req $req
+     * @return $this
+     * @deprecated Use `setReq` instead
+     */
+    public function setRequest($req)
+    {
+        return $this->setReq($req);
+    }
+
+    /**
      * @param Req $request
      * @return $this
      */
-    public function setRequest($request)
+    public function setReq($req)
     {
-        $this->req = $request;
-
+        $this->req = $req;
         return $this;
     }
 

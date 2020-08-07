@@ -189,12 +189,23 @@ class AppModel
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public static function findFromRequest($request = null)
+    public static function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public static function findFromReq($req = null)
     {
     }
 
@@ -1010,12 +1021,23 @@ class Model
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public static function findFromRequest($request = null)
+    public static function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public static function findFromReq($req = null)
     {
     }
 
@@ -2601,12 +2623,23 @@ class User
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public static function findFromRequest($request = null)
+    public static function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public static function findFromReq($req = null)
     {
     }
 
@@ -3424,12 +3457,23 @@ class UserModel
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public static function findFromRequest($request = null)
+    public static function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public static function findFromReq($req = null)
     {
     }
 
@@ -4244,12 +4288,23 @@ class AppModel
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public function findFromRequest($request = null)
+    public function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public function findFromReq($req = null)
     {
     }
 
@@ -5065,12 +5120,23 @@ class Model
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public function findFromRequest($request = null)
+    public function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public function findFromReq($req = null)
     {
     }
 
@@ -6656,12 +6722,23 @@ class User
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public function findFromRequest($request = null)
+    public function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public function findFromReq($req = null)
     {
     }
 
@@ -7479,12 +7556,23 @@ class UserModel
     }
 
     /**
-     * @param array|Req|null $request
+     * @param array|Req|null $req
      * @return $this
      * @throws \Exception
+     * @deprecated Use `findFromReq` instead
      * @see Model::findFromRequest
      */
-    public function findFromRequest($request = null)
+    public function findFromRequest($req = null)
+    {
+    }
+
+    /**
+     * @param array|Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see Model::findFromReq
+     */
+    public function findFromReq($req = null)
     {
     }
 
