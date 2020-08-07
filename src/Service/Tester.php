@@ -112,7 +112,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     public function request(array $request)
     {
-        $this->req = $request;
+        $this->request = $request;
 
         return $this;
     }
@@ -203,7 +203,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
 
         // 1. 注入各种配置
         $wei->req->clear();
-        $wei->req->set($this->req);
+        $wei->req->set($this->request);
         $wei->req->setOption('gets', $this->query);
         $wei->req->setOption('posts', $this->post);
         $wei->req->setMethod($this->method);
@@ -303,7 +303,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
             $this->login();
         }
 
-        return $this->req($data)
+        return $this->request($data)
             ->json()
             ->exec()
             ->response();
