@@ -11,6 +11,16 @@ return [
         ],
         'aliases' => [
             'request' => Wei\Req::class,
+            'plugin' => Miaoxing\Plugin\Service\Plugin::class,
+            'install' => Miaoxing\Install\Service\Install::class,
+            // install 服务用到
+            'app' => Miaoxing\Plugin\Service\App::class,
+            'url' => Miaoxing\Services\Service\Url::class,
+        ],
+        'preload' => [
+            'error',
+            'env',
+            'plugin',
         ],
         'providers' => [
             'cache' => 'phpFileCache',
@@ -35,6 +45,11 @@ return [
         'providers' => [
             'cache' => 'nearCache',
         ],
+    ],
+
+    /* @see Wei\Env */
+    'env' => [
+        'configFile' => 'storage/configs/%env%.php',
     ],
 
     /* @see Wei\Error */
@@ -69,6 +84,12 @@ return [
     'redis' => [
         'host' => 'redis',
         'auth' => 'password',
+    ],
+
+    /* @see Wei\Req */
+    'req' => [
+        // 更改为 false，以便不配置 URL 重写也能打开页面
+        'defaultUrlRewrite' => false,
     ],
 
     /* @see Wei\Ret */

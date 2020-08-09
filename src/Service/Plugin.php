@@ -103,7 +103,6 @@ class Plugin extends BaseService
         }
 
         // Load configs to services
-        $this->wei->env->loadConfigFile(__DIR__ . '/../../config/config.php');
         $config = $this->getConfig();
         $this->wei->setConfig($config + [
                 'event' => [
