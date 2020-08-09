@@ -20,6 +20,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $updatedAt
  * @property int $createdBy
  * @property int $updatedBy
+ * @internal will change in the future
  */
 trait AppTrait
 {

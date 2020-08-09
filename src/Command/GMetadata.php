@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * @mixin \StrMixin
  * @mixin \PluginMixin
+ * @internal will change in the future
  */
 class GMetadata extends BaseCommand
 {
