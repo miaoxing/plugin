@@ -143,6 +143,7 @@ class Plugin extends BaseService
             return [
                 'wei' => [
                     'aliases' => $this->getWeiAliases(),
+                    'preload' => $this->getWeiPreload(),
                 ],
                 'app' => [
                     'controllerMap' => $this->getAppControllerMap(),
@@ -464,6 +465,24 @@ class Plugin extends BaseService
     protected function getWeiAliases()
     {
         return $this->classMap->generate($this->basePaths, '/Service/*.php', 'Service');
+    }
+
+    /**
+     * Get preload defined in composer.json
+     *
+     * @return array
+     */
+    protected function getWeiPreload()
+    {
+        $preload = [];
+        $files = glob('plugins/*/composer.json');
+        foreach ($files as $file) {
+            $config = json_decode(file_get_contents($file), true);
+            if (isset($config['extra']['wei-preload'])) {
+                $preload = array_merge($preload, $config['extra']['wei-preload']);
+            }
+        }
+        return $preload;
     }
 
     /**
