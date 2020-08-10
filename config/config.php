@@ -12,10 +12,6 @@ return [
         'aliases' => [
             'request' => Wei\Req::class,
             'plugin' => Miaoxing\Plugin\Service\Plugin::class,
-            'install' => Miaoxing\Install\Service\Install::class,
-            // install 服务用到
-            'app' => Miaoxing\Plugin\Service\App::class,
-            'url' => Miaoxing\Services\Service\Url::class,
         ],
         'preload' => [
             'error',
