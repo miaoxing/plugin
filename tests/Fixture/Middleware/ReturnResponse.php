@@ -5,7 +5,7 @@ namespace MiaoxingTest\Plugin\Fixture\Middleware;
 use Wei\Base;
 
 /**
- * @mixin \ResponseMixin
+ * @mixin \ResMixin
  */
 class ReturnResponse extends Base
 {

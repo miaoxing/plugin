@@ -52,7 +52,7 @@ class UserModel extends Model
     }
 
     /**
-     * @return string|void
+     * @return string|null
      */
     public function getDisplayNameAttribute()
     {
@@ -61,6 +61,7 @@ class UserModel extends Model
                 return $name;
             }
         }
+        return null;
     }
 
     /**

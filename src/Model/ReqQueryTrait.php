@@ -7,6 +7,7 @@ use Wei\Req;
 
 /**
  * @mixin \ReqMixin
+ * @property Req $req 需加上 phpstan 才能识别
  */
 trait ReqQueryTrait
 {
