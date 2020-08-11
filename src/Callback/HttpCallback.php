@@ -4,6 +4,8 @@ namespace Miaoxing\Plugin\Callback;
 
 abstract class HttpCallback
 {
+    const MAX_LOG_LENGTH = 1024;
+
     /**
      * @param mixed $response
      * @param \Wei\Http $http
@@ -35,8 +37,8 @@ abstract class HttpCallback
         $level = $http->getOption('errorLevel') ?: 'error';
 
         $response = $http->getResponseText();
-        if (mb_strlen($response) > 1024) {
-            $body = mb_substr($response, 0, 1024) . '...';
+        if (mb_strlen($response) > static::MAX_LOG_LENGTH) {
+            $body = mb_substr($response, 0, static::MAX_LOG_LENGTH) . '...';
         } else {
             $body = $response;
         }
