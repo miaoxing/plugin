@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * @mixin \PluginMixin
  * @internal will change in the future
  */
-class GMetadata extends BaseCommand
+final class GMetadata extends BaseCommand
 {
     public function handle()
     {

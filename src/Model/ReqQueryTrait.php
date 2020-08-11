@@ -25,7 +25,7 @@ trait ReqQueryTrait
     }
 
     /**
-     * @param Req $request
+     * @param Req $req
      * @return $this
      */
     public function setReq($req)
