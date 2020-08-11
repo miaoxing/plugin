@@ -21,7 +21,8 @@ while ('/' !== $dir) {
 $loader = require 'vendor/autoload.php';
 
 $files = [
-    'config.php',
+    'config/config.php', // 用于 plugin 自己
+    'plugins/plugin/config/config.php', // 用于其他插件
     'tests/config.php',
     'tests/config-local.php',
 ];
