@@ -8,12 +8,12 @@
   ],
   "license": "MIT",
   "require": {
-    "wei/wei": "^0.9.27",
+    "wei/wei": "^0.9.28",
     "doctrine/inflector": "^v1.1.0",
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {
-    "miaoxing/dev": "^6.0.0",
+    "miaoxing/dev": "^0.1.0",
     "nette/php-generator": "^3.4"
   },
   "autoload": {

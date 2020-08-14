@@ -1,11 +1,11 @@
 {
   "name": "@miaoxing/plugin",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "main": "index.js",
   "repository": "https://github.com/miaoxing/plugin",
   "license": "MIT",
   "devDependencies": {
-    "@miaoxing/dev": "^6.0.0"
+    "@miaoxing/dev": "^0.1.0"
   }
 }
