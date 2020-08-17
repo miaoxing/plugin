@@ -24,7 +24,7 @@ if (!function_exists('err')) {
      * @param string $level
      * @return Ret
      */
-    function err($message, $code = -1, $level = 'info')
+    function err($message, $code = 0, $level = 'info')
     {
         return Ret::err(...func_get_args());
     }
