@@ -1,3 +1,14 @@
+## [0.1.7](https://github.com/miaoxing/plugin/compare/v0.1.6...v0.1.7) (2020-08-17)
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from 6.1.0 to 6.1.1
+* **@wei/wei:** upgrade from 0.9.29 to 0.9.30
+
 ## [0.1.6](https://github.com/miaoxing/plugin/compare/v0.1.5...v0.1.6) (2020-08-14)
 
 
