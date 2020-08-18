@@ -6,6 +6,8 @@ use Wei\Base;
 
 /**
  * @mixin \LoggerMixin
+ * @mixin \PluginMixin
+ * @mixin \EnvMixin
  */
 class Ret extends Base implements \JsonSerializable, \ArrayAccess
 {
@@ -13,6 +15,11 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      * @var bool
      */
     protected static $createNewInstance = true;
+
+    /**
+     * @var array
+     */
+    private static $errors = [];
 
     /**
      * The default operation result data
@@ -41,6 +48,10 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      */
     public function __invoke($message, $code = 1, $type = 'success')
     {
+        if (1 !== $code && func_num_args() === 1) {
+            $code = $this->generateCode($message);
+        }
+
         if (is_string($message)) {
             // 直接传入消息字符串
             // $this->xxx('message', code);
@@ -165,6 +176,74 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      */
     protected function err($message, $code = 0, $level = 'info')
     {
+        if (func_num_args() === 1 && $this->env->isDev()) {
+            $code = $this->generateCode($message);
+        }
+
         return $this->__invoke($message, $code, $level);
+    }
+
+    /**
+     * @param string|array $message
+     * @return int
+     * @throws \Exception
+     */
+    private function generateCode($message)
+    {
+        $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4);
+
+        if ($traces[3]['function'] === 'err') {
+            // err();
+            $file = $traces[3]['file'];
+        } else {
+            // Ret:err();
+            $file = $traces[2]['file'];
+        }
+
+        $name = explode('/plugins/', $file)[1];
+        $name = explode('/src/', $name)[0];
+        $plugin = $this->plugin->getOneById($name);
+
+        $errors = $this->getErrors($name);
+        $key = is_array($message) ? $message[0] : $message;
+        if (isset($errors[$key])) {
+            $code = $errors[$key];
+        } else {
+            $lastCode = end($errors);
+            $code = $lastCode ? $lastCode + 1 : $plugin->getCode() * 1000 + 1;
+            $errors[$key] = $code;
+            $this->setErrors($name, $errors);
+        }
+
+        return $code;
+    }
+
+    private function getErrors($name)
+    {
+        if (!isset(static::$errors[$name])) {
+            $file = $this->getErrorFile($name);
+            if (is_file($file)) {
+                static::$errors[$name] = require $file;
+            } else {
+                static::$errors[$name] = [];
+            }
+        }
+        return static::$errors[$name];
+    }
+
+    private function setErrors($name, $errors)
+    {
+        static::$errors[$name] = $errors;
+        $file = $this->getErrorFile($name);
+        $dir = dirname($file);
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+        file_put_contents($this->getErrorFile($name), "<?php\n\nreturn " . var_export($errors, true) . ';');
+    }
+
+    private function getErrorFile($name)
+    {
+        return 'plugins/' . $name . '/config/errors.php';
     }
 }

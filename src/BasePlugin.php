@@ -35,11 +35,13 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
     protected $description = '';
 
     /**
-     * 插件的唯一数字ID
+     * 插件的唯一数字代码
+     *
+     * 用于错误码等
      *
      * @var int
      */
-    protected $id;
+    protected $code;
 
     /**
      * The web path for this plugin
@@ -81,6 +83,14 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
             'version' => $this->version,
             'description' => $this->description,
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**

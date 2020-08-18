@@ -304,17 +304,17 @@ class User extends UserModel
         $user = $user->findBy($column, $data['username']);
 
         if (!$user) {
-            return err('用户名不存在或密码错误', 2);
+            return err('用户名不存在或密码错误');
         }
 
         // 3. 检查用户是否有效
         if (!$user->isEnabled) {
-            return err('用户未启用,无法登录', 3);
+            return err('用户未启用,无法登录');
         }
 
         // 4. 验证密码是否正确
         if (!$user->verifyPassword($data['password'])) {
-            return err('用户不存在或密码错误', 4);
+            return err('用户不存在或密码错误');
         }
 
         // 5. 验证通过,登录用户
