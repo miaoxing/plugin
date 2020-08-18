@@ -210,7 +210,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
             $code = $errors[$key];
         } else {
             $lastCode = end($errors);
-            $code = $lastCode ? $lastCode + 1 : $plugin->getCode() * 1000 + 1;
+            $code = $lastCode ? $lastCode + 1 : $plugin->getCode() * 1000;
             $errors[$key] = $code;
             $this->setErrors($name, $errors);
         }
