@@ -201,7 +201,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
         }
 
         $name = explode('/plugins/', $file)[1];
-        $name = explode('/src/', $name)[0];
+        $name = explode('/', $name, 2)[0];
         $plugin = $this->plugin->getOneById($name);
 
         $errors = $this->getErrors($name);
