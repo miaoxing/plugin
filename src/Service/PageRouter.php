@@ -204,9 +204,13 @@ class PageRouter extends BaseService
 
             if (is_dir($dir . '/' . $file)) {
                 $result = $this->scanPages($rootDir, $dir . '/' . $file);
+                // Ignore empty array
                 if ($result) {
-                    // Ignore empty array
-                    $pages[$file] = $result;
+                    if (isset($pages[$file])) {
+                        $pages[$file] += $result;
+                    } else {
+                        $pages[$file] = $result;
+                    }
                 }
                 continue;
             }
