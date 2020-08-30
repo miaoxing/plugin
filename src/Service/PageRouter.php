@@ -53,7 +53,7 @@ class PageRouter extends BaseService
         }
 
         return [
-            'file' => ($result['dir'] ? ($result['dir'] . '/') : '') . implode('/', $result['paths']),
+            'file' => ($result['path'] ? ($result['path'] . '/') : '') . ltrim(implode('', $result['paths']), '/'),
             'params' => $params,
         ];
     }
@@ -120,11 +120,11 @@ class PageRouter extends BaseService
             $hasNext = $this->hasNext($next);
             if ($isLast && $this->isEnded($next, $hasNext)) {
                 $matches[] = $filePath;
-                if (isset($next['_file'])) {
-                    $matches[] = $next['_file'];
+                if (isset($next['file'])) {
+                    $matches[] = '/' . $next['file'];
                 }
                 return [
-                    'dir' => $next['_dir'] ?? null,
+                    'path' => $next['path'] ?? null,
                     'paths' => $matches,
                 ];
             }
@@ -150,8 +150,10 @@ class PageRouter extends BaseService
      */
     protected function matchPath(string $urlPath, string $filePath, bool $isLast): bool
     {
+        $urlPath = '/' . $urlPath;
+
         // Ignore config
-        if (substr($filePath, 0, 1) === '_') {
+        if (substr($filePath, 0, 1) !== '/') {
             return false;
         }
 
@@ -207,16 +209,16 @@ class PageRouter extends BaseService
                 // Ignore empty array
                 if ($result) {
                     if (isset($pages[$file])) {
-                        $pages[$file] += $result;
+                        $pages['/' . $file] += $result;
                     } else {
-                        $pages[$file] = $result;
+                        $pages['/' . $file] = $result;
                     }
                 }
                 continue;
             }
 
             if ($file === 'index.php') {
-                $pages += ['_file' => 'index.php', '_dir' => $rootDir];
+                $pages += ['file' => 'index.php', 'path' => $rootDir];
                 continue;
             }
 
@@ -224,7 +226,7 @@ class PageRouter extends BaseService
             $info = pathinfo($file);
             // Ignore file start with underscore
             if (substr($info['basename'], 0, 1) !== '_' && $info['extension'] === 'php') {
-                $pages[$file] = ['_dir' => $rootDir];
+                $pages['/' . $file] = ['path' => $rootDir];
             }
         }
         return $pages;
@@ -237,7 +239,7 @@ class PageRouter extends BaseService
      */
     private function isEnded($next, bool $hasNext): bool
     {
-        if (isset($next['_file'])) {
+        if (isset($next['file'])) {
             return true;
         }
         return !$hasNext;

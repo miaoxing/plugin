@@ -17,31 +17,31 @@ class PageRouterTest extends BaseTestCase
     public function testMatch(string $pathInfo, array $result = null)
     {
         $this->pageRouter->setPages([
-            'assignees' => [
-                '_file' => 'index.php',
-                '[assignee].php' => [],
+            '/assignees' => [
+                'file' => 'index.php',
+                '/[assignee].php' => [],
             ],
-            'issues' => [
-                '_file' => 'index.php',
-                'comments' => [
-                    '_file' => 'index.php',
-                    '[commentId].php' => [],
+            '/issues' => [
+                'file' => 'index.php',
+                '/comments' => [
+                    'file' => 'index.php',
+                    '/[commentId].php' => [],
                 ],
 
-                '[issueNumber].php' => [],
+                '/[issueNumber].php' => [],
 
-                '[issueNumber]' => [
-                    'assignees' => [
-                        '_file' => 'index.php',
+                '/[issueNumber]' => [
+                    '/assignees' => [
+                        'file' => 'index.php',
                     ],
 
-                    'comments' => [
-                        '_file' => 'index.php',
-                        '[commentId].php' => [],
+                    '/comments' => [
+                        'file' => 'index.php',
+                        '/[commentId].php' => [],
                     ],
 
-                    'lock' => [
-                        '_file' => 'index.php',
+                    '/lock' => [
+                        'file' => 'index.php',
                     ],
                 ],
             ],
@@ -185,8 +185,8 @@ class PageRouterTest extends BaseTestCase
     public function testMatchExact()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '_file' => 'index.php',
+            '/issues' => [
+                'file' => 'index.php',
             ],
         ]);
 
@@ -196,9 +196,9 @@ class PageRouterTest extends BaseTestCase
     public function testDir()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '_file' => 'index.php',
-                '_dir' => 'pages',
+            '/issues' => [
+                'file' => 'index.php',
+                'path' => 'pages',
             ],
         ]);
 
@@ -208,9 +208,9 @@ class PageRouterTest extends BaseTestCase
     public function testMatchDynamic()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '_file' => 'index.php',
-                '[issueNumber].php' => [],
+            '/issues' => [
+                'file' => 'index.php',
+                '/[issueNumber].php' => [],
             ],
         ]);
 
@@ -225,15 +225,15 @@ class PageRouterTest extends BaseTestCase
     public function testMatchNested()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '[issueNumber]' => [
-                    'comments' => [
-                        '_file' => 'index.php',
-                        '[commentId].php' => [],
+            '/issues' => [
+                '/[issueNumber]' => [
+                    '/comments' => [
+                        'file' => 'index.php',
+                        '/[commentId].php' => [],
                     ],
                 ],
-                '[issueNumber].php' => [],
-                '_file' => 'index.php',
+                '/[issueNumber].php' => [],
+                'file' => 'index.php',
             ],
         ]);
 
@@ -263,21 +263,21 @@ class PageRouterTest extends BaseTestCase
     public function testMatchSimilar()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '[issueId]' => [
-                    'labels' => [
-                        '_file' => 'index.php',
-                        '[labelId].php' => [],
+            '/issues' => [
+                '/[issueId]' => [
+                    '/labels' => [
+                        'file' => 'index.php',
+                        '/[labelId].php' => [],
                     ],
                 ],
-                '[issueNumber]' => [
-                    'comments' => [
-                        '_file' => 'index.php',
-                        '[commentId].php' => [],
+                '/[issueNumber]' => [
+                    '/comments' => [
+                        'file' => 'index.php',
+                        '/[commentId].php' => [],
                     ],
                 ],
-                '[issueNumber].php' => [],
-                '_file' => 'index.php',
+                '/[issueNumber].php' => [],
+                'file' => 'index.php',
             ],
         ]);
 
@@ -307,18 +307,18 @@ class PageRouterTest extends BaseTestCase
     public function testMatchDeep()
     {
         $this->pageRouter->setPages([
-            'orgs' => [
-                '_file' => 'index.php',
-                '[org].php' => [],
-                '[org]' => [
-                    'teams' => [
-                        '[teamSlug]' => [
-                            'discussions' => [
-                                '[discussionNumber]' => [
-                                    'comments' => [
-                                        '[commentNumber]' => [
-                                            'reactions' => [
-                                                '_file' => 'index.php',
+            '/orgs' => [
+                'file' => 'index.php',
+                '/[org].php' => [],
+                '/[org]' => [
+                    '/teams' => [
+                        '/[teamSlug]' => [
+                            '/discussions' => [
+                                '/[discussionNumber]' => [
+                                    '/comments' => [
+                                        '/[commentNumber]' => [
+                                            '/reactions' => [
+                                                'file' => 'index.php',
                                             ],
                                         ],
                                     ],
@@ -348,21 +348,21 @@ F,
     public function testIgnoreConfig()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '_file' => 'index.php',
-                '_dir' => 'apis',
+            '/issues' => [
+                'file' => 'index.php',
+                'path' => 'apis',
             ],
         ]);
 
-        $this->assertNull($this->pageRouter->match('/issues/_dir'));
+        $this->assertNull($this->pageRouter->match('/issues/path'));
         $this->assertSame('apis/issues/index.php', $this->pageRouter->match('/issues')['file']);
     }
 
     public function testIndexPhp()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '_file' => 'index.php',
+            '/issues' => [
+                'file' => 'index.php',
             ],
         ]);
 
@@ -374,10 +374,10 @@ F,
     public function testPreferNamePhpThanIndexPhp()
     {
         $this->pageRouter->setPages([
-            'issues.php' => [],
-            'issues' => [
-                '_dir' => '',
-                '_file' => 'index.php',
+            '/issues.php' => [],
+            '/issues' => [
+                'path' => '',
+                'file' => 'index.php',
             ],
         ]);
 
@@ -387,18 +387,18 @@ F,
     public function testOrder()
     {
         $this->pageRouter->setPages([
-            'comments' => [
-                '_file' => 'index.php',
+            '/comments' => [
+                'file' => 'index.php',
             ],
-            '[issueNumber].php' => [],
+            '/[issueNumber].php' => [],
         ]);
 
         $this->assertSame('comments/index.php', $this->pageRouter->match('comments')['file']);
 
         $this->pageRouter->setPages([
-            '[issueNumber].php' => [],
-            'comments' => [
-                '_file' => 'index.php',
+            '/[issueNumber].php' => [],
+            '/comments' => [
+                'file' => 'index.php',
             ],
         ]);
 
@@ -408,12 +408,12 @@ F,
     public function testActionPage()
     {
         $this->pageRouter->setPages([
-            'issues' => [
-                '_file' => 'index.php',
-                '[id].php' => [],
-                '[id]' => [
-                    'new.php' => [],
-                    'edit.php' => [],
+            '/issues' => [
+                'file' => 'index.php',
+                '/[id].php' => [],
+                '/[id]' => [
+                    '/new.php' => [],
+                    '/edit.php' => [],
                 ],
             ],
         ]);
@@ -436,8 +436,8 @@ F,
     public function testDirContainsDotPhp()
     {
         $this->pageRouter->setPages([
-            'issues.php' => [
-                'labels.php' => [],
+            '/issues.php' => [
+                '/labels.php' => [],
             ],
         ]);
 
@@ -455,30 +455,30 @@ F,
 
         $pages = $this->pageRouter->getPages();
         $this->assertSame([
-            '_file' => 'index.php',
-            '_dir' => $dir . '/tests',
-            '[testId]' => [
-                'comments' => [
-                    '_file' => 'index.php',
-                    '_dir' => $dir . '/tests',
-                    '[id].php' => [
-                        '_dir' => $dir . '/tests',
+            'file' => 'index.php',
+            'path' => $dir . '/tests',
+            '/[testId]' => [
+                '/comments' => [
+                    'file' => 'index.php',
+                    'path' => $dir . '/tests',
+                    '/[id].php' => [
+                        'path' => $dir . '/tests',
                     ],
                 ],
             ],
-            '[id].php' => [
-                '_dir' => $dir . '/tests',
+            '/[id].php' => [
+                'path' => $dir . '/tests',
             ],
-            '[id]' => [
-                'new.php' => [
-                    '_dir' => $dir . '/tests',
+            '/[id]' => [
+                '/new.php' => [
+                    'path' => $dir . '/tests',
                 ],
-                'edit.php' => [
-                    '_dir' => $dir . '/tests',
+                '/edit.php' => [
+                    'path' => $dir . '/tests',
                 ],
             ],
-            'test.php' => [
-                '_dir' => $dir . '/tests2',
+            '/test.php' => [
+                'path' => $dir . '/tests2',
             ],
         ], $pages);
     }
