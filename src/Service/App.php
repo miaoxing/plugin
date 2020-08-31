@@ -18,9 +18,12 @@ use Wei\Res;
  * @mixin \StrMixin
  * @mixin \AppModelMixin
  * @mixin \CacheMixin
+ * @mixin \PageRouterMixin
  */
 class App extends \Wei\App
 {
+    protected const METHOD_NOT_ALLOWED = 405;
+
     /**
      * 插件控制器不使用该格式,留空可减少类查找
      *
@@ -74,23 +77,19 @@ class App extends \Wei\App
     protected $defaultViewFile = '@plugin/_default.php';
 
     /**
-     * 当页面不存在时，加载该控制器
-     *
      * @var string
      */
-    protected $fallbackController = 'app';
-
-    /**
-     * 当页面不存在时，加载该方法
-     *
-     * @var string
-     */
-    protected $fallbackAction = 'index';
+    protected $fallbackPathInfo = 'app';
 
     /**
      * @var \Miaoxing\Plugin\Service\AppModel[]
      */
     protected $records = [];
+
+    /**
+     * @var array
+     */
+    private $page = [];
 
     /**
      * {@inheritdoc}
@@ -140,10 +139,10 @@ class App extends \Wei\App
      */
     public function getDefaultTemplate($controller = null, $action = null)
     {
-        $file = lcfirst($controller ?: $this->controller) . '/' . ($action ?: $this->action)
-            . $this->view->getExtension();
+        $file = $controller ?: $this->page['file'];
+        $file = dirname($file) . '/_' . basename($file);
 
-        $plugin = $this->getPlugin();
+        $plugin = $this->getPlugin();;
 
         return $plugin ? '@' . $plugin . '/' . $file : $file;
     }
@@ -164,6 +163,7 @@ class App extends \Wei\App
      *
      * @param string $action
      * @return string
+     * @deprecated
      */
     public function getControllerFile($action)
     {
@@ -178,14 +178,9 @@ class App extends \Wei\App
     public function getPlugin()
     {
         if (!$this->plugin) {
-            $classes = array_reverse($this->getControllerClasses($this->controller));
-            foreach ($classes as $class) {
-                // 认为第二部分是插件名称
-                list(, $plugin) = explode('\\', $class, 3);
-                $this->plugin = $this->str->dash($plugin);
-
-                break;
-            }
+            // 认为第二部分是插件名称
+            list(, $plugin) = explode('/', $this->page['file'], 3);
+            $this->plugin = $plugin;
         }
 
         return $this->plugin;
@@ -293,7 +288,8 @@ class App extends \Wei\App
      */
     public function isApi()
     {
-        return 0 === strpos($this->getController(), 'api') || 0 === strpos($this->getController(), 'adminApi');
+        $pathInfo = $this->req->getRouterPathInfo();
+        return 0 === strpos($pathInfo, '/api') || 0 === strpos($pathInfo, '/admin-api');
     }
 
     /**
@@ -312,32 +308,38 @@ class App extends \Wei\App
     {
         $options && $this->setOption($options);
 
-        // Parse the path info to parameter set
-        $request = $this->req;
-        $paramSet = $this->router->matchParamSet($request->getRouterPathInfo(), $request->getMethod());
-
-        // TODO router 负责转换为 camel?
-        foreach ($paramSet as $i => $params) {
-            $paramSet[$i]['controller'] = $this->str->camel($params['controller']);
+        $pathInfo = $this->req->getRouterPathInfo();
+        $result = $this->pageRouter->match($pathInfo);
+        if (!$result) {
+            $result = $this->pageRouter->match($this->fallbackPathInfo);
         }
 
-        // 当控制器不存在时，回退到该控制器，适用于前后端分离的情况
-        $paramSet[] = [
-            'controller' => $this->fallbackController,
-            'action' => $this->fallbackAction,
+        $this->req->set($result['params']);
+        $page = require $result['file'];
+
+        $this->page = [
+            'file' => $result['file'],
+            'page' => $page,
         ];
 
-        // Find out exiting controller action and execute
-        $notFound = [];
-        foreach ($paramSet as $params) {
-            $response = $this->dispatch($params['controller'], $params['action'], $params, false);
-            if (is_array($response)) {
-                $notFound = array_merge($notFound, $response);
-            } else {
-                return $response;
-            }
+        $method = $this->req->getMethod();
+        if (!method_exists($page, $method)) {
+            $this->res->setStatusCode(static::METHOD_NOT_ALLOWED);
+            throw new \Exception('Method Not Allowed', static::METHOD_NOT_ALLOWED);
         }
-        throw $this->buildException($notFound);
+
+        return $this->execute($page, $method);
+    }
+
+    /**
+     * Returns the method name of specified acion
+     *
+     * @param string $action
+     * @return string
+     */
+    public function getActionMethod($action)
+    {
+        return $action;
     }
 
     /**

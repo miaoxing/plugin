@@ -12,6 +12,7 @@ return [
         'aliases' => [
             'request' => Wei\Req::class,
             'plugin' => Miaoxing\Plugin\Service\Plugin::class,
+            'pageRouter' => Miaoxing\Plugin\Service\PageRouter::class,
         ],
         'preload' => [
             'error',
@@ -94,12 +95,6 @@ return [
             'message' => '操作成功',
             'code' => 1,
         ],
-    ],
-
-    /* @see Wei\Router */
-    'router' => [
-        'namespaces' => ['api', 'admin-api', 'admin'],
-        'scopes' => [],
     ],
 
     /* @see Wei\Schema */

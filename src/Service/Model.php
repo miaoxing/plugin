@@ -1267,8 +1267,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param array $merge
      * @return array
+     * @svc
      */
-    public function toRet(array $merge = [])
+    protected function toRet(array $merge = [])
     {
         if ($this->isColl()) {
             return $this->suc($merge + [
@@ -1750,7 +1751,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function findFromReq($req = null)
     {
         $req || $req = $this->wei->req;
-        if (in_array($req['action'], ['edit', 'update'], true)) {
+        if (!$req->isPost()) {
             $this->findOrFail($req[$this->getPrimaryKey()]);
         }
         return $this;

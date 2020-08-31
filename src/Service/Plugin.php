@@ -17,6 +17,7 @@ use Miaoxing\Plugin\BaseService;
  * @mixin \ReqMixin
  * @mixin \AppMixin
  * @mixin \ClassMapMixin
+ * @mixin \PageRouterMixin
  */
 class Plugin extends BaseService
 {
@@ -144,11 +145,11 @@ class Plugin extends BaseService
                     'aliases' => $this->getWeiAliases(),
                     'preload' => $this->getWeiPreload(),
                 ],
-                'app' => [
-                    'controllerMap' => $this->getAppControllerMap(),
-                ],
                 'plugin' => [
                     'pluginClasses' => $this->getPluginClasses(true),
+                ],
+                'pageRouter' => [
+                    'pages' => $this->pageRouter->generatePages(),
                 ],
             ];
         });
@@ -489,6 +490,7 @@ class Plugin extends BaseService
      *
      * @return array
      * @todo v3 要求以 Controller 结尾
+     * @deprecated
      */
     protected function getAppControllerMap()
     {

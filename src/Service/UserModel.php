@@ -20,6 +20,22 @@ class UserModel extends Model
         'display_name',
     ];
 
+    protected $guarded = [
+        'id',
+        'app_id',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
+        'is_admin',
+        'mobile_verified_at',
+        'username',
+        'password',
+        'last_login_at',
+    ];
+
     /**
      * @var array
      */
