@@ -28,6 +28,12 @@ class ModelMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\PageRouter $pageRouter
+ */
+class PageRouterMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
  */
 class PluginMixin {
@@ -92,6 +98,7 @@ class UserModelMixin {
  * @mixin AppModelMixin
  * @mixin ConfigMixin
  * @mixin ModelMixin
+ * @mixin PageRouterMixin
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
  * @mixin RetMixin
@@ -127,6 +134,9 @@ $config = wei()->config;
 
 /** @var Miaoxing\Plugin\Service\Model $model */
 $model = wei()->model;
+
+/** @var Miaoxing\Plugin\Service\PageRouter $pageRouter */
+$pageRouter = wei()->pageRouter;
 
 /** @var Miaoxing\Plugin\Service\Plugin $plugin */
 $plugin = wei()->plugin;

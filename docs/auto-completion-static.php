@@ -19,6 +19,17 @@ class App
 class AppModel
 {
     /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public static function toRet(array $merge = [])
+    {
+    }
+
+    /**
      * Return the record table name
      *
      * @return string
@@ -851,6 +862,17 @@ class Config
 class Model
 {
     /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public static function toRet(array $merge = [])
+    {
+    }
+
+    /**
      * Return the record table name
      *
      * @return string
@@ -1651,6 +1673,10 @@ class Model
     public static function unscoped($scopes = [])
     {
     }
+}
+
+class PageRouter
+{
 }
 
 class Plugin
@@ -2460,6 +2486,17 @@ class User
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
+    {
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public static function toRet(array $merge = [])
     {
     }
 
@@ -3283,6 +3320,17 @@ class UserModel
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
+    {
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public static function toRet(array $merge = [])
     {
     }
 
@@ -4118,6 +4166,17 @@ class App
 class AppModel
 {
     /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public function toRet(array $merge = [])
+    {
+    }
+
+    /**
      * Return the record table name
      *
      * @return string
@@ -4950,6 +5009,17 @@ class Config
 class Model
 {
     /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public function toRet(array $merge = [])
+    {
+    }
+
+    /**
      * Return the record table name
      *
      * @return string
@@ -5750,6 +5820,10 @@ class Model
     public function unscoped($scopes = [])
     {
     }
+}
+
+class PageRouter
+{
 }
 
 class Plugin
@@ -6559,6 +6633,17 @@ class User
      * @see UserModel::updatePassword
      */
     public function updatePassword($req)
+    {
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public function toRet(array $merge = [])
     {
     }
 
@@ -7382,6 +7467,17 @@ class UserModel
      * @see UserModel::updatePassword
      */
     public function updatePassword($req)
+    {
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @see Model::toRet
+     */
+    public function toRet(array $merge = [])
     {
     }
 

@@ -55,7 +55,7 @@ class PageRouter extends BaseService
         return [
             'file' => ($result['path'] ? ($result['path'] . '/') : '') . ltrim(implode('', $result['paths']), '/'),
             'params' => $params,
-        ];
+        ] + $result;
     }
 
     /**
@@ -123,10 +123,7 @@ class PageRouter extends BaseService
                 if (isset($next['file'])) {
                     $matches[] = '/' . $next['file'];
                 }
-                return [
-                    'path' => $next['path'] ?? null,
-                    'paths' => $matches,
-                ];
+                return $next + ['paths' => $matches];
             }
 
             if (!$hasNext) {
@@ -182,7 +179,7 @@ class PageRouter extends BaseService
             return false;
         }
         foreach ($pages as $name => $page) {
-            if (substr($name, 0, 1) !== '_') {
+            if (substr($name, 0, 1) === '/') {
                 return true;
             }
         }
@@ -239,7 +236,7 @@ class PageRouter extends BaseService
      */
     private function isEnded($next, bool $hasNext): bool
     {
-        if (isset($next['file'])) {
+        if (isset($next['file']) || isset($next['name'])) {
             return true;
         }
         return !$hasNext;
