@@ -201,14 +201,15 @@ class PageRouter extends BaseService
                 continue;
             }
 
-            if (is_dir($dir . '/' . $file)) {
-                $result = $this->scanPages($rootDir, $dir . '/' . $file);
+            $path = '/' . $file;
+            if (is_dir($dir . $path)) {
+                $result = $this->scanPages($rootDir, $dir . $path);
                 // Ignore empty array
                 if ($result) {
-                    if (isset($pages[$file])) {
-                        $pages['/' . $file] += $result;
+                    if (isset($pages[$path])) {
+                        $pages[$path] += $result;
                     } else {
-                        $pages['/' . $file] = $result;
+                        $pages[$path] = $result;
                     }
                 }
                 continue;
@@ -223,7 +224,7 @@ class PageRouter extends BaseService
             $info = pathinfo($file);
             // Ignore file start with underscore
             if (substr($info['basename'], 0, 1) !== '_' && $info['extension'] === 'php') {
-                $pages['/' . $file] = ['path' => $rootDir];
+                $pages[$path] = ['path' => $rootDir];
             }
         }
         return $pages;
