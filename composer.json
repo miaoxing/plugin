@@ -9,7 +9,7 @@
   "license": "MIT",
   "require": {
     "wei/wei": "^0.9.30",
-    "doctrine/inflector": "^v1.1.0",
+    "doctrine/inflector": "^1.4|^2.0",
     "oomphinc/composer-installers-extender": "^1.1"
   },
   "require-dev": {

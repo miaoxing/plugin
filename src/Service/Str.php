@@ -2,7 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Miaoxing\Plugin\BaseService;
 
 /**
@@ -17,12 +18,17 @@ class Str extends BaseService
     protected static $camelCache = [];
 
     /**
+     * @var Inflector
+     */
+    protected $inflector;
+
+    /**
      * @param string $word
      * @return string
      */
     public function pluralize($word)
     {
-        return Inflector::pluralize($word);
+        return $this->getInflector()->pluralize($word);
     }
 
     /**
@@ -31,7 +37,7 @@ class Str extends BaseService
      */
     public function singularize($word)
     {
-        return Inflector::singularize($word);
+        return $this->getInflector()->singularize($word);
     }
 
     /**
@@ -92,5 +98,18 @@ class Str extends BaseService
         $parts = explode('\\', is_string($object) ? $object : get_class($object));
 
         return end($parts);
+    }
+
+    /**
+     * Get the inflector instance.
+     *
+     * @return Inflector
+     */
+    public function getInflector()
+    {
+        if (!$this->inflector) {
+            $this->inflector = InflectorFactory::create()->build();
+        }
+        return $this->inflector;
     }
 }
