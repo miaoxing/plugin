@@ -1,3 +1,29 @@
+# [0.2.0](https://github.com/miaoxing/plugin/compare/v0.1.7...v0.2.0) (2020-09-01)
+
+
+### Bug Fixes
+
+* 路径错误导致路由未识别到 ([4884591](https://github.com/miaoxing/plugin/commit/4884591f2f1023ca7dfcb292f8a01437f4a0f10e))
+* **pageRouter:** 相同的页面目录会被覆盖 ([9250a95](https://github.com/miaoxing/plugin/commit/9250a950c6d6a1dda4b1a01480a1034cd78c0745))
+* **Ret:** 不在 src 目录下调用解析插件名称错误 ([b9eaee9](https://github.com/miaoxing/plugin/commit/b9eaee9a1b9d831fc4ecd90e76db63b364d24bdd))
+* 默认 code 和 Ret 服务保持一致 ([1ca02b8](https://github.com/miaoxing/plugin/commit/1ca02b8cb282f8a67323da0151944d8f9604bdbb))
+
+
+### Code Refactoring
+
+* 后端控制器改为 page 模式 ([f0e7467](https://github.com/miaoxing/plugin/commit/f0e74677f967fb30aecb17d8dded56df7283abd0))
+
+
+### Features
+
+* 增加 PageRouter 服务 ([9383e28](https://github.com/miaoxing/plugin/commit/9383e286dbc9d14f52508c04cd0b7b97ab21111e))
+* 增加自动生成错误码功能 ([49907ea](https://github.com/miaoxing/plugin/commit/49907eae4442cc430a08a9f61994befe8d24e24d))
+
+
+### BREAKING CHANGES
+
+* 后端控制器改为 page 模式
+
 ## [0.1.7](https://github.com/miaoxing/plugin/compare/v0.1.6...v0.1.7) (2020-08-17)
 
 
