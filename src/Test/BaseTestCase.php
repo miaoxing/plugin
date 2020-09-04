@@ -119,8 +119,12 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         }
 
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
+        $expected = [];
 
-        $expected = ['code' => $code];
+        // @experimental
+        if (null !== $code) {
+            $expected['code'] = $code;
+        }
         if (null !== $message) {
             $expected['message'] = $message;
         }
