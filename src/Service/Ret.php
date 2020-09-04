@@ -205,7 +205,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
         $plugin = $this->plugin->getOneById($name);
 
         $errors = $this->getErrors($name);
-        $key = is_array($message) ? $message[0] : $message;
+        $key = is_array($message) ? ($message['message'] ?? $message[0]) : $message;
         if (isset($errors[$key])) {
             $code = $errors[$key];
         } else {
