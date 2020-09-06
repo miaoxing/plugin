@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Auth\BaseAuth;
+use Miaoxing\Plugin\Auth\JwtAuth;
 use Miaoxing\Plugin\ConfigTrait;
 
 /**
@@ -23,7 +25,6 @@ use Miaoxing\Plugin\ConfigTrait;
  * @property string $defaultAvatar
  * @property bool $enablePinCode
  * @mixin \EventMixin
- * @mixin \SessionMixin
  * @mixin \ReqMixin
  * @mixin \PasswordMixin
  */
@@ -88,13 +89,6 @@ class User extends UserModel
     ];
 
     /**
-     * 缓存在session中的字段
-     *
-     * @var array
-     */
-    protected $sessionFields = ['id', 'username', 'nickName'];
-
-    /**
      * @var array
      */
     protected $requiredServices = [
@@ -103,8 +97,17 @@ class User extends UserModel
         'logger',
         'ret',
         'str',
-        'session',
     ];
+
+    /**
+     * @var string
+     */
+    protected $authClass = JwtAuth::class;
+
+    /**
+     * @var BaseAuth
+     */
+    protected $auth;
 
     /**
      * NOTE: 暂时只有__set有效
@@ -138,16 +141,6 @@ class User extends UserModel
     }
 
     /**
-     * 获取存储在session中的用户数据
-     *
-     * @return array|null
-     */
-    public function getSessionData()
-    {
-        return $this->session['user'];
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function toArray($returnFields = [], callable $prepend = null)
@@ -164,22 +157,23 @@ class User extends UserModel
     {
         // 确保是更新操作,同时有ID作为更新条件
         $this->isNew = false;
-        $this['id'] = $this->session['user']['id'];
+        $this['id'] = $this->getAuth()->getData()['id'];
 
         return parent::save($data);
     }
 
     /**
-     * Record: 获取用户资料,优先从session中获取
+     * Record: 获取用户资料,优先从认证服务中获取
      *
      * {@inheritdoc}
      */
     public function &get($name, &$exists = null, $throwException = true)
     {
-        // 未加载数据,已登录,session中存在需要的key
-        if (!$this->isLoaded() && isset($this->session['user'][$name])) {
+        // 未加载数据,已登录,认证服务中存在需要的key
+        $data = $this->getAuth()->getData();
+        if (!$this->isLoaded() && isset($data[$name])) {
             $exists = true;
-            return $this->session['user'][$name];
+            return $data[$name];
         } else {
             $this->loadDbUser();
 
@@ -252,7 +246,18 @@ class User extends UserModel
      */
     protected function isLogin()
     {
-        return (bool) $this->session['user'];
+        return $this->getAuth()->isLogin();
+    }
+
+    /**
+     * 检查用户是否登录
+     *
+     * @return Ret
+     * @svc
+     */
+    protected function checkLogin()
+    {
+        return $this->getAuth()->checkLogin();
     }
 
     /**
@@ -364,10 +369,13 @@ class User extends UserModel
     protected function loginByModel(UserModel $user)
     {
         $this->loadRecordData($user);
-        $this->session['user'] = $user->toArray($this->sessionFields);
-        $this->event->trigger('userLogin', [$user]);
 
-        return suc('登录成功');
+        $ret = $this->getAuth()->login($user);
+        if ($ret->isSuc()) {
+            $this->event->trigger('userLogin', [$user]);
+        }
+
+        return $ret;
     }
 
     /**
@@ -379,7 +387,8 @@ class User extends UserModel
     protected function logout()
     {
         $this->data = [];
-        unset($this->session['user']);
+
+        $this->getAuth()->logout();
 
         return suc();
     }
@@ -393,10 +402,18 @@ class User extends UserModel
      */
     protected function refresh(UserModel $user)
     {
-        if ($user->id === $this->session['user']['id']) {
+        if ($user->id === $this->getAuth()->getData()['id']) {
             $this->loginByModel($user);
         }
 
         return $this;
+    }
+
+    protected function getAuth()
+    {
+        if (!$this->auth) {
+            $this->auth = new $this->authClass;
+        }
+        return $this->auth;
     }
 }

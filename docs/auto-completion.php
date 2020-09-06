@@ -21,6 +21,12 @@ class ConfigMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Jwt $jwt
+ */
+class JwtMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Model $model
  * @method      Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] model($table = null)
  */
@@ -97,6 +103,7 @@ class UserModelMixin {
  * @mixin AppMixin
  * @mixin AppModelMixin
  * @mixin ConfigMixin
+ * @mixin JwtMixin
  * @mixin ModelMixin
  * @mixin PageRouterMixin
  * @mixin PluginMixin
@@ -131,6 +138,9 @@ $apps = wei()->appModel();
 
 /** @var Miaoxing\Plugin\Service\Config $config */
 $config = wei()->config;
+
+/** @var Miaoxing\Plugin\Service\Jwt $jwt */
+$jwt = wei()->jwt;
 
 /** @var Miaoxing\Plugin\Service\Model $model */
 $model = wei()->model;

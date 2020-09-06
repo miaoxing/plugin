@@ -859,6 +859,29 @@ class Config
     }
 }
 
+class Jwt
+{
+    /**
+     * @param array $claims
+     * @param int $expire
+     * @return Token
+     * @throws \Exception
+     * @see Jwt::generate
+     */
+    public static function generate(array $claims, int $expire = 2592000): \Lcobucci\JWT\Token
+    {
+    }
+
+    /**
+     * @param string $token
+     * @return Ret
+     * @see Jwt::verify
+     */
+    public static function verify(string $token): Ret
+    {
+    }
+}
+
 class Model
 {
     /**
@@ -2400,6 +2423,16 @@ class User
      * @see User::isLogin
      */
     public static function isLogin()
+    {
+    }
+
+    /**
+     * 检查用户是否登录
+     *
+     * @return Ret
+     * @see User::checkLogin
+     */
+    public static function checkLogin()
     {
     }
 
@@ -5006,6 +5039,29 @@ class Config
     }
 }
 
+class Jwt
+{
+    /**
+     * @param array $claims
+     * @param int $expire
+     * @return Token
+     * @throws \Exception
+     * @see Jwt::generate
+     */
+    public function generate(array $claims, int $expire = 2592000): \Lcobucci\JWT\Token
+    {
+    }
+
+    /**
+     * @param string $token
+     * @return Ret
+     * @see Jwt::verify
+     */
+    public function verify(string $token): Ret
+    {
+    }
+}
+
 class Model
 {
     /**
@@ -6547,6 +6603,16 @@ class User
      * @see User::isLogin
      */
     public function isLogin()
+    {
+    }
+
+    /**
+     * 检查用户是否登录
+     *
+     * @return Ret
+     * @see User::checkLogin
+     */
+    public function checkLogin()
     {
     }
 
