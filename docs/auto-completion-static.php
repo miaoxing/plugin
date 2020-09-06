@@ -880,6 +880,16 @@ class Jwt
     public static function verify(string $token): Ret
     {
     }
+
+    /**
+     * 生成默认配置所需的密钥
+     *
+     * @see Jwt::generateDefaultKeys
+     * @experimental
+     */
+    public static function generateDefaultKeys(): Ret
+    {
+    }
 }
 
 class Model
@@ -5058,6 +5068,16 @@ class Jwt
      * @see Jwt::verify
      */
     public function verify(string $token): Ret
+    {
+    }
+
+    /**
+     * 生成默认配置所需的密钥
+     *
+     * @see Jwt::generateDefaultKeys
+     * @experimental
+     */
+    public function generateDefaultKeys(): Ret
     {
     }
 }

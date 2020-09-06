@@ -28,12 +28,12 @@ class Jwt extends BaseService
     /**
      * @var string
      */
-    protected $privateKey = 'file://storage/cert/private.key';
+    protected $privateKey = 'file://storage/keys/private.key';
 
     /**
      * @var string
      */
-    protected $publicKey = 'file://storage/cert/public.key';
+    protected $publicKey = 'file://storage/keys/public.key';
 
     /**
      * @param array $claims
@@ -115,5 +115,48 @@ class Jwt extends BaseService
     public function getSigner(): Signer
     {
         return new $this->signerClass;
+    }
+
+    /**
+     * 生成默认配置所需的密钥
+     *
+     * @svc
+     * @experimental
+     */
+    protected function generateDefaultKeys(): Ret
+    {
+        $res = openssl_pkey_new(array(
+            'private_key_bits' => 2048,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+        ));
+
+        openssl_pkey_export($res, $privateKey);
+
+        $details = openssl_pkey_get_details($res);
+        $publicKey = $details['key'];
+
+        openssl_free_key($res);
+
+        $ret = $this->write($this->publicKey, $publicKey);
+        if ($ret->isErr()) {
+            return $ret;
+        }
+        return $this->write($this->privateKey, $privateKey);
+    }
+
+    protected function write($path, $content): Ret
+    {
+        if (substr($path, 0, 7) === 'file://') {
+            $path = substr($path, 7);
+        }
+
+        $dir = dirname($path);
+        //return !(!\is_dir($directory) && !@\mkdir($directory, 0777, \true) && !\is_dir($directory));
+        if (!is_dir($dir) && !@mkdir($dir, 0777, true) && !is_dir($dir)) {
+            return err(['创建目录 %s 失败，请检查是否有权限操作', $dir]);
+        }
+
+        file_put_contents($path, $content);
+        return suc();
     }
 }
