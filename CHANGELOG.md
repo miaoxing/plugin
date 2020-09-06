@@ -1,3 +1,16 @@
+## [0.2.2](https://github.com/miaoxing/plugin/compare/v0.2.1...v0.2.2) (2020-09-06)
+
+
+### Bug Fixes
+
+* 调用 err(['message' => 'xx']) 时解析 message 错误 ([4a337ae](https://github.com/miaoxing/plugin/commit/4a337aef7c61f43ada0d5c2472de77d05f599d07))
+
+
+### Features
+
+* 增加 jwt 登录 ([e05b28a](https://github.com/miaoxing/plugin/commit/e05b28a784f3ce9bad4ec22b38a8105be76edf39))
+* 安装时生成 jwt 所需的 RSA 密钥对 ([dffd6d3](https://github.com/miaoxing/plugin/commit/dffd6d303d5e48801cdc1e5ff37f7d8251640b69))
+
 ## [0.2.1](https://github.com/miaoxing/plugin/compare/v0.2.0...v0.2.1) (2020-09-01)
 
 
