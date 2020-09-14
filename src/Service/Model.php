@@ -1879,7 +1879,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         foreach ($this->data as $row) {
             $rowRelation = $row->{$name} = $related::newColl();
             foreach ($records as $record) {
-                if ($record[$relation['foreignKey']] === $row[$relation['localKey']]) {
+                // NOTE: 从数据库取出为 string, 因此必须转换了再比较
+                if ($record[$relation['foreignKey']] === (string) $row[$relation['localKey']]) {
                     // Remove external data
                     if (!$related->hasColumn($relation['foreignKey'])) {
                         unset($record[$relation['foreignKey']]);

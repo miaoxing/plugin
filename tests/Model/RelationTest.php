@@ -259,6 +259,15 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals(1, $array['articles'][0]['id']);
     }
 
+    public function testRecordsHasMany()
+    {
+        $users = TestUser::all();
+        $this->assertNotNull($users[0]->id);
+
+        $users->load('articles');
+        $this->assertNotNull($users[0]->articles[0]->id);
+    }
+
     public function testRecordHasManyWithQuery()
     {
         $user = TestUser::new();
