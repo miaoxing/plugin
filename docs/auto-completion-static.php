@@ -2406,6 +2406,41 @@ class Str
 
 class Tester
 {
+    /**
+     * @param array $request
+     * @return $this
+     * @see Tester::request
+     */
+    public static function request(array $request)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::delete
+     */
+    public static function delete(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::getAdminApi
+     */
+    public static function getAdminApi(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::deleteAdminApi
+     */
+    public static function deleteAdminApi(string $page)
+    {
+    }
 }
 
 class User
@@ -6596,6 +6631,41 @@ class Str
 
 class Tester
 {
+    /**
+     * @param array $request
+     * @return $this
+     * @see Tester::request
+     */
+    public function request(array $request)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::delete
+     */
+    public function delete(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::getAdminApi
+     */
+    public function getAdminApi(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::deleteAdminApi
+     */
+    public function deleteAdminApi(string $page)
+    {
+    }
 }
 
 class User

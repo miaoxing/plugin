@@ -109,8 +109,9 @@ class Tester extends \Miaoxing\Plugin\BaseService
     /**
      * @param array $request
      * @return $this
+     * @svc
      */
-    public function request(array $request)
+    protected function request(array $request)
     {
         $this->request = $request;
 
@@ -307,6 +308,94 @@ class Tester extends \Miaoxing\Plugin\BaseService
             ->json()
             ->exec()
             ->response();
+    }
+
+    /**
+     * @param string $page
+     * @param string $method
+     * @return mixed
+     */
+    protected function call(string $page, string $method)
+    {
+        $wei = $this->wei;
+
+        // 1. 注入各种配置
+        $wei->req->clear();
+        $wei->req->set($this->request);
+        $wei->req->setOption('gets', $this->query);
+        $wei->req->setOption('posts', $this->post);
+        $wei->req->setMethod($this->method);
+        $wei->req->set('_format', $this->dataType);
+        $wei->req->setContent($this->content);
+
+        $wei->session->set($this->session);
+
+        // 2. 调用相应的URL
+        ob_start();
+        try {
+            $result = wei()->pageRouter->match($page);
+            $wei->req->set($result['params']);
+            $page = require $result['file'];
+            $ret = $page->{$method}();
+        } catch (\Exception $e) {
+            ob_end_clean();
+            throw $e;
+        }
+        ob_end_clean();
+
+        // 3. 还原原来的配置
+        $wei->req->clear();
+        $wei->req->setOption('gets', []);
+        $wei->req->setOption('posts', []);
+        $wei->req->setMethod('GET');
+        $wei->req->set('_format', '');
+        $wei->req->setContent('');
+
+        foreach ($this->session as $key => $value) {
+            $wei->session->remove($key);
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @svc
+     */
+    public function get(string $page)
+    {
+        return $this->call($page, 'get');
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @svc
+     */
+    protected function delete(string $page)
+    {
+        return $this->call($page, 'delete');
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @svc
+     */
+    protected function getAdminApi(string $page)
+    {
+        return $this->get('/admin-api/' . $page);
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @svc
+     */
+    protected function deleteAdminApi(string $page)
+    {
+        return $this->delete('/admin-api/' . $page);
     }
 
     protected function getControllerByClass($class)
