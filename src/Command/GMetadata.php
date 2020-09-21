@@ -70,7 +70,7 @@ final class GMetadata extends BaseCommand
     protected function createClass($model, $plugin, $camelCase)
     {
         $modelObject = wei()->{$model}();
-        $table = $modelObject->getTable();
+        $table = $modelObject->db->getTable($modelObject->getTable());
         $defaultCasts = $modelObject->getOption('defaultCasts') ?: [];
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
 
