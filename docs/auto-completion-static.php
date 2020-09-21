@@ -19,6 +19,29 @@ class App
 class AppModel
 {
     /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see Model::toArray
+     */
+    public static function toArray($returnFields = [], callable $prepend = null)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public static function saveData($data = [])
+    {
+    }
+
+    /**
      * Returns the success result with model data
      *
      * @param array $merge
@@ -894,6 +917,29 @@ class Jwt
 
 class Model
 {
+    /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see Model::toArray
+     */
+    public static function toArray($returnFields = [], callable $prepend = null)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public static function saveData($data = [])
+    {
+    }
+
     /**
      * Returns the success result with model data
      *
@@ -2418,6 +2464,15 @@ class Tester
     /**
      * @param string $page
      * @return mixed
+     * @see Tester::patch
+     */
+    public static function patch(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
      * @see Tester::delete
      */
     public static function delete(string $page)
@@ -2430,6 +2485,26 @@ class Tester
      * @see Tester::getAdminApi
      */
     public static function getAdminApi(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @see Tester::postAdminApi
+     */
+    public static function postAdminApi(string $page, $data = [])
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @see Tester::patchAdminApi
+     */
+    public static function patchAdminApi(string $page, $data = [])
     {
     }
 
@@ -2564,6 +2639,17 @@ class User
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public static function saveData($data = [])
     {
     }
 
@@ -3398,6 +3484,29 @@ class UserModel
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
+    {
+    }
+
+    /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see Model::toArray
+     */
+    public static function toArray($returnFields = [], callable $prepend = null)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public static function saveData($data = [])
     {
     }
 
@@ -4243,6 +4352,29 @@ class App
 
 class AppModel
 {
+    /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see Model::toArray
+     */
+    public function toArray($returnFields = [], callable $prepend = null)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public function saveData($data = [])
+    {
+    }
+
     /**
      * Returns the success result with model data
      *
@@ -5119,6 +5251,29 @@ class Jwt
 
 class Model
 {
+    /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see Model::toArray
+     */
+    public function toArray($returnFields = [], callable $prepend = null)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public function saveData($data = [])
+    {
+    }
+
     /**
      * Returns the success result with model data
      *
@@ -6643,6 +6798,15 @@ class Tester
     /**
      * @param string $page
      * @return mixed
+     * @see Tester::patch
+     */
+    public function patch(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
      * @see Tester::delete
      */
     public function delete(string $page)
@@ -6655,6 +6819,26 @@ class Tester
      * @see Tester::getAdminApi
      */
     public function getAdminApi(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @see Tester::postAdminApi
+     */
+    public function postAdminApi(string $page, $data = [])
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @see Tester::patchAdminApi
+     */
+    public function patchAdminApi(string $page, $data = [])
     {
     }
 
@@ -6789,6 +6973,17 @@ class User
      * @see UserModel::updatePassword
      */
     public function updatePassword($req)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public function saveData($data = [])
     {
     }
 
@@ -7623,6 +7818,29 @@ class UserModel
      * @see UserModel::updatePassword
      */
     public function updatePassword($req)
+    {
+    }
+
+    /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see Model::toArray
+     */
+    public function toArray($returnFields = [], callable $prepend = null)
+    {
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @see Model::saveData
+     */
+    public function saveData($data = [])
     {
     }
 

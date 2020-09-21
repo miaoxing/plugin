@@ -279,8 +279,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param array|callable $returnFields A indexed array specified the fields to return
      * @param callable|null $prepend
      * @return array
+     * @svc
      */
-    public function toArray($returnFields = [], callable $prepend = null)
+    protected function toArray($returnFields = [], callable $prepend = null)
     {
         if (!$this->isLoaded()) {
             $this->loadData($this->isColl() ? 0 : 'id');
@@ -930,8 +931,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      *
      * @param array $data
      * @return $this
+     * @svc
      */
-    public function saveData($data = [])
+    protected function saveData($data = [])
     {
         $data && $this->setData($data);
 
