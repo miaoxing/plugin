@@ -151,6 +151,19 @@ trait ReqQueryTrait
         }
 
         foreach ((array) $columns as $column) {
+            // 支持数组形式
+            $name = $this->convertOutputIdentifier($column);
+            if ($this->req->has($name) && is_array($this->req[$name])) {
+                if (isset($this->req[$name][0])) {
+                    $this->where($prefix . $column, '>=', $this->req[$name][0]);
+                }
+                if (isset($this->req[$name][1])) {
+                    $this->where($prefix . $column, '<=', $this->req[$name][1]);
+                }
+                continue;
+            }
+
+            // 或是两个字段
             $min = $this->convertOutputIdentifier($column . '_min');
             if ($this->req->has($min)) {
                 $this->where($prefix . $column, '>=', $this->req[$min]);
