@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\RetException;
+
 /**
  * 测试
  *
@@ -324,7 +326,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
         $wei->req->set($this->request);
         $wei->req->setOption('gets', $this->query);
         $wei->req->setOption('posts', $this->post);
-        $wei->req->setMethod($this->method);
+        $wei->req->setMethod($method);
         $wei->req->set('_format', $this->dataType);
         $wei->req->setContent($this->content);
 
@@ -336,7 +338,9 @@ class Tester extends \Miaoxing\Plugin\BaseService
             $result = wei()->pageRouter->match($page);
             $wei->req->set($result['params']);
             $page = require $result['file'];
-            $ret = $page->{$method}();
+            $ret = $page->{$method}($wei->req, $wei->res);
+        } catch (RetException $e) {
+            $ret = err($e->getMessage(), $e->getCode());
         } catch (\Exception $e) {
             ob_end_clean();
             throw $e;
@@ -373,6 +377,16 @@ class Tester extends \Miaoxing\Plugin\BaseService
      * @return mixed
      * @svc
      */
+    protected function patch(string $page)
+    {
+        return $this->call($page, 'patch');
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @svc
+     */
     protected function delete(string $page)
     {
         return $this->call($page, 'delete');
@@ -386,6 +400,28 @@ class Tester extends \Miaoxing\Plugin\BaseService
     protected function getAdminApi(string $page)
     {
         return $this->get('/admin-api/' . $page);
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @svc
+     */
+    protected function postAdminApi(string $page, $data = [])
+    {
+        return $this->request($data)->call('/admin-api/' . $page, 'post');
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @svc
+     */
+    protected function patchAdminApi(string $page, $data = [])
+    {
+        return $this->request($data)->patch('/admin-api/' . $page);
     }
 
     /**
