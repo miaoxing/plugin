@@ -123,10 +123,12 @@ trait CastTrait
                 return (bool) $value;
 
             case 'string':
-            case 'datetime': // Coverts by database
-            case 'date':
             case 'float':
                 return (string) $value;
+
+            case 'date':
+            case 'datetime':
+                return $value;
 
             case 'array':
             case 'json':
