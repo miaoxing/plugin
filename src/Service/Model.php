@@ -151,7 +151,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected $virtual = [];
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $hidden = [];
 
@@ -325,6 +325,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Get guarded columns
+     *
+     * @return string[]
+     */
+    public function getGuarded()
+    {
+        return $this->guarded;
+    }
+
+    /**
      * Set guarded columns
      *
      * @param array $guarded
@@ -334,6 +344,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         $this->guarded = $guarded;
         return $this;
+    }
+
+    /**
+     * Get fillable columns
+     *
+     * @return string[]
+     */
+    public function getFillable()
+    {
+        return $this->fillable;
     }
 
     /**
@@ -362,8 +382,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         $field = $this->convertInputIdentifier($field);
+        $fillable = $this->getFillable();
 
-        return !in_array($field, $this->guarded, true) && !$this->fillable || in_array($field, $this->fillable, true);
+        return !in_array($field, $this->getGuarded(), true) && !$fillable || in_array($field, $fillable, true);
     }
 
     /**
@@ -1032,6 +1053,22 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this->toArray();
     }
 
+    /**
+     * Get hidden columns
+     *
+     * @return string[]
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * Set hidden columns
+     *
+     * @param string|array $hidden
+     * @return $this
+     */
     public function setHidden($hidden)
     {
         $this->hidden = (array) $hidden;
@@ -1476,7 +1513,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
             $this->triggerCallback('afterSave');
-        // 2.2 Loop and save collection records
+            // 2.2 Loop and save collection records
         } else {
             foreach ($this->data as $record) {
                 $record->save();
@@ -1808,8 +1845,8 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
     protected function getToArrayColumns(array $columns)
     {
-        if ($this->hidden) {
-            $columns = array_diff($columns, $this->hidden);
+        if ($hidden = $this->getHidden()) {
+            $columns = array_diff($columns, $hidden);
         }
 
         return $columns;
