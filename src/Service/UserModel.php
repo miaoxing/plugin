@@ -20,28 +20,23 @@ class UserModel extends Model
         'display_name',
     ];
 
-    protected $guarded = [
-        'id',
-        'app_id',
-        'created_at',
-        'created_by',
-        'updated_at',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
-        'is_admin',
-        'mobile_verified_at',
-        'username',
-        'password',
-        'last_login_at',
-    ];
-
     /**
      * @var array
      */
     protected $data = [
         'sex' => 1,
     ];
+
+    public function getGuarded()
+    {
+        return array_merge(parent::getGuarded(), [
+            'is_admin',
+            'mobile_verified_at',
+            'username',
+            'password',
+            'last_login_at',
+        ]);
+    }
 
     /**
      * 设置未加密的密码
