@@ -1,3 +1,27 @@
+## [0.2.3](https://github.com/miaoxing/plugin/compare/v0.2.2...v0.2.3) (2020-09-25)
+
+
+### Bug Fixes
+
+* date/datetime 自动转换 null 为空字符串导致数据库出错 ([1bb4e50](https://github.com/miaoxing/plugin/commit/1bb4e50edde8c82fa2aae4194ebb5ecf6b61a181))
+* 生成 metadata 的数据表缺少前缀 ([42ad445](https://github.com/miaoxing/plugin/commit/42ad445a11422c4fde9de3ec19dcd9a5578d9b71))
+* **model:** 多个记录加载多个记录时，关联数据可能变空 ([4b52337](https://github.com/miaoxing/plugin/commit/4b523372088f70a39bbad1ad73b58812e85726c5))
+
+
+### Features
+
+* ReqQuery 支持数组形式的范围查找 ([367428f](https://github.com/miaoxing/plugin/commit/367428f2414e2ef0d727b9eaaee6572552293afb))
+* 允许调用 XxxModel::toArray ([d2e2716](https://github.com/miaoxing/plugin/commit/d2e27162c622eb23f1b643e9908f45f47e0c7091))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from 6.1.1 to 6.1.2
+* **@wei/wei:** upgrade from 0.9.30 to 0.9.31
+
 ## [0.2.2](https://github.com/miaoxing/plugin/compare/v0.2.1...v0.2.2) (2020-09-06)
 
 
