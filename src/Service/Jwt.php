@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Miaoxing\Plugin\Service;
 
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Signer\Key;
-use Lcobucci\JWT\Token;
-use Miaoxing\Plugin\BaseService;
-use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
+use Miaoxing\Plugin\BaseService;
 
 /**
  * @mixin \ReqMixin
@@ -34,6 +34,27 @@ class Jwt extends BaseService
      * @var string
      */
     protected $publicKey = 'file://storage/keys/public.key';
+
+    /**
+     * @return string
+     */
+    public function getPrivateKey()
+    {
+        return $this->privateKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublicKey()
+    {
+        return $this->publicKey ?: $this->privateKey;
+    }
+
+    public function getSigner(): Signer
+    {
+        return new $this->signerClass();
+    }
 
     /**
      * @param array $claims
@@ -66,7 +87,7 @@ class Jwt extends BaseService
             return err('Token 不能为空');
         }
 
-        if (strpos($token, ' ') !== false) {
+        if (false !== strpos($token, ' ')) {
             $token = explode(' ', $token)[1];
         }
 
@@ -97,27 +118,6 @@ class Jwt extends BaseService
     }
 
     /**
-     * @return string
-     */
-    public function getPrivateKey()
-    {
-        return $this->privateKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPublicKey()
-    {
-        return $this->publicKey ?: $this->privateKey;
-    }
-
-    public function getSigner(): Signer
-    {
-        return new $this->signerClass;
-    }
-
-    /**
      * 生成默认配置所需的密钥
      *
      * @svc
@@ -125,10 +125,10 @@ class Jwt extends BaseService
      */
     protected function generateDefaultKeys(): Ret
     {
-        $res = openssl_pkey_new(array(
+        $res = openssl_pkey_new([
             'private_key_bits' => 2048,
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ));
+        ]);
 
         openssl_pkey_export($res, $privateKey);
 
@@ -146,7 +146,7 @@ class Jwt extends BaseService
 
     protected function write($path, $content): Ret
     {
-        if (substr($path, 0, 7) === 'file://') {
+        if ('file://' === substr($path, 0, 7)) {
             $path = substr($path, 7);
         }
 

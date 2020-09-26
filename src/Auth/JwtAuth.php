@@ -30,14 +30,14 @@ class JwtAuth extends BaseAuth
 
     public function checkLogin()
     {
-        if (is_null($this->loginRet)) {
+        if (null === $this->loginRet) {
             $auth = $this->req->getServer('HTTP_AUTHORIZATION');
             if (!$auth) {
                 $ret = $this->loginRet();
             } else {
                 $ret = $this->jwt->verify($auth);
                 if ($ret->isErr()) {
-                    $ret['code'] === Jwt::CODE_EXPIRED && $ret['message'] = '您的登录已过期，请重新登录';
+                    Jwt::CODE_EXPIRED === $ret['code'] && $ret['message'] = '您的登录已过期，请重新登录';
                     $ret['code'] = static::CODE_UNAUTHORIZED;
                 }
             }

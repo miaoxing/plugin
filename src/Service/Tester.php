@@ -109,18 +109,6 @@ class Tester extends \Miaoxing\Plugin\BaseService
     }
 
     /**
-     * @param array $request
-     * @return $this
-     * @svc
-     */
-    protected function request(array $request)
-    {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    /**
      * @param array $query
      * @return $this
      */
@@ -314,6 +302,28 @@ class Tester extends \Miaoxing\Plugin\BaseService
 
     /**
      * @param string $page
+     * @return mixed
+     * @svc
+     */
+    public function get(string $page)
+    {
+        return $this->call($page, 'get');
+    }
+
+    /**
+     * @param array $request
+     * @return $this
+     * @svc
+     */
+    protected function request(array $request)
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * @param string $page
      * @param string $method
      * @return mixed
      */
@@ -360,16 +370,6 @@ class Tester extends \Miaoxing\Plugin\BaseService
         }
 
         return $ret;
-    }
-
-    /**
-     * @param string $page
-     * @return mixed
-     * @svc
-     */
-    public function get(string $page)
-    {
-        return $this->call($page, 'get');
     }
 
     /**

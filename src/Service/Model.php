@@ -274,46 +274,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * Returns the record data as array
-     *
-     * @param array|callable $returnFields A indexed array specified the fields to return
-     * @param callable|null $prepend
-     * @return array
-     * @svc
-     */
-    protected function toArray($returnFields = [], callable $prepend = null)
-    {
-        if (!$this->isLoaded()) {
-            $this->loadData($this->isColl() ? 0 : 'id');
-        }
-
-        if (!$this->isColl) {
-            $data = [];
-            $columns = $this->getToArrayColumns($returnFields ?: $this->getFields());
-            foreach ($columns as $column) {
-                $data[$this->convertOutputIdentifier($column)] = $this->get($column);
-            }
-
-            return $data + $this->virtualToArray() + $this->relationToArray();
-        } else {
-            if (is_callable($returnFields)) {
-                $prepend = $returnFields;
-                $returnFields = [];
-            }
-
-            $data = [];
-            /** @var static $record */
-            foreach ($this->data as $key => $record) {
-                $data[$key] = $record->toArray($returnFields);
-                if ($prepend) {
-                    $data[$key] = $prepend($record) + $data[$key];
-                }
-            }
-            return $data;
-        }
-    }
-
-    /**
      * Returns the record and relative records data as JSON string
      *
      * @param array $returnFields A indexed array specified the fields to return
@@ -947,20 +907,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         return $this;
     }
 
-    /**
-     * 不经过fillable检查,设置数据并保存
-     *
-     * @param array $data
-     * @return $this
-     * @svc
-     */
-    protected function saveData($data = [])
-    {
-        $data && $this->setData($data);
-
-        return $this->save();
-    }
-
     public function findAllByIds($ids)
     {
         if (!$ids) {
@@ -1389,6 +1335,60 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @svc
+     */
+    protected function toArray($returnFields = [], callable $prepend = null)
+    {
+        if (!$this->isLoaded()) {
+            $this->loadData($this->isColl() ? 0 : 'id');
+        }
+
+        if (!$this->isColl) {
+            $data = [];
+            $columns = $this->getToArrayColumns($returnFields ?: $this->getFields());
+            foreach ($columns as $column) {
+                $data[$this->convertOutputIdentifier($column)] = $this->get($column);
+            }
+
+            return $data + $this->virtualToArray() + $this->relationToArray();
+        } else {
+            if (is_callable($returnFields)) {
+                $prepend = $returnFields;
+                $returnFields = [];
+            }
+
+            $data = [];
+            /** @var static $record */
+            foreach ($this->data as $key => $record) {
+                $data[$key] = $record->toArray($returnFields);
+                if ($prepend) {
+                    $data[$key] = $prepend($record) + $data[$key];
+                }
+            }
+            return $data;
+        }
+    }
+
+    /**
+     * 不经过fillable检查,设置数据并保存
+     *
+     * @param array $data
+     * @return $this
+     * @svc
+     */
+    protected function saveData($data = [])
+    {
+        $data && $this->setData($data);
+
+        return $this->save();
+    }
+
+    /**
      * Returns the success result with model data
      *
      * @param array $merge
@@ -1513,7 +1513,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
             $this->triggerCallback('afterSave');
-            // 2.2 Loop and save collection records
+        // 2.2 Loop and save collection records
         } else {
             foreach ($this->data as $record) {
                 $record->save();

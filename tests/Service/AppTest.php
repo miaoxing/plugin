@@ -6,7 +6,6 @@ use Miaoxing\Plugin\Service\App;
 use Miaoxing\Plugin\Service\AppModel;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Plugin\Test\BaseTestCase;
-use MiaoxingTest\Plugin\Fixture\Controller\TestController;
 
 /**
  * @internal

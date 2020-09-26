@@ -6,17 +6,6 @@ trait DbTrait
 {
     private static $tablePrefix;
 
-    private static function setTablePrefix($tablePrefix = '')
-    {
-        static::$tablePrefix = wei()->db->getTablePrefix();
-        wei()->db->setOption('tablePrefix', $tablePrefix);
-    }
-
-    private static function resetTablePrefix()
-    {
-        wei()->db->setOption('tablePrefix', static::$tablePrefix);
-    }
-
     public function initFixtures()
     {
         $db = $this->db;
@@ -62,5 +51,16 @@ trait DbTrait
         wei()->schema
             ->dropIfExists('test_users')
             ->dropIfExists('test_user_groups');
+    }
+
+    private static function setTablePrefix($tablePrefix = '')
+    {
+        static::$tablePrefix = wei()->db->getTablePrefix();
+        wei()->db->setOption('tablePrefix', $tablePrefix);
+    }
+
+    private static function resetTablePrefix()
+    {
+        wei()->db->setOption('tablePrefix', static::$tablePrefix);
     }
 }

@@ -7,7 +7,7 @@ use MiaoxingTest\Plugin\Fixture\Middleware\ReturnRet;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnString;
 use Wei\RetTrait;
 
-return new class extends BaseController {
+return new class() extends BaseController {
     use RetTrait;
 
     public function __construct(array $options = [])

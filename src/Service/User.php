@@ -412,7 +412,7 @@ class User extends UserModel
     protected function getAuth()
     {
         if (!$this->auth) {
-            $this->auth = new $this->authClass;
+            $this->auth = new $this->authClass();
         }
         return $this->auth;
     }
