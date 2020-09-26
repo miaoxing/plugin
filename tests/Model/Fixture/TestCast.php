@@ -8,8 +8,8 @@ use Miaoxing\Plugin\Service\Model;
  * @property int $intColumn
  * @property bool $boolColumn
  * @property string $stringColumn
- * @property string $datetimeColumn
- * @property string $dateColumn
+ * @property string|null $datetimeColumn
+ * @property string|null $dateColumn
  * @property array $jsonColumn
  */
 class TestCast extends Model

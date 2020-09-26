@@ -56,7 +56,7 @@ class JwtTest extends BaseTestCase
         $token = Jwt::generate(['test' => '1']);
 
         $origPort = $this->req->getServer('SERVER_PORT');
-        $this->req->setServer('SERVER_PORT', $origPort + 1);
+        $this->req->setServer('SERVER_PORT', (string) ($origPort + 1));
 
         $ret = Jwt::verify($token);
         $this->assertRetErr($ret, null, 'Token 内容错误');

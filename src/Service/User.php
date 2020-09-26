@@ -105,7 +105,7 @@ class User extends UserModel
     protected $authClass = JwtAuth::class;
 
     /**
-     * @var BaseAuth
+     * @var BaseAuth|null
      */
     protected $auth;
 

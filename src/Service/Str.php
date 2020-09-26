@@ -18,7 +18,7 @@ class Str extends BaseService
     protected static $camelCache = [];
 
     /**
-     * @var Inflector
+     * @var Inflector|null
      */
     protected $inflector;
 
