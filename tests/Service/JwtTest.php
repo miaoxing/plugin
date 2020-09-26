@@ -11,6 +11,12 @@ use Miaoxing\Plugin\Test\BaseTestCase;
  */
 class JwtTest extends BaseTestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        Jwt::generateDefaultKeys();
+    }
+
     public function testGenerate()
     {
         $token = Jwt::generate(['test' => '1']);
