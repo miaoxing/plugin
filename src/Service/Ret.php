@@ -239,7 +239,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
         if (!is_dir($dir)) {
             mkdir($dir);
         }
-        file_put_contents($this->getErrorFile($name), "<?php\n\nreturn " . var_export($errors, true) . ';');
+        file_put_contents($this->getErrorFile($name), "<?php\n\nreturn " . var_export($errors, true) . ";\n");
     }
 
     private function getErrorFile($name)
