@@ -51,6 +51,12 @@ class PageRouterTest extends BaseTestCase
             $result['params'] = [];
         }
 
+        if ($result && !isset($result['paths'])) {
+            $result['paths'] = array_map(function ($path) {
+                return '/' . $path;
+            }, explode('/', $result['file']));
+        }
+
         $this->assertSame($result, $this->pageRouter->match($pathInfo));
     }
 
@@ -61,6 +67,8 @@ class PageRouterTest extends BaseTestCase
                 '/assignees',
                 [
                     'file' => 'assignees/index.php',
+                    'params' => [],
+                    '/[assignee].php' => [],
                 ],
             ],
             [
@@ -89,6 +97,24 @@ class PageRouterTest extends BaseTestCase
                 '/issues',
                 [
                     'file' => 'issues/index.php',
+                    'params' => [],
+                    '/comments' => [
+                        'file' => 'index.php',
+                        '/[commentId].php' => [],
+                    ],
+                    '/[issueNumber].php' => [],
+                    '/[issueNumber]' => [
+                        '/assignees' => [
+                            'file' => 'index.php',
+                        ],
+                        '/comments' => [
+                            'file' => 'index.php',
+                            '/[commentId].php' => [],
+                        ],
+                        '/lock' => [
+                            'file' => 'index.php',
+                        ],
+                    ],
                 ],
             ],
             [
@@ -108,6 +134,8 @@ class PageRouterTest extends BaseTestCase
                 '/issues/comments',
                 [
                     'file' => 'issues/comments/index.php',
+                    'params' => [],
+                    '/[commentId].php' => [],
                 ],
             ],
             [
@@ -157,6 +185,7 @@ class PageRouterTest extends BaseTestCase
                     'params' => [
                         'issueNumber' => '3',
                     ],
+                    '/[commentId].php' => [],
                 ],
             ],
             [
@@ -219,6 +248,10 @@ class PageRouterTest extends BaseTestCase
             'params' => [
                 'issueNumber' => '1',
             ],
+            'paths' => [
+                '/issues',
+                '/[issueNumber].php',
+            ],
         ], $this->pageRouter->match('/issues/1'));
     }
 
@@ -242,12 +275,23 @@ class PageRouterTest extends BaseTestCase
             'params' => [
                 'issueNumber' => '1',
             ],
+            'paths' => [
+                '/issues',
+                '/[issueNumber].php',
+            ],
         ], $this->pageRouter->match('/issues/1'));
 
         $this->assertSame([
             'file' => 'issues/[issueNumber]/comments/index.php',
             'params' => [
                 'issueNumber' => '1',
+            ],
+            '/[commentId].php' => [],
+            'paths' => [
+                '/issues',
+                '/[issueNumber]',
+                '/comments',
+                '/index.php',
             ],
         ], $this->pageRouter->match('/issues/1/comments'));
 
@@ -256,6 +300,12 @@ class PageRouterTest extends BaseTestCase
             'params' => [
                 'issueNumber' => '1',
                 'commentId' => '2',
+            ],
+            'paths' => [
+                '/issues',
+                '/[issueNumber]',
+                '/comments',
+                '/[commentId].php',
             ],
         ], $this->pageRouter->match('/issues/1/comments/2'));
     }
@@ -286,12 +336,23 @@ class PageRouterTest extends BaseTestCase
             'params' => [
                 'issueNumber' => '1',
             ],
+            'paths' => [
+                '/issues',
+                '/[issueNumber].php',
+            ],
         ], $this->pageRouter->match('/issues/1'));
 
         $this->assertSame([
             'file' => 'issues/[issueId]/labels/index.php',
             'params' => [
                 'issueId' => '1',
+            ],
+            '/[labelId].php' => [],
+            'paths' => [
+                '/issues',
+                '/[issueId]',
+                '/labels',
+                '/index.php',
             ],
         ], $this->pageRouter->match('/issues/1/labels'));
 
@@ -300,6 +361,12 @@ class PageRouterTest extends BaseTestCase
             'params' => [
                 'issueId' => '1',
                 'labelId' => '2',
+            ],
+            'paths' => [
+                '/issues',
+                '/[issueId]',
+                '/labels',
+                '/[labelId].php',
             ],
         ], $this->pageRouter->match('/issues/1/labels/2'));
     }
@@ -341,6 +408,18 @@ F,
                 'teamSlug' => 'miaoxing',
                 'discussionNumber' => '1',
                 'commentNumber' => '2',
+            ],
+            'paths' => [
+                '/orgs',
+                '/[org]',
+                '/teams',
+                '/[teamSlug]',
+                '/discussions',
+                '/[discussionNumber]',
+                '/comments',
+                '/[commentNumber]',
+                '/reactions',
+                '/index.php',
             ],
         ], $this->pageRouter->match('/orgs/miaoxing/teams/miaoxing/discussions/1/comments/2/reactions'));
     }
@@ -423,12 +502,21 @@ F,
             'params' => [
                 'id' => '1',
             ],
+            'paths' => [
+                '/issues',
+                '/[id]',
+                '/edit.php',
+            ],
         ], $this->pageRouter->match('issues/1/edit'));
 
         $this->assertSame([
             'file' => 'issues/[id].php',
             'params' => [
                 'id' => '2',
+            ],
+            'paths' => [
+                '/issues',
+                '/[id].php',
             ],
         ], $this->pageRouter->match('issues/2'));
     }
