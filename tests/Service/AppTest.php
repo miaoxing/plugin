@@ -72,16 +72,16 @@ final class AppTest extends BaseTestCase
         User::loginById(1);
 
         $app = wei()->app;
-        $app->setControllerMap(['test' => TestController::class]);
-
         $app->req->set('_format', 'json');
+
+        $test = require __DIR__ . '/../Fixture/pages/tests/index.php';
 
         // 更改视图为测试的目录
         $origDirs = $app->view->getOption('dirs');
         $app->view->setDirs([dirname(__DIR__) . '/Fixture/views']);
 
         ob_start();
-        $app->dispatch('test', $action);
+        $app->execute($test, $action);
         $response = ob_get_clean();
 
         // 还原视图目录
@@ -94,11 +94,11 @@ final class AppTest extends BaseTestCase
     {
         return [
             [
-                'suc',
+                'sucAction',
                 json_encode(wei()->ret->suc(), JSON_UNESCAPED_UNICODE),
             ],
             [
-                'err',
+                'errAction',
                 '{"message":"err","code":-2}',
             ],
             [
@@ -162,9 +162,9 @@ final class AppTest extends BaseTestCase
         User::loginById(1);
 
         $app = wei()->app;
-        $app->setControllerMap(['test' => TestController::class]);
-
         $app->req->set('_format', 'json');
+
+        $test = require __DIR__ . '/../Fixture/pages/tests/index.php';
 
         // 更改视图为测试的目录
         $origDirs = $app->view->getOption('dirs');
@@ -172,7 +172,7 @@ final class AppTest extends BaseTestCase
 
         ob_start();
         try {
-            $app->dispatch('test', $action);
+            $app->execute($test, $action);
         } catch (\Exception $e) {
             throw $e;
         } finally {
