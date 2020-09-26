@@ -10,10 +10,14 @@ use MiaoxingTest\Plugin\Model\Fixture\TestReqQuery;
  */
 final class ReqQueryTraitTest extends BaseTestCase
 {
+    private static $tablePrefix;
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
+        static::$tablePrefix = wei()->db->getTablePrefix();
+        wei()->db->setOption('tablePrefix', '');
         static::dropTables();
 
         wei()->schema->table('test_req_queries')
@@ -44,6 +48,7 @@ final class ReqQueryTraitTest extends BaseTestCase
     public static function tearDownAfterClass(): void
     {
         static::dropTables();
+        wei()->db->setOption('tablePrefix', static::$tablePrefix);
         parent::tearDownAfterClass();
     }
 
