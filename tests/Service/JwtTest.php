@@ -17,6 +17,14 @@ class JwtTest extends BaseTestCase
         Jwt::generateDefaultKeys();
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        $jwt = wei()->jwt;
+        unlink(substr($jwt->getPublicKey(), strlen('file://')));
+        unlink(substr($jwt->getPrivateKey(), strlen('file://')));
+        parent::tearDownAfterClass();
+    }
+
     public function testGenerate()
     {
         $token = Jwt::generate(['test' => '1']);
