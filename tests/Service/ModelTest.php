@@ -6,6 +6,7 @@ use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
+use Wei\Req;
 
 /**
  * @mixin \DbMixin
@@ -200,19 +201,40 @@ final class ModelTest extends BaseTestCase
         TestUser::findByOrFail('name', 'not-exists');
     }
 
-    public function testFindFromRequest()
+    public function testFindFromReq()
     {
         $this->initFixtures();
 
-        $user = TestUser::findFromRequest(['action' => 'new', 'id' => 1]);
+        // POST users
+        $req = new Req([
+            'wei' => $this->wei,
+            'fromGlobal' => false,
+            'data' => ['id' => 1], // ignored
+            'servers' => ['REQUEST_METHOD' => 'POST'],
+        ]);
+        $user = TestUser::findFromReq($req);
         $this->assertTrue($user->isNew());
         $this->assertNull($user->id);
 
-        $user = TestUser::findFromRequest(['action' => 'edit', 'id' => 1]);
+        // GET users/1
+        $req = new Req([
+            'wei' => $this->wei,
+            'fromGlobal' => false,
+            'data' => ['id' => 1],
+            'servers' => ['REQUEST_METHOD' => 'GET'],
+        ]);
+        $user = TestUser::findFromReq($req);
         $this->assertFalse($user->isNew());
         $this->assertSame(1, $user->id);
 
-        $user = TestUser::findFromRequest(['action' => 'update', 'id' => 1]);
+        // PATCH users/1
+        $req = new Req([
+            'wei' => $this->wei,
+            'fromGlobal' => false,
+            'data' => ['id' => 1],
+            'servers' => ['REQUEST_METHOD' => 'PATCH'],
+        ]);
+        $user = TestUser::findFromReq($req);
         $this->assertFalse($user->isNew());
         $this->assertSame(1, $user->id);
     }
