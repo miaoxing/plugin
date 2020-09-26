@@ -44,7 +44,7 @@ class PageRouter extends BaseService
 
         $params = [];
         foreach ($result['paths'] as $i => $path) {
-            if (strpos($path, '[') !== false) {
+            if (false !== strpos($path, '[')) {
                 preg_match('/\[(.+?)\]/', $path, $matches);
                 if ($matches) {
                     $params[$matches[1]] = $paths[$i];
@@ -63,7 +63,7 @@ class PageRouter extends BaseService
      */
     public function getPages(): array
     {
-        if (is_null($this->pages)) {
+        if (null === $this->pages) {
             $this->pages = $this->generatePages();
         }
         return $this->pages;
@@ -150,7 +150,7 @@ class PageRouter extends BaseService
         $urlPath = '/' . $urlPath;
 
         // Ignore config
-        if (substr($filePath, 0, 1) !== '/') {
+        if ('/' !== substr($filePath, 0, 1)) {
             return false;
         }
 
@@ -162,7 +162,7 @@ class PageRouter extends BaseService
             return true;
         }
 
-        if (strpos($filePath, '[') !== false) {
+        if (false !== strpos($filePath, '[')) {
             return true;
         }
 
@@ -179,7 +179,7 @@ class PageRouter extends BaseService
             return false;
         }
         foreach ($pages as $name => $page) {
-            if (substr($name, 0, 1) === '/') {
+            if ('/' === substr($name, 0, 1)) {
                 return true;
             }
         }
@@ -197,7 +197,7 @@ class PageRouter extends BaseService
         $files = array_reverse(scandir($dir));
 
         foreach ($files as $file) {
-            if ($file === '.' || $file === '..') {
+            if ('.' === $file || '..' === $file) {
                 continue;
             }
 
@@ -215,7 +215,7 @@ class PageRouter extends BaseService
                 continue;
             }
 
-            if ($file === 'index.php') {
+            if ('index.php' === $file) {
                 $pages += ['file' => 'index.php', 'path' => $rootDir];
                 continue;
             }
@@ -223,7 +223,7 @@ class PageRouter extends BaseService
             // TODO better support for views
             $info = pathinfo($file);
             // Ignore file start with underscore
-            if (substr($info['basename'], 0, 1) !== '_' && $info['extension'] === 'php') {
+            if ('_' !== substr($info['basename'], 0, 1) && 'php' === $info['extension']) {
                 $pages[$path] = ['path' => $rootDir];
             }
         }

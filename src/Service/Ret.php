@@ -17,11 +17,6 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     protected static $createNewInstance = true;
 
     /**
-     * @var array
-     */
-    private static $errors = [];
-
-    /**
      * The default operation result data
      *
      * @var array
@@ -39,6 +34,11 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     protected $data = [];
 
     /**
+     * @var array
+     */
+    private static $errors = [];
+
+    /**
      * Return operation result data
      *
      * @param array|string $message
@@ -48,7 +48,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      */
     public function __invoke($message, $code = 1, $type = 'success')
     {
-        if (1 !== $code && func_num_args() === 1) {
+        if (1 !== $code && 1 === func_num_args()) {
             $code = $this->generateCode($message);
         }
 
@@ -176,7 +176,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      */
     protected function err($message, $code = 0, $level = 'info')
     {
-        if (func_num_args() === 1 && $this->env->isDev()) {
+        if (1 === func_num_args() && $this->env->isDev()) {
             $code = $this->generateCode($message);
         }
 
@@ -192,7 +192,7 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     {
         $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4);
 
-        if ($traces[3]['function'] === 'err') {
+        if ('err' === $traces[3]['function']) {
             // err();
             $file = $traces[3]['file'];
         } else {

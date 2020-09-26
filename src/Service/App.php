@@ -142,7 +142,7 @@ class App extends \Wei\App
         $file = $controller ?: $this->page['file'];
         $file = dirname($file) . '/_' . basename($file);
 
-        $plugin = $this->getPlugin();;
+        $plugin = $this->getPlugin();
 
         return $plugin ? '@' . $plugin . '/' . $file : $file;
     }
@@ -304,6 +304,17 @@ class App extends \Wei\App
         return $this;
     }
 
+    /**
+     * Returns the method name of specified acion
+     *
+     * @param string $action
+     * @return string
+     */
+    public function getActionMethod($action)
+    {
+        return $action;
+    }
+
     protected function invokeApp(array $options = [])
     {
         $options && $this->setOption($options);
@@ -329,17 +340,6 @@ class App extends \Wei\App
         }
 
         return $this->execute($page, $method);
-    }
-
-    /**
-     * Returns the method name of specified acion
-     *
-     * @param string $action
-     * @return string
-     */
-    public function getActionMethod($action)
-    {
-        return $action;
     }
 
     /**

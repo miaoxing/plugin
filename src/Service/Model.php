@@ -1302,27 +1302,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * Returns the success result with model data
-     *
-     * @param array $merge
-     * @return array
-     * @svc
-     */
-    protected function toRet(array $merge = [])
-    {
-        if ($this->isColl()) {
-            return $this->suc($merge + [
-                    'data' => $this,
-                    'page' => $this->getSqlPart('page'),
-                    'rows' => $this->getSqlPart('limit'),
-                    'records' => $this->count(),
-                ]);
-        } else {
-            return $this->suc($merge + ['data' => $this]);
-        }
-    }
-
-    /**
      * @param string $column
      * @param mixed $value
      * @return $this
@@ -1407,6 +1386,27 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         return $this;
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array $merge
+     * @return array
+     * @svc
+     */
+    protected function toRet(array $merge = [])
+    {
+        if ($this->isColl()) {
+            return $this->suc($merge + [
+                    'data' => $this,
+                    'page' => $this->getSqlPart('page'),
+                    'rows' => $this->getSqlPart('limit'),
+                    'records' => $this->count(),
+                ]);
+        } else {
+            return $this->suc($merge + ['data' => $this]);
+        }
     }
 
     /**
