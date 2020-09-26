@@ -19,16 +19,14 @@ final class QueryBuilderTest extends BaseTestCase
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-
-        wei()->db->setOption('tablePrefix', 'p_');
+        static::setTablePrefix('p_');
     }
 
     public static function tearDownAfterClass(): void
     {
+        static::dropTables();
+        static::resetTablePrefix();
         parent::tearDownAfterClass();
-
-        self::dropTables();
-        wei()->db->setOption('tablePrefix', '');
     }
 
     public function testSelect()

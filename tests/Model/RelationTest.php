@@ -19,14 +19,10 @@ final class RelationTest extends BaseTestCase
 {
     use DbTrait;
 
-    private static $tablePrefix;
-
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-
-        static::$tablePrefix = wei()->db->getTablePrefix();
-        wei()->db->setOption('tablePrefix', '');
+        static::setTablePrefix();
         static::dropRelationTables();
         static::createRelationTables();
 
@@ -103,7 +99,7 @@ final class RelationTest extends BaseTestCase
     public static function tearDownAfterClass(): void
     {
         static::dropRelationTables();
-        wei()->db->setOption('tablePrefix', static::$tablePrefix);
+        static::resetTablePrefix();
         parent::tearDownAfterClass();
     }
 

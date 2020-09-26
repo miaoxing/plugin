@@ -19,16 +19,14 @@ final class ModelTest extends BaseTestCase
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-
-        wei()->db->setOption('tablePrefix', 'p_');
+        static::setTablePrefix('p_');
     }
 
     public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
-
         self::dropTables();
-        wei()->db->setOption('tablePrefix', '');
+        static::resetTablePrefix();
     }
 
     public function testSetter()
