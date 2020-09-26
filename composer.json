@@ -8,6 +8,7 @@
   ],
   "license": "MIT",
   "require": {
+    "ext-json": "*",
     "ext-openssl": "*",
     "wei/wei": "^0.9.31",
     "doctrine/inflector": "^1.4|^2.0",
