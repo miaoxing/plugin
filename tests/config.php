@@ -17,4 +17,8 @@ return [
     'env' => [
         'configFile' => 'storage/configs/%env%.php',
     ],
+
+    'db' => [
+        'tablePrefix' => 'mx_',
+    ],
 ];
