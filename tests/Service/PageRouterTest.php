@@ -400,9 +400,10 @@ class PageRouterTest extends BaseTestCase
         $this->assertNull($this->pageRouter->match('/orgs/miaoxing/teams/miaoxing'));
 
         $this->assertSame([
-            'file' => <<<'F'
-orgs/[org]/teams/[teamSlug]/discussions/[discussionNumber]/comments/[commentNumber]/reactions/index.php
-F,
+            'file' => implode('', [
+                'orgs/[org]/teams/[teamSlug]/discussions/[discussionNumber]',
+                '/comments/[commentNumber]/reactions/index.php'
+            ]),
             'params' => [
                 'org' => 'miaoxing',
                 'teamSlug' => 'miaoxing',
