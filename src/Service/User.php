@@ -171,19 +171,12 @@ class User extends UserModel
     {
         // 未加载数据,已登录,认证服务中存在需要的key
         $data = $this->getAuth()->getData();
-        if (!$this->isLoaded()) {
+        if (!$this->isLoaded() && isset($data[$name])) {
             $exists = true;
-
-            if (isset($data[$name])) {
-                return $data[$name];
-            }
-
-            if (!isset($data['id'])) {
-                $result = null;
-                return $result;
-            }
+            return $data[$name];
         } else {
             $this->loadDbUser();
+
             return parent::get($name, $exists, $throwException);
         }
     }
