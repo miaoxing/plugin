@@ -36,24 +36,51 @@ class Jwt extends BaseService
     protected $publicKey = 'file://storage/keys/public.key';
 
     /**
-     * @return string
+     * @return Signer
      */
-    public function getPrivateKey()
+    public function getSigner(): Signer
+    {
+        return new $this->signerClass();
+    }
+
+    /**
+     * @return string
+     * @svc
+     */
+    protected function getPrivateKey()
     {
         return $this->privateKey;
     }
 
     /**
-     * @return string
+     * @param string $privateKey
+     * @return $this
+     * @svc
      */
-    public function getPublicKey()
+    protected function setPrivateKey(string $privateKey)
+    {
+        $this->privateKey = $privateKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @svc
+     */
+    protected function getPublicKey()
     {
         return $this->publicKey ?: $this->privateKey;
     }
 
-    public function getSigner(): Signer
+    /**
+     * @param string $publicKey
+     * @return $this
+     * @svc
+     */
+    protected function setPublicKey(string $publicKey)
     {
-        return new $this->signerClass();
+        $this->publicKey = $publicKey;
+        return $this;
     }
 
     /**

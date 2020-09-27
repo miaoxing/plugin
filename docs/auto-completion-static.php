@@ -885,6 +885,40 @@ class Config
 class Jwt
 {
     /**
+     * @return string
+     * @see Jwt::getPrivateKey
+     */
+    public static function getPrivateKey()
+    {
+    }
+
+    /**
+     * @param string $privateKey
+     * @return $this
+     * @see Jwt::setPrivateKey
+     */
+    public static function setPrivateKey(string $privateKey)
+    {
+    }
+
+    /**
+     * @return string
+     * @see Jwt::getPublicKey
+     */
+    public static function getPublicKey()
+    {
+    }
+
+    /**
+     * @param string $publicKey
+     * @return $this
+     * @see Jwt::setPublicKey
+     */
+    public static function setPublicKey(string $publicKey)
+    {
+    }
+
+    /**
      * @param array $claims
      * @param int $expire
      * @return Token
@@ -5218,6 +5252,40 @@ class Config
 
 class Jwt
 {
+    /**
+     * @return string
+     * @see Jwt::getPrivateKey
+     */
+    public function getPrivateKey()
+    {
+    }
+
+    /**
+     * @param string $privateKey
+     * @return $this
+     * @see Jwt::setPrivateKey
+     */
+    public function setPrivateKey(string $privateKey)
+    {
+    }
+
+    /**
+     * @return string
+     * @see Jwt::getPublicKey
+     */
+    public function getPublicKey()
+    {
+    }
+
+    /**
+     * @param string $publicKey
+     * @return $this
+     * @see Jwt::setPublicKey
+     */
+    public function setPublicKey(string $publicKey)
+    {
+    }
+
     /**
      * @param array $claims
      * @param int $expire
