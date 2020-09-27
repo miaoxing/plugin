@@ -14,14 +14,17 @@ class JwtTest extends BaseTestCase
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        Jwt::generateDefaultKeys();
+
+        $dir = sys_get_temp_dir();
+        Jwt::setPrivateKey('file://' . $dir . '/private.key')
+            ->setPublicKey('file://' . $dir . '/public.key')
+            ->generateDefaultKeys();
     }
 
     public static function tearDownAfterClass(): void
     {
-        $jwt = wei()->jwt;
-        unlink(substr($jwt->getPublicKey(), strlen('file://')));
-        unlink(substr($jwt->getPrivateKey(), strlen('file://')));
+        unlink(substr(Jwt::getPrivateKey(), strlen('file://')));
+        unlink(substr(Jwt::getPublicKey(), strlen('file://')));
         parent::tearDownAfterClass();
     }
 
