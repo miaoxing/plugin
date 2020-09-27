@@ -29,4 +29,11 @@ final class UserTest extends BaseTestCase
         User::logout();
         $this->assertNull(User::id());
     }
+
+    public function testGetIdWithoutLogin()
+    {
+        User::logout();
+        $this->assertNull(User::id());
+        $this->assertNull(User::cur()->name);
+    }
 }

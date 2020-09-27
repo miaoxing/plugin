@@ -22,7 +22,7 @@ class SessionAuth extends BaseAuth
 
     public function getData()
     {
-        return $this->session['user'];
+        return $this->session['user'] ?? [];
     }
 
     public function checkLogin()
