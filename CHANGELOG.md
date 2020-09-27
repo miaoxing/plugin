@@ -1,3 +1,23 @@
+## [0.2.4](https://github.com/miaoxing/plugin/compare/v0.2.3...v0.2.4) (2020-09-27)
+
+
+### Bug Fixes
+
+* 未登录时获取用户 id 时，调用进入死循环出错 ([8c7a635](https://github.com/miaoxing/plugin/commit/8c7a635e84788f586b1a3d17ebfd38bd7da60424))
+* **PageRouter:** 匹配结果可能不含 path 键名 ([246af5d](https://github.com/miaoxing/plugin/commit/246af5d11408fbe0dc6439b36b0a26d0d3512bcf))
+* 未登录时获取用户 id 时，调用进入死循环出错 ([15c46e7](https://github.com/miaoxing/plugin/commit/15c46e70992bdcec5c0e632c2164452675e40afb))
+
+
+### Features
+
+* 增加 getGuarded getFillable getHidden 方法，以便子类继承附加新的字段 ([4a9c64e](https://github.com/miaoxing/plugin/commit/4a9c64e703d1806d64960afaf83a584bc0b2991f))
+* 增加 setPrivateKey，setPublicKey 方法 ([7941861](https://github.com/miaoxing/plugin/commit/794186129675446dbe218f554f45d4f1c8bf0d3f))
+
+
+### Reverts
+
+* "fix: 未登录时获取用户 id 时，调用进入死循环出错" ([8c1da2f](https://github.com/miaoxing/plugin/commit/8c1da2f709927b136b1afa2034ce0af8b05621a9))
+
 ## [0.2.3](https://github.com/miaoxing/plugin/compare/v0.2.2...v0.2.3) (2020-09-25)
 
 
