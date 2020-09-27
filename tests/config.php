@@ -21,4 +21,8 @@ return [
     'db' => [
         'tablePrefix' => 'mx_',
     ],
+
+    'user' => [
+        'authClass' => Miaoxing\Plugin\Auth\SessionAuth::class,
+    ],
 ];
