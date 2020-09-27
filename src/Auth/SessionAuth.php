@@ -27,7 +27,7 @@ class SessionAuth extends BaseAuth
 
     public function checkLogin()
     {
-        if (isset($this->session['user'])) {
+        if (isset($this->session['user']['id'])) {
             return suc();
         }
         return $this->loginRet();

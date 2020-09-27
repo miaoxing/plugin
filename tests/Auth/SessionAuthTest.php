@@ -17,4 +17,11 @@ class SessionAuthTest extends BaseTestCase
         $this->assertSame([], $data);
         $this->assertArrayNotHasKey('user', $this->session);
     }
+
+    public function testEmptyUserSession()
+    {
+        $auth = new SessionAuth();
+        $this->session['user'] = [];
+        $this->assertFalse($auth->isLogin());
+    }
 }
