@@ -402,7 +402,7 @@ class PageRouterTest extends BaseTestCase
         $this->assertSame([
             'file' => implode('', [
                 'orgs/[org]/teams/[teamSlug]/discussions/[discussionNumber]',
-                '/comments/[commentNumber]/reactions/index.php'
+                '/comments/[commentNumber]/reactions/index.php',
             ]),
             'params' => [
                 'org' => 'miaoxing',

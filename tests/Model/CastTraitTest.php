@@ -235,7 +235,10 @@ final class CastTraitTest extends BaseTestCase
         ]);
         $this->assertNull($cast->datetimeColumn);
 
-        $this->expectExceptionMessage("SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'datetime_column' at row 1");
+        $this->expectExceptionMessage(implode('', [
+            'SQLSTATE[22007]: Invalid datetime format: ',
+            "1292 Incorrect datetime value: '' for column 'datetime_column' at row 1",
+        ]));
         TestCast::save([
             'datetimeColumn' => '',
         ]);
