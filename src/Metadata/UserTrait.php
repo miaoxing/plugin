@@ -15,7 +15,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $nickName
  * @property string $remarkName
  * @property string $username
- * @property string $name
+ * @property string|null $name
  * @property string $email
  * @property string $mobile
  * @property string $mobileVerifiedAt 手机校验时间

@@ -80,6 +80,7 @@ final class AppTest extends BaseTestCase
         $app->view->setDirs([dirname(__DIR__) . '/Fixture/views']);
 
         ob_start();
+        // @phpstan-ignore-next-line 待整理出直接调用的方法
         $app->execute($test, $action);
         $response = ob_get_clean();
 
@@ -171,6 +172,7 @@ final class AppTest extends BaseTestCase
 
         ob_start();
         try {
+            // @phpstan-ignore-next-line 待整理出直接调用的方法
             $app->execute($test, $action);
         } catch (\Exception $e) {
             throw $e;
