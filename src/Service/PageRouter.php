@@ -52,8 +52,9 @@ class PageRouter extends BaseService
             }
         }
 
+        $path = (isset($result['path']) && $result['path']) ? ($result['path'] . '/') : '';
         return [
-            'file' => ($result['path'] ? ($result['path'] . '/') : '') . ltrim(implode('', $result['paths']), '/'),
+            'file' => $path . ltrim(implode('', $result['paths']), '/'),
             'params' => $params,
         ] + $result;
     }
