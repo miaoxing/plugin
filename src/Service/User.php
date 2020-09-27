@@ -387,6 +387,8 @@ class User extends UserModel
     protected function logout()
     {
         $this->data = [];
+        $this->loaded = false;
+        $this->dataSources = ['*' => 'php'];
 
         $this->getAuth()->logout();
 
