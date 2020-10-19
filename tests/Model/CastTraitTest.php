@@ -287,4 +287,17 @@ final class CastTraitTest extends BaseTestCase
         $cast->reload();
         $this->assertEquals([], $cast->jsonColumn);
     }
+
+    public function testBeforeSave()
+    {
+        TestCast::on('beforeSave', 'changeDataBeforeSave');
+
+        $cast = TestCast::save([
+            'json_column' => [
+                '1', '2', '3'
+            ],
+        ]);
+
+        $this->assertSame('3', $cast->stringColumn);
+    }
 }

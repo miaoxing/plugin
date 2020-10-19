@@ -153,7 +153,10 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     /**
      * @var string[]
      */
-    protected $hidden = [];
+    protected $hidden = [
+        'deleted_by',
+        'deleted_at',
+    ];
 
     protected static $booted = [];
 
@@ -1456,11 +1459,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         // 1. Merges data from parameters
         $data && $this->fromArray($data);
 
-        // 将数据转换为数据库数据
-        $origData = $this->data;
-        $this->data = $this->generateDbData();
-        $isNew = $this->isNew;
-
         // 2.1 Saves single record
         if (!$this->isColl) {
             // 2.1.1 Returns when record has been destroy to avoid store dirty data
@@ -1479,6 +1477,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             $isNew = $this->isNew;
             $this->triggerCallback('beforeSave');
             $this->triggerCallback($isNew ? 'beforeCreate' : 'beforeUpdate');
+
+            // 将数据转换为数据库数据
+            $origData = $this->data;
+            $this->data = $this->generateDbData();
+            $isNew = $this->isNew;
 
             // 2.1.3.1 Inserts new record
             if ($isNew) {
@@ -1506,6 +1509,18 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 }
             }
 
+            if ($isNew) {
+                $this->setDataSource($this->primaryKey, 'db');
+            }
+
+            // 解决保存之前调用了$this->id导致变为null的问题
+            if ($isNew && array_key_exists($this->primaryKey, $origData)) {
+                $origData[$this->primaryKey] = $this->data[$this->primaryKey];
+            }
+
+            // 还原原来的数据+save过程中生成的主键数据
+            $this->data = $origData + $this->data;
+
             // 2.1.4 Reset changed data and changed status
             $this->changedData = [];
             $this->isChanged = false;
@@ -1519,18 +1534,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 $record->save();
             }
         }
-
-        if ($isNew) {
-            $this->setDataSource($this->primaryKey, 'db');
-        }
-
-        // 解决保存之前调用了$this->id导致变为null的问题
-        if ($isNew && array_key_exists($this->primaryKey, $origData)) {
-            $origData[$this->primaryKey] = $this->data[$this->primaryKey];
-        }
-
-        // 还原原来的数据+save过程中生成的主键数据
-        $this->data = $origData + $this->data;
 
         return $this;
     }

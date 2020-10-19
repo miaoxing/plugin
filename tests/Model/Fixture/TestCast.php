@@ -28,4 +28,9 @@ class TestCast extends Model
     protected $data = [
         'json_column' => [],
     ];
+
+    public function changeDataBeforeSave()
+    {
+        $this->stringColumn = count($this->jsonColumn);
+    }
 }
