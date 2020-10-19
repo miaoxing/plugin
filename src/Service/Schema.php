@@ -24,5 +24,6 @@ class Schema extends \Wei\Schema
         self::TYPE_STRING => '',
         self::TYPE_TEXT => false,
         self::TYPE_TIMESTAMP => null,
+        self::TYPE_JSON => false,
     ];
 }
