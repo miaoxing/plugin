@@ -1249,4 +1249,19 @@ final class QueryBuilderTest extends BaseTestCase
 
         $this->assertSame('1', $qb->fetch()['group_id']);
     }
+
+    public function testAutoAddTableNameToWhereWhenJoin()
+    {
+        $qb = Qb::table('test_users', 'u')
+            ->where('id', 1)
+            ->having('id', 1)
+            ->join('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
+
+        $this->assertSame(implode(' ', [
+            'SELECT * FROM `p_test_users` `u`',
+            'INNER JOIN `p_test_user_groups` ON `p_test_users`.`group_id` = `p_test_user_groups`.`id`',
+            'WHERE `p_test_users`.`id` = 1',
+            'HAVING `p_test_users`.`id` = 1',
+        ]), $qb->getRawSql());
+    }
 }

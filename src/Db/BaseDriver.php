@@ -43,10 +43,14 @@ abstract class BaseDriver extends Base
      */
     abstract public function getRawSql($type, $sqlParts, $identifierConverter, array $values);
 
-    protected function wrap($column)
+    protected function wrap($column, string $defaultTable = null)
     {
         if (false === strpos($column, '.')) {
-            return $this->wrapValue($column);
+            if (!$defaultTable) {
+                return $this->wrapValue($column);
+            } else {
+                $column = $defaultTable . '.' . $column;
+            }
         }
 
         $items = explode('.', $column);

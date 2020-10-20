@@ -115,7 +115,7 @@ class Mysql extends BaseDriver
         }
 
         if ($parts['where']) {
-            $query .= ' WHERE ' . $this->buildWhere($parts['where']);
+            $query .= ' WHERE ' . $this->buildWhere($parts);
         }
 
         if ($parts['groupBy']) {
@@ -128,7 +128,7 @@ class Mysql extends BaseDriver
         }
 
         if ($parts['having']) {
-            $query .= ' HAVING ' . $this->buildWhere($parts['having']);
+            $query .= ' HAVING ' . $this->buildWhere($parts, 'having');
         }
 
         if (!$parts['aggregate']) {
@@ -150,8 +150,11 @@ class Mysql extends BaseDriver
         return $query;
     }
 
-    protected function buildWhere(array $wheres)
+    protected function buildWhere(array $parts, string $type = 'where')
     {
+        $wheres = $parts[$type];
+        $defaultTable = $parts['join'] ? $this->parseTableAndAlias($parts['from'])[0] : null;
+
         $query = '';
         foreach ($wheres as $i => $where) {
             if (0 !== $i) {
@@ -165,11 +168,11 @@ class Mysql extends BaseDriver
 
             if ($where['column'] instanceof QueryBuilder) {
                 $sqlParts = $where['column']->getSqlParts();
-                $query .= '(' . $this->buildWhere($sqlParts['where']) . ')';
+                $query .= '(' . $this->buildWhere($sqlParts) . ')';
                 continue;
             }
 
-            $column = $this->wrap($where['column']);
+            $column = $this->wrap($where['column'], $defaultTable);
             switch ($where['type'] ?? '') {
                 case 'DATE':
                 case 'MONTH':
@@ -237,7 +240,7 @@ class Mysql extends BaseDriver
         $query .= implode(', ', $sets);
 
         if ($this->sqlParts['where']) {
-            $query .= ' WHERE ' . $this->buildWhere($this->sqlParts['where']);
+            $query .= ' WHERE ' . $this->buildWhere($this->sqlParts);
         }
 
         return $query;
@@ -251,7 +254,7 @@ class Mysql extends BaseDriver
     protected function getSqlForDelete()
     {
         return 'DELETE FROM ' . $this->getFrom()
-            . ($this->sqlParts['where'] ? ' WHERE ' . $this->buildWhere($this->sqlParts['where']) : '');
+            . ($this->sqlParts['where'] ? ' WHERE ' . $this->buildWhere($this->sqlParts) : '');
     }
 
     /**
@@ -266,14 +269,7 @@ class Mysql extends BaseDriver
 
     protected function parseTable($table)
     {
-        $pos = strpos($table, ' ');
-        if (false !== $pos) {
-            [$table, $alias] = explode(' ', $table);
-            $this->addAlias($alias);
-        } else {
-            $alias = null;
-        }
-
+        [$table, $alias] = $this->parseTableAndAlias($table);
         return $this->wrapTable($table) . ($alias ? (' ' . $this->wrap($alias)) : '');
     }
 
@@ -321,5 +317,17 @@ class Mysql extends BaseDriver
         } else {
             return ' LOCK IN SHARE MODE';
         }
+    }
+
+    private function parseTableAndAlias(string $table): array
+    {
+        $pos = strpos($table, ' ');
+        if (false !== $pos) {
+            [$table, $alias] = explode(' ', $table);
+            $this->addAlias($alias);
+        } else {
+            $alias = null;
+        }
+        return [$table, $alias];
     }
 }
