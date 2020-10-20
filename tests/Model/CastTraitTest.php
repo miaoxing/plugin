@@ -228,22 +228,6 @@ final class CastTraitTest extends BaseTestCase
         $this->assertSame('{"a":"b\\\\c","d":"中文"}', $data['json_column']);
     }
 
-    public function testSaveInvalidDate()
-    {
-        $cast = TestCast::save([
-            'datetimeColumn' => null,
-        ]);
-        $this->assertNull($cast->datetimeColumn);
-
-        $this->expectExceptionMessage(implode('', [
-            'SQLSTATE[22007]: Invalid datetime format: ',
-            "1292 Incorrect datetime value: '' for column 'datetime_column' at row 1",
-        ]));
-        TestCast::save([
-            'datetimeColumn' => '',
-        ]);
-    }
-
     public function testGetNewModel()
     {
         $cast = TestCast::new();
@@ -294,10 +278,30 @@ final class CastTraitTest extends BaseTestCase
 
         $cast = TestCast::save([
             'json_column' => [
-                '1', '2', '3'
+                '1',
+                '2',
+                '3',
             ],
         ]);
 
         $this->assertSame('3', $cast->stringColumn);
+    }
+
+    public function testConvertEmptyDateStringToNull()
+    {
+        $cast = TestCast::save([
+            'dateColumn' => '',
+            'datetimeColumn' => '',
+        ]);
+        $this->assertNull($cast->dateColumn);
+        $this->assertNull($cast->datetimeColumn);
+    }
+
+    public function testSaveNullDate()
+    {
+        $cast = TestCast::save([
+            'datetimeColumn' => null,
+        ]);
+        $this->assertNull($cast->datetimeColumn);
     }
 }

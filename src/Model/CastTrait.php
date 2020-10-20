@@ -128,7 +128,7 @@ trait CastTrait
 
             case 'date':
             case 'datetime':
-                return $value;
+                return $value ?: null;
 
             case 'array':
             case 'json':
