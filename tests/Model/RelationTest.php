@@ -529,6 +529,112 @@ final class RelationTest extends BaseTestCase
         $this->assertArrayNotHasKey('test_user_id', $array);
     }
 
+    /**
+     * @group saveRelation
+     */
+    public function testRecordCreate()
+    {
+        $user = TestUser::save();
+
+        /** @var TestProfile $profile */
+        $profile = $user->profile()->saveRelation();
+
+        $this->assertSame($user->id, $profile->testUserId);
+    }
+
+    /**
+     * @group saveRelation
+     */
+    public function testRecordUpdate()
+    {
+        $user = TestUser::save([
+            'name' => 'test',
+        ]);
+
+        $profile = TestProfile::save([
+            'testUserId' => $user->id,
+        ]);
+
+        $profile2 = $user->profile()->saveRelation([
+            'description' => 'test',
+        ]);
+
+        $this->assertSame($profile->id, $profile2->id);
+        $this->assertSame('test', $profile->reload()->description);
+    }
+
+    /**
+     * @group saveRelation
+     */
+    public function testRecordSaveIgnoreRelateId()
+    {
+        $user = TestUser::save([
+            'name' => 'test',
+        ]);
+
+        /** @var TestProfile $profile */
+        $profile = $user->profile()->saveRelation([
+            'testUserId' => $user->id + 1,
+            'description' => 'test',
+        ]);
+
+        $this->assertSame($user->id, $profile->testUserId);
+    }
+
+    /**
+     * @group saveRelation
+     */
+    public function testCollCreate()
+    {
+        $user = TestUser::save();
+
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = $user->articles()->saveRelation([
+            [
+                'title' => 'title 1',
+            ],
+            [
+                'title' => 'title 2',
+            ],
+        ]);
+
+        $this->assertCount(2, $articles);
+        $this->assertSame($user->id, $articles[0]->testUserId);
+    }
+
+    /**
+     * @group saveRelation
+     */
+    public function testCollUpdate()
+    {
+        $user = TestUser::save();
+
+        $articles = TestArticle::save([
+            TestArticle::new([
+                'testUserId' => $user->id,
+            ]),
+            TestArticle::new([
+                'testUserId' => $user->id,
+            ]),
+        ]);
+
+        $articles2 = $user->articles()->saveRelation([
+            [
+                'id' => $articles[0]->id,
+                'title' => 'title 1',
+            ],
+            [
+                'id' => $articles[1]->id,
+                'title' => 'title 2',
+            ],
+        ]);
+
+        $this->assertSame($articles[0]->id, $articles2[0]->id);
+
+        $articles = $user->articles;
+        $this->assertSame('title 1', $articles[0]->title);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
@@ -554,7 +660,7 @@ final class RelationTest extends BaseTestCase
             ->id()
             ->int('test_user_id')
             ->string('title', 128)
-            ->text('content')
+            ->string('content')
             ->exec();
 
         wei()->schema->table('test_tags')

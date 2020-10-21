@@ -197,6 +197,14 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected $virtualData = [];
 
     /**
+     * Extra data for saveRelation method
+     *
+     * @var array
+     * @internal may be rename to avoid confuse with relationValues
+     */
+    private $relationData = [];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(array $options = [])
@@ -441,6 +449,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                 $this->offsetSet(null, $this->__invoke($this->table)->fromArray($extraData + $row));
             }
         }
+        $this->data = array_values($this->data);
 
         // 5. Save and return
         return $this->save();
@@ -1040,7 +1049,9 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         $foreignKey || $foreignKey = $this->getForeignKey();
         $this->relations[$name] = ['foreignKey' => $foreignKey, 'localKey' => $localKey];
 
-        $related->where($foreignKey, $this->getRelatedValue($localKey));
+        $value = $this->getRelatedValue($localKey);
+        $related->where($foreignKey, $value);
+        $related->setRelationData($foreignKey, $value);
 
         return $related;
     }
@@ -1338,6 +1349,44 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Save with relation data
+     *
+     * Use with relation calls like
+     *
+     * ```php
+     * $user->profile()->saveRelation([]);
+     * $user->emails()->saveRelation([[], []]);
+     * ```
+     *
+     * @param array $data
+     * @return $this
+     * @expertimental
+     */
+    public function saveRelation(array $data = [])
+    {
+        if ($this->isColl()) {
+            $this->all();
+            $this->saveColl($data, $this->relationData);
+        } else {
+            $this->findOrInitBy([])->fromArray($data)->save($this->relationData);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     * @internal
+     */
+    protected function setRelationData(string $column, $value)
+    {
+        $this->relationData[$column] = $value;
+        return $this;
+    }
+
+    /**
      * Returns the record data as array
      *
      * @param array|callable $returnFields A indexed array specified the fields to return
@@ -1528,7 +1577,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
             $this->triggerCallback('afterSave');
-        // 2.2 Loop and save collection records
+            // 2.2 Loop and save collection records
         } else {
             foreach ($this->data as $record) {
                 $record->save();
