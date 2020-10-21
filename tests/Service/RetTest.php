@@ -30,7 +30,7 @@ final class RetTest extends BaseTestCase
 
     public function testErr()
     {
-        $ret = wei()->ret->err('Operation failed');
+        $ret = wei()->ret->err('Operation failed', 0);
         $this->assertSame([
             'message' => 'Operation failed',
             'code' => 0,
@@ -100,7 +100,7 @@ final class RetTest extends BaseTestCase
 
     public function testRetErr()
     {
-        $ret = Ret::err('err');
+        $ret = Ret::err('err', 0);
         $this->assertSame([
             'message' => 'err',
             'code' => 0,
