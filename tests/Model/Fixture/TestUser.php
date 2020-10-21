@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Model\Fixture;
 use Miaoxing\Plugin\Service\Model;
 
 /**
+ * @property TestUserGroup|null $group
  * @property TestProfile|null $profile
  * @property TestArticle|TestArticle[] $articles
  * @property TestArticle|TestArticle[] $customArticles
@@ -29,6 +30,11 @@ class TestUser extends Model
     protected $data = [
         'group_id' => 0,
     ];
+
+    public function group()
+    {
+        return $this->belongsTo(TestUserGroup::class, 'id', 'group_id');
+    }
 
     public function articles()
     {

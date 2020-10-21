@@ -764,6 +764,22 @@ final class ModelTest extends BaseTestCase
         $this->assertEquals('beforeDestroy->afterDestroy', $user->getEventResult());
     }
 
+    public function testFromArray()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::new();
+
+        $user->fromArray([
+            'group_id' => 2,
+            'ignored' => true,
+        ]);
+
+        $array = $user->toArray();
+        $this->assertSame(2, $array['groupId']);
+        $this->assertArrayNotHasKey('ignored', $array);
+    }
+
     public function testFromArrayMultipleLevelWontBecomeColl()
     {
         $this->initFixtures();
@@ -784,6 +800,28 @@ final class ModelTest extends BaseTestCase
         ]);
 
         $this->assertFalse($users->isColl());
+    }
+
+    public function testFromArrayWillIgnoreRelation()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::new();
+
+        $user->fromArray([
+            'group' => [
+                'id' => 1,
+                'name' => 'test',
+            ],
+        ]);
+
+        $array = $user->toArray();
+        $this->assertArrayNotHasKey('group', $array);
+
+        $this->assertNull($user->group);
+
+        $array = $user->toArray();
+        $this->assertNull($array['group']);
     }
 
     public function testFindCollectionAndDestroy()

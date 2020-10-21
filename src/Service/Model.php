@@ -1441,7 +1441,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     {
         foreach ($data as $key => $value) {
             if (is_int($key) || $this->isFillable($key, $data)) {
-                $this->set($key, $value, false);
+                $this->setFromArray($key, $value);
             }
         }
         return $this;
@@ -2305,6 +2305,22 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
         }
 
         return $result;
+    }
+
+    /**
+     * @todo 整理
+     */
+    private function setFromArray($name, $value)
+    {
+        if ($this->isCollKey($name) || $this->hasColumn($name)) {
+            return $this->setColumnValue($name, $value);
+        }
+
+        if ($this->hasVirtual($name)) {
+            return $this->setVirtualValue($name, $value);
+        }
+
+        return false;
     }
 
     private function baseName()
