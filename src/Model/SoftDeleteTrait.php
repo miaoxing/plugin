@@ -38,10 +38,14 @@ trait SoftDeleteTrait
      */
     public function restore()
     {
-        return $this->saveData([
-            $this->deletedAtColumn => '',
+        $data = [
+            $this->deletedAtColumn => null,
             $this->deletedByColumn => 0,
-        ]);
+        ];
+        if ($statusColumn = $this->getDeleteStatusColumn()) {
+            $data[$statusColumn] = $this->getRestoreStatusValue();
+        }
+        return $this->saveData($data);
     }
 
     /**
@@ -64,7 +68,11 @@ trait SoftDeleteTrait
      */
     protected function withoutDeleted()
     {
-        return $this->whereNull($this->deletedAtColumn);
+        if ($statusColumn = $this->getDeleteStatusColumn()) {
+            return $this->where($statusColumn, '!=', $this->getDeleteStatusValue());
+        } else {
+            return $this->whereNull($this->deletedAtColumn);
+        }
     }
 
     /**
@@ -73,7 +81,12 @@ trait SoftDeleteTrait
      */
     protected function onlyDeleted()
     {
-        return $this->unscoped('withoutDeleted')->whereNotNull($this->deletedAtColumn);
+        $this->unscoped('withoutDeleted');
+        if ($statusColumn = $this->getDeleteStatusColumn()) {
+            return $this->where($statusColumn, $this->getDeleteStatusValue());
+        } else {
+            return $this->whereNotNull($this->deletedAtColumn);
+        }
     }
 
     /**
@@ -93,10 +106,29 @@ trait SoftDeleteTrait
         if ($this->reallyDestroy) {
             parent::executeDestroy();
         } else {
-            $this->saveData([
+            $data = [
                 $this->deletedAtColumn => Time::now(),
                 $this->deletedByColumn => User::id() ?: 0,
-            ]);
+            ];
+            if ($statusColumn = $this->getDeleteStatusColumn()) {
+                $data[$statusColumn] = $this->getDeleteStatusValue();
+            }
+            $this->saveData($data);
         }
+    }
+
+    protected function getDeleteStatusColumn()
+    {
+        return property_exists($this, 'deleteStatusColumn') ? $this->deleteStatusColumn : null;
+    }
+
+    protected function getDeleteStatusValue()
+    {
+        return 1;
+    }
+
+    protected function getRestoreStatusValue()
+    {
+        return 0;
     }
 }
