@@ -7,7 +7,7 @@ use stdClass;
 
 /**
  * @property-read array $casts
- * @property-read array $defaultCasts Helper for generating metadata
+ * @property-read array $defaultCasts @deprecated Helper for generating metadata
  */
 trait CastTrait
 {
@@ -15,6 +15,33 @@ trait CastTrait
      * @var array
      */
     protected static $castCache = [];
+
+    protected static function bootCastTrait()
+    {
+        static::on('getValue', 'castToPhp');
+        static::on('setValue', 'castToDb');
+    }
+
+    /**
+     * Get the cast configs
+     *
+     * @return array
+     */
+    public function getCasts(): array
+    {
+        return array_merge($this->casts ?? [], isset($this->defaultCasts) ? $this->defaultCasts : []);
+    }
+
+    /**
+     * Get the cast config for specified column
+     *
+     * @param string $column
+     * @return string|array|null
+     */
+    public function getCast(string $column)
+    {
+        return $this->getCasts()[$column] ?? null;
+    }
 
     /**
      * Check if the specified column should be cast
@@ -24,13 +51,7 @@ trait CastTrait
      */
     public function hasCast($name)
     {
-        return isset($this->casts) && isset($this->casts[$name]);
-    }
-
-    protected static function bootCastTrait()
-    {
-        static::on('getValue', 'castToPhp');
-        static::on('setValue', 'castToDb');
+        return (bool) $this->getCast($name);
     }
 
     /**
@@ -43,8 +64,8 @@ trait CastTrait
      */
     protected function castToPhp($value, $column)
     {
-        if (null !== $value && $this->hasCast($column) && !$this->isIgnoreCast($value)) {
-            $value = $this->toPhpType($value, $this->casts[$column]);
+        if (null !== $value && !$this->isIgnoreCast($value) && $cast = $this->getCast($column)) {
+            $value = $this->toPhpType($value, $cast);
         }
 
         return $value;
@@ -59,8 +80,8 @@ trait CastTrait
      */
     protected function castToDb($value, $column)
     {
-        if ($this->hasCast($column) && !$this->isIgnoreCast($value)) {
-            $value = $this->toDbType($value, $this->casts[$column]);
+        if (!$this->isIgnoreCast($value) && $cast = $this->getCast($column)) {
+            $value = $this->toDbType($value, $cast);
         }
 
         return $value;

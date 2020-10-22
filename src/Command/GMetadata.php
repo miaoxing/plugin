@@ -71,17 +71,12 @@ final class GMetadata extends BaseCommand
     {
         $modelObject = wei()->{$model}();
         $table = $modelObject->db->getTable($modelObject->getTable());
-        $defaultCasts = $modelObject->getOption('defaultCasts') ?: [];
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
 
         $casts = [];
         $docBlock = '';
         foreach ($columns as $column) {
-            if (isset($defaultCasts[$column['Field']])) {
-                $casts[$column['Field']] = $defaultCasts[$column['Field']];
-            } else {
-                $casts[$column['Field']] = $this->getCastType($column['Type']);
-            }
+            $casts[$column['Field']] = $this->getCastType($column['Type']);
             $phpType = $this->getPhpType($casts[$column['Field']]);
 
             $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
@@ -147,6 +142,10 @@ final class GMetadata extends BaseCommand
 
     protected function getPhpType($type)
     {
+        if (is_array($type)) {
+            $type = $type[0];
+        }
+
         switch ($type) {
             case 'int':
             case 'tinyint':
@@ -167,6 +166,7 @@ final class GMetadata extends BaseCommand
                 return 'string';
 
             case 'json':
+            case 'list':
                 return 'array';
 
             case 'decimal':
