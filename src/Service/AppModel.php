@@ -19,11 +19,6 @@ class AppModel extends Model
 
     const STATUS_OFFLINE = 2;
 
-    protected $defaultCasts = [
-        'plugin_ids' => 'array',
-        'configs' => 'json',
-    ];
-
     /**
      * @var array
      */
@@ -37,6 +32,14 @@ class AppModel extends Model
         'configs' => [],
         'plugin_ids' => [],
     ];
+
+    public function getCasts(): array
+    {
+        return array_merge(parent::getCasts(), [
+            'plugin_ids' => 'json',
+            'configs' => 'json',
+        ]);
+    }
 
     public function afterSave()
     {
