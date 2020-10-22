@@ -23,6 +23,8 @@ final class CastTraitTest extends BaseTestCase
             ->datetime('datetime_column')
             ->date('date_column')
             ->string('json_column')
+            ->string('list_column')
+            ->string('list2_column')
             ->exec();
 
         wei()->db->batchInsert('test_casts', [
@@ -33,6 +35,8 @@ final class CastTraitTest extends BaseTestCase
                 'datetime_column' => '2018-01-01 00:00:00',
                 'date_column' => '2018-01-01',
                 'json_column' => '{"a":"b\\\\c","d":"中文"}',
+                'list_column' => 'a,b,c',
+                'list2_column' => '1|2|3',
             ],
         ]);
     }
@@ -59,6 +63,8 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+                    'listColumn' => ['a', 'b'],
+                    'list2Column' => [1, 2],
                 ],
                 [
                     'intColumn' => 2,
@@ -67,6 +73,7 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+                    'list2Column' => [1, 2],
                 ],
             ],
             [
@@ -77,6 +84,7 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+                    'list2Column' => [1, 1],
                 ],
                 [
                     'intColumn' => 3,
@@ -85,6 +93,7 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+                    'list2Column' => [1, 1],
                 ],
             ],
             [
@@ -95,6 +104,8 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => 'abc',
+                    'listColumn' => 'abc',
+                    'list2Column' => '123',
                 ],
                 [
                     'intColumn' => 4,
@@ -103,6 +114,8 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => ['abc'],
+                    'listColumn' => ['abc'],
+                    'list2Column' => [123],
                 ],
             ],
         ];
@@ -146,6 +159,8 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+                    'listColumn' => ['a', 'b'],
+                    'list2Column' => [1, 2],
                 ],
                 [
                     'intColumn' => 1,
@@ -154,6 +169,8 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+                    'listColumn' => ['a', 'b'],
+                    'list2Column' => [1, 2],
                 ],
             ],
             [
@@ -164,6 +181,8 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => '{"a":"b\\c","d":"中文"}',
+                    'listColumn' => 'a|b',
+                    'list2Column' => '1,2',
                 ],
                 [
                     'intColumn' => 0,
@@ -172,6 +191,18 @@ final class CastTraitTest extends BaseTestCase
                     'datetimeColumn' => '2018-01-01 00:00:00',
                     'dateColumn' => '2018-01-01',
                     'jsonColumn' => [0 => '{"a":"b\c","d":"中文"}'],
+                    'listColumn' => ['a|b'],
+                    'list2Column' => [1],
+                ],
+            ],
+            [
+                [
+                    'listColumn' => 'a,b',
+                    'list2Column' => '1|2',
+                ],
+                [
+                    'listColumn' => ['a', 'b'],
+                    'list2Column' => [1, 2],
                 ],
             ],
         ];
@@ -205,6 +236,8 @@ final class CastTraitTest extends BaseTestCase
         $this->assertSame('2018-01-01 00:00:00', $record->datetimeColumn);
         $this->assertSame('2018-01-01', $record->dateColumn);
         $this->assertSame(['a' => 'b\c', 'd' => '中文'], $record->jsonColumn);
+        $this->assertSame(['a', 'b', 'c'], $record->listColumn);
+        $this->assertSame([1, 2, 3], $record->list2Column);
     }
 
     public function testSave()
@@ -216,6 +249,8 @@ final class CastTraitTest extends BaseTestCase
             'datetimeColumn' => '2018-01-01 00:00:00',
             'dateColumn' => '2018-01-01',
             'jsonColumn' => ['a' => 'b\c', 'd' => '中文'],
+            'listColumn' => ['a', 'b', 'c'],
+            'list2Column' => [1, 2, 3],
         ]);
 
         $data = wei()->db->select('test_casts', ['int_column' => 5]);
@@ -226,6 +261,8 @@ final class CastTraitTest extends BaseTestCase
         $this->assertSame('2018-01-01 00:00:00', $data['datetime_column']);
         $this->assertSame('2018-01-01', $data['date_column']);
         $this->assertSame('{"a":"b\\\\c","d":"中文"}', $data['json_column']);
+        $this->assertSame('a,b,c', $data['list_column']);
+        $this->assertSame('1|2|3', $data['list2_column']);
     }
 
     public function testGetNewModel()

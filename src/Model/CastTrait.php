@@ -75,6 +75,8 @@ trait CastTrait
      */
     protected function toPhpType($value, $type)
     {
+        [$type, $options] = $this->parseType($type);
+
         switch ($type) {
             case 'int':
                 return (int) $value;
@@ -94,12 +96,25 @@ trait CastTrait
             case 'array':
                 return is_array($value) ? $value : (array) $this->cacheJsonDecode($value, true);
 
+            case 'float':
+                return (float) $value;
+
             case 'json':
                 // Ignore default array value
                 return is_array($value) ? $value : $this->cacheJsonDecode($value, true);
 
-            case 'float':
-                return (float) $value;
+            case 'list':
+                // Ignore default array value
+                if (is_array($value)) {
+                    return $value;
+                }
+
+                $value = explode($options['separator'] ?? ',', $value);
+                if ($options['type'] ?? 'string' === 'int') {
+                    $value = array_map('intval', $value);
+                }
+
+                return $value;
 
             default:
                 throw new InvalidArgumentException('Unsupported cast type: ' . $type);
@@ -115,6 +130,8 @@ trait CastTrait
      */
     protected function toDbType($value, $type)
     {
+        [$type, $options] = $this->parseType($type);
+
         switch ($type) {
             case 'int':
                 return (int) $value;
@@ -133,6 +150,9 @@ trait CastTrait
             case 'array':
             case 'json':
                 return json_encode((array) $value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+            case 'list':
+                return implode($options['separator'] ?? ',', (array) $value);
 
             default:
                 throw new InvalidArgumentException('Unsupported cast type: ' . $type);
@@ -163,5 +183,21 @@ trait CastTrait
     protected function isIgnoreCast($value)
     {
         return $value instanceof stdClass && isset($value->scalar);
+    }
+
+    /**
+     * @param string|array $type
+     * @return array
+     */
+    private function parseType($type)
+    {
+        if (is_array($type)) {
+            $options = $type;
+            $type = $options[0];
+            unset($options[0]);
+        } else {
+            $options = [];
+        }
+        return [$type, $options];
     }
 }

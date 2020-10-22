@@ -11,6 +11,8 @@ use Miaoxing\Plugin\Service\Model;
  * @property string|null $datetimeColumn
  * @property string|null $dateColumn
  * @property array $jsonColumn
+ * @property array $listColumn
+ * @property array $list2Column
  */
 class TestCast extends Model
 {
@@ -23,10 +25,18 @@ class TestCast extends Model
         'datetime_column' => 'datetime',
         'date_column' => 'date',
         'json_column' => 'array',
+        'list_column' => 'list',
+        'list2_column' => [
+            'list',
+            'type' => 'int',
+            'separator' => '|',
+        ],
     ];
 
     protected $data = [
         'json_column' => [],
+        'list_column' => [],
+        'list2_column' => [],
     ];
 
     public function changeDataBeforeSave()
