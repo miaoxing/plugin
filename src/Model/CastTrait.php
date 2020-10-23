@@ -29,7 +29,10 @@ trait CastTrait
      */
     public function getCasts(): array
     {
-        return array_merge($this->casts ?? [], isset($this->defaultCasts) ? $this->defaultCasts : []);
+        return array_merge(
+            isset($this->casts) ? $this->casts : [],
+            isset($this->defaultCasts) ? $this->defaultCasts : []
+        );
     }
 
     /**
