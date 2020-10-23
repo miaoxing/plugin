@@ -532,7 +532,7 @@ final class RelationTest extends BaseTestCase
     /**
      * @group saveRelation
      */
-    public function testRecordCreate()
+    public function testSaveRelationCreateOne()
     {
         $user = TestUser::save();
 
@@ -545,7 +545,7 @@ final class RelationTest extends BaseTestCase
     /**
      * @group saveRelation
      */
-    public function testRecordUpdate()
+    public function testSaveRelationUpdateOne()
     {
         $user = TestUser::save([
             'name' => 'test',
@@ -566,7 +566,7 @@ final class RelationTest extends BaseTestCase
     /**
      * @group saveRelation
      */
-    public function testRecordSaveIgnoreRelateId()
+    public function testSaveRelationIgnoreRelateId()
     {
         $user = TestUser::save([
             'name' => 'test',
@@ -584,7 +584,7 @@ final class RelationTest extends BaseTestCase
     /**
      * @group saveRelation
      */
-    public function testCollCreate()
+    public function testSaveRelationCreateMany()
     {
         $user = TestUser::save();
 
@@ -605,7 +605,7 @@ final class RelationTest extends BaseTestCase
     /**
      * @group saveRelation
      */
-    public function testCollUpdate()
+    public function testSaveRelationUpdateMany()
     {
         $user = TestUser::save();
 
