@@ -635,6 +635,27 @@ final class RelationTest extends BaseTestCase
         $this->assertSame('title 1', $articles[0]->title);
     }
 
+    public function testSaveRelationDeleteMany()
+    {
+        $user = TestUser::save();
+
+        TestArticle::save([
+            TestArticle::new([
+                'testUserId' => $user->id,
+            ]),
+            TestArticle::new([
+                'testUserId' => $user->id,
+            ]),
+        ]);
+
+        $articles2 = $user->articles()->saveRelation();
+
+        $this->assertCount(0, $articles2);
+
+        $articles = $user->articles;
+        $this->assertCount(0, $articles);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
