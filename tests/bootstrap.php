@@ -26,3 +26,15 @@ foreach ($wei->plugin->getAll() as $plugin) {
         }
     }
 }
+
+// 允许运行 wei/wei 的测试
+$paths = [
+    'packages/wei',
+    'vendor/wei/wei',
+];
+foreach ($paths as  $path) {
+    if (is_dir($path)) {
+        $loader->addPsr4('WeiTest\\', $path . '/tests/unit');
+        break;
+    }
+}
