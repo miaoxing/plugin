@@ -214,6 +214,12 @@ class GAutoCompletion extends BaseCommand
             $services['is' . $name] = 'Wei\\Validator\\' . $name;
         }
 
+        foreach ($services as $name => $class) {
+            if ((new ReflectionClass($class))->isAbstract()) {
+                unset($services[$name]);
+            }
+        }
+
         return [$services, 'packages/wei', false];
     }
 
