@@ -211,10 +211,6 @@ class GAutoCompletion extends BaseCommand
         $files = glob($path . '/Validator/*.php');
         foreach ($files as $file) {
             $name = basename($file, '.php');
-            // TODO Null 类 php7 不支持
-            if ('Null' === $name) {
-                continue;
-            }
             $services['is' . $name] = 'Wei\\Validator\\' . $name;
         }
 
