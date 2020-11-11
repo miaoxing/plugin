@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Wei\Validator\BaseValidator;
+use Wei\BaseValidator;
 
 class IsModelExists extends BaseValidator
 {
