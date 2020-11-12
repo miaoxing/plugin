@@ -21,6 +21,13 @@ class ConfigMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
+ * @method      bool isModelExists($input = null, $model = null, $column = 'id') Check if the input is existing model
+ */
+class IsModelExistsMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Jwt $jwt
  */
 class JwtMixin {
@@ -103,6 +110,7 @@ class UserModelMixin {
  * @mixin AppMixin
  * @mixin AppModelMixin
  * @mixin ConfigMixin
+ * @mixin IsModelExistsMixin
  * @mixin JwtMixin
  * @mixin ModelMixin
  * @mixin PageRouterMixin
@@ -138,6 +146,9 @@ $apps = wei()->appModel();
 
 /** @var Miaoxing\Plugin\Service\Config $config */
 $config = wei()->config;
+
+/** @var Miaoxing\Plugin\Service\IsModelExists $isModelExists */
+$isModelExists = wei()->isModelExists;
 
 /** @var Miaoxing\Plugin\Service\Jwt $jwt */
 $jwt = wei()->jwt;

@@ -882,6 +882,10 @@ class Config
     }
 }
 
+class IsModelExists
+{
+}
+
 class Jwt
 {
     /**
@@ -4367,6 +4371,28 @@ class UserModel
     }
 }
 
+
+namespace Wei;
+
+class V
+{
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     */
+    public static function modelExists($model = null, $column = 'id')
+    {
+    }
+
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     */
+    public static function notModelExists($model = null, $column = 'id')
+    {
+    }
+}
+
 namespace Miaoxing\Plugin\Service;
 
 if (0) {
@@ -5248,6 +5274,10 @@ class Config
     public function load()
     {
     }
+}
+
+class IsModelExists
+{
 }
 
 class Jwt
@@ -8731,6 +8761,31 @@ class UserModel
      * @see UserModel::like
      */
     public function like($columns)
+    {
+    }
+}
+
+
+
+}
+namespace Wei;
+
+if (0) {
+class V
+{
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     */
+    public function modelExists($model = null, $column = 'id')
+    {
+    }
+
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     */
+    public function notModelExists($model = null, $column = 'id')
     {
     }
 }

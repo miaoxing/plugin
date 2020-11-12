@@ -5,7 +5,9 @@ namespace Miaoxing\Plugin\Command;
 use Miaoxing\Plugin\BasePlugin;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
+use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpFile;
+use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
 use ReflectionClass;
 use ReflectionMethod;
@@ -139,6 +141,8 @@ class GAutoCompletion extends BaseCommand
             }
         }
 
+        $this->addValidatorMethods($services, $staticFile, $dynamicFile);
+
         if (!isset($staticNamespace) || !$staticNamespace->getClasses()) {
             $this->suc('API method not found!');
             return;
@@ -206,12 +210,6 @@ class GAutoCompletion extends BaseCommand
         foreach ($files as $file) {
             $name = basename($file, '.php');
             $services[lcfirst($name)] = 'Wei\\' . $name;
-        }
-
-        $files = glob($path . '/Validator/*.php');
-        foreach ($files as $file) {
-            $name = basename($file, '.php');
-            $services['is' . $name] = 'Wei\\Validator\\' . $name;
         }
 
         foreach ($services as $name => $class) {
@@ -503,5 +501,67 @@ class $class {
 }
 
 PHP;
+    }
+
+    private function addValidatorMethods(array $services, PhpFile $staticFile, PhpFile $dynamicFile)
+    {
+        $validators = [];
+        foreach ($services as $name => $class) {
+            if (substr($name, 0, 2) === 'is') {
+                $validators[$name] = $class;
+            }
+        }
+        if (!$validators) {
+            return;
+        }
+
+        $staticNamespace = $staticFile->addNamespace('Wei');
+        $dynamicNamespace = $dynamicFile->addNamespace('Wei');
+        $staticClass = $this->getOrAddClass($staticNamespace, 'V');
+        $dynamicClass = $this->getOrAddClass($dynamicNamespace, 'V');
+
+        $methods = $dynamicClass->getMethods();
+        $staticMethods = $staticClass->getMethods();
+
+        foreach ($validators as $name => $class) {
+            $name = substr($name, 2);
+
+            $dynamicMethod = Method::from([$class, '__invoke'])->cloneWithName(lcfirst($name));
+
+            // 移除 $input 参数
+            $parameters = $dynamicMethod->getParameters();
+            array_shift($parameters);
+
+            if ($class::BASIC_TYPE) {
+                // 加上 name 和 label
+                $nameParameter = new Parameter('name');
+                $nameParameter->setDefaultValue(null);
+
+                $labelParameter = new Parameter('label');
+                $labelParameter->setType('string');
+                $labelParameter->setDefaultValue(null);
+                array_unshift($parameters, $nameParameter, $labelParameter);
+            }
+
+            $dynamicMethod->setParameters($parameters);
+
+            $dynamicMethod->setComment('@return $this');
+            $dynamicMethod->addComment('@see \\' . $class . '::__invoke');
+
+            $methods[] = $dynamicMethod;
+            $staticMethods[] = (clone $dynamicMethod)->setStatic();
+
+            $methods[] = $dynamicMethod->cloneWithName('not' . $name);
+            $staticMethods[] = $dynamicMethod->cloneWithName('not' . $name)->setStatic();
+        }
+
+        $dynamicClass->setMethods($methods);
+        $staticClass->setMethods($staticMethods);
+    }
+
+    private function getOrAddClass(PhpNamespace $namespace, string $class)
+    {
+        $classes = $namespace->getClasses();
+        return $classes[$class] ?? $namespace->addClass($class);
     }
 }
