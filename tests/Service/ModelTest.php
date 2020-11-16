@@ -1179,4 +1179,18 @@ final class ModelTest extends BaseTestCase
         $user = TestUser::findBy(['name' => 'twin']);
         $this->assertEquals('test address 3', $user['address']);
     }
+
+    public function testWasRecentlyCreated()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::first();
+        $this->assertFalse($user->wasRecentlyCreated());
+
+        $user = TestUser::save();
+        $this->assertTrue($user->wasRecentlyCreated());
+
+        $user = TestUser::find($user->id);
+        $this->assertFalse($user->wasRecentlyCreated());
+    }
 }

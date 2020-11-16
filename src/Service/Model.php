@@ -197,6 +197,13 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected $virtualData = [];
 
     /**
+     * Returns whether the model was inserted in the this request
+     *
+     * @var bool
+     */
+    protected $wasRecentlyCreated = false;
+
+    /**
      * Extra data for saveRelation method
      *
      * @var array
@@ -1375,6 +1382,16 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Returns whether the model was inserted in the this request
+     *
+     * @return bool
+     */
+    public function wasRecentlyCreated()
+    {
+        return $this->wasRecentlyCreated;
+    }
+
+    /**
      * @param string $column
      * @param mixed $value
      * @return $this
@@ -1541,6 +1558,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
 
                 $this->db->insert($this->getTable(), $this->data);
                 $this->isNew = false;
+                $this->wasRecentlyCreated = true;
 
                 // Receives primary key value when it's empty
                 if (!isset($this->data[$this->primaryKey]) || !$this->data[$this->primaryKey]) {
