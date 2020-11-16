@@ -1461,7 +1461,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @svc
      */
     protected function toRet(array $merge = [])
@@ -1474,7 +1474,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
                     'records' => $this->count(),
                 ]);
         } else {
-            return $this->suc($merge + ['data' => $this]);
+            return $this->suc($merge + ['data' => $this])->setMetadata('model', $this);
         }
     }
 

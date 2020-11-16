@@ -3,10 +3,12 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 use Wei\Req;
+use Wei\Res;
 
 /**
  * @mixin \DbMixin
@@ -1192,5 +1194,38 @@ final class ModelTest extends BaseTestCase
 
         $user = TestUser::find($user->id);
         $this->assertFalse($user->wasRecentlyCreated());
+    }
+
+    public function testToRet()
+    {
+        $this->initFixtures();;
+
+        $user = TestUser::first();
+
+        $ret = $user->toRet();
+        $this->assertInstanceOf(Ret::class, $ret);
+        $this->assertSame($user->id, $ret['data']['id']);
+
+        $this->assertSame($user, $ret->getMetadata('model'));
+
+        $ret = $user->toRet(['data' => 'custom']);
+        $this->assertSame('custom', $ret['data']);
+
+        $this->assertSame($user, $ret->getMetadata('model'));
+    }
+
+    public function testToRetToRes()
+    {
+        $this->initFixtures();
+
+        $res = new Res(['wei' => $this->wei]);
+
+        $user = TestUser::first();
+        $user->toRet()->toRes(null, $res);
+        $this->assertSame(200, $res->getStatusCode());
+
+        $user = TestUser::save();
+        $user->toRet()->toRes(null, $res);
+        $this->assertSame(201, $res->getStatusCode());
     }
 }

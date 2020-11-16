@@ -258,8 +258,10 @@ class App extends \Wei\App
      */
     public function handleResponse($response)
     {
-        if ($response instanceof JsonSerializable || $this->isRet($response)) {
+        if ($response instanceof Ret || $this->isRet($response)) {
             return $this->handleRet($response);
+        } elseif ($response instanceof JsonSerializable) {
+            return $this->res->json($response);
         } elseif (is_array($response)) {
             $template = $this->getDefaultTemplate();
             $file = $this->view->resolveFile($template) ? $template : $this->defaultViewFile;
@@ -285,6 +287,7 @@ class App extends \Wei\App
      * 判断是否为API接口
      *
      * @return bool
+     * @deprecated
      */
     public function isApi()
     {
@@ -487,17 +490,14 @@ class App extends \Wei\App
      */
     protected function handleRet($ret)
     {
-        if ($this->req->acceptJson() || $this->isApi()) {
-            return $this->res->json($ret);
-        } else {
-            if ($ret instanceof Ret) {
-                $ret = $ret->toArray();
+        if (is_array($ret)) {
+            if ($ret['code'] === 1) {
+                $ret = Ret::suc($ret);
+            } else {
+                $ret = Ret::err($ret);
             }
-            $type = $ret['retType'] ?? (1 === $ret['code'] ? 'success' : 'warning');
-            $content = $this->view->render('@plugin/_ret.php', $ret + ['type' => $type]);
-
-            return $this->res->setContent($content);
         }
+        return $ret->toRes($this->req, $this->res);
     }
 
     /**

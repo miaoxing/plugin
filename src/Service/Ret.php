@@ -3,11 +3,16 @@
 namespace Miaoxing\Plugin\Service;
 
 use Wei\Base;
+use Wei\Req;
+use Wei\Res;
 
 /**
  * @mixin \LoggerMixin
  * @mixin \PluginMixin
  * @mixin \EnvMixin
+ * @mixin \ReqMixin
+ * @mixin \ResMixin
+ * @mixin \ViewMixin
  */
 class Ret extends Base implements \JsonSerializable, \ArrayAccess
 {
@@ -32,6 +37,11 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
      * @var array
      */
     protected $data = [];
+
+    /**
+     * @var array
+     */
+    protected $metadata = [];
 
     /**
      * @var array
@@ -103,6 +113,50 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     }
 
     /**
+     * Returns metadata value by key, or returns all metadata if key is not set
+     *
+     * @param string|null $key
+     * @return array|mixed|null
+     */
+    public function getMetadata(string $key = null)
+    {
+        return null === $key ? $this->metadata : ($this->metadata[$key] ?? null);
+    }
+
+    /**
+     * Sets metadata by key or sets all metadata if key is an array
+     *
+     * @param string|array $key
+     * @param mixed $value
+     * @return $this
+     */
+    public function setMetadata($key, $value = null)
+    {
+        if (is_array($key)) {
+            $this->metadata = $key;
+        } else {
+            $this->metadata[$key] = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * Removes metadata value by key or clears all metadata if key is not set
+     *
+     * @param string $key
+     * @return $this
+     */
+    public function removeMetadata(string $key = null)
+    {
+        if (null === $key) {
+            $this->metadata = [];
+        } else {
+            unset($this->metadata[$key]);
+        }
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function jsonSerialize()
@@ -140,6 +194,33 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
+    }
+
+    /**
+     * Convert Ret object to response
+     *
+     * @param Req|null $req
+     * @param Res|null $res
+     * @return Res
+     * @throws \Exception
+     */
+    public function toRes(Req $req = null, Res $res = null)
+    {
+        $req || $req = $this->req;
+        $res || $res = $this->res;
+
+        $model = $this->getMetadata('model');
+        if ($model instanceof Model && $model->wasRecentlyCreated()) {
+            $res->setStatusCode(201);
+        }
+
+        if ($req->acceptJson() || $this->isApi($req)) {
+            return $res->json($this);
+        } else {
+            $type = $this->data['retType'] ?? (1 === $this->isSuc() ? 'success' : 'warning');
+            $content = $this->view->render('@plugin/_ret.php', $this->data + ['type' => $type]);
+            return $res->setContent($content);
+        }
     }
 
     /**
@@ -248,5 +329,17 @@ class Ret extends Base implements \JsonSerializable, \ArrayAccess
     private function getErrorFile($name)
     {
         return 'plugins/' . $name . '/config/errors.php';
+    }
+
+    /**
+     * 判断是否为API接口
+     *
+     * @param Req $req
+     * @return bool
+     */
+    private function isApi(Req $req)
+    {
+        $pathInfo = $req->getRouterPathInfo();
+        return 0 === strpos($pathInfo, '/api') || 0 === strpos($pathInfo, '/admin-api');
     }
 }

@@ -115,4 +115,40 @@ final class RetTest extends BaseTestCase
         $this->assertEquals($ret1, $ret2);
         $this->assertNotSame($ret1, $ret2);
     }
+
+    public function testGetMetadata()
+    {
+        $ret = Ret::suc();
+
+        $ret->setMetadata('key', 'value');
+        $ret->setMetadata('key2', 'value2');
+
+        $this->assertSame('value', $ret->getMetadata('key'));
+        $this->assertSame(['key' => 'value', 'key2' => 'value2'], $ret->getMetadata());
+    }
+
+    public function testSetMetadata()
+    {
+        $ret = Ret::suc();
+
+        $ret->setMetadata('key', 'value');
+        $this->assertSame('value', $ret->getMetadata('key'));
+
+        $ret->setMetadata(['key2' => 'value2']);
+        $this->assertSame(['key2' => 'value2'], $ret->getMetadata());
+    }
+
+    public function testRemoveMetadata()
+    {
+        $ret = Ret::suc();
+
+        $ret->setMetadata('key', 'value');
+        $ret->setMetadata('key2', 'value2');
+
+        $ret->removeMetadata('key');
+        $this->assertSame(['key2' => 'value2'], $ret->getMetadata());
+
+        $ret->removeMetadata();
+        $this->assertSame([], $ret->getMetadata());
+    }
 }
