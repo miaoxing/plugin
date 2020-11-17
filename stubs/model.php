@@ -2,11 +2,11 @@
 
 namespace <?= $namespace ?>;
 
-use Miaoxing\Plugin\BaseModelV2;
+use Miaoxing\Plugin\Service\Model;
 
 /**
  * <?= $class, "\n" ?>
  */
-class <?= $class ?> extends BaseModelV2
+class <?= $class ?> extends Model
 {
 }
