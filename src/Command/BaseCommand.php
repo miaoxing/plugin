@@ -7,6 +7,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Wei\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;
 
@@ -140,12 +141,12 @@ abstract class BaseCommand extends Command
     /**
      * Writes a message base on result data
      *
-     * @param array $ret
+     * @param Ret $ret
      * @return int
      */
-    protected function ret(array $ret): int
+    protected function ret(Ret $ret): int
     {
-        $type = 1 === $ret['code'] ? 'suc' : 'err';
+        $type = $ret->isSuc() ? 'suc' : 'err';
         return $this->{$type}($ret['message'], $ret['code']);
     }
 

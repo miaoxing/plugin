@@ -278,21 +278,21 @@ class Plugin extends BaseService
      * Install a plugin by ID
      *
      * @param string $id
-     * @return array
+     * @return Ret
      */
     public function install($id)
     {
         $plugin = $this->getById($id);
         if (!$plugin) {
-            return ['code' => -1, 'message' => 'Plugin not found'];
+            return err('插件不存在');
         }
 
         if ($this->isInstalled($id)) {
-            return ['code' => -2, 'message' => 'Plugin has been installed'];
+            return err('插件已安装');
         }
 
         $ret = $plugin->install();
-        if (1 !== $ret['code']) {
+        if ($ret->isErr()) {
             return $ret;
         }
 
@@ -309,32 +309,32 @@ class Plugin extends BaseService
      * Uninstall a plugin by ID
      *
      * @param string $id
-     * @return array
+     * @return Ret
      */
     public function uninstall($id)
     {
         $plugin = $this->getById($id);
         if (!$plugin) {
-            return ['code' => -3, 'message' => 'Plugin not found'];
+            return err('插件不存在');
         }
 
         if (!$this->isInstalled($id)) {
-            return ['code' => -4, 'message' => 'Plugin not installed'];
+            return err('插件未安装');
         }
 
         if ($this->isBuildIn($id)) {
-            return ['code' => -5, 'message' => 'Can not uninstall build-in plugin'];
+            return err('不能卸载内置插件');
         }
 
         $ret = $plugin->uninstall();
-        if (1 !== $ret['code']) {
+        if ($ret->isErr()) {
             return $ret;
         }
 
         $pluginIds = $this->getInstalledIds();
         $key = array_search($id, $pluginIds, true);
         if (false === $key) {
-            return ['code' => -6, 'message' => 'Plugin not installed'];
+            return err('插件未安装');
         }
         unset($pluginIds[$key]);
         $this->setInstalledIds($pluginIds);
