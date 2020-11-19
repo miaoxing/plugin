@@ -45,7 +45,7 @@ class AppModel
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public static function toRet(array $merge = [])
@@ -254,7 +254,7 @@ class AppModel
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public static function all()
@@ -982,7 +982,7 @@ class Model
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public static function toRet(array $merge = [])
@@ -1191,7 +1191,7 @@ class Model
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public static function all()
@@ -2695,7 +2695,7 @@ class User
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public static function toRet(array $merge = [])
@@ -2893,7 +2893,7 @@ class User
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public static function all()
@@ -3552,7 +3552,7 @@ class UserModel
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public static function toRet(array $merge = [])
@@ -3761,7 +3761,7 @@ class UserModel
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public static function all()
@@ -4439,7 +4439,7 @@ class AppModel
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public function toRet(array $merge = [])
@@ -4648,7 +4648,7 @@ class AppModel
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public function all()
@@ -5376,7 +5376,7 @@ class Model
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public function toRet(array $merge = [])
@@ -5585,7 +5585,7 @@ class Model
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public function all()
@@ -7089,7 +7089,7 @@ class User
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public function toRet(array $merge = [])
@@ -7287,7 +7287,7 @@ class User
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public function all()
@@ -7946,7 +7946,7 @@ class UserModel
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return array
+     * @return Ret
      * @see Model::toRet
      */
     public function toRet(array $merge = [])
@@ -8155,7 +8155,7 @@ class UserModel
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @see Model::all
      */
     public function all()

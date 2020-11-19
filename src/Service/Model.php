@@ -1878,7 +1878,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
-     * @return $this|array
+     * @return $this|$this[]|array
      * @svc
      */
     protected function all()
