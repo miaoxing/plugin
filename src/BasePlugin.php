@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin;
 
+use Miaoxing\Plugin\Service\Ret;
+
 /**
  * @mixin \EnvMixin
  * @mixin \ViewMixin
@@ -53,21 +55,21 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
     /**
      * 安装当前插件
      *
-     * @return array
+     * @return Ret
      */
     public function install()
     {
-        return ['code' => 1, 'message' => 'Install success'];
+        return suc('Install success');
     }
 
     /**
      * 卸载当前插件
      *
-     * @return array
+     * @return Ret
      */
     public function uninstall()
     {
-        return ['code' => 1, 'message' => 'Uninstall success'];
+        return suc('Uninstall success');
     }
 
     /**
