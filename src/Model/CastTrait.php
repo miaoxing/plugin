@@ -7,7 +7,6 @@ use stdClass;
 
 /**
  * @property-read array $casts
- * @property-read array $defaultCasts @deprecated Helper for generating metadata
  */
 trait CastTrait
 {
@@ -29,10 +28,7 @@ trait CastTrait
      */
     public function getCasts(): array
     {
-        return array_merge(
-            isset($this->casts) ? $this->casts : [],
-            isset($this->defaultCasts) ? $this->defaultCasts : []
-        );
+        return $this->casts ?? [];
     }
 
     /**
