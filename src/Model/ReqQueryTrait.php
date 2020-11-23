@@ -18,16 +18,6 @@ trait ReqQueryTrait
     /**
      * @param Req $req
      * @return $this
-     * @deprecated Use `setReq` instead
-     */
-    public function setRequest($req)
-    {
-        return $this->setReq($req);
-    }
-
-    /**
-     * @param Req $req
-     * @return $this
      */
     public function setReq($req)
     {
