@@ -187,12 +187,6 @@ class Plugin extends BaseService
             $pluginId = substr($pluginId, 1);
         }
 
-        // @deprecated
-        if (false !== strpos($resource, ':')) {
-            wei()->logger->warning('deprecated view', $resource);
-            list($pluginId, $file) = explode(':', $resource, 2);
-        }
-
         if ($pluginId) {
             $plugin = $this->getOneById($pluginId);
             $path = $plugin->getBasePath() . '/views';
