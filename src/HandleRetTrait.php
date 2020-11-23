@@ -2,19 +2,19 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Plugin\Service\Ret;
+use Wei\Ret;
 
 trait HandleRetTrait
 {
     /**
      * Throw exception if ret is error
      *
-     * @param array|Ret $ret
+     * @param Ret $ret
      * @throws RetException
      */
-    protected function tie($ret)
+    protected function tie(Ret $ret)
     {
-        if (isset($ret['code']) && 1 !== $ret['code']) {
+        if ($ret->isErr()) {
             throw new RetException($ret);
         }
     }

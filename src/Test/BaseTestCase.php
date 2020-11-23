@@ -86,38 +86,30 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array|Ret $ret
+     * @param Ret $ret
      * @param string $message
      * @param string $assertMessage
      */
-    public function assertRetSuc($ret, $message = null, $assertMessage = null)
+    public function assertRetSuc(Ret $ret, $message = null, $assertMessage = null)
     {
-        if ($ret instanceof Ret) {
-            $ret = $ret->toArray();
-        }
-
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
 
-        $expected = ['code' => 1];
+        $expected = ['code' => $ret->getOption('defaultSucCode')];
         if (null !== $message) {
             $expected['message'] = $message;
         }
 
-        $this->assertArrayContains($expected, $ret, $assertMessage);
+        $this->assertArrayContains($expected, $ret->toArray(), $assertMessage);
     }
 
     /**
-     * @param array|Ret $ret
+     * @param Ret $ret
      * @param string $message
      * @param string $assertMessage
      * @param mixed $code
      */
-    public function assertRetErr($ret, $code, $message = null, $assertMessage = null)
+    public function assertRetErr(Ret $ret, $code, $message = null, $assertMessage = null)
     {
-        if ($ret instanceof Ret) {
-            $ret = $ret->toArray();
-        }
-
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
         $expected = [];
 
@@ -129,7 +121,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
             $expected['message'] = $message;
         }
 
-        $this->assertArrayContains($expected, $ret, $assertMessage);
+        $this->assertArrayContains($expected, $ret->toArray(), $assertMessage);
     }
 
     public static function assertArrayContains($subset, $array, $message = '')

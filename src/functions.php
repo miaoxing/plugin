@@ -21,10 +21,10 @@ if (!function_exists('err')) {
      *
      * @param array|string $message
      * @param int $code
-     * @param string $level
+     * @param string|null $level
      * @return Ret
      */
-    function err($message, $code = 0, $level = 'info')
+    function err($message, $code = null, $level = null)
     {
         return Ret::err(...func_get_args());
     }
@@ -39,7 +39,7 @@ if (!function_exists('ret')) {
      * @param string $type
      * @return mixed|string
      */
-    function ret($message, $code = 1, $type = 'success')
+    function ret($message, $code = null, $type = null)
     {
         return wei()->ret->__invoke(...func_get_args());
     }

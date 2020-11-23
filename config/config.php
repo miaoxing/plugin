@@ -91,10 +91,7 @@ return [
 
     /* @see Wei\Ret */
     'ret' => [
-        'defaults' => [
-            'message' => '操作成功',
-            'code' => 1,
-        ],
+        'defaultSucMessage' => '操作成功',
     ],
 
     /* @see Wei\Schema */
