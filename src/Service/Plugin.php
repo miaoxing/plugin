@@ -467,18 +467,6 @@ class Plugin extends BaseService
     }
 
     /**
-     * Get controllers defined in plugins
-     *
-     * @return array
-     * @todo v3 要求以 Controller 结尾
-     * @deprecated
-     */
-    protected function getAppControllerMap()
-    {
-        return $this->classMap->generate($this->basePaths, '/Controller/{*,*/*}.php', 'Controller', true, true);
-    }
-
-    /**
      * Get all plugin classes
      *
      * @param bool $refresh
