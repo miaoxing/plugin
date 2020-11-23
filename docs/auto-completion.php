@@ -61,7 +61,7 @@ class QueryBuilderMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\Ret $ret
- * @method      Miaoxing\Plugin\Service\Ret ret($message, $code = 1, $type = 'success') Return operation result data
+ * @method      Miaoxing\Plugin\Service\Ret ret($message, $code = null, $type = null) Return operation result data
  */
 class RetMixin {
 }

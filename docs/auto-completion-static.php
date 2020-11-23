@@ -226,17 +226,6 @@ class AppModel
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public static function findFromRequest($req = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
      * @see Model::findFromReq
      */
     public static function findFromReq($req = null)
@@ -1156,17 +1145,6 @@ class Model
      * @see Model::findByOrFail
      */
     public static function findByOrFail($column, $operator = null, $value = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public static function findFromRequest($req = null)
     {
     }
 
@@ -2441,6 +2419,15 @@ class QueryBuilder
 class Ret
 {
     /**
+     * {@inheritDoc}
+     * @throws \Exception
+     * @see Ret::err
+     */
+    public static function err($message, $code = null, $level = null)
+    {
+    }
+
+    /**
      * Return operation successful result
      *
      * ```php
@@ -2463,15 +2450,26 @@ class Ret
     }
 
     /**
-     * Return operation failed result, and logs with an info level
+     * Return operation failed result, and logs with a warning level
      *
-     * @param array|string $message
+     * @param string $message
      * @param int $code
-     * @param string $level
      * @return $this
-     * @see Ret::err
+     * @see Ret::warning
      */
-    public static function err($message, $code = 0, $level = 'info')
+    public static function warning($message, $code = null)
+    {
+    }
+
+    /**
+     * Return operation failed result, and logs with an alert level
+     *
+     * @param string $message
+     * @param int $code
+     * @return $this
+     * @see Ret::alert
+     */
+    public static function alert($message, $code = null)
     {
     }
 }
@@ -2858,17 +2856,6 @@ class User
      * @see Model::findByOrFail
      */
     public static function findByOrFail($column, $operator = null, $value = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public static function findFromRequest($req = null)
     {
     }
 
@@ -3726,17 +3713,6 @@ class UserModel
      * @see Model::findByOrFail
      */
     public static function findByOrFail($column, $operator = null, $value = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public static function findFromRequest($req = null)
     {
     }
 
@@ -4613,17 +4589,6 @@ class AppModel
      * @see Model::findByOrFail
      */
     public function findByOrFail($column, $operator = null, $value = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public function findFromRequest($req = null)
     {
     }
 
@@ -5550,17 +5515,6 @@ class Model
      * @see Model::findByOrFail
      */
     public function findByOrFail($column, $operator = null, $value = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public function findFromRequest($req = null)
     {
     }
 
@@ -6835,6 +6789,15 @@ class QueryBuilder
 class Ret
 {
     /**
+     * {@inheritDoc}
+     * @throws \Exception
+     * @see Ret::err
+     */
+    public function err($message, $code = null, $level = null)
+    {
+    }
+
+    /**
      * Return operation successful result
      *
      * ```php
@@ -6857,15 +6820,26 @@ class Ret
     }
 
     /**
-     * Return operation failed result, and logs with an info level
+     * Return operation failed result, and logs with a warning level
      *
-     * @param array|string $message
+     * @param string $message
      * @param int $code
-     * @param string $level
      * @return $this
-     * @see Ret::err
+     * @see Ret::warning
      */
-    public function err($message, $code = 0, $level = 'info')
+    public function warning($message, $code = null)
+    {
+    }
+
+    /**
+     * Return operation failed result, and logs with an alert level
+     *
+     * @param string $message
+     * @param int $code
+     * @return $this
+     * @see Ret::alert
+     */
+    public function alert($message, $code = null)
     {
     }
 }
@@ -7252,17 +7226,6 @@ class User
      * @see Model::findByOrFail
      */
     public function findByOrFail($column, $operator = null, $value = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public function findFromRequest($req = null)
     {
     }
 
@@ -8120,17 +8083,6 @@ class UserModel
      * @see Model::findByOrFail
      */
     public function findByOrFail($column, $operator = null, $value = null)
-    {
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @see Model::findFromRequest
-     */
-    public function findFromRequest($req = null)
     {
     }
 

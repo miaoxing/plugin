@@ -1843,18 +1843,6 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @deprecated Use `findFromReq` instead
-     * @svc
-     */
-    protected function findFromRequest($req = null)
-    {
-        return $this->findFromReq($req);
-    }
-
-    /**
-     * @param array|Req|null $req
-     * @return $this
-     * @throws \Exception
      * @svc
      */
     protected function findFromReq($req = null)
