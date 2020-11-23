@@ -421,19 +421,6 @@ class Plugin extends BaseService
         }
     }
 
-    /**
-     * Generate class map
-     *
-     * @param mixed ...$args
-     * @return array
-     * @throws Exception
-     * @deprecated Use classMap->generate()
-     */
-    public function generateClassMap(...$args)
-    {
-        return $this->classMap->generate(...$args);
-    }
-
     public function getPluginIdByClass($class)
     {
         // 类名如:Miaoxing\App\Controller\Apps
