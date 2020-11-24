@@ -268,6 +268,17 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     }
 
     /**
+     * Check if property exists
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->$name);
+    }
+
+    /**
      * Create a new model object
      *
      * @param array $data
