@@ -1228,4 +1228,30 @@ final class ModelTest extends BaseTestCase
         $user->toRet()->toRes(null, $res);
         $this->assertSame(201, $res->getStatusCode());
     }
+
+    public function testFindByOrCreateWithNewAttribute()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::findByOrCreate(['name' => 'new']);
+        $this->assertFalse($user->isNew());
+        $this->assertSame(0, $user->groupId);
+    }
+
+    public function testFindByOrCreateWithNewData()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::findByOrCreate(['name' => 'new'], ['groupId' => 2]);
+        $this->assertFalse($user->isNew());
+        $this->assertSame(2, $user->groupId);
+    }
+
+    public function testFindByOrCreateWontSaveExistingData()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::findByOrCreate(['name' => 'twin'], ['groupId' => 2]);
+        $this->assertSame(1, $user->groupId);
+    }
 }

@@ -1719,7 +1719,7 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
     protected function findOrCreate($id, $data = [])
     {
         $this->findOrInit($id, $data);
-        if ($this->isNew) {
+        if ($this->isNew()) {
             $this->save();
         }
         return $this;
@@ -1733,7 +1733,11 @@ class Model extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \C
      */
     protected function findByOrCreate($attributes, $data = [])
     {
-        return $this->findOrInitBy($attributes, $data)->save();
+        $this->findOrInitBy($attributes, $data);
+        if ($this->isChanged()) {
+            $this->save();
+        }
+        return $this;
     }
 
     /**
