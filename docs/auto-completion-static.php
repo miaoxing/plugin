@@ -2485,10 +2485,6 @@ class Ret
     }
 }
 
-class Schema
-{
-}
-
 class Session
 {
 }
@@ -6864,10 +6860,6 @@ class Ret
     public function alert($message, $code = null)
     {
     }
-}
-
-class Schema
-{
 }
 
 class Session

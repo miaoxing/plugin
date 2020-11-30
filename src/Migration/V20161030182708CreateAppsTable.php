@@ -15,7 +15,7 @@ class V20161030182708CreateAppsTable extends BaseMigration
     {
         $this->schema->table($this->table)
             ->id()
-            ->int('user_id')
+            ->uInt('user_id')
             ->text('plugin_ids')
             ->string('name', 16)
             ->string('title', 32)
@@ -23,7 +23,7 @@ class V20161030182708CreateAppsTable extends BaseMigration
             ->string('domain', 128)
             ->string('description')
             ->string('industry', 16)
-            ->tinyInt('status')->defaults(1)
+            ->uTinyInt('status')->defaults(1)
             ->string('configs')->defaults('[]')
             ->timestamps()
             ->userstamps()

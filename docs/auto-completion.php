@@ -67,12 +67,6 @@ class RetMixin {
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Schema $schema
- */
-class SchemaMixin {
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\Session $session
  * @method      mixed session($key, $value = null) Get or set session
  */
@@ -117,7 +111,6 @@ class UserModelMixin {
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
  * @mixin RetMixin
- * @mixin SchemaMixin
  * @mixin SessionMixin
  * @mixin StrMixin
  * @mixin TesterMixin
@@ -167,9 +160,6 @@ $queryBuilder = wei()->queryBuilder;
 
 /** @var Miaoxing\Plugin\Service\Ret $ret */
 $ret = wei()->ret;
-
-/** @var Miaoxing\Plugin\Service\Schema $schema */
-$schema = wei()->schema;
 
 /** @var Miaoxing\Plugin\Service\Session $session */
 $session = wei()->session;

@@ -14,7 +14,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
         $table = $this->schema->table('users');
         $table->tableComment('用户')
             ->id()
-            ->int('app_id')
+            ->uInt('app_id')
             ->string('out_id', 32)
             ->bool('is_admin')
             ->string('nick_name', 32)
@@ -26,7 +26,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->timestamp('mobile_verified_at')->comment('手机校验时间')
             ->string('phone', 16)
             ->string('password', 255)
-            ->tinyInt('sex')->defaults(1)
+            ->uTinyInt('sex')->defaults(1)
             ->string('country', 32)
             ->string('province', 32)
             ->string('city', 32)
