@@ -104,15 +104,7 @@ class Plugin extends BaseService
         }
 
         // Load configs to services
-        $config = $this->getConfig();
-        $this->wei->setConfig($config + [
-                'event' => [
-                    'loadEvent' => [$this, 'loadEvent'],
-                ],
-                'view' => [
-                    'parseResource' => [$this, 'parseViewResource'],
-                ],
-            ]);
+        $this->loadConfig();
     }
 
     /**
@@ -436,6 +428,28 @@ class Plugin extends BaseService
     public function getBasePaths()
     {
         return $this->basePaths;
+    }
+
+    /**
+     * Load service configs
+     *
+     * @param bool $refresh
+     * @return $this
+     * @svc
+     */
+    protected function loadConfig($refresh = false)
+    {
+        // Load configs to services
+        $config = $this->getConfig($refresh);
+        $this->wei->setConfig($config + [
+                'event' => [
+                    'loadEvent' => [$this, 'loadEvent'],
+                ],
+                'view' => [
+                    'parseResource' => [$this, 'parseViewResource'],
+                ],
+            ]);
+        return $this;
     }
 
     /**

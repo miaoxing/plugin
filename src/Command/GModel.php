@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
+use Miaoxing\Plugin\Service\Plugin;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -29,7 +30,7 @@ class GModel extends BaseCommand
 
         $this->createFile($file, $namespace, $class);
 
-        $this->plugin->getConfig(true);
+        Plugin::loadConfig(true);
         $this->runCommand('g:auto-completion', ['plugin-id' => $id]);
         $this->runCommand('g:metadata', ['plugin-id' => $id]);
 

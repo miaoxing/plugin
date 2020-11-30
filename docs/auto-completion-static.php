@@ -1777,6 +1777,17 @@ class PageRouter
 class Plugin
 {
     /**
+     * Load service configs
+     *
+     * @param bool $refresh
+     * @return $this
+     * @see Plugin::loadConfig
+     */
+    public static function loadConfig($refresh = false)
+    {
+    }
+
+    /**
      * Check if a plugin exists
      *
      * @param string $id
@@ -6146,6 +6157,17 @@ class PageRouter
 
 class Plugin
 {
+    /**
+     * Load service configs
+     *
+     * @param bool $refresh
+     * @return $this
+     * @see Plugin::loadConfig
+     */
+    public function loadConfig($refresh = false)
+    {
+    }
+
     /**
      * Check if a plugin exists
      *

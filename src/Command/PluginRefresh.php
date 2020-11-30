@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Command;
 
+use Miaoxing\Plugin\Service\Plugin;
+
 class PluginRefresh extends BaseCommand
 {
     /**
@@ -11,7 +13,7 @@ class PluginRefresh extends BaseCommand
      */
     public function handle()
     {
-        wei()->plugin->getConfig(true);
+        Plugin::loadConfig(true);
         $this->suc('Refreshed the plugin config!');
     }
 
