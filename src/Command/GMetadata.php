@@ -117,6 +117,7 @@ final class GMetadata extends BaseCommand
             case 'int':
             case 'smallint':
             case 'mediumint':
+            case 'bigint':
                 return 'int';
 
             case 'tinyint':
