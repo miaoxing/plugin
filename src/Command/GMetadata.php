@@ -78,6 +78,9 @@ final class GMetadata extends BaseCommand
         foreach ($columns as $column) {
             $casts[$column['Field']] = $this->getCastType($column['Type']);
             $phpType = $this->getPhpType($casts[$column['Field']]);
+            if ($column['Null'] === 'YES') {
+                $phpType .= '|null';
+            }
 
             $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
             $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName, $column['Comment'])) . "\n";
