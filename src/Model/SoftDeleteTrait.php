@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Service\User;
+use Miaoxing\Plugin\Service\WeiModel;
 use Wei\Time;
 
 /**
@@ -27,9 +28,10 @@ trait SoftDeleteTrait
      *
      * @param Model $initModel
      */
-    public static function bootSoftDeleteTrait(Model $initModel)
+    public static function bootSoftDeleteTrait(WeiModel $initModel)
     {
         $initModel->addDefaultScope('withoutDeleted');
+        static::on('init', 'addedDeleteColumnToGuarded');
     }
 
     /**
@@ -39,7 +41,7 @@ trait SoftDeleteTrait
      */
     public function isDeleted()
     {
-        return (bool) $this->get($this->deletedAtColumn);
+        return (bool) $this->get($this->getDeletedAtColumn());
     }
 
     /**
@@ -50,8 +52,8 @@ trait SoftDeleteTrait
     public function restore()
     {
         $data = [
-            $this->deletedAtColumn => null,
-            $this->deletedByColumn => 0,
+            $this->getDeletedAtColumn() => null,
+            $this->getDeletedByColumn() => 0,
         ];
         if ($statusColumn = $this->getDeleteStatusColumn()) {
             $data[$statusColumn] = $this->getRestoreStatusValue();
@@ -86,7 +88,7 @@ trait SoftDeleteTrait
         if ($statusColumn = $this->getDeleteStatusColumn()) {
             return $this->where($statusColumn, '!=', $this->getDeleteStatusValue());
         } else {
-            return $this->whereNull($this->deletedAtColumn);
+            return $this->whereNull($this->getDeletedAtColumn());
         }
     }
 
@@ -102,7 +104,7 @@ trait SoftDeleteTrait
         if ($statusColumn = $this->getDeleteStatusColumn()) {
             return $this->where($statusColumn, $this->getDeleteStatusValue());
         } else {
-            return $this->whereNotNull($this->deletedAtColumn);
+            return $this->whereNotNull($this->getDeletedAtColumn());
         }
     }
 
@@ -126,14 +128,24 @@ trait SoftDeleteTrait
             parent::executeDestroy();
         } else {
             $data = [
-                $this->deletedAtColumn => Time::now(),
-                $this->deletedByColumn => User::id() ?: 0,
+                $this->getDeletedAtColumn() => Time::now(),
+                $this->getDeletedByColumn() => User::id() ?: 0,
             ];
             if ($statusColumn = $this->getDeleteStatusColumn()) {
                 $data[$statusColumn] = $this->getDeleteStatusValue();
             }
             $this->saveData($data);
         }
+    }
+
+    protected function getDeletedAtColumn()
+    {
+        return $this->deletedAtColumn ?? 'deleted_at';
+    }
+
+    protected function getDeletedByColumn()
+    {
+        return $this->deletedByColumn ?? 'deleted_by';
     }
 
     /**
@@ -170,5 +182,17 @@ trait SoftDeleteTrait
     protected function getRestoreStatusValue()
     {
         return 0;
+    }
+
+    /**
+     * @internal
+     */
+    protected function addedDeleteColumnToGuarded()
+    {
+        $this->guarded = array_merge($this->guarded, array_filter([
+            $this->getDeletedAtColumn(),
+            $this->getDeletedByColumn(),
+            $this->getDeleteStatusColumn(),
+        ]));
     }
 }

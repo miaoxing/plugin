@@ -5,15 +5,13 @@ namespace Miaoxing\Plugin\Model;
 use Miaoxing\Plugin\Service\App;
 use Miaoxing\Plugin\Service\Model;
 
-/**
- * @property-read string $appIdColumn
- */
 trait HasAppIdTrait
 {
     public static function bootHasAppIdTrait(Model $initModel)
     {
         $initModel->addDefaultScope('curApp');
 
+        static::on('init', 'addAppIdToGuarded');
         static::on('beforeCreate', 'setAppId');
     }
 
@@ -26,8 +24,7 @@ trait HasAppIdTrait
     {
         /** @var App $app */
         $app = $this->wei->app;
-
-        return $this->where($this->getTable() . '.' . $this->appIdColumn, $app->getId());
+        return $this->where('app_id', $app->getId());
     }
 
     /**
@@ -40,6 +37,14 @@ trait HasAppIdTrait
     {
         /** @var App $app */
         $app = $this->wei->app;
-        return $this->set($this->appIdColumn, $appId ?: $app->getId());
+        return $this->set('appId', $appId ?: $app->getId());
+    }
+
+    /**
+     * @internal
+     */
+    protected function addAppIdToGuarded()
+    {
+        array_push($this->guarded, 'appId');
     }
 }
