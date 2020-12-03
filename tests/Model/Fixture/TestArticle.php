@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
 /**
  * @property TestUser|null $user
@@ -10,7 +10,7 @@ use Miaoxing\Plugin\Service\Model;
  * @property string $testUserId
  * @property string $title
  */
-class TestArticle extends Model
+class TestArticle extends WeiModel
 {
     public function user()
     {

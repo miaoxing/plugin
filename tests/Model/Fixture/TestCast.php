@@ -2,19 +2,19 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
 /**
- * @property int $intColumn
- * @property bool $boolColumn
- * @property string $stringColumn
- * @property string|null $datetimeColumn
- * @property string|null $dateColumn
- * @property array $jsonColumn
- * @property array $listColumn
- * @property array $list2Column
+ * @property int $int_column
+ * @property bool $bool_column
+ * @property string $string_column
+ * @property string|null $datetime_column
+ * @property string|null $date_column
+ * @property array $json_column
+ * @property array $list_column
+ * @property array $list2_column
  */
-class TestCast extends Model
+class TestCast extends WeiModel
 {
     protected $primaryKey = 'int_column';
 
@@ -41,6 +41,6 @@ class TestCast extends Model
 
     public function changeDataBeforeSave()
     {
-        $this->stringColumn = count($this->jsonColumn);
+        $this->string_column = count($this->json_column);
     }
 }

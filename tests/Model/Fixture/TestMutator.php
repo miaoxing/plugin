@@ -2,16 +2,16 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
 /**
  * @property int|null $id
  * @property string|null $setter
  * @property string $getter
  * @property string $mutator
- * @property string $defaultValue
+ * @property string $default_value
  */
-class TestMutator extends Model
+class TestMutator extends WeiModel
 {
     protected function getGetterAttribute()
     {

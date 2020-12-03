@@ -123,9 +123,8 @@ trait ReqQueryTrait
     public function equals($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->convertOutputIdentifier($column);
-            if ($this->req->has($name)) {
-                $this->where($column, $this->req[$name]);
+            if ($this->req->has($column)) {
+                $this->where($column, $this->req[$column]);
             }
         }
 
@@ -142,24 +141,23 @@ trait ReqQueryTrait
 
         foreach ((array) $columns as $column) {
             // 支持数组形式
-            $name = $this->convertOutputIdentifier($column);
-            if ($this->req->has($name) && is_array($this->req[$name])) {
-                if (isset($this->req[$name][0])) {
-                    $this->where($prefix . $column, '>=', $this->req[$name][0]);
+            if ($this->req->has($column) && is_array($this->req[$column])) {
+                if (isset($this->req[$column][0])) {
+                    $this->where($prefix . $column, '>=', $this->req[$column][0]);
                 }
-                if (isset($this->req[$name][1])) {
-                    $this->where($prefix . $column, '<=', $this->req[$name][1]);
+                if (isset($this->req[$column][1])) {
+                    $this->where($prefix . $column, '<=', $this->req[$column][1]);
                 }
                 continue;
             }
 
             // 或是两个字段
-            $min = $this->convertOutputIdentifier($column . '_min');
+            $min = $column . 'Min';
             if ($this->req->has($min)) {
                 $this->where($prefix . $column, '>=', $this->req[$min]);
             }
 
-            $max = $this->convertOutputIdentifier($column . '_max');
+            $max = $column = 'Max';
             if ($this->req->has($max)) {
                 $this->where($prefix . $column, '<=', $this->processMaxDate($column, $this->req[$max]));
             }
@@ -171,9 +169,8 @@ trait ReqQueryTrait
     public function reqHas($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->convertOutputIdentifier($column);
-            if ($this->req->has($name)) {
-                $this->whereHas($column, $this->req[$name]);
+            if ($this->req->has($column)) {
+                $this->whereHas($column, $this->req[$column]);
             }
         }
 
@@ -183,7 +180,7 @@ trait ReqQueryTrait
     public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
     {
         if ($this->req->has('sort')) {
-            $name = $this->convertInputIdentifier($this->req['sort']);
+            $name = $this->req['sort'];
             if (in_array($name, $this->getFields(), true)) {
                 $sort = $name;
             } else {
@@ -237,16 +234,15 @@ trait ReqQueryTrait
         list($name, $op) = $this->parseNameAndOp($name);
 
         // 检查字段是否存在
-        $column = $this->convertInputIdentifier($name);
-        if (!$this->hasColumn($column)) {
+        if (!$this->hasColumn($name)) {
             return;
         }
 
         if ($this->getSqlPart('join')) {
-            $column = $this->getTable() . '.' . $column;
+            $name = $this->getTable() . '.' . $name;
         }
 
-        $this->queryByOp($column, $op, $value);
+        $this->queryByOp($name, $op, $value);
     }
 
     /**
@@ -335,8 +331,7 @@ trait ReqQueryTrait
     protected function like($columns)
     {
         foreach ((array) $columns as $column) {
-            $name = $this->convertOutputIdentifier($column);
-            [$column, $value, $relation] = $this->parseReqColumn($name);
+            [$column, $value, $relation] = $this->parseReqColumn($column);
             if (!wei()->isPresent($value)) {
                 continue;
             }
@@ -372,8 +367,6 @@ trait ReqQueryTrait
             if ($this->getSqlPart('join')) {
                 $column = $this->getTable() . '.' . $column;
             }
-
-            $column = $this->convertInputIdentifier($column);
         } else {
             // 查询关联表
             [$relation, $relationColumn] = explode('.', $column, 2);

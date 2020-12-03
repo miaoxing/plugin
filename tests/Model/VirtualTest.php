@@ -39,63 +39,78 @@ final class VirtualTest extends BaseTestCase
         $virtual = TestVirtual::new();
 
         $this->assertNull($virtual->getVirtualColumnValue());
-        $this->assertNull($virtual['virtualColumn']);
-        $this->assertNull($virtual->virtualColumn);
+        $this->assertNull($virtual['virtual_column']);
+        $this->assertNull($virtual->virtual_column);
+        $this->assertNull($virtual->get('virtual_column'));
     }
 
     public function testGetAfterSet()
     {
         $virtual = TestVirtual::new();
 
-        $virtual->virtualColumn = 'something';
+        $virtual->virtual_column = 'something';
 
         $this->assertEquals('something', $virtual->getVirtualColumnValue());
-        $this->assertEquals('something', $virtual['virtualColumn']);
-        $this->assertEquals('something', $virtual->virtualColumn);
-        $this->assertEquals('something', $virtual->get('virtualColumn'));
+        $this->assertEquals('something', $virtual['virtual_column']);
+        $this->assertEquals('something', $virtual->virtual_column);
+        $this->assertEquals('something', $virtual->get('virtual_column'));
     }
 
     public function testOffsetSet()
     {
         $virtual = TestVirtual::new();
 
-        $virtual['virtualColumn'] = 'something';
+        $virtual['virtual_column'] = 'something';
 
         $this->assertEquals('something', $virtual->getVirtualColumnValue());
-        $this->assertEquals('something', $virtual['virtualColumn']);
-        $this->assertEquals('something', $virtual->virtualColumn);
-        $this->assertEquals('something', $virtual->get('virtualColumn'));
+        $this->assertEquals('something', $virtual['virtual_column']);
+        $this->assertEquals('something', $virtual->virtual_column);
+        $this->assertEquals('something', $virtual->get('virtual_column'));
     }
 
     public function testSetMethod()
     {
         $virtual = TestVirtual::new();
 
-        $virtual->set('virtualColumn', 'something');
+        $virtual->set('virtual_column', 'something');
 
         $this->assertEquals('something', $virtual->getVirtualColumnValue());
-        $this->assertEquals('something', $virtual['virtualColumn']);
-        $this->assertEquals('something', $virtual->virtualColumn);
-        $this->assertEquals('something', $virtual->get('virtualColumn'));
+        $this->assertEquals('something', $virtual['virtual_column']);
+        $this->assertEquals('something', $virtual->virtual_column);
+        $this->assertEquals('something', $virtual->get('virtual_column'));
     }
 
     public function testGetFullName()
     {
         $virtual = TestVirtual::new();
 
-        $virtual->firstName = 'Hello';
-        $virtual->lastName = 'World';
+        $virtual->first_name = 'Hello';
+        $virtual->last_name = 'World';
 
-        $this->assertEquals('Hello World', $virtual->fullName);
+        $this->assertEquals('Hello World', $virtual->full_name);
     }
 
     public function testSetFullName()
     {
         $virtual = TestVirtual::new();
 
-        $virtual->fullName = 'Hello World';
+        $virtual->full_name = 'Hello World';
 
-        $this->assertEquals('Hello', $virtual->firstName);
-        $this->assertEquals('World', $virtual->lastName);
+        $this->assertEquals('Hello', $virtual->first_name);
+        $this->assertEquals('World', $virtual->last_name);
+    }
+
+    public function testGetCamelCaseThrowsException()
+    {
+        $virtual = TestVirtual::new();
+        $this->expectExceptionMessage('Property or object "virtualColumn" (class "Wei\VirtualColumn") not found');
+        $virtual->virtualColumn;
+    }
+
+    public function testSetCamelCaseThrowsException()
+    {
+        $virtual = TestVirtual::new();
+        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: virtualColumn'));
+        $virtual->virtualColumn = 'abc';
     }
 }

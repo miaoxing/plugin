@@ -2,9 +2,9 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
-class TestDefaultScope extends Model
+class TestDefaultScope extends WeiModel
 {
     public function __construct(array $options = [])
     {

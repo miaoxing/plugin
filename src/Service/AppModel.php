@@ -30,13 +30,13 @@ class AppModel extends Model
 
     protected $data = [
         'configs' => [],
-        'plugin_ids' => [],
+        'pluginIds' => [],
     ];
 
     public function getCasts(): array
     {
         return array_merge(parent::getCasts(), [
-            'plugin_ids' => 'json',
+            'pluginIds' => 'json',
             'configs' => 'json',
         ]);
     }

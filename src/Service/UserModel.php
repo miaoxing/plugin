@@ -17,7 +17,7 @@ class UserModel extends Model
     ];
 
     protected $virtual = [
-        'display_name',
+        'displayName',
     ];
 
     /**
@@ -30,11 +30,11 @@ class UserModel extends Model
     public function getGuarded()
     {
         return array_merge(parent::getGuarded(), [
-            'is_admin',
-            'mobile_verified_at',
+            'isAdmin',
+            'mobileVerifiedAt',
             'username',
             'password',
-            'last_login_at',
+            'lastLoginAt',
         ]);
     }
 

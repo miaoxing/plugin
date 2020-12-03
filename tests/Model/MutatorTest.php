@@ -263,6 +263,6 @@ final class MutatorTest extends BaseTestCase
     public function testNewModelCallGetAttribute()
     {
         $mutator = TestMutator::new();
-        $this->assertEquals('default value', $mutator->defaultValue);
+        $this->assertEquals('default value', $mutator->default_value);
     }
 }

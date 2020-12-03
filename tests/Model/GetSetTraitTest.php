@@ -90,15 +90,15 @@ final class GetSetTraitTest extends BaseTestCase
     public function testIncrSave()
     {
         $getSet = TestGetSet::new();
-        $getSet->incrSave('userCount', 2);
-        $this->assertEquals(2, $getSet->userCount);
-        $this->assertFalse($getSet->isChanged('userCount'));
+        $getSet->incrSave('user_count', 2);
+        $this->assertEquals(2, $getSet->user_count);
+        $this->assertFalse($getSet->isChanged('user_count'));
         $this->assertFalse($getSet->isChanged());
 
-        $getSet->incrSave('userCount', 3);
+        $getSet->incrSave('user_count', 3);
         $getSet->name = 'test';
-        $this->assertEquals(5, $getSet->userCount);
-        $this->assertFalse($getSet->isChanged('userCount'));
+        $this->assertEquals(5, $getSet->user_count);
+        $this->assertFalse($getSet->isChanged('user_count'));
         $this->assertTrue($getSet->isChanged('name'));
         $this->assertTrue($getSet->isChanged());
     }

@@ -380,40 +380,40 @@ final class ModelTest extends BaseTestCase
 
         $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('groupId', $user);
+        $this->assertArrayHasKey('group_id', $user);
         $this->assertArrayHasKey('name', $user);
         $this->assertArrayHasKey('address', $user);
 
-        $user = TestUser::find(1)->toArray(['id', 'groupId']);
+        $user = TestUser::find(1)->toArray(['id', 'group_id']);
         $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('groupId', $user);
+        $this->assertArrayHasKey('group_id', $user);
         $this->assertArrayNotHasKey('name', $user);
         $this->assertArrayNotHasKey('address', $user);
 
-        $user = TestUser::find(1)->toArray(['id', 'groupId']);
+        $user = TestUser::find(1)->toArray(['id', 'group_id']);
         $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('groupId', $user);
+        $this->assertArrayHasKey('group_id', $user);
         $this->assertArrayNotHasKey('name', $user);
         $this->assertArrayNotHasKey('address', $user);
 
         $user = TestUser::new()->toArray();
         $this->assertIsArray($user);
         $this->assertArrayHasKey('id', $user);
-        $this->assertArrayHasKey('groupId', $user);
+        $this->assertArrayHasKey('group_id', $user);
         $this->assertArrayHasKey('name', $user);
         $this->assertArrayHasKey('address', $user);
         $this->assertNull($user['id']);
-        $this->assertSame(0, $user['groupId']); // default value
+        $this->assertSame(0, $user['group_id']); // default value
         $this->assertNull($user['name']);
         $this->assertSame('default address', $user['address']); // getAddressAttribute
 
-        $users = TestUser::all()->toArray(['id', 'groupId']);
+        $users = TestUser::all()->toArray(['id', 'group_id']);
         $this->assertIsArray($users);
         $this->assertArrayHasKey(0, $users);
         $this->assertArrayHasKey('id', $users[0]);
-        $this->assertArrayHasKey('groupId', $users[0]);
+        $this->assertArrayHasKey('group_id', $users[0]);
         $this->assertArrayNotHasKey('name', $users[0]);
     }
 
@@ -458,7 +458,7 @@ final class ModelTest extends BaseTestCase
         $data = $user->toArray();
 
         $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('groupId', $data);
+        $this->assertArrayHasKey('group_id', $data);
         $this->assertArrayHasKey('name', $data);
     }
 
@@ -470,10 +470,10 @@ final class ModelTest extends BaseTestCase
 
         $this->assertTrue($user->isNew());
 
-        $data = $user->toArray(['groupId', 'name']);
+        $data = $user->toArray(['group_id', 'name']);
 
         $this->assertArrayNotHasKey('id', $data);
-        $this->assertArrayHasKey('groupId', $data);
+        $this->assertArrayHasKey('group_id', $data);
         $this->assertArrayHasKey('name', $data);
     }
 
@@ -574,12 +574,12 @@ final class ModelTest extends BaseTestCase
         $user = TestUser::find(1);
 
         $this->assertEquals('twin', $user['name']);
-        $this->assertEquals('1', $user['groupId']);
+        $this->assertEquals('1', $user['group_id']);
 
-        unset($user['name'], $user['groupId']);
+        unset($user['name'], $user['group_id']);
 
         $this->assertNull($user['name']);
-        $this->assertNull($user['groupId']);
+        $this->assertNull($user['group_id']);
     }
 
     public function testCount()
@@ -596,14 +596,14 @@ final class ModelTest extends BaseTestCase
         $user = TestUser::find(1);
         $user2 = TestUser::find(1);
 
-        $user->groupId = 2;
+        $user->group_id = 2;
         $user->save();
 
-        $this->assertNotEquals($user->groupId, $user2->groupId);
+        $this->assertNotEquals($user->group_id, $user2->group_id);
         $this->assertEquals(1, $user->getLoadTimes());
 
         $user2->reload();
-        $this->assertEquals($user->groupId, $user2->groupId);
+        $this->assertEquals($user->group_id, $user2->group_id);
         $this->assertEquals(2, $user2->getLoadTimes());
     }
 
@@ -665,7 +665,7 @@ final class ModelTest extends BaseTestCase
         $this->assertFalse($user->isChanged());
 
         $user->name = 'tt';
-        $user->groupId = 1;
+        $user->group_id = 1;
         $user->address = 'address';
         $this->assertFalse($user->isChanged('id'));
         $this->assertTrue($user->isChanged('name'));
@@ -697,13 +697,13 @@ final class ModelTest extends BaseTestCase
         $this->initFixtures();
 
         $user = TestUser::find(1);
-        $groupId = $user->groupId;
+        $group_id = $user->group_id;
 
-        $user->groupId = (object) 'group_id + 1';
+        $user->group_id = (object) 'group_id + 1';
         $user->save();
         $user->reload();
 
-        $this->assertSame($groupId + 1, $user->groupId);
+        $this->assertSame($group_id + 1, $user->group_id);
     }
 
     public function testNewRecord()
@@ -778,7 +778,7 @@ final class ModelTest extends BaseTestCase
         ]);
 
         $array = $user->toArray();
-        $this->assertSame(2, $array['groupId']);
+        $this->assertSame(2, $array['group_id']);
         $this->assertArrayNotHasKey('ignored', $array);
     }
 
@@ -859,7 +859,7 @@ final class ModelTest extends BaseTestCase
         $this->assertCount(2, $users);
 
         foreach ($users as $user) {
-            $user->groupId = 2;
+            $user->group_id = 2;
         }
         $users->save();
 
@@ -1045,19 +1045,19 @@ final class ModelTest extends BaseTestCase
 
         $user = TestUser::find(1);
 
-        $groupId = $user['group_id'];
+        $group_id = $user['group_id'];
 
         $user->incr('group_id', 2);
         $user->save();
         $user->reload();
 
-        $this->assertEquals($groupId + 2, $user['group_id']);
+        $this->assertEquals($group_id + 2, $user['group_id']);
 
         $user->decr('group_id');
         $user->save();
         $user->reload();
 
-        $this->assertEquals($groupId + 2 - 1, $user['group_id']);
+        $this->assertEquals($group_id + 2 - 1, $user['group_id']);
     }
 
     public function testCreateOrUpdate()
@@ -1235,24 +1235,24 @@ final class ModelTest extends BaseTestCase
 
         $user = TestUser::findByOrCreate(['name' => 'new']);
         $this->assertFalse($user->isNew());
-        $this->assertSame(0, $user->groupId);
+        $this->assertSame(0, $user->group_id);
     }
 
     public function testFindByOrCreateWithNewData()
     {
         $this->initFixtures();
 
-        $user = TestUser::findByOrCreate(['name' => 'new'], ['groupId' => 2]);
+        $user = TestUser::findByOrCreate(['name' => 'new'], ['group_id' => 2]);
         $this->assertFalse($user->isNew());
-        $this->assertSame(2, $user->groupId);
+        $this->assertSame(2, $user->group_id);
     }
 
     public function testFindByOrCreateWontSaveExistingData()
     {
         $this->initFixtures();
 
-        $user = TestUser::findByOrCreate(['name' => 'twin'], ['groupId' => 2]);
-        $this->assertSame(1, $user->groupId);
+        $user = TestUser::findByOrCreate(['name' => 'twin'], ['group_id' => 2]);
+        $this->assertSame(1, $user->group_id);
     }
 
     public function testIsset()

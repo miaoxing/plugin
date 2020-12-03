@@ -2,15 +2,15 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
 /**
- * @property mixed $virtualColumn
- * @property string $firstName
- * @property string $lastName
- * @property string $fullName
+ * @property mixed $virtual_column
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $full_name
  */
-class TestVirtual extends Model
+class TestVirtual extends WeiModel
 {
     protected $table = 'test_virtual';
 
@@ -38,11 +38,11 @@ class TestVirtual extends Model
 
     public function getFullNameAttribute()
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function setFullNameAttribute($fullName)
     {
-        [$this->firstName, $this->lastName] = explode(' ', $fullName);
+        [$this->first_name, $this->last_name] = explode(' ', $fullName);
     }
 }

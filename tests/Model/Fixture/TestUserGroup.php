@@ -2,9 +2,9 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
-class TestUserGroup extends Model
+class TestUserGroup extends WeiModel
 {
-    
+
 }

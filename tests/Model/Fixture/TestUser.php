@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
 /**
  * @property TestUserGroup|null $group
@@ -11,10 +11,10 @@ use Miaoxing\Plugin\Service\Model;
  * @property TestArticle|TestArticle[] $customArticles
  * @property int|null $id
  * @property string|null $name
- * @property int|null $groupId
+ * @property int|null $group_id
  * @property string|null $address
  */
-class TestUser extends Model
+class TestUser extends WeiModel
 {
     protected $scopes;
 
@@ -50,7 +50,7 @@ class TestUser extends Model
 
     public function profile()
     {
-        return $this->hasOne(TestProfile::new());
+        return $this->hasOne(TestProfile::class);
     }
 
     public function afterLoad()

@@ -2,8 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
-class TestReqQueryDetail extends Model
+class TestReqQueryDetail extends WeiModel
 {
 }

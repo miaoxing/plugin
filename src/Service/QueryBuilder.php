@@ -52,21 +52,14 @@ class QueryBuilder extends BaseService
     protected $fields = [];
 
     /**
-     * The primary key field
-     *
-     * @var string
+     * @var callable|null
      */
-    protected $primaryKey = 'id';
+    protected $inputIdentifierConverter = null;
 
     /**
      * @var callable|null
      */
-    protected $inputIdentifierConverter = [self::class, 'snake'];
-
-    /**
-     * @var callable|null
-     */
-    protected $outputIdentifierConverter = [self::class, 'camel'];
+    protected $outputIdentifierConverter = null;
 
     /**
      * The parts of SQL
@@ -174,28 +167,6 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * Sets the primary key field
-     *
-     * @param string $primaryKey
-     * @return $this
-     */
-    public function setPrimaryKey($primaryKey)
-    {
-        $this->primaryKey = $primaryKey;
-        return $this;
-    }
-
-    /**
-     * Returns the primary key field
-     *
-     * @return string
-     */
-    public function getPrimaryKey()
-    {
-        return $this->primaryKey;
-    }
-
-    /**
      * Get the state of this query builder instance
      *
      * @return int
@@ -216,7 +187,7 @@ class QueryBuilder extends BaseService
             if (false !== $this->cacheTime) {
                 return $this->fetchFromCache();
             } else {
-                return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
+                return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
             }
         } else {
             return $this->db->executeUpdate($this->getSql(), $this->getBindParams(), $this->paramTypes);
@@ -603,6 +574,9 @@ class QueryBuilder extends BaseService
     {
         if (empty($this->fields)) {
             $this->fields = $this->db->getTableFields($this->getTable());
+            foreach ($this->fields as &$field) {
+                $field = $this->convertOutputIdentifier($field);
+            }
         }
         return $this->fields;
     }
@@ -614,7 +588,7 @@ class QueryBuilder extends BaseService
     {
         $cache = false === $this->cacheTags ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
         return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
-            return $this->db->fetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
+            return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->paramTypes);
         });
     }
 
@@ -1470,13 +1444,24 @@ class QueryBuilder extends BaseService
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
      * @svc
      */
-    protected function setInputIdentifierConverter(callable $converter)
+    protected function setInputIdentifierConverter(callable $converter = null)
     {
         $this->inputIdentifierConverter = $converter;
+        return $this;
+    }
+
+    /**
+     * @param callable|null $converter
+     * @return $this
+     * @svc
+     */
+    protected function setOutputIdentifierConverter(callable $converter = null)
+    {
+        $this->outputIdentifierConverter = $converter;
         return $this;
     }
 
@@ -1502,6 +1487,34 @@ class QueryBuilder extends BaseService
             $this->outputIdentifierConverter,
             $identifier
         ) : $identifier;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     * @internal
+     */
+    protected function convertOutputKeys(array $data)
+    {
+        $newData = [];
+        foreach ($data as $key => $value) {
+            $newData[$this->convertOutputIdentifier($key)] = $value;
+        }
+        return $newData;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     * @internal
+     */
+    protected function convertInputKeys(array $data)
+    {
+        $newData = [];
+        foreach ($data as $key => $value) {
+            $newData[$this->convertInputIdentifier($key)] = $value;
+        }
+        return $newData;
     }
 
     /**
@@ -1550,5 +1563,18 @@ class QueryBuilder extends BaseService
         }
 
         return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
+    }
+
+    private function executeFetchAll($sql, $params = [], $types = [])
+    {
+        $data = $this->db->fetchAll($sql, $params, $types);
+        if (isset($data[0])) {
+            foreach ($data as &$row) {
+                $row = $this->convertOutputKeys($row);
+            }
+            return $data;
+        } else {
+            return $this->convertOutputKeys($data);
+        }
     }
 }

@@ -2,12 +2,12 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
 /**
- * @property string|null $testUserId
+ * @property string|null $test_user_id
  * @property string|null $description
  */
-class TestProfile extends Model
+class TestProfile extends WeiModel
 {
 }

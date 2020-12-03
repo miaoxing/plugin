@@ -57,7 +57,6 @@ final class CamelCaseTraitTest extends BaseTestCase
         $camelCase->fromArray($request);
 
         $this->assertNull($camelCase['testUserId']);
-        $this->assertNull($camelCase['test_user_id']);
 
         $request->fromArray([
             'test_user_id' => 1,
@@ -68,7 +67,7 @@ final class CamelCaseTraitTest extends BaseTestCase
         $this->assertEquals(2, $camelCase['testUserId']);
     }
 
-    public function testFromArrayArrayAllowSnake()
+    public function testFromArrayArrayIgnoreSnake()
     {
         $camelCase = TestCamelCase::new();
 
@@ -76,8 +75,7 @@ final class CamelCaseTraitTest extends BaseTestCase
             'test_user_id' => 1,
         ]);
 
-        $this->assertEquals(1, $camelCase['testUserId']);
-        $this->assertEquals(1, $camelCase['test_user_id']);
+        $this->assertEquals(0, $camelCase['testUserId']);
 
         $camelCase->fromArray([
             'test_user_id' => 1,
@@ -120,7 +118,7 @@ final class CamelCaseTraitTest extends BaseTestCase
         $this->assertEquals(2, $camelCase['testUserId']);
 
         $data = $camelCase->getData();
-        $this->assertArrayHasKey('test_user_id', $data);
-        $this->assertArrayNotHasKey('testUserId', $data);
+        $this->assertArrayHasKey('testUserId', $data);
+        $this->assertArrayNotHasKey('test_user_id', $data);
     }
 }

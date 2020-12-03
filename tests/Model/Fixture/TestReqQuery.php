@@ -3,9 +3,9 @@
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
 use Miaoxing\Plugin\Model\ReqQueryTrait;
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\Service\WeiModel;
 
-class TestReqQuery extends Model
+class TestReqQuery extends WeiModel
 {
     use ReqQueryTrait;
 

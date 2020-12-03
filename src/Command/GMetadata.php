@@ -76,8 +76,9 @@ final class GMetadata extends BaseCommand
         $casts = [];
         $docBlock = '';
         foreach ($columns as $column) {
-            $casts[$column['Field']] = $this->getCastType($column['Type']);
-            $phpType = $this->getPhpType($casts[$column['Field']]);
+            $field = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
+            $casts[$field] = $this->getCastType($column['Type']);
+            $phpType = $this->getPhpType($casts[$field]);
             if ($column['Null'] === 'YES') {
                 $phpType .= '|null';
             }

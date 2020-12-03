@@ -824,6 +824,15 @@ class AppModel
     }
 
     /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public static function setOutputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
      * Set or remove cache time for the query
      *
      * @param false|int|null $seconds
@@ -1750,6 +1759,15 @@ class Model
     }
 
     /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public static function setOutputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
      * Set or remove cache time for the query
      *
      * @param false|int|null $seconds
@@ -2412,6 +2430,15 @@ class QueryBuilder
      * @see QueryBuilder::setInputIdentifierConverter
      */
     public static function setInputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public static function setOutputIdentifierConverter(callable $converter)
     {
     }
 
@@ -3468,6 +3495,15 @@ class User
     }
 
     /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public static function setOutputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
      * Set or remove cache time for the query
      *
      * @param false|int|null $seconds
@@ -4321,6 +4357,15 @@ class UserModel
      * @see QueryBuilder::setInputIdentifierConverter
      */
     public static function setInputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public static function setOutputIdentifierConverter(callable $converter)
     {
     }
 
@@ -5197,6 +5242,15 @@ class AppModel
      * @see QueryBuilder::setInputIdentifierConverter
      */
     public function setInputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public function setOutputIdentifierConverter(callable $converter)
     {
     }
 
@@ -6127,6 +6181,15 @@ class Model
     }
 
     /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public function setOutputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
      * Set or remove cache time for the query
      *
      * @param false|int|null $seconds
@@ -6789,6 +6852,15 @@ class QueryBuilder
      * @see QueryBuilder::setInputIdentifierConverter
      */
     public function setInputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public function setOutputIdentifierConverter(callable $converter)
     {
     }
 
@@ -7845,6 +7917,15 @@ class User
     }
 
     /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public function setOutputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
      * Set or remove cache time for the query
      *
      * @param false|int|null $seconds
@@ -8698,6 +8779,15 @@ class UserModel
      * @see QueryBuilder::setInputIdentifierConverter
      */
     public function setInputIdentifierConverter(callable $converter)
+    {
+    }
+
+    /**
+     * @param callable $converter
+     * @return $this
+     * @see QueryBuilder::setOutputIdentifierConverter
+     */
+    public function setOutputIdentifierConverter(callable $converter)
     {
     }
 

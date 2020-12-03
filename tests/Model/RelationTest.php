@@ -118,7 +118,7 @@ final class RelationTest extends BaseTestCase
 
         $profile = $user->profile;
 
-        $this->assertEquals(1, $profile->testUserId);
+        $this->assertEquals(1, $profile->test_user_id);
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[0]);
@@ -127,7 +127,7 @@ final class RelationTest extends BaseTestCase
 
         $array = $user->toArray();
         $this->assertArrayHasKey('profile', $array);
-        $this->assertEquals(1, $array['profile']['testUserId']);
+        $this->assertEquals(1, $array['profile']['test_user_id']);
     }
 
     public function testCollHasOne()
@@ -136,8 +136,8 @@ final class RelationTest extends BaseTestCase
 
         $users->all()->load('profile');
 
-        $this->assertEquals($users[0]->id, $users[0]->profile->testUserId);
-        $this->assertEquals($users[1]->id, $users[1]->profile->testUserId);
+        $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
+        $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
         $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
@@ -148,7 +148,7 @@ final class RelationTest extends BaseTestCase
 
         $array = $users->toArray();
         $this->assertArrayHasKey('profile', $array[0]);
-        $this->assertEquals(1, $array[0]['profile']['testUserId']);
+        $this->assertEquals(1, $array[0]['profile']['test_user_id']);
     }
 
     public function testCollHasOneLazyLoad()
@@ -157,8 +157,8 @@ final class RelationTest extends BaseTestCase
 
         $users->all();
 
-        $this->assertEquals($users[0]->id, $users[0]->profile->testUserId);
-        $this->assertEquals($users[1]->id, $users[1]->profile->testUserId);
+        $this->assertEquals($users[0]->id, $users[0]->profile->test_user_id);
+        $this->assertEquals($users[1]->id, $users[1]->profile->test_user_id);
         $this->assertNull($users[2]->profile);
 
         $queries = wei()->db->getQueries();
@@ -171,7 +171,7 @@ final class RelationTest extends BaseTestCase
 
         $array = $users->toArray();
         $this->assertArrayHasKey('profile', $array[0]);
-        $this->assertEquals(1, $array[0]['profile']['testUserId']);
+        $this->assertEquals(1, $array[0]['profile']['test_user_id']);
     }
 
     public function testRecordBelongsTo()
@@ -203,7 +203,7 @@ final class RelationTest extends BaseTestCase
 
         foreach ($articles as $article) {
             $user = $article->user;
-            $this->assertEquals($article->testUserId, $user->id);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $queries = wei()->db->getQueries();
@@ -224,7 +224,7 @@ final class RelationTest extends BaseTestCase
 
         foreach ($articles as $article) {
             $user = $article->user;
-            $this->assertEquals($article->testUserId, $user->id);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $queries = wei()->db->getQueries();
@@ -247,7 +247,7 @@ final class RelationTest extends BaseTestCase
         $articles = $user->articles;
 
         foreach ($articles as $article) {
-            $this->assertEquals($article->testUserId, $user->id);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $queries = wei()->db->getQueries();
@@ -278,7 +278,7 @@ final class RelationTest extends BaseTestCase
         $articles = $user->customArticles()->where('id', '>=', 1)->desc('id');
 
         foreach ($articles as $article) {
-            $this->assertEquals($article->testUserId, $user->id);
+            $this->assertEquals($article->test_user_id, $user->id);
         }
 
         $this->assertCount(2, $articles);
@@ -302,7 +302,7 @@ final class RelationTest extends BaseTestCase
 
         foreach ($users as $user) {
             foreach ($user->customArticles as $article) {
-                $this->assertEquals($article->testUserId, $user->id);
+                $this->assertEquals($article->test_user_id, $user->id);
             }
         }
 
@@ -516,7 +516,7 @@ final class RelationTest extends BaseTestCase
         $array = $article->setHidden('id')->toArray();
 
         $this->assertArrayNotHasKey('id', $array);
-        $this->assertArrayHasKey('testUserId', $array);
+        $this->assertArrayHasKey('test_user_id', $array);
     }
 
     public function testSetHiddenByArray()
@@ -539,7 +539,7 @@ final class RelationTest extends BaseTestCase
         /** @var TestProfile $profile */
         $profile = $user->profile()->saveRelation();
 
-        $this->assertSame($user->id, $profile->testUserId);
+        $this->assertSame($user->id, $profile->test_user_id);
     }
 
     /**
@@ -552,7 +552,7 @@ final class RelationTest extends BaseTestCase
         ]);
 
         $profile = TestProfile::save([
-            'testUserId' => $user->id,
+            'test_user_id' => $user->id,
         ]);
 
         $profile2 = $user->profile()->saveRelation([
@@ -574,11 +574,11 @@ final class RelationTest extends BaseTestCase
 
         /** @var TestProfile $profile */
         $profile = $user->profile()->saveRelation([
-            'testUserId' => $user->id + 1,
+            'test_user_id' => $user->id + 1,
             'description' => 'test',
         ]);
 
-        $this->assertSame($user->id, $profile->testUserId);
+        $this->assertSame($user->id, $profile->test_user_id);
     }
 
     /**
@@ -599,7 +599,7 @@ final class RelationTest extends BaseTestCase
         ]);
 
         $this->assertCount(2, $articles);
-        $this->assertSame($user->id, $articles[0]->testUserId);
+        $this->assertSame($user->id, $articles[0]->test_user_id);
     }
 
     /**
@@ -611,10 +611,10 @@ final class RelationTest extends BaseTestCase
 
         $articles = TestArticle::save([
             TestArticle::new([
-                'testUserId' => $user->id,
+                'test_user_id' => $user->id,
             ]),
             TestArticle::new([
-                'testUserId' => $user->id,
+                'test_user_id' => $user->id,
             ]),
         ]);
 
@@ -641,10 +641,10 @@ final class RelationTest extends BaseTestCase
 
         TestArticle::save([
             TestArticle::new([
-                'testUserId' => $user->id,
+                'test_user_id' => $user->id,
             ]),
             TestArticle::new([
-                'testUserId' => $user->id,
+                'test_user_id' => $user->id,
             ]),
         ]);
 

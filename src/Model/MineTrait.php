@@ -6,7 +6,7 @@ use Miaoxing\Plugin\Service\User;
 
 trait MineTrait
 {
-    protected $userIdColumn = 'user_id';
+    protected $userIdColumn = 'userId';
 
     protected static $mineCache;
 
@@ -17,7 +17,7 @@ trait MineTrait
      */
     public function mine()
     {
-        return $this->andWhere([$this->userIdColumn => User::id()]);
+        return $this->andWhere(['userId' => User::id()]);
     }
 
     /**

@@ -29,6 +29,16 @@ final class QueryBuilderTest extends BaseTestCase
         parent::tearDownAfterClass();
     }
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->wei->setConfig('queryBuilder', [
+            'inputIdentifierConverter' => null,
+            'outputIdentifierConverter' => null,
+        ]);
+    }
+
     public function testSelect()
     {
         $sql = Qb::table('test_users')->select('name')->getSql();
@@ -765,6 +775,19 @@ final class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('1', $data[0]['group_id']);
     }
 
+    public function testFetchAllSnake()
+    {
+        $this->initFixtures();
+
+        $data = Qb::setInputIdentifierConverter(null)
+            ->setOutputIdentifierConverter(null)
+            ->table('test_users')
+            ->fetchAll();
+
+        $this->assertIsArray($data);
+        $this->assertEquals('1', $data[0]['group_id']);
+    }
+
     public function testFirst()
     {
         $this->initFixtures();
@@ -779,6 +802,19 @@ final class QueryBuilderTest extends BaseTestCase
         $this->initFixtures();
 
         $data = Qb::table('test_users')->all();
+
+        $this->assertIsArray($data);
+        $this->assertEquals('1', $data[0]['group_id']);
+    }
+
+    public function testAllSnake()
+    {
+        $this->initFixtures();
+
+        $data = Qb::setInputIdentifierConverter(null)
+            ->setOutputIdentifierConverter(null)
+            ->table('test_users')
+            ->all();
 
         $this->assertIsArray($data);
         $this->assertEquals('1', $data[0]['group_id']);
@@ -1221,17 +1257,6 @@ final class QueryBuilderTest extends BaseTestCase
         wei()->cache->clear();
     }
 
-    public function testSetIdentifierConvert()
-    {
-        $this->initFixtures();
-
-        $qb = Qb::setInputIdentifierConverter([wei()->str, 'snake'])->table('testUsers')->where('groupId', 1);
-
-        $this->assertSame('SELECT * FROM `p_test_users` WHERE `group_id` = 1', $qb->getRawSql());
-
-        $this->assertSame('1', $qb->fetch()['group_id']);
-    }
-
     public function testGetIdentifierConvert()
     {
         $fn = function () {
@@ -1239,15 +1264,6 @@ final class QueryBuilderTest extends BaseTestCase
         $qb = Qb::setInputIdentifierConverter($fn);
 
         $this->assertSame($fn, $qb->getInputIdentifierConverter());
-    }
-
-    public function testInputCamelCaseColumn()
-    {
-        $qb = Qb::table('testUsers')->where('groupId', 1);
-
-        $this->assertSame('SELECT * FROM `p_test_users` WHERE `group_id` = 1', $qb->getRawSql());
-
-        $this->assertSame('1', $qb->fetch()['group_id']);
     }
 
     public function testAutoAddTableNameToWhereWhenJoin()
