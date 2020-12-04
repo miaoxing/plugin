@@ -9,6 +9,12 @@ use Wei\Base;
  */
 abstract class BaseDriver extends Base
 {
+    // The query types.
+
+    const SELECT = 0;
+    const DELETE = 1;
+    const UPDATE = 2;
+
     /**
      * @var string
      */

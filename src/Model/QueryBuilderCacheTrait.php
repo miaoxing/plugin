@@ -73,7 +73,7 @@ trait QueryBuilderCacheTrait
     public function getCacheKey()
     {
         return $this->cacheKey ?:
-            md5($this->db->getDbname() . $this->getSql() . serialize($this->params) . serialize($this->paramTypes));
+            md5($this->db->getDbname() . $this->getSql() . serialize($this->queryParams) . serialize($this->queryParamTypes));
     }
 
     /**
@@ -101,7 +101,7 @@ trait QueryBuilderCacheTrait
     protected function getCacheTags()
     {
         $tags[] = $this->getTable();
-        foreach ($this->sqlParts['join'] as $join) {
+        foreach ($this->queryParts['join'] as $join) {
             $tags[] = $join['table'];
         }
         return $tags;

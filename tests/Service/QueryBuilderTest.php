@@ -34,8 +34,8 @@ final class QueryBuilderTest extends BaseTestCase
         parent::setUp();
 
         $this->wei->setConfig('queryBuilder', [
-            'inputIdentifierConverter' => null,
-            'outputIdentifierConverter' => null,
+            'dbKeyConverter' => null,
+            'phpKeyConverter' => null,
         ]);
     }
 
@@ -779,8 +779,8 @@ final class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = Qb::setInputIdentifierConverter(null)
-            ->setOutputIdentifierConverter(null)
+        $data = Qb::setDbKeyConverter(null)
+            ->setPhpKeyConverter(null)
             ->table('test_users')
             ->fetchAll();
 
@@ -811,8 +811,8 @@ final class QueryBuilderTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $data = Qb::setInputIdentifierConverter(null)
-            ->setOutputIdentifierConverter(null)
+        $data = Qb::setDbKeyConverter(null)
+            ->setPhpKeyConverter(null)
             ->table('test_users')
             ->all();
 
@@ -945,7 +945,7 @@ final class QueryBuilderTest extends BaseTestCase
 
         $query = Qb::table('test_users')
             ->whereRaw('id = :id AND group_id = :groupId')
-            ->addParameter([
+            ->addQueryParam([
                 'id' => 1,
                 'groupId' => 1,
             ]);
@@ -956,14 +956,14 @@ final class QueryBuilderTest extends BaseTestCase
             'groupId' => 1,
         ], $query->getBindParams());
 
-        $this->assertEquals(1, $query->getParameter('id'));
-        $this->assertNull($query->getParameter('no'));
+        $this->assertEquals(1, $query->getQueryParam('id'));
+        $this->assertNull($query->getQueryParam('no'));
 
         $this->assertEquals(1, $user['id']);
         $this->assertEquals(1, $user['group_id']);
 
         // TODO set parameter
-        $query->removeParameters()->addParameter([
+        $query->removeParam()->addQueryParam([
             'id' => 10,
             'groupId' => 1,
         ]);
@@ -1009,17 +1009,17 @@ final class QueryBuilderTest extends BaseTestCase
     {
         $query = Qb::table('test_users')->offset(1)->limit(1);
 
-        $this->assertEquals(1, $query->getSqlPart('offset'));
-        $this->assertEquals(1, $query->getSqlPart('limit'));
+        $this->assertEquals(1, $query->getQueryPart('offset'));
+        $this->assertEquals(1, $query->getQueryPart('limit'));
 
-        $queryParts = $query->getSqlParts();
+        $queryParts = $query->getQueryParts();
         $this->assertArrayHasKey('offset', $queryParts);
         $this->assertArrayHasKey('limit', $queryParts);
 
-        $query->resetSqlParts();
+        $query->resetQueryParts();
 
-        $this->assertNull($query->getSqlPart('offset'));
-        $this->assertNull($query->getSqlPart('limit'));
+        $this->assertNull($query->getQueryPart('offset'));
+        $this->assertNull($query->getQueryPart('limit'));
     }
 
     public function testFromAlias()
@@ -1058,13 +1058,13 @@ final class QueryBuilderTest extends BaseTestCase
         $user = Qb::table('test_users');
 
         $user->limit(-1);
-        $this->assertEquals(1, $user->getSqlPart('limit'));
+        $this->assertEquals(1, $user->getQueryPart('limit'));
 
         $user->limit(0);
-        $this->assertEquals(1, $user->getSqlPart('limit'));
+        $this->assertEquals(1, $user->getQueryPart('limit'));
 
         $user->limit('string');
-        $this->assertEquals(1, $user->getSqlPart('limit'));
+        $this->assertEquals(1, $user->getQueryPart('limit'));
     }
 
     public function testInvalidOffset()
@@ -1073,16 +1073,16 @@ final class QueryBuilderTest extends BaseTestCase
         $user = Qb::table('test_users');
 
         $user->offset(-1);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
+        $this->assertEquals(0, $user->getQueryPart('offset'));
 
         $user->offset(-1.1);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
+        $this->assertEquals(0, $user->getQueryPart('offset'));
 
         $user->offset('string');
-        $this->assertEquals(0, $user->getSqlPart('offset'));
+        $this->assertEquals(0, $user->getQueryPart('offset'));
 
         $user->offset(9848519079999155811);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
+        $this->assertEquals(0, $user->getQueryPart('offset'));
     }
 
     public function testInvalidPage()
@@ -1097,7 +1097,7 @@ final class QueryBuilderTest extends BaseTestCase
         // => -8598224993710352384
         // => 0
         $user->page(984851907999915581);
-        $this->assertEquals(0, $user->getSqlPart('offset'));
+        $this->assertEquals(0, $user->getQueryPart('offset'));
     }
 
     public function testJoin()
@@ -1261,9 +1261,9 @@ final class QueryBuilderTest extends BaseTestCase
     {
         $fn = function () {
         };
-        $qb = Qb::setInputIdentifierConverter($fn);
+        $qb = Qb::setDbKeyConverter($fn);
 
-        $this->assertSame($fn, $qb->getInputIdentifierConverter());
+        $this->assertSame($fn, $qb->getDbKeyConverter());
     }
 
     public function testAutoAddTableNameToWhereWhenJoin()

@@ -27,8 +27,8 @@ class QueryBuilderCamelCaseTest extends BaseTestCase
     {
         parent::setUp();
         $this->wei->setConfig('queryBuilder', [
-            'inputIdentifierConverter' => [Qb::class, 'snake'],
-            'outputIdentifierConverter' => [Qb::class, 'camel'],
+            'dbKeyConverter' => [Qb::class, 'snake'],
+            'phpKeyConverter' => [Qb::class, 'camel'],
         ]);
     }
 

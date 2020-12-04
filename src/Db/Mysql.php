@@ -2,16 +2,8 @@
 
 namespace Miaoxing\Plugin\Db;
 
-use Miaoxing\Plugin\Service\QueryBuilder;
-
 class Mysql extends BaseDriver
 {
-    // The query types.
-
-    const SELECT = 0;
-    const DELETE = 1;
-    const UPDATE = 2;
-
     protected $wrapper = '`';
 
     protected $sqlParts = [];
@@ -166,8 +158,9 @@ class Mysql extends BaseDriver
                 continue;
             }
 
-            if ($where['column'] instanceof QueryBuilder) {
-                $sqlParts = $where['column']->getSqlParts();
+            // NOTE: instanceof QueryBuilderTrait
+            if (method_exists($where['column'], 'getQueryParts')) {
+                $sqlParts = $where['column']->getQueryParts();
                 $query .= '(' . $this->buildWhere($sqlParts) . ')';
                 continue;
             }
