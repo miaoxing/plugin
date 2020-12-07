@@ -300,17 +300,6 @@ trait QueryBuilderTrait
     }
 
     /**
-     * @param string $expression
-     * @param mixed $params
-     * @return $this
-     * @svc
-     */
-    public function havingRaw($expression, $params = [])
-    {
-        return $this->having($this->raw($expression), null, $params);
-    }
-
-    /**
      * Adds a restriction over the groups of the query, forming a logical
      * disjunction with any existing having restrictions.
      *
@@ -540,14 +529,13 @@ trait QueryBuilderTrait
     }
 
     /**
-     * @return mixed
+     * @param string $column
+     * @param array $params
+     * @return $this
      */
-    protected function fetchFromCache()
+    public function orWhereBetween($column, array $params)
     {
-        $cache = false === $this->cacheTags ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
-        return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
-            return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
-        });
+        return $this->addWhere($column, 'BETWEEN', $params, 'OR');
     }
 
     /**
@@ -973,17 +961,6 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function orWhereBetween($column, array $params)
-    {
-        return $this->addWhere($column, 'BETWEEN', $params, 'OR');
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @svc
-     */
     protected function whereNotBetween($column, array $params)
     {
         return $this->addWhere($column, 'NOT BETWEEN', $params);
@@ -1173,6 +1150,17 @@ trait QueryBuilderTrait
     }
 
     /**
+     * @param string $expression
+     * @param mixed $params
+     * @return $this
+     * @svc
+     */
+    public function havingRaw($expression, $params = [])
+    {
+        return $this->having($this->raw($expression), null, $params);
+    }
+
+    /**
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
@@ -1226,115 +1214,6 @@ trait QueryBuilderTrait
     {
         $this->queryParts['indexBy'] = $column;
         return $this;
-    }
-
-    /**
-     * @param array $data
-     * @param string $column
-     * @return array
-     */
-    protected function executeIndexBy($data, $column)
-    {
-        if (!$data) {
-            return $data;
-        }
-
-        $newData = [];
-        foreach ($data as $row) {
-            $newData[$row[$column]] = $row;
-        }
-        return $newData;
-    }
-
-    /**
-     * Reset single SQL part
-     *
-     * @param string $name
-     * @return $this
-     * @svc
-     */
-    protected function resetSqlPart($name)
-    {
-        $this->queryParts[$name] = is_array($this->queryParts[$name]) ? [] : null;
-        $this->queryChanged = true;
-        return $this;
-    }
-
-    /**
-     * Either appends to or replaces a single, generic query part.
-     *
-     * The available parts are: 'select', 'from', 'set', 'where',
-     * 'groupBy', 'having', 'orderBy', 'limit' and 'offset'.
-     *
-     * @param string $sqlPartName
-     * @param mixed $sqlPart
-     * @param bool $append
-     * @param string $type
-     * @return $this
-     */
-    protected function add($sqlPartName, $sqlPart, $append = false, $type = null)
-    {
-        $this->queryChanged = true;
-
-        $isArray = is_array($sqlPart);
-        $isMultiple = is_array($this->queryParts[$sqlPartName]);
-
-        if ($isMultiple && !$isArray) {
-            $sqlPart = [$sqlPart];
-        }
-
-        if ($append) {
-            if ('orderBy' === $sqlPartName
-                || 'groupBy' === $sqlPartName
-                || 'select' === $sqlPartName
-                || 'set' === $sqlPartName
-            ) {
-                $this->queryParts[$sqlPartName] = array_merge($this->queryParts[$sqlPartName], $sqlPart);
-            } elseif ($isMultiple) {
-                $this->queryParts[$sqlPartName][] = $sqlPart;
-            }
-            return $this;
-        }
-
-        $this->queryParts[$sqlPartName] = $sqlPart;
-        return $this;
-    }
-
-    protected function addWhere($column, $operator, $value = null, $condition = 'AND', $type = null)
-    {
-        if ($column instanceof Closure) {
-            $query = new static([
-                'db' => $this->db,
-                'table' => $this->table,
-            ]);
-            $column($query);
-            $column = $query;
-            $this->queryParams['where'] = array_merge($this->queryParams['where'], $query->getQueryParams()['where']);
-        }
-
-        if (null === $value) {
-            $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
-        } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'], true)) {
-            $operator = 'NOT IN' === $operator ? $operator : 'IN';
-            $this->queryParams['where'][] = (array) $value;
-        } else {
-            $this->queryParams['where'][] = (array) $value;
-        }
-
-        $this->queryParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
-
-        return $this;
-    }
-
-    protected function addWhereArgs($args, $condition = 'AND', $type = null)
-    {
-        if (2 === count($args)) {
-            $operator = '=';
-            [$column, $value] = $args;
-        } else {
-            [$column, $operator, $value] = $args;
-        }
-        return $this->addWhere($column, $operator, $value, $condition, $type);
     }
 
     /**
@@ -1421,6 +1300,114 @@ trait QueryBuilderTrait
     {
         $this->phpKeyConverter = $converter;
         return $this;
+    }
+
+    /**
+     * @param array $data
+     * @param string $column
+     * @return array
+     */
+    protected function executeIndexBy($data, $column)
+    {
+        if (!$data) {
+            return $data;
+        }
+
+        $newData = [];
+        foreach ($data as $row) {
+            $newData[$row[$column]] = $row;
+        }
+        return $newData;
+    }
+
+    /**
+     * Reset single SQL part
+     *
+     * @param string $name
+     * @return $this
+     */
+    protected function resetSqlPart($name)
+    {
+        $this->queryParts[$name] = is_array($this->queryParts[$name]) ? [] : null;
+        $this->queryChanged = true;
+        return $this;
+    }
+
+    /**
+     * Either appends to or replaces a single, generic query part.
+     *
+     * The available parts are: 'select', 'from', 'set', 'where',
+     * 'groupBy', 'having', 'orderBy', 'limit' and 'offset'.
+     *
+     * @param string $sqlPartName
+     * @param mixed $sqlPart
+     * @param bool $append
+     * @param string $type
+     * @return $this
+     */
+    protected function add($sqlPartName, $sqlPart, $append = false, $type = null)
+    {
+        $this->queryChanged = true;
+
+        $isArray = is_array($sqlPart);
+        $isMultiple = is_array($this->queryParts[$sqlPartName]);
+
+        if ($isMultiple && !$isArray) {
+            $sqlPart = [$sqlPart];
+        }
+
+        if ($append) {
+            if ('orderBy' === $sqlPartName
+                || 'groupBy' === $sqlPartName
+                || 'select' === $sqlPartName
+                || 'set' === $sqlPartName
+            ) {
+                $this->queryParts[$sqlPartName] = array_merge($this->queryParts[$sqlPartName], $sqlPart);
+            } elseif ($isMultiple) {
+                $this->queryParts[$sqlPartName][] = $sqlPart;
+            }
+            return $this;
+        }
+
+        $this->queryParts[$sqlPartName] = $sqlPart;
+        return $this;
+    }
+
+    protected function addWhere($column, $operator, $value = null, $condition = 'AND', $type = null)
+    {
+        if ($column instanceof Closure) {
+            $query = new static([
+                'db' => $this->db,
+                'table' => $this->table,
+            ]);
+            $column($query);
+            $column = $query;
+            $this->queryParams['where'] = array_merge($this->queryParams['where'], $query->getQueryParams()['where']);
+        }
+
+        if (null === $value) {
+            $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
+        } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'], true)) {
+            $operator = 'NOT IN' === $operator ? $operator : 'IN';
+            $this->queryParams['where'][] = (array) $value;
+        } else {
+            $this->queryParams['where'][] = (array) $value;
+        }
+
+        $this->queryParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
+
+        return $this;
+    }
+
+    protected function addWhereArgs($args, $condition = 'AND', $type = null)
+    {
+        if (2 === count($args)) {
+            $operator = '=';
+            [$column, $value] = $args;
+        } else {
+            [$column, $operator, $value] = $args;
+        }
+        return $this->addWhere($column, $operator, $value, $condition, $type);
     }
 
     /**
@@ -1517,6 +1504,17 @@ trait QueryBuilderTrait
         }
 
         return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function fetchFromCache()
+    {
+        $cache = false === $this->cacheTags ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
+        return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
+            return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
+        });
     }
 
     /**
