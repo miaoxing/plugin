@@ -2,14 +2,16 @@
 
 namespace <?= $namespace ?>;
 
+use Miaoxing\Plugin\Model\ModelTrait;
+
 /**
- * <?= $class, "\n" ?>
- *
 <?= $docBlock ?>
  * @internal will change in the future
  */
 trait <?= $class, "\n" ?>
 {
+    use ModelTrait;
+
     /**
      * @var array
      * @see CastTrait::$casts
