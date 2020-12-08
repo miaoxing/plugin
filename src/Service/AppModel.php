@@ -2,14 +2,17 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\ConstTrait;
 use Miaoxing\Plugin\Metadata\AppTrait;
+use Miaoxing\Plugin\Model\ModelTrait;
 
 /**
  * 应用模型
  */
-class AppModel extends Model
+class AppModel extends BaseModel
 {
+    use ModelTrait;
     use ConstTrait;
     use AppTrait;
 
@@ -35,7 +38,7 @@ class AppModel extends Model
 
     public function getCasts(): array
     {
-        return array_merge(parent::getCasts(), [
+        return array_merge($this->casts, [
             'pluginIds' => 'json',
             'configs' => 'json',
         ]);

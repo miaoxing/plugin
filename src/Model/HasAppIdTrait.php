@@ -2,12 +2,12 @@
 
 namespace Miaoxing\Plugin\Model;
 
+use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Service\App;
-use Miaoxing\Plugin\Service\Model;
 
 trait HasAppIdTrait
 {
-    public static function bootHasAppIdTrait(Model $initModel)
+    public static function bootHasAppIdTrait(BaseModel $initModel)
     {
         $initModel->addDefaultScope('curApp');
 

@@ -7,7 +7,7 @@ namespace Miaoxing\Plugin\Metadata;
  *
  * @property int $id
  * @property int $userId
- * @property array $pluginIds
+ * @property string $pluginIds
  * @property string $name
  * @property string $title
  * @property string $secret
@@ -15,9 +15,9 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $description
  * @property string $industry
  * @property int $status
- * @property array $configs
- * @property string $createdAt
- * @property string $updatedAt
+ * @property string $configs
+ * @property string|null $createdAt
+ * @property string|null $updatedAt
  * @property int $createdBy
  * @property int $updatedBy
  * @internal will change in the future
@@ -30,8 +30,8 @@ trait AppTrait
      */
     protected $casts = [
         'id' => 'int',
-        'user_id' => 'int',
-        'plugin_ids' => 'array',
+        'userId' => 'int',
+        'pluginIds' => 'string',
         'name' => 'string',
         'title' => 'string',
         'secret' => 'string',
@@ -39,10 +39,10 @@ trait AppTrait
         'description' => 'string',
         'industry' => 'string',
         'status' => 'int',
-        'configs' => 'json',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'created_by' => 'int',
-        'updated_by' => 'int',
+        'configs' => 'string',
+        'createdAt' => 'datetime',
+        'updatedAt' => 'datetime',
+        'createdBy' => 'int',
+        'updatedBy' => 'int',
     ];
 }

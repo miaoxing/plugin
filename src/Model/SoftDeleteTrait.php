@@ -2,9 +2,8 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Service\User;
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 use Wei\Time;
 
 /**
@@ -26,12 +25,13 @@ trait SoftDeleteTrait
     /**
      * Bootstrap the trait
      *
-     * @param Model $initModel
+     * @param BaseModel $initModel
      */
-    public static function bootSoftDeleteTrait(WeiModel $initModel)
+    public static function bootSoftDeleteTrait(WeiBaseModel $initModel)
     {
         $initModel->addDefaultScope('withoutDeleted');
         static::on('init', 'addedDeleteColumnToGuarded');
+        static::on('destroy', 'executeSoftDelete');
     }
 
     /**
@@ -119,25 +119,6 @@ trait SoftDeleteTrait
         return $this->unscoped('withoutDeleted');
     }
 
-    /**
-     * Overwrite original destroy logic
-     */
-    protected function executeDestroy()
-    {
-        if ($this->reallyDestroy) {
-            parent::executeDestroy();
-        } else {
-            $data = [
-                $this->getDeletedAtColumn() => Time::now(),
-                $this->getDeletedByColumn() => User::id() ?: 0,
-            ];
-            if ($statusColumn = $this->getDeleteStatusColumn()) {
-                $data[$statusColumn] = $this->getDeleteStatusValue();
-            }
-            $this->saveData($data);
-        }
-    }
-
     protected function getDeletedAtColumn()
     {
         return $this->deletedAtColumn ?? 'deleted_at';
@@ -182,6 +163,26 @@ trait SoftDeleteTrait
     protected function getRestoreStatusValue()
     {
         return 0;
+    }
+
+    /**
+     * @internal
+     */
+    protected function executeSoftDelete()
+    {
+        if ($this->reallyDestroy) {
+            return false;
+        }
+
+        $data = [
+            $this->getDeletedAtColumn() => Time::now(),
+            $this->getDeletedByColumn() => User::id() ?: 0,
+        ];
+        if ($statusColumn = $this->getDeleteStatusColumn()) {
+            $data[$statusColumn] = $this->getDeleteStatusValue();
+        }
+        $this->saveData($data);
+        return true;
     }
 
     /**

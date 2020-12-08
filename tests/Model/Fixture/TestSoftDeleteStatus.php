@@ -2,14 +2,16 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
+use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Model\SoftDeleteTrait;
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property string|null status
  */
-class TestSoftDeleteStatus extends WeiModel
+class TestSoftDeleteStatus extends WeiBaseModel
 {
+    use ModelTrait;
     use SoftDeleteTrait;
 
     const STATUS_NORMAL = 1;

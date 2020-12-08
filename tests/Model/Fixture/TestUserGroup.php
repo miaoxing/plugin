@@ -2,9 +2,10 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
-class TestUserGroup extends WeiModel
+class TestUserGroup extends WeiBaseModel
 {
-
+    use ModelTrait;
 }

@@ -2,7 +2,6 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\Model;
 use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
@@ -357,19 +356,6 @@ final class ModelTest extends BaseTestCase
         $user->find(1);
 
         $this->assertTrue($user->isLoaded());
-    }
-
-    public function testQueryBuilder()
-    {
-        $this->initFixtures();
-
-        /** @var Model $user */
-        $user = $this->db('test_users');
-        $user = $user->where('name', 'twin')->first();
-
-        $this->assertEquals("SELECT * FROM `p_test_users` WHERE `name` = 'twin' LIMIT 1", $user->getRawSql());
-        // @phpstan-ignore-next-line
-        $this->assertEquals('twin', $user->name);
     }
 
     public function testToArray()

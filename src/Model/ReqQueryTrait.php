@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\Service\Model;
+use Miaoxing\Plugin\BaseModel;
 use Wei\Req;
 
 /**
@@ -97,7 +97,7 @@ trait ReqQueryTrait
             $this->joins[$relation] = true;
             $this->selectMain();
 
-            /** @var Model $related */
+            /** @var BaseModel $related */
             $related = $this->{$relation}();
             $name = $related->getClassServiceName();
             $config = $this->relations[$name];
@@ -133,7 +133,7 @@ trait ReqQueryTrait
 
     public function between($columns)
     {
-        if ($this->getSqlPart('join')) {
+        if ($this->getQueryPart('join')) {
             $prefix = $this->getTable() . '.';
         } else {
             $prefix = '';
@@ -181,7 +181,7 @@ trait ReqQueryTrait
     {
         if ($this->req->has('sort')) {
             $name = $this->req['sort'];
-            if (in_array($name, $this->getFields(), true)) {
+            if (in_array($name, $this->getColumns(), true)) {
                 $sort = $name;
             } else {
                 $sort = $defaultColumn;
@@ -199,7 +199,7 @@ trait ReqQueryTrait
             $order = $defaultOrder;
         }
 
-        if ($this->getSqlPart('join')) {
+        if ($this->getQueryPart('join')) {
             $sort = $this->getTable() . '.' . $sort;
         }
 
@@ -238,7 +238,7 @@ trait ReqQueryTrait
             return;
         }
 
-        if ($this->getSqlPart('join')) {
+        if ($this->getQueryPart('join')) {
             $name = $this->getTable() . '.' . $name;
         }
 
@@ -262,7 +262,7 @@ trait ReqQueryTrait
 
         list($name, $op) = $this->parseNameAndOp($name);
 
-        /** @var Model $related */
+        /** @var BaseModel $related */
         $related = $this->{$relation}();
         if (!$related->hasColumn($name)) {
             return;
@@ -364,7 +364,7 @@ trait ReqQueryTrait
             $relation = null;
 
             // 有连表查询,加上表名
-            if ($this->getSqlPart('join')) {
+            if ($this->getQueryPart('join')) {
                 $column = $this->getTable() . '.' . $column;
             }
         } else {
@@ -372,7 +372,7 @@ trait ReqQueryTrait
             [$relation, $relationColumn] = explode('.', $column, 2);
             $value = $this->req[$relation][$relationColumn];
 
-            /** @var Model $related */
+            /** @var BaseModel $related */
             $related = $this->{$relation}();
             $column = $related->getTable() . '.' . $relationColumn;
         }

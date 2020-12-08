@@ -55,10 +55,10 @@ class IsModelExists extends BaseValidator
      */
     protected function doValidate($input)
     {
-        if (is_string($this->model) && is_subclass_of($this->model, Model::class)) {
+        if (is_string($this->model) && is_subclass_of($this->model, WeiBaseModel::class)) {
             /** @var Model $model */
             $this->model = $this->model::where($this->column, $input);
-        } elseif ($this->model instanceof Model) {
+        } elseif ($this->model instanceof WeiBaseModel) {
             $this->model->where($this->column, $input);
         } else {
             throw new \InvalidArgumentException(sprintf(

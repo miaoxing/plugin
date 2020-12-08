@@ -2,7 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property TestUserGroup|null $group
@@ -14,8 +15,10 @@ use Miaoxing\Plugin\Service\WeiModel;
  * @property int|null $group_id
  * @property string|null $address
  */
-class TestUser extends WeiModel
+class TestUser extends WeiBaseModel
 {
+    use ModelTrait;
+
     protected $scopes;
 
     protected $loadTimes;

@@ -2,7 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property mixed $virtual_column
@@ -10,8 +11,10 @@ use Miaoxing\Plugin\Service\WeiModel;
  * @property string $last_name
  * @property string $full_name
  */
-class TestVirtual extends WeiModel
+class TestVirtual extends WeiBaseModel
 {
+    use ModelTrait;
+
     protected $table = 'test_virtual';
 
     protected $virtual = [

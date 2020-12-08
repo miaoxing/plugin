@@ -2,7 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property int $int_column
@@ -14,8 +15,10 @@ use Miaoxing\Plugin\Service\WeiModel;
  * @property array $list_column
  * @property array $list2_column
  */
-class TestCast extends WeiModel
+class TestCast extends WeiBaseModel
 {
+    use ModelTrait;
+
     protected $primaryKey = 'int_column';
 
     protected $casts = [

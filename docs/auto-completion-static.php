@@ -24,7 +24,7 @@ class AppModel
      * @param array|callable $returnFields A indexed array specified the fields to return
      * @param callable|null $prepend
      * @return array
-     * @see Model::toArray
+     * @see AppModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null)
     {
@@ -35,7 +35,7 @@ class AppModel
      *
      * @param array $data
      * @return $this
-     * @see Model::saveData
+     * @see AppModel::saveData
      */
     public static function saveData($data = [])
     {
@@ -46,7 +46,7 @@ class AppModel
      *
      * @param array $merge
      * @return Ret
-     * @see Model::toRet
+     * @see AppModel::toRet
      */
     public static function toRet(array $merge = [])
     {
@@ -56,7 +56,7 @@ class AppModel
      * Return the record table name
      *
      * @return string
-     * @see Model::getTable
+     * @see AppModel::getTable
      */
     public static function getTable()
     {
@@ -67,7 +67,7 @@ class AppModel
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @see Model::fromArray
+     * @see AppModel::fromArray
      */
     public static function fromArray($data)
     {
@@ -78,7 +78,7 @@ class AppModel
      *
      * @param array $data
      * @return $this
-     * @see Model::save
+     * @see AppModel::save
      */
     public static function save($data = [])
     {
@@ -89,7 +89,7 @@ class AppModel
      *
      * @param int|string $id
      * @return $this
-     * @see Model::destroy
+     * @see AppModel::destroy
      */
     public static function destroy($id = null)
     {
@@ -102,7 +102,7 @@ class AppModel
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
-     * @see Model::set
+     * @see AppModel::set
      */
     public static function set($name, $value = null, $throwException = true)
     {
@@ -113,7 +113,7 @@ class AppModel
      *
      * @param int|string|array|null $id
      * @return $this|null
-     * @see Model::find
+     * @see AppModel::find
      */
     public static function find($id)
     {
@@ -125,7 +125,7 @@ class AppModel
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @see Model::findOrFail
+     * @see AppModel::findOrFail
      */
     public static function findOrFail($id)
     {
@@ -137,7 +137,7 @@ class AppModel
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInit
+     * @see AppModel::findOrInit
      */
     public static function findOrInit($id = null, $data = [])
     {
@@ -149,7 +149,7 @@ class AppModel
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @see Model::findOrCreate
+     * @see AppModel::findOrCreate
      */
     public static function findOrCreate($id, $data = [])
     {
@@ -159,7 +159,7 @@ class AppModel
      * @param array $attributes
      * @param array $data
      * @return $this
-     * @see Model::findByOrCreate
+     * @see AppModel::findByOrCreate
      */
     public static function findByOrCreate($attributes, $data = [])
     {
@@ -170,7 +170,7 @@ class AppModel
      *
      * @param array $ids
      * @return $this|$this[]
-     * @see Model::findAll
+     * @see AppModel::findAll
      */
     public static function findAll($ids)
     {
@@ -181,7 +181,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|null
-     * @see Model::findBy
+     * @see AppModel::findBy
      */
     public static function findBy($column, $operator = null, $value = null)
     {
@@ -192,7 +192,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
-     * @see Model::findAllBy
+     * @see AppModel::findAllBy
      */
     public static function findAllBy($column, $operator = null, $value = null)
     {
@@ -202,7 +202,7 @@ class AppModel
      * @param array $attributes
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInitBy
+     * @see AppModel::findOrInitBy
      */
     public static function findOrInitBy($attributes, $data = [])
     {
@@ -216,7 +216,7 @@ class AppModel
      * @param mixed|null $value
      * @return $this
      * @throws \Exception
-     * @see Model::findByOrFail
+     * @see AppModel::findByOrFail
      */
     public static function findByOrFail($column, $operator = null, $value = null)
     {
@@ -226,7 +226,7 @@ class AppModel
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @see Model::findFromReq
+     * @see AppModel::findFromReq
      */
     public static function findFromReq($req = null)
     {
@@ -236,7 +236,7 @@ class AppModel
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @see Model::first
+     * @see AppModel::first
      */
     public static function first()
     {
@@ -244,7 +244,7 @@ class AppModel
 
     /**
      * @return $this|$this[]|array
-     * @see Model::all
+     * @see AppModel::all
      */
     public static function all()
     {
@@ -253,7 +253,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see Model::indexBy
+     * @see AppModel::indexBy
      */
     public static function indexBy($column)
     {
@@ -263,9 +263,9 @@ class AppModel
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see AppModel::getColumns
      */
-    public static function getFields()
+    public static function getColumns()
     {
     }
 
@@ -276,7 +276,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see AppModel::fetch
      */
     public static function fetch($column = null, $operator = null, $value = null)
     {
@@ -289,7 +289,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see AppModel::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -299,7 +299,7 @@ class AppModel
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see AppModel::pluck
      */
     public static function pluck(string $column, string $index = null)
     {
@@ -309,7 +309,7 @@ class AppModel
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see AppModel::chunk
      */
     public static function chunk(int $count, callable $callback)
     {
@@ -320,7 +320,7 @@ class AppModel
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see AppModel::cnt
      */
     public static function cnt($column = '*')
     {
@@ -332,7 +332,7 @@ class AppModel
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see AppModel::update
      */
     public static function update($set = [], $value = null)
     {
@@ -345,7 +345,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see AppModel::delete
      */
     public static function delete($column = null, $operator = null, $value = null)
     {
@@ -356,7 +356,7 @@ class AppModel
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see AppModel::offset
      */
     public static function offset($offset)
     {
@@ -367,7 +367,7 @@ class AppModel
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see AppModel::limit
      */
     public static function limit($limit)
     {
@@ -378,7 +378,7 @@ class AppModel
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see AppModel::page
      */
     public static function page($page)
     {
@@ -390,7 +390,7 @@ class AppModel
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see AppModel::select
      */
     public static function select($columns = ['*']): self
     {
@@ -399,7 +399,7 @@ class AppModel
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see AppModel::selectDistinct
      */
     public static function selectDistinct($columns)
     {
@@ -408,7 +408,7 @@ class AppModel
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see AppModel::selectRaw
      */
     public static function selectRaw($expression)
     {
@@ -420,7 +420,7 @@ class AppModel
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see AppModel::selectExcept
      */
     public static function selectExcept($columns)
     {
@@ -432,7 +432,7 @@ class AppModel
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see AppModel::from
      */
     public static function from($table, $alias = null): self
     {
@@ -442,7 +442,7 @@ class AppModel
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see AppModel::table
      */
     public static function table(string $table, $alias = null): self
     {
@@ -457,7 +457,7 @@ class AppModel
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see AppModel::join
      */
     public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -471,7 +471,7 @@ class AppModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see AppModel::innerJoin
      */
     public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -485,7 +485,7 @@ class AppModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see AppModel::leftJoin
      */
     public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -499,7 +499,7 @@ class AppModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see AppModel::rightJoin
      */
     public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -520,7 +520,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see AppModel::where
      */
     public static function where($column = null, $operator = null, $value = null)
     {
@@ -530,7 +530,7 @@ class AppModel
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see AppModel::whereRaw
      */
     public static function whereRaw($expression, $params = [])
     {
@@ -540,7 +540,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see AppModel::whereBetween
      */
     public static function whereBetween($column, array $params)
     {
@@ -550,17 +550,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public static function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see AppModel::whereNotBetween
      */
     public static function whereNotBetween($column, array $params)
     {
@@ -570,7 +560,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see AppModel::whereIn
      */
     public static function whereIn($column, array $params)
     {
@@ -580,7 +570,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see AppModel::whereNotIn
      */
     public static function whereNotIn($column, array $params)
     {
@@ -589,7 +579,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see AppModel::whereNull
      */
     public static function whereNull($column)
     {
@@ -598,7 +588,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see AppModel::whereNotNULL
      */
     public static function whereNotNULL($column)
     {
@@ -609,7 +599,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see AppModel::whereDate
      */
     public static function whereDate($column, $opOrValue, $value = null)
     {
@@ -620,7 +610,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see AppModel::whereMonth
      */
     public static function whereMonth($column, $opOrValue, $value = null)
     {
@@ -631,7 +621,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see AppModel::whereDay
      */
     public static function whereDay($column, $opOrValue, $value = null)
     {
@@ -642,7 +632,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see AppModel::whereYear
      */
     public static function whereYear($column, $opOrValue, $value = null)
     {
@@ -653,7 +643,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see AppModel::whereTime
      */
     public static function whereTime($column, $opOrValue, $value = null)
     {
@@ -664,7 +654,7 @@ class AppModel
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see AppModel::whereColumn
      */
     public static function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -677,7 +667,7 @@ class AppModel
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see AppModel::whereContains
      */
     public static function whereContains($column, $value, string $condition = 'AND')
     {
@@ -688,7 +678,7 @@ class AppModel
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see AppModel::whereNotContains
      */
     public static function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -700,7 +690,7 @@ class AppModel
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see AppModel::groupBy
      */
     public static function groupBy($column)
     {
@@ -715,7 +705,7 @@ class AppModel
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see AppModel::having
      */
     public static function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -728,7 +718,7 @@ class AppModel
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see AppModel::orderBy
      */
     public static function orderBy($column, $order = 'ASC')
     {
@@ -739,7 +729,7 @@ class AppModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see AppModel::desc
      */
     public static function desc($field)
     {
@@ -750,26 +740,15 @@ class AppModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see AppModel::asc
      */
     public static function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public static function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see AppModel::forUpdate
      */
     public static function forUpdate()
     {
@@ -777,7 +756,7 @@ class AppModel
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see AppModel::forShare
      */
     public static function forShare()
     {
@@ -786,7 +765,7 @@ class AppModel
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see AppModel::lock
      */
     public static function lock($lock)
     {
@@ -797,7 +776,7 @@ class AppModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see AppModel::when
      */
     public static function when($value, $callback, callable $default = null)
     {
@@ -808,27 +787,27 @@ class AppModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see AppModel::unless
      */
     public static function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see AppModel::setDbKeyConverter
      */
-    public static function setInputIdentifierConverter(callable $converter)
+    public static function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see AppModel::setPhpKeyConverter
      */
-    public static function setOutputIdentifierConverter(callable $converter)
+    public static function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -837,7 +816,7 @@ class AppModel
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see AppModel::cache
      */
     public static function cache($seconds = null)
     {
@@ -846,7 +825,7 @@ class AppModel
     /**
      * @param array|string|true $scopes
      * @return $this
-     * @see Model::unscoped
+     * @see AppModel::unscoped
      */
     public static function unscoped($scopes = [])
     {
@@ -1198,9 +1177,9 @@ class Model
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see Model::getColumns
      */
-    public static function getFields()
+    public static function getColumns()
     {
     }
 
@@ -1211,7 +1190,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see Model::fetch
      */
     public static function fetch($column = null, $operator = null, $value = null)
     {
@@ -1224,7 +1203,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see Model::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -1234,7 +1213,7 @@ class Model
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see Model::pluck
      */
     public static function pluck(string $column, string $index = null)
     {
@@ -1244,7 +1223,7 @@ class Model
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see Model::chunk
      */
     public static function chunk(int $count, callable $callback)
     {
@@ -1255,7 +1234,7 @@ class Model
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see Model::cnt
      */
     public static function cnt($column = '*')
     {
@@ -1267,7 +1246,7 @@ class Model
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see Model::update
      */
     public static function update($set = [], $value = null)
     {
@@ -1280,7 +1259,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see Model::delete
      */
     public static function delete($column = null, $operator = null, $value = null)
     {
@@ -1291,7 +1270,7 @@ class Model
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see Model::offset
      */
     public static function offset($offset)
     {
@@ -1302,7 +1281,7 @@ class Model
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see Model::limit
      */
     public static function limit($limit)
     {
@@ -1313,7 +1292,7 @@ class Model
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see Model::page
      */
     public static function page($page)
     {
@@ -1325,7 +1304,7 @@ class Model
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see Model::select
      */
     public static function select($columns = ['*']): self
     {
@@ -1334,7 +1313,7 @@ class Model
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see Model::selectDistinct
      */
     public static function selectDistinct($columns)
     {
@@ -1343,7 +1322,7 @@ class Model
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see Model::selectRaw
      */
     public static function selectRaw($expression)
     {
@@ -1355,7 +1334,7 @@ class Model
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see Model::selectExcept
      */
     public static function selectExcept($columns)
     {
@@ -1367,7 +1346,7 @@ class Model
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see Model::from
      */
     public static function from($table, $alias = null): self
     {
@@ -1377,7 +1356,7 @@ class Model
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see Model::table
      */
     public static function table(string $table, $alias = null): self
     {
@@ -1392,7 +1371,7 @@ class Model
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see Model::join
      */
     public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -1406,7 +1385,7 @@ class Model
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see Model::innerJoin
      */
     public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -1420,7 +1399,7 @@ class Model
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see Model::leftJoin
      */
     public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -1434,7 +1413,7 @@ class Model
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see Model::rightJoin
      */
     public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -1455,7 +1434,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see Model::where
      */
     public static function where($column = null, $operator = null, $value = null)
     {
@@ -1465,7 +1444,7 @@ class Model
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see Model::whereRaw
      */
     public static function whereRaw($expression, $params = [])
     {
@@ -1475,7 +1454,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see Model::whereBetween
      */
     public static function whereBetween($column, array $params)
     {
@@ -1485,17 +1464,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public static function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see Model::whereNotBetween
      */
     public static function whereNotBetween($column, array $params)
     {
@@ -1505,7 +1474,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see Model::whereIn
      */
     public static function whereIn($column, array $params)
     {
@@ -1515,7 +1484,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see Model::whereNotIn
      */
     public static function whereNotIn($column, array $params)
     {
@@ -1524,7 +1493,7 @@ class Model
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see Model::whereNull
      */
     public static function whereNull($column)
     {
@@ -1533,7 +1502,7 @@ class Model
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see Model::whereNotNULL
      */
     public static function whereNotNULL($column)
     {
@@ -1544,7 +1513,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see Model::whereDate
      */
     public static function whereDate($column, $opOrValue, $value = null)
     {
@@ -1555,7 +1524,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see Model::whereMonth
      */
     public static function whereMonth($column, $opOrValue, $value = null)
     {
@@ -1566,7 +1535,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see Model::whereDay
      */
     public static function whereDay($column, $opOrValue, $value = null)
     {
@@ -1577,7 +1546,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see Model::whereYear
      */
     public static function whereYear($column, $opOrValue, $value = null)
     {
@@ -1588,7 +1557,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see Model::whereTime
      */
     public static function whereTime($column, $opOrValue, $value = null)
     {
@@ -1599,7 +1568,7 @@ class Model
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see Model::whereColumn
      */
     public static function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -1612,7 +1581,7 @@ class Model
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see Model::whereContains
      */
     public static function whereContains($column, $value, string $condition = 'AND')
     {
@@ -1623,7 +1592,7 @@ class Model
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see Model::whereNotContains
      */
     public static function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -1635,7 +1604,7 @@ class Model
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see Model::groupBy
      */
     public static function groupBy($column)
     {
@@ -1650,7 +1619,7 @@ class Model
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see Model::having
      */
     public static function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -1663,7 +1632,7 @@ class Model
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see Model::orderBy
      */
     public static function orderBy($column, $order = 'ASC')
     {
@@ -1674,7 +1643,7 @@ class Model
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see Model::desc
      */
     public static function desc($field)
     {
@@ -1685,26 +1654,15 @@ class Model
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see Model::asc
      */
     public static function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public static function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see Model::forUpdate
      */
     public static function forUpdate()
     {
@@ -1712,7 +1670,7 @@ class Model
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see Model::forShare
      */
     public static function forShare()
     {
@@ -1721,7 +1679,7 @@ class Model
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see Model::lock
      */
     public static function lock($lock)
     {
@@ -1732,7 +1690,7 @@ class Model
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see Model::when
      */
     public static function when($value, $callback, callable $default = null)
     {
@@ -1743,27 +1701,27 @@ class Model
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see Model::unless
      */
     public static function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see Model::setDbKeyConverter
      */
-    public static function setInputIdentifierConverter(callable $converter)
+    public static function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see Model::setPhpKeyConverter
      */
-    public static function setOutputIdentifierConverter(callable $converter)
+    public static function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -1772,7 +1730,7 @@ class Model
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see Model::cache
      */
     public static function cache($seconds = null)
     {
@@ -1833,7 +1791,7 @@ class QueryBuilder
     /**
      * Return the record table name
      *
-     * @return string
+     * @return string|null
      * @see QueryBuilder::getTable
      */
     public static function getTable()
@@ -1844,9 +1802,9 @@ class QueryBuilder
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see QueryBuilder::getColumns
      */
-    public static function getFields()
+    public static function getColumns()
     {
     }
 
@@ -2149,16 +2107,6 @@ class QueryBuilder
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public static function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
      * @see QueryBuilder::whereNotBetween
      */
     public static function whereNotBetween($column, array $params)
@@ -2367,17 +2315,6 @@ class QueryBuilder
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
-     * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public static function resetSqlPart($name)
-    {
-    }
-
-    /**
      * @return $this
      * @see QueryBuilder::forUpdate
      */
@@ -2425,20 +2362,20 @@ class QueryBuilder
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see QueryBuilder::setDbKeyConverter
      */
-    public static function setInputIdentifierConverter(callable $converter)
+    public static function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see QueryBuilder::setPhpKeyConverter
      */
-    public static function setOutputIdentifierConverter(callable $converter)
+    public static function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -2717,7 +2654,7 @@ class User
      *
      * @param array $data
      * @return $this
-     * @see Model::saveData
+     * @see UserModel::saveData
      */
     public static function saveData($data = [])
     {
@@ -2728,7 +2665,7 @@ class User
      *
      * @param array $merge
      * @return Ret
-     * @see Model::toRet
+     * @see UserModel::toRet
      */
     public static function toRet(array $merge = [])
     {
@@ -2738,7 +2675,7 @@ class User
      * Return the record table name
      *
      * @return string
-     * @see Model::getTable
+     * @see UserModel::getTable
      */
     public static function getTable()
     {
@@ -2749,7 +2686,7 @@ class User
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @see Model::fromArray
+     * @see UserModel::fromArray
      */
     public static function fromArray($data)
     {
@@ -2760,7 +2697,7 @@ class User
      *
      * @param int|string $id
      * @return $this
-     * @see Model::destroy
+     * @see UserModel::destroy
      */
     public static function destroy($id = null)
     {
@@ -2773,7 +2710,7 @@ class User
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
-     * @see Model::set
+     * @see UserModel::set
      */
     public static function set($name, $value = null, $throwException = true)
     {
@@ -2784,7 +2721,7 @@ class User
      *
      * @param int|string|array|null $id
      * @return $this|null
-     * @see Model::find
+     * @see UserModel::find
      */
     public static function find($id)
     {
@@ -2796,7 +2733,7 @@ class User
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @see Model::findOrFail
+     * @see UserModel::findOrFail
      */
     public static function findOrFail($id)
     {
@@ -2808,7 +2745,7 @@ class User
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInit
+     * @see UserModel::findOrInit
      */
     public static function findOrInit($id = null, $data = [])
     {
@@ -2820,7 +2757,7 @@ class User
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @see Model::findOrCreate
+     * @see UserModel::findOrCreate
      */
     public static function findOrCreate($id, $data = [])
     {
@@ -2830,7 +2767,7 @@ class User
      * @param array $attributes
      * @param array $data
      * @return $this
-     * @see Model::findByOrCreate
+     * @see UserModel::findByOrCreate
      */
     public static function findByOrCreate($attributes, $data = [])
     {
@@ -2841,7 +2778,7 @@ class User
      *
      * @param array $ids
      * @return $this|$this[]
-     * @see Model::findAll
+     * @see UserModel::findAll
      */
     public static function findAll($ids)
     {
@@ -2852,7 +2789,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|null
-     * @see Model::findBy
+     * @see UserModel::findBy
      */
     public static function findBy($column, $operator = null, $value = null)
     {
@@ -2863,7 +2800,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
-     * @see Model::findAllBy
+     * @see UserModel::findAllBy
      */
     public static function findAllBy($column, $operator = null, $value = null)
     {
@@ -2873,7 +2810,7 @@ class User
      * @param array $attributes
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInitBy
+     * @see UserModel::findOrInitBy
      */
     public static function findOrInitBy($attributes, $data = [])
     {
@@ -2887,7 +2824,7 @@ class User
      * @param mixed|null $value
      * @return $this
      * @throws \Exception
-     * @see Model::findByOrFail
+     * @see UserModel::findByOrFail
      */
     public static function findByOrFail($column, $operator = null, $value = null)
     {
@@ -2897,7 +2834,7 @@ class User
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @see Model::findFromReq
+     * @see UserModel::findFromReq
      */
     public static function findFromReq($req = null)
     {
@@ -2907,7 +2844,7 @@ class User
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @see Model::first
+     * @see UserModel::first
      */
     public static function first()
     {
@@ -2915,7 +2852,7 @@ class User
 
     /**
      * @return $this|$this[]|array
-     * @see Model::all
+     * @see UserModel::all
      */
     public static function all()
     {
@@ -2924,7 +2861,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see Model::indexBy
+     * @see UserModel::indexBy
      */
     public static function indexBy($column)
     {
@@ -2934,9 +2871,9 @@ class User
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see UserModel::getColumns
      */
-    public static function getFields()
+    public static function getColumns()
     {
     }
 
@@ -2947,7 +2884,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see UserModel::fetch
      */
     public static function fetch($column = null, $operator = null, $value = null)
     {
@@ -2960,7 +2897,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see UserModel::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -2970,7 +2907,7 @@ class User
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see UserModel::pluck
      */
     public static function pluck(string $column, string $index = null)
     {
@@ -2980,7 +2917,7 @@ class User
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see UserModel::chunk
      */
     public static function chunk(int $count, callable $callback)
     {
@@ -2991,7 +2928,7 @@ class User
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see UserModel::cnt
      */
     public static function cnt($column = '*')
     {
@@ -3003,7 +2940,7 @@ class User
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see UserModel::update
      */
     public static function update($set = [], $value = null)
     {
@@ -3016,7 +2953,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see UserModel::delete
      */
     public static function delete($column = null, $operator = null, $value = null)
     {
@@ -3027,7 +2964,7 @@ class User
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see UserModel::offset
      */
     public static function offset($offset)
     {
@@ -3038,7 +2975,7 @@ class User
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see UserModel::limit
      */
     public static function limit($limit)
     {
@@ -3049,7 +2986,7 @@ class User
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see UserModel::page
      */
     public static function page($page)
     {
@@ -3061,7 +2998,7 @@ class User
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see UserModel::select
      */
     public static function select($columns = ['*']): self
     {
@@ -3070,7 +3007,7 @@ class User
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see UserModel::selectDistinct
      */
     public static function selectDistinct($columns)
     {
@@ -3079,7 +3016,7 @@ class User
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see UserModel::selectRaw
      */
     public static function selectRaw($expression)
     {
@@ -3091,7 +3028,7 @@ class User
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see UserModel::selectExcept
      */
     public static function selectExcept($columns)
     {
@@ -3103,7 +3040,7 @@ class User
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see UserModel::from
      */
     public static function from($table, $alias = null): self
     {
@@ -3113,7 +3050,7 @@ class User
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see UserModel::table
      */
     public static function table(string $table, $alias = null): self
     {
@@ -3128,7 +3065,7 @@ class User
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see UserModel::join
      */
     public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -3142,7 +3079,7 @@ class User
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see UserModel::innerJoin
      */
     public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -3156,7 +3093,7 @@ class User
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see UserModel::leftJoin
      */
     public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -3170,7 +3107,7 @@ class User
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see UserModel::rightJoin
      */
     public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -3191,7 +3128,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see UserModel::where
      */
     public static function where($column = null, $operator = null, $value = null)
     {
@@ -3201,7 +3138,7 @@ class User
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see UserModel::whereRaw
      */
     public static function whereRaw($expression, $params = [])
     {
@@ -3211,7 +3148,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see UserModel::whereBetween
      */
     public static function whereBetween($column, array $params)
     {
@@ -3221,17 +3158,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public static function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see UserModel::whereNotBetween
      */
     public static function whereNotBetween($column, array $params)
     {
@@ -3241,7 +3168,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see UserModel::whereIn
      */
     public static function whereIn($column, array $params)
     {
@@ -3251,7 +3178,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see UserModel::whereNotIn
      */
     public static function whereNotIn($column, array $params)
     {
@@ -3260,7 +3187,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see UserModel::whereNull
      */
     public static function whereNull($column)
     {
@@ -3269,7 +3196,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see UserModel::whereNotNULL
      */
     public static function whereNotNULL($column)
     {
@@ -3280,7 +3207,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see UserModel::whereDate
      */
     public static function whereDate($column, $opOrValue, $value = null)
     {
@@ -3291,7 +3218,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see UserModel::whereMonth
      */
     public static function whereMonth($column, $opOrValue, $value = null)
     {
@@ -3302,7 +3229,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see UserModel::whereDay
      */
     public static function whereDay($column, $opOrValue, $value = null)
     {
@@ -3313,7 +3240,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see UserModel::whereYear
      */
     public static function whereYear($column, $opOrValue, $value = null)
     {
@@ -3324,7 +3251,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see UserModel::whereTime
      */
     public static function whereTime($column, $opOrValue, $value = null)
     {
@@ -3335,7 +3262,7 @@ class User
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see UserModel::whereColumn
      */
     public static function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -3348,7 +3275,7 @@ class User
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see UserModel::whereContains
      */
     public static function whereContains($column, $value, string $condition = 'AND')
     {
@@ -3359,7 +3286,7 @@ class User
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see UserModel::whereNotContains
      */
     public static function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -3371,7 +3298,7 @@ class User
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see UserModel::groupBy
      */
     public static function groupBy($column)
     {
@@ -3386,7 +3313,7 @@ class User
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see UserModel::having
      */
     public static function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -3399,7 +3326,7 @@ class User
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see UserModel::orderBy
      */
     public static function orderBy($column, $order = 'ASC')
     {
@@ -3410,7 +3337,7 @@ class User
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see UserModel::desc
      */
     public static function desc($field)
     {
@@ -3421,26 +3348,15 @@ class User
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see UserModel::asc
      */
     public static function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public static function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see UserModel::forUpdate
      */
     public static function forUpdate()
     {
@@ -3448,7 +3364,7 @@ class User
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see UserModel::forShare
      */
     public static function forShare()
     {
@@ -3457,7 +3373,7 @@ class User
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see UserModel::lock
      */
     public static function lock($lock)
     {
@@ -3468,7 +3384,7 @@ class User
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see UserModel::when
      */
     public static function when($value, $callback, callable $default = null)
     {
@@ -3479,27 +3395,27 @@ class User
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see UserModel::unless
      */
     public static function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see UserModel::setDbKeyConverter
      */
-    public static function setInputIdentifierConverter(callable $converter)
+    public static function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see UserModel::setPhpKeyConverter
      */
-    public static function setOutputIdentifierConverter(callable $converter)
+    public static function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -3508,7 +3424,7 @@ class User
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see UserModel::cache
      */
     public static function cache($seconds = null)
     {
@@ -3517,7 +3433,7 @@ class User
     /**
      * @param array|string|true $scopes
      * @return $this
-     * @see Model::unscoped
+     * @see UserModel::unscoped
      */
     public static function unscoped($scopes = [])
     {
@@ -3561,7 +3477,7 @@ class UserModel
      * @param array|callable $returnFields A indexed array specified the fields to return
      * @param callable|null $prepend
      * @return array
-     * @see Model::toArray
+     * @see UserModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null)
     {
@@ -3572,7 +3488,7 @@ class UserModel
      *
      * @param array $data
      * @return $this
-     * @see Model::saveData
+     * @see UserModel::saveData
      */
     public static function saveData($data = [])
     {
@@ -3583,7 +3499,7 @@ class UserModel
      *
      * @param array $merge
      * @return Ret
-     * @see Model::toRet
+     * @see UserModel::toRet
      */
     public static function toRet(array $merge = [])
     {
@@ -3593,7 +3509,7 @@ class UserModel
      * Return the record table name
      *
      * @return string
-     * @see Model::getTable
+     * @see UserModel::getTable
      */
     public static function getTable()
     {
@@ -3604,7 +3520,7 @@ class UserModel
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @see Model::fromArray
+     * @see UserModel::fromArray
      */
     public static function fromArray($data)
     {
@@ -3615,7 +3531,7 @@ class UserModel
      *
      * @param array $data
      * @return $this
-     * @see Model::save
+     * @see UserModel::save
      */
     public static function save($data = [])
     {
@@ -3626,7 +3542,7 @@ class UserModel
      *
      * @param int|string $id
      * @return $this
-     * @see Model::destroy
+     * @see UserModel::destroy
      */
     public static function destroy($id = null)
     {
@@ -3639,7 +3555,7 @@ class UserModel
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
-     * @see Model::set
+     * @see UserModel::set
      */
     public static function set($name, $value = null, $throwException = true)
     {
@@ -3650,7 +3566,7 @@ class UserModel
      *
      * @param int|string|array|null $id
      * @return $this|null
-     * @see Model::find
+     * @see UserModel::find
      */
     public static function find($id)
     {
@@ -3662,7 +3578,7 @@ class UserModel
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @see Model::findOrFail
+     * @see UserModel::findOrFail
      */
     public static function findOrFail($id)
     {
@@ -3674,7 +3590,7 @@ class UserModel
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInit
+     * @see UserModel::findOrInit
      */
     public static function findOrInit($id = null, $data = [])
     {
@@ -3686,7 +3602,7 @@ class UserModel
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @see Model::findOrCreate
+     * @see UserModel::findOrCreate
      */
     public static function findOrCreate($id, $data = [])
     {
@@ -3696,7 +3612,7 @@ class UserModel
      * @param array $attributes
      * @param array $data
      * @return $this
-     * @see Model::findByOrCreate
+     * @see UserModel::findByOrCreate
      */
     public static function findByOrCreate($attributes, $data = [])
     {
@@ -3707,7 +3623,7 @@ class UserModel
      *
      * @param array $ids
      * @return $this|$this[]
-     * @see Model::findAll
+     * @see UserModel::findAll
      */
     public static function findAll($ids)
     {
@@ -3718,7 +3634,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|null
-     * @see Model::findBy
+     * @see UserModel::findBy
      */
     public static function findBy($column, $operator = null, $value = null)
     {
@@ -3729,7 +3645,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
-     * @see Model::findAllBy
+     * @see UserModel::findAllBy
      */
     public static function findAllBy($column, $operator = null, $value = null)
     {
@@ -3739,7 +3655,7 @@ class UserModel
      * @param array $attributes
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInitBy
+     * @see UserModel::findOrInitBy
      */
     public static function findOrInitBy($attributes, $data = [])
     {
@@ -3753,7 +3669,7 @@ class UserModel
      * @param mixed|null $value
      * @return $this
      * @throws \Exception
-     * @see Model::findByOrFail
+     * @see UserModel::findByOrFail
      */
     public static function findByOrFail($column, $operator = null, $value = null)
     {
@@ -3763,7 +3679,7 @@ class UserModel
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @see Model::findFromReq
+     * @see UserModel::findFromReq
      */
     public static function findFromReq($req = null)
     {
@@ -3773,7 +3689,7 @@ class UserModel
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @see Model::first
+     * @see UserModel::first
      */
     public static function first()
     {
@@ -3781,7 +3697,7 @@ class UserModel
 
     /**
      * @return $this|$this[]|array
-     * @see Model::all
+     * @see UserModel::all
      */
     public static function all()
     {
@@ -3790,7 +3706,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see Model::indexBy
+     * @see UserModel::indexBy
      */
     public static function indexBy($column)
     {
@@ -3800,9 +3716,9 @@ class UserModel
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see UserModel::getColumns
      */
-    public static function getFields()
+    public static function getColumns()
     {
     }
 
@@ -3813,7 +3729,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see UserModel::fetch
      */
     public static function fetch($column = null, $operator = null, $value = null)
     {
@@ -3826,7 +3742,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see UserModel::fetchAll
      */
     public static function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -3836,7 +3752,7 @@ class UserModel
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see UserModel::pluck
      */
     public static function pluck(string $column, string $index = null)
     {
@@ -3846,7 +3762,7 @@ class UserModel
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see UserModel::chunk
      */
     public static function chunk(int $count, callable $callback)
     {
@@ -3857,7 +3773,7 @@ class UserModel
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see UserModel::cnt
      */
     public static function cnt($column = '*')
     {
@@ -3869,7 +3785,7 @@ class UserModel
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see UserModel::update
      */
     public static function update($set = [], $value = null)
     {
@@ -3882,7 +3798,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see UserModel::delete
      */
     public static function delete($column = null, $operator = null, $value = null)
     {
@@ -3893,7 +3809,7 @@ class UserModel
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see UserModel::offset
      */
     public static function offset($offset)
     {
@@ -3904,7 +3820,7 @@ class UserModel
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see UserModel::limit
      */
     public static function limit($limit)
     {
@@ -3915,7 +3831,7 @@ class UserModel
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see UserModel::page
      */
     public static function page($page)
     {
@@ -3927,7 +3843,7 @@ class UserModel
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see UserModel::select
      */
     public static function select($columns = ['*']): self
     {
@@ -3936,7 +3852,7 @@ class UserModel
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see UserModel::selectDistinct
      */
     public static function selectDistinct($columns)
     {
@@ -3945,7 +3861,7 @@ class UserModel
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see UserModel::selectRaw
      */
     public static function selectRaw($expression)
     {
@@ -3957,7 +3873,7 @@ class UserModel
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see UserModel::selectExcept
      */
     public static function selectExcept($columns)
     {
@@ -3969,7 +3885,7 @@ class UserModel
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see UserModel::from
      */
     public static function from($table, $alias = null): self
     {
@@ -3979,7 +3895,7 @@ class UserModel
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see UserModel::table
      */
     public static function table(string $table, $alias = null): self
     {
@@ -3994,7 +3910,7 @@ class UserModel
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see UserModel::join
      */
     public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -4008,7 +3924,7 @@ class UserModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see UserModel::innerJoin
      */
     public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -4022,7 +3938,7 @@ class UserModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see UserModel::leftJoin
      */
     public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -4036,7 +3952,7 @@ class UserModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see UserModel::rightJoin
      */
     public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -4057,7 +3973,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see UserModel::where
      */
     public static function where($column = null, $operator = null, $value = null)
     {
@@ -4067,7 +3983,7 @@ class UserModel
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see UserModel::whereRaw
      */
     public static function whereRaw($expression, $params = [])
     {
@@ -4077,7 +3993,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see UserModel::whereBetween
      */
     public static function whereBetween($column, array $params)
     {
@@ -4087,17 +4003,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public static function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see UserModel::whereNotBetween
      */
     public static function whereNotBetween($column, array $params)
     {
@@ -4107,7 +4013,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see UserModel::whereIn
      */
     public static function whereIn($column, array $params)
     {
@@ -4117,7 +4023,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see UserModel::whereNotIn
      */
     public static function whereNotIn($column, array $params)
     {
@@ -4126,7 +4032,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see UserModel::whereNull
      */
     public static function whereNull($column)
     {
@@ -4135,7 +4041,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see UserModel::whereNotNULL
      */
     public static function whereNotNULL($column)
     {
@@ -4146,7 +4052,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see UserModel::whereDate
      */
     public static function whereDate($column, $opOrValue, $value = null)
     {
@@ -4157,7 +4063,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see UserModel::whereMonth
      */
     public static function whereMonth($column, $opOrValue, $value = null)
     {
@@ -4168,7 +4074,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see UserModel::whereDay
      */
     public static function whereDay($column, $opOrValue, $value = null)
     {
@@ -4179,7 +4085,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see UserModel::whereYear
      */
     public static function whereYear($column, $opOrValue, $value = null)
     {
@@ -4190,7 +4096,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see UserModel::whereTime
      */
     public static function whereTime($column, $opOrValue, $value = null)
     {
@@ -4201,7 +4107,7 @@ class UserModel
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see UserModel::whereColumn
      */
     public static function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -4214,7 +4120,7 @@ class UserModel
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see UserModel::whereContains
      */
     public static function whereContains($column, $value, string $condition = 'AND')
     {
@@ -4225,7 +4131,7 @@ class UserModel
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see UserModel::whereNotContains
      */
     public static function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -4237,7 +4143,7 @@ class UserModel
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see UserModel::groupBy
      */
     public static function groupBy($column)
     {
@@ -4252,7 +4158,7 @@ class UserModel
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see UserModel::having
      */
     public static function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -4265,7 +4171,7 @@ class UserModel
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see UserModel::orderBy
      */
     public static function orderBy($column, $order = 'ASC')
     {
@@ -4276,7 +4182,7 @@ class UserModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see UserModel::desc
      */
     public static function desc($field)
     {
@@ -4287,26 +4193,15 @@ class UserModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see UserModel::asc
      */
     public static function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public static function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see UserModel::forUpdate
      */
     public static function forUpdate()
     {
@@ -4314,7 +4209,7 @@ class UserModel
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see UserModel::forShare
      */
     public static function forShare()
     {
@@ -4323,7 +4218,7 @@ class UserModel
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see UserModel::lock
      */
     public static function lock($lock)
     {
@@ -4334,7 +4229,7 @@ class UserModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see UserModel::when
      */
     public static function when($value, $callback, callable $default = null)
     {
@@ -4345,27 +4240,27 @@ class UserModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see UserModel::unless
      */
     public static function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see UserModel::setDbKeyConverter
      */
-    public static function setInputIdentifierConverter(callable $converter)
+    public static function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see UserModel::setPhpKeyConverter
      */
-    public static function setOutputIdentifierConverter(callable $converter)
+    public static function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -4374,7 +4269,7 @@ class UserModel
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see UserModel::cache
      */
     public static function cache($seconds = null)
     {
@@ -4383,7 +4278,7 @@ class UserModel
     /**
      * @param array|string|true $scopes
      * @return $this
-     * @see Model::unscoped
+     * @see UserModel::unscoped
      */
     public static function unscoped($scopes = [])
     {
@@ -4446,7 +4341,7 @@ class AppModel
      * @param array|callable $returnFields A indexed array specified the fields to return
      * @param callable|null $prepend
      * @return array
-     * @see Model::toArray
+     * @see AppModel::toArray
      */
     public function toArray($returnFields = [], callable $prepend = null)
     {
@@ -4457,7 +4352,7 @@ class AppModel
      *
      * @param array $data
      * @return $this
-     * @see Model::saveData
+     * @see AppModel::saveData
      */
     public function saveData($data = [])
     {
@@ -4468,7 +4363,7 @@ class AppModel
      *
      * @param array $merge
      * @return Ret
-     * @see Model::toRet
+     * @see AppModel::toRet
      */
     public function toRet(array $merge = [])
     {
@@ -4478,7 +4373,7 @@ class AppModel
      * Return the record table name
      *
      * @return string
-     * @see Model::getTable
+     * @see AppModel::getTable
      */
     public function getTable()
     {
@@ -4489,7 +4384,7 @@ class AppModel
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @see Model::fromArray
+     * @see AppModel::fromArray
      */
     public function fromArray($data)
     {
@@ -4500,7 +4395,7 @@ class AppModel
      *
      * @param array $data
      * @return $this
-     * @see Model::save
+     * @see AppModel::save
      */
     public function save($data = [])
     {
@@ -4511,7 +4406,7 @@ class AppModel
      *
      * @param int|string $id
      * @return $this
-     * @see Model::destroy
+     * @see AppModel::destroy
      */
     public function destroy($id = null)
     {
@@ -4524,7 +4419,7 @@ class AppModel
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
-     * @see Model::set
+     * @see AppModel::set
      */
     public function set($name, $value = null, $throwException = true)
     {
@@ -4535,7 +4430,7 @@ class AppModel
      *
      * @param int|string|array|null $id
      * @return $this|null
-     * @see Model::find
+     * @see AppModel::find
      */
     public function find($id)
     {
@@ -4547,7 +4442,7 @@ class AppModel
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @see Model::findOrFail
+     * @see AppModel::findOrFail
      */
     public function findOrFail($id)
     {
@@ -4559,7 +4454,7 @@ class AppModel
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInit
+     * @see AppModel::findOrInit
      */
     public function findOrInit($id = null, $data = [])
     {
@@ -4571,7 +4466,7 @@ class AppModel
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @see Model::findOrCreate
+     * @see AppModel::findOrCreate
      */
     public function findOrCreate($id, $data = [])
     {
@@ -4581,7 +4476,7 @@ class AppModel
      * @param array $attributes
      * @param array $data
      * @return $this
-     * @see Model::findByOrCreate
+     * @see AppModel::findByOrCreate
      */
     public function findByOrCreate($attributes, $data = [])
     {
@@ -4592,7 +4487,7 @@ class AppModel
      *
      * @param array $ids
      * @return $this|$this[]
-     * @see Model::findAll
+     * @see AppModel::findAll
      */
     public function findAll($ids)
     {
@@ -4603,7 +4498,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|null
-     * @see Model::findBy
+     * @see AppModel::findBy
      */
     public function findBy($column, $operator = null, $value = null)
     {
@@ -4614,7 +4509,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
-     * @see Model::findAllBy
+     * @see AppModel::findAllBy
      */
     public function findAllBy($column, $operator = null, $value = null)
     {
@@ -4624,7 +4519,7 @@ class AppModel
      * @param array $attributes
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInitBy
+     * @see AppModel::findOrInitBy
      */
     public function findOrInitBy($attributes, $data = [])
     {
@@ -4638,7 +4533,7 @@ class AppModel
      * @param mixed|null $value
      * @return $this
      * @throws \Exception
-     * @see Model::findByOrFail
+     * @see AppModel::findByOrFail
      */
     public function findByOrFail($column, $operator = null, $value = null)
     {
@@ -4648,7 +4543,7 @@ class AppModel
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @see Model::findFromReq
+     * @see AppModel::findFromReq
      */
     public function findFromReq($req = null)
     {
@@ -4658,7 +4553,7 @@ class AppModel
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @see Model::first
+     * @see AppModel::first
      */
     public function first()
     {
@@ -4666,7 +4561,7 @@ class AppModel
 
     /**
      * @return $this|$this[]|array
-     * @see Model::all
+     * @see AppModel::all
      */
     public function all()
     {
@@ -4675,7 +4570,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see Model::indexBy
+     * @see AppModel::indexBy
      */
     public function indexBy($column)
     {
@@ -4685,9 +4580,9 @@ class AppModel
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see AppModel::getColumns
      */
-    public function getFields()
+    public function getColumns()
     {
     }
 
@@ -4698,7 +4593,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see AppModel::fetch
      */
     public function fetch($column = null, $operator = null, $value = null)
     {
@@ -4711,7 +4606,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see AppModel::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -4721,7 +4616,7 @@ class AppModel
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see AppModel::pluck
      */
     public function pluck(string $column, string $index = null)
     {
@@ -4731,7 +4626,7 @@ class AppModel
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see AppModel::chunk
      */
     public function chunk(int $count, callable $callback)
     {
@@ -4742,7 +4637,7 @@ class AppModel
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see AppModel::cnt
      */
     public function cnt($column = '*')
     {
@@ -4754,7 +4649,7 @@ class AppModel
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see AppModel::update
      */
     public function update($set = [], $value = null)
     {
@@ -4767,7 +4662,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see AppModel::delete
      */
     public function delete($column = null, $operator = null, $value = null)
     {
@@ -4778,7 +4673,7 @@ class AppModel
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see AppModel::offset
      */
     public function offset($offset)
     {
@@ -4789,7 +4684,7 @@ class AppModel
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see AppModel::limit
      */
     public function limit($limit)
     {
@@ -4800,7 +4695,7 @@ class AppModel
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see AppModel::page
      */
     public function page($page)
     {
@@ -4812,7 +4707,7 @@ class AppModel
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see AppModel::select
      */
     public function select($columns = ['*']): self
     {
@@ -4821,7 +4716,7 @@ class AppModel
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see AppModel::selectDistinct
      */
     public function selectDistinct($columns)
     {
@@ -4830,7 +4725,7 @@ class AppModel
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see AppModel::selectRaw
      */
     public function selectRaw($expression)
     {
@@ -4842,7 +4737,7 @@ class AppModel
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see AppModel::selectExcept
      */
     public function selectExcept($columns)
     {
@@ -4854,7 +4749,7 @@ class AppModel
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see AppModel::from
      */
     public function from($table, $alias = null): self
     {
@@ -4864,7 +4759,7 @@ class AppModel
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see AppModel::table
      */
     public function table(string $table, $alias = null): self
     {
@@ -4879,7 +4774,7 @@ class AppModel
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see AppModel::join
      */
     public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -4893,7 +4788,7 @@ class AppModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see AppModel::innerJoin
      */
     public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -4907,7 +4802,7 @@ class AppModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see AppModel::leftJoin
      */
     public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -4921,7 +4816,7 @@ class AppModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see AppModel::rightJoin
      */
     public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -4942,7 +4837,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see AppModel::where
      */
     public function where($column = null, $operator = null, $value = null)
     {
@@ -4952,7 +4847,7 @@ class AppModel
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see AppModel::whereRaw
      */
     public function whereRaw($expression, $params = [])
     {
@@ -4962,7 +4857,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see AppModel::whereBetween
      */
     public function whereBetween($column, array $params)
     {
@@ -4972,17 +4867,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see AppModel::whereNotBetween
      */
     public function whereNotBetween($column, array $params)
     {
@@ -4992,7 +4877,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see AppModel::whereIn
      */
     public function whereIn($column, array $params)
     {
@@ -5002,7 +4887,7 @@ class AppModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see AppModel::whereNotIn
      */
     public function whereNotIn($column, array $params)
     {
@@ -5011,7 +4896,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see AppModel::whereNull
      */
     public function whereNull($column)
     {
@@ -5020,7 +4905,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see AppModel::whereNotNULL
      */
     public function whereNotNULL($column)
     {
@@ -5031,7 +4916,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see AppModel::whereDate
      */
     public function whereDate($column, $opOrValue, $value = null)
     {
@@ -5042,7 +4927,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see AppModel::whereMonth
      */
     public function whereMonth($column, $opOrValue, $value = null)
     {
@@ -5053,7 +4938,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see AppModel::whereDay
      */
     public function whereDay($column, $opOrValue, $value = null)
     {
@@ -5064,7 +4949,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see AppModel::whereYear
      */
     public function whereYear($column, $opOrValue, $value = null)
     {
@@ -5075,7 +4960,7 @@ class AppModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see AppModel::whereTime
      */
     public function whereTime($column, $opOrValue, $value = null)
     {
@@ -5086,7 +4971,7 @@ class AppModel
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see AppModel::whereColumn
      */
     public function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -5099,7 +4984,7 @@ class AppModel
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see AppModel::whereContains
      */
     public function whereContains($column, $value, string $condition = 'AND')
     {
@@ -5110,7 +4995,7 @@ class AppModel
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see AppModel::whereNotContains
      */
     public function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -5122,7 +5007,7 @@ class AppModel
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see AppModel::groupBy
      */
     public function groupBy($column)
     {
@@ -5137,7 +5022,7 @@ class AppModel
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see AppModel::having
      */
     public function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -5150,7 +5035,7 @@ class AppModel
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see AppModel::orderBy
      */
     public function orderBy($column, $order = 'ASC')
     {
@@ -5161,7 +5046,7 @@ class AppModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see AppModel::desc
      */
     public function desc($field)
     {
@@ -5172,26 +5057,15 @@ class AppModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see AppModel::asc
      */
     public function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see AppModel::forUpdate
      */
     public function forUpdate()
     {
@@ -5199,7 +5073,7 @@ class AppModel
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see AppModel::forShare
      */
     public function forShare()
     {
@@ -5208,7 +5082,7 @@ class AppModel
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see AppModel::lock
      */
     public function lock($lock)
     {
@@ -5219,7 +5093,7 @@ class AppModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see AppModel::when
      */
     public function when($value, $callback, callable $default = null)
     {
@@ -5230,27 +5104,27 @@ class AppModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see AppModel::unless
      */
     public function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see AppModel::setDbKeyConverter
      */
-    public function setInputIdentifierConverter(callable $converter)
+    public function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see AppModel::setPhpKeyConverter
      */
-    public function setOutputIdentifierConverter(callable $converter)
+    public function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -5259,7 +5133,7 @@ class AppModel
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see AppModel::cache
      */
     public function cache($seconds = null)
     {
@@ -5268,7 +5142,7 @@ class AppModel
     /**
      * @param array|string|true $scopes
      * @return $this
-     * @see Model::unscoped
+     * @see AppModel::unscoped
      */
     public function unscoped($scopes = [])
     {
@@ -5620,9 +5494,9 @@ class Model
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see Model::getColumns
      */
-    public function getFields()
+    public function getColumns()
     {
     }
 
@@ -5633,7 +5507,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see Model::fetch
      */
     public function fetch($column = null, $operator = null, $value = null)
     {
@@ -5646,7 +5520,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see Model::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -5656,7 +5530,7 @@ class Model
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see Model::pluck
      */
     public function pluck(string $column, string $index = null)
     {
@@ -5666,7 +5540,7 @@ class Model
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see Model::chunk
      */
     public function chunk(int $count, callable $callback)
     {
@@ -5677,7 +5551,7 @@ class Model
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see Model::cnt
      */
     public function cnt($column = '*')
     {
@@ -5689,7 +5563,7 @@ class Model
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see Model::update
      */
     public function update($set = [], $value = null)
     {
@@ -5702,7 +5576,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see Model::delete
      */
     public function delete($column = null, $operator = null, $value = null)
     {
@@ -5713,7 +5587,7 @@ class Model
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see Model::offset
      */
     public function offset($offset)
     {
@@ -5724,7 +5598,7 @@ class Model
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see Model::limit
      */
     public function limit($limit)
     {
@@ -5735,7 +5609,7 @@ class Model
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see Model::page
      */
     public function page($page)
     {
@@ -5747,7 +5621,7 @@ class Model
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see Model::select
      */
     public function select($columns = ['*']): self
     {
@@ -5756,7 +5630,7 @@ class Model
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see Model::selectDistinct
      */
     public function selectDistinct($columns)
     {
@@ -5765,7 +5639,7 @@ class Model
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see Model::selectRaw
      */
     public function selectRaw($expression)
     {
@@ -5777,7 +5651,7 @@ class Model
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see Model::selectExcept
      */
     public function selectExcept($columns)
     {
@@ -5789,7 +5663,7 @@ class Model
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see Model::from
      */
     public function from($table, $alias = null): self
     {
@@ -5799,7 +5673,7 @@ class Model
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see Model::table
      */
     public function table(string $table, $alias = null): self
     {
@@ -5814,7 +5688,7 @@ class Model
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see Model::join
      */
     public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -5828,7 +5702,7 @@ class Model
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see Model::innerJoin
      */
     public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -5842,7 +5716,7 @@ class Model
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see Model::leftJoin
      */
     public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -5856,7 +5730,7 @@ class Model
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see Model::rightJoin
      */
     public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -5877,7 +5751,7 @@ class Model
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see Model::where
      */
     public function where($column = null, $operator = null, $value = null)
     {
@@ -5887,7 +5761,7 @@ class Model
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see Model::whereRaw
      */
     public function whereRaw($expression, $params = [])
     {
@@ -5897,7 +5771,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see Model::whereBetween
      */
     public function whereBetween($column, array $params)
     {
@@ -5907,17 +5781,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see Model::whereNotBetween
      */
     public function whereNotBetween($column, array $params)
     {
@@ -5927,7 +5791,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see Model::whereIn
      */
     public function whereIn($column, array $params)
     {
@@ -5937,7 +5801,7 @@ class Model
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see Model::whereNotIn
      */
     public function whereNotIn($column, array $params)
     {
@@ -5946,7 +5810,7 @@ class Model
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see Model::whereNull
      */
     public function whereNull($column)
     {
@@ -5955,7 +5819,7 @@ class Model
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see Model::whereNotNULL
      */
     public function whereNotNULL($column)
     {
@@ -5966,7 +5830,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see Model::whereDate
      */
     public function whereDate($column, $opOrValue, $value = null)
     {
@@ -5977,7 +5841,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see Model::whereMonth
      */
     public function whereMonth($column, $opOrValue, $value = null)
     {
@@ -5988,7 +5852,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see Model::whereDay
      */
     public function whereDay($column, $opOrValue, $value = null)
     {
@@ -5999,7 +5863,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see Model::whereYear
      */
     public function whereYear($column, $opOrValue, $value = null)
     {
@@ -6010,7 +5874,7 @@ class Model
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see Model::whereTime
      */
     public function whereTime($column, $opOrValue, $value = null)
     {
@@ -6021,7 +5885,7 @@ class Model
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see Model::whereColumn
      */
     public function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -6034,7 +5898,7 @@ class Model
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see Model::whereContains
      */
     public function whereContains($column, $value, string $condition = 'AND')
     {
@@ -6045,7 +5909,7 @@ class Model
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see Model::whereNotContains
      */
     public function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -6057,7 +5921,7 @@ class Model
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see Model::groupBy
      */
     public function groupBy($column)
     {
@@ -6072,7 +5936,7 @@ class Model
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see Model::having
      */
     public function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -6085,7 +5949,7 @@ class Model
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see Model::orderBy
      */
     public function orderBy($column, $order = 'ASC')
     {
@@ -6096,7 +5960,7 @@ class Model
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see Model::desc
      */
     public function desc($field)
     {
@@ -6107,26 +5971,15 @@ class Model
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see Model::asc
      */
     public function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see Model::forUpdate
      */
     public function forUpdate()
     {
@@ -6134,7 +5987,7 @@ class Model
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see Model::forShare
      */
     public function forShare()
     {
@@ -6143,7 +5996,7 @@ class Model
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see Model::lock
      */
     public function lock($lock)
     {
@@ -6154,7 +6007,7 @@ class Model
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see Model::when
      */
     public function when($value, $callback, callable $default = null)
     {
@@ -6165,27 +6018,27 @@ class Model
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see Model::unless
      */
     public function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see Model::setDbKeyConverter
      */
-    public function setInputIdentifierConverter(callable $converter)
+    public function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see Model::setPhpKeyConverter
      */
-    public function setOutputIdentifierConverter(callable $converter)
+    public function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -6194,7 +6047,7 @@ class Model
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see Model::cache
      */
     public function cache($seconds = null)
     {
@@ -6255,7 +6108,7 @@ class QueryBuilder
     /**
      * Return the record table name
      *
-     * @return string
+     * @return string|null
      * @see QueryBuilder::getTable
      */
     public function getTable()
@@ -6266,9 +6119,9 @@ class QueryBuilder
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see QueryBuilder::getColumns
      */
-    public function getFields()
+    public function getColumns()
     {
     }
 
@@ -6571,16 +6424,6 @@ class QueryBuilder
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
      * @see QueryBuilder::whereNotBetween
      */
     public function whereNotBetween($column, array $params)
@@ -6789,17 +6632,6 @@ class QueryBuilder
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
-     * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public function resetSqlPart($name)
-    {
-    }
-
-    /**
      * @return $this
      * @see QueryBuilder::forUpdate
      */
@@ -6847,20 +6679,20 @@ class QueryBuilder
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see QueryBuilder::setDbKeyConverter
      */
-    public function setInputIdentifierConverter(callable $converter)
+    public function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see QueryBuilder::setPhpKeyConverter
      */
-    public function setOutputIdentifierConverter(callable $converter)
+    public function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -7139,7 +6971,7 @@ class User
      *
      * @param array $data
      * @return $this
-     * @see Model::saveData
+     * @see UserModel::saveData
      */
     public function saveData($data = [])
     {
@@ -7150,7 +6982,7 @@ class User
      *
      * @param array $merge
      * @return Ret
-     * @see Model::toRet
+     * @see UserModel::toRet
      */
     public function toRet(array $merge = [])
     {
@@ -7160,7 +6992,7 @@ class User
      * Return the record table name
      *
      * @return string
-     * @see Model::getTable
+     * @see UserModel::getTable
      */
     public function getTable()
     {
@@ -7171,7 +7003,7 @@ class User
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @see Model::fromArray
+     * @see UserModel::fromArray
      */
     public function fromArray($data)
     {
@@ -7182,7 +7014,7 @@ class User
      *
      * @param int|string $id
      * @return $this
-     * @see Model::destroy
+     * @see UserModel::destroy
      */
     public function destroy($id = null)
     {
@@ -7195,7 +7027,7 @@ class User
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
-     * @see Model::set
+     * @see UserModel::set
      */
     public function set($name, $value = null, $throwException = true)
     {
@@ -7206,7 +7038,7 @@ class User
      *
      * @param int|string|array|null $id
      * @return $this|null
-     * @see Model::find
+     * @see UserModel::find
      */
     public function find($id)
     {
@@ -7218,7 +7050,7 @@ class User
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @see Model::findOrFail
+     * @see UserModel::findOrFail
      */
     public function findOrFail($id)
     {
@@ -7230,7 +7062,7 @@ class User
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInit
+     * @see UserModel::findOrInit
      */
     public function findOrInit($id = null, $data = [])
     {
@@ -7242,7 +7074,7 @@ class User
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @see Model::findOrCreate
+     * @see UserModel::findOrCreate
      */
     public function findOrCreate($id, $data = [])
     {
@@ -7252,7 +7084,7 @@ class User
      * @param array $attributes
      * @param array $data
      * @return $this
-     * @see Model::findByOrCreate
+     * @see UserModel::findByOrCreate
      */
     public function findByOrCreate($attributes, $data = [])
     {
@@ -7263,7 +7095,7 @@ class User
      *
      * @param array $ids
      * @return $this|$this[]
-     * @see Model::findAll
+     * @see UserModel::findAll
      */
     public function findAll($ids)
     {
@@ -7274,7 +7106,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|null
-     * @see Model::findBy
+     * @see UserModel::findBy
      */
     public function findBy($column, $operator = null, $value = null)
     {
@@ -7285,7 +7117,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
-     * @see Model::findAllBy
+     * @see UserModel::findAllBy
      */
     public function findAllBy($column, $operator = null, $value = null)
     {
@@ -7295,7 +7127,7 @@ class User
      * @param array $attributes
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInitBy
+     * @see UserModel::findOrInitBy
      */
     public function findOrInitBy($attributes, $data = [])
     {
@@ -7309,7 +7141,7 @@ class User
      * @param mixed|null $value
      * @return $this
      * @throws \Exception
-     * @see Model::findByOrFail
+     * @see UserModel::findByOrFail
      */
     public function findByOrFail($column, $operator = null, $value = null)
     {
@@ -7319,7 +7151,7 @@ class User
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @see Model::findFromReq
+     * @see UserModel::findFromReq
      */
     public function findFromReq($req = null)
     {
@@ -7329,7 +7161,7 @@ class User
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @see Model::first
+     * @see UserModel::first
      */
     public function first()
     {
@@ -7337,7 +7169,7 @@ class User
 
     /**
      * @return $this|$this[]|array
-     * @see Model::all
+     * @see UserModel::all
      */
     public function all()
     {
@@ -7346,7 +7178,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see Model::indexBy
+     * @see UserModel::indexBy
      */
     public function indexBy($column)
     {
@@ -7356,9 +7188,9 @@ class User
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see UserModel::getColumns
      */
-    public function getFields()
+    public function getColumns()
     {
     }
 
@@ -7369,7 +7201,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see UserModel::fetch
      */
     public function fetch($column = null, $operator = null, $value = null)
     {
@@ -7382,7 +7214,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see UserModel::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -7392,7 +7224,7 @@ class User
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see UserModel::pluck
      */
     public function pluck(string $column, string $index = null)
     {
@@ -7402,7 +7234,7 @@ class User
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see UserModel::chunk
      */
     public function chunk(int $count, callable $callback)
     {
@@ -7413,7 +7245,7 @@ class User
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see UserModel::cnt
      */
     public function cnt($column = '*')
     {
@@ -7425,7 +7257,7 @@ class User
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see UserModel::update
      */
     public function update($set = [], $value = null)
     {
@@ -7438,7 +7270,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see UserModel::delete
      */
     public function delete($column = null, $operator = null, $value = null)
     {
@@ -7449,7 +7281,7 @@ class User
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see UserModel::offset
      */
     public function offset($offset)
     {
@@ -7460,7 +7292,7 @@ class User
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see UserModel::limit
      */
     public function limit($limit)
     {
@@ -7471,7 +7303,7 @@ class User
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see UserModel::page
      */
     public function page($page)
     {
@@ -7483,7 +7315,7 @@ class User
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see UserModel::select
      */
     public function select($columns = ['*']): self
     {
@@ -7492,7 +7324,7 @@ class User
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see UserModel::selectDistinct
      */
     public function selectDistinct($columns)
     {
@@ -7501,7 +7333,7 @@ class User
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see UserModel::selectRaw
      */
     public function selectRaw($expression)
     {
@@ -7513,7 +7345,7 @@ class User
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see UserModel::selectExcept
      */
     public function selectExcept($columns)
     {
@@ -7525,7 +7357,7 @@ class User
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see UserModel::from
      */
     public function from($table, $alias = null): self
     {
@@ -7535,7 +7367,7 @@ class User
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see UserModel::table
      */
     public function table(string $table, $alias = null): self
     {
@@ -7550,7 +7382,7 @@ class User
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see UserModel::join
      */
     public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -7564,7 +7396,7 @@ class User
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see UserModel::innerJoin
      */
     public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -7578,7 +7410,7 @@ class User
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see UserModel::leftJoin
      */
     public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -7592,7 +7424,7 @@ class User
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see UserModel::rightJoin
      */
     public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -7613,7 +7445,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see UserModel::where
      */
     public function where($column = null, $operator = null, $value = null)
     {
@@ -7623,7 +7455,7 @@ class User
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see UserModel::whereRaw
      */
     public function whereRaw($expression, $params = [])
     {
@@ -7633,7 +7465,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see UserModel::whereBetween
      */
     public function whereBetween($column, array $params)
     {
@@ -7643,17 +7475,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see UserModel::whereNotBetween
      */
     public function whereNotBetween($column, array $params)
     {
@@ -7663,7 +7485,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see UserModel::whereIn
      */
     public function whereIn($column, array $params)
     {
@@ -7673,7 +7495,7 @@ class User
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see UserModel::whereNotIn
      */
     public function whereNotIn($column, array $params)
     {
@@ -7682,7 +7504,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see UserModel::whereNull
      */
     public function whereNull($column)
     {
@@ -7691,7 +7513,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see UserModel::whereNotNULL
      */
     public function whereNotNULL($column)
     {
@@ -7702,7 +7524,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see UserModel::whereDate
      */
     public function whereDate($column, $opOrValue, $value = null)
     {
@@ -7713,7 +7535,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see UserModel::whereMonth
      */
     public function whereMonth($column, $opOrValue, $value = null)
     {
@@ -7724,7 +7546,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see UserModel::whereDay
      */
     public function whereDay($column, $opOrValue, $value = null)
     {
@@ -7735,7 +7557,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see UserModel::whereYear
      */
     public function whereYear($column, $opOrValue, $value = null)
     {
@@ -7746,7 +7568,7 @@ class User
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see UserModel::whereTime
      */
     public function whereTime($column, $opOrValue, $value = null)
     {
@@ -7757,7 +7579,7 @@ class User
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see UserModel::whereColumn
      */
     public function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -7770,7 +7592,7 @@ class User
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see UserModel::whereContains
      */
     public function whereContains($column, $value, string $condition = 'AND')
     {
@@ -7781,7 +7603,7 @@ class User
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see UserModel::whereNotContains
      */
     public function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -7793,7 +7615,7 @@ class User
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see UserModel::groupBy
      */
     public function groupBy($column)
     {
@@ -7808,7 +7630,7 @@ class User
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see UserModel::having
      */
     public function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -7821,7 +7643,7 @@ class User
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see UserModel::orderBy
      */
     public function orderBy($column, $order = 'ASC')
     {
@@ -7832,7 +7654,7 @@ class User
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see UserModel::desc
      */
     public function desc($field)
     {
@@ -7843,26 +7665,15 @@ class User
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see UserModel::asc
      */
     public function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see UserModel::forUpdate
      */
     public function forUpdate()
     {
@@ -7870,7 +7681,7 @@ class User
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see UserModel::forShare
      */
     public function forShare()
     {
@@ -7879,7 +7690,7 @@ class User
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see UserModel::lock
      */
     public function lock($lock)
     {
@@ -7890,7 +7701,7 @@ class User
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see UserModel::when
      */
     public function when($value, $callback, callable $default = null)
     {
@@ -7901,27 +7712,27 @@ class User
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see UserModel::unless
      */
     public function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see UserModel::setDbKeyConverter
      */
-    public function setInputIdentifierConverter(callable $converter)
+    public function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see UserModel::setPhpKeyConverter
      */
-    public function setOutputIdentifierConverter(callable $converter)
+    public function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -7930,7 +7741,7 @@ class User
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see UserModel::cache
      */
     public function cache($seconds = null)
     {
@@ -7939,7 +7750,7 @@ class User
     /**
      * @param array|string|true $scopes
      * @return $this
-     * @see Model::unscoped
+     * @see UserModel::unscoped
      */
     public function unscoped($scopes = [])
     {
@@ -7983,7 +7794,7 @@ class UserModel
      * @param array|callable $returnFields A indexed array specified the fields to return
      * @param callable|null $prepend
      * @return array
-     * @see Model::toArray
+     * @see UserModel::toArray
      */
     public function toArray($returnFields = [], callable $prepend = null)
     {
@@ -7994,7 +7805,7 @@ class UserModel
      *
      * @param array $data
      * @return $this
-     * @see Model::saveData
+     * @see UserModel::saveData
      */
     public function saveData($data = [])
     {
@@ -8005,7 +7816,7 @@ class UserModel
      *
      * @param array $merge
      * @return Ret
-     * @see Model::toRet
+     * @see UserModel::toRet
      */
     public function toRet(array $merge = [])
     {
@@ -8015,7 +7826,7 @@ class UserModel
      * Return the record table name
      *
      * @return string
-     * @see Model::getTable
+     * @see UserModel::getTable
      */
     public function getTable()
     {
@@ -8026,7 +7837,7 @@ class UserModel
      *
      * @param array|\ArrayAccess $data
      * @return $this
-     * @see Model::fromArray
+     * @see UserModel::fromArray
      */
     public function fromArray($data)
     {
@@ -8037,7 +7848,7 @@ class UserModel
      *
      * @param array $data
      * @return $this
-     * @see Model::save
+     * @see UserModel::save
      */
     public function save($data = [])
     {
@@ -8048,7 +7859,7 @@ class UserModel
      *
      * @param int|string $id
      * @return $this
-     * @see Model::destroy
+     * @see UserModel::destroy
      */
     public function destroy($id = null)
     {
@@ -8061,7 +7872,7 @@ class UserModel
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
-     * @see Model::set
+     * @see UserModel::set
      */
     public function set($name, $value = null, $throwException = true)
     {
@@ -8072,7 +7883,7 @@ class UserModel
      *
      * @param int|string|array|null $id
      * @return $this|null
-     * @see Model::find
+     * @see UserModel::find
      */
     public function find($id)
     {
@@ -8084,7 +7895,7 @@ class UserModel
      * @param int|string $id
      * @return $this
      * @throws \Exception
-     * @see Model::findOrFail
+     * @see UserModel::findOrFail
      */
     public function findOrFail($id)
     {
@@ -8096,7 +7907,7 @@ class UserModel
      * @param int|string $id
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInit
+     * @see UserModel::findOrInit
      */
     public function findOrInit($id = null, $data = [])
     {
@@ -8108,7 +7919,7 @@ class UserModel
      * @param int|string $id
      * @param array $data
      * @return $this
-     * @see Model::findOrCreate
+     * @see UserModel::findOrCreate
      */
     public function findOrCreate($id, $data = [])
     {
@@ -8118,7 +7929,7 @@ class UserModel
      * @param array $attributes
      * @param array $data
      * @return $this
-     * @see Model::findByOrCreate
+     * @see UserModel::findByOrCreate
      */
     public function findByOrCreate($attributes, $data = [])
     {
@@ -8129,7 +7940,7 @@ class UserModel
      *
      * @param array $ids
      * @return $this|$this[]
-     * @see Model::findAll
+     * @see UserModel::findAll
      */
     public function findAll($ids)
     {
@@ -8140,7 +7951,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|null
-     * @see Model::findBy
+     * @see UserModel::findBy
      */
     public function findBy($column, $operator = null, $value = null)
     {
@@ -8151,7 +7962,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
-     * @see Model::findAllBy
+     * @see UserModel::findAllBy
      */
     public function findAllBy($column, $operator = null, $value = null)
     {
@@ -8161,7 +7972,7 @@ class UserModel
      * @param array $attributes
      * @param array|object $data
      * @return $this
-     * @see Model::findOrInitBy
+     * @see UserModel::findOrInitBy
      */
     public function findOrInitBy($attributes, $data = [])
     {
@@ -8175,7 +7986,7 @@ class UserModel
      * @param mixed|null $value
      * @return $this
      * @throws \Exception
-     * @see Model::findByOrFail
+     * @see UserModel::findByOrFail
      */
     public function findByOrFail($column, $operator = null, $value = null)
     {
@@ -8185,7 +7996,7 @@ class UserModel
      * @param array|Req|null $req
      * @return $this
      * @throws \Exception
-     * @see Model::findFromReq
+     * @see UserModel::findFromReq
      */
     public function findFromReq($req = null)
     {
@@ -8195,7 +8006,7 @@ class UserModel
      * Executes the generated SQL and returns the found record object or null if not found
      *
      * @return $this|null
-     * @see Model::first
+     * @see UserModel::first
      */
     public function first()
     {
@@ -8203,7 +8014,7 @@ class UserModel
 
     /**
      * @return $this|$this[]|array
-     * @see Model::all
+     * @see UserModel::all
      */
     public function all()
     {
@@ -8212,7 +8023,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see Model::indexBy
+     * @see UserModel::indexBy
      */
     public function indexBy($column)
     {
@@ -8222,9 +8033,9 @@ class UserModel
      * Returns the name of fields of current table
      *
      * @return array
-     * @see QueryBuilder::getFields
+     * @see UserModel::getColumns
      */
-    public function getFields()
+    public function getColumns()
     {
     }
 
@@ -8235,7 +8046,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array|null
-     * @see QueryBuilder::fetch
+     * @see UserModel::fetch
      */
     public function fetch($column = null, $operator = null, $value = null)
     {
@@ -8248,7 +8059,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return array
-     * @see QueryBuilder::fetchAll
+     * @see UserModel::fetchAll
      */
     public function fetchAll($column = null, $operator = null, $value = null)
     {
@@ -8258,7 +8069,7 @@ class UserModel
      * @param string $column
      * @param string|null $index
      * @return array
-     * @see QueryBuilder::pluck
+     * @see UserModel::pluck
      */
     public function pluck(string $column, string $index = null)
     {
@@ -8268,7 +8079,7 @@ class UserModel
      * @param int $count
      * @param callable $callback
      * @return bool
-     * @see QueryBuilder::chunk
+     * @see UserModel::chunk
      */
     public function chunk(int $count, callable $callback)
     {
@@ -8279,7 +8090,7 @@ class UserModel
      *
      * @param string $column
      * @return int
-     * @see QueryBuilder::cnt
+     * @see UserModel::cnt
      */
     public function cnt($column = '*')
     {
@@ -8291,7 +8102,7 @@ class UserModel
      * @param array|string $set
      * @param mixed $value
      * @return int
-     * @see QueryBuilder::update
+     * @see UserModel::update
      */
     public function update($set = [], $value = null)
     {
@@ -8304,7 +8115,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return mixed
-     * @see QueryBuilder::delete
+     * @see UserModel::delete
      */
     public function delete($column = null, $operator = null, $value = null)
     {
@@ -8315,7 +8126,7 @@ class UserModel
      *
      * @param int|float|string $offset The first result to return
      * @return $this
-     * @see QueryBuilder::offset
+     * @see UserModel::offset
      */
     public function offset($offset)
     {
@@ -8326,7 +8137,7 @@ class UserModel
      *
      * @param int|float|string $limit The maximum number of results to retrieve
      * @return $this
-     * @see QueryBuilder::limit
+     * @see UserModel::limit
      */
     public function limit($limit)
     {
@@ -8337,7 +8148,7 @@ class UserModel
      *
      * @param int $page The page number
      * @return $this
-     * @see QueryBuilder::page
+     * @see UserModel::page
      */
     public function page($page)
     {
@@ -8349,7 +8160,7 @@ class UserModel
      *
      * @param array|string $columns the selection expressions
      * @return $this
-     * @see QueryBuilder::select
+     * @see UserModel::select
      */
     public function select($columns = ['*']): self
     {
@@ -8358,7 +8169,7 @@ class UserModel
     /**
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectDistinct
+     * @see UserModel::selectDistinct
      */
     public function selectDistinct($columns)
     {
@@ -8367,7 +8178,7 @@ class UserModel
     /**
      * @param string $expression
      * @return $this
-     * @see QueryBuilder::selectRaw
+     * @see UserModel::selectRaw
      */
     public function selectRaw($expression)
     {
@@ -8379,7 +8190,7 @@ class UserModel
      *
      * @param array|string $columns
      * @return $this
-     * @see QueryBuilder::selectExcept
+     * @see UserModel::selectExcept
      */
     public function selectExcept($columns)
     {
@@ -8391,7 +8202,7 @@ class UserModel
      * @param string $table
      * @param string|null $alias
      * @return $this
-     * @see QueryBuilder::from
+     * @see UserModel::from
      */
     public function from($table, $alias = null): self
     {
@@ -8401,7 +8212,7 @@ class UserModel
      * @param string $table
      * @param mixed|null $alias
      * @return $this
-     * @see QueryBuilder::table
+     * @see UserModel::table
      */
     public function table(string $table, $alias = null): self
     {
@@ -8416,7 +8227,7 @@ class UserModel
      * @param string $second
      * @param string $type
      * @return $this
-     * @see QueryBuilder::join
+     * @see UserModel::join
      */
     public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER')
     {
@@ -8430,7 +8241,7 @@ class UserModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::innerJoin
+     * @see UserModel::innerJoin
      */
     public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -8444,7 +8255,7 @@ class UserModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::leftJoin
+     * @see UserModel::leftJoin
      */
     public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -8458,7 +8269,7 @@ class UserModel
      * @param string $operator
      * @param string|null $second
      * @return $this
-     * @see QueryBuilder::rightJoin
+     * @see UserModel::rightJoin
      */
     public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
     {
@@ -8479,7 +8290,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::where
+     * @see UserModel::where
      */
     public function where($column = null, $operator = null, $value = null)
     {
@@ -8489,7 +8300,7 @@ class UserModel
      * @param string $expression
      * @param mixed $params
      * @return $this
-     * @see QueryBuilder::whereRaw
+     * @see UserModel::whereRaw
      */
     public function whereRaw($expression, $params = [])
     {
@@ -8499,7 +8310,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereBetween
+     * @see UserModel::whereBetween
      */
     public function whereBetween($column, array $params)
     {
@@ -8509,17 +8320,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::orWhereBetween
-     */
-    public function orWhereBetween($column, array $params)
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
+     * @see UserModel::whereNotBetween
      */
     public function whereNotBetween($column, array $params)
     {
@@ -8529,7 +8330,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereIn
+     * @see UserModel::whereIn
      */
     public function whereIn($column, array $params)
     {
@@ -8539,7 +8340,7 @@ class UserModel
      * @param string $column
      * @param array $params
      * @return $this
-     * @see QueryBuilder::whereNotIn
+     * @see UserModel::whereNotIn
      */
     public function whereNotIn($column, array $params)
     {
@@ -8548,7 +8349,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNull
+     * @see UserModel::whereNull
      */
     public function whereNull($column)
     {
@@ -8557,7 +8358,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see UserModel::whereNotNULL
      */
     public function whereNotNULL($column)
     {
@@ -8568,7 +8369,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDate
+     * @see UserModel::whereDate
      */
     public function whereDate($column, $opOrValue, $value = null)
     {
@@ -8579,7 +8380,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereMonth
+     * @see UserModel::whereMonth
      */
     public function whereMonth($column, $opOrValue, $value = null)
     {
@@ -8590,7 +8391,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereDay
+     * @see UserModel::whereDay
      */
     public function whereDay($column, $opOrValue, $value = null)
     {
@@ -8601,7 +8402,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereYear
+     * @see UserModel::whereYear
      */
     public function whereYear($column, $opOrValue, $value = null)
     {
@@ -8612,7 +8413,7 @@ class UserModel
      * @param mixed $opOrValue
      * @param mixed|null $value
      * @return $this
-     * @see QueryBuilder::whereTime
+     * @see UserModel::whereTime
      */
     public function whereTime($column, $opOrValue, $value = null)
     {
@@ -8623,7 +8424,7 @@ class UserModel
      * @param string $opOrColumn2
      * @param string|null $column2
      * @return $this
-     * @see QueryBuilder::whereColumn
+     * @see UserModel::whereColumn
      */
     public function whereColumn($column, $opOrColumn2, $column2 = null)
     {
@@ -8636,7 +8437,7 @@ class UserModel
      * @param string $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereContains
+     * @see UserModel::whereContains
      */
     public function whereContains($column, $value, string $condition = 'AND')
     {
@@ -8647,7 +8448,7 @@ class UserModel
      * @param mixed $value
      * @param string $condition
      * @return $this
-     * @see QueryBuilder::whereNotContains
+     * @see UserModel::whereNotContains
      */
     public function whereNotContains($column, $value, string $condition = 'OR')
     {
@@ -8659,7 +8460,7 @@ class UserModel
      *
      * @param mixed $column the grouping column
      * @return $this
-     * @see QueryBuilder::groupBy
+     * @see UserModel::groupBy
      */
     public function groupBy($column)
     {
@@ -8674,7 +8475,7 @@ class UserModel
      * @param mixed|null $value
      * @param mixed $condition
      * @return $this
-     * @see QueryBuilder::having
+     * @see UserModel::having
      */
     public function having($column, $operator, $value = null, $condition = 'AND')
     {
@@ -8687,7 +8488,7 @@ class UserModel
      * @param string $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
-     * @see QueryBuilder::orderBy
+     * @see UserModel::orderBy
      */
     public function orderBy($column, $order = 'ASC')
     {
@@ -8698,7 +8499,7 @@ class UserModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::desc
+     * @see UserModel::desc
      */
     public function desc($field)
     {
@@ -8709,26 +8510,15 @@ class UserModel
      *
      * @param string $field The name of field
      * @return $this
-     * @see QueryBuilder::asc
+     * @see UserModel::asc
      */
     public function asc($field)
     {
     }
 
     /**
-     * Reset single SQL part
-     *
-     * @param string $name
      * @return $this
-     * @see QueryBuilder::resetSqlPart
-     */
-    public function resetSqlPart($name)
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
+     * @see UserModel::forUpdate
      */
     public function forUpdate()
     {
@@ -8736,7 +8526,7 @@ class UserModel
 
     /**
      * @return $this
-     * @see QueryBuilder::forShare
+     * @see UserModel::forShare
      */
     public function forShare()
     {
@@ -8745,7 +8535,7 @@ class UserModel
     /**
      * @param string|bool $lock
      * @return $this
-     * @see QueryBuilder::lock
+     * @see UserModel::lock
      */
     public function lock($lock)
     {
@@ -8756,7 +8546,7 @@ class UserModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::when
+     * @see UserModel::when
      */
     public function when($value, $callback, callable $default = null)
     {
@@ -8767,27 +8557,27 @@ class UserModel
      * @param callable $callback
      * @param callable|null $default
      * @return $this
-     * @see QueryBuilder::unless
+     * @see UserModel::unless
      */
     public function unless($value, callable $callback, callable $default = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setInputIdentifierConverter
+     * @see UserModel::setDbKeyConverter
      */
-    public function setInputIdentifierConverter(callable $converter)
+    public function setDbKeyConverter(callable $converter = null)
     {
     }
 
     /**
-     * @param callable $converter
+     * @param callable|null $converter
      * @return $this
-     * @see QueryBuilder::setOutputIdentifierConverter
+     * @see UserModel::setPhpKeyConverter
      */
-    public function setOutputIdentifierConverter(callable $converter)
+    public function setPhpKeyConverter(callable $converter = null)
     {
     }
 
@@ -8796,7 +8586,7 @@ class UserModel
      *
      * @param false|int|null $seconds
      * @return $this
-     * @see QueryBuilder::cache
+     * @see UserModel::cache
      */
     public function cache($seconds = null)
     {
@@ -8805,7 +8595,7 @@ class UserModel
     /**
      * @param array|string|true $scopes
      * @return $this
-     * @see Model::unscoped
+     * @see UserModel::unscoped
      */
     public function unscoped($scopes = [])
     {

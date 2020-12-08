@@ -33,7 +33,7 @@ class Ret extends \Wei\Ret
         $res || $res = $this->res;
 
         $model = $this->getMetadata('model');
-        if ($model instanceof WeiModel && $model->wasRecentlyCreated()) {
+        if ($model instanceof WeiBaseModel && $model->wasRecentlyCreated()) {
             $res->setStatusCode(201);
         }
 

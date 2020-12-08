@@ -2,13 +2,18 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
-class TestDefaultScope extends WeiModel
+class TestDefaultScope extends WeiBaseModel
 {
+    use ModelTrait {
+        __construct as parentConstruct;
+    }
+
     public function __construct(array $options = [])
     {
-        parent::__construct($options);
+        $this->parentConstruct($options);
 
         $this->addDefaultScope('active');
         $this->addDefaultScope('typeA');

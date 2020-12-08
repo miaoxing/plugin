@@ -38,7 +38,6 @@ return [
         'password' => 'password',
         'charset' => 'utf8mb4',
         'tablePrefix' => 'mx_',
-        'recordClass' => Miaoxing\Plugin\Service\Model::class,
         'beforeQuery' => [Miaoxing\Plugin\Callback\DbCallback::class, 'beforeQuery'],
         'providers' => [
             'cache' => 'nearCache',

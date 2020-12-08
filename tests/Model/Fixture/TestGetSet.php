@@ -2,15 +2,18 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property int|null $id
  * @property string|null $name
  * @property int|null $user_count
  */
-class TestGetSet extends WeiModel
+class TestGetSet extends WeiBaseModel
 {
+    use ModelTrait;
+
     protected $casts = [
         'id' => 'int',
         'name' => 'string',

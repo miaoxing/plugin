@@ -659,10 +659,10 @@ final class RelationTest extends BaseTestCase
     protected function clearLogs()
     {
         // preload fields cache
-        TestUser::getFields();
-        TestArticle::getFields();
-        TestProfile::getFields();
-        TestTag::getFields();
+        TestUser::getColumns();
+        TestArticle::getColumns();
+        TestProfile::getColumns();
+        TestTag::getColumns();
 
         wei()->db->setOption('queries', []);
     }

@@ -2,7 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property int|null $id
@@ -11,8 +12,10 @@ use Miaoxing\Plugin\Service\WeiModel;
  * @property string $mutator
  * @property string $default_value
  */
-class TestMutator extends WeiModel
+class TestMutator extends WeiBaseModel
 {
+    use ModelTrait;
+
     protected function getGetterAttribute()
     {
         return base64_decode($this->data['getter'] ?? '', true);

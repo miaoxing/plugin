@@ -1,203 +1,28 @@
 <?php
 
-namespace Miaoxing\Plugin\Service;
+namespace Miaoxing\Plugin\Model;
 
+use Closure;
+use InvalidArgumentException;
 use Miaoxing\Plugin\BaseService;
-use Miaoxing\Plugin\Model\CastTrait;
-use Miaoxing\Plugin\Model\DefaultScopeTrait;
+use Miaoxing\Plugin\Db\BaseDriver;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 use Wei\RetTrait;
 
 /**
- * @internal 逐步完善后移到 Wei 中
+ * @internal
  */
-class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
+trait ModelTrait
 {
+    use QueryBuilderTrait {
+        add as private parentAdd;
+        execute as private parentExecute;
+        indexBy as private parentIndexBy;
+    }
+    use QueryBuilderCacheTrait;
     use CastTrait;
     use RetTrait;
     use DefaultScopeTrait;
-
-    protected $createdAtColumn = 'created_at';
-
-    protected $createdByColumn = 'created_by';
-
-    protected $updatedAtColumn = 'updated_at';
-
-    protected $updatedByColumn = 'updated_by';
-
-    /**
-     * The primary key column
-     *
-     * @var string
-     */
-    protected $primaryKey = 'id';
-
-    /**
-     * Whether it's a new record and has not save to database
-     *
-     * @var bool
-     */
-    protected $isNew = true;
-
-    /**
-     * The record data
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * The fields that are assignable through fromArray method
-     *
-     * @var array
-     */
-    protected $fillable = [];
-
-    /**
-     * The fields that aren't assignable through fromArray method
-     *
-     * @var array
-     */
-    protected $guarded = [
-        'id',
-        'created_at',
-        'created_by',
-        'updated_at',
-        'updated_by',
-    ];
-
-    /**
-     * Whether the record's data is changed
-     *
-     * @var bool
-     */
-    protected $isChanged = false;
-
-    /**
-     * The record data before changed
-     *
-     * @var array
-     */
-    protected $changedData = [];
-
-    /**
-     * Whether the record has been removed from database
-     *
-     * @var bool
-     */
-    protected $isDestroyed = false;
-
-    /**
-     * Whether the record is waiting to remove from database
-     *
-     * @var bool
-     */
-    protected $detached = false;
-
-    /**
-     * Whether the data is loaded
-     *
-     * @var bool
-     */
-    protected $loaded = false;
-
-    /**
-     * Whether it contains multiple or single row data
-     *
-     * @var bool
-     */
-    protected $isColl = false;
-
-    /**
-     * The relation configs
-     *
-     * @var array
-     */
-    protected $relations = [];
-
-    /**
-     * The relations have been loaded
-     *
-     * @var array
-     */
-    protected $loadedRelations = [];
-
-    /**
-     * @var array
-     */
-    protected $relationValues = [];
-
-    /**
-     * The value for relation base query
-     *
-     * @var mixed
-     */
-    protected $relatedValue;
-
-    /**
-     * @var array
-     */
-    protected $virtual = [];
-
-    /**
-     * @var string[]
-     */
-    protected $hidden = [
-        'deletedBy',
-        'deletedAt',
-    ];
-
-    protected static $booted = [];
-
-    protected static $events = [];
-
-    /**
-     * @var array
-     */
-    protected $requiredServices = [
-        'db',
-        'cache',
-        'logger',
-        'ret',
-        'str',
-    ];
-
-    protected $defaultValues = [
-        'date' => '0000-00-00',
-        'datetime' => '0000-00-00 00:00:00',
-    ];
-
-    /**
-     * 数组来源
-     *
-     * php：数据经过代码处理，例如默认值
-     * db：数据来自数据库，是一个未解码/未转换类型的字符串。如果经过处理，则变成php
-     * user：数据来自用户设置
-     *
-     * @var array
-     */
-    protected $dataSources = [
-        '*' => 'php',
-    ];
-
-    /**
-     * @var array
-     */
-    protected $virtualData = [];
-
-    /**
-     * Returns whether the model was inserted in the this request
-     *
-     * @var bool
-     */
-    protected $wasRecentlyCreated = false;
-
-    /**
-     * Extra data for saveRelation method
-     *
-     * @var array
-     * @internal may be rename to avoid confuse with relationValues
-     */
-    private $relationData = [];
 
     /**
      * {@inheritdoc}
@@ -230,7 +55,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
         $this->db->addRecordClass($this->getTable(), static::class);
 
         // @phpstan-ignore-next-line 待 db 服务更新后再移除
-        return $this->db($this->table);
+        return $this->db($this->getTable());
     }
 
     /**
@@ -503,7 +328,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
     public function origGet($name)
     {
         // Check if field exists when it is not a collection
-        if (!$this->isColl && !in_array($name, $this->getFields(), true)) {
+        if (!$this->isColl && !in_array($name, $this->getColumns(), true)) {
             throw new InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
@@ -531,7 +356,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
         }
 
         if (!$this->isColl) {
-            if (in_array($name, $this->getFields(), true)) {
+            if (in_array($name, $this->getColumns(), true)) {
                 $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
                 $this->data[$name] = $value;
                 $this->isChanged = true;
@@ -608,7 +433,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     public function incr($name, $offset = 1)
     {
-        $this[$name] = (object) ($this->convertInputIdentifier($name) . ' + ' . $offset);
+        $this[$name] = (object) ($this->convertToDbKey($name) . ' + ' . $offset);
         return $this;
     }
 
@@ -621,7 +446,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     public function decr($name, $offset = 1)
     {
-        $this[$name] = (object) ($this->convertInputIdentifier($name) . ' - ' . $offset);
+        $this[$name] = (object) ($this->convertToDbKey($name) . ' - ' . $offset);
         return $this;
     }
 
@@ -800,7 +625,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     public function beforeSave()
     {
-        $fields = $this->getFields();
+        $fields = $this->getColumns();
 
         if (in_array($this->updatedAtColumn, $fields, true)) {
             $this[$this->updatedAtColumn] = date('Y-m-d H:i:s');
@@ -823,7 +648,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     public function beforeCreate()
     {
-        $fields = $this->getFields();
+        $fields = $this->getColumns();
 
         if (in_array($this->createdAtColumn, $fields, true) && !$this[$this->createdAtColumn]) {
             $this[$this->createdAtColumn] = date('Y-m-d H:i:s');
@@ -872,6 +697,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
     public function boot()
     {
         $class = static::class;
+
         if (isset(static::$booted[$class])) {
             return;
         }
@@ -890,14 +716,25 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      * @param object $class
      * @param bool $autoload
      * @return array
-     * @see http://php.net/manual/en/function.class-uses.php#110752
+     * @see https://www.php.net/manual/en/function.class-uses.php#112671
      */
     public function classUsesDeep($class, $autoload = true)
     {
         $traits = [];
+
+        // Get traits of all parent classes
         do {
             $traits = array_merge(class_uses($class, $autoload), $traits);
         } while ($class = get_parent_class($class));
+
+        // Get traits of all parent traits
+        $traitsToSearch = $traits;
+        while (!empty($traitsToSearch)) {
+            $newTraits = class_uses(array_pop($traitsToSearch), $autoload);
+            $traits = array_merge($newTraits, $traits);
+            $traitsToSearch = array_merge($newTraits, $traitsToSearch);
+        };
+
         foreach ($traits as $trait => $same) {
             $traits = array_merge(class_uses($trait, $autoload), $traits);
         }
@@ -1194,7 +1031,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     public function hasColumn($name)
     {
-        return in_array($name, $this->getFields(), true);
+        return in_array($name, $this->getColumns(), true);
     }
 
     public function trigger($event, $data = [])
@@ -1225,11 +1062,11 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
     {
         $this->trigger('preExecute');
 
-        if (self::SELECT == $this->type) {
+        if (BaseDriver::SELECT == $this->queryType) {
             $this->loaded = true;
         }
 
-        return parent::execute();
+        return $this->parentExecute();
     }
 
     public function add($sqlPartName, $sqlPart, $append = false, $type = null)
@@ -1238,7 +1075,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
 
         $this->isNew = false;
 
-        return parent::add($sqlPartName, $sqlPart, $append, $type);
+        return $this->parentAdd($sqlPartName, $sqlPart, $append, $type);
     }
 
     /**
@@ -1401,18 +1238,6 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
     }
 
     /**
-     * @param string $column
-     * @param mixed $value
-     * @return $this
-     * @internal
-     */
-    protected function setRelationData(string $column, $value)
-    {
-        $this->relationData[$this->convertOutputIdentifier($column)] = $value;
-        return $this;
-    }
-
-    /**
      * Returns the record data as array
      *
      * @param array|callable $returnFields A indexed array specified the fields to return
@@ -1428,7 +1253,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
 
         if (!$this->isColl) {
             $data = [];
-            $columns = $this->getToArrayColumns($returnFields ?: $this->getFields());
+            $columns = $this->getToArrayColumns($returnFields ?: $this->getColumns());
             foreach ($columns as $column) {
                 $data[$column] = $this->get($column);
             }
@@ -1478,8 +1303,8 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
         if ($this->isColl()) {
             return $this->suc($merge + [
                     'data' => $this,
-                    'page' => $this->getSqlPart('page'),
-                    'rows' => $this->getSqlPart('limit'),
+                    'page' => $this->getQueryPart('page'),
+                    'rows' => $this->getQueryPart('limit'),
                     'records' => $this->count(),
                 ]);
         } else {
@@ -1495,7 +1320,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     protected function getTable()
     {
-        if (!$this->table) {
+        if (!isset($this->table)) {
             $baseName = $this->baseName();
             if ('Model' === substr($baseName, -5)) {
                 $baseName = substr($baseName, 0, -5);
@@ -1628,8 +1453,13 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
 
         if (!$this->isColl) {
             $this->triggerCallback('beforeDestroy');
-            $this->executeDestroy();
-            $this->isDestroyed = true;
+
+            $result = $this->trigger('destroy');
+            if (!$result) {
+                $this->executeDestroy();
+                $this->isDestroyed = true;
+            }
+
             $this->triggerCallback('afterDestroy');
         } else {
             foreach ($this->data as $record) {
@@ -1951,7 +1781,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
     {
         if ($model instanceof static) {
             return $model;
-        } elseif (is_subclass_of($model, self::class)) {
+        } elseif (is_subclass_of($model, WeiBaseModel::class)) {
             return forward_static_call([$model, 'new']);
         } else {
             return $this->wei->{$model}();
@@ -2037,7 +1867,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
         return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
     }
 
-    protected function getJunctionTable(self $related)
+    protected function getJunctionTable(WeiBaseModel $related)
     {
         $tables = [$this->getTable(), $related->getTable()];
         sort($tables);
@@ -2110,7 +1940,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     protected function indexBy($column)
     {
-        parent::indexBy($column);
+        $this->parentIndexBy($column);
         $this->loaded && $this->data = $this->executeIndexBy($this->data, $column);
         return $this;
     }
@@ -2370,6 +2200,18 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
     }
 
     /**
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     * @internal
+     */
+    protected function setRelationData(string $column, $value)
+    {
+        $this->relationData[$this->convertToPhpKey($column)] = $value;
+        return $this;
+    }
+
+    /**
      * @todo 整理
      */
     private function setFromArray($name, $value)
@@ -2414,7 +2256,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     private function executeDelete(array $conditions)
     {
-        return $this->db->delete($this->getTable(), $this->convertInputKeys($conditions));
+        return $this->db->delete($this->getTable(), $this->convertKeysToDbKeys($conditions));
     }
 
     /**
@@ -2424,8 +2266,8 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     private function executeSelect(array $conditions)
     {
-        return $this->convertOutputKeys(
-            (array) $this->db->select($this->getTable(), $this->convertInputKeys($conditions))
+        return $this->convertKeysToPhpKeys(
+            (array) $this->db->select($this->getTable(), $this->convertKeysToDbKeys($conditions))
         );
     }
 
@@ -2436,7 +2278,7 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     private function executeInsert(array $data)
     {
-        return $this->db->insert($this->getTable(), $this->convertInputKeys($data));
+        return $this->db->insert($this->getTable(), $this->convertKeysToDbKeys($data));
     }
 
     /**
@@ -2449,8 +2291,8 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
     {
         return $this->db->update(
             $this->getTable(),
-            $this->convertInputKeys($data),
-            $this->convertInputKeys($conditions)
+            $this->convertKeysToDbKeys($data),
+            $this->convertKeysToDbKeys($conditions)
         );
     }
 
@@ -2461,6 +2303,6 @@ class WeiModel extends QueryBuilder implements \ArrayAccess, \IteratorAggregate,
      */
     private function addRelation($name, $relation)
     {
-        $this->relations[$name] = array_map([$this, 'convertOutputIdentifier'], $relation);
+        $this->relations[$name] = array_map([$this, 'convertToPhpKey'], $relation);
     }
 }

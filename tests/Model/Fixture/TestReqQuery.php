@@ -2,11 +2,13 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
+use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Model\ReqQueryTrait;
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
-class TestReqQuery extends WeiModel
+class TestReqQuery extends WeiBaseModel
 {
+    use ModelTrait;
     use ReqQueryTrait;
 
     public function detail()

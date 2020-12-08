@@ -6,12 +6,12 @@ trait CamelCaseTrait
 {
     public static function bootCamelCaseTrait()
     {
-        static::on('init', 'setCamelCaseIdentifierConverter');
+        static::on('init', 'setCamelCaseKeyConverter');
     }
 
-    public function setCamelCaseIdentifierConverter()
+    public function setCamelCaseKeyConverter()
     {
-        $this->setInputIdentifierConverter([$this, 'snake']);
-        $this->setOutputIdentifierConverter([$this, 'camel']);
+        $this->setDbKeyConverter([$this, 'snake']);
+        $this->setPhpKeyConverter([$this, 'camel']);
     }
 }

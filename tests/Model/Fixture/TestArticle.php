@@ -2,7 +2,8 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Service\WeiModel;
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property TestUser|null $user
@@ -10,8 +11,10 @@ use Miaoxing\Plugin\Service\WeiModel;
  * @property string $testUserId
  * @property string $title
  */
-class TestArticle extends WeiModel
+class TestArticle extends WeiBaseModel
 {
+    use ModelTrait;
+
     public function user()
     {
         return $this->belongsTo(TestUser::class);
