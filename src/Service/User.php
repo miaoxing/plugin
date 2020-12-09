@@ -198,8 +198,6 @@ class User extends UserModel
 
         $id = $this['id'];
         $user = wei()->userModel()
-            ->cache()
-            ->tags(false)
             ->setCacheKey($this->getRecordCacheKey($id))
             ->findOrInit($id);
 

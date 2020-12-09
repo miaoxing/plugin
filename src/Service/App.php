@@ -196,9 +196,8 @@ class App extends \Wei\App
         $namespace = $this->getNamespace();
         if (!isset($this->records[$namespace])) {
             $this->records[$namespace] = wei()->appModel()
-                ->tags(false)
                 ->setCacheKey('appName:' . $namespace)
-                ->cache(86400)
+                ->setCacheTime(86400)
                 ->findBy('name', $namespace);
         }
 

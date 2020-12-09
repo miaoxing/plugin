@@ -142,7 +142,7 @@ trait QueryBuilderTrait
     public function execute()
     {
         if (BaseDriver::SELECT == $this->queryType) {
-            if (false !== $this->cacheTime) {
+            if ($this->hasCacheConfig()) {
                 return $this->fetchFromCache();
             } else {
                 return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
@@ -1511,8 +1511,7 @@ trait QueryBuilderTrait
      */
     protected function fetchFromCache()
     {
-        $cache = false === $this->cacheTags ? $this->cache : $this->tagCache($this->cacheTags ?: $this->getCacheTags());
-        return $cache->get($this->getCacheKey(), $this->cacheTime, function () {
+        return $this->getCache()->get($this->getCacheKey(), $this->getCacheTime(), function () {
             return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
         });
     }

@@ -34,13 +34,6 @@ class JwtMixin {
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Model $model
- * @method      Miaoxing\Plugin\Service\Model|Miaoxing\Plugin\Service\Model[] model($table = null)
- */
-class ModelMixin {
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\PageRouter $pageRouter
  */
 class PageRouterMixin {
@@ -106,7 +99,6 @@ class UserModelMixin {
  * @mixin ConfigMixin
  * @mixin IsModelExistsMixin
  * @mixin JwtMixin
- * @mixin ModelMixin
  * @mixin PageRouterMixin
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
@@ -145,9 +137,6 @@ $isModelExists = wei()->isModelExists;
 
 /** @var Miaoxing\Plugin\Service\Jwt $jwt */
 $jwt = wei()->jwt;
-
-/** @var Miaoxing\Plugin\Service\Model $model */
-$model = wei()->model;
 
 /** @var Miaoxing\Plugin\Service\PageRouter $pageRouter */
 $pageRouter = wei()->pageRouter;

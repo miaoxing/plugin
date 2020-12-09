@@ -769,7 +769,7 @@ trait ModelTrait
      */
     public function tagByUser()
     {
-        return $this->tags($this->getUserTag());
+        return $this->setCacheTags($this->getUserTag());
     }
 
     /**

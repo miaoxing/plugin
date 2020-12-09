@@ -2,6 +2,9 @@
 
 namespace Miaoxing\Plugin\Model;
 
+use Wei\BaseCache;
+use Wei\TagCache;
+
 trait QueryBuilderCacheTrait
 {
     /**
@@ -14,52 +17,31 @@ trait QueryBuilderCacheTrait
     /**
      * The specified cache time
      *
-     * @var false|int
+     * @var int|null
      */
-    protected $cacheTime = false;
+    protected $cacheTime;
 
     /**
-     * @var string
+     * The key name of cache
+     *
+     * @var string|null
      */
-    protected $cacheKey = '';
+    protected $cacheKey;
 
     /**
      * The cache tags
      *
-     * @var array|false
+     * @var array|true|null
      */
-    protected $cacheTags = [];
+    protected $cacheTags;
 
     /**
-     * Clear cache that tagged with current table name
+     * Set the key name of cache
      *
+     * @param string|null $cacheKey
      * @return $this
      */
-    public function clearTagCache()
-    {
-        $this->tagCache($this->getCacheTags())->clear();
-        return $this;
-    }
-
-    /**
-     * Set or remove cache tags
-     *
-     * @param array|string|false|null $tags
-     * @return $this
-     */
-    public function tags($tags = null)
-    {
-        $this->cacheTags = false === $tags ? false : $tags;
-        return $this;
-    }
-
-    /**
-     * Set cache key
-     *
-     * @param string $cacheKey
-     * @return $this
-     */
-    public function setCacheKey($cacheKey)
+    public function setCacheKey(?string $cacheKey): self
     {
         $this->cacheKey = $cacheKey;
         return $this;
@@ -67,10 +49,8 @@ trait QueryBuilderCacheTrait
 
     /**
      * Generate cache key form query and params
-     *
-     * @return string
      */
-    public function getCacheKey()
+    public function getCacheKey(): string
     {
         return $this->cacheKey ?:
             md5($this->db->getDbname() . $this->getSql() . serialize($this->queryParams) . serialize($this->queryParamTypes));
@@ -79,31 +59,83 @@ trait QueryBuilderCacheTrait
     /**
      * Set or remove cache time for the query
      *
-     * @param false|int|null $seconds
+     * @param int|null $seconds
      * @return $this
      * @svc
      */
-    protected function cache($seconds = null)
+    protected function setCacheTime(?int $seconds): self
     {
-        if (null === $seconds) {
-            $this->cacheTime = $this->defaultCacheTime;
-        } elseif (false === $seconds) {
-            $this->cacheTime = false;
-        } else {
-            $this->cacheTime = (int) $seconds;
-        }
+        $this->cacheTime = $seconds;
         return $this;
     }
 
     /**
-     * @return array
+     * Returns the expire seconds of cache
      */
-    protected function getCacheTags()
+    public function getCacheTime(): int
     {
-        $tags[] = $this->getTable();
-        foreach ($this->queryParts['join'] as $join) {
-            $tags[] = $join['table'];
+        return null === $this->cacheTime ? $this->defaultCacheTime : $this->cacheTime;
+    }
+
+    /**
+     * Set or remove the tags of cache
+     *
+     * @param array|true|null $cacheTags
+     * @return $this
+     */
+    public function setCacheTags($cacheTags = true): self
+    {
+        $this->cacheTags = $cacheTags;
+        return $this;
+    }
+
+    /**
+     * Returns the tags of cache
+     */
+    public function getCacheTags(): ?array
+    {
+        if ($this->cacheTags === true) {
+            $cacheTags[] = $this->getTable();
+            foreach ($this->queryParts['join'] as $join) {
+                $cacheTags[] = $join['table'];
+            }
+            return $cacheTags;
         }
-        return $tags;
+        return $this->cacheTags;
+    }
+
+    /**
+     * Clear cache that tagged with current table name
+     */
+    public function clearTagCache(): self
+    {
+        if (!$this->cacheTags) {
+            $this->setCacheTags();
+        }
+
+        $this->tagCache($this->getCacheTags())->clear();
+        return $this;
+    }
+
+    /**
+     * Indicates whether has configured cache key or tags
+     */
+    protected function hasCacheConfig(): bool
+    {
+        return $this->cacheKey || $this->cacheTags;
+    }
+
+    /**
+     * Returns the cache service
+     *
+     * @return TagCache|BaseCache
+     */
+    protected function getCache()
+    {
+        if ($this->cacheTags) {
+            return $this->tagCache($this->getCacheTags());
+        } else {
+            return $this->cache;
+        }
     }
 }
