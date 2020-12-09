@@ -9,6 +9,9 @@ use Miaoxing\Plugin\Model\ModelTrait;
 
 /**
  * 应用模型
+ *
+ * @property array $pluginIds 已安装的插件编号
+ * @property array $configs 配置
  */
 class AppModel extends BaseModel
 {
