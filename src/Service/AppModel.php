@@ -46,8 +46,6 @@ class AppModel extends BaseModel
 
     public function afterSave()
     {
-        parent::afterSave();
-
         $this->cache->remove('appName:' . $this['name']);
     }
 }
