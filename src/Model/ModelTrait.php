@@ -1304,8 +1304,8 @@ trait ModelTrait
             return $this->suc($merge + [
                     'data' => $this,
                     'page' => $this->getQueryPart('page'),
-                    'rows' => $this->getQueryPart('limit'),
-                    'records' => $this->count(),
+                    'limit' => $this->getQueryPart('limit'),
+                    'total' => $this->cnt(),
                 ]);
         } else {
             return $this->suc($merge + ['data' => $this])->setMetadata('model', $this);

@@ -210,7 +210,7 @@ trait ReqQueryTrait
 
     public function paginate()
     {
-        $limit = $this->req['rows'] ?: 10;
+        $limit = $this->req['limit'] ?: 10;
         $page = $this->req['page'] ?: 1;
 
         $this->limit($limit)->page($page);
