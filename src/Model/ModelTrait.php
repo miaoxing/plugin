@@ -1038,8 +1038,8 @@ trait ModelTrait
     {
         $result = null;
         $class = static::class;
-        if (isset(static::$events[$class][$event])) {
-            foreach (static::$events[$class][$event] as $callback) {
+        if (isset(static::$modelEvents[$class][$event])) {
+            foreach (static::$modelEvents[$class][$event] as $callback) {
                 // 优先使用自身方法
                 if (method_exists($this, $callback)) {
                     $callback = [$this, $callback];
@@ -1055,7 +1055,7 @@ trait ModelTrait
 
     public static function on($event, $method)
     {
-        static::$events[static::class][$event][] = $method;
+        static::$modelEvents[static::class][$event][] = $method;
     }
 
     public function execute()
