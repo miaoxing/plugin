@@ -22,7 +22,7 @@ class TestSoftDeleteStatus extends WeiBaseModel
 
     protected $deleteStatusColumn = 'status';
 
-    protected $data = [
+    protected $attributes = [
         'status' => self::STATUS_NORMAL,
     ];
 

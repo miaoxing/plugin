@@ -34,7 +34,7 @@ class AppModel extends BaseModel
         self::STATUS_OFFLINE => '下线',
     ];
 
-    protected $data = [
+    protected $attributes = [
         'configs' => [],
         'pluginIds' => [],
     ];

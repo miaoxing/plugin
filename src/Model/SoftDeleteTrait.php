@@ -58,7 +58,7 @@ trait SoftDeleteTrait
         if ($statusColumn = $this->getDeleteStatusColumn()) {
             $data[$statusColumn] = $this->getRestoreStatusValue();
         }
-        return $this->saveData($data);
+        return $this->saveAttributes($data);
     }
 
     /**
@@ -181,7 +181,7 @@ trait SoftDeleteTrait
         if ($statusColumn = $this->getDeleteStatusColumn()) {
             $data[$statusColumn] = $this->getDeleteStatusValue();
         }
-        $this->saveData($data);
+        $this->saveAttributes($data);
         return true;
     }
 

@@ -36,7 +36,7 @@ class TestCast extends WeiBaseModel
         ],
     ];
 
-    protected $data = [
+    protected $attributes = [
         'json_column' => [],
         'list_column' => [],
         'list2_column' => [],

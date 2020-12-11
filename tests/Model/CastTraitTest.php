@@ -135,7 +135,7 @@ final class CastTraitTest extends BaseTestCase
         $record->fromArray($from);
 
         // data中的数据不变
-        $data = $record->getData();
+        $data = $record->getAttributes();
         foreach ($from as $key => $value) {
             $this->assertSame($value, $data[$key]);
         }

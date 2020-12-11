@@ -19,7 +19,7 @@ class TestRef extends WeiBaseModel
         'json' => 'json',
     ];
 
-    protected $data = [
+    protected $attributes = [
         'json' => [],
     ];
 }

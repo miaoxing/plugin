@@ -18,26 +18,26 @@ class TestMutator extends WeiBaseModel
 
     protected function getGetterAttribute()
     {
-        return base64_decode($this->data['getter'] ?? '', true);
+        return base64_decode($this->attributes['getter'] ?? '', true);
     }
 
     protected function setSetterAttribute($value)
     {
-        $this->data['setter'] = base64_encode($value);
+        $this->attributes['setter'] = base64_encode($value);
     }
 
     protected function getMutatorAttribute()
     {
-        return base64_decode($this->data['mutator'] ?? '', true);
+        return base64_decode($this->attributes['mutator'] ?? '', true);
     }
 
     protected function setMutatorAttribute($value)
     {
-        $this->data['mutator'] = base64_encode($value);
+        $this->attributes['mutator'] = base64_encode($value);
     }
 
     protected function getDefaultValueAttribute()
     {
-        return $this->data['default_value'] ?? 'default value';
+        return $this->attributes['default_value'] ?? 'default value';
     }
 }

@@ -668,15 +668,15 @@ final class ModelTest extends BaseTestCase
         $this->assertTrue($user->isChanged('name'));
         $this->assertTrue($user->isChanged());
 
-        $this->assertNull($user->getChangedData('name'));
+        $this->assertNull($user->getChanges('name'));
 
         $user->name = 'aa';
         $this->assertTrue($user->isChanged());
-        $this->assertEquals('tt', $user->getChangedData('name'));
+        $this->assertEquals('tt', $user->getChanges('name'));
 
         $user->save();
         $this->assertFalse($user->isChanged());
-        $this->assertEmpty($user->getChangedData());
+        $this->assertEmpty($user->getChanges());
     }
 
     public function testQueryBuilderForEach()

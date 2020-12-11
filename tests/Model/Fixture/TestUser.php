@@ -30,7 +30,7 @@ class TestUser extends WeiBaseModel
         'group_id' => 'int',
     ];
 
-    protected $data = [
+    protected $attributes = [
         'group_id' => 0,
     ];
 
@@ -103,6 +103,6 @@ class TestUser extends WeiBaseModel
 
     public function getAddressAttribute()
     {
-        return $this->data['address'] ?? 'default address';
+        return $this->attributes['address'] ?? 'default address';
     }
 }

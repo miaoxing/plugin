@@ -24,7 +24,7 @@ class UserModel extends BaseModel
     /**
      * @var array
      */
-    protected $data = [
+    protected $attributes = [
         'sex' => 1,
     ];
 

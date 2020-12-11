@@ -63,7 +63,7 @@ final class MutatorTest extends BaseTestCase
         $mutator = TestMutator::new();
         $mutator->set('setter', 'abc');
 
-        $data = $mutator->getData();
+        $data = $mutator->getAttributes();
         $this->assertEquals('YWJj', $data['setter'], '由mutator管理数据');
     }
 
@@ -77,7 +77,7 @@ final class MutatorTest extends BaseTestCase
         $mutator = TestMutator::new();
         $mutator->setter = 'abc';
 
-        $data = $mutator->getData();
+        $data = $mutator->getAttributes();
         $this->assertEquals('YWJj', $data['setter']);
     }
 

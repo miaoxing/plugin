@@ -211,10 +211,10 @@ class User extends UserModel
      */
     protected function loadRecordData(UserModel $user)
     {
-        $this->setData($user->getData());
+        $this->setAttributes($user->getAttributes());
 
         // 清空更改状态
-        $this->changedData = [];
+        $this->changes = [];
     }
 
     /**
@@ -383,7 +383,7 @@ class User extends UserModel
      */
     protected function logout()
     {
-        $this->data = [];
+        $this->attributes = [];
         $this->loaded = false;
         $this->dataSources = ['*' => 'php'];
 

@@ -58,11 +58,11 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     protected $isNew = true;
 
     /**
-     * The record data
+     * The data of model
      *
      * @var array
      */
-    protected $data = [];
+    protected $attributes = [];
 
     /**
      * The fields that are assignable through fromArray method
@@ -89,7 +89,7 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      *
      * @var array
      */
-    protected $changedData = [];
+    protected $changes = [];
 
     /**
      * Whether the data is loaded
@@ -182,7 +182,7 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     /**
      * @var array
      */
-    protected $virtualData = [];
+    protected $virtualAttributes = [];
 
     /**
      * Returns whether the model was inserted in the this request
@@ -197,5 +197,5 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      * @var array
      * @internal may be rename to avoid confuse with relationValues
      */
-    protected $relationData = [];
+    protected $relationAttributes = [];
 }

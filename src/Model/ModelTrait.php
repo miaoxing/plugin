@@ -30,14 +30,14 @@ trait ModelTrait
     public function __construct(array $options = [])
     {
         if (isset($options['isNew']) && false === $options['isNew']) {
-            $this->setRawData($options['data']);
-            unset($options['data']);
+            $this->setDbAttributes($options['attributes']);
+            unset($options['attributes']);
         }
 
         parent::__construct($options);
 
         // Clear changed status after created
-        $this->changedData = [];
+        $this->changes = [];
 
         $this->triggerCallback('afterLoad');
 
@@ -95,25 +95,25 @@ trait ModelTrait
     /**
      * Create a new model object
      *
-     * @param array $data
+     * @param array $attributes
      * @param array $options
      * @return $this
      */
-    public static function new($data = [], array $options = [])
+    public static function new($attributes = [], array $options = [])
     {
         $class = static::getServiceClass();
-        return new $class($options + ['data' => $data]);
+        return new $class($options + ['attributes' => $attributes]);
     }
 
     /**
-     * @param array $data
+     * @param array $attributes
      * @return $this|$this[]
      * @todo 待 data 改为 default ？ 后移除
      */
-    public static function newColl($data = [])
+    public static function newColl($attributes = [])
     {
         $class = static::getServiceClass();
-        return (new $class())->beColl()->fromArray($data);
+        return (new $class())->beColl()->fromArray($attributes);
     }
 
     /**
@@ -187,13 +187,13 @@ trait ModelTrait
     /**
      * Import a PHP array in this record
      *
-     * @param array|\ArrayAccess $data
+     * @param array|\ArrayAccess $attributes
      * @return $this
      */
-    public function setData($data)
+    public function setAttributes($attributes)
     {
-        foreach ($data as $field => $value) {
-            $this->set($field, $value);
+        foreach ($attributes as $column => $value) {
+            $this->set($column, $value);
         }
         return $this;
     }
@@ -208,72 +208,72 @@ trait ModelTrait
         $this->dataSources = ['*' => 'db'];
 
         $primaryKey = $this->getPrimaryKey();
-        $this->data = $this->executeSelect([$primaryKey => $this->get($primaryKey)]);
-        $this->changedData = [];
+        $this->attributes = $this->executeSelect([$primaryKey => $this->get($primaryKey)]);
+        $this->changes = [];
         $this->triggerCallback('afterLoad');
         return $this;
     }
 
     /**
-     * Merges data into collection and save to database, including insert, update and delete
+     * Merges attributes into collection and save to database, including insert, update and delete
      *
-     * @param array $data A two-dimensional array
-     * @param array $extraData The extra data for new rows
+     * @param array $attributes A two-dimensional array
+     * @param array $extra The extra attributes for new rows
      * @param bool $sort
      * @return $this
      */
-    public function saveColl($data, $extraData = [], $sort = false)
+    public function saveColl($attributes, $extra = [], $sort = false)
     {
-        if (!is_array($data)) {
+        if (!is_array($attributes)) {
             return $this;
         }
 
         // 1. Uses primary key as data index
-        $newData = [];
+        $newAttributes = [];
         $primaryKey = $this->getPrimaryKey();
-        foreach ($this->data as $key => $record) {
-            unset($this->data[$key]);
+        foreach ($this->attributes as $key => $record) {
+            unset($this->attributes[$key]);
             // Ignore default data
             if ($record instanceof $this) {
-                $newData[$record[$primaryKey]] = $record;
+                $newAttributes[$record[$primaryKey]] = $record;
             }
         }
-        $this->data = $newData;
+        $this->attributes = $newAttributes;
 
         // 2. Removes empty rows from data
-        foreach ($data as $index => $row) {
+        foreach ($attributes as $index => $row) {
             if (!array_filter($row)) {
-                unset($data[$index]);
+                unset($attributes[$index]);
             }
         }
 
         // 3. Removes missing rows
         $existIds = [];
-        foreach ($data as $row) {
+        foreach ($attributes as $row) {
             if (isset($row[$primaryKey]) && null !== $row[$primaryKey]) {
                 $existIds[] = $row[$primaryKey];
             }
         }
         /** @var static $record */
-        foreach ($this->data as $key => $record) {
+        foreach ($this->attributes as $key => $record) {
             if (!in_array($record[$primaryKey], $existIds, true)) {
                 $record->destroy();
-                unset($this->data[$key]);
+                unset($this->attributes[$key]);
             }
         }
 
         // 4. Merges existing rows or create new rows
-        foreach ($data as $index => $row) {
+        foreach ($attributes as $index => $row) {
             if ($sort) {
                 $row[$sort] = $index;
             }
-            if (isset($row[$primaryKey], $this->data[$row[$primaryKey]])) {
-                $this->data[$row[$primaryKey]]->fromArray($row);
+            if (isset($row[$primaryKey], $this->attributes[$row[$primaryKey]])) {
+                $this->attributes[$row[$primaryKey]]->fromArray($row);
             } else {
-                $this->offsetSet(null, $this->__invoke($this->table)->fromArray($extraData + $row));
+                $this->offsetSet(null, $this->__invoke($this->table)->fromArray($extra + $row));
             }
         }
-        $this->data = array_values($this->data);
+        $this->attributes = array_values($this->attributes);
 
         // 5. Save and return
         return $this->save();
@@ -293,7 +293,7 @@ trait ModelTrait
         $exists = true;
 
         // Receive field value
-        if ($this->isCollKey($name) || $this->hasColumn($name) || array_key_exists($name, $this->data)) {
+        if ($this->isCollKey($name) || $this->hasColumn($name) || array_key_exists($name, $this->attributes)) {
             return $this->getColumnValue($name);
         }
 
@@ -333,7 +333,7 @@ trait ModelTrait
                 static::class
             ));
         }
-        return isset($this->data[$name]) ? $this->data[$name] : null;
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
     }
 
     /**
@@ -349,14 +349,14 @@ trait ModelTrait
         $this->loaded = true;
 
         // Set record for collection
-        if (!$this->data && $value instanceof static) {
+        if (!$this->attributes && $value instanceof static) {
             $this->isColl = true;
         }
 
         if (!$this->isColl) {
             if (in_array($name, $this->getColumns(), true)) {
-                $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
-                $this->data[$name] = $value;
+                $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+                $this->attributes[$name] = $value;
             }
         } else {
             if (!$value instanceof static) {
@@ -364,9 +364,9 @@ trait ModelTrait
             } else {
                 // Support $coll[] = $value;
                 if (null === $name) {
-                    $this->data[] = $value;
+                    $this->attributes[] = $value;
                 } else {
-                    $this->data[$name] = $value;
+                    $this->attributes[$name] = $value;
                 }
             }
         }
@@ -382,7 +382,7 @@ trait ModelTrait
      */
     public function setAll($name, $value)
     {
-        foreach ($this->data as $record) {
+        foreach ($this->attributes as $record) {
             $record[$name] = $value;
         }
         return $this;
@@ -396,11 +396,11 @@ trait ModelTrait
      */
     public function getAll($name)
     {
-        $data = [];
-        foreach ($this->data as $record) {
-            $data[] = $record[$name];
+        $attributes = [];
+        foreach ($this->attributes as $record) {
+            $attributes[] = $record[$name];
         }
-        return $data;
+        return $attributes;
     }
 
     /**
@@ -412,11 +412,11 @@ trait ModelTrait
     public function remove($name)
     {
         if (!$this->isColl) {
-            if (array_key_exists($name, $this->data)) {
-                $this->data[$name] = null;
+            if (array_key_exists($name, $this->attributes)) {
+                $this->attributes[$name] = null;
             }
         } else {
-            unset($this->data[$name]);
+            unset($this->attributes[$name]);
         }
         return $this;
     }
@@ -473,17 +473,17 @@ trait ModelTrait
     }
 
     /**
-     * Return the field data before changed
+     * Return the column that has been changed
      *
-     * @param string $field
+     * @param string $column
      * @return array|string|null
      */
-    public function getChangedData($field = null)
+    public function getChanges($column = null)
     {
-        if ($field) {
-            return isset($this->changedData[$field]) ? $this->changedData[$field] : null;
+        if ($column) {
+            return isset($this->changes[$column]) ? $this->changes[$column] : null;
         }
-        return $this->changedData;
+        return $this->changes;
     }
 
     /**
@@ -507,8 +507,8 @@ trait ModelTrait
      */
     public function offsetExists($offset)
     {
-        $this->loadData($offset);
-        return isset($this->data[$offset]);
+        $this->loadAttributes($offset);
+        return isset($this->attributes[$offset]);
     }
 
     /**
@@ -530,7 +530,7 @@ trait ModelTrait
      */
     public function offsetSet($offset, $value)
     {
-        $this->loadData($offset);
+        $this->loadAttributes($offset);
         $this->set($offset, $value);
     }
 
@@ -541,7 +541,7 @@ trait ModelTrait
      */
     public function offsetUnset($offset)
     {
-        $this->loadData($offset);
+        $this->loadAttributes($offset);
         $this->remove($offset);
     }
 
@@ -552,8 +552,8 @@ trait ModelTrait
      */
     public function getIterator()
     {
-        $this->loadData(0);
-        return new \ArrayIterator($this->data);
+        $this->loadAttributes(0);
+        return new \ArrayIterator($this->attributes);
     }
 
     /**
@@ -564,8 +564,8 @@ trait ModelTrait
      */
     public function filter(Closure $fn)
     {
-        $data = array_filter($this->data, $fn);
-        return static::newColl($data)->setOption([
+        $attributes = array_filter($this->attributes, $fn);
+        return static::newColl($attributes)->setOption([
             'isNew' => $this->isNew,
             'loaded' => $this->loaded,
         ]);
@@ -712,7 +712,7 @@ trait ModelTrait
      */
     public function beColl()
     {
-        $this->data = [];
+        $this->attributes = [];
         $this->isColl = true;
 
         return $this;
@@ -793,13 +793,13 @@ trait ModelTrait
     }
 
     /**
-     * Returns the record data
+     * Returns the data of model
      *
      * @return $this[]|array
      */
-    public function getData()
+    public function getAttributes()
     {
-        return $this->data;
+        return $this->attributes;
     }
 
     /**
@@ -850,7 +850,7 @@ trait ModelTrait
 
         $value = $this->getRelatedValue($localKey);
         $related->where($foreignKey, $value);
-        $related->setRelationData($foreignKey, $value);
+        $related->setRelationAttribute($foreignKey, $value);
 
         return $related;
     }
@@ -1052,9 +1052,9 @@ trait ModelTrait
     public function isChanged($field = null)
     {
         if ($field) {
-            return array_key_exists($field, $this->changedData);
+            return array_key_exists($field, $this->changes);
         }
-        return (bool) $this->changedData;
+        return (bool) $this->changes;
     }
 
     /**
@@ -1064,7 +1064,7 @@ trait ModelTrait
      */
     public function setRawValue($column, $value)
     {
-        $this->data[$column] = $value;
+        $this->attributes[$column] = $value;
         return $this;
     }
 
@@ -1097,8 +1097,8 @@ trait ModelTrait
      */
     public function count()
     {
-        $this->loadData(0);
-        return count($this->data);
+        $this->loadAttributes(0);
+        return count($this->attributes);
     }
 
     public function selectMain($column = '*')
@@ -1132,9 +1132,9 @@ trait ModelTrait
      * @param array $data
      * @return $this
      */
-    public function setRawData(array $data)
+    public function setDbAttributes(array $data)
     {
-        $this->data = $data + $this->data;
+        $this->attributes = $data + $this->attributes;
 
         if ($data) {
             $this->loaded = true;
@@ -1154,17 +1154,17 @@ trait ModelTrait
      * $user->emails()->saveRelation([[], []]);
      * ```
      *
-     * @param array $data
+     * @param array $attributes
      * @return $this
      * @expertimental
      */
-    public function saveRelation(array $data = [])
+    public function saveRelation(array $attributes = [])
     {
         if ($this->isColl()) {
             $this->all();
-            $this->saveColl($data, $this->relationData);
+            $this->saveColl($attributes, $this->relationAttributes);
         } else {
-            $this->findOrInitBy([])->fromArray($data)->save($this->relationData);
+            $this->findOrInitBy([])->fromArray($attributes)->save($this->relationAttributes);
         }
 
         return $this;
@@ -1213,7 +1213,7 @@ trait ModelTrait
     protected function toArray($returnFields = [], callable $prepend = null)
     {
         if (!$this->isLoaded()) {
-            $this->loadData($this->isColl() ? 0 : 'id');
+            $this->loadAttributes($this->isColl() ? 0 : 'id');
         }
 
         if (!$this->isColl) {
@@ -1232,7 +1232,7 @@ trait ModelTrait
 
             $data = [];
             /** @var static $record */
-            foreach ($this->data as $key => $record) {
+            foreach ($this->attributes as $key => $record) {
                 $data[$key] = $record->toArray($returnFields);
                 if ($prepend) {
                     $data[$key] = $prepend($record) + $data[$key];
@@ -1245,13 +1245,13 @@ trait ModelTrait
     /**
      * 不经过fillable检查,设置数据并保存
      *
-     * @param array $data
+     * @param array $attributes
      * @return $this
      * @svc
      */
-    protected function saveData($data = [])
+    protected function saveAttributes($attributes = [])
     {
-        $data && $this->setData($data);
+        $attributes && $this->setAttributes($attributes);
 
         return $this->save();
     }
@@ -1298,14 +1298,14 @@ trait ModelTrait
     /**
      * Import a PHP array in this record
      *
-     * @param array|\ArrayAccess $data
+     * @param array|\ArrayAccess $attributes
      * @return $this
      * @svc
      */
-    protected function fromArray($data)
+    protected function fromArray($attributes)
     {
-        foreach ($data as $key => $value) {
-            if (is_int($key) || $this->isFillable($key, $data)) {
+        foreach ($attributes as $key => $value) {
+            if (is_int($key) || $this->isFillable($key, $attributes)) {
                 $this->setFromArray($key, $value);
             }
         }
@@ -1315,14 +1315,14 @@ trait ModelTrait
     /**
      * Save the record or data to database
      *
-     * @param array $data
+     * @param array $attributes
      * @return $this
      * @svc
      */
-    protected function save($data = [])
+    protected function save($attributes = [])
     {
-        // 1. Merges data from parameters
-        $data && $this->fromArray($data);
+        // 1. Merges attributes from parameters
+        $attributes && $this->fromArray($attributes);
 
         // 2.1 Saves single record
         if (!$this->isColl) {
@@ -1334,32 +1334,32 @@ trait ModelTrait
             $this->triggerCallback($isNew ? 'beforeCreate' : 'beforeUpdate');
 
             // 将数据转换为数据库数据
-            $origData = $this->data;
-            $this->data = $this->generateDbData();
+            $origAttributes = $this->attributes;
+            $this->attributes = $this->getDbAttributes();
             $isNew = $this->isNew;
 
             // 2.1.3.1 Inserts new record
             if ($isNew) {
                 // Removes primary key value when it's empty to avoid SQL error
-                if (array_key_exists($primaryKey, $this->data) && !$this->data[$primaryKey]) {
-                    unset($this->data[$primaryKey]);
+                if (array_key_exists($primaryKey, $this->attributes) && !$this->attributes[$primaryKey]) {
+                    unset($this->attributes[$primaryKey]);
                 }
 
-                $this->executeInsert($this->data);
+                $this->executeInsert($this->attributes);
                 $this->isNew = false;
                 $this->wasRecentlyCreated = true;
 
                 // Receives primary key value when it's empty
-                if (!isset($this->data[$primaryKey]) || !$this->data[$primaryKey]) {
+                if (!isset($this->attributes[$primaryKey]) || !$this->attributes[$primaryKey]) {
                     // Prepare sequence name for PostgreSQL
                     $sequence = sprintf('%s_%s_seq', $this->db->getTable($this->getTable()), $primaryKey);
-                    $this->data[$primaryKey] = $this->db->lastInsertId($sequence);
+                    $this->attributes[$primaryKey] = $this->db->lastInsertId($sequence);
                 }
                 // 2.1.3.2 Updates existing record
             } else {
                 if ($this->isChanged()) {
-                    $data = array_intersect_key($this->data, $this->changedData);
-                    $this->executeUpdate($data, [$primaryKey => $this->data[$primaryKey]]);
+                    $attributes = array_intersect_key($this->attributes, $this->changes);
+                    $this->executeUpdate($attributes, [$primaryKey => $this->attributes[$primaryKey]]);
                 }
             }
 
@@ -1368,22 +1368,22 @@ trait ModelTrait
             }
 
             // 解决保存之前调用了$this->id导致变为null的问题
-            if ($isNew && array_key_exists($primaryKey, $origData)) {
-                $origData[$primaryKey] = $this->data[$primaryKey];
+            if ($isNew && array_key_exists($primaryKey, $origAttributes)) {
+                $origAttributes[$primaryKey] = $this->attributes[$primaryKey];
             }
 
             // 还原原来的数据+save过程中生成的主键数据
-            $this->data = $origData + $this->data;
+            $this->attributes = $origAttributes + $this->attributes;
 
-            // 2.1.4 Reset changed data
-            $this->changedData = [];
+            // 2.1.4 Reset changed attributes
+            $this->changes = [];
 
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
             $this->triggerCallback('afterSave');
             // 2.2 Loop and save collection records
         } else {
-            foreach ($this->data as $record) {
+            foreach ($this->attributes as $record) {
                 $record->save();
             }
         }
@@ -1401,7 +1401,7 @@ trait ModelTrait
     protected function destroy($id = null)
     {
         $id && $this->find($id);
-        !$this->loaded && $this->loadData(0);
+        !$this->loaded && $this->loadAttributes(0);
 
         if (!$this->isColl) {
             $this->triggerCallback('beforeDestroy');
@@ -1413,7 +1413,7 @@ trait ModelTrait
 
             $this->triggerCallback('afterDestroy');
         } else {
-            foreach ($this->data as $record) {
+            foreach ($this->attributes as $record) {
                 $record->destroy();
             }
         }
@@ -1424,7 +1424,7 @@ trait ModelTrait
     protected function executeDestroy()
     {
         $primaryKey = $this->getPrimaryKey();
-        $this->executeDelete([$primaryKey => $this->data[$primaryKey]]);
+        $this->executeDelete([$primaryKey => $this->attributes[$primaryKey]]);
         $this->isNew = true;
     }
 
@@ -1488,29 +1488,29 @@ trait ModelTrait
     }
 
     /**
-     * Find a record by primary key, or init with the specified data if record not found
+     * Find a record by primary key, or init with the specified attributes if record not found
      *
      * @param int|string $id
-     * @param array|object $data
+     * @param array|object $attributes
      * @return $this
      * @svc
      */
-    protected function findOrInit($id = null, $data = [])
+    protected function findOrInit($id = null, $attributes = [])
     {
-        return $this->findOrInitBy([$this->getPrimaryKey() => $id], $data);
+        return $this->findOrInitBy([$this->getPrimaryKey() => $id], $attributes);
     }
 
     /**
-     * Find a record by primary key, or save with the specified data if record not found
+     * Find a record by primary key, or save with the specified attributes if record not found
      *
      * @param int|string $id
-     * @param array $data
+     * @param array $attributes
      * @return $this
      * @svc
      */
-    protected function findOrCreate($id, $data = [])
+    protected function findOrCreate($id, $attributes = [])
     {
-        $this->findOrInit($id, $data);
+        $this->findOrInit($id, $attributes);
         if ($this->isNew()) {
             $this->save();
         }
@@ -1557,7 +1557,7 @@ trait ModelTrait
         $data = $this->fetch(...func_get_args());
         if ($data) {
             $this->setDataSource('*', 'db');
-            $this->data = $data + $this->data;
+            $this->attributes = $data + $this->attributes;
             $this->triggerCallback('afterFind');
             return $this;
         } else {
@@ -1589,7 +1589,7 @@ trait ModelTrait
             $records[$key]->triggerCallback('afterFind');
         }
 
-        $this->data = $records;
+        $this->attributes = $records;
         return $this;
     }
 
@@ -1610,7 +1610,7 @@ trait ModelTrait
                 $data = $data->toArray();
             }
 
-            $this->setData($attributes);
+            $this->setAttributes($attributes);
             $this->fromArray($data);
         }
         return $this;
@@ -1675,7 +1675,7 @@ trait ModelTrait
      *
      * @param int|string|null $offset
      */
-    protected function loadData($offset)
+    protected function loadAttributes($offset)
     {
         if (!$this->loaded && !$this->isNew) {
             if (is_numeric($offset) || null === $offset) {
@@ -1753,7 +1753,7 @@ trait ModelTrait
         } else {
             $records = [];
         }
-        foreach ($this->data as $row) {
+        foreach ($this->attributes as $row) {
             $row->{$name} = isset($records[$row[$relation['localKey']]]) ? $records[$row[$relation['localKey']]] : null;
         }
 
@@ -1769,7 +1769,7 @@ trait ModelTrait
     protected function loadHasMany($related, $relation, $name)
     {
         $records = $related ? $related->fetchAll() : [];
-        foreach ($this->data as $row) {
+        foreach ($this->attributes as $row) {
             $rowRelation = $row->{$name} = $related::newColl();
             foreach ($records as $record) {
                 // NOTE: 从数据库取出为 string, 因此必须转换了再比较
@@ -1778,7 +1778,7 @@ trait ModelTrait
                     if (!$related->hasColumn($relation['foreignKey'])) {
                         unset($record[$relation['foreignKey']]);
                     }
-                    $rowRelation[] = forward_static_call([$related, 'new'])->setData($record);
+                    $rowRelation[] = forward_static_call([$related, 'new'])->setAttributes($record);
                 }
             }
         }
@@ -1829,18 +1829,18 @@ trait ModelTrait
 
     protected function getRelatedValue($field)
     {
-        return $this->relatedValue ?: (array_key_exists($field, $this->data) ? $this->get($field) : null);
+        return $this->relatedValue ?: (array_key_exists($field, $this->attributes) ? $this->get($field) : null);
     }
 
     protected function setChanged($name)
     {
-        $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
+        $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
     }
 
     protected function resetChanged($name)
     {
-        if (array_key_exists($name, $this->changedData)) {
-            unset($this->changedData[$name]);
+        if (array_key_exists($name, $this->changes)) {
+            unset($this->changes[$name]);
         }
         return $this;
     }
@@ -1889,7 +1889,7 @@ trait ModelTrait
     protected function indexBy($column)
     {
         $this->parentIndexBy($column);
-        $this->loaded && $this->data = $this->executeIndexBy($this->data, $column);
+        $this->loaded && $this->attributes = $this->executeIndexBy($this->attributes, $column);
         return $this;
     }
 
@@ -1907,7 +1907,7 @@ trait ModelTrait
             if ($result) {
                 $this->setDataSource($name, 'db');
                 // TODO 整理逻辑
-                $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
+                $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
                 return $this;
             }
 
@@ -1940,10 +1940,10 @@ trait ModelTrait
             if ($this->isNew()) {
                 // TODO 整理
                 // 如果是新数据，进行转换
-                $this->data[$name] = $this->getGetValue($name, $value);
+                $this->attributes[$name] = $this->getGetValue($name, $value);
             }
             // TODO 不返回 value,返回 $this->data 才有ref
-            return $this->data[$name];
+            return $this->attributes[$name];
         }
 
         // 用户数据则先转换为db数据
@@ -1952,10 +1952,10 @@ trait ModelTrait
         }
 
         // 通过getter处理数据
-        $this->data[$name] = $this->getGetValue($name, $value);
+        $this->attributes[$name] = $this->getGetValue($name, $value);
         $this->setDataSource($name, 'php');
 
-        return $this->data[$name];
+        return $this->attributes[$name];
     }
 
     /**
@@ -2002,7 +2002,7 @@ trait ModelTrait
     {
         $result = $this->callSetter($name, $value);
         if ($result) {
-            $value = $this->data[$name];
+            $value = $this->attributes[$name];
         } else {
             $value = $this->trigger('setValue', [$value, $name]);
         }
@@ -2015,10 +2015,10 @@ trait ModelTrait
      *
      * @return array
      */
-    protected function generateDbData()
+    protected function getDbAttributes()
     {
         $dbData = [];
-        foreach ($this->data as $name => $value) {
+        foreach ($this->attributes as $name => $value) {
             if ('db' !== $this->getDataSource($name)) {
                 $dbData[$name] = $this->getSetValue($name, $value);
             } else {
@@ -2051,9 +2051,9 @@ trait ModelTrait
      */
     protected function &getVirtualValue($name)
     {
-        $result = $this->callGetter($name, $this->virtualData[$name]);
+        $result = $this->callGetter($name, $this->virtualAttributes[$name]);
         if ($result) {
-            return $this->virtualData[$name];
+            return $this->virtualAttributes[$name];
         }
 
         throw new InvalidArgumentException('Invalid virtual column: ' . $name);
@@ -2152,9 +2152,9 @@ trait ModelTrait
      * @return $this
      * @internal
      */
-    protected function setRelationData(string $column, $value)
+    protected function setRelationAttribute(string $column, $value)
     {
-        $this->relationData[$this->convertToPhpKey($column)] = $value;
+        $this->relationAttributes[$this->convertToPhpKey($column)] = $value;
         return $this;
     }
 
