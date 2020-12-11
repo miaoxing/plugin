@@ -214,7 +214,6 @@ class User extends UserModel
         $this->setData($user->getData());
 
         // 清空更改状态
-        $this->isChanged = false;
         $this->changedData = [];
     }
 

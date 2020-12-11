@@ -85,13 +85,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     ];
 
     /**
-     * Whether the record's data is changed
-     *
-     * @var bool
-     */
-    protected $isChanged = false;
-
-    /**
      * The record data before changed
      *
      * @var array

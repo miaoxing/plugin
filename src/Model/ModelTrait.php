@@ -38,7 +38,6 @@ trait ModelTrait
 
         // Clear changed status after created
         $this->changedData = [];
-        $this->isChanged = false;
 
         $this->triggerCallback('afterLoad');
 
@@ -211,7 +210,6 @@ trait ModelTrait
         $primaryKey = $this->getPrimaryKey();
         $this->data = $this->executeSelect([$primaryKey => $this->get($primaryKey)]);
         $this->changedData = [];
-        $this->isChanged = false;
         $this->triggerCallback('afterLoad');
         return $this;
     }
@@ -359,7 +357,6 @@ trait ModelTrait
             if (in_array($name, $this->getColumns(), true)) {
                 $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
                 $this->data[$name] = $value;
-                $this->isChanged = true;
             }
         } else {
             if (!$value instanceof static) {
@@ -1089,7 +1086,7 @@ trait ModelTrait
         if ($field) {
             return array_key_exists($field, $this->changedData);
         }
-        return $this->isChanged;
+        return (bool) $this->changedData;
     }
 
     /**
@@ -1404,7 +1401,7 @@ trait ModelTrait
                 }
                 // 2.1.3.2 Updates existing record
             } else {
-                if ($this->isChanged) {
+                if ($this->isChanged()) {
                     $data = array_intersect_key($this->data, $this->changedData);
                     $this->executeUpdate($data, [$primaryKey => $this->data[$primaryKey]]);
                 }
@@ -1422,9 +1419,8 @@ trait ModelTrait
             // 还原原来的数据+save过程中生成的主键数据
             $this->data = $origData + $this->data;
 
-            // 2.1.4 Reset changed data and changed status
+            // 2.1.4 Reset changed data
             $this->changedData = [];
-            $this->isChanged = false;
 
             // 2.1.5. Triggers after callbacks
             $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
@@ -1883,16 +1879,12 @@ trait ModelTrait
     protected function setChanged($name)
     {
         $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
-        $this->isChanged = true;
     }
 
     protected function resetChanged($name)
     {
         if (array_key_exists($name, $this->changedData)) {
             unset($this->changedData[$name]);
-        }
-        if (!$this->changedData) {
-            $this->isChanged = false;
         }
         return $this;
     }
@@ -1960,7 +1952,6 @@ trait ModelTrait
                 $this->setDataSource($name, 'db');
                 // TODO 整理逻辑
                 $this->changedData[$name] = isset($this->data[$name]) ? $this->data[$name] : null;
-                $this->isChanged = true;
                 return $this;
             }
 
