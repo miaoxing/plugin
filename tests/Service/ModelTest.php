@@ -111,7 +111,6 @@ final class ModelTest extends BaseTestCase
 
         $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` = 3 LIMIT 1', $user->getRawSql());
         $this->assertTrue($user->isNew());
-        $this->assertFalse($user->isDestroyed());
     }
 
     public function testFindOrInitWithSameFields()
@@ -480,6 +479,7 @@ final class ModelTest extends BaseTestCase
         $result = $user->destroy();
 
         $this->assertInstanceOf(TestUser::class, $result);
+        $this->assertTrue($user->isNew());
 
         $user = TestUser::find(1);
 
@@ -494,6 +494,17 @@ final class ModelTest extends BaseTestCase
         $this->assertInstanceOf(TestUser::class, $user);
 
         $this->assertNull(TestUser::find(2));
+    }
+
+    public function testDestroyAndSave()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::find(1);
+        $user->destroy();
+
+        $user->save();
+        $this->assertSame(1, $user->id);
     }
 
     public function testGetTable()
@@ -945,19 +956,6 @@ final class ModelTest extends BaseTestCase
         $this->assertSame(1, $user->id);
     }
 
-    public function testSaveDestroyedModel()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::find(1);
-        $user->destroy();
-
-        $user->save();
-
-        $user = TestUser::find(1);
-        $this->assertNull($user);
-    }
-
     public function testSaveWithNullPrimaryKey()
     {
         $this->initFixtures();
@@ -1067,27 +1065,6 @@ final class ModelTest extends BaseTestCase
         ]);
 
         $this->assertFalse($user->isNew());
-    }
-
-    public function testDetach()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::find(1);
-
-        $this->assertFalse($user->isDetached());
-
-        $user->detach();
-
-        $this->assertTrue($user->isDetached());
-
-        $user->save();
-
-        $this->assertTrue($user->isDestroyed());
-
-        $newMember = TestUser::find(1);
-
-        $this->assertNull($newMember);
     }
 
     public function testModelFetchColumn()

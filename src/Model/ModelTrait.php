@@ -448,18 +448,6 @@ trait ModelTrait
     }
 
     /**
-     * Set the detach status for current record
-     *
-     * @param bool $bool
-     * @return $this
-     */
-    public function detach($bool = true)
-    {
-        $this->detached = (bool) $bool;
-        return $this;
-    }
-
-    /**
      * Check if it's a new record and has not save to database
      *
      * @return bool
@@ -467,26 +455,6 @@ trait ModelTrait
     public function isNew()
     {
         return $this->isNew;
-    }
-
-    /**
-     * Check if the record has been removed from the database
-     *
-     * @return bool
-     */
-    public function isDestroyed()
-    {
-        return $this->isDestroyed;
-    }
-
-    /**
-     * Check if the record is waiting to remove from database
-     *
-     * @return bool
-     */
-    public function isDetached()
-    {
-        return $this->detached;
     }
 
     public function isColl()
@@ -1360,18 +1328,6 @@ trait ModelTrait
         if (!$this->isColl) {
             $primaryKey = $this->getPrimaryKey();
 
-            // 2.1.1 Returns when record has been destroy to avoid store dirty data
-            if ($this->isDestroyed) {
-                return $this;
-            }
-
-            // Deletes the record when it's waiting to remove from database
-            if ($this->detached) {
-                $this->executeDelete([$primaryKey => $this->data[$primaryKey]]);
-                $this->isDestroyed = true;
-                return $this;
-            }
-
             // 2.1.2 Triggers before callbacks
             $isNew = $this->isNew;
             $this->triggerCallback('beforeSave');
@@ -1453,7 +1409,6 @@ trait ModelTrait
             $result = $this->trigger('destroy');
             if (!$result) {
                 $this->executeDestroy();
-                $this->isDestroyed = true;
             }
 
             $this->triggerCallback('afterDestroy');
@@ -1470,6 +1425,7 @@ trait ModelTrait
     {
         $primaryKey = $this->getPrimaryKey();
         $this->executeDelete([$primaryKey => $this->data[$primaryKey]]);
+        $this->isNew = true;
     }
 
     /**

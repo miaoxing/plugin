@@ -92,20 +92,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     protected $changedData = [];
 
     /**
-     * Whether the record has been removed from database
-     *
-     * @var bool
-     */
-    protected $isDestroyed = false;
-
-    /**
-     * Whether the record is waiting to remove from database
-     *
-     * @var bool
-     */
-    protected $detached = false;
-
-    /**
      * Whether the data is loaded
      *
      * @var bool
