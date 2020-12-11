@@ -28,4 +28,9 @@ abstract class BaseModel extends WeiBaseModel
         'updatedAt',
         'updatedBy',
     ];
+
+    protected $hidden = [
+        'deletedBy',
+        'deletedAt',
+    ];
 }

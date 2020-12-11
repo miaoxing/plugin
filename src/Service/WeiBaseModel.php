@@ -139,10 +139,7 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     /**
      * @var string[]
      */
-    protected $hidden = [
-        'deletedBy',
-        'deletedAt',
-    ];
+    protected $hidden = [];
 
     protected static $booted = [];
 
