@@ -156,7 +156,7 @@ class User extends UserModel
     public function save($data = [])
     {
         // 确保是更新操作,同时有ID作为更新条件
-        $this->isNew = false;
+        $this->new = false;
         $this['id'] = $this->getAuth()->getData()['id'];
 
         return parent::save($data);

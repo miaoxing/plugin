@@ -29,7 +29,7 @@ trait ModelTrait
      */
     public function __construct(array $options = [])
     {
-        if (isset($options['isNew']) && false === $options['isNew']) {
+        if (isset($options['new']) && false === $options['new']) {
             $this->setDbAttributes($options['attributes']);
             unset($options['attributes']);
         }
@@ -454,7 +454,7 @@ trait ModelTrait
      */
     public function isNew()
     {
-        return $this->isNew;
+        return $this->new;
     }
 
     public function isColl()
@@ -566,7 +566,7 @@ trait ModelTrait
     {
         $attributes = array_filter($this->attributes, $fn);
         return static::newColl($attributes)->setOption([
-            'isNew' => $this->isNew,
+            'new' => $this->new,
             'loaded' => $this->loaded,
         ]);
     }
@@ -1038,7 +1038,7 @@ trait ModelTrait
     {
         $this->trigger('preBuildQuery', func_get_args());
 
-        $this->isNew = false;
+        $this->new = false;
 
         return $this->parentAdd($sqlPartName, $sqlPart, $append, $type);
     }
@@ -1084,7 +1084,7 @@ trait ModelTrait
      */
     public function existOrFail()
     {
-        if ($this->isNew) {
+        if ($this->new) {
             throw new \Exception('Record not found', 404);
         }
         return $this;
@@ -1329,14 +1329,14 @@ trait ModelTrait
             $primaryKey = $this->getPrimaryKey();
 
             // 2.1.2 Triggers before callbacks
-            $isNew = $this->isNew;
+            $isNew = $this->new;
             $this->triggerCallback('beforeSave');
             $this->triggerCallback($isNew ? 'beforeCreate' : 'beforeUpdate');
 
             // 将数据转换为数据库数据
             $origAttributes = $this->attributes;
             $this->attributes = $this->getDbAttributes();
-            $isNew = $this->isNew;
+            $isNew = $this->new;
 
             // 2.1.3.1 Inserts new record
             if ($isNew) {
@@ -1346,7 +1346,7 @@ trait ModelTrait
                 }
 
                 $this->executeInsert($this->attributes);
-                $this->isNew = false;
+                $this->new = false;
                 $this->wasRecentlyCreated = true;
 
                 // Receives primary key value when it's empty
@@ -1425,7 +1425,7 @@ trait ModelTrait
     {
         $primaryKey = $this->getPrimaryKey();
         $this->executeDelete([$primaryKey => $this->attributes[$primaryKey]]);
-        $this->isNew = true;
+        $this->new = true;
     }
 
     /**
@@ -1584,7 +1584,7 @@ trait ModelTrait
                 'wei' => $this->wei,
                 'db' => $this->db,
                 'table' => $this->getTable(),
-                'isNew' => false,
+                'new' => false,
             ]);
             $records[$key]->triggerCallback('afterFind');
         }
@@ -1603,7 +1603,7 @@ trait ModelTrait
     {
         if (!$this->findBy($attributes)) {
             // Reset status when record not found
-            $this->isNew = true;
+            $this->new = true;
 
             // Convert to object to array
             if (is_object($data) && method_exists($data, 'toArray')) {
@@ -1677,7 +1677,7 @@ trait ModelTrait
      */
     protected function loadAttributes($offset)
     {
-        if (!$this->loaded && !$this->isNew) {
+        if (!$this->loaded && !$this->new) {
             if (is_numeric($offset) || null === $offset) {
                 $this->all();
             } else {

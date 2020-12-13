@@ -55,7 +55,21 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      *
      * @var bool
      */
-    protected $isNew = true;
+    protected $new = true;
+
+    /**
+     * Whether the data is loaded
+     *
+     * @var bool
+     */
+    protected $loaded = false;
+
+    /**
+     * Whether it contains multiple or single row data
+     *
+     * @var bool
+     */
+    protected $isColl = false;
 
     /**
      * The data of model
@@ -90,20 +104,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      * @var array
      */
     protected $changes = [];
-
-    /**
-     * Whether the data is loaded
-     *
-     * @var bool
-     */
-    protected $loaded = false;
-
-    /**
-     * Whether it contains multiple or single row data
-     *
-     * @var bool
-     */
-    protected $isColl = false;
 
     /**
      * The relation configs
