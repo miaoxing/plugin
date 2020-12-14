@@ -110,7 +110,7 @@ final class RelationTest extends BaseTestCase
         $this->clearLogs();
     }
 
-    public function testRecordHasOne()
+    public function testModelHasOne()
     {
         $user = TestUser::new();
 
@@ -151,7 +151,7 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals(1, $array[0]['profile']['test_user_id']);
     }
 
-    public function testCollHasOneLazyLoad()
+    public function testCollectionHasOneLazyLoad()
     {
         $users = TestUser::new();
 
@@ -174,7 +174,7 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals(1, $array[0]['profile']['test_user_id']);
     }
 
-    public function testRecordBelongsTo()
+    public function testModelBelongsTo()
     {
         $article = TestArticle::new();
 
@@ -239,7 +239,7 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals(1, $array[0]['user']['id']);
     }
 
-    public function testRecordHasMany()
+    public function testModelHasMany()
     {
         $user = TestUser::new();
 
@@ -260,7 +260,7 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals(1, $array['articles'][0]['id']);
     }
 
-    public function testRecordsHasMany()
+    public function testCollHasMany()
     {
         $users = TestUser::all();
         $this->assertNotNull($users[0]->id);
@@ -269,7 +269,7 @@ final class RelationTest extends BaseTestCase
         $this->assertNotNull($users[0]->articles[0]->id);
     }
 
-    public function testRecordHasManyWithQuery()
+    public function testModelHasManyWithQuery()
     {
         $user = TestUser::new();
 
@@ -316,7 +316,7 @@ final class RelationTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
-    public function testRecordBelongsToMany()
+    public function testModelBelongsToMany()
     {
         $article = TestArticle::find(1);
 
@@ -341,7 +341,7 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals(1, $array['tags'][0]['id']);
     }
 
-    public function testRecordBelongsToMany2()
+    public function testModelBelongsToMany2()
     {
         $tag = TestTag::find(1);
 
@@ -489,7 +489,7 @@ final class RelationTest extends BaseTestCase
         $this->assertCount(1, $queries);
     }
 
-    public function testNewRecordsRecordIsNull()
+    public function testNewModelsModelIsNull()
     {
         /** @var TestUser $user */
         $user = TestUser::new();
@@ -499,7 +499,7 @@ final class RelationTest extends BaseTestCase
         $this->assertNull($profile);
     }
 
-    public function testNewRecordsCollIsNotNull()
+    public function testNewModelsCollIsNotNull()
     {
         $user = TestUser::new();
 
@@ -609,7 +609,7 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::save();
 
-        $articles = TestArticle::save([
+        $articles = TestArticle::newColl()->save([
             TestArticle::new([
                 'test_user_id' => $user->id,
             ]),

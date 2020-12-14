@@ -81,14 +81,6 @@ final class MutatorTest extends BaseTestCase
         $this->assertEquals('YWJj', $data['setter']);
     }
 
-    public function testSetColl()
-    {
-        $mutators = TestMutator::new();
-        $mutators[] = TestMutator::new();
-
-        $this->assertInstanceOf(TestMutator::class, $mutators[0]);
-    }
-
     public function testCreate()
     {
         $mutator = TestMutator::new();

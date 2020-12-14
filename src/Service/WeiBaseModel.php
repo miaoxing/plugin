@@ -65,13 +65,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     protected $loaded = false;
 
     /**
-     * Whether it contains multiple or single row data
-     *
-     * @var bool
-     */
-    protected $isColl = false;
-
-    /**
      * The data of model
      *
      * @var array

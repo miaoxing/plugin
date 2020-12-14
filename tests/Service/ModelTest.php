@@ -31,25 +31,13 @@ final class ModelTest extends BaseTestCase
         static::resetTablePrefix();
     }
 
-    public function testSetter()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::find(1);
-
-        $this->assertEquals('1', $user->id);
-
-        $user->id = 2;
-
-        $this->assertEquals('2', $user->id);
-    }
-
     public function testFind()
     {
         $this->initFixtures();
 
         $user = TestUser::find(1);
 
+        $this->assertInstanceOf(TestUser::class, $user);
         $this->assertSame('SELECT * FROM `p_test_users` WHERE `id` = 1 LIMIT 1', $user->getRawSql());
         $this->assertEquals('1', $user->id);
     }
@@ -254,6 +242,7 @@ final class ModelTest extends BaseTestCase
 
         $users = TestUser::all();
 
+        $this->assertInstanceOf(TestUser::class, $users);
         $this->assertCount(2, $users);
     }
 
@@ -268,26 +257,6 @@ final class ModelTest extends BaseTestCase
 
         $this->assertInstanceOf(TestUser::class, $users['twin']);
         $this->assertInstanceOf(TestUser::class, $users['test']);
-
-        $users = $users->toArray();
-
-        $this->assertArrayHasKey('twin', $users);
-        $this->assertArrayHasKey('test', $users);
-    }
-
-    public function testIndexByMultipleTimes()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::indexBy('id')->all();
-
-        $this->assertArrayHasKey(1, $users);
-
-        $users->indexBy('name');
-        $this->assertArrayHasKey('twin', $users);
-
-        $users->indexBy('id');
-        $this->assertArrayHasKey(1, $users);
     }
 
     public function testFixUndefinedOffset0WhenFetchEmptyData()
@@ -296,18 +265,6 @@ final class ModelTest extends BaseTestCase
 
         $emptyMembers = TestUser::where(['group_id' => '3'])->indexBy('id')->fetchAll();
         $this->assertEmpty($emptyMembers);
-    }
-
-    public function testRealTimeIndexBy()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::all();
-
-        $users = $users->indexBy('name')->toArray();
-
-        $this->assertArrayHasKey('twin', $users);
-        $this->assertArrayHasKey('test', $users);
     }
 
     public function testModelSave()
@@ -404,32 +361,11 @@ final class ModelTest extends BaseTestCase
 
     public function testToArrayWithInvalidColumn()
     {
+        $this->initFixtures();
+
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: notExistColumn'));
 
         TestUser::new()->toArray(['notExistColumn']);
-    }
-
-    public function testToArrayWithPrepend()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::limit(1)->all();
-
-        $data = $users->toArray(function (TestUser $user) {
-            return [
-                'newId' => $user->id + 1,
-            ];
-        });
-        $this->assertSame(2, $data[0]['newId']);
-        $this->assertArrayHasKey('id', $data[0]);
-
-        $data = $users->toArray(['name'], function ($user) {
-            return [
-                'newId' => $user->id + 1,
-            ];
-        });
-        $this->assertSame(2, $data[0]['newId']);
-        $this->assertArrayNotHasKey('id', $data[0]);
     }
 
     public function testNewModelToArrayWithoutReturnFields()
@@ -528,64 +464,6 @@ final class ModelTest extends BaseTestCase
         $user['notFound'];
     }
 
-    public function testColl()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::all();
-
-        $this->assertInstanceOf(TestUser::class, $users);
-
-        $userArray = $users->toArray();
-        $this->assertIsArray($userArray);
-        foreach ($userArray as $user) {
-            $this->assertIsArray($user);
-        }
-    }
-
-    public function testFilter()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::all();
-
-        $oneUsers = $users->filter(static function (TestUser $user) {
-            return 1 === $user->id;
-        });
-
-        $this->assertCount(1, $oneUsers);
-        $this->assertEquals(1, $oneUsers[0]->id);
-
-        $noMembers = $users->filter(static function () {
-            return false;
-        });
-
-        $this->assertCount(0, $noMembers);
-        $this->assertEmpty($noMembers->toArray());
-    }
-
-    public function testOffsetUnset()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::find(1);
-
-        $this->assertEquals('twin', $user['name']);
-        $this->assertEquals('1', $user['group_id']);
-
-        unset($user['name'], $user['group_id']);
-
-        $this->assertNull($user['name']);
-        $this->assertNull($user['group_id']);
-    }
-
-    public function testCount()
-    {
-        $users = TestUser::limit(1)->all();
-
-        $this->assertCount(1, $users);
-    }
-
     public function testReload()
     {
         $this->initFixtures();
@@ -639,11 +517,11 @@ final class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
-        $user = TestUser::new();
+        $users = TestUser::new();
 
         $count = 0;
         $times = 0;
-        $result = $user->chunk(1, function (TestUser $users, $page) use (&$count, &$times) {
+        $result = $users->chunk(1, function (TestUser $users, $page) use (&$count, &$times) {
             $count += count($users);
             ++$times;
             return false;
@@ -677,16 +555,6 @@ final class ModelTest extends BaseTestCase
         $user->save();
         $this->assertFalse($user->isChanged());
         $this->assertEmpty($user->getChanges());
-    }
-
-    public function testQueryBuilderForEach()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::where('group_id', 1)->all();
-        foreach ($users as $user) {
-            $this->assertEquals(1, $user['group_id']);
-        }
     }
 
     public function testSaveRawObject()
@@ -779,28 +647,6 @@ final class ModelTest extends BaseTestCase
         $this->assertArrayNotHasKey('ignored', $array);
     }
 
-    public function testFromArrayMultipleLevelWontBecomeColl()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::new();
-
-        $users->fromArray([
-            [
-                'group_id' => 1,
-                'name' => 'John',
-                'address' => 'xx street',
-            ],
-            [
-                'group_id' => 2,
-                'name' => 'Tome',
-                'address' => 'xx street',
-            ],
-        ]);
-
-        $this->assertFalse($users->isColl());
-    }
-
     public function testFromArrayWillIgnoreRelation()
     {
         $this->initFixtures();
@@ -821,85 +667,6 @@ final class ModelTest extends BaseTestCase
 
         $array = $user->toArray();
         $this->assertNull($array['group']);
-    }
-
-    public function testFindCollectionAndDestroy()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::findAllBy('group_id', 1);
-        $users->destroy();
-
-        $users = TestUser::findAllBy('group_id', 1);
-        $this->assertCount(0, $users);
-    }
-
-    public function testFindAndUpdate()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::find(1);
-        $user->name = 'William';
-        $result = $user->save();
-        $this->assertSame($result, $user);
-
-        $user = TestUser::find(1);
-        $this->assertEquals('William', $user->name);
-    }
-
-    public function testFindCollectionAndUpdate()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::findAllBy('group_id', 1);
-
-        $this->assertCount(2, $users);
-
-        foreach ($users as $user) {
-            $user->group_id = 2;
-        }
-        $users->save();
-
-        $users = TestUser::findAllBy('group_id', 2);
-        $this->assertCount(2, $users);
-    }
-
-    public function testCreateCollectionAndSave()
-    {
-        $this->initFixtures();
-
-        // Creates a user collection
-        $users = TestUser::newColl();
-
-        $john = TestUser::fromArray([
-            'group_id' => 2,
-            'name' => 'John',
-            'address' => 'xx street',
-        ]);
-
-        $larry = TestUser::fromArray([
-            'group_id' => 3,
-            'name' => 'Larry',
-            'address' => 'xx street',
-        ]);
-
-        // Adds record to collection
-        $users->fromArray([
-            $john,
-        ]);
-
-        // Or adds by [] operator
-        $users[] = $larry;
-
-        $result = $users->save();
-
-        $this->assertSame($result, $users);
-
-        // Find out member by id
-        $users = TestUser::indexBy('id')->whereIn('id', [$john['id'], $larry['id']])->all();
-
-        $this->assertEquals('John', $users[$john['id']]['name']);
-        $this->assertEquals('Larry', $users[$larry['id']]['name']);
     }
 
     public function testSaveOnNoAttributeChanged()
@@ -981,20 +748,6 @@ final class ModelTest extends BaseTestCase
         $this->assertNotNull($user['id']);
     }
 
-    public function testNullAsCollectionKey()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::newColl();
-
-        $users[] = TestUser::new();
-        $users[] = TestUser::new();
-        $users[] = TestUser::new();
-        $users[] = TestUser::new();
-
-        $this->assertCount(4, $users);
-    }
-
     public function testSetInvalidPropertyName()
     {
         $this->initFixtures();
@@ -1006,21 +759,6 @@ final class ModelTest extends BaseTestCase
         // TODO 改为 table
         // @phpstan-ignore-next-line
         $user->abc = 234;
-    }
-
-    public function testAddNotModelToCollection()
-    {
-        $this->initFixtures();
-
-        $users = TestUser::newColl();
-        $user = TestUser::new();
-
-        $this->expectExceptionObject(new \InvalidArgumentException(
-            'Value for collection must be an instance of Wei\Record'
-        ));
-
-        // Assign non record value to raise an exception
-        $users[] = 234;
     }
 
     public function testIncrAndDecr()

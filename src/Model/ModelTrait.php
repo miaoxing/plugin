@@ -2,11 +2,11 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Closure;
 use InvalidArgumentException;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Db\BaseDriver;
 use Miaoxing\Plugin\Service\WeiBaseModel;
+use Wei\Ret;
 use Wei\RetTrait;
 
 /**
@@ -20,6 +20,7 @@ trait ModelTrait
         indexBy as private parentIndexBy;
     }
     use QueryBuilderCacheTrait;
+    use CollTrait;
     use CastTrait;
     use RetTrait;
     use DefaultScopeTrait;
@@ -106,17 +107,6 @@ trait ModelTrait
     }
 
     /**
-     * @param array $attributes
-     * @return $this|$this[]
-     * @todo 待 data 改为 default ？ 后移除
-     */
-    public static function newColl($attributes = [])
-    {
-        $class = static::getServiceClass();
-        return (new $class())->beColl()->fromArray($attributes);
-    }
-
-    /**
      * Returns the record and relative records data as JSON string
      *
      * @param array $returnFields A indexed array specified the fields to return
@@ -192,6 +182,10 @@ trait ModelTrait
      */
     public function setAttributes($attributes)
     {
+        // Replace all attributes of the collection
+        if ($this->coll) {
+            $this->attributes = [];
+        }
         foreach ($attributes as $column => $value) {
             $this->set($column, $value);
         }
@@ -215,71 +209,6 @@ trait ModelTrait
     }
 
     /**
-     * Merges attributes into collection and save to database, including insert, update and delete
-     *
-     * @param array $attributes A two-dimensional array
-     * @param array $extra The extra attributes for new rows
-     * @param bool $sort
-     * @return $this
-     */
-    public function saveColl($attributes, $extra = [], $sort = false)
-    {
-        if (!is_array($attributes)) {
-            return $this;
-        }
-
-        // 1. Uses primary key as data index
-        $newAttributes = [];
-        $primaryKey = $this->getPrimaryKey();
-        foreach ($this->attributes as $key => $record) {
-            unset($this->attributes[$key]);
-            // Ignore default data
-            if ($record instanceof $this) {
-                $newAttributes[$record[$primaryKey]] = $record;
-            }
-        }
-        $this->attributes = $newAttributes;
-
-        // 2. Removes empty rows from data
-        foreach ($attributes as $index => $row) {
-            if (!array_filter($row)) {
-                unset($attributes[$index]);
-            }
-        }
-
-        // 3. Removes missing rows
-        $existIds = [];
-        foreach ($attributes as $row) {
-            if (isset($row[$primaryKey]) && null !== $row[$primaryKey]) {
-                $existIds[] = $row[$primaryKey];
-            }
-        }
-        /** @var static $record */
-        foreach ($this->attributes as $key => $record) {
-            if (!in_array($record[$primaryKey], $existIds, true)) {
-                $record->destroy();
-                unset($this->attributes[$key]);
-            }
-        }
-
-        // 4. Merges existing rows or create new rows
-        foreach ($attributes as $index => $row) {
-            if ($sort) {
-                $row[$sort] = $index;
-            }
-            if (isset($row[$primaryKey], $this->attributes[$row[$primaryKey]])) {
-                $this->attributes[$row[$primaryKey]]->fromArray($row);
-            } else {
-                $this->offsetSet(null, $this->__invoke($this->table)->fromArray($extra + $row));
-            }
-        }
-        $this->attributes = array_values($this->attributes);
-
-        // 5. Save and return
-        return $this->save();
-    }
-
-    /**
      * Receives the record field value
      *
      * @param string $name
@@ -292,8 +221,13 @@ trait ModelTrait
     {
         $exists = true;
 
-        // Receive field value
-        if ($this->isCollKey($name) || $this->hasColumn($name) || array_key_exists($name, $this->attributes)) {
+        // Receive collection value
+        if ($this->coll && $this->hasColl($name)) {
+            return $this->getCollValue($name);
+        }
+
+        // Receive column value
+        if ($this->hasColumn($name)) {
             return $this->getColumnValue($name);
         }
 
@@ -326,7 +260,7 @@ trait ModelTrait
     public function origGet($name)
     {
         // Check if field exists when it is not a collection
-        if (!$this->isColl && !in_array($name, $this->getColumns(), true)) {
+        if (!$this->coll && !in_array($name, $this->getColumns(), true)) {
             throw new InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
@@ -348,59 +282,12 @@ trait ModelTrait
     {
         $this->loaded = true;
 
-        // Set record for collection
-        if (!$this->attributes && $value instanceof static) {
-            $this->isColl = true;
+        if (in_array($name, $this->getColumns(), true)) {
+            $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+            $this->attributes[$name] = $value;
         }
 
-        if (!$this->isColl) {
-            if (in_array($name, $this->getColumns(), true)) {
-                $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
-                $this->attributes[$name] = $value;
-            }
-        } else {
-            if (!$value instanceof static) {
-                throw new InvalidArgumentException('Value for collection must be an instance of Wei\Record');
-            } else {
-                // Support $coll[] = $value;
-                if (null === $name) {
-                    $this->attributes[] = $value;
-                } else {
-                    $this->attributes[$name] = $value;
-                }
-            }
-        }
         return $this;
-    }
-
-    /**
-     * Set field value for every record in collection
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return $this
-     */
-    public function setAll($name, $value)
-    {
-        foreach ($this->attributes as $record) {
-            $record[$name] = $value;
-        }
-        return $this;
-    }
-
-    /**
-     * Return the value of field from every record in collection
-     *
-     * @param string $name
-     * @return array
-     */
-    public function getAll($name)
-    {
-        $attributes = [];
-        foreach ($this->attributes as $record) {
-            $attributes[] = $record[$name];
-        }
-        return $attributes;
     }
 
     /**
@@ -411,13 +298,7 @@ trait ModelTrait
      */
     public function remove($name)
     {
-        if (!$this->isColl) {
-            if (array_key_exists($name, $this->attributes)) {
-                $this->attributes[$name] = null;
-            }
-        } else {
-            unset($this->attributes[$name]);
-        }
+        unset($this->attributes[$name]);
         return $this;
     }
 
@@ -455,11 +336,6 @@ trait ModelTrait
     public function isNew()
     {
         return $this->new;
-    }
-
-    public function isColl()
-    {
-        return $this->isColl;
     }
 
     /**
@@ -543,32 +419,6 @@ trait ModelTrait
     {
         $this->loadAttributes($offset);
         $this->remove($offset);
-    }
-
-    /**
-     * Retrieve an array iterator
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        $this->loadAttributes(0);
-        return new \ArrayIterator($this->attributes);
-    }
-
-    /**
-     * Filters elements of the collection using a callback function
-     *
-     * @param Closure $fn
-     * @return $this|$this[]
-     */
-    public function filter(Closure $fn)
-    {
-        $attributes = array_filter($this->attributes, $fn);
-        return static::newColl($attributes)->setOption([
-            'new' => $this->new,
-            'loaded' => $this->loaded,
-        ]);
     }
 
     /**
@@ -705,17 +555,6 @@ trait ModelTrait
         }
 
         return array_unique($traits);
-    }
-
-    /**
-     * @return $this|$this[]
-     */
-    public function beColl()
-    {
-        $this->attributes = [];
-        $this->isColl = true;
-
-        return $this;
     }
 
     public function findAllByIds($ids)
@@ -1090,17 +929,6 @@ trait ModelTrait
         return $this;
     }
 
-    /**
-     * Returns the record number in collection
-     *
-     * @return int
-     */
-    public function count()
-    {
-        $this->loadAttributes(0);
-        return count($this->attributes);
-    }
-
     public function selectMain($column = '*')
     {
         return $this->select($this->getTable() . '.' . $column);
@@ -1160,7 +988,7 @@ trait ModelTrait
      */
     public function saveRelation(array $attributes = [])
     {
-        if ($this->isColl()) {
+        if ($this->coll) {
             $this->all();
             $this->saveColl($attributes, $this->relationAttributes);
         } else {
@@ -1212,34 +1040,29 @@ trait ModelTrait
      */
     protected function toArray($returnFields = [], callable $prepend = null)
     {
+        if ($this->coll) {
+            return $this->mapColl(__FUNCTION__, func_get_args());
+        }
+
         if (!$this->isLoaded()) {
-            $this->loadAttributes($this->isColl() ? 0 : 'id');
+            $this->loadAttributes($this->coll ? 0 : 'id');
         }
 
-        if (!$this->isColl) {
-            $data = [];
-            $columns = $this->getToArrayColumns($returnFields ?: $this->getColumns());
-            foreach ($columns as $column) {
-                $data[$column] = $this->get($column);
-            }
-
-            return $data + $this->virtualToArray() + $this->relationToArray();
-        } else {
-            if (is_callable($returnFields)) {
-                $prepend = $returnFields;
-                $returnFields = [];
-            }
-
-            $data = [];
-            /** @var static $record */
-            foreach ($this->attributes as $key => $record) {
-                $data[$key] = $record->toArray($returnFields);
-                if ($prepend) {
-                    $data[$key] = $prepend($record) + $data[$key];
-                }
-            }
-            return $data;
+        if (is_callable($returnFields)) {
+            $prepend = $returnFields;
+            $returnFields = [];
         }
+
+        $data = [];
+        $columns = $this->getToArrayColumns($returnFields ?: $this->getColumns());
+        foreach ($columns as $column) {
+            $data[$column] = $this->get($column);
+        }
+
+        if ($prepend) {
+            $data = $prepend($this) + $data;
+        }
+        return $data + $this->virtualToArray() + $this->relationToArray();
     }
 
     /**
@@ -1265,13 +1088,8 @@ trait ModelTrait
      */
     protected function toRet(array $merge = [])
     {
-        if ($this->isColl()) {
-            return $this->suc($merge + [
-                    'data' => $this,
-                    'page' => $this->getQueryPart('page'),
-                    'limit' => $this->getQueryPart('limit'),
-                    'total' => $this->cnt(),
-                ]);
+        if ($this->coll) {
+            return $this->collToRet($merge);
         } else {
             return $this->suc($merge + ['data' => $this])->setMetadata('model', $this);
         }
@@ -1304,8 +1122,12 @@ trait ModelTrait
      */
     protected function fromArray($attributes)
     {
+        if ($this->coll) {
+            return $this->setAttributes($attributes);
+        }
+
         foreach ($attributes as $key => $value) {
-            if (is_int($key) || $this->isFillable($key, $attributes)) {
+            if ($this->isFillable($key, $attributes)) {
                 $this->setFromArray($key, $value);
             }
         }
@@ -1324,69 +1146,68 @@ trait ModelTrait
         // 1. Merges attributes from parameters
         $attributes && $this->fromArray($attributes);
 
-        // 2.1 Saves single record
-        if (!$this->isColl) {
-            $primaryKey = $this->getPrimaryKey();
+        // 2.1 Loop and save collection records
+        if ($this->coll) {
+            $this->mapColl(__FUNCTION__);
+            return $this;
+        }
 
-            // 2.1.2 Triggers before callbacks
-            $isNew = $this->new;
-            $this->triggerCallback('beforeSave');
-            $this->triggerCallback($isNew ? 'beforeCreate' : 'beforeUpdate');
+        // 2.2 Saves single record
+        $primaryKey = $this->getPrimaryKey();
 
-            // 将数据转换为数据库数据
-            $origAttributes = $this->attributes;
-            $this->attributes = $this->getDbAttributes();
-            $isNew = $this->new;
+        // 2.2.2 Triggers before callbacks
+        $isNew = $this->new;
+        $this->triggerCallback('beforeSave');
+        $this->triggerCallback($isNew ? 'beforeCreate' : 'beforeUpdate');
 
-            // 2.1.3.1 Inserts new record
-            if ($isNew) {
-                // Removes primary key value when it's empty to avoid SQL error
-                if (array_key_exists($primaryKey, $this->attributes) && !$this->attributes[$primaryKey]) {
-                    unset($this->attributes[$primaryKey]);
-                }
+        // 将数据转换为数据库数据
+        $origAttributes = $this->attributes;
+        $this->attributes = $this->getDbAttributes();
+        $isNew = $this->new;
 
-                $this->executeInsert($this->attributes);
-                $this->new = false;
-                $this->wasRecentlyCreated = true;
-
-                // Receives primary key value when it's empty
-                if (!isset($this->attributes[$primaryKey]) || !$this->attributes[$primaryKey]) {
-                    // Prepare sequence name for PostgreSQL
-                    $sequence = sprintf('%s_%s_seq', $this->db->getTable($this->getTable()), $primaryKey);
-                    $this->attributes[$primaryKey] = $this->db->lastInsertId($sequence);
-                }
-                // 2.1.3.2 Updates existing record
-            } else {
-                if ($this->isChanged()) {
-                    $attributes = array_intersect_key($this->attributes, $this->changes);
-                    $this->executeUpdate($attributes, [$primaryKey => $this->attributes[$primaryKey]]);
-                }
+        // 2.2.3.1 Inserts new record
+        if ($isNew) {
+            // Removes primary key value when it's empty to avoid SQL error
+            if (array_key_exists($primaryKey, $this->attributes) && !$this->attributes[$primaryKey]) {
+                unset($this->attributes[$primaryKey]);
             }
 
-            if ($isNew) {
-                $this->setDataSource($primaryKey, 'db');
+            $this->executeInsert($this->attributes);
+            $this->new = false;
+            $this->wasRecentlyCreated = true;
+
+            // Receives primary key value when it's empty
+            if (!isset($this->attributes[$primaryKey]) || !$this->attributes[$primaryKey]) {
+                // Prepare sequence name for PostgreSQL
+                $sequence = sprintf('%s_%s_seq', $this->db->getTable($this->getTable()), $primaryKey);
+                $this->attributes[$primaryKey] = $this->db->lastInsertId($sequence);
             }
-
-            // 解决保存之前调用了$this->id导致变为null的问题
-            if ($isNew && array_key_exists($primaryKey, $origAttributes)) {
-                $origAttributes[$primaryKey] = $this->attributes[$primaryKey];
-            }
-
-            // 还原原来的数据+save过程中生成的主键数据
-            $this->attributes = $origAttributes + $this->attributes;
-
-            // 2.1.4 Reset changed attributes
-            $this->changes = [];
-
-            // 2.1.5. Triggers after callbacks
-            $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
-            $this->triggerCallback('afterSave');
-            // 2.2 Loop and save collection records
+            // 2.2.3.2 Updates existing record
         } else {
-            foreach ($this->attributes as $record) {
-                $record->save();
+            if ($this->isChanged()) {
+                $attributes = array_intersect_key($this->attributes, $this->changes);
+                $this->executeUpdate($attributes, [$primaryKey => $this->attributes[$primaryKey]]);
             }
         }
+
+        if ($isNew) {
+            $this->setDataSource($primaryKey, 'db');
+        }
+
+        // 解决保存之前调用了$this->id导致变为null的问题
+        if ($isNew && array_key_exists($primaryKey, $origAttributes)) {
+            $origAttributes[$primaryKey] = $this->attributes[$primaryKey];
+        }
+
+        // 还原原来的数据+save过程中生成的主键数据
+        $this->attributes = $origAttributes + $this->attributes;
+
+        // 2.2.4 Reset changed attributes
+        $this->changes = [];
+
+        // 2.2.5. Triggers after callbacks
+        $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
+        $this->triggerCallback('afterSave');
 
         return $this;
     }
@@ -1403,20 +1224,17 @@ trait ModelTrait
         $id && $this->find($id);
         !$this->loaded && $this->loadAttributes(0);
 
-        if (!$this->isColl) {
-            $this->triggerCallback('beforeDestroy');
-
-            $result = $this->trigger('destroy');
-            if (!$result) {
-                $this->executeDestroy();
-            }
-
-            $this->triggerCallback('afterDestroy');
-        } else {
-            foreach ($this->attributes as $record) {
-                $record->destroy();
-            }
+        if ($this->coll) {
+            $this->mapColl(__FUNCTION__);
+            return $this;
         }
+
+        $this->triggerCallback('beforeDestroy');
+        $result = $this->trigger('destroy');
+        if (!$result) {
+            $this->executeDestroy();
+        }
+        $this->triggerCallback('afterDestroy');
 
         return $this;
     }
@@ -1439,7 +1257,11 @@ trait ModelTrait
      */
     protected function set($name, $value = null, $throwException = true)
     {
-        if ($this->isCollKey($name) || $this->hasColumn($name)) {
+        if ($this->coll) {
+            return $this->setCollValue($name, $value);
+        }
+
+        if ($this->hasColumn($name)) {
             return $this->setColumnValue($name, $value);
         }
 
@@ -1452,7 +1274,7 @@ trait ModelTrait
         }
 
         if ($throwException) {
-            throw new InvalidArgumentException('Invalid property: ' . $name);
+            throw new InvalidArgumentException('Invalid property: ' . (null === $name ? '[null]' : $name));
         } else {
             return false;
         }
@@ -1553,7 +1375,7 @@ trait ModelTrait
      */
     protected function findBy($column, $operator = null, $value = null)
     {
-        $this->isColl = false;
+        $this->coll = false;
         $data = $this->fetch(...func_get_args());
         if ($data) {
             $this->setDataSource('*', 'db');
@@ -1574,7 +1396,7 @@ trait ModelTrait
      */
     protected function findAllBy($column, $operator = null, $value = null)
     {
-        $this->isColl = true;
+        $this->coll = true;
         $data = $this->fetchAll(...func_get_args());
 
         $records = [];
@@ -1668,6 +1490,20 @@ trait ModelTrait
     protected function all()
     {
         return $this->findAllBy(null);
+    }
+
+    /**
+     * Coll: Specifies a field to be the key of the fetched array
+     *
+     * @param string $column
+     * @return $this
+     * @svc
+     */
+    protected function indexBy($column)
+    {
+        $this->parentIndexBy($column);
+        $this->loaded && $this->attributes = $this->executeIndexBy($this->attributes, $column);
+        return $this;
     }
 
     /**
@@ -1871,53 +1707,25 @@ trait ModelTrait
     }
 
     /**
-     * Check if collection key
-     *
-     * @param string|null $key
-     * @return bool
-     */
-    protected function isCollKey(string $key = null)
-    {
-        return null === $key || is_numeric($key);
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @svc
-     */
-    protected function indexBy($column)
-    {
-        $this->parentIndexBy($column);
-        $this->loaded && $this->attributes = $this->executeIndexBy($this->attributes, $column);
-        return $this;
-    }
-
-    /**
      * @param string|null $name
      * @param mixed $value
      * @return $this
      */
     protected function setColumnValue($name, $value)
     {
-        // Ignore $coll[] = $value
-        if (null !== $name) {
-            // 如果有mutator，由mutator管理数据
-            $result = $this->callSetter($name, $value);
-            if ($result) {
-                $this->setDataSource($name, 'db');
-                // TODO 整理逻辑
-                $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
-                return $this;
-            }
-
-            // 直接设置就行
-            $this->origSet($name, $value);
-
-            $this->setDataSource($name, 'user');
-        } else {
-            $this->origSet($name, $value);
+        // 如果有mutator，由mutator管理数据
+        $result = $this->callSetter($name, $value);
+        if ($result) {
+            $this->setDataSource($name, 'db');
+            // TODO 整理逻辑
+            $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+            return $this;
         }
+
+        // 直接设置就行
+        $this->origSet($name, $value);
+
+        $this->setDataSource($name, 'user');
 
         return $this;
     }
@@ -2163,7 +1971,7 @@ trait ModelTrait
      */
     private function setFromArray($name, $value)
     {
-        if ($this->isCollKey($name) || $this->hasColumn($name)) {
+        if ($this->hasColumn($name)) {
             return $this->setColumnValue($name, $value);
         }
 
