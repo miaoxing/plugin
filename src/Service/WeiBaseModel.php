@@ -99,32 +99,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     protected $changes = [];
 
     /**
-     * The relation configs
-     *
-     * @var array
-     */
-    protected $relations = [];
-
-    /**
-     * The relations have been loaded
-     *
-     * @var array
-     */
-    protected $loadedRelations = [];
-
-    /**
-     * @var array
-     */
-    protected $relationValues = [];
-
-    /**
-     * The value for relation base query
-     *
-     * @var mixed
-     */
-    protected $relatedValue;
-
-    /**
      * @var array
      */
     protected $virtual = [];
@@ -183,12 +157,4 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      * @var bool
      */
     protected $wasRecentlyCreated = false;
-
-    /**
-     * Extra data for saveRelation method
-     *
-     * @var array
-     * @internal may be rename to avoid confuse with relationValues
-     */
-    protected $relationAttributes = [];
 }
