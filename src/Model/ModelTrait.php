@@ -929,11 +929,6 @@ trait ModelTrait
         return $this;
     }
 
-    public function selectMain($column = '*')
-    {
-        return $this->select($this->getTable() . '.' . $column);
-    }
-
     /**
      * 搜索某一列是否有值
      *

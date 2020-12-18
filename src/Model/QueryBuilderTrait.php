@@ -801,6 +801,19 @@ trait QueryBuilderTrait
     }
 
     /**
+     * Specifies an item of the main table that is to be returned in the query result.
+     * Default to all columns of the main table
+     *
+     * @param string $column
+     * @return $this
+     * @svc
+     */
+    protected function selectMain(string $column = '*'): self
+    {
+        return $this->select($this->getTable() . '.' . $column);
+    }
+
+    /**
      * Sets table for FROM query
      *
      * @param string $table
