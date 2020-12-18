@@ -515,7 +515,7 @@ trait QueryBuilderTrait
     }
 
     /**
-     * Returns the name of fields of current table
+     * Returns the name of columns of current table
      *
      * @return array
      * @svc
@@ -526,6 +526,18 @@ trait QueryBuilderTrait
             $this->columns = array_map([$this, 'convertToPhpKey'], $this->db->getTableFields($this->getTable()));
         }
         return $this->columns;
+    }
+
+    /**
+     * Check if column name exists
+     *
+     * @param string|int|null $name
+     * @return bool
+     * @svc
+     */
+    protected function hasColumn($name): bool
+    {
+        return in_array($name, $this->getColumns(), true);
     }
 
     /**

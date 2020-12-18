@@ -827,17 +827,6 @@ trait ModelTrait
         return $this->getServiceValue($name);
     }
 
-    /**
-     * Check if column name exists
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function hasColumn($name)
-    {
-        return in_array($name, $this->getColumns(), true);
-    }
-
     public function trigger($event, $data = [])
     {
         $result = null;
