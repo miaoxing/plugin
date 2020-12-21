@@ -604,6 +604,13 @@ final class QueryBuilderTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM `p_test_users` GROUP BY `group_id`, `type`', $sql);
     }
 
+    public function testGroupByTwice()
+    {
+        $sql = Qb::table('test_users')->groupBy('group_id')->groupBy('type')->getRawSql();
+
+        $this->assertEquals('SELECT * FROM `p_test_users` GROUP BY `group_id`, `type`', $sql);
+    }
+
     public function testHaving()
     {
         $sql = Qb::table('test_users')

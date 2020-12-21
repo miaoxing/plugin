@@ -14,7 +14,7 @@ use Wei\RetTrait;
 trait ModelTrait
 {
     use QueryBuilderTrait {
-        add as private parentAdd;
+        addQueryPart as private parentAddQueryPart;
         execute as private parentExecute;
         indexBy as private parentIndexBy;
     }
@@ -609,10 +609,10 @@ trait ModelTrait
         return $this->parentExecute();
     }
 
-    public function add($sqlPartName, $sqlPart, $append = false, $type = null)
+    public function addQueryPart($sqlPartName, $value, $append = false)
     {
         $this->trigger('preBuildQuery', func_get_args());
-        return $this->parentAdd($sqlPartName, $sqlPart, $append, $type);
+        return $this->parentAddQueryPart($sqlPartName, $value, $append);
     }
 
     /**

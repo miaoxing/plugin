@@ -186,7 +186,7 @@ trait QueryBuilderTrait
 
     public function aggregate($function, $columns = ['*'])
     {
-        $this->add('aggregate', compact('function', 'columns'));
+        $this->addQueryPart('aggregate', compact('function', 'columns'));
         return $this->fetchColumn(null);
     }
 
@@ -196,7 +196,7 @@ trait QueryBuilderTrait
      */
     public function distinct(bool $distinct = true)
     {
-        return $this->add('distinct', $distinct);
+        return $this->addQueryPart('distinct', $distinct);
     }
 
     public function raw($expression)
@@ -351,7 +351,7 @@ trait QueryBuilderTrait
             $name = array_keys($this->queryParts);
         }
         foreach ($name as $queryPartName) {
-            $this->resetSqlPart($queryPartName);
+            $this->resetQueryPart($queryPartName);
         }
         return $this;
     }
@@ -712,7 +712,7 @@ trait QueryBuilderTrait
 
         $params = [];
         foreach ($set as $field => $param) {
-            $this->add('set', $field, true);
+            $this->addQueryPart('set', $field, true);
             $params[] = $param;
         }
         $this->addQueryParams($params, 'set');
@@ -748,7 +748,7 @@ trait QueryBuilderTrait
     {
         $offset = (int) $offset;
         $offset < 0 && $offset = 0;
-        return $this->add('offset', $offset);
+        return $this->addQueryPart('offset', $offset);
     }
 
     /**
@@ -761,7 +761,7 @@ trait QueryBuilderTrait
     protected function limit($limit)
     {
         $limit = max(1, (int) $limit);
-        $this->add('limit', $limit);
+        $this->addQueryPart('limit', $limit);
 
         // 计算出新的offset
         if ($page = $this->getQueryPart('page')) {
@@ -781,12 +781,12 @@ trait QueryBuilderTrait
     protected function page($page)
     {
         $page = max(1, (int) $page);
-        $this->add('page', $page);
+        $this->addQueryPart('page', $page);
 
         $limit = $this->getQueryPart('limit');
         if (!$limit) {
             $limit = 10;
-            $this->add('limit', $limit);
+            $this->addQueryPart('limit', $limit);
         }
         return $this->offset(($page - 1) * $limit);
     }
@@ -805,7 +805,7 @@ trait QueryBuilderTrait
 
         $columns = is_array($columns) ? $columns : func_get_args();
 
-        return $this->add('select', (array) $columns, true);
+        return $this->addQueryPart('select', (array) $columns, true);
     }
 
     /**
@@ -828,7 +828,7 @@ trait QueryBuilderTrait
     {
         $this->queryType = BaseDriver::SELECT;
 
-        return $this->add('select', $this->raw($expression));
+        return $this->addQueryPart('select', $this->raw($expression));
     }
 
     /**
@@ -870,7 +870,7 @@ trait QueryBuilderTrait
     protected function from($table, $alias = null): self
     {
         $this->table = $table;
-        return $this->add('from', $table . ($alias ? ' ' . $alias : ''));
+        return $this->addQueryPart('from', $table . ($alias ? ' ' . $alias : ''));
     }
 
     /**
@@ -902,7 +902,7 @@ trait QueryBuilderTrait
         string $second = null,
         string $type = 'INNER'
     ) {
-        return $this->add('join', compact('table', 'first', 'operator', 'second', 'type'), true);
+        return $this->addQueryPart('join', compact('table', 'first', 'operator', 'second', 'type'), true);
     }
 
     /**
@@ -1176,7 +1176,7 @@ trait QueryBuilderTrait
     protected function groupBy($column)
     {
         $column = is_array($column) ? $column : func_get_args();
-        return $this->add('groupBy', $column, true);
+        return $this->addQueryPart('groupBy', $column, true);
     }
 
     /**
@@ -1203,7 +1203,7 @@ trait QueryBuilderTrait
             $this->addQueryParam($value, 'having');
         }
 
-        $this->add('having', compact('column', 'operator', 'value', 'condition'), true);
+        $this->addQueryPart('having', compact('column', 'operator', 'value', 'condition'), true);
         return $this;
     }
 
@@ -1234,7 +1234,7 @@ trait QueryBuilderTrait
             throw new \InvalidArgumentException('Parameter for "order" must be "ASC" or "DESC".');
         }
 
-        return $this->add('orderBy', [compact('column', 'order')], true);
+        return $this->addQueryPart('orderBy', [compact('column', 'order')], true);
     }
 
     /**
@@ -1270,7 +1270,7 @@ trait QueryBuilderTrait
      */
     protected function indexBy($column)
     {
-        $this->add('indexBy', $column);
+        $this->addQueryPart('indexBy', $column);
         return $this;
     }
 
@@ -1299,7 +1299,7 @@ trait QueryBuilderTrait
      */
     protected function lock($lock)
     {
-        $this->add('lock', $lock);
+        $this->addQueryPart('lock', $lock);
         return $this;
     }
 
@@ -1383,7 +1383,7 @@ trait QueryBuilderTrait
      * @param string $name
      * @return $this
      */
-    protected function resetSqlPart($name)
+    protected function resetQueryPart($name)
     {
         $this->queryParts[$name] = is_array($this->queryParts[$name]) ? [] : null;
         $this->queryChanged = true;
@@ -1393,40 +1393,33 @@ trait QueryBuilderTrait
     /**
      * Either appends to or replaces a single, generic query part.
      *
-     * The available parts are: 'select', 'from', 'set', 'where',
-     * 'groupBy', 'having', 'orderBy', 'limit' and 'offset'.
-     *
-     * @param string $sqlPartName
-     * @param mixed $sqlPart
+     * @param string $name
+     * @param mixed $value
      * @param bool $append
-     * @param string $type
      * @return $this
      */
-    protected function add($sqlPartName, $sqlPart, $append = false, $type = null)
+    protected function addQueryPart($name, $value, $append = false)
     {
         $this->queryChanged = true;
 
-        $isArray = is_array($sqlPart);
-        $isMultiple = is_array($this->queryParts[$sqlPartName]);
-
-        if ($isMultiple && !$isArray) {
-            $sqlPart = [$sqlPart];
+        $isMultiple = is_array($this->queryParts[$name]);
+        if ($isMultiple && !is_array($value)) {
+            $value = [$value];
         }
 
         if ($append) {
-            if ('orderBy' === $sqlPartName
-                || 'groupBy' === $sqlPartName
-                || 'select' === $sqlPartName
-                || 'set' === $sqlPartName
-            ) {
-                $this->queryParts[$sqlPartName] = array_merge($this->queryParts[$sqlPartName], $sqlPart);
+            if (in_array($name, ['orderBy', 'groupBy', 'select', 'set'])) {
+                // merge
+                $this->queryParts[$name] = array_merge($this->queryParts[$name], $value);
             } elseif ($isMultiple) {
-                $this->queryParts[$sqlPartName][] = $sqlPart;
+                // append
+                $this->queryParts[$name][] = $value;
             }
-            return $this;
+        } else {
+            // set
+            $this->queryParts[$name] = $value;
         }
 
-        $this->queryParts[$sqlPartName] = $sqlPart;
         return $this;
     }
 
@@ -1451,7 +1444,7 @@ trait QueryBuilderTrait
             $this->addQueryParam($value);
         }
 
-        $this->add('where', compact('column', 'operator', 'value', 'condition', 'type'), true);
+        $this->addQueryPart('where', compact('column', 'operator', 'value', 'condition', 'type'), true);
 
         return $this;
     }
