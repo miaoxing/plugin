@@ -196,4 +196,18 @@ class AttributeTest extends BaseTestCase
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: key'));
         $user->key = 'abc';
     }
+
+    public function testMagicIsset()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::new();
+
+        $this->assertTrue($user->id ?? true);
+
+        $user->id = 123;
+        $this->assertTrue($user->id ?? true);
+
+        $this->assertTrue($user->notFound ?? true);
+    }
 }

@@ -942,11 +942,4 @@ final class ModelTest extends BaseTestCase
         $user = TestUser::findByOrCreate(['name' => 'twin'], ['group_id' => 2]);
         $this->assertSame(1, $user->group_id);
     }
-
-    public function testIsset()
-    {
-        $user = TestUser::new();
-        $this->assertTrue($user->id ?? true);
-        $this->assertTrue($user->notFound ?? true);
-    }
 }
