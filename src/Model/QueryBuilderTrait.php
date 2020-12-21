@@ -47,9 +47,9 @@ trait QueryBuilderTrait
         'from' => null,
         'join' => [],
         'set' => [],
-        'where' => null,
+        'where' => [],
         'groupBy' => [],
-        'having' => null,
+        'having' => [],
         'orderBy' => [],
         'limit' => null,
         'offset' => null,
@@ -1169,8 +1169,7 @@ trait QueryBuilderTrait
             $this->queryParams['having'][] = (array) $value;
         }
 
-        $this->queryParts['having'][] = compact('column', 'operator', 'value', 'condition');
-
+        $this->add('having', compact('column', 'operator', 'value', 'condition'), true);
         return $this;
     }
 
@@ -1237,7 +1236,7 @@ trait QueryBuilderTrait
      */
     protected function indexBy($column)
     {
-        $this->queryParts['indexBy'] = $column;
+        $this->add('indexBy', $column);
         return $this;
     }
 
@@ -1266,8 +1265,7 @@ trait QueryBuilderTrait
      */
     protected function lock($lock)
     {
-        $this->queryParts['lock'] = $lock;
-
+        $this->add('lock', $lock);
         return $this;
     }
 
@@ -1419,7 +1417,7 @@ trait QueryBuilderTrait
             $this->queryParams['where'][] = (array) $value;
         }
 
-        $this->queryParts['where'][] = compact('column', 'operator', 'value', 'condition', 'type');
+        $this->add('where', compact('column', 'operator', 'value', 'condition', 'type'), true);
 
         return $this;
     }
