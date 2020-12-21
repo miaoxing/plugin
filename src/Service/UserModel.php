@@ -30,7 +30,7 @@ class UserModel extends BaseModel
 
     public function getGuarded()
     {
-        return array_merge(parent::getGuarded(), [
+        return array_merge($this->guarded, [
             'isAdmin',
             'mobileVerifiedAt',
             'username',

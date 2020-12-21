@@ -280,8 +280,6 @@ trait ModelTrait
      */
     public function origSet($name, $value = null)
     {
-        $this->loaded = true;
-
         if (in_array($name, $this->getColumns(), true)) {
             $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
             $this->attributes[$name] = $value;
@@ -339,16 +337,6 @@ trait ModelTrait
     }
 
     /**
-     * Returns whether the data is loaded
-     *
-     * @return bool
-     */
-    public function isLoaded()
-    {
-        return $this->loaded;
-    }
-
-    /**
      * Return the column that has been changed
      *
      * @param string $column
@@ -383,7 +371,6 @@ trait ModelTrait
      */
     public function offsetExists($offset)
     {
-        $this->loadAttributes($offset);
         return isset($this->attributes[$offset]);
     }
 
@@ -406,7 +393,6 @@ trait ModelTrait
      */
     public function offsetSet($offset, $value)
     {
-        $this->loadAttributes($offset);
         $this->set($offset, $value);
     }
 
@@ -417,7 +403,6 @@ trait ModelTrait
      */
     public function offsetUnset($offset)
     {
-        $this->loadAttributes($offset);
         $this->remove($offset);
     }
 
@@ -720,20 +705,12 @@ trait ModelTrait
     public function execute()
     {
         $this->trigger('preExecute');
-
-        if (BaseDriver::SELECT == $this->queryType) {
-            $this->loaded = true;
-        }
-
         return $this->parentExecute();
     }
 
     public function add($sqlPartName, $sqlPart, $append = false, $type = null)
     {
         $this->trigger('preBuildQuery', func_get_args());
-
-        $this->new = false;
-
         return $this->parentAdd($sqlPartName, $sqlPart, $append, $type);
     }
 
@@ -815,7 +792,6 @@ trait ModelTrait
         $this->attributes = $data + $this->attributes;
 
         if ($data) {
-            $this->loaded = true;
             $this->setDataSource('*', 'db');
         }
 
@@ -866,10 +842,6 @@ trait ModelTrait
     {
         if ($this->coll) {
             return $this->mapColl(__FUNCTION__, func_get_args());
-        }
-
-        if (!$this->isLoaded()) {
-            $this->loadAttributes($this->coll ? 0 : 'id');
         }
 
         if (is_callable($returnFields)) {
@@ -987,7 +959,6 @@ trait ModelTrait
         // 将数据转换为数据库数据
         $origAttributes = $this->attributes;
         $this->attributes = $this->getDbAttributes();
-        $isNew = $this->new;
 
         // 2.2.3.1 Inserts new record
         if ($isNew) {
@@ -1046,7 +1017,6 @@ trait ModelTrait
     protected function destroy($id = null)
     {
         $id && $this->find($id);
-        !$this->loaded && $this->loadAttributes(0);
 
         if ($this->coll) {
             $this->mapColl(__FUNCTION__);
@@ -1202,6 +1172,7 @@ trait ModelTrait
         $this->coll = false;
         $data = $this->fetch(...func_get_args());
         if ($data) {
+            $this->new = false;
             $this->setDataSource('*', 'db');
             $this->attributes = $data + $this->attributes;
             $this->triggerCallback('afterFind');
@@ -1248,9 +1219,6 @@ trait ModelTrait
     protected function findOrInitBy($attributes, $data = [])
     {
         if (!$this->findBy($attributes)) {
-            // Reset status when record not found
-            $this->new = true;
-
             // Convert to object to array
             if (is_object($data) && method_exists($data, 'toArray')) {
                 $data = $data->toArray();
@@ -1326,24 +1294,8 @@ trait ModelTrait
     protected function indexBy($column)
     {
         $this->parentIndexBy($column);
-        $this->loaded && $this->attributes = $this->executeIndexBy($this->attributes, $column);
+        $this->attributes = $this->executeIndexBy($this->attributes, $column);
         return $this;
-    }
-
-    /**
-     * Load record by array offset
-     *
-     * @param int|string|null $offset
-     */
-    protected function loadAttributes($offset)
-    {
-        if (!$this->loaded && !$this->new) {
-            if (is_numeric($offset) || null === $offset) {
-                $this->all();
-            } else {
-                $this->first();
-            }
-        }
     }
 
     /**

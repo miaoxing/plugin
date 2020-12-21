@@ -301,19 +301,6 @@ final class ModelTest extends BaseTestCase
         $this->assertEquals('3', $user->id);
     }
 
-    public function testModelIsLoaded()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::new();
-
-        $this->assertFalse($user->isLoaded());
-
-        $user->find(1);
-
-        $this->assertTrue($user->isLoaded());
-    }
-
     public function testToArray()
     {
         $this->initFixtures();

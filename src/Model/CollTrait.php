@@ -162,7 +162,6 @@ trait CollTrait
         $attributes = array_filter($this->attributes, $fn);
         return static::newColl($attributes)->setOption([
             'new' => $this->new,
-            'loaded' => $this->loaded,
         ]);
     }
 
@@ -173,7 +172,6 @@ trait CollTrait
      */
     public function count(): int
     {
-        $this->loadAttributes(0);
         return count($this->attributes);
     }
 
@@ -184,7 +182,6 @@ trait CollTrait
      */
     public function getIterator(): ArrayIterator
     {
-        $this->loadAttributes(0);
         return new ArrayIterator($this->attributes);
     }
 

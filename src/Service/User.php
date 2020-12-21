@@ -89,17 +89,6 @@ class User extends UserModel
     ];
 
     /**
-     * @var array
-     */
-    protected $requiredServices = [
-        'db',
-        'cache',
-        'logger',
-        'ret',
-        'str',
-    ];
-
-    /**
      * @var string
      */
     protected $authClass = JwtAuth::class;
@@ -140,10 +129,7 @@ class User extends UserModel
         // __set end
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray($returnFields = [], callable $prepend = null)
+    protected function toArray($returnFields = [], callable $prepend = null)
     {
         $this->loadDbUser();
 
@@ -171,7 +157,7 @@ class User extends UserModel
     {
         // 未加载数据,已登录,认证服务中存在需要的key
         $data = $this->getAuth()->getData();
-        if (!$this->isLoaded() && isset($data[$name])) {
+        if ($this->isNew() && isset($data[$name])) {
             $exists = true;
             return $data[$name];
         } else {
@@ -192,7 +178,7 @@ class User extends UserModel
      */
     protected function loadDbUser()
     {
-        if ($this->isLoaded() || !$this->isLogin()) {
+        if (!$this->isNew() || !$this->isLogin()) {
             return;
         }
 
@@ -384,7 +370,6 @@ class User extends UserModel
     protected function logout()
     {
         $this->attributes = [];
-        $this->loaded = false;
         $this->dataSources = ['*' => 'php'];
 
         $this->getAuth()->logout();
