@@ -1,6 +1,6 @@
 <?php
 
-namespace MiaoxingTest\Plugin\Service;
+namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;

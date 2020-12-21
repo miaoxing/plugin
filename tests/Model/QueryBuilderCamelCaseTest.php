@@ -1,6 +1,6 @@
 <?php
 
-namespace MiaoxingTest\Plugin\Service;
+namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
