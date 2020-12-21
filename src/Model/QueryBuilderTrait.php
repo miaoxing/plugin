@@ -67,6 +67,7 @@ trait QueryBuilderTrait
     protected $queryParams = [
         'set' => [],
         'where' => [],
+        'having' => [],
     ];
 
     /**
@@ -360,17 +361,25 @@ trait QueryBuilderTrait
      *
      * @param int|string $key The parameter position or name
      * @param mixed $value The parameter value
-     * @param string|null $type PDO::PARAM_*
+     * @param string|null $type
      * @return $this
-     * @todo refactor 暂不支持
      */
-    public function setQueryParam($key, $value, $type = null)
+    public function setQueryParam($key, $value, $type = 'where')
     {
-        if (null !== $type) {
-            $this->queryParamTypes[$key] = $type;
-        }
+        $this->queryParams[$type][$key] = $value;
+        return $this;
+    }
 
-        $this->queryParams[$key] = $value;
+    /**
+     * Sets a collection of query parameters for the query being constructed
+     *
+     * @param array $params The query parameters to set
+     * @param string $type
+     * @return $this
+     */
+    public function setQueryParams(array $params, $type = 'where')
+    {
+        $this->queryParams[$type] = $params;
         return $this;
     }
 
@@ -378,25 +387,12 @@ trait QueryBuilderTrait
      * Gets a (previously set) query parameter of the query being constructed
      *
      * @param mixed $key The key (index or name) of the bound parameter
+     * @param string $type
      * @return mixed The value of the bound parameter
      */
-    public function getQueryParam($key)
+    public function getQueryParam($key, $type = 'where')
     {
-        return $this->getBindParams()[$key] ?? null;
-    }
-
-    /**
-     * Sets a collection of query parameters for the query being constructed
-     *
-     * @param array $params The query parameters to set
-     * @param array $types The query parameters types to set
-     * @return $this
-     */
-    public function setQueryParams(array $params, array $types = [])
-    {
-        $this->queryParamTypes = $types;
-        $this->queryParams = $params;
-        return $this;
+        return $this->queryParams[$type][$key] ?? null;
     }
 
     /**
@@ -404,9 +400,13 @@ trait QueryBuilderTrait
      *
      * @return array the currently defined query parameters
      */
-    public function getQueryParams()
+    public function getQueryParams($type = 'where')
     {
-        return $this->queryParams;
+        if ($type) {
+            return $this->queryParams[$type] ?? null;
+        } else {
+            return $this->queryParams;
+        }
     }
 
     /**
@@ -416,7 +416,17 @@ trait QueryBuilderTrait
      */
     public function addQueryParam($param, $type = 'where')
     {
-        $this->queryParams[$type][] = (array) $param;
+        $this->queryParams[$type] = array_merge($this->queryParams[$type], (array) $param);
+        return $this;
+    }
+
+    /**
+     * @param array $params
+     * @param string $type
+     */
+    public function addQueryParams(array $params, $type = 'where')
+    {
+        $this->queryParams[$type] = array_merge($this->queryParams[$type], $params);
         return $this;
     }
 
@@ -424,16 +434,54 @@ trait QueryBuilderTrait
      * @param string|null $type
      * @return $this
      */
-    public function removeParam($type = null)
+    public function resetQueryParam($type = 'where')
     {
         if ($type) {
             $this->queryParams[$type] = [];
         } else {
-            foreach ($this->queryParams as $paramType => $params) {
-                $this->queryParams[$paramType] = [];
+            foreach ($this->queryParams as $type => $params) {
+                $this->queryParams[$type] = [];
             }
         }
         return $this;
+    }
+
+    /**
+     * Returns flatten array for parameter binding.
+     *
+     * @return array
+     */
+    public function getBindParams()
+    {
+        $result = [];
+        foreach ($this->queryParams as $params) {
+            foreach ($params as $key => $param) {
+                if (is_int($key)) {
+                    $result[] = $param;
+                } else {
+                    $result[$key] = $param;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param array $types
+     * @return $this
+     */
+    public function setQueryParamTypes(array $types)
+    {
+        $this->queryParamTypes = $types;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getQueryParamTypes()
+    {
+        return $this->queryParamTypes;
     }
 
     /**
@@ -469,27 +517,13 @@ trait QueryBuilderTrait
     }
 
     /**
-     * Returns flatten array for parameter binding.
-     *
-     * @return array
-     */
-    public function getBindParams()
-    {
-        $params = [];
-        foreach ($this->queryParams as $value) {
-            $params[] = array_merge([], ...$value);
-        }
-        return array_merge([], ...$params);
-    }
-
-    /**
      * Reset all SQL parts and parameters
      *
      * @return $this
      */
     public function resetQuery()
     {
-        $this->queryParams = [];
+        $this->resetQueryParam(null);
         $this->queryParamTypes = [];
 
         return $this->resetQueryParts();
@@ -681,7 +715,7 @@ trait QueryBuilderTrait
             $this->add('set', $field, true);
             $params[] = $param;
         }
-        $this->queryParams['set'][] = array_merge($this->queryParams['set'], $params);
+        $this->addQueryParams($params, 'set');
 
         $this->queryType = BaseDriver::UPDATE;
         return $this->execute();
@@ -964,7 +998,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereRaw($expression, $params = [])
+    protected function whereRaw($expression, $params = null)
     {
         return $this->where($this->raw($expression), null, $params);
     }
@@ -1166,7 +1200,7 @@ trait QueryBuilderTrait
         if (null === $value) {
             $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
         } else {
-            $this->queryParams['having'][] = (array) $value;
+            $this->addQueryParam($value, 'having');
         }
 
         $this->add('having', compact('column', 'operator', 'value', 'condition'), true);
@@ -1405,16 +1439,16 @@ trait QueryBuilderTrait
             ]);
             $column($query);
             $column = $query;
-            $this->queryParams['where'] = array_merge($this->queryParams['where'], $query->getQueryParams()['where']);
+            $this->addQueryParams($query->getQueryParams());
         }
 
         if (null === $value) {
             $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
         } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'], true)) {
             $operator = 'NOT IN' === $operator ? $operator : 'IN';
-            $this->queryParams['where'][] = (array) $value;
+            $this->addQueryParam($value);
         } else {
-            $this->queryParams['where'][] = (array) $value;
+            $this->addQueryParam($value);
         }
 
         $this->add('where', compact('column', 'operator', 'value', 'condition', 'type'), true);

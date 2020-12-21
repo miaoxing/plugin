@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
+use PDO;
 
 /**
  * @mixin \DbMixin
@@ -962,8 +963,7 @@ final class QueryBuilderTest extends BaseTestCase
         $this->assertEquals(1, $user['id']);
         $this->assertEquals(1, $user['group_id']);
 
-        // TODO set parameter
-        $query->removeParam()->addQueryParam([
+        $query->setQueryParams([
             'id' => 10,
             'groupId' => 1,
         ]);
@@ -1178,5 +1178,52 @@ final class QueryBuilderTest extends BaseTestCase
             'WHERE `p_test_users`.`id` = 1',
             'HAVING `p_test_users`.`id` = 1',
         ]), $qb->getRawSql());
+    }
+
+    public function testResetQuery()
+    {
+        $qb = Qb::table('test_users')
+            ->where('id', 1)
+            ->having('id', 1);
+
+        $qb->resetQuery();
+
+        $queryParams = $qb->getQueryParams(null);
+        $this->assertSame([
+            'set' => [],
+            'where' => [],
+            'having' => [],
+        ], $queryParams);
+    }
+
+    public function testSetQueryParam()
+    {
+        $this->initFixtures();
+
+        $users = Qb::table('test_users')
+            ->whereRaw('name = :name')
+            ->setQueryParam('name', 'twin')
+            ->fetchAll();
+        $this->assertCount(1, $users);
+        $this->assertSame('twin', $users[0]['name']);
+    }
+
+    public function testSetQueryParamTypes()
+    {
+        $this->initFixtures();
+
+        $qb = Qb::table('test_users')
+            ->whereRaw('group_id = :groupId AND name = :name', [
+                'groupId' => 1,
+                'name' => 'twin',
+            ])
+            ->setQueryParamTypes([
+                'groupId' => PDO::PARAM_INT,
+                'name' => PDO::PARAM_STR,
+            ]);
+
+        $data = $qb->fetch();
+        $this->assertSame('twin', $data['name']);
+        $this->assertSame('1', $data['group_id']);
     }
 }
