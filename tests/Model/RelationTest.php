@@ -275,7 +275,7 @@ final class RelationTest extends BaseTestCase
 
         $user->find(1);
         /** @var TestArticle|TestArticle[] $articles */
-        $articles = $user->customArticles()->where('id', '>=', 1)->desc('id');
+        $articles = $user->customArticles()->where('id', '>=', 1)->desc('id')->all();
 
         foreach ($articles as $article) {
             $this->assertEquals($article->test_user_id, $user->id);
