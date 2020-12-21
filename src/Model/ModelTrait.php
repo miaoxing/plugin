@@ -59,52 +59,6 @@ trait ModelTrait
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    public function __set($name, $value = null)
-    {
-        // Required services first
-        if (in_array($name, $this->requiredServices, true)) {
-            return $this->{$name} = $value;
-        }
-
-        $result = $this->set($name, $value, false);
-        if ($result) {
-            return;
-        }
-
-        if ($this->wei->has($name)) {
-            return $this->{$name} = $value;
-        }
-
-        throw new InvalidArgumentException('Invalid property: ' . $name);
-    }
-
-    /**
-     * Check if property exists
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        return isset($this->$name);
-    }
-
-    /**
-     * Remove the attribute value by name
-     *
-     * @param string|int $name The name of field
-     * @return $this
-     */
-    public function __unset($name)
-    {
-        return $this->remove($name);
-    }
-
-    /**
      * Create a new model object
      *
      * @param array $attributes
@@ -375,49 +329,6 @@ trait ModelTrait
     }
 
     /**
-     * Check if the offset exists
-     *
-     * @param string $offset
-     * @return bool
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->attributes[$offset]);
-    }
-
-    /**
-     * Get the offset value
-     *
-     * @param string $offset
-     * @return mixed
-     */
-    public function &offsetGet($offset)
-    {
-        return $this->get($offset);
-    }
-
-    /**
-     * Set the offset value
-     *
-     * @param string|int|null $offset
-     * @param mixed $value
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->set($offset, $value);
-    }
-
-    /**
-     * Unset the offset
-     *
-     * @param string $offset
-     */
-    public function offsetUnset($offset)
-    {
-        $this->remove($offset);
-    }
-
-    /**
      * The method called after load a record
      */
     public function afterLoad()
@@ -668,27 +579,6 @@ trait ModelTrait
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return $this|BaseService
-     */
-    public function &__get($name)
-    {
-        // Receive service that conflict with record method name
-        if (in_array($name, $this->requiredServices, true)) {
-            return $this->getServiceValue($name);
-        }
-
-        $value = &$this->get($name, $exists, false);
-        if ($exists) {
-            return $value;
-        }
-
-        // Receive other services
-        return $this->getServiceValue($name);
-    }
-
     public function trigger($event, $data = [])
     {
         $result = null;
@@ -839,6 +729,116 @@ trait ModelTrait
     public function getPrimaryKey()
     {
         return $this->primaryKey;
+    }
+
+    /**
+     * Check if the offset exists
+     *
+     * @param string $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->attributes[$offset]);
+    }
+
+    /**
+     * Get the offset value
+     *
+     * @param string $offset
+     * @return mixed
+     */
+    public function &offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * Set the offset value
+     *
+     * @param string|int|null $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->set($offset, $value);
+    }
+
+    /**
+     * Unset the offset
+     *
+     * @param string $offset
+     */
+    public function offsetUnset($offset)
+    {
+        $this->remove($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return $this|BaseService
+     */
+    public function &__get($name)
+    {
+        // Receive service that conflict with record method name
+        if (in_array($name, $this->requiredServices, true)) {
+            return $this->getServiceValue($name);
+        }
+
+        $value = &$this->get($name, $exists, false);
+        if ($exists) {
+            return $value;
+        }
+
+        // Receive other services
+        return $this->getServiceValue($name);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
+    public function __set($name, $value = null)
+    {
+        // Required services first
+        if (in_array($name, $this->requiredServices, true)) {
+            return $this->{$name} = $value;
+        }
+
+        $result = $this->set($name, $value, false);
+        if ($result) {
+            return;
+        }
+
+        if ($this->wei->has($name)) {
+            return $this->{$name} = $value;
+        }
+
+        throw new InvalidArgumentException('Invalid property: ' . $name);
+    }
+
+    /**
+     * Check if property exists
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->$name);
+    }
+
+    /**
+     * Remove the attribute value by name
+     *
+     * @param string|int $name The name of field
+     * @return $this
+     */
+    public function __unset($name)
+    {
+        return $this->remove($name);
     }
 
     /**
