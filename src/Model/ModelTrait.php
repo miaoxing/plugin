@@ -94,6 +94,17 @@ trait ModelTrait
     }
 
     /**
+     * Remove the attribute value by name
+     *
+     * @param string|int $name The name of field
+     * @return $this
+     */
+    public function __unset($name)
+    {
+        return $this->remove($name);
+    }
+
+    /**
      * Create a new model object
      *
      * @param array $attributes
@@ -289,9 +300,9 @@ trait ModelTrait
     }
 
     /**
-     * Remove field value
+     * Remove the attribute value by name
      *
-     * @param string $name The name of field
+     * @param string|int $name The name of field
      * @return $this
      */
     public function remove($name)

@@ -197,6 +197,31 @@ class AttributeTest extends BaseTestCase
         $user->key = 'abc';
     }
 
+    public function testMagicUnset()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::new([
+            'id' => 123,
+        ]);
+        $this->assertSame(123, $user->id);
+
+        unset($user->id);
+        $this->assertNull($user->id);
+
+
+    }
+
+    public function testMagicUnsetInvalid()
+    {
+        $this->initFixtures();
+        $user = TestUser::new();
+        $this->assertSame([], $user->getHidden());
+
+        unset($user->hidden);
+        $this->assertSame([], $user->getHidden());
+    }
+
     public function testMagicIsset()
     {
         $this->initFixtures();
