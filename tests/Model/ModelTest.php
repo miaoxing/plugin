@@ -469,6 +469,16 @@ final class ModelTest extends BaseTestCase
         $this->assertEquals(2, $user2->getLoadTimes());
     }
 
+    public function testReloadIdBecomeStringIssue()
+    {
+        $this->initFixtures();
+        $user = TestUser::find(1);
+
+        $user->reload();
+
+        $this->assertSame(1, $user->id);
+    }
+
     public function testChunk()
     {
         $this->initFixtures();

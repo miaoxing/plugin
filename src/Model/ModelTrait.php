@@ -164,11 +164,10 @@ trait ModelTrait
      */
     public function reload()
     {
-        $this->dataSources = ['*' => 'db'];
-
         $primaryKey = $this->getPrimaryKey();
         $this->attributes = $this->executeSelect([$primaryKey => $this->get($primaryKey)]);
         $this->changes = [];
+        $this->dataSources = ['*' => 'db'];
         $this->triggerCallback('afterLoad');
         return $this;
     }
@@ -1407,6 +1406,7 @@ trait ModelTrait
 
         // 通过getter处理数据
         $this->attributes[$name] = $this->getGetValue($name, $value);
+
         $this->setDataSource($name, 'php');
 
         return $this->attributes[$name];
