@@ -656,6 +656,15 @@ final class RelationTest extends BaseTestCase
         $this->assertCount(0, $articles);
     }
 
+    public function testModelLoadWillThrowsException()
+    {
+        $user = TestUser::save();
+
+        $this->expectExceptionObject(new \BadMethodCallException('Method "load" can be called when the object is a collection'));
+
+        $user->load('profile');
+    }
+
     protected function clearLogs()
     {
         // preload fields cache

@@ -160,6 +160,8 @@ trait RelationTrait
      */
     public function load($names)
     {
+        $this->ensureColl();
+
         foreach ((array) $names as $name) {
             // 1. Load relation config
             $parts = explode('.', $name, 2);
