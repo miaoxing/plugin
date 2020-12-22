@@ -315,19 +315,6 @@ trait ModelTrait
     }
 
     /**
-     * Find a record by primary key, or throws 404 exception if record not found
-     *
-     * @param int|string $id
-     * @return $this
-     * @throws \Exception
-     * @deprecated use findOrFail
-     */
-    public function findOne($id)
-    {
-        return $this->findOrFail($id);
-    }
-
-    /**
      * The method called after load a record
      */
     public function afterLoad()
@@ -461,15 +448,6 @@ trait ModelTrait
         }
 
         return array_unique($traits);
-    }
-
-    public function findAllByIds($ids)
-    {
-        if (!$ids) {
-            return $this->beColl();
-        }
-
-        return $this->findAll(['id' => $ids]);
     }
 
     /**
