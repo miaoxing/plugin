@@ -181,7 +181,7 @@ trait ReqQueryTrait
     {
         if ($this->req->has('sort')) {
             $name = $this->req['sort'];
-            if (in_array($name, $this->getColumns(), true)) {
+            if ($this->hasColumn($name)) {
                 $sort = $name;
             } else {
                 $sort = $defaultColumn;

@@ -224,7 +224,7 @@ trait ModelTrait
     public function origGet($name)
     {
         // Check if field exists when it is not a collection
-        if (!$this->coll && !in_array($name, $this->getColumns(), true)) {
+        if (!$this->coll && !$this->hasColumn($name)) {
             throw new InvalidArgumentException(sprintf(
                 'Field "%s" not found in record class "%s"',
                 $name,
@@ -244,7 +244,7 @@ trait ModelTrait
      */
     public function origSet($name, $value = null)
     {
-        if (in_array($name, $this->getColumns(), true)) {
+        if ($this->hasColumn($name)) {
             $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
             $this->attributes[$name] = $value;
         }
@@ -333,14 +333,12 @@ trait ModelTrait
      */
     public function beforeSave()
     {
-        $fields = $this->getColumns();
-
-        if (in_array($this->updatedAtColumn, $fields, true)) {
-            $this[$this->updatedAtColumn] = date('Y-m-d H:i:s');
+        if ($this->hasColumn($this->updatedAtColumn)) {
+            $this->setColumnValue($this->updatedAtColumn, date('Y-m-d H:i:s'));
         }
 
-        if (in_array($this->updatedByColumn, $fields, true)) {
-            $this[$this->updatedByColumn] = (int) $this->user->id;
+        if ($this->hasColumn($this->updatedByColumn)) {
+            $this->setColumnValue($this->updatedByColumn, (int) $this->user->id);
         }
     }
 
@@ -356,14 +354,12 @@ trait ModelTrait
      */
     public function beforeCreate()
     {
-        $fields = $this->getColumns();
-
-        if (in_array($this->createdAtColumn, $fields, true) && !$this[$this->createdAtColumn]) {
-            $this[$this->createdAtColumn] = date('Y-m-d H:i:s');
+        if ($this->hasColumn($this->createdAtColumn) && !$this->getColumnValue($this->createdAtColumn)) {
+            $this->setColumnValue($this->createdAtColumn, date('Y-m-d H:i:s'));
         }
 
-        if (in_array($this->createdByColumn, $fields, true) && !$this[$this->createdByColumn]) {
-            $this[$this->createdByColumn] = (int) $this->user->id;
+        if ($this->hasColumn($this->createdByColumn) && !$this->getColumnValue($this->createdByColumn)) {
+            $this->setColumnValue($this->createdByColumn, (int) $this->user->id);
         }
     }
 
