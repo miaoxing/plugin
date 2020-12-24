@@ -49,6 +49,15 @@ abstract class BaseDriver extends Base
      */
     abstract public function getRawSql($type, $sqlParts, $identifierConverter, array $values);
 
+    /**
+     * Returns the columns config
+     *
+     * @param string $table
+     * @param callable|null $phpKeyConverter
+     * @return array
+     */
+    abstract public function getColumns(string $table, callable $phpKeyConverter = null): array;
+
     protected function wrap($column, string $defaultTable = null)
     {
         if (false === strpos($column, '.')) {

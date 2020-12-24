@@ -11,9 +11,7 @@ use Miaoxing\Plugin\Db\BaseDriver;
  * @mixin \TagCacheMixin
  * @property \Wei\Cache $cache A cache service proxy 不引入 \CacheMixin 以免 phpstan 识别为 mixin 的 cache 方法
  * @property string $table The name of the table
- * @property array $columns The column names of the table
- *                          If leave it blank, it will automatic generate form the database table,
- *                          or fill it to speed up the record
+ * @property array $columns The column config of the table, it will automatic merged form the database table
  * @internal
  */
 trait QueryBuilderTrait
@@ -95,6 +93,13 @@ trait QueryBuilderTrait
      * @var string the complete SQL string for this query
      */
     protected $sql;
+
+    /**
+     * Indicates whether the columns config has been loaded
+     *
+     * @var bool
+     */
+    protected $loadedColumns;
 
     /**
      * @var BaseDriver[]
@@ -554,10 +559,18 @@ trait QueryBuilderTrait
      * @return array
      * @svc
      */
-    protected function getColumns()
+    protected function getColumns(): array
     {
-        if (!isset($this->columns)) {
-            $this->columns = array_map([$this, 'convertToPhpKey'], $this->db->getTableFields($this->getTable()));
+        if (!$this->loadedColumns) {
+            $columns = $this->cache->get(
+                'tableColumns:' . $this->db->getDbname() . ':' . $this->getTable(),
+                60,
+                function () {
+                    return $this->getDbDriver()->getColumns($this->getTable(), $this->phpKeyConverter);
+                }
+            );
+            $this->columns = array_replace_recursive($columns, isset($this->columns) ? $this->columns : []);
+            $this->loadedColumns = true;
         }
         return $this->columns;
     }
@@ -571,7 +584,34 @@ trait QueryBuilderTrait
      */
     protected function hasColumn($name): bool
     {
-        return in_array($name, $this->getColumns(), true);
+        return isset($this->getColumns()[$name]);
+    }
+
+    /**
+     * Return the value of the specified key in the columns config, if the key name does not exist, omit it
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function getColumnValues(string $name): array
+    {
+        $values = [];
+        foreach ($this->getColumns() as $key => $column) {
+            if (isset($column[$name])) {
+                $values[$key] = $column[$name];
+            }
+        }
+        return $values;
+    }
+
+    /**
+     * Return the names of column
+     *
+     * @return array
+     */
+    protected function getColumnNames(): array
+    {
+        return array_keys($this->getColumns());
     }
 
     /**
@@ -841,7 +881,7 @@ trait QueryBuilderTrait
      */
     protected function selectExcept($columns)
     {
-        $columns = array_diff($this->getColumns(), is_array($columns) ? $columns : [$columns]);
+        $columns = array_diff($this->getColumnNames(), is_array($columns) ? $columns : [$columns]);
 
         return $this->select($columns);
     }

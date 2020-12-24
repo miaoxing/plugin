@@ -5,9 +5,6 @@ namespace Miaoxing\Plugin\Model;
 use InvalidArgumentException;
 use stdClass;
 
-/**
- * @property-read array $casts
- */
 trait CastTrait
 {
     /**
@@ -22,13 +19,13 @@ trait CastTrait
     }
 
     /**
-     * Get the cast configs
+     * Get the column cast configs
      *
      * @return array
      */
-    public function getCasts(): array
+    public function getColumnCasts(): array
     {
-        return $this->casts ?? [];
+        return $this->getColumnValues('cast');
     }
 
     /**
@@ -37,9 +34,9 @@ trait CastTrait
      * @param string $column
      * @return string|array|null
      */
-    public function getCast(string $column)
+    public function getColumnCast(string $column)
     {
-        return $this->getCasts()[$column] ?? null;
+        return $this->getColumns()[$column]['cast'] ?? null;
     }
 
     /**
@@ -48,9 +45,9 @@ trait CastTrait
      * @param string $name
      * @return bool
      */
-    public function hasCast($name)
+    public function hasColumnCast($name)
     {
-        return (bool) $this->getCast($name);
+        return (bool) $this->getColumnCast($name);
     }
 
     /**
@@ -63,7 +60,7 @@ trait CastTrait
      */
     protected function castToPhp($value, $column)
     {
-        if (null !== $value && !$this->isIgnoreCast($value) && $cast = $this->getCast($column)) {
+        if (null !== $value && !$this->isIgnoreCast($value) && $cast = $this->getColumnCast($column)) {
             $value = $this->toPhpType($value, $cast);
         }
 
@@ -79,7 +76,7 @@ trait CastTrait
      */
     protected function castToDb($value, $column)
     {
-        if (!$this->isIgnoreCast($value) && $cast = $this->getCast($column)) {
+        if (!$this->isIgnoreCast($value) && $cast = $this->getColumnCast($column)) {
             $value = $this->toDbType($value, $cast);
         }
 

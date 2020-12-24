@@ -41,7 +41,7 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      *
      * @var array
      */
-    protected $columns;
+    protected $columns = [];
 
     /**
      * The primary key column

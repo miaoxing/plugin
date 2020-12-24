@@ -347,10 +347,7 @@ trait ReqQueryTrait
 
     protected function processMaxDate($column, $value)
     {
-        if (isset($this->casts[$column])
-            && 'datetime' == $this->casts[$column]
-            && wei()->isDate($value)
-        ) {
+        if ('datetime' === $this->getColumnCast($column) && wei()->isDate($value)) {
             return $value . ' 23:59:59';
         }
         return $value;

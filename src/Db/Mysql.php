@@ -62,6 +62,24 @@ class Mysql extends BaseDriver
         return preg_replace($keys, $values, $query, 1);
     }
 
+    public function getColumns(string $table, callable $phpKeyConverter = null): array
+    {
+        $columns = [];
+
+        $table = $this->db->getTable($table);
+        $dbColumns = $this->db->fetchAll("SHOW COLUMNS FROM $table");
+        foreach ($dbColumns as $dbColumn) {
+            $column = [];
+
+            $column['cast'] = $this->getCastType($dbColumn['Type']);
+
+            $name = $phpKeyConverter ? $phpKeyConverter($dbColumn['Field']) : $dbColumn['Field'];
+            $columns[$name] = $column;
+        }
+
+        return $columns;
+    }
+
     /**
      * Converts this instance into an SELECT string in SQL
      *
@@ -309,6 +327,46 @@ class Mysql extends BaseDriver
             return ' FOR UPDATE';
         } else {
             return ' LOCK IN SHARE MODE';
+        }
+    }
+
+    protected function getCastType($columnType)
+    {
+        $parts = explode('(', $columnType);
+        $type = $parts[0];
+        $length = (int) ($parts[1] ?? 0);
+
+        switch ($type) {
+            case 'int':
+            case 'smallint':
+            case 'mediumint':
+            case 'bigint':
+                return 'int';
+
+            case 'tinyint':
+                return 1 === $length ? 'bool' : 'int';
+
+            case 'varchar':
+            case 'char':
+            case 'mediumtext':
+            case 'text':
+                return 'string';
+
+            case 'timestamp':
+            case 'datetime':
+                return 'datetime';
+
+            case 'date':
+                return 'date';
+
+            case 'decimal':
+                return 'float';
+
+            case 'json':
+                return 'json';
+
+            default:
+                return 'string';
         }
     }
 

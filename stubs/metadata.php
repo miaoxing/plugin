@@ -11,14 +11,4 @@ use Miaoxing\Plugin\Model\ModelTrait;
 trait <?= $class, "\n" ?>
 {
     use ModelTrait;
-
-    /**
-     * @var array
-     * @see CastTrait::$casts
-     */
-    protected $casts = [
-<?php foreach ($casts as $column => $type) { ?>
-        '<?= $column ?>' => '<?= $type ?>',
-<?php } ?>
-    ];
 }

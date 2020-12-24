@@ -39,13 +39,14 @@ class AppModel extends BaseModel
         'pluginIds' => [],
     ];
 
-    public function getCasts(): array
-    {
-        return array_merge($this->casts, [
-            'pluginIds' => 'json',
-            'configs' => 'json',
-        ]);
-    }
+    protected $columns = [
+        'pluginIds' => [
+            'cast' => 'json',
+        ],
+        'configs' => [
+            'cast' => 'json',
+        ]
+    ];
 
     public function afterSave()
     {

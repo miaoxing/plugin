@@ -2,9 +2,9 @@
 
 namespace Miaoxing\Plugin\Metadata;
 
+use Miaoxing\Plugin\Model\ModelTrait;
+
 /**
- * AppTrait
- *
  * @property int $id
  * @property int $userId
  * @property string $pluginIds
@@ -24,25 +24,5 @@ namespace Miaoxing\Plugin\Metadata;
  */
 trait AppTrait
 {
-    /**
-     * @var array
-     * @see CastTrait::$casts
-     */
-    protected $casts = [
-        'id' => 'int',
-        'userId' => 'int',
-        'pluginIds' => 'string',
-        'name' => 'string',
-        'title' => 'string',
-        'secret' => 'string',
-        'domain' => 'string',
-        'description' => 'string',
-        'industry' => 'string',
-        'status' => 'int',
-        'configs' => 'string',
-        'createdAt' => 'datetime',
-        'updatedAt' => 'datetime',
-        'createdBy' => 'int',
-        'updatedBy' => 'int',
-    ];
+    use ModelTrait;
 }

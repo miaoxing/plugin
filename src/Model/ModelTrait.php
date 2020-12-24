@@ -644,8 +644,8 @@ trait ModelTrait
      */
     public function whereHas($column, $value = true)
     {
-        if (isset($this->defaultValues[$this->casts[$column]])) {
-            $default = $this->defaultValues[$this->casts[$column]];
+        if (isset($this->defaultValues[$this->getColumnCast($column)])) {
+            $default = $this->defaultValues[$this->getColumnCast($column)];
         } else {
             $default = '';
         }
@@ -834,7 +834,7 @@ trait ModelTrait
         }
 
         $data = [];
-        $columns = $this->getToArrayColumns($returnFields ?: $this->getColumns());
+        $columns = $this->getToArrayColumns($returnFields ?: $this->getColumnNames());
         foreach ($columns as $column) {
             $data[$column] = $this->get($column);
         }

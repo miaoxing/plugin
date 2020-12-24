@@ -341,4 +341,23 @@ final class CastTraitTest extends BaseTestCase
         ]);
         $this->assertNull($cast->datetime_column);
     }
+
+    public function testGetColumnCasts()
+    {
+        $casts = TestCast::new()->getColumnCasts();
+        $this->assertSame([
+            'int_column' => 'int',
+            'bool_column' => 'bool',
+            'string_column' => 'string',
+            'datetime_column' => 'datetime',
+            'date_column' => 'date',
+            'json_column' => 'array',
+            'list_column' => 'list',
+            'list2_column' => [
+                0 => 'list',
+                'type' => 'int',
+                'separator' => '|',
+            ],
+        ], $casts);
+    }
 }

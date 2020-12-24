@@ -84,18 +84,15 @@ final class GMetadata extends BaseCommand
         $table = $modelObject->db->getTable($modelObject->getTable());
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
 
-        $casts = [];
-        $docBlock = '';
+        $docBlocks = [];
         foreach ($columns as $column) {
-            $field = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
-            $casts[$field] = $this->getCastType($column['Type']);
-            $phpType = $this->getPhpType($casts[$field]);
+            $phpType = $this->getPhpType($column['Type']);
             if ($column['Null'] === 'YES') {
                 $phpType .= '|null';
             }
 
             $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
-            $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName, $column['Comment'])) . "\n";
+            $docBlocks[$propertyName] = rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName, $column['Comment']));
         }
 
         // 获取getXxxAttribute的定义
@@ -103,7 +100,7 @@ final class GMetadata extends BaseCommand
         preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($modelObject)), $matches);
         foreach ($matches[1] as $key => $attr) {
             $propertyName = $camelCase ? lcfirst($attr) : $this->str->snake($attr);
-            if (isset($casts[$propertyName])) {
+            if (isset($docBlocks[$propertyName])) {
                 continue;
             }
 
@@ -111,15 +108,16 @@ final class GMetadata extends BaseCommand
             $reflectionMethod = $reflectionClass->getMethod($method);
             $name = $this->getDocCommentTitle($reflectionMethod->getDocComment());
             $return = $this->getMethodReturn($reflectionClass, $reflectionMethod) ?: 'mixed';
-            $docBlock .= rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, $name)) . "\n";
+            $docBlocks[$propertyName] = rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, $name));
         }
 
         $class = ucfirst(substr($model, 0, -strlen('Model'))) . 'Trait';
         $file = $this->getFile($plugin, $class);
-        $this->createFile($file, $this->getNamespace($plugin), $class, $docBlock, $casts);
+        $docBlock = implode("\n", $docBlocks) . "\n";
+        $this->createFile($file, $this->getNamespace($plugin), $class, $docBlock);
     }
 
-    protected function getCastType($columnType)
+    protected function getPhpType($columnType)
     {
         $parts = explode('(', $columnType);
         $type = $parts[0];
@@ -139,54 +137,16 @@ final class GMetadata extends BaseCommand
             case 'char':
             case 'mediumtext':
             case 'text':
-                return 'string';
-
             case 'timestamp':
             case 'datetime':
-                return 'datetime';
-
             case 'date':
-                return 'date';
+                return 'string';
 
             case 'decimal':
                 return 'float';
-
-            default:
-                return $type;
-        }
-    }
-
-    protected function getPhpType($type)
-    {
-        if (is_array($type)) {
-            $type = $type[0];
-        }
-
-        switch ($type) {
-            case 'int':
-            case 'tinyint':
-                return 'int';
-
-            case 'varchar':
-            case 'char':
-                return 'string';
-
-            case 'timestamp':
-            case 'datetime':
-                return 'string';
-
-            case 'date':
-                return 'string';
-
-            case 'text':
-                return 'string';
 
             case 'json':
-            case 'list':
                 return 'array';
-
-            case 'decimal':
-                return 'float';
 
             default:
                 return $type;
@@ -227,7 +187,7 @@ final class GMetadata extends BaseCommand
         return implode('\\', $parts) . '\Metadata';
     }
 
-    protected function createFile($file, $namespace, $class, $docBlock, $casts)
+    protected function createFile($file, $namespace, $class, $docBlock)
     {
         $table = $this->getTable($class);
 
@@ -266,5 +226,43 @@ final class GMetadata extends BaseCommand
         }
 
         return false;
+    }
+
+    /**
+     * @param mixed $var
+     * @param string $indent
+     * @return string
+     * @link https://stackoverflow.com/questions/24316347/how-to-format-var-export-to-php5-4-array-syntax
+     */
+    private function varExport($var, $indent = '')
+    {
+        switch (gettype($var)) {
+            case 'string':
+                return '\'' . addcslashes($var, "\\\$\\'\r\n\t\v\f") . '\'';
+            case 'array':
+                $indexed = array_keys($var) === range(0, count($var) - 1);
+                $result = [];
+                foreach ($var as $key => $value) {
+                    $result[] = $indent . '    '
+                        . ($indexed ? '' : $this->varExport($key) . ' => ')
+                        . $this->varExport($value, "$indent    ");
+                }
+
+                return "[\n" . implode(",\n", $result) . ($result ? ',' : '') . "\n" . $indent . ']';
+            case 'boolean':
+                return $var ? 'true' : 'false';
+
+            case 'NULL':
+                return 'null';
+
+            case 'object':
+                if (isset($var->express)) {
+                    return $var->express;
+                }
+            // no break
+
+            default:
+                return var_export($var, true);
+        }
     }
 }

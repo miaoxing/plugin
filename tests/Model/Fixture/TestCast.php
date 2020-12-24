@@ -21,18 +21,34 @@ class TestCast extends WeiBaseModel
 
     protected $primaryKey = 'int_column';
 
-    protected $casts = [
-        'int_column' => 'int',
-        'bool_column' => 'bool',
-        'string_column' => 'string',
-        'datetime_column' => 'datetime',
-        'date_column' => 'date',
-        'json_column' => 'array',
-        'list_column' => 'list',
+    protected $columns = [
+        'int_column' => [
+            'cast' => 'int',
+        ],
+        'bool_column' => [
+            'cast' => 'bool',
+        ],
+        'string_column' => [
+            'cast' => 'string',
+        ],
+        'datetime_column' => [
+            'cast' => 'datetime',
+        ],
+        'date_column' => [
+            'cast' => 'date',
+        ],
+        'json_column' => [
+            'cast' => 'array',
+        ],
+        'list_column' => [
+            'cast' => 'list',
+        ],
         'list2_column' => [
-            'list',
-            'type' => 'int',
-            'separator' => '|',
+            'cast' => [
+                'list',
+                'type' => 'int',
+                'separator' => '|',
+            ],
         ],
     ];
 
