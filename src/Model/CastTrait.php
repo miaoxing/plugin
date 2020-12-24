@@ -134,6 +134,10 @@ trait CastTrait
                     return $value;
                 }
 
+                if (in_array($value, [null, ''], true)) {
+                    return [];
+                }
+
                 $value = explode($options['separator'] ?? ',', $value);
                 if ($options['type'] ?? 'string' === 'int') {
                     $value = array_map('intval', $value);

@@ -410,6 +410,20 @@ final class CastTraitTest extends BaseTestCase
         $this->assertNull($cast->date_column);
     }
 
+    public function testSetListEmptyValue()
+    {
+        $cast = TestCast::new();
+
+        $cast->list_column = '';
+        $this->assertSame([], $cast->list_column);
+
+        $cast->list_column = null;
+        $this->assertSame([], $cast->list_column);
+
+        $cast->list_column = [];
+        $this->assertSame([], $cast->list_column);
+    }
+
     public function testGetColumnCasts()
     {
         $casts = TestCast::new()->getColumnCasts();
