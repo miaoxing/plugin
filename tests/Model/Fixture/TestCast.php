@@ -57,9 +57,4 @@ class TestCast extends WeiBaseModel
         'list_column' => [],
         'list2_column' => [],
     ];
-
-    public function changeDataBeforeSave()
-    {
-        $this->string_column = count($this->json_column);
-    }
 }

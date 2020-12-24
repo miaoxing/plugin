@@ -18,12 +18,19 @@ final class CastTraitTest extends BaseTestCase
 
         wei()->schema->table('test_casts')
             ->id('int_column')
+            ->int('nullable_int_column')->nullable()
             ->bool('bool_column')
+            ->bool('nullable_bool_column')->nullable()
             ->string('string_column')
-            ->datetime('datetime_column')
-            ->date('date_column')
+            ->string('nullable_string_column')->nullable()
+            ->datetime('datetime_column')->nullable(false)
+            ->datetime('nullable_datetime_column')->nullable()
+            ->date('date_column')->nullable(false)
+            ->date('nullable_date_column')->nullable()
             ->string('json_column')
+            ->string('nullable_json_column')->nullable()
             ->string('list_column')
+            ->string('nullable_list_column')->nullable()
             ->string('list2_column')
             ->exec();
 
@@ -311,9 +318,13 @@ final class CastTraitTest extends BaseTestCase
 
     public function testBeforeSave()
     {
-        TestCast::on('beforeSave', 'changeDataBeforeSave');
+        $cast = TestCast::new();
 
-        $cast = TestCast::save([
+        $cast::on('beforeSave', function () use ($cast) {
+            $cast->string_column = count($cast->json_column);
+        });
+
+        $cast->save([
             'json_column' => [
                 '1',
                 '2',
@@ -340,6 +351,63 @@ final class CastTraitTest extends BaseTestCase
             'datetime_column' => null,
         ]);
         $this->assertNull($cast->datetime_column);
+    }
+
+    public function testDefaultToArray()
+    {
+        $array = TestCast::toArray();
+        $this->assertSame([
+            'int_column' => 0,
+            'nullable_int_column' => null,
+            'bool_column' => false,
+            'nullable_bool_column' => null,
+            'string_column' => '',
+            'nullable_string_column' => null,
+            'datetime_column' => null,
+            'nullable_datetime_column' => null,
+            'date_column' => null,
+            'nullable_date_column' => null,
+            'json_column' => [],
+            'nullable_json_column' => null,
+            'list_column' => [],
+            'nullable_list_column' => null,
+            'list2_column' => [],
+        ], $array);
+    }
+
+    public function testSetNull()
+    {
+        $cast = TestCast::new();
+        foreach ($cast->getColumns() as $name => $column) {
+            $cast->set($name, null);
+        }
+        $cast->save();
+
+        $data = $cast->db->select($cast->getTable(), ['int_column' => $cast->int_column]);
+        $this->assertSame([
+            'int_column' => (string) $cast->int_column,
+            'nullable_int_column' => null,
+            'bool_column' => '0',
+            'nullable_bool_column' => null,
+            'string_column' => '',
+            'nullable_string_column' => null,
+            'datetime_column' => null,
+            'nullable_datetime_column' => null,
+            'date_column' => null,
+            'nullable_date_column' => null,
+            'json_column' => '[]',
+            'nullable_json_column' => null,
+            'list_column' => '',
+            'nullable_list_column' => null,
+            'list2_column' => '',
+        ], $data);
+    }
+
+    public function testSetDateNull()
+    {
+        $cast = TestCast::new();
+        $cast->date_column = null;
+        $this->assertNull($cast->date_column);
     }
 
     public function testGetColumnCasts()

@@ -73,6 +73,10 @@ class Mysql extends BaseDriver
 
             $column['cast'] = $this->getCastType($dbColumn['Type']);
 
+            if ($dbColumn['Null'] === 'YES') {
+                $column['nullable'] = true;
+            }
+
             $name = $phpKeyConverter ? $phpKeyConverter($dbColumn['Field']) : $dbColumn['Field'];
             $columns[$name] = $column;
         }

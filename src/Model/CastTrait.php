@@ -60,8 +60,12 @@ trait CastTrait
      */
     protected function castToPhp($value, $column)
     {
-        if (null !== $value && !$this->isIgnoreCast($value) && $cast = $this->getColumnCast($column)) {
-            $value = $this->toPhpType($value, $cast);
+        if (null === $value && ($this->getColumns()[$column]['nullable'] ?? false)) {
+            return null;
+        }
+
+        if (!$this->isIgnoreCast($value) && $cast = $this->getColumnCast($column)) {
+            return $this->toPhpType($value, $cast);
         }
 
         return $value;
@@ -76,8 +80,12 @@ trait CastTrait
      */
     protected function castToDb($value, $column)
     {
+        if (null === $value && ($this->getColumns()[$column]['nullable'] ?? false)) {
+            return null;
+        }
+
         if (!$this->isIgnoreCast($value) && $cast = $this->getColumnCast($column)) {
-            $value = $this->toDbType($value, $cast);
+            return $this->toDbType($value, $cast);
         }
 
         return $value;
@@ -162,6 +170,7 @@ trait CastTrait
 
             case 'date':
             case 'datetime':
+                // Note that default value of the date* column is null, so they are always nullable
                 return $value ?: null;
 
             case 'array':
