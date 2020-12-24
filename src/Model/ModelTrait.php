@@ -559,7 +559,7 @@ trait ModelTrait
         if (isset(static::$modelEvents[$class][$event])) {
             foreach (static::$modelEvents[$class][$event] as $callback) {
                 // 优先使用自身方法
-                if (method_exists($this, $callback)) {
+                if (is_string($callback) && method_exists($this, $callback)) {
                     $callback = [$this, $callback];
                 }
                 $result = call_user_func_array($callback, (array) $data);
