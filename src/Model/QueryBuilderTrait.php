@@ -1467,6 +1467,7 @@ trait QueryBuilderTrait
     {
         if ($column instanceof Closure) {
             $query = new static([
+                'wei' => $this->wei,
                 'db' => $this->db,
                 'table' => $this->table,
             ]);
