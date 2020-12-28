@@ -15,6 +15,8 @@ class TestVirtualCamelCase extends TestVirtual
 {
     use CamelCaseTrait;
 
+    protected $table = 'test_virtual_camel_cases';
+
     protected $virtual = [
         'virtualColumn',
         'fullName',

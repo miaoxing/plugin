@@ -16,7 +16,7 @@ final class VirtualCamelCaseTest extends BaseTestCase
 
         static::dropTables();
 
-        wei()->schema->table('test_virtual')
+        wei()->schema->table('test_virtual_camel_cases')
             ->id()
             ->string('first_name')
             ->string('last_name')
@@ -31,7 +31,7 @@ final class VirtualCamelCaseTest extends BaseTestCase
 
     public static function dropTables()
     {
-        wei()->schema->dropIfExists('test_virtual');
+        wei()->schema->dropIfExists('test_virtual_camel_cases');
     }
 
     public function testGetNew()
