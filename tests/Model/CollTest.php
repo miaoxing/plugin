@@ -351,13 +351,13 @@ class CollTest extends BaseTestCase
             'key1' => [
                 'id' => null,
                 'group_id' => 0,
-                'name' => null,
+                'name' => '',
                 'address' => 'default address',
             ],
             'key2' => [
                 'id' => null,
                 'group_id' => 0,
-                'name' => null,
+                'name' => '',
                 'address' => 'default address',
             ],
         ], $users);
@@ -375,7 +375,7 @@ class CollTest extends BaseTestCase
         $this->assertSame([
             'key1' => [
                 'id' => null,
-                'name' => null,
+                'name' => '',
             ],
         ], $users);
     }
@@ -398,7 +398,7 @@ class CollTest extends BaseTestCase
                 'test' => 'default address',
                 'id' => null,
                 'group_id' => 0,
-                'name' => null,
+                'name' => '',
                 'address' => 'default address',
             ],
         ], $users);
@@ -421,7 +421,7 @@ class CollTest extends BaseTestCase
             'key1' => [
                 'test' => 'default address',
                 'id' => null,
-                'name' => null,
+                'name' => '',
             ],
         ], $users);
     }

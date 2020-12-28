@@ -4,9 +4,9 @@ namespace Miaoxing\Plugin\Model;
 
 use InvalidArgumentException;
 use Miaoxing\Plugin\BaseService;
-use Miaoxing\Plugin\Db\BaseDriver;
 use Wei\Ret;
 use Wei\RetTrait;
+use Wei\Wei;
 
 /**
  * @internal
@@ -30,21 +30,19 @@ trait ModelTrait
      */
     public function __construct(array $options = [])
     {
-        if (isset($options['new']) && false === $options['new']) {
-            $this->setDbAttributes($options['attributes']);
-            unset($options['attributes']);
-        }
+        // 1. Init service container
+        $this->wei = $options['wei'] ?? Wei::getContainer();
 
+        // 2. Set common and model config before set options
+        $this->boot();
+        $this->trigger('init');
+
+        // 3. Add default value to model attributes
+        $this->attributes += $this->getColumnValues('default');
         parent::__construct($options);
 
-        // Clear changed status after created
+        // 4. Clear changed status after set attributes
         $this->changes = [];
-
-        $this->triggerCallback('afterLoad');
-
-        $this->boot();
-
-        $this->trigger('init');
     }
 
     /**
@@ -168,7 +166,6 @@ trait ModelTrait
         $this->attributes = $this->executeSelect([$primaryKey => $this->get($primaryKey)]);
         $this->changes = [];
         $this->dataSources = ['*' => 'db'];
-        $this->triggerCallback('afterLoad');
         return $this;
     }
 
@@ -1180,13 +1177,12 @@ trait ModelTrait
 
         $records = [];
         foreach ($data as $key => $row) {
-            /** @var static[] $records */
-            $records[$key] = static::new($row, [
+            $records[$key] = static::new([], [
                 'wei' => $this->wei,
                 'db' => $this->db,
                 'table' => $this->getTable(),
                 'new' => false,
-            ]);
+            ])->setDbAttributes($row);
             $records[$key]->triggerCallback('afterFind');
         }
 

@@ -14,12 +14,16 @@ class TestRef extends WeiBaseModel
 {
     use ModelTrait;
 
-    protected $casts = [
-        'id' => 'int',
-        'json' => 'json',
-    ];
-
-    protected $attributes = [
-        'json' => [],
+    protected $columns = [
+        'id' => [
+            'cast' => 'int',
+        ],
+        'json' => [
+            'cast' => 'json',
+            'default' => [],
+        ],
+        'mixed' => [
+            'cast' => null,
+        ],
     ];
 }

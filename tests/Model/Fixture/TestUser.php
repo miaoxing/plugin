@@ -21,8 +21,6 @@ class TestUser extends WeiBaseModel
 
     protected $scopes;
 
-    protected $loadTimes;
-
     protected $eventResult;
 
     protected $casts = [
@@ -54,16 +52,6 @@ class TestUser extends WeiBaseModel
     public function profile()
     {
         return $this->hasOne(TestProfile::class);
-    }
-
-    public function afterLoad()
-    {
-        ++$this->loadTimes;
-    }
-
-    public function getLoadTimes()
-    {
-        return $this->loadTimes;
     }
 
     public function beforeCreate()

@@ -357,7 +357,7 @@ final class CastTraitTest extends BaseTestCase
     {
         $array = TestCast::toArray();
         $this->assertSame([
-            'int_column' => 0,
+            'int_column' => null,
             'nullable_int_column' => null,
             'bool_column' => false,
             'nullable_bool_column' => null,
@@ -427,16 +427,24 @@ final class CastTraitTest extends BaseTestCase
     public function testGetColumnCasts()
     {
         $casts = TestCast::new()->getColumnCasts();
+
         $this->assertSame([
             'int_column' => 'int',
+            'nullable_int_column' => 'int',
             'bool_column' => 'bool',
+            'nullable_bool_column' => 'bool',
             'string_column' => 'string',
+            'nullable_string_column' => 'string',
             'datetime_column' => 'datetime',
+            'nullable_datetime_column' => 'datetime',
             'date_column' => 'date',
+            'nullable_date_column' => 'date',
             'json_column' => 'array',
+            'nullable_json_column' => 'string',
             'list_column' => 'list',
+            'nullable_list_column' => 'string',
             'list2_column' => [
-                0 => 'list',
+                'list',
                 'type' => 'int',
                 'separator' => '|',
             ],

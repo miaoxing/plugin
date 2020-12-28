@@ -335,7 +335,7 @@ final class ModelTest extends BaseTestCase
         $this->assertArrayHasKey('address', $user);
         $this->assertNull($user['id']);
         $this->assertSame(0, $user['group_id']); // default value
-        $this->assertNull($user['name']);
+        $this->assertSame('', $user['name']);
         $this->assertSame('default address', $user['address']); // getAddressAttribute
 
         $users = TestUser::all()->toArray(['id', 'group_id']);
@@ -462,11 +462,9 @@ final class ModelTest extends BaseTestCase
         $user->save();
 
         $this->assertNotEquals($user->group_id, $user2->group_id);
-        $this->assertEquals(1, $user->getLoadTimes());
 
         $user2->reload();
         $this->assertEquals($user->group_id, $user2->group_id);
-        $this->assertEquals(2, $user2->getLoadTimes());
     }
 
     public function testReloadIdBecomeStringIssue()
@@ -850,7 +848,7 @@ final class ModelTest extends BaseTestCase
 
         $this->assertNull($user['id']);
         $this->assertEquals('2', $user['group_id']);
-        $this->assertNull($user['name']);
+        $this->assertSame('', $user['name']);
     }
 
     public function testUpdateWithParam()

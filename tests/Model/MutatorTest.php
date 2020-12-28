@@ -17,7 +17,7 @@ final class MutatorTest extends BaseTestCase
 
         static::dropTables();
 
-        $table = TestMutator::getTable();
+        $table = 'test_mutators';
         wei()->schema->table($table)
             ->id()
             ->string('getter')
@@ -48,7 +48,7 @@ final class MutatorTest extends BaseTestCase
 
     public static function dropTables()
     {
-        wei()->schema->dropIfExists(TestMutator::getTable());
+        wei()->schema->dropIfExists('test_mutators');
     }
 
     public function testGet()
@@ -193,7 +193,7 @@ final class MutatorTest extends BaseTestCase
 
         $this->assertSame('', $mutator->mutator); // 经 getMutatorAttribute 转换
         $this->assertSame('', $mutator->getter); // 经 getGetterAttribute 转换
-        $this->assertNull($mutator->setter);
+        $this->assertSame('', $mutator->setter);
 
         $mutator->mutator = 'mutator2';
         $mutator->getter = base64_encode('getter2');

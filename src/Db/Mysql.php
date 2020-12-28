@@ -68,13 +68,20 @@ class Mysql extends BaseDriver
 
         $table = $this->db->getTable($table);
         $dbColumns = $this->db->fetchAll("SHOW COLUMNS FROM $table");
+
         foreach ($dbColumns as $dbColumn) {
             $column = [];
 
             $column['cast'] = $this->getCastType($dbColumn['Type']);
 
-            if ($dbColumn['Null'] === 'YES') {
+            // Auto increment column cant have default value, so it's allow to be null
+            if ('YES' === $dbColumn['Null'] || false !== strpos($dbColumn['Extra'], 'auto_increment')) {
                 $column['nullable'] = true;
+            }
+
+            [$default, $isCustom] = $this->getCustomDefault($dbColumn);
+            if ($isCustom) {
+                $column['default'] = $default;
             }
 
             $name = $phpKeyConverter ? $phpKeyConverter($dbColumn['Field']) : $dbColumn['Field'];
@@ -82,6 +89,49 @@ class Mysql extends BaseDriver
         }
 
         return $columns;
+    }
+
+    /**
+     * @param array $column
+     * @return array
+     */
+    protected function getCustomDefault(array $column): array
+    {
+        $parts = explode('(', $column['Type']);
+        $type = $parts[0];
+        $length = (int) ($parts[1] ?? 0);
+        $default = $column['Default'];
+
+        if (null === $column['Default'] && 'YES' === $column['Null']) {
+            return [null, false];
+        }
+
+        // Bool
+        if ($type === 'tinyint' && $length === 1) {
+            return [(bool) $default, $default !== '0'];
+        }
+
+        if (in_array($type, ['tinyint', 'int', 'smallint', 'mediumint', 'bigint'])) {
+            // When the column is the primary key, it cant have default value, $default is null
+            return [(int) $default, $default !== '0' && $default !== null];
+        }
+
+        if (in_array($type, ['decimal'])) {
+            return [(float) $default, (float) $default !== 0.0];
+        }
+
+        // MySQL 5.7 *text and json columns cant have default value, so always use empty string and array as custom default value
+        // TODO Mysql 8.0 support expression as default value
+
+        if (in_array($column['Type'], ['tinytext', 'text', 'mediumtext', 'longtext'])) {
+            return ['', true];
+        }
+
+        if (in_array($type, ['json'])) {
+            return [[], true];
+        }
+
+        return [$default, $default !== ''];
     }
 
     /**
@@ -350,12 +400,6 @@ class Mysql extends BaseDriver
             case 'tinyint':
                 return 1 === $length ? 'bool' : 'int';
 
-            case 'varchar':
-            case 'char':
-            case 'mediumtext':
-            case 'text':
-                return 'string';
-
             case 'timestamp':
             case 'datetime':
                 return 'datetime';
@@ -369,6 +413,10 @@ class Mysql extends BaseDriver
             case 'json':
                 return 'json';
 
+            case 'varchar':
+            case 'char':
+            case 'mediumtext':
+            case 'text':
             default:
                 return 'string';
         }

@@ -56,7 +56,7 @@ final class CamelCaseTraitTest extends BaseTestCase
         ]);
         $camelCase->fromArray($request);
 
-        $this->assertNull($camelCase['testUserId']);
+        $this->assertSame(0, $camelCase['testUserId']);
 
         $request->fromArray([
             'test_user_id' => 1,
@@ -103,7 +103,7 @@ final class CamelCaseTraitTest extends BaseTestCase
     {
         $camelCase = TestCamelCase::new();
 
-        $this->assertNull($camelCase['testUserId']);
+        $this->assertSame(0, $camelCase['testUserId']);
 
         $camelCase['testUserId'] = 1;
 

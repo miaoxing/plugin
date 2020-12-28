@@ -39,9 +39,11 @@ class TestCast extends WeiBaseModel
         ],
         'json_column' => [
             'cast' => 'array',
+            'default' => [],
         ],
         'list_column' => [
             'cast' => 'list',
+            'default' => [],
         ],
         'list2_column' => [
             'cast' => [
@@ -49,12 +51,7 @@ class TestCast extends WeiBaseModel
                 'type' => 'int',
                 'separator' => '|',
             ],
+            'default' => [],
         ],
-    ];
-
-    protected $attributes = [
-        'json_column' => [],
-        'list_column' => [],
-        'list2_column' => [],
     ];
 }

@@ -47,7 +47,7 @@ final class GetSetTraitTest extends BaseTestCase
         $test->id = 2;
 
         $this->assertTrue(isset($test['id']));
-        $this->assertNull($test->name);
+        $this->assertSame('', $test->name);
 
         // NOTE 暂时不支持
         $this->assertFalse(isset($test->id));

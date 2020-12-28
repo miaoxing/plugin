@@ -90,7 +90,7 @@ class AttributeTest extends BaseTestCase
         $this->assertSame('twin', $user['name']);
 
         unset($user['name']);
-        $this->assertNull($user['name']);
+        $this->assertSame('', $user['name']);
     }
 
     public function testGet()
@@ -208,8 +208,6 @@ class AttributeTest extends BaseTestCase
 
         unset($user->id);
         $this->assertNull($user->id);
-
-
     }
 
     public function testMagicUnsetInvalid()

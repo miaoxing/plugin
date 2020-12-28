@@ -18,7 +18,7 @@ final class RefTest extends BaseTestCase
 
         static::dropTables();
 
-        $table = TestRef::getTable();
+        $table = 'test_refs';//TestRef::getTable();
         wei()->schema->table($table)
             ->id()
             ->string('json')
@@ -42,7 +42,7 @@ final class RefTest extends BaseTestCase
 
     public static function dropTables()
     {
-        wei()->schema->dropIfExists(TestRef::getTable());
+        wei()->schema->dropIfExists('test_refs');
     }
 
     public function testArrayIncrementOperator()

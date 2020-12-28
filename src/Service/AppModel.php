@@ -40,12 +40,14 @@ class AppModel extends BaseModel
     ];
 
     protected $columns = [
-        'pluginIds' => [
-            'cast' => 'json',
-        ],
         'configs' => [
             'cast' => 'json',
-        ]
+            'default' => [],
+        ],
+        'pluginIds' => [
+            'cast' => 'json',
+            'default' => [],
+        ],
     ];
 
     public function afterSave()
