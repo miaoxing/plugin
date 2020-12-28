@@ -1480,12 +1480,12 @@ trait QueryBuilderTrait
             $operator = 'NOT NULL' === $operator ? $operator : 'NULL';
         } elseif (is_array($value) && !in_array($operator, ['BETWEEN', 'NOT BETWEEN'], true)) {
             $operator = 'NOT IN' === $operator ? $operator : 'IN';
-            $this->addQueryParam($value);
-        } else {
-            $this->addQueryParam($value);
         }
 
         $this->addQueryPart('where', compact('column', 'operator', 'value', 'condition', 'type'), true);
+        if (null !== $value) {
+            $this->addQueryParam($value);
+        }
 
         return $this;
     }
