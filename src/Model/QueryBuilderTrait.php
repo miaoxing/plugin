@@ -4,11 +4,13 @@ namespace Miaoxing\Plugin\Model;
 
 use Closure;
 use Miaoxing\Plugin\Db\BaseDriver;
+use Wei\BaseCache;
 
 /**
  * @author Twin Huang <twinhuang@qq.com>
  * @mixin \DbMixin
  * @mixin \TagCacheMixin
+ * @mixin \NearCacheMixin
  * @property \Wei\Cache $cache A cache service proxy 不引入 \CacheMixin 以免 phpstan 识别为 mixin 的 cache 方法
  * @property string $table The name of the table
  * @property array $columns The column config of the table, it will automatic merged form the database table
@@ -93,6 +95,13 @@ trait QueryBuilderTrait
      * @var string the complete SQL string for this query
      */
     protected $sql;
+
+    /**
+     * The cache service that stores metadata
+     *
+     * @var BaseCache
+     */
+    protected $metadataCache;
 
     /**
      * Indicates whether the columns config has been loaded
@@ -562,7 +571,7 @@ trait QueryBuilderTrait
     protected function getColumns(): array
     {
         if (!$this->loadedColumns) {
-            $columns = $this->cache->get(
+            $columns = $this->getMetadataCache()->get(
                 'tableColumns:' . $this->db->getDbname() . ':' . $this->getTable(),
                 60,
                 function () {
@@ -612,6 +621,28 @@ trait QueryBuilderTrait
     protected function getColumnNames(): array
     {
         return array_keys($this->getColumns());
+    }
+
+    /**
+     * Return the cache service that stores metadata
+     *
+     * @return BaseCache
+     */
+    protected function getMetadataCache(): BaseCache
+    {
+        return $this->metadataCache ?? $this->wei->nearCache;
+    }
+
+    /**
+     * Set the cache service to store metadata
+     *
+     * @param BaseCache $metadataCache
+     * @return $this
+     */
+    public function setMetadataCache(BaseCache $metadataCache): self
+    {
+        $this->metadataCache = $metadataCache;
+        return $this;
     }
 
     /**
