@@ -124,19 +124,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     ];
 
     /**
-     * 数组来源
-     *
-     * php：数据经过代码处理，例如默认值
-     * db：数据来自数据库，是一个未解码/未转换类型的字符串。如果经过处理，则变成php
-     * user：数据来自用户设置
-     *
-     * @var array
-     */
-    protected $dataSources = [
-        '*' => 'php',
-    ];
-
-    /**
      * @var array
      */
     protected $virtualAttributes = [];
@@ -147,4 +134,28 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      * @var bool
      */
     protected $wasRecentlyCreated = false;
+
+    /**
+     * The attribute is set by the user, such as calling `$model->xxx = $value`.
+     */
+    protected const ATTRIBUTE_SOURCE_USER = 1;
+
+    /**
+     * The attribute is loaded from the database and is an undecoded/unconverted type string.
+     */
+    protected const ATTRIBUTE_SOURCE_DB = 2;
+
+    /**
+     * The attribute have been convert by PHP, such as type cast.
+     */
+    protected const ATTRIBUTE_SOURCE_PHP = 3;
+
+    /**
+     * The source of the current attribute values
+     *
+     * @var array
+     */
+    protected $attributeSources = [
+        '*' => self::ATTRIBUTE_SOURCE_USER,
+    ];
 }

@@ -43,7 +43,7 @@ trait ModelTrait
         parent::__construct($options);
 
         // 4. Clear changed status after set attributes
-        $this->changes = [];
+        $this->resetChanges();
     }
 
     /**
@@ -164,9 +164,8 @@ trait ModelTrait
     public function reload()
     {
         $primaryKey = $this->getPrimaryKey();
-        $this->attributes = $this->executeSelect([$primaryKey => $this->get($primaryKey)]);
-        $this->changes = [];
-        $this->dataSources = ['*' => 'db'];
+        $this->setDbAttributes($this->executeSelect([$primaryKey => $this->get($primaryKey)]));
+        $this->resetChanges();
         return $this;
     }
 
@@ -213,44 +212,6 @@ trait ModelTrait
     }
 
     /**
-     * Receives the record field value
-     *
-     * @param string $name
-     * @return $this|mixed
-     * @throws InvalidArgumentException When field not found
-     */
-    public function origGet($name)
-    {
-        // Check if field exists when it is not a collection
-        if (!$this->coll && !$this->hasColumn($name)) {
-            throw new InvalidArgumentException(sprintf(
-                'Field "%s" not found in record class "%s"',
-                $name,
-                static::class
-            ));
-        }
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
-    }
-
-    /**
-     * Set the record field value
-     *
-     * @param string|int|null $name
-     * @param mixed $value
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function origSet($name, $value = null)
-    {
-        if ($this->hasColumn($name)) {
-            $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
-            $this->attributes[$name] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
      * Remove the attribute value by name
      *
      * @param string|int $name The name of field
@@ -259,6 +220,7 @@ trait ModelTrait
     public function remove($name)
     {
         unset($this->attributes[$name]);
+        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
         return $this;
     }
 
@@ -654,19 +616,16 @@ trait ModelTrait
     }
 
     /**
-     * Set raw data to model
+     * Set db data to model
      *
-     * @param array $data
+     * @param array $attributes
+     * @param bool $merge
      * @return $this
      */
-    public function setDbAttributes(array $data)
+    protected function setDbAttributes(array $attributes, bool $merge = false)
     {
-        $this->attributes = $data + $this->attributes;
-
-        if ($data) {
-            $this->setDataSource('*', 'db');
-        }
-
+        $this->attributes = array_merge($merge ? $this->attributes : [], $attributes);
+        $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
         return $this;
     }
 
@@ -894,9 +853,18 @@ trait ModelTrait
             return $this->setAttributes($attributes);
         }
 
-        foreach ($attributes as $key => $value) {
-            if ($this->isFillable($key, $attributes)) {
-                $this->setFromArray($key, $value);
+        foreach ($attributes as $name => $value) {
+            if (!$this->isFillable($name, $attributes)) {
+                continue;
+            }
+
+            if ($this->hasColumn($name)) {
+                $this->setColumnValue($name, $value);
+                continue;
+            }
+
+            if ($this->hasVirtual($name)) {
+                $this->setVirtualValue($name, $value);
             }
         }
         return $this;
@@ -958,7 +926,7 @@ trait ModelTrait
         }
 
         if ($isNew) {
-            $this->setDataSource($primaryKey, 'db');
+            $this->setAttributeSource($primaryKey, static::ATTRIBUTE_SOURCE_DB);
         }
 
         // 解决保存之前调用了$this->id导致变为null的问题
@@ -970,7 +938,7 @@ trait ModelTrait
         $this->attributes = $origAttributes + $this->attributes;
 
         // 2.2.4 Reset changed attributes
-        $this->changes = [];
+        $this->resetChanges();
 
         // 2.2.5. Triggers after callbacks
         $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
@@ -1145,8 +1113,7 @@ trait ModelTrait
         $data = $this->fetch(...func_get_args());
         if ($data) {
             $this->new = false;
-            $this->setDataSource('*', 'db');
-            $this->attributes = $data + $this->attributes;
+            $this->setDbAttributes($data, true);
             $this->triggerCallback('afterFind');
             return $this;
         } else {
@@ -1173,7 +1140,7 @@ trait ModelTrait
                 'db' => $this->db,
                 'table' => $this->getTable(),
                 'new' => false,
-            ])->setDbAttributes($row);
+            ])->setDbAttributes($row, true);
             $records[$key]->triggerCallback('afterFind');
         }
 
@@ -1301,7 +1268,7 @@ trait ModelTrait
 
     protected function setChanged($name)
     {
-        $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        $this->changes[$name] = $this->attributes[$name] ?? null;
     }
 
     protected function resetChanged($name)
@@ -1312,26 +1279,28 @@ trait ModelTrait
         return $this;
     }
 
+    protected function resetChanges()
+    {
+        $this->changes = [];
+    }
+
     /**
-     * @param string|null $name
+     * @param string $name
      * @param mixed $value
      * @return $this
      */
     protected function setColumnValue($name, $value)
     {
-        // 如果有mutator，由mutator管理数据
         $result = $this->callSetter($name, $value);
         if ($result) {
-            $this->setDataSource($name, 'db');
-            // TODO 整理逻辑
-            $this->changes[$name] = isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+            $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_DB);
+            $this->setChanged($name);
             return $this;
         }
 
-        // 直接设置就行
-        $this->origSet($name, $value);
-
-        $this->setDataSource($name, 'user');
+        $this->setChanged($name);
+        $this->attributes[$name] = $value;
+        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
 
         return $this;
     }
@@ -1347,28 +1316,21 @@ trait ModelTrait
             return $value;
         }
 
-        $value = $this->origGet($name);
-
-        $source = $this->getDataSource($name);
-        if ('php' === $source) {
-            if ($this->isNew()) {
-                // TODO 整理
-                // 如果是新数据，进行转换
-                $this->attributes[$name] = $this->getGetValue($name, $value);
-            }
-            // TODO 不返回 value,返回 $this->data 才有ref
+        $source = $this->getAttributeSource($name);
+        if (static::ATTRIBUTE_SOURCE_PHP === $source) {
             return $this->attributes[$name];
         }
 
-        // 用户数据则先转换为db数据
-        if ('user' === $source) {
-            $value = $this->getSetValue($name, $value);
+        // Data flow: user => db => php
+        $value = $this->attributes[$name] ?? null;
+        if (static::ATTRIBUTE_SOURCE_USER === $source) {
+            // Convert user data to db data
+            $value = $this->getDbAttribute($name);
         }
 
-        // 通过getter处理数据
-        $this->attributes[$name] = $this->getGetValue($name, $value);
-
-        $this->setDataSource($name, 'php');
+        // Convert db data to php data
+        $this->attributes[$name] = $this->trigger('getValue', [$value, $name]);
+        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_PHP);
 
         return $this->attributes[$name];
     }
@@ -1376,53 +1338,26 @@ trait ModelTrait
     /**
      * @param string $name
      * @param string $source
+     * @param bool $replace
      */
-    protected function setDataSource($name, $source)
+    protected function setAttributeSource($name, $source, bool $replace = false)
     {
-        $this->dataSources[$name] = $source;
+        if ($replace) {
+            $this->attributeSources = [$name => $source];
+        } else {
+            $this->attributeSources[$name] = $source;
+        }
     }
 
     /**
-     * Returns the data source of specified column name
+     * Returns the attribute source of specified column name
      *
      * @param string $name
      * @return string
      */
-    protected function getDataSource($name)
+    protected function getAttributeSource($name)
     {
-        return isset($this->dataSources[$name]) ? $this->dataSources[$name] : $this->dataSources['*'];
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    protected function getGetValue($name, $value)
-    {
-        $result = $this->callGetter($name, $value);
-        if ($result) {
-            return $value;
-        } else {
-            return $this->trigger('getValue', [$value, $name]);
-        }
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    protected function getSetValue($name, $value)
-    {
-        $result = $this->callSetter($name, $value);
-        if ($result) {
-            $value = $this->attributes[$name];
-        } else {
-            $value = $this->trigger('setValue', [$value, $name]);
-        }
-
-        return $value;
+        return $this->attributeSources[$name] ?? $this->attributeSources['*'];
     }
 
     /**
@@ -1432,16 +1367,31 @@ trait ModelTrait
      */
     protected function getDbAttributes()
     {
-        $dbData = [];
+        $attributes = [];
         foreach ($this->attributes as $name => $value) {
-            if ('db' !== $this->getDataSource($name)) {
-                $dbData[$name] = $this->getSetValue($name, $value);
+            if (static::ATTRIBUTE_SOURCE_DB !== $this->getAttributeSource($name)) {
+                $attributes[$name] = $this->getDbAttribute($name);
             } else {
-                $dbData[$name] = $value;
+                $attributes[$name] = $value;
             }
         }
+        return $attributes;
+    }
 
-        return $dbData;
+    /**
+     * Get the attribute value expected by the database
+     *
+     * @param string $name
+     * @return mixed
+     */
+    protected function getDbAttribute(string $name)
+    {
+        $value = $this->attributes[$name] ?? null;
+        $result = $this->callSetter($name, $value);
+        if ($result) {
+            return $this->attributes[$name];
+        }
+        return $this->trigger('setValue', [$value, $name]);
     }
 
     /**
@@ -1530,22 +1480,6 @@ trait ModelTrait
         }
 
         return $result;
-    }
-
-    /**
-     * @todo 整理
-     */
-    private function setFromArray($name, $value)
-    {
-        if ($this->hasColumn($name)) {
-            return $this->setColumnValue($name, $value);
-        }
-
-        if ($this->hasVirtual($name)) {
-            return $this->setVirtualValue($name, $value);
-        }
-
-        return false;
     }
 
     private function baseName()

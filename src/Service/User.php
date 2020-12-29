@@ -182,9 +182,7 @@ class User extends UserModel
     protected function loadRecordData(UserModel $user)
     {
         $this->setAttributes($user->getAttributes());
-
-        // 清空更改状态
-        $this->changes = [];
+        $this->resetChanges();
     }
 
     /**
@@ -354,7 +352,7 @@ class User extends UserModel
     protected function logout()
     {
         $this->attributes = [];
-        $this->dataSources = ['*' => 'php'];
+        $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
 
         $this->getAuth()->logout();
 
