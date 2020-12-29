@@ -107,26 +107,10 @@ class User extends UserModel
      */
     public function __set($name, $value = null)
     {
-        // __set start
-        // Required services first
-        if (in_array($name, $this->requiredServices, true)) {
-            return $this->{$name} = $value;
-        }
-
         // NOTE: 设置前需主动加载，否则状态变为loaded，不会再去加载
         $this->loadDbUser();
 
-        $result = $this->set($name, $value, false);
-        if ($result) {
-            return;
-        }
-
-        if ($this->wei->has($name)) {
-            return $this->{$name} = $value;
-        }
-
-        throw new \InvalidArgumentException('Invalid property: ' . $name);
-        // __set end
+        return parent::__set($name, $value);
     }
 
     protected function toArray($returnFields = [], callable $prepend = null)

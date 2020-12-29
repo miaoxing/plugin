@@ -32,6 +32,7 @@ trait ModelTrait
     {
         // 1. Init service container
         $this->wei = $options['wei'] ?? Wei::getContainer();
+        $this->db = $options['db'] ?? $this->wei->db;
 
         // 2. Set common and model config before set options
         $this->boot();
@@ -751,11 +752,6 @@ trait ModelTrait
      */
     public function &__get($name)
     {
-        // Receive service that conflict with record method name
-        if (in_array($name, $this->requiredServices, true)) {
-            return $this->getServiceValue($name);
-        }
-
         $value = &$this->get($name, $exists, false);
         if ($exists) {
             return $value;
@@ -772,11 +768,6 @@ trait ModelTrait
      */
     public function __set($name, $value = null)
     {
-        // Required services first
-        if (in_array($name, $this->requiredServices, true)) {
-            return $this->{$name} = $value;
-        }
-
         $result = $this->set($name, $value, false);
         if ($result) {
             return;
