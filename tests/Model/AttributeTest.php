@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Model;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
+use Wei\Logger;
 
 class AttributeTest extends BaseTestCase
 {
@@ -232,5 +233,28 @@ class AttributeTest extends BaseTestCase
         $this->assertTrue($user->id ?? true);
 
         $this->assertTrue($user->notFound ?? true);
+    }
+
+    public function testMagicGetService()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::new();
+
+        $logger = $user->logger;
+        $this->assertInstanceOf(Logger::class, $logger);
+    }
+
+    public function testMagicSetService()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::new();
+        $logger = $user->logger;
+
+        $user = TestUser::new();
+        $user->logger = $logger;
+
+        $this->assertSame($logger, $user->logger);
     }
 }
