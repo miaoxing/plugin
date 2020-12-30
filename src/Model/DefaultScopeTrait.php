@@ -21,8 +21,8 @@ trait DefaultScopeTrait
 
     public static function bootDefaultScopeTrait()
     {
-        static::on('preExecute', 'applyDefaultScope');
-        static::on('preBuildQuery', 'applyDefaultScopePreBuildQuery');
+        static::on('beforeExecute', 'applyDefaultScope');
+        static::on('beforeAddQueryPart', 'applyDefaultScopeBeforeAddQueryPart');
     }
 
     /**
@@ -90,10 +90,10 @@ trait DefaultScopeTrait
     /**
      * @param string $sqlPartName
      */
-    protected function applyDefaultScopePreBuildQuery($sqlPartName)
+    protected function applyDefaultScopeBeforeAddQueryPart($queryPartNane)
     {
-        // 忽略初始化时设置table使用了from
-        if ('from' !== $sqlPartName) {
+        // Ignore `setTable` called `from` on init
+        if ('from' !== $queryPartNane) {
             $this->applyDefaultScope();
         }
     }

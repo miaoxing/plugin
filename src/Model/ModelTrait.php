@@ -538,13 +538,13 @@ trait ModelTrait
 
     public function execute()
     {
-        $this->trigger('preExecute');
+        $this->trigger('beforeExecute');
         return $this->parentExecute();
     }
 
     public function addQueryPart($sqlPartName, $value, $append = false)
     {
-        $this->trigger('preBuildQuery', func_get_args());
+        $this->trigger('beforeAddQueryPart', func_get_args());
         return $this->parentAddQueryPart($sqlPartName, $value, $append);
     }
 
