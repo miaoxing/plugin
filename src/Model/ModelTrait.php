@@ -261,20 +261,6 @@ trait ModelTrait
     }
 
     /**
-     * Return the column that has been changed
-     *
-     * @param string $column
-     * @return array|string|null
-     */
-    public function getChanges($column = null)
-    {
-        if ($column) {
-            return isset($this->changes[$column]) ? $this->changes[$column] : null;
-        }
-        return $this->changes;
-    }
-
-    /**
      * The method called after load a record
      */
     public function afterLoad()
@@ -549,17 +535,35 @@ trait ModelTrait
     }
 
     /**
-     * Check if the record's data or specified field is changed
+     * Check if the model's attributes or the specified column is changed
      *
-     * @param string $field
+     * @param string $column
      * @return bool
      */
-    public function isChanged($field = null)
+    public function isChanged($column = null)
     {
-        if ($field) {
-            return array_key_exists($field, $this->changes);
+        $this->removeUnchanged($column);
+
+        if ($column) {
+            return array_key_exists($column, $this->changes);
         }
         return (bool) $this->changes;
+    }
+
+    /**
+     * Return the column that has been changed
+     *
+     * @param string $column
+     * @return array|string|null
+     */
+    public function getChanges($column = null)
+    {
+        $this->removeUnchanged($column);
+
+        if ($column) {
+            return $this->changes[$column] ?? null;
+        }
+        return $this->changes;
     }
 
     /**
@@ -578,7 +582,7 @@ trait ModelTrait
         $value = $this->get($name) + $offset;
         $this->incr($name, $offset)->save();
         $this->set($name, $value);
-        $this->resetChanged($name);
+        $this->resetChanges($name);
 
         return $this;
     }
@@ -889,19 +893,17 @@ trait ModelTrait
         }
 
         // 2.2 Saves single record
+        $isNew = $this->new;
         $primaryKey = $this->getPrimaryKey();
 
         // 2.2.2 Triggers before callbacks
-        $isNew = $this->new;
         $this->triggerCallback('beforeSave');
         $this->triggerCallback($isNew ? 'beforeCreate' : 'beforeUpdate');
 
-        // 将数据转换为数据库数据
-        $origAttributes = $this->attributes;
-        $this->attributes = $this->getDbAttributes();
-
-        // 2.2.3.1 Inserts new record
         if ($isNew) {
+            $this->convertToDbValues();
+
+            // 2.2.3.1 Inserts new record
             // Removes primary key value when it's empty to avoid SQL error
             if (array_key_exists($primaryKey, $this->attributes) && !$this->attributes[$primaryKey]) {
                 unset($this->attributes[$primaryKey]);
@@ -916,26 +918,14 @@ trait ModelTrait
                 // Prepare sequence name for PostgreSQL
                 $sequence = sprintf('%s_%s_seq', $this->db->getTable($this->getTable()), $primaryKey);
                 $this->attributes[$primaryKey] = $this->db->lastInsertId($sequence);
+                $this->setAttributeSource($primaryKey, static::ATTRIBUTE_SOURCE_DB);
             }
-            // 2.2.3.2 Updates existing record
         } else {
-            if ($this->isChanged()) {
-                $attributes = array_intersect_key($this->attributes, $this->changes);
+            // 2.2.3.2 Updates existing record
+            if ($attributes = $this->getUpdateAttributes()) {
                 $this->executeUpdate($attributes, [$primaryKey => $this->attributes[$primaryKey]]);
             }
         }
-
-        if ($isNew) {
-            $this->setAttributeSource($primaryKey, static::ATTRIBUTE_SOURCE_DB);
-        }
-
-        // 解决保存之前调用了$this->id导致变为null的问题
-        if ($isNew && array_key_exists($primaryKey, $origAttributes)) {
-            $origAttributes[$primaryKey] = $this->attributes[$primaryKey];
-        }
-
-        // 还原原来的数据+save过程中生成的主键数据
-        $this->attributes = $origAttributes + $this->attributes;
 
         // 2.2.4 Reset changed attributes
         $this->resetChanges();
@@ -1237,6 +1227,75 @@ trait ModelTrait
     }
 
     /**
+     * Remove all change values  or the specified column change value
+     *
+     * @param string|null $column
+     */
+    protected function resetChanges(string $column = null)
+    {
+        if ($column) {
+            unset($this->changes[$column]);
+        }
+        $this->changes = [];
+    }
+
+    /**
+     * Record the value of column before change
+     *
+     * @param string $column
+     */
+    protected function setChange(string $column): void
+    {
+        // Only record the init value of column
+        // If column value change back to init value, it will be removed by the `removeUnchanged` method
+        if (!array_key_exists($column, $this->changes)) {
+            $this->changes[$column] = $this->getColumnValue($column);
+        }
+    }
+
+    /**
+     * Remove unchanged values
+     *
+     * ```php
+     * $model = static::new(['column' => 'a']); // init column value to "a"
+     * $model->column = 'b'; // $model->changes become ['column' => 'a']
+     * $model->column = 'a'; // $model->changes still be ['column' => 'a']
+     * $model->removeUnchanged(); // $model->changes become []
+     * ```
+     *
+     * @param string|null $column
+     * @return bool
+     */
+    protected function removeUnchanged(string $column = null): bool
+    {
+        if ($column) {
+            if (!isset($this->changes[$column])) {
+                return false;
+            }
+
+            $value = $this->getColumnValue($column);
+            $original = $this->changes[$column];
+
+            // If the value is an object, compare whether they have the same attributes and values,
+            // and are instances of the same class.
+            // @link https://www.php.net/manual/en/language.oop5.object-comparison.php
+            if ($original === $value || (is_object($original) && $original == $value)) {
+                unset($this->changes[$column]);
+                return true;
+            }
+            return false;
+        }
+
+        $result = false;
+        foreach ($this->changes as $column => $value) {
+            if ($this->removeUnchanged($column)) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Trigger a callback
      *
      * @param string $name
@@ -1266,24 +1325,6 @@ trait ModelTrait
         return $data;
     }
 
-    protected function setChanged($name)
-    {
-        $this->changes[$name] = $this->attributes[$name] ?? null;
-    }
-
-    protected function resetChanged($name)
-    {
-        if (array_key_exists($name, $this->changes)) {
-            unset($this->changes[$name]);
-        }
-        return $this;
-    }
-
-    protected function resetChanges()
-    {
-        $this->changes = [];
-    }
-
     /**
      * @param string $name
      * @param mixed $value
@@ -1291,14 +1332,14 @@ trait ModelTrait
      */
     protected function setColumnValue($name, $value)
     {
+        $this->setChange($name);
+
         $result = $this->callSetter($name, $value);
         if ($result) {
             $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_DB);
-            $this->setChanged($name);
             return $this;
         }
 
-        $this->setChanged($name);
         $this->attributes[$name] = $value;
         $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
 
@@ -1322,11 +1363,9 @@ trait ModelTrait
         }
 
         // Data flow: user => db => php
-        $value = $this->attributes[$name] ?? null;
-        if (static::ATTRIBUTE_SOURCE_USER === $source) {
-            // Convert user data to db data
-            $value = $this->getDbAttribute($name);
-        }
+
+        // Convert user data to db data
+        $value = $this->convertToDbValue($name);
 
         // Convert db data to php data
         $this->attributes[$name] = $this->trigger('getValue', [$value, $name]);
@@ -1358,40 +1397,6 @@ trait ModelTrait
     protected function getAttributeSource($name)
     {
         return $this->attributeSources[$name] ?? $this->attributeSources['*'];
-    }
-
-    /**
-     * Generates data for saving to database
-     *
-     * @return array
-     */
-    protected function getDbAttributes()
-    {
-        $attributes = [];
-        foreach ($this->attributes as $name => $value) {
-            if (static::ATTRIBUTE_SOURCE_DB !== $this->getAttributeSource($name)) {
-                $attributes[$name] = $this->getDbAttribute($name);
-            } else {
-                $attributes[$name] = $value;
-            }
-        }
-        return $attributes;
-    }
-
-    /**
-     * Get the attribute value expected by the database
-     *
-     * @param string $name
-     * @return mixed
-     */
-    protected function getDbAttribute(string $name)
-    {
-        $value = $this->attributes[$name] ?? null;
-        $result = $this->callSetter($name, $value);
-        if ($result) {
-            return $this->attributes[$name];
-        }
-        return $this->trigger('setValue', [$value, $name]);
     }
 
     /**
@@ -1482,6 +1487,66 @@ trait ModelTrait
         return $result;
     }
 
+    /**
+     * Generates data for saving to database
+     *
+     * @return array
+     */
+    protected function convertToDbValues(): array
+    {
+        foreach ($this->attributes as $name => $value) {
+            $this->convertToDbValue($name);
+        }
+        return $this->attributes;
+    }
+
+    /**
+     * Convert the attribute value to database value
+     *
+     * @param string $column
+     * @return mixed
+     */
+    protected function convertToDbValue(string $column)
+    {
+        $value = $this->attributes[$column] ?? null;
+
+        if ($this->getAttributeSource($column) === static::ATTRIBUTE_SOURCE_DB) {
+            return $value;
+        }
+
+        // Convert to db value by setter
+        $result = $this->callSetter($column, $value);
+        if ($result) {
+            $this->setAttributeSource($column, static::ATTRIBUTE_SOURCE_DB);
+            return $this->attributes[$column];
+        }
+
+        // Convert to db value by caster
+        $this->attributes[$column] = $this->trigger('setValue', [$value, $column]);
+        $this->setAttributeSource($column, static::ATTRIBUTE_SOURCE_DB);
+        return $this->attributes[$column];
+    }
+
+    /**
+     * Return the attribute values that should be update to database
+     *
+     * @return array
+     */
+    private function getUpdateAttributes(): array
+    {
+        $attributes = [];
+        foreach ($this->changes as $column => $value) {
+            // `removeUnchanged` will call `getColumnValue`, which may convert the USER value to a DB value,
+            // and then convert the DB value to a PHP value, so here we call `convertToDbValue` in advance
+            // to avoid converting the value to a DB value twice
+            $attributes[$column] = $this->convertToDbValue($column);
+            if ($this->removeUnchanged($column)) {
+                unset($attributes[$column]);
+            }
+        }
+        return $attributes;
+    }
+
     private function baseName()
     {
         $parts = explode('\\', static::class);
@@ -1522,7 +1587,7 @@ trait ModelTrait
     private function executeSelect(array $conditions)
     {
         return $this->convertKeysToPhpKeys(
-            (array) $this->db->select($this->getTable(), $this->convertKeysToDbKeys($conditions))
+            $this->db->select($this->getTable(), $this->convertKeysToDbKeys($conditions)) ?: []
         );
     }
 

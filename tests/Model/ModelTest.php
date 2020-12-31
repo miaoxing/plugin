@@ -527,31 +527,6 @@ final class ModelTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testIsChanged()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::new();
-        $this->assertFalse($user->isChanged());
-
-        $user->name = 'tt';
-        $user->group_id = 1;
-        $user->address = 'address';
-        $this->assertFalse($user->isChanged('id'));
-        $this->assertTrue($user->isChanged('name'));
-        $this->assertTrue($user->isChanged());
-
-        $this->assertNull($user->getChanges('name'));
-
-        $user->name = 'aa';
-        $this->assertTrue($user->isChanged());
-        $this->assertEquals('tt', $user->getChanges('name'));
-
-        $user->save();
-        $this->assertFalse($user->isChanged());
-        $this->assertEmpty($user->getChanges());
-    }
-
     public function testSaveRawObject()
     {
         $this->initFixtures();
@@ -662,16 +637,6 @@ final class ModelTest extends BaseTestCase
 
         $array = $user->toArray();
         $this->assertNull($array['group']);
-    }
-
-    public function testSaveOnNoAttributeChanged()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::new();
-        $result = $user->save();
-
-        $this->assertInstanceOf(TestUser::class, $result);
     }
 
     public function testPrimaryKey()

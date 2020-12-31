@@ -11,6 +11,7 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
  * @property string $getter
  * @property string $mutator
  * @property string $default_value
+ * @property \stdClass $object
  */
 class TestMutator extends WeiBaseModel
 {
@@ -39,5 +40,15 @@ class TestMutator extends WeiBaseModel
     protected function getDefaultValueAttribute()
     {
         return $this->attributes['default_value'] ?? 'default value';
+    }
+
+    protected function setObjectAttribute($value)
+    {
+        $this->attributes['object'] = json_encode($value);
+    }
+
+    protected function getObjectAttribute()
+    {
+        return json_decode($this->attributes['object']);
     }
 }

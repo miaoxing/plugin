@@ -450,4 +450,22 @@ final class CastTraitTest extends BaseTestCase
             ],
         ], $casts);
     }
+
+    /**
+     * @group change
+     */
+    public function testUpdate()
+    {
+        $cast = TestCast::save();
+
+        $cast->json_column = ['a' => 'b'];
+        $cast->save();
+
+        // Save string to database
+        $data = wei()->db->select($cast->getTable(), ['int_column' => $cast->int_column]);
+        $this->assertSame('{"a":"b"}', $data['json_column']);
+
+        // After save, convert back to array
+        $this->assertSame(['a' => 'b'], $cast->json_column);
+    }
 }

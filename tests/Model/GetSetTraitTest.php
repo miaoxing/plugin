@@ -87,6 +87,9 @@ final class GetSetTraitTest extends BaseTestCase
         $this->assertEquals('abc', $tests['abc']->name);
     }
 
+    /**
+     * @group change
+     */
     public function testIncrSave()
     {
         $getSet = TestGetSet::new();

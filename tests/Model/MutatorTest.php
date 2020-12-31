@@ -24,6 +24,7 @@ final class MutatorTest extends BaseTestCase
             ->string('setter')
             ->string('mutator')
             ->string('default_value')
+            ->string('object')
             ->exec();
 
         wei()->db->batchInsert($table, [
@@ -31,11 +32,13 @@ final class MutatorTest extends BaseTestCase
                 'getter' => base64_encode('getter'),
                 'setter' => base64_encode('setter'),
                 'mutator' => base64_encode('mutator'),
+                'object' => '{}',
             ],
             [
                 'getter' => base64_encode('getter'),
                 'setter' => base64_encode('setter'),
                 'mutator' => base64_encode('mutator'),
+                'object' => '{}',
             ],
         ]);
     }
@@ -100,14 +103,43 @@ final class MutatorTest extends BaseTestCase
 
         $data = wei()->db->select($mutator->getTable(), ['id' => $mutator->id]);
         $this->assertEquals(base64_encode('bbc'), $data['setter']);
+
+        $this->assertSame(base64_encode('bbc'), $mutator->setter);
     }
 
-    public function testIsChange()
+    /**
+     * @group change
+     */
+    public function testChange()
     {
-        $mutator = TestMutator::find(1);
-        $mutator->setter = 'cbc';
+        $mutator = TestMutator::find(2);
 
+        $setterValue = $mutator->setter;
+        $this->assertSame(base64_encode('setter'), $setterValue);
+        $mutator->setter = 'abc';
         $this->assertTrue($mutator->isChanged('setter'));
+        $this->assertSame($setterValue, $mutator->getChanges('setter'));
+
+        $getterValue = $mutator->getter;
+        $this->assertSame('getter', $getterValue);
+        $mutator->getter = base64_encode('bbc');
+        $this->assertTrue($mutator->isChanged('getter'));
+        $this->assertSame($getterValue, $mutator->getChanges('getter'));
+
+        $mutatorValue = $mutator->mutator;
+        $this->assertSame('mutator', $mutatorValue);
+        $mutator->mutator = base64_encode('abc');
+        $this->assertTrue($mutator->isChanged('mutator'));
+        $this->assertSame($mutatorValue, $mutator->getChanges('mutator'));
+
+        $objectValue = $mutator->object;
+        $this->assertEquals($objectValue, new \stdClass());
+        $mutator->object = (object) ['a' => 'b'];
+        $this->assertTrue($mutator->isChanged('object'));
+        $this->assertEquals($objectValue, $mutator->getChanges('object'));
+
+        $mutator->object = new \stdClass();
+        $this->assertFalse($mutator->isChanged('object'));
     }
 
     public function testSetInvalid()

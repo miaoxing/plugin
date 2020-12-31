@@ -93,7 +93,7 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     ];
 
     /**
-     * The record data before changed
+     * The attribute values before changed
      *
      * @var array
      */
