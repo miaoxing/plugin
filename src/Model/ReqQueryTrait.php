@@ -89,7 +89,7 @@ trait ReqQueryTrait
         foreach ((array) $relations as $relation) {
             if (isset($this->joins[$relation])
                 || !$this->req->has($relation)
-                || !$this->hasRelation($relation)
+                || !$this->isRelation($relation)
             ) {
                 continue;
             }
@@ -254,7 +254,7 @@ trait ReqQueryTrait
      */
     protected function processRelationQuery($relation, $name, $value)
     {
-        if (!$this->hasRelation($relation)) {
+        if (!$this->isRelation($relation)) {
             return;
         }
 

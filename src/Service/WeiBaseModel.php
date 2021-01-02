@@ -3,10 +3,12 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Model\ModelTrait;
 use Wei\Db;
 
 /**
  * @internal 逐步完善后移到 Wei 中
+ * @mixin ModelTrait
  */
 abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
 {

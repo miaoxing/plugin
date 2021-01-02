@@ -665,6 +665,73 @@ final class RelationTest extends BaseTestCase
         $user->load('profile');
     }
 
+    public function testGetSelfMethodAsRelation()
+    {
+        $user = TestUser::new();
+
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessageMatches('/Property or object "getEventResult" \(class "Wei\\\GetEventResult"\) not found, called in file/');
+
+        // @phpstan-ignore-next-line
+        $user->getEventResult;
+    }
+
+    public function testGetParentModelMethodAsRelation()
+    {
+        $user = TestUser::new();
+
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessageMatches('/Property or object "getGuarded" \(class "Wei\\\GetGuarded"\) not found, called in file/');
+
+        // @phpstan-ignore-next-line
+        $user->getGuarded;
+    }
+
+    public function testGetModelMethodHasArgumentAsRelation()
+    {
+        $user = TestUser::new();
+
+        $this->expectException(\ArgumentCountError::class);
+        $this->expectExceptionMessageMatches('/Too few arguments to function MiaoxingTest\\\Plugin\\\Model\\\Fixture\\\TestUser::methodHasArg\(\), 0 passed /');
+
+        // @phpstan-ignore-next-line
+        $user->methodHasArg;
+    }
+
+    public function testIsRelation()
+    {
+        $user = TestUser::new();
+
+        $this->assertTrue($user->isRelation('group'));
+        $this->assertFalse($user->isRelation('articles'));
+    }
+
+    public function testInstanceRelationModelByModel()
+    {
+        $user = TestUser::new();
+        $profile = TestProfile::new();
+
+        $model = $user->hasOne($profile);
+        $this->assertInstanceOf(TestProfile::class, $model);
+        $this->assertSame($model, $profile);
+    }
+
+    public function testInstanceRelationModelByClass()
+    {
+        $user = TestUser::new();
+        $model = $user->hasOne(TestProfile::class);
+        $this->assertInstanceOf(TestProfile::class, $model);
+    }
+
+    public function testInstanceRelationModelByInvalidName()
+    {
+        $user = TestUser::new();
+
+        $this->expectExceptionObject(new \InvalidArgumentException('Expected "model" argument to be a subclass or an instance of WeiBaseModel, "abc" given'));
+
+        $user->hasOne('abc');
+    }
+
     protected function clearLogs()
     {
         // preload fields cache

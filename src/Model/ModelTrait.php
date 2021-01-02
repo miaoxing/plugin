@@ -198,8 +198,9 @@ trait ModelTrait
         }
 
         // Receive relation
-        if ($this->hasRelation($name)) {
-            return $this->getRelationValue($name);
+        $result = $this->getRelationValue($name, $exists, $throwException);
+        if ($exists) {
+            return $result;
         }
 
         $exists = false;
@@ -993,10 +994,6 @@ trait ModelTrait
             return $this->setVirtualValue($name, $value);
         }
 
-        if ($this->hasRelation($name)) {
-            return $this->setRelationValue($name, $value);
-        }
-
         if ($throwException) {
             throw new InvalidArgumentException('Invalid property: ' . (null === $name ? '[null]' : $name));
         } else {
@@ -1221,6 +1218,11 @@ trait ModelTrait
      */
     protected function indexBy($column)
     {
+        // Expect to work with coll
+        if (!$this->coll) {
+            $this->beColl();
+        }
+
         $this->parentIndexBy($column);
         $this->attributes = $this->executeIndexBy($this->attributes, $column);
         return $this;

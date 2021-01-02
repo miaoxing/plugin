@@ -2,6 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
+use Miaoxing\Plugin\Model\Attributes\Relation;
 use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Service\WeiBaseModel;
 
@@ -32,6 +33,10 @@ class TestUser extends WeiBaseModel
         'group_id' => 0,
     ];
 
+    /**
+     * @Relation
+     */
+    #[Relation]
     public function group()
     {
         return $this->belongsTo(TestUserGroup::class, 'id', 'group_id');
@@ -52,6 +57,11 @@ class TestUser extends WeiBaseModel
     public function profile()
     {
         return $this->hasOne(TestProfile::class);
+    }
+
+    public function methodHasArg($name)
+    {
+        return $name;
     }
 
     public function beforeCreate()

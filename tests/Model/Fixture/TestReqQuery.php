@@ -11,6 +11,9 @@ class TestReqQuery extends WeiBaseModel
     use ModelTrait;
     use ReqQueryTrait;
 
+    /**
+     * @Relation
+     */
     public function detail()
     {
         return $this->hasOne(TestReqQueryDetail::class);

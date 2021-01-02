@@ -714,11 +714,10 @@ final class ModelTest extends BaseTestCase
 
         $user = TestUser::new();
 
-        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: abc'));
+        $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: table'));
 
-        // TODO 改为 table
         // @phpstan-ignore-next-line
-        $user->abc = 234;
+        $user->table = 234;
     }
 
     public function testIncrAndDecr()

@@ -110,7 +110,7 @@ trait CollTrait
             if (isset($row[$primaryKey], $this->attributes[$row[$primaryKey]])) {
                 $this->attributes[$row[$primaryKey]]->fromArray($row);
             } else {
-                $this->offsetSet(null, $this->__invoke($this->table)->fromArray($extra + $row));
+                $this->offsetSet(null, static::new()->fromArray($extra + $row));
             }
         }
         $this->attributes = array_values($this->attributes);
