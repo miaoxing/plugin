@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
 use Miaoxing\Plugin\Model\ModelTrait;
@@ -24,7 +26,7 @@ class TestMutator extends WeiBaseModel
 
     protected function setSetterAttribute($value)
     {
-        $this->attributes['setter'] = base64_encode($value);
+        $this->attributes['setter'] = base64_encode($value ?? '');
     }
 
     protected function getMutatorAttribute()

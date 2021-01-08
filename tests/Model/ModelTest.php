@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Service\Ret;
