@@ -471,7 +471,7 @@ trait RelationTrait
         }
 
         // Compat with PHP less than 8
-        return strpos($ref->getDocComment(), '@Relation') !== false;
+        return strpos($ref->getDocComment() ?: '', '@Relation') !== false;
     }
 
     /**
