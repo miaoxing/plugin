@@ -129,7 +129,7 @@ trait QueryBuilderTrait
      * @param string|null $table
      * @return static
      */
-    public function __invoke(string $table = null)
+    public function __invoke(string $table = null): self
     {
         return new static([
             'wei' => $this->wei,
@@ -144,7 +144,7 @@ trait QueryBuilderTrait
      * @param string $table
      * @return $this
      */
-    public function setTable($table)
+    public function setTable(string $table): self
     {
         return $this->from($table);
     }
@@ -175,7 +175,7 @@ trait QueryBuilderTrait
      * @param mixed|null $value
      * @return string|null
      */
-    public function fetchColumn($column = null, $operator = null, $value = null)
+    public function fetchColumn($column = null, $operator = null, $value = null): ?string
     {
         $data = $this->fetch(...func_get_args());
         return $data ? current($data) : null;
@@ -187,18 +187,27 @@ trait QueryBuilderTrait
      * @return int
      * @todo 改为自动识别
      */
-    public function countBySubQuery()
+    public function countBySubQuery(): int
     {
         return (int) $this->where(...func_get_args())->fetchColumn();
         //return (int) $this->db->fetchColumn($this->getSqlForCount(), $this->getBindParams());
     }
 
-    public function max($column)
+    /**
+     * @param string $column
+     * @return string|null
+     */
+    public function max(string $column): ?string
     {
         return $this->aggregate('MAX', $column);
     }
 
-    public function aggregate($function, $columns = ['*'])
+    /**
+     * @param string $function
+     * @param string[] $columns
+     * @return string|null
+     */
+    public function aggregate($function, $columns = ['*']): ?string
     {
         $this->addQueryPart('aggregate', compact('function', 'columns'));
         return $this->fetchColumn(null);
@@ -208,12 +217,16 @@ trait QueryBuilderTrait
      * @param bool $distinct
      * @return $this
      */
-    public function distinct(bool $distinct = true)
+    public function distinct(bool $distinct = true): self
     {
         return $this->addQueryPart('distinct', $distinct);
     }
 
-    public function raw($expression)
+    /**
+     * @param scalar $expression
+     * @return object
+     */
+    public function raw($expression): object
     {
         return (object) $expression;
     }
@@ -227,7 +240,7 @@ trait QueryBuilderTrait
      * @param mixed|null $value
      * @return $this
      */
-    public function orWhere($column, $operator = null, $value = null)
+    public function orWhere($column, $operator = null, $value = null): self
     {
         if (is_array($column)) {
             foreach ($column as $arg) {
@@ -244,72 +257,146 @@ trait QueryBuilderTrait
         return $this->addWhere($column, $operator, $value, 'OR');
     }
 
-    public function orWhereRaw($expression, $params = null)
+    /**
+     * @param scalar $expression
+     * @param mixed $params
+     * @return $this
+     */
+    public function orWhereRaw($expression, $params = null): self
     {
         return $this->orWhere($this->raw($expression), null, $params);
     }
 
-    public function orWhereNotBetween($column, array $params)
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     */
+    public function orWhereNotBetween(string $column, array $params): self
     {
         return $this->addWhere($column, 'NOT BETWEEN', $params, 'OR');
     }
 
-    public function orWhereIn($column, array $params)
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     */
+    public function orWhereIn(string $column, array $params): self
     {
         return $this->addWhere($column, 'IN', $params, 'OR');
     }
 
-    public function orWhereNotIn($column, array $params)
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     */
+    public function orWhereNotIn(string $column, array $params): self
     {
         return $this->addWhere($column, 'NOT IN', $params, 'OR');
     }
 
-    public function orWhereNull($column)
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function orWhereNull(string $column): self
     {
         return $this->addWhere($column, 'NULL', null, 'OR');
     }
 
-    public function orWhereNotNull($column)
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function orWhereNotNull(string $column): self
     {
         return $this->addWhere($column, 'NOT NULL', null, 'OR');
     }
 
-    public function orWhereDate($column, $opOrValue, $value = null)
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orWhereDate(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'DATE');
     }
 
-    public function orWhereMonth($column, $opOrValue, $value = null)
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orWhereMonth(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'MONTH');
     }
 
-    public function orWhereDay($column, $opOrValue, $value = null)
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orWhereDay(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'DAY');
     }
 
-    public function orWhereYear($column, $opOrValue, $value = null)
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orWhereYear(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'YEAR');
     }
 
-    public function orWhereTime($column, $opOrValue, $value = null)
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orWhereTime(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'TIME');
     }
 
-    public function orWhereColumn($column, $opOrColumn2, $column2 = null)
+    /**
+     * @param string $column
+     * @param mixed $opOrColumn2
+     * @param mixed|null $column2
+     * @return $this
+     */
+    public function orWhereColumn(string $column, $opOrColumn2, $column2 = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'OR', 'COLUMN');
     }
 
-    public function orWhereContains($column, $value)
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     */
+    public function orWhereContains(string $column, $value): self
     {
         return $this->whereContains($column, $value, 'OR');
     }
 
-    public function orWhereNotContains($column, $value)
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     */
+    public function orWhereNotContains(string $column, $value): self
     {
         return $this->whereNotContains($column, $value, 'OR');
     }
@@ -323,7 +410,7 @@ trait QueryBuilderTrait
      * @param mixed|null $value
      * @return $this
      */
-    public function orHaving($column, $operator, $value = null)
+    public function orHaving($column, $operator, $value = null): self
     {
         if (2 === func_num_args()) {
             $value = $operator;
@@ -338,7 +425,7 @@ trait QueryBuilderTrait
      * @param string $name The name of SQL part
      * @return mixed
      */
-    public function getQueryPart($name)
+    public function getQueryPart(string $name)
     {
         return $this->queryParts[$name] ?? null;
     }
@@ -348,7 +435,7 @@ trait QueryBuilderTrait
      *
      * @return array
      */
-    public function getQueryParts()
+    public function getQueryParts(): array
     {
         return $this->queryParts;
     }
@@ -356,10 +443,10 @@ trait QueryBuilderTrait
     /**
      * Reset all SQL parts
      *
-     * @param array $name
+     * @param string|null $name
      * @return $this
      */
-    public function resetQueryParts($name = null)
+    public function resetQueryParts($name = null): self
     {
         if (null === $name) {
             $name = array_keys($this->queryParts);
@@ -378,7 +465,7 @@ trait QueryBuilderTrait
      * @param string|null $type
      * @return $this
      */
-    public function setQueryParam($key, $value, $type = 'where')
+    public function setQueryParam($key, $value, string $type = 'where'): self
     {
         $this->queryParams[$type][$key] = $value;
         return $this;
@@ -391,7 +478,7 @@ trait QueryBuilderTrait
      * @param string $type
      * @return $this
      */
-    public function setQueryParams(array $params, $type = 'where')
+    public function setQueryParams(array $params, string $type = 'where'): self
     {
         $this->queryParams[$type] = $params;
         return $this;
@@ -404,7 +491,7 @@ trait QueryBuilderTrait
      * @param string $type
      * @return mixed The value of the bound parameter
      */
-    public function getQueryParam($key, $type = 'where')
+    public function getQueryParam($key, string $type = 'where')
     {
         return $this->queryParams[$type][$key] ?? null;
     }
@@ -412,9 +499,10 @@ trait QueryBuilderTrait
     /**
      * Gets all defined query parameters for the query being constructed.
      *
+     * @param string|null $type
      * @return array the currently defined query parameters
      */
-    public function getQueryParams($type = 'where')
+    public function getQueryParams(?string $type = 'where'): ?array
     {
         if ($type) {
             return $this->queryParams[$type] ?? null;
@@ -428,7 +516,7 @@ trait QueryBuilderTrait
      * @param string $type
      * @return $this
      */
-    public function addQueryParam($param, $type = 'where')
+    public function addQueryParam($param, string $type = 'where'): self
     {
         $this->queryParams[$type] = array_merge($this->queryParams[$type], (array) $param);
         return $this;
@@ -438,7 +526,7 @@ trait QueryBuilderTrait
      * @param array $params
      * @param string $type
      */
-    public function addQueryParams(array $params, $type = 'where')
+    public function addQueryParams(array $params, string $type = 'where'): self
     {
         $this->queryParams[$type] = array_merge($this->queryParams[$type], $params);
         return $this;
@@ -448,7 +536,7 @@ trait QueryBuilderTrait
      * @param string|null $type
      * @return $this
      */
-    public function resetQueryParam($type = 'where')
+    public function resetQueryParam(?string $type = 'where'): self
     {
         if ($type) {
             $this->queryParams[$type] = [];
@@ -465,7 +553,7 @@ trait QueryBuilderTrait
      *
      * @return array
      */
-    public function getBindParams()
+    public function getBindParams(): array
     {
         $result = [];
         foreach ($this->queryParams as $params) {
@@ -484,7 +572,7 @@ trait QueryBuilderTrait
      * @param array $types
      * @return $this
      */
-    public function setQueryParamTypes(array $types)
+    public function setQueryParamTypes(array $types): self
     {
         $this->queryParamTypes = $types;
         return $this;
@@ -493,7 +581,7 @@ trait QueryBuilderTrait
     /**
      * @return array
      */
-    public function getQueryParamTypes()
+    public function getQueryParamTypes(): array
     {
         return $this->queryParamTypes;
     }
@@ -503,7 +591,7 @@ trait QueryBuilderTrait
      *
      * @return string The sql query string
      */
-    public function getSql()
+    public function getSql(): string
     {
         if (null !== $this->sql && !$this->queryChanged) {
             return $this->sql;
@@ -520,7 +608,7 @@ trait QueryBuilderTrait
         return $this->sql;
     }
 
-    public function getRawSql()
+    public function getRawSql(): string
     {
         return $this->getDbDriver()->getRawSql(
             $this->queryType,
@@ -535,7 +623,7 @@ trait QueryBuilderTrait
      *
      * @return $this
      */
-    public function resetQuery()
+    public function resetQuery(): self
     {
         $this->resetQueryParam(null);
         $this->queryParamTypes = [];
@@ -546,7 +634,7 @@ trait QueryBuilderTrait
     /**
      * @return callable
      */
-    public function getDbKeyConverter()
+    public function getDbKeyConverter(): callable
     {
         return $this->dbKeyConverter;
     }
@@ -557,7 +645,7 @@ trait QueryBuilderTrait
      * @return string|null
      * @svc
      */
-    protected function getTable()
+    protected function getTable(): ?string
     {
         return $this->table ?? null;
     }
@@ -650,7 +738,7 @@ trait QueryBuilderTrait
      * @param array $params
      * @return $this
      */
-    public function orWhereBetween($column, array $params)
+    public function orWhereBetween(string $column, array $params): self
     {
         return $this->addWhere($column, 'BETWEEN', $params, 'OR');
     }
@@ -664,7 +752,7 @@ trait QueryBuilderTrait
      * @return array|null
      * @svc
      */
-    protected function fetch($column = null, $operator = null, $value = null)
+    protected function fetch($column = null, $operator = null, $value = null): ?array
     {
         $this->where(...func_get_args());
         $this->limit(1);
@@ -681,7 +769,7 @@ trait QueryBuilderTrait
      * @return array
      * @svc
      */
-    protected function fetchAll($column = null, $operator = null, $value = null)
+    protected function fetchAll($column = null, $operator = null, $value = null): array
     {
         $this->where(...func_get_args());
         $data = $this->execute();
@@ -697,7 +785,7 @@ trait QueryBuilderTrait
      * @return array|null
      * @svc
      */
-    protected function first()
+    protected function first(): ?array
     {
         return $this->fetch();
     }
@@ -706,7 +794,7 @@ trait QueryBuilderTrait
      * @return array
      * @svc
      */
-    protected function all()
+    protected function all(): array
     {
         return $this->fetchAll();
     }
@@ -717,7 +805,7 @@ trait QueryBuilderTrait
      * @return array
      * @svc
      */
-    protected function pluck(string $column, string $index = null)
+    protected function pluck(string $column, string $index = null): array
     {
         $columns = [$column];
         $index && $columns[] = $index;
@@ -731,7 +819,7 @@ trait QueryBuilderTrait
      * @return bool
      * @svc
      */
-    protected function chunk(int $count, callable $callback)
+    protected function chunk(int $count, callable $callback): bool
     {
         $this->limit($count);
         $page = 1;
@@ -762,7 +850,7 @@ trait QueryBuilderTrait
      * @return int
      * @svc
      */
-    protected function cnt($column = '*')
+    protected function cnt($column = '*'): int
     {
         return (int) $this->aggregate('COUNT', $column);
     }
@@ -775,7 +863,7 @@ trait QueryBuilderTrait
      * @return int
      * @svc
      */
-    protected function update($set = [], $value = null)
+    protected function update($set = [], $value = null): int
     {
         if (2 === func_num_args()) {
             $set = [$set => $value];
@@ -798,10 +886,10 @@ trait QueryBuilderTrait
      * @param mixed|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
-     * @return mixed
+     * @return int
      * @svc
      */
-    protected function delete($column = null, $operator = null, $value = null)
+    protected function delete($column = null, $operator = null, $value = null): int
     {
         $this->where(...func_get_args());
         $this->queryType = BaseDriver::DELETE;
@@ -815,7 +903,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function offset($offset)
+    protected function offset($offset): self
     {
         $offset = (int) $offset;
         $offset < 0 && $offset = 0;
@@ -829,7 +917,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function limit($limit)
+    protected function limit($limit): self
     {
         $limit = max(1, (int) $limit);
         $this->addQueryPart('limit', $limit);
@@ -849,7 +937,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function page($page)
+    protected function page($page): self
     {
         $page = max(1, (int) $page);
         $this->addQueryPart('page', $page);
@@ -884,7 +972,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function selectDistinct($columns)
+    protected function selectDistinct($columns): self
     {
         $this->distinct(true);
         return $this->select(func_get_args());
@@ -895,7 +983,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function selectRaw($expression)
+    protected function selectRaw($expression): self
     {
         $this->queryType = BaseDriver::SELECT;
 
@@ -910,7 +998,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function selectExcept($columns)
+    protected function selectExcept($columns): self
     {
         $columns = array_diff($this->getColumnNames(), is_array($columns) ? $columns : [$columns]);
 
@@ -938,7 +1026,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function from($table, $alias = null): self
+    protected function from(string $table, $alias = null): self
     {
         $this->table = $table;
         return $this->addQueryPart('from', $table . ($alias ? ' ' . $alias : ''));
@@ -959,9 +1047,9 @@ trait QueryBuilderTrait
      * Adds a inner join to the query
      *
      * @param string $table The table name to join
-     * @param string $first
+     * @param string|null $first
      * @param string $operator
-     * @param string $second
+     * @param string|null $second
      * @param string $type
      * @return $this
      * @svc
@@ -972,7 +1060,7 @@ trait QueryBuilderTrait
         string $operator = '=',
         string $second = null,
         string $type = 'INNER'
-    ) {
+    ): self {
         return $this->addQueryPart('join', compact('table', 'first', 'operator', 'second', 'type'), true);
     }
 
@@ -986,8 +1074,12 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null)
-    {
+    protected function innerJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
         return $this->join(...func_get_args());
     }
 
@@ -1001,8 +1093,12 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null)
-    {
+    protected function leftJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
         return $this->join($table, $first, $operator, $second, 'LEFT');
     }
 
@@ -1016,8 +1112,12 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null)
-    {
+    protected function rightJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
         return $this->join($table, $first, $operator, $second, 'RIGHT');
     }
 
@@ -1038,7 +1138,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function where($column = null, $operator = null, $value = null)
+    protected function where($column = null, $operator = null, $value = null): self
     {
         if (null === $column) {
             return $this;
@@ -1064,12 +1164,12 @@ trait QueryBuilderTrait
     }
 
     /**
-     * @param string $expression
+     * @param scalar $expression
      * @param mixed $params
      * @return $this
      * @svc
      */
-    protected function whereRaw($expression, $params = null)
+    protected function whereRaw($expression, $params = null): self
     {
         return $this->where($this->raw($expression), null, $params);
     }
@@ -1080,7 +1180,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereBetween($column, array $params)
+    protected function whereBetween(string $column, array $params): self
     {
         return $this->addWhere($column, 'BETWEEN', $params);
     }
@@ -1091,7 +1191,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereNotBetween($column, array $params)
+    protected function whereNotBetween(string $column, array $params): self
     {
         return $this->addWhere($column, 'NOT BETWEEN', $params);
     }
@@ -1102,7 +1202,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereIn($column, array $params)
+    protected function whereIn(string $column, array $params): self
     {
         return $this->addWhere($column, 'IN', $params);
     }
@@ -1113,7 +1213,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereNotIn($column, array $params)
+    protected function whereNotIn(string $column, array $params): self
     {
         return $this->addWhere($column, 'NOT IN', $params);
     }
@@ -1123,7 +1223,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereNull($column)
+    protected function whereNull(string $column): self
     {
         return $this->addWhere($column, 'NULL');
     }
@@ -1133,7 +1233,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereNotNULL($column)
+    protected function whereNotNULL(string $column): self
     {
         return $this->addWhere($column, 'NOT NULL');
     }
@@ -1145,7 +1245,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereDate($column, $opOrValue, $value = null)
+    protected function whereDate(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'DATE');
     }
@@ -1157,7 +1257,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereMonth($column, $opOrValue, $value = null)
+    protected function whereMonth(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'MONTH');
     }
@@ -1169,7 +1269,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereDay($column, $opOrValue, $value = null)
+    protected function whereDay(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'DAY');
     }
@@ -1181,7 +1281,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereYear($column, $opOrValue, $value = null)
+    protected function whereYear(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'YEAR');
     }
@@ -1193,19 +1293,19 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereTime($column, $opOrValue, $value = null)
+    protected function whereTime(string $column, $opOrValue, $value = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'TIME');
     }
 
     /**
      * @param string $column
-     * @param string $opOrColumn2
-     * @param string|null $column2
+     * @param mixed $opOrColumn2
+     * @param mixed|null $column2
      * @return $this
      * @svc
      */
-    protected function whereColumn($column, $opOrColumn2, $column2 = null)
+    protected function whereColumn(string $column, $opOrColumn2, $column2 = null): self
     {
         return $this->addWhereArgs(func_get_args(), 'AND', 'COLUMN');
     }
@@ -1214,24 +1314,24 @@ trait QueryBuilderTrait
      * 搜索字段是否包含某个值
      *
      * @param string $column
-     * @param string $value
-     * @param string $condition
-     * @return $this
-     * @svc
-     */
-    protected function whereContains($column, $value, string $condition = 'AND')
-    {
-        return $this->addWhere($column, 'LIKE', '%' . $value . '%', $condition);
-    }
-
-    /**
-     * @param mixed $column
      * @param mixed $value
      * @param string $condition
      * @return $this
      * @svc
      */
-    protected function whereNotContains($column, $value, string $condition = 'OR')
+    protected function whereContains(string $column, $value, string $condition = 'AND'): self
+    {
+        return $this->addWhere($column, 'LIKE', '%' . $value . '%', $condition);
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @param string $condition
+     * @return $this
+     * @svc
+     */
+    protected function whereNotContains(string $column, $value, string $condition = 'OR'): self
     {
         return $this->addWhere($column, 'NOT LIKE', '%' . $value . '%', $condition);
     }
@@ -1244,7 +1344,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function groupBy($column)
+    protected function groupBy($column): self
     {
         $column = is_array($column) ? $column : func_get_args();
         return $this->addQueryPart('groupBy', $column, true);
@@ -1261,7 +1361,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function having($column, $operator, $value = null, $condition = 'AND')
+    protected function having($column, $operator, $value = null, $condition = 'AND'): self
     {
         if (2 === func_num_args()) {
             $value = $operator;
@@ -1279,12 +1379,12 @@ trait QueryBuilderTrait
     }
 
     /**
-     * @param string $expression
+     * @param scalar $expression
      * @param mixed $params
      * @return $this
      * @svc
      */
-    public function havingRaw($expression, $params = [])
+    public function havingRaw($expression, $params = []): self
     {
         return $this->having($this->raw($expression), null, $params);
     }
@@ -1298,7 +1398,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function orderBy($column, $order = 'ASC')
+    protected function orderBy(string $column, $order = 'ASC'): self
     {
         $order = strtoupper($order);
         if (!in_array($order, ['ASC', 'DESC'], true)) {
@@ -1315,7 +1415,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function desc($field)
+    protected function desc(string $field): self
     {
         return $this->orderBy($field, 'DESC');
     }
@@ -1327,7 +1427,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function asc($field)
+    protected function asc(string $field): self
     {
         return $this->orderBy($field, 'ASC');
     }
@@ -1339,7 +1439,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function indexBy($column)
+    protected function indexBy(string $column): self
     {
         $this->addQueryPart('indexBy', $column);
         return $this;
@@ -1349,7 +1449,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function forUpdate()
+    protected function forUpdate(): self
     {
         return $this->lock(true);
     }
@@ -1358,7 +1458,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function forShare()
+    protected function forShare(): self
     {
         return $this->lock(false);
     }
@@ -1368,7 +1468,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function lock($lock)
+    protected function lock($lock): self
     {
         $this->addQueryPart('lock', $lock);
         return $this;
@@ -1381,7 +1481,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function when($value, $callback, callable $default = null)
+    protected function when($value, callable $callback, callable $default = null): self
     {
         if ($value) {
             $callback($this, $value);
@@ -1398,7 +1498,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function unless($value, callable $callback, callable $default = null)
+    protected function unless($value, callable $callback, callable $default = null): self
     {
         if (!$value) {
             $callback($this, $value);
@@ -1413,7 +1513,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function setDbKeyConverter(callable $converter = null)
+    protected function setDbKeyConverter(callable $converter = null): self
     {
         $this->dbKeyConverter = $converter;
         return $this;
@@ -1424,7 +1524,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function setPhpKeyConverter(callable $converter = null)
+    protected function setPhpKeyConverter(callable $converter = null): self
     {
         $this->phpKeyConverter = $converter;
         return $this;
@@ -1435,7 +1535,7 @@ trait QueryBuilderTrait
      * @param string $column
      * @return array
      */
-    protected function executeIndexBy($data, $column)
+    protected function executeIndexBy($data, $column): array
     {
         if (!$data) {
             return $data;
@@ -1454,7 +1554,7 @@ trait QueryBuilderTrait
      * @param string $name
      * @return $this
      */
-    protected function resetQueryPart($name)
+    protected function resetQueryPart(string $name): self
     {
         $this->queryParts[$name] = is_array($this->queryParts[$name]) ? [] : null;
         $this->queryChanged = true;
@@ -1469,7 +1569,7 @@ trait QueryBuilderTrait
      * @param bool $append
      * @return $this
      */
-    protected function addQueryPart($name, $value, $append = false)
+    protected function addQueryPart(string $name, $value, bool $append = false): self
     {
         $this->queryChanged = true;
 
@@ -1494,8 +1594,21 @@ trait QueryBuilderTrait
         return $this;
     }
 
-    protected function addWhere($column, $operator, $value = null, $condition = 'AND', $type = null)
-    {
+    /**
+     * @param string|Closure $column
+     * @param string $operator
+     * @param mixed|null $value
+     * @param string $condition
+     * @param string|null $type
+     * @return $this
+     */
+    protected function addWhere(
+        $column,
+        ?string $operator,
+        $value = null,
+        string $condition = 'AND',
+        string $type = null
+    ): self {
         if ($column instanceof Closure) {
             $query = new static([
                 'wei' => $this->wei,
@@ -1521,7 +1634,7 @@ trait QueryBuilderTrait
         return $this;
     }
 
-    protected function addWhereArgs($args, $condition = 'AND', $type = null)
+    protected function addWhereArgs(array $args, string $condition = 'AND', string $type = null): self
     {
         if (2 === count($args)) {
             $operator = '=';
@@ -1536,7 +1649,7 @@ trait QueryBuilderTrait
      * @param string $key
      * @return string
      */
-    protected function convertToDbKey($key)
+    protected function convertToDbKey(string $key): string
     {
         return isset($this->dbKeyConverter) ? call_user_func($this->dbKeyConverter, $key) : $key;
     }
@@ -1545,7 +1658,7 @@ trait QueryBuilderTrait
      * @param string $key
      * @return string
      */
-    protected function convertToPhpKey($key)
+    protected function convertToPhpKey(string $key): string
     {
         return isset($this->phpKeyConverter) ? call_user_func($this->phpKeyConverter, $key) : $key;
     }
@@ -1556,7 +1669,7 @@ trait QueryBuilderTrait
      * @param array $data
      * @return array
      */
-    protected function convertKeysToPhpKeys(array $data)
+    protected function convertKeysToPhpKeys(array $data): array
     {
         $newData = [];
         foreach ($data as $key => $value) {
@@ -1571,7 +1684,7 @@ trait QueryBuilderTrait
      * @param array $data
      * @return array
      */
-    protected function convertKeysToDbKeys(array $data)
+    protected function convertKeysToDbKeys(array $data): array
     {
         $newData = [];
         foreach ($data as $key => $value) {
@@ -1583,7 +1696,7 @@ trait QueryBuilderTrait
     /**
      * @return BaseDriver
      */
-    protected function getDbDriver()
+    protected function getDbDriver(): BaseDriver
     {
         $driver = $this->db->getDriver();
         if (!isset(static::$dbDrivers[$driver])) {
@@ -1599,7 +1712,7 @@ trait QueryBuilderTrait
      * @param string $input
      * @return string
      */
-    protected function snake($input)
+    protected function snake(string $input): string
     {
         if (isset(static::$snakeCache[$input])) {
             return static::$snakeCache[$input];
@@ -1619,7 +1732,7 @@ trait QueryBuilderTrait
      * @param string $input
      * @return string
      */
-    protected function camel($input)
+    protected function camel(string $input): string
     {
         if (isset(static::$camelCache[$input])) {
             return static::$camelCache[$input];
@@ -1645,7 +1758,7 @@ trait QueryBuilderTrait
      * @return array
      * @internal
      */
-    protected function executeFetchAll($sql, $params = [], $types = [])
+    protected function executeFetchAll(string $sql, array $params = [], array $types = []): array
     {
         $data = $this->db->fetchAll($sql, $params, $types);
         if (isset($data[0])) {

@@ -113,7 +113,7 @@ class User extends UserModel
         return parent::__set($name, $value);
     }
 
-    protected function toArray($returnFields = [], callable $prepend = null)
+    protected function toArray($returnFields = [], callable $prepend = null): array
     {
         $this->loadDbUser();
 
@@ -123,7 +123,7 @@ class User extends UserModel
     /**
      * {@inheritdoc}
      */
-    public function save($data = [])
+    public function save(iterable $data = []): self
     {
         // 确保是更新操作,同时有ID作为更新条件
         $this->new = false;

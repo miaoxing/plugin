@@ -7,7 +7,7 @@ use Miaoxing\Plugin\Service\App;
 
 trait HasAppIdTrait
 {
-    public static function bootHasAppIdTrait(BaseModel $initModel)
+    public static function bootHasAppIdTrait(BaseModel $initModel): void
     {
         $initModel->addDefaultScope('curApp');
 
@@ -20,11 +20,11 @@ trait HasAppIdTrait
      *
      * @return $this
      */
-    public function curApp()
+    public function curApp(): self
     {
         /** @var App $app */
         $app = $this->wei->app;
-        return $this->where('app_id', $app->getId());
+        return $this->where('appId', $app->getId());
     }
 
     /**
@@ -33,7 +33,7 @@ trait HasAppIdTrait
      * @param int|null $appId
      * @return $this
      */
-    public function setAppId($appId = null)
+    public function setAppId($appId = null): self
     {
         /** @var App $app */
         $app = $this->wei->app;
@@ -43,7 +43,7 @@ trait HasAppIdTrait
     /**
      * @internal
      */
-    protected function addAppIdToGuarded()
+    protected function addAppIdToGuarded(): void
     {
         array_push($this->guarded, 'appId');
     }

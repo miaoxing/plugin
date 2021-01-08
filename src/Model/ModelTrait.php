@@ -4,6 +4,8 @@ namespace Miaoxing\Plugin\Model;
 
 use InvalidArgumentException;
 use Miaoxing\Plugin\BaseService;
+use Wei\Base;
+use Wei\Req;
 use Wei\Ret;
 use Wei\RetTrait;
 use Wei\Wei;
@@ -64,7 +66,7 @@ trait ModelTrait
      * @param array $options
      * @return $this
      */
-    public static function new($attributes = [], array $options = [])
+    public static function new($attributes = [], array $options = []): self
     {
         $class = static::getServiceClass();
         return new $class($options + ['attributes' => $attributes]);
@@ -76,7 +78,7 @@ trait ModelTrait
      * @param array $returnFields A indexed array specified the fields to return
      * @return string
      */
-    public function toJson($returnFields = [])
+    public function toJson(array $returnFields = []): string
     {
         return json_encode($this->toArray($returnFields));
     }
@@ -86,7 +88,7 @@ trait ModelTrait
      *
      * @return string[]
      */
-    public function getGuarded()
+    public function getGuarded(): array
     {
         return $this->guarded;
     }
@@ -97,7 +99,7 @@ trait ModelTrait
      * @param array $guarded
      * @return $this
      */
-    public function setGuarded(array $guarded)
+    public function setGuarded(array $guarded): self
     {
         $this->guarded = $guarded;
         return $this;
@@ -108,7 +110,7 @@ trait ModelTrait
      *
      * @return string[]
      */
-    public function getFillable()
+    public function getFillable(): array
     {
         return $this->fillable;
     }
@@ -119,7 +121,7 @@ trait ModelTrait
      * @param array $fillable
      * @return $this
      */
-    public function setFillable(array $fillable)
+    public function setFillable(array $fillable): self
     {
         $this->fillable = $fillable;
         return $this;
@@ -128,23 +130,22 @@ trait ModelTrait
     /**
      * Check if the field is assignable through fromArray method
      *
-     * @param string $field
-     * @param mixed|null $data
+     * @param string $column
      * @return bool
      */
-    public function isFillable($field, $data = null)
+    public function isFillable(string $column): bool
     {
         $fillable = $this->getFillable();
-        return !in_array($field, $this->getGuarded(), true) && !$fillable || in_array($field, $fillable, true);
+        return !in_array($column, $this->getGuarded(), true) && !$fillable || in_array($column, $fillable, true);
     }
 
     /**
      * Import a PHP array in this record
      *
-     * @param array|\ArrayAccess $attributes
+     * @param iterable $attributes
      * @return $this
      */
-    public function setAttributes($attributes)
+    public function setAttributes(iterable $attributes): self
     {
         // Replace all attributes of the collection
         if ($this->coll) {
@@ -161,7 +162,7 @@ trait ModelTrait
      *
      * @return $this
      */
-    public function reload()
+    public function reload(): self
     {
         $primaryKey = $this->getPrimaryKey();
         $this->setDbAttributes($this->executeSelect([$primaryKey => $this->get($primaryKey)]));
@@ -170,15 +171,15 @@ trait ModelTrait
     }
 
     /**
-     * Receives the record field value
+     * Receives the model column value
      *
-     * @param string $name
-     * @param mixed|null $exists
-     * @param mixed $throwException
-     * @return $this|mixed
-     * @throws InvalidArgumentException When field not found
+     * @param string|int $name
+     * @param bool|null $exists
+     * @param bool $throwException
+     * @return mixed
+     * @throws InvalidArgumentException When column not found
      */
-    public function &get($name, &$exists = null, $throwException = true)
+    public function &get($name, bool &$exists = null, bool $throwException = true)
     {
         $exists = true;
 
@@ -218,7 +219,7 @@ trait ModelTrait
      * @param string|int $name The name of field
      * @return $this
      */
-    public function remove($name)
+    public function remove($name): self
     {
         unset($this->attributes[$name]);
         $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
@@ -229,10 +230,10 @@ trait ModelTrait
      * Increment a field
      *
      * @param string $name
-     * @param int $offset
+     * @param int|float|string $offset
      * @return $this
      */
-    public function incr($name, $offset = 1)
+    public function incr(string $name, $offset = 1): self
     {
         $this[$name] = (object) ($this->convertToDbKey($name) . ' + ' . $offset);
         return $this;
@@ -242,10 +243,10 @@ trait ModelTrait
      * Decrement a field
      *
      * @param string $name
-     * @param int $offset
+     * @param int|float|string $offset
      * @return $this
      */
-    public function decr($name, $offset = 1)
+    public function decr(string $name, $offset = 1): self
     {
         $this[$name] = (object) ($this->convertToDbKey($name) . ' - ' . $offset);
         return $this;
@@ -256,7 +257,7 @@ trait ModelTrait
      *
      * @return bool
      */
-    public function isNew()
+    public function isNew(): bool
     {
         return $this->new;
     }
@@ -345,7 +346,7 @@ trait ModelTrait
     {
     }
 
-    public function boot()
+    public function boot(): void
     {
         $class = static::class;
 
@@ -461,9 +462,9 @@ trait ModelTrait
     /**
      * Returns the data of model
      *
-     * @return $this[]|array
+     * @return $this[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -471,7 +472,7 @@ trait ModelTrait
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
@@ -481,7 +482,7 @@ trait ModelTrait
      *
      * @return string[]
      */
-    public function getHidden()
+    public function getHidden(): array
     {
         return $this->hidden;
     }
@@ -492,14 +493,19 @@ trait ModelTrait
      * @param string|array $hidden
      * @return $this
      */
-    public function setHidden($hidden)
+    public function setHidden($hidden): self
     {
         $this->hidden = (array) $hidden;
 
         return $this;
     }
 
-    public function trigger($event, $data = [])
+    /**
+     * @param string $event
+     * @param array $data
+     * @return mixed
+     */
+    public function trigger(string $event, $data = [])
     {
         $result = null;
         $class = static::class;
@@ -518,7 +524,11 @@ trait ModelTrait
         return $result;
     }
 
-    public static function on($event, $method)
+    /**
+     * @param string $event
+     * @param string|callable $method
+     */
+    public static function on(string $event, $method)
     {
         static::$modelEvents[static::class][$event][] = $method;
     }
@@ -538,10 +548,10 @@ trait ModelTrait
     /**
      * Check if the model's attributes or the specified column is changed
      *
-     * @param string $column
+     * @param string|null $column
      * @return bool
      */
-    public function isChanged($column = null)
+    public function isChanged(string $column = null): bool
     {
         $this->removeUnchanged($column);
 
@@ -554,10 +564,10 @@ trait ModelTrait
     /**
      * Return the column that has been changed
      *
-     * @param string $column
+     * @param string|null $column
      * @return array|string|null
      */
-    public function getChanges($column = null)
+    public function getChanges(string $column = null)
     {
         $this->removeUnchanged($column);
 
@@ -572,13 +582,18 @@ trait ModelTrait
      * @param mixed $value
      * @return $this
      */
-    public function setRawValue($column, $value)
+    public function setRawValue(string $column, $value): self
     {
         $this->attributes[$column] = $value;
         return $this;
     }
 
-    public function incrSave($name, $offset = 1)
+    /**
+     * @param string $name
+     * @param int|float|string $offset
+     * @return $this
+     */
+    public function incrSave(string $name, $offset = 1): self
     {
         $value = $this->get($name) + $offset;
         $this->incr($name, $offset)->save();
@@ -592,7 +607,7 @@ trait ModelTrait
      * @return $this
      * @throws \Exception
      */
-    public function existOrFail()
+    public function existOrFail(): self
     {
         if ($this->new) {
             throw new \Exception('Record not found', 404);
@@ -607,7 +622,7 @@ trait ModelTrait
      * @param bool $value
      * @return $this
      */
-    public function whereHas($column, $value = true)
+    public function whereHas($column, $value = true): self
     {
         if (isset($this->defaultValues[$this->getColumnCast($column)])) {
             $default = $this->defaultValues[$this->getColumnCast($column)];
@@ -627,7 +642,7 @@ trait ModelTrait
      * @param bool $merge
      * @return $this
      */
-    protected function setDbAttributes(array $attributes, bool $merge = false)
+    protected function setDbAttributes(array $attributes, bool $merge = false): self
     {
         $this->attributes = array_merge($merge ? $this->attributes : [], $attributes);
         $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
@@ -639,7 +654,7 @@ trait ModelTrait
      *
      * @return bool
      */
-    public function wasRecentlyCreated()
+    public function wasRecentlyCreated(): bool
     {
         return $this->wasRecentlyCreated;
     }
@@ -650,7 +665,7 @@ trait ModelTrait
      * @param string $primaryKey
      * @return $this
      */
-    public function setPrimaryKey($primaryKey)
+    public function setPrimaryKey(string $primaryKey): self
     {
         $this->primaryKey = $primaryKey;
         return $this;
@@ -661,7 +676,7 @@ trait ModelTrait
      *
      * @return string
      */
-    public function getPrimaryKey()
+    public function getPrimaryKey(): string
     {
         return $this->primaryKey;
     }
@@ -669,10 +684,10 @@ trait ModelTrait
     /**
      * Check if the offset exists
      *
-     * @param string $offset
+     * @param string|int $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->attributes[$offset]);
     }
@@ -680,7 +695,7 @@ trait ModelTrait
     /**
      * Get the offset value
      *
-     * @param string $offset
+     * @param string|int $offset
      * @return mixed
      */
     public function &offsetGet($offset)
@@ -702,7 +717,7 @@ trait ModelTrait
     /**
      * Unset the offset
      *
-     * @param string $offset
+     * @param string|int $offset
      */
     public function offsetUnset($offset)
     {
@@ -710,9 +725,9 @@ trait ModelTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return $this|BaseService
+     * @param string|int $name
+     * @return BaseService|$this
+     * @throws \Exception
      */
     public function &__get($name)
     {
@@ -726,7 +741,7 @@ trait ModelTrait
     }
 
     /**
-     * @param string $name
+     * @param string|int|null $name
      * @param mixed $value
      * @return mixed
      */
@@ -747,10 +762,10 @@ trait ModelTrait
     /**
      * Check if property exists
      *
-     * @param string $name
+     * @param string|int $name
      * @return bool
      */
-    public function __isset($name)
+    public function __isset($name): bool
     {
         return isset($this->$name);
     }
@@ -759,11 +774,10 @@ trait ModelTrait
      * Remove the attribute value by name
      *
      * @param string|int $name The name of field
-     * @return $this
      */
-    public function __unset($name)
+    public function __unset($name): void
     {
-        return $this->remove($name);
+        $this->remove($name);
     }
 
     /**
@@ -774,7 +788,7 @@ trait ModelTrait
      * @return array
      * @svc
      */
-    protected function toArray($returnFields = [], callable $prepend = null)
+    protected function toArray($returnFields = [], callable $prepend = null): array
     {
         if ($this->coll) {
             return $this->mapColl(__FUNCTION__, func_get_args());
@@ -800,11 +814,11 @@ trait ModelTrait
     /**
      * 不经过fillable检查,设置数据并保存
      *
-     * @param array $attributes
+     * @param iterable $attributes
      * @return $this
      * @svc
      */
-    protected function saveAttributes($attributes = [])
+    protected function saveAttributes(iterable $attributes = []): self
     {
         $attributes && $this->setAttributes($attributes);
 
@@ -818,7 +832,7 @@ trait ModelTrait
      * @return Ret
      * @svc
      */
-    protected function toRet(array $merge = [])
+    protected function toRet(array $merge = []): Ret
     {
         if ($this->coll) {
             return $this->collToRet($merge);
@@ -833,7 +847,7 @@ trait ModelTrait
      * @return string
      * @svc
      */
-    protected function getTable()
+    protected function getTable(): string
     {
         if (!isset($this->table)) {
             $baseName = $this->baseName();
@@ -848,18 +862,18 @@ trait ModelTrait
     /**
      * Import a PHP array in this record
      *
-     * @param array|\ArrayAccess $attributes
+     * @param iterable $attributes
      * @return $this
      * @svc
      */
-    protected function fromArray($attributes)
+    protected function fromArray(iterable $attributes): self
     {
         if ($this->coll) {
             return $this->setAttributes($attributes);
         }
 
         foreach ($attributes as $name => $value) {
-            if (!$this->isFillable($name, $attributes)) {
+            if (!$this->isFillable($name)) {
                 continue;
             }
 
@@ -878,11 +892,11 @@ trait ModelTrait
     /**
      * Save the record or data to database
      *
-     * @param array $attributes
+     * @param iterable $attributes
      * @return $this
      * @svc
      */
-    protected function save($attributes = [])
+    protected function save(iterable $attributes = []): self
     {
         // 1. Merges attributes from parameters
         $attributes && $this->fromArray($attributes);
@@ -945,7 +959,7 @@ trait ModelTrait
      * @return $this
      * @svc
      */
-    protected function destroy($id = null)
+    protected function destroy($id = null): self
     {
         $id && $this->find($id);
 
@@ -974,13 +988,13 @@ trait ModelTrait
     /**
      * Set the record field value
      *
-     * @param string $name
+     * @param string|int $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
      * @svc
      */
-    protected function set($name, $value = null, $throwException = true)
+    protected function set($name, $value = null, bool $throwException = true)
     {
         if ($this->coll) {
             return $this->setCollValue($name, $value);
@@ -1008,7 +1022,7 @@ trait ModelTrait
      * @return $this|null
      * @svc
      */
-    protected function find($id)
+    protected function find($id): ?self
     {
         return $this->findBy($this->getPrimaryKey(), $id);
     }
@@ -1021,7 +1035,7 @@ trait ModelTrait
      * @throws \Exception
      * @svc
      */
-    protected function findOrFail($id)
+    protected function findOrFail($id): self
     {
         if ($this->find($id)) {
             return $this;
@@ -1038,7 +1052,7 @@ trait ModelTrait
      * @return $this
      * @svc
      */
-    protected function findOrInit($id = null, $attributes = [])
+    protected function findOrInit($id = null, $attributes = []): self
     {
         return $this->findOrInitBy([$this->getPrimaryKey() => $id], $attributes);
     }
@@ -1051,7 +1065,7 @@ trait ModelTrait
      * @return $this
      * @svc
      */
-    protected function findOrCreate($id, $attributes = [])
+    protected function findOrCreate($id, $attributes = []): self
     {
         $this->findOrInit($id, $attributes);
         if ($this->isNew()) {
@@ -1062,11 +1076,11 @@ trait ModelTrait
 
     /**
      * @param array $attributes
-     * @param array $data
+     * @param array|object $data
      * @return $this
      * @svc
      */
-    protected function findByOrCreate($attributes, $data = [])
+    protected function findByOrCreate($attributes, $data = []): self
     {
         $this->findOrInitBy($attributes, $data);
         if ($this->isChanged()) {
@@ -1082,7 +1096,7 @@ trait ModelTrait
      * @return $this|$this[]
      * @svc
      */
-    protected function findAll($ids)
+    protected function findAll(array $ids): self
     {
         return $this->findAllBy($this->getPrimaryKey(), 'IN', $ids);
     }
@@ -1094,7 +1108,7 @@ trait ModelTrait
      * @return $this|null
      * @svc
      */
-    protected function findBy($column, $operator = null, $value = null)
+    protected function findBy($column, $operator = null, $value = null): ?self
     {
         $this->coll = false;
         $data = $this->fetch(...func_get_args());
@@ -1115,7 +1129,7 @@ trait ModelTrait
      * @return $this|$this[]
      * @svc
      */
-    protected function findAllBy($column, $operator = null, $value = null)
+    protected function findAllBy($column, $operator = null, $value = null): self
     {
         $this->coll = true;
         $data = $this->fetchAll(...func_get_args());
@@ -1141,7 +1155,7 @@ trait ModelTrait
      * @return $this
      * @svc
      */
-    protected function findOrInitBy($attributes, $data = [])
+    protected function findOrInitBy(array $attributes, $data = []): self
     {
         if (!$this->findBy($attributes)) {
             // Convert to object to array
@@ -1165,7 +1179,7 @@ trait ModelTrait
      * @throws \Exception
      * @svc
      */
-    protected function findByOrFail($column, $operator = null, $value = null)
+    protected function findByOrFail($column, $operator = null, $value = null): self
     {
         if ($this->findBy(...func_get_args())) {
             return $this;
@@ -1175,12 +1189,12 @@ trait ModelTrait
     }
 
     /**
-     * @param array|Req|null $req
+     * @param Req|null $req
      * @return $this
      * @throws \Exception
      * @svc
      */
-    protected function findFromReq($req = null)
+    protected function findFromReq(Req $req = null): self
     {
         $req || $req = $this->wei->req;
         if (!$req->isPost()) {
@@ -1195,16 +1209,16 @@ trait ModelTrait
      * @return $this|null
      * @svc
      */
-    protected function first()
+    protected function first(): ?self
     {
         return $this->findBy(null);
     }
 
     /**
-     * @return $this|$this[]|array
+     * @return $this|$this[]
      * @svc
      */
-    protected function all()
+    protected function all(): self
     {
         return $this->findAllBy(null);
     }
@@ -1216,7 +1230,7 @@ trait ModelTrait
      * @return $this
      * @svc
      */
-    protected function indexBy($column)
+    protected function indexBy(string $column): self
     {
         // Expect to work with coll
         if (!$this->coll) {
@@ -1233,7 +1247,7 @@ trait ModelTrait
      *
      * @param string|null $column
      */
-    protected function resetChanges(string $column = null)
+    protected function resetChanges(string $column = null): void
     {
         if ($column) {
             unset($this->changes[$column]);
@@ -1302,13 +1316,17 @@ trait ModelTrait
      *
      * @param string $name
      */
-    protected function triggerCallback($name)
+    protected function triggerCallback(string $name): void
     {
         $this->trigger($name);
         $this->{$name}();
     }
 
-    protected function getToArrayColumns(array $columns)
+    /**
+     * @param array $columns
+     * @return array
+     */
+    protected function getToArrayColumns(array $columns): array
     {
         if ($hidden = $this->getHidden()) {
             $columns = array_diff($columns, $hidden);
@@ -1317,7 +1335,7 @@ trait ModelTrait
         return $columns;
     }
 
-    protected function virtualToArray()
+    protected function virtualToArray(): array
     {
         $data = [];
         foreach ($this->virtual as $column) {
@@ -1332,7 +1350,7 @@ trait ModelTrait
      * @param mixed $value
      * @return $this
      */
-    protected function setColumnValue($name, $value)
+    protected function setColumnValue(string $name, $value): self
     {
         $this->setChange($name);
 
@@ -1352,7 +1370,7 @@ trait ModelTrait
      * @param string $name
      * @return mixed
      */
-    protected function &getColumnValue($name)
+    protected function &getColumnValue(string $name)
     {
         $result = $this->callGetter($name, $value);
         if ($result) {
@@ -1378,10 +1396,10 @@ trait ModelTrait
 
     /**
      * @param string $name
-     * @param string $source
+     * @param int $source
      * @param bool $replace
      */
-    protected function setAttributeSource($name, $source, bool $replace = false)
+    protected function setAttributeSource(string $name, int $source, bool $replace = false): void
     {
         if ($replace) {
             $this->attributeSources = [$name => $source];
@@ -1394,9 +1412,9 @@ trait ModelTrait
      * Returns the attribute source of specified column name
      *
      * @param string $name
-     * @return string
+     * @return int
      */
-    protected function getAttributeSource($name)
+    protected function getAttributeSource(string $name): int
     {
         return $this->attributeSources[$name] ?? $this->attributeSources['*'];
     }
@@ -1405,10 +1423,10 @@ trait ModelTrait
      * Returns the service object
      *
      * @param string $name
-     * @return BaseService
+     * @return Base
      * @throws \Exception
      */
-    protected function &getServiceValue($name)
+    protected function &getServiceValue(string $name): Base
     {
         parent::__get($name);
 
@@ -1421,7 +1439,7 @@ trait ModelTrait
      * @param string $name
      * @return mixed
      */
-    protected function &getVirtualValue($name)
+    protected function &getVirtualValue(string $name)
     {
         $result = $this->callGetter($name, $this->virtualAttributes[$name]);
         if ($result) {
@@ -1438,7 +1456,7 @@ trait ModelTrait
      * @param mixed $value
      * @return $this
      */
-    protected function setVirtualValue($name, $value)
+    protected function setVirtualValue(string $name, $value): self
     {
         $result = $this->callSetter($name, $value);
         if (!$result) {
@@ -1451,10 +1469,10 @@ trait ModelTrait
     /**
      * Check if the name is virtual column
      *
-     * @param string $name
+     * @param mixed $name
      * @return bool
      */
-    protected function hasVirtual($name)
+    protected function hasVirtual($name): bool
     {
         return in_array($name, $this->virtual, true);
     }
@@ -1464,13 +1482,12 @@ trait ModelTrait
      * @param mixed $value
      * @return bool
      */
-    protected function callGetter($name, &$value)
+    protected function callGetter(string $name, &$value): bool
     {
         $method = 'get' . $this->camel($name) . 'Attribute';
         if ($result = method_exists($this, $method)) {
             $value = $this->{$method}();
         }
-
         return $result;
     }
 
@@ -1479,13 +1496,12 @@ trait ModelTrait
      * @param mixed $value
      * @return bool
      */
-    protected function callSetter($name, $value)
+    protected function callSetter(string $name, $value): bool
     {
         $method = 'set' . $this->camel($name) . 'Attribute';
         if ($result = method_exists($this, $method)) {
             $this->{$method}($value);
         }
-
         return $result;
     }
 
@@ -1549,13 +1565,13 @@ trait ModelTrait
         return $attributes;
     }
 
-    private function baseName()
+    private function baseName(): string
     {
         $parts = explode('\\', static::class);
         return end($parts);
     }
 
-    private function pluralize($word)
+    private function pluralize(string $word): string
     {
         return wei()->str->pluralize($word);
     }
@@ -1565,7 +1581,7 @@ trait ModelTrait
      *
      * @return string
      */
-    private static function getServiceClass()
+    private static function getServiceClass(): string
     {
         $wei = wei();
         return $wei->has($wei->getServiceName(static::class)) ?: static::class;
@@ -1576,7 +1592,7 @@ trait ModelTrait
      * @return int
      * @internal
      */
-    private function executeDelete(array $conditions)
+    private function executeDelete(array $conditions): int
     {
         return $this->db->delete($this->getTable(), $this->convertKeysToDbKeys($conditions));
     }
@@ -1586,7 +1602,7 @@ trait ModelTrait
      * @return array
      * @internal
      */
-    private function executeSelect(array $conditions)
+    private function executeSelect(array $conditions): array
     {
         return $this->convertKeysToPhpKeys(
             $this->db->select($this->getTable(), $this->convertKeysToDbKeys($conditions)) ?: []
@@ -1598,7 +1614,7 @@ trait ModelTrait
      * @return int
      * @internal
      */
-    private function executeInsert(array $data)
+    private function executeInsert(array $data): int
     {
         return $this->db->insert($this->getTable(), $this->convertKeysToDbKeys($data));
     }
@@ -1609,7 +1625,7 @@ trait ModelTrait
      * @return int
      * @internal
      */
-    private function executeUpdate(array $data, array $conditions)
+    private function executeUpdate(array $data, array $conditions): int
     {
         return $this->db->update(
             $this->getTable(),

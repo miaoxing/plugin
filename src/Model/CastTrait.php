@@ -12,7 +12,7 @@ trait CastTrait
      */
     protected static $castCache = [];
 
-    protected static function bootCastTrait()
+    protected static function bootCastTrait(): void
     {
         static::on('getValue', 'castToPhp');
         static::on('setValue', 'castToDb');
@@ -45,7 +45,7 @@ trait CastTrait
      * @param string $name
      * @return bool
      */
-    public function hasColumnCast($name)
+    public function hasColumnCast(string $name): bool
     {
         return (bool) $this->getColumnCast($name);
     }
@@ -58,7 +58,7 @@ trait CastTrait
      * @return mixed
      * @throws \Exception
      */
-    protected function castToPhp($value, $column)
+    protected function castToPhp($value, string $column)
     {
         if (null === $value && ($this->getColumns()[$column]['nullable'] ?? false)) {
             return null;
@@ -78,7 +78,7 @@ trait CastTrait
      * @param string $column
      * @return mixed
      */
-    protected function castToDb($value, $column)
+    protected function castToDb($value, string $column)
     {
         if (null === $value && ($this->getColumns()[$column]['nullable'] ?? false)) {
             return null;
@@ -94,8 +94,8 @@ trait CastTrait
     /**
      * Cast value to PHP type
      *
-     * @param string $type
      * @param mixed $value
+     * @param string|array $type
      * @return mixed
      */
     protected function toPhpType($value, $type)
@@ -153,8 +153,8 @@ trait CastTrait
     /**
      * Cast value for saving to database
      *
+     * @param string|array $type
      * @param mixed $value
-     * @param string $type
      * @return mixed
      */
     protected function toDbType($value, $type)
@@ -194,9 +194,9 @@ trait CastTrait
      *
      * @param string $value
      * @param bool $assoc
-     * @return mixed
+     * @return array|stdClass
      */
-    protected function cacheJsonDecode($value, $assoc = false)
+    protected function cacheJsonDecode(string $value, bool $assoc = false)
     {
         if (!isset(static::$castCache[$value][$assoc])) {
             static::$castCache[$value][$assoc] = json_decode($value, $assoc);
@@ -210,7 +210,7 @@ trait CastTrait
      * @return bool
      * @todo object操作移到单独区域
      */
-    protected function isIgnoreCast($value)
+    protected function isIgnoreCast($value): bool
     {
         return $value instanceof stdClass && isset($value->scalar);
     }
@@ -219,7 +219,7 @@ trait CastTrait
      * @param string|array $type
      * @return array
      */
-    private function parseType($type)
+    private function parseType($type): array
     {
         if (is_array($type)) {
             $options = $type;

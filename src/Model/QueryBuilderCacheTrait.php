@@ -130,7 +130,7 @@ trait QueryBuilderCacheTrait
      *
      * @return TagCache|BaseCache
      */
-    protected function getCache()
+    protected function getCache(): BaseCache
     {
         if ($this->cacheTags) {
             return $this->tagCache($this->getCacheTags());

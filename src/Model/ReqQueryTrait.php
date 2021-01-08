@@ -19,7 +19,7 @@ trait ReqQueryTrait
      * @param Req $req
      * @return $this
      */
-    public function setReq($req)
+    public function setReq($req): self
     {
         $this->req = $req;
         return $this;
@@ -31,7 +31,7 @@ trait ReqQueryTrait
      * @param array $options
      * @return $this
      */
-    public function reqQuery(array $options = [])
+    public function reqQuery(array $options = []): self
     {
         // 允许传索引数组表示常见的only选项
         if (isset($options[0])) {
@@ -74,7 +74,7 @@ trait ReqQueryTrait
      * @param array $values
      * @return $this
      */
-    public function reqMap($name, array $values)
+    public function reqMap(string $name, array $values)
     {
         $this->reqMaps[$name] = $values;
         return $this;
@@ -120,7 +120,11 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function equals($columns)
+    /**
+     * @param string|array $columns
+     * @return $this
+     */
+    public function equals($columns): self
     {
         foreach ((array) $columns as $column) {
             if ($this->req->has($column)) {
@@ -131,7 +135,11 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function between($columns)
+    /**
+     * @param string|array $columns
+     * @return $this
+     */
+    public function between($columns): self
     {
         if ($this->getQueryPart('join')) {
             $prefix = $this->getTable() . '.';
@@ -166,7 +174,11 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function reqHas($columns)
+    /**
+     * @param string|array $columns
+     * @return $this
+     */
+    public function reqHas($columns): self
     {
         foreach ((array) $columns as $column) {
             if ($this->req->has($column)) {
@@ -177,7 +189,12 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function sort($defaultColumn = 'id', $defaultOrder = 'DESC')
+    /**
+     * @param string $defaultColumn
+     * @param string $defaultOrder
+     * @return $this
+     */
+    public function sort(string $defaultColumn = 'id', string $defaultOrder = 'DESC')
     {
         if ($this->req->has('sort')) {
             $name = $this->req['sort'];
@@ -208,7 +225,10 @@ trait ReqQueryTrait
         return $this;
     }
 
-    public function paginate()
+    /**
+     * @return $this
+     */
+    public function paginate(): self
     {
         $limit = $this->req['limit'] ?: 10;
         $page = $this->req['page'] ?: 1;
@@ -224,7 +244,7 @@ trait ReqQueryTrait
      * @param string $name
      * @param mixed $value
      */
-    protected function processColumnQuery($name, $value)
+    protected function processColumnQuery(string $name, $value): void
     {
         if (isset($this->reqMaps[$name][$value])) {
             $value = $this->reqMaps[$name][$value];
@@ -252,7 +272,7 @@ trait ReqQueryTrait
      * @param string $name
      * @param mixed $value
      */
-    protected function processRelationQuery($relation, $name, $value)
+    protected function processRelationQuery(string $relation, string $name, $value): void
     {
         if (!$this->isRelation($relation)) {
             return;
@@ -277,7 +297,7 @@ trait ReqQueryTrait
      * @param string $name
      * @return array
      */
-    protected function parseNameAndOp($name)
+    protected function parseNameAndOp(string $name): array
     {
         if (false === strpos($name, '$')) {
             return [$name, 'eq'];
@@ -294,7 +314,7 @@ trait ReqQueryTrait
      * @param mixed $value
      * @return $this
      */
-    protected function queryByOp($column, $op, $value)
+    protected function queryByOp(string $column, string $op, $value): self
     {
         switch ($op) {
             case 'eq':
@@ -328,7 +348,7 @@ trait ReqQueryTrait
      * @return $this
      * @svc
      */
-    protected function like($columns)
+    protected function like($columns): self
     {
         foreach ((array) $columns as $column) {
             [$column, $value, $relation] = $this->parseReqColumn($column);
@@ -345,7 +365,7 @@ trait ReqQueryTrait
         return $this;
     }
 
-    protected function processMaxDate($column, $value)
+    protected function processMaxDate($column, $value): string
     {
         if ('datetime' === $this->getColumnCast($column) && wei()->isDate($value)) {
             return $value . ' 23:59:59';
@@ -353,7 +373,7 @@ trait ReqQueryTrait
         return $value;
     }
 
-    protected function parseReqColumn($column)
+    protected function parseReqColumn(string $column): array
     {
         if (false === strpos($column, '.')) {
             // 查询当前表

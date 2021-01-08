@@ -19,7 +19,7 @@ trait DefaultScopeTrait
      */
     protected $withoutScopes = [];
 
-    public static function bootDefaultScopeTrait()
+    public static function bootDefaultScopeTrait(): void
     {
         static::on('beforeExecute', 'applyDefaultScope');
         static::on('beforeAddQueryPart', 'applyDefaultScopeBeforeAddQueryPart');
@@ -29,7 +29,7 @@ trait DefaultScopeTrait
      * @param string $method
      * @return $this
      */
-    public function addDefaultScope($method)
+    public function addDefaultScope($method): self
     {
         $class = static::class;
 
@@ -38,11 +38,9 @@ trait DefaultScopeTrait
         return $this;
     }
 
-    public static function getDefaultScopes()
+    public static function getDefaultScopes(): array
     {
-        $class = static::class;
-
-        return isset(static::$defaultScopes[$class]) ? static::$defaultScopes[$class] : [];
+        return static::$defaultScopes[static::class] ?? [];
     }
 
     /**
@@ -50,7 +48,7 @@ trait DefaultScopeTrait
      * @return $this
      * @svc
      */
-    protected function unscoped($scopes = [])
+    protected function unscoped($scopes = []): self
     {
         if (!$scopes) {
             $this->withoutScopes = true;
@@ -64,7 +62,7 @@ trait DefaultScopeTrait
         return $this;
     }
 
-    protected function applyDefaultScope()
+    protected function applyDefaultScope(): void
     {
         if ($this->applyDefaultScope) {
             return;
@@ -83,17 +81,15 @@ trait DefaultScopeTrait
         foreach ($scopes as $scope) {
             $this->{$scope}();
         }
-
-        return $this;
     }
 
     /**
-     * @param string $sqlPartName
+     * @param string $queryPartName
      */
-    protected function applyDefaultScopeBeforeAddQueryPart($queryPartNane)
+    protected function applyDefaultScopeBeforeAddQueryPart(string $queryPartName): void
     {
         // Ignore `setTable` called `from` on init
-        if ('from' !== $queryPartNane) {
+        if ('from' !== $queryPartName) {
             $this->applyDefaultScope();
         }
     }

@@ -59,7 +59,7 @@ trait RelationTrait
      * @return $this
      * @expertimental
      */
-    public function saveRelation(array $attributes = [])
+    public function saveRelation(array $attributes = []): self
     {
         if ($this->coll) {
             $this->all();
@@ -76,7 +76,7 @@ trait RelationTrait
      * @param string|null $localKey
      * @return WeiBaseModel
      */
-    public function hasOne($model, $foreignKey = null, $localKey = null)
+    public function hasOne($model, $foreignKey = null, $localKey = null): WeiBaseModel
     {
         $related = $this->instanceRelationModel($model);
         $name = $related->getClassServiceName();
@@ -96,9 +96,9 @@ trait RelationTrait
      * @param self|string $model
      * @param string|null $foreignKey
      * @param string|null $localKey
-     * @return $this
+     * @return WeiBaseModel
      */
-    public function hasMany($model, $foreignKey = null, $localKey = null)
+    public function hasMany($model, $foreignKey = null, $localKey = null): WeiBaseModel
     {
         return $this->hasOne($model, $foreignKey, $localKey)->beColl();
     }
@@ -107,9 +107,9 @@ trait RelationTrait
      * @param self|string $model
      * @param string|null $foreignKey
      * @param string|null $localKey
-     * @return static
+     * @return WeiBaseModel
      */
-    public function belongsTo($model, $foreignKey = null, $localKey = null)
+    public function belongsTo($model, $foreignKey = null, $localKey = null): WeiBaseModel
     {
         $related = $this->instanceRelationModel($model);
         $foreignKey || $foreignKey = $this->getPrimaryKey();
@@ -123,9 +123,9 @@ trait RelationTrait
      * @param string|null $junctionTable
      * @param string|null $foreignKey
      * @param string|null $relatedKey
-     * @return static
+     * @return WeiBaseModel
      */
-    public function belongsToMany($model, $junctionTable = null, $foreignKey = null, $relatedKey = null)
+    public function belongsToMany($model, $junctionTable = null, $foreignKey = null, $relatedKey = null): WeiBaseModel
     {
         $related = $this->instanceRelationModel($model);
         $name = $this->getClassServiceName($related);
@@ -156,7 +156,7 @@ trait RelationTrait
      * @param array|string $names
      * @return $this|$this[]
      */
-    public function load($names)
+    public function load($names): self
     {
         $this->ensureColl();
 
@@ -211,7 +211,7 @@ trait RelationTrait
      *
      * @return array
      */
-    protected function relationToArray()
+    protected function relationToArray(): array
     {
         $data = [];
         foreach ($this->relationValues as $name => $value) {
@@ -221,12 +221,12 @@ trait RelationTrait
     }
 
     /**
-     * @param self|null $related
+     * @param WeiBaseModel|null $related
      * @param array $relation
      * @param string $name
      * @return $this|$this[]
      */
-    protected function loadHasOne($related, $relation, $name)
+    protected function loadHasOne(?WeiBaseModel $related, array $relation, string $name)
     {
         if ($related) {
             $models = $related->all()->indexBy($relation['foreignKey']);
@@ -242,12 +242,12 @@ trait RelationTrait
     }
 
     /**
-     * @param self|null $related
+     * @param WeiBaseModel|null $related
      * @param array $relation
      * @param string $name
      * @return $this|$this[]
      */
-    protected function loadHasMany($related, $relation, $name)
+    protected function loadHasMany(?WeiBaseModel $related, array $relation, string $name)
     {
         $models = $related ? $related->fetchAll() : [];
         foreach ($this->attributes as $row) {
@@ -269,12 +269,12 @@ trait RelationTrait
     }
 
     /**
-     * @param self|null $related
+     * @param WeiBaseModel|null $related
      * @param array $relation
      * @param string $name
-     * @return array|$this|$this[]
+     * @return $this|$this[]
      */
-    protected function loadBelongsToMany($related, $relation, $name)
+    protected function loadBelongsToMany(?WeiBaseModel $related, array $relation, string $name)
     {
         if ($related) {
             $related->select($relation['junctionTable'] . '.' . $relation['foreignKey']);
@@ -283,7 +283,11 @@ trait RelationTrait
         return $this->loadHasMany($related, $relation, $name);
     }
 
-    protected function getClassServiceName($object = null)
+    /**
+     * @param WeiBaseModel|null $object
+     * @return string
+     */
+    protected function getClassServiceName(WeiBaseModel $object = null): string
     {
         !$object && $object = $this;
         $parts = explode('\\', get_class($object));
@@ -301,7 +305,7 @@ trait RelationTrait
      *
      * @return string
      */
-    protected function getForeignKey()
+    protected function getForeignKey(): string
     {
         return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
     }
@@ -312,7 +316,7 @@ trait RelationTrait
      * @param WeiBaseModel $related
      * @return string
      */
-    protected function getJunctionTable(WeiBaseModel $related)
+    protected function getJunctionTable(WeiBaseModel $related): string
     {
         /** @var ModelTrait $related */
         $tables = [$this->getTable(), $related->getTable()];
@@ -327,7 +331,7 @@ trait RelationTrait
      * @param string $column
      * @return mixed
      */
-    protected function getRelationParams($column)
+    protected function getRelationParams(string $column)
     {
         return $this->relationParams ?: (array_key_exists($column, $this->attributes) ? $this->get($column) : null);
     }
@@ -339,7 +343,7 @@ trait RelationTrait
      * @param object|string $model
      * @return WeiBaseModel
      */
-    protected function instanceRelationModel($model)
+    protected function instanceRelationModel($model): WeiBaseModel
     {
         if ($model instanceof WeiBaseModel) {
             return $model;
@@ -360,9 +364,9 @@ trait RelationTrait
      *
      * @param string $name
      * @param bool $throw
-     * @return static
+     * @return WeiBaseModel|null
      */
-    protected function getRelationModel(string $name, $throw = true)
+    protected function getRelationModel(string $name, bool $throw = true): ?WeiBaseModel
     {
         // Ignore parent method
         if (method_exists(ModelTrait::class, $name)) {
@@ -437,11 +441,11 @@ trait RelationTrait
     /**
      * Set relation value
      *
-     * @param $name
+     * @param string $name
      * @param WeiBaseModel|null $value
      * @return $this
      */
-    protected function setRelationValue($name, ?WeiBaseModel $value): self
+    protected function setRelationValue(string $name, ?WeiBaseModel $value): self
     {
         $this->relationValues[$name] = $value;
         return $this;
@@ -479,11 +483,13 @@ trait RelationTrait
      *
      * @param string $name
      * @param array $relation
+     * @return $this
      * @internal
      */
-    protected function setRelation($name, $relation)
+    protected function setRelation(string $name, array $relation): self
     {
         $this->relations[$name] = array_map([$this, 'convertToPhpKey'], $relation);
+        return $this;
     }
 
     /**
@@ -493,7 +499,7 @@ trait RelationTrait
      * @param mixed $value
      * @return $this
      */
-    protected function setRelationAttribute(string $column, $value)
+    protected function setRelationAttribute(string $column, $value): self
     {
         $this->relationAttributes[$this->convertToPhpKey($column)] = $value;
         return $this;

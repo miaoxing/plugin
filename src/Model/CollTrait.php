@@ -22,11 +22,11 @@ trait CollTrait
     /**
      * Create a new model collection
      *
-     * @param array $attributes
+     * @param iterable $attributes
      * @param array $options
      * @return $this|$this[]
      */
-    public static function newColl($attributes = [], array $options = []): self
+    public static function newColl(iterable $attributes = [], array $options = []): self
     {
         return static::new($attributes, ['coll' => true] + $options);
     }
@@ -59,10 +59,10 @@ trait CollTrait
      *
      * @param array $attributes A two-dimensional array
      * @param array $extra The extra attributes for new rows
-     * @param bool $sort
+     * @param string|null $sortColumn
      * @return $this
      */
-    public function saveColl($attributes, $extra = [], $sort = false): self
+    public function saveColl(array $attributes, array $extra = [], string $sortColumn = null): self
     {
         if (!is_array($attributes)) {
             return $this;
@@ -104,8 +104,8 @@ trait CollTrait
 
         // 4. Merges existing rows or create new rows
         foreach ($attributes as $index => $row) {
-            if ($sort) {
-                $row[$sort] = $index;
+            if ($sortColumn) {
+                $row[$sortColumn] = $index;
             }
             if (isset($row[$primaryKey], $this->attributes[$row[$primaryKey]])) {
                 $this->attributes[$row[$primaryKey]]->fromArray($row);
@@ -152,10 +152,10 @@ trait CollTrait
     /**
      * Filters elements of the collection using a callback function
      *
-     * @param Closure $fn
+     * @param callable $fn
      * @return $this|$this[]
      */
-    public function filter(Closure $fn)
+    public function filter(callable $fn)
     {
         $this->ensureColl();
 
@@ -217,7 +217,7 @@ trait CollTrait
     /**
      * Get the value of the specified key name in the collection
      *
-     * @param int|string $name
+     * @param string|int $name
      * @return self
      */
     protected function &getCollValue($name): self

@@ -25,9 +25,9 @@ trait SoftDeleteTrait
     /**
      * Bootstrap the trait
      *
-     * @param BaseModel $initModel
+     * @param WeiBaseModel $initModel
      */
-    public static function bootSoftDeleteTrait(WeiBaseModel $initModel)
+    public static function bootSoftDeleteTrait(WeiBaseModel $initModel): void
     {
         $initModel->addDefaultScope('withoutDeleted');
         static::on('init', 'addedDeleteColumnToGuarded');
@@ -39,7 +39,7 @@ trait SoftDeleteTrait
      *
      * @return bool
      */
-    public function isDeleted()
+    public function isDeleted(): bool
     {
         return (bool) $this->get($this->getDeletedAtColumn());
     }
@@ -49,7 +49,7 @@ trait SoftDeleteTrait
      *
      * @return $this
      */
-    public function restore()
+    public function restore(): self
     {
         $data = [
             $this->getDeletedAtColumn() => null,
@@ -64,14 +64,14 @@ trait SoftDeleteTrait
     /**
      * Really remove the record from database
      *
-     * @param mixed $conditions
+     * @param int|string $id
      * @return $this
      * @svc
      */
-    protected function reallyDestroy($conditions = false)
+    protected function reallyDestroy($id = false): self
     {
         $this->reallyDestroy = true;
-        $this->destroy($conditions);
+        $this->destroy($id);
         $this->reallyDestroy = false;
 
         return $this;
@@ -83,7 +83,7 @@ trait SoftDeleteTrait
      * @return $this
      * @svc
      */
-    protected function withoutDeleted()
+    protected function withoutDeleted(): self
     {
         if ($statusColumn = $this->getDeleteStatusColumn()) {
             return $this->where($statusColumn, '!=', $this->getDeleteStatusValue());
@@ -98,7 +98,7 @@ trait SoftDeleteTrait
      * @return $this
      * @svc
      */
-    protected function onlyDeleted()
+    protected function onlyDeleted(): self
     {
         $this->unscoped('withoutDeleted');
         if ($statusColumn = $this->getDeleteStatusColumn()) {
@@ -114,17 +114,17 @@ trait SoftDeleteTrait
      * @return $this
      * @svc
      */
-    protected function withDeleted()
+    protected function withDeleted(): self
     {
         return $this->unscoped('withoutDeleted');
     }
 
-    protected function getDeletedAtColumn()
+    protected function getDeletedAtColumn(): string
     {
         return $this->deletedAtColumn ?? 'deleted_at';
     }
 
-    protected function getDeletedByColumn()
+    protected function getDeletedByColumn(): string
     {
         return $this->deletedByColumn ?? 'deleted_by';
     }
@@ -136,7 +136,7 @@ trait SoftDeleteTrait
      *
      * @return string|null
      */
-    protected function getDeleteStatusColumn()
+    protected function getDeleteStatusColumn(): ?string
     {
         return property_exists($this, 'deleteStatusColumn') ? $this->deleteStatusColumn : null;
     }
@@ -146,7 +146,7 @@ trait SoftDeleteTrait
      *
      * The model class can override this method to customize the value of the delete state
      *
-     * @return int
+     * @return int|string
      */
     protected function getDeleteStatusValue()
     {
@@ -158,7 +158,7 @@ trait SoftDeleteTrait
      *
      * The model class can override this method to customize the value of the restore state
      *
-     * @return int
+     * @return int|string
      */
     protected function getRestoreStatusValue()
     {
@@ -168,7 +168,7 @@ trait SoftDeleteTrait
     /**
      * @internal
      */
-    protected function executeSoftDelete()
+    protected function executeSoftDelete(): bool
     {
         if ($this->reallyDestroy) {
             return false;
@@ -188,7 +188,7 @@ trait SoftDeleteTrait
     /**
      * @internal
      */
-    protected function addedDeleteColumnToGuarded()
+    protected function addedDeleteColumnToGuarded(): void
     {
         $this->guarded = array_merge($this->guarded, array_filter([
             $this->getDeletedAtColumn(),
