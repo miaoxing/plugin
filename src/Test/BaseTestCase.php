@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Test;
 
-use Miaoxing\Plugin\Service\Ret;
+use Wei\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;
 
@@ -108,15 +108,15 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      * @param string $assertMessage
      * @param mixed $code
      */
-    public function assertRetErr(Ret $ret, $code, $message = null, $assertMessage = null)
+    public function assertRetErr(Ret $ret, $message = null, $code = null, $assertMessage = null)
     {
         $assertMessage = $this->buildRetMessage($ret, $assertMessage);
         $expected = [];
 
-        // @experimental
         if (null !== $code) {
             $expected['code'] = $code;
         }
+
         if (null !== $message) {
             $expected['message'] = $message;
         }

@@ -45,27 +45,27 @@ class JwtTest extends BaseTestCase
     public function testVerifyEmpty()
     {
         $ret = Jwt::verify('');
-        $this->assertRetErr($ret, null, 'Token 不能为空');
+        $this->assertRetErr($ret, 'Token 不能为空');
     }
 
     public function testVeifyParseFail()
     {
         $ret = Jwt::verify('123');
-        $this->assertRetErr($ret, null, '解析 Token 失败');
+        $this->assertRetErr($ret, '解析 Token 失败');
         $this->assertSame('The JWT string must have two dots', $ret['detail']);
     }
 
     public function testVerifyExpired()
     {
         $token = Jwt::generate(['test' => '1'], -1);
-        $this->assertRetErr(Jwt::verify($token), Jwt::CODE_EXPIRED, 'Token 已过期');
+        $this->assertRetErr(Jwt::verify($token), 'Token 已过期', Jwt::CODE_EXPIRED);
     }
 
     public function testVerifySignErr()
     {
         $token = Jwt::generate(['test' => '1']);
         $ret = Jwt::verify($token . '1');
-        $this->assertRetErr($ret, null, 'Token 签名错误');
+        $this->assertRetErr($ret, 'Token 签名错误');
     }
 
     public function testVerifyDataFail()
@@ -76,7 +76,7 @@ class JwtTest extends BaseTestCase
         $this->req->setServer('SERVER_PORT', (string) ($origPort + 1));
 
         $ret = Jwt::verify($token);
-        $this->assertRetErr($ret, null, 'Token 内容错误');
+        $this->assertRetErr($ret, 'Token 内容错误');
         $this->req->setServer('SERVER_PORT', $origPort);
     }
 }
