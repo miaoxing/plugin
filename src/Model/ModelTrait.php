@@ -49,17 +49,6 @@ trait ModelTrait
     }
 
     /**
-     * @return $this|$this[]
-     */
-    public function __invoke(string $table = null)
-    {
-        $this->db->addRecordClass($this->getTable(), static::class);
-
-        // @phpstan-ignore-next-line 待 db 服务更新后再移除
-        return $this->db($this->getTable());
-    }
-
-    /**
      * Create a new model object
      *
      * @param array $attributes
@@ -140,7 +129,7 @@ trait ModelTrait
     }
 
     /**
-     * Import a PHP array in this record
+     * Set each attribute value, without checking whether the column is fillable
      *
      * @param iterable $attributes
      * @return $this
@@ -395,81 +384,6 @@ trait ModelTrait
     }
 
     /**
-     * 设置缓存的标签为当前表名+用户ID
-     *
-     * @return $this
-     */
-    public function tagByUser()
-    {
-        return $this->setCacheTags($this->getUserTag());
-    }
-
-    /**
-     * Record: 清除当前记录的缓存
-     *
-     * @return $this
-     */
-    public function clearRecordCache()
-    {
-        if ($this['id']) {
-            $this->cache->remove($this->getRecordCacheKey());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Record: 获取当前记录的缓存键名
-     *
-     * @param int|null $id
-     * @return string
-     */
-    public function getRecordCacheKey($id = null)
-    {
-        return $this->db->getDbname() . ':' . $this->getTable() . ':' . ($id ?: $this['id']);
-    }
-
-    /**
-     * @return $this
-     */
-    public function clearTagCacheByUser()
-    {
-        $tag = $this->getUserTag();
-        $this->tagCache($tag)->clear();
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserTag()
-    {
-        return $this->table . ':' . ($this['userId'] ?: $this->user->id);
-    }
-
-    /**
-     * 获取包含数据库名词的数据表,如app.user,方便跨库查询
-     *
-     * @param string $table
-     * @return string
-     */
-    public function getDbTable($table)
-    {
-        return wei()->app->getDbName($this[$this->appIdColumn]) . '.' . $table;
-    }
-
-    /**
-     * Returns the data of model
-     *
-     * @return $this[]
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function jsonSerialize(): array
@@ -578,17 +492,6 @@ trait ModelTrait
     }
 
     /**
-     * @param string $column
-     * @param mixed $value
-     * @return $this
-     */
-    public function setRawValue(string $column, $value): self
-    {
-        $this->attributes[$column] = $value;
-        return $this;
-    }
-
-    /**
      * @param string $name
      * @param int|float|string $offset
      * @return $this
@@ -632,20 +535,6 @@ trait ModelTrait
         $op = $value ? '!=' : '=';
         $this->where($column . ' ' . $op . ' \'' . $default . '\'');
 
-        return $this;
-    }
-
-    /**
-     * Set db data to model
-     *
-     * @param array $attributes
-     * @param bool $merge
-     * @return $this
-     */
-    protected function setDbAttributes(array $attributes, bool $merge = false): self
-    {
-        $this->attributes = array_merge($merge ? $this->attributes : [], $attributes);
-        $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
         return $this;
     }
 
@@ -812,7 +701,7 @@ trait ModelTrait
     }
 
     /**
-     * 不经过fillable检查,设置数据并保存
+     * Set each attribute value, without checking whether the column is fillable, and save the model
      *
      * @param iterable $attributes
      * @return $this
@@ -821,7 +710,6 @@ trait ModelTrait
     protected function saveAttributes(iterable $attributes = []): self
     {
         $attributes && $this->setAttributes($attributes);
-
         return $this->save();
     }
 
@@ -862,17 +750,17 @@ trait ModelTrait
     /**
      * Import a PHP array in this record
      *
-     * @param iterable $attributes
+     * @param iterable $array
      * @return $this
      * @svc
      */
-    protected function fromArray(iterable $attributes): self
+    protected function fromArray(iterable $array): self
     {
         if ($this->coll) {
-            return $this->setAttributes($attributes);
+            return $this->setAttributes($array);
         }
 
-        foreach ($attributes as $name => $value) {
+        foreach ($array as $name => $value) {
             if (!$this->isFillable($name)) {
                 continue;
             }
@@ -1239,6 +1127,20 @@ trait ModelTrait
 
         $this->parentIndexBy($column);
         $this->attributes = $this->executeIndexBy($this->attributes, $column);
+        return $this;
+    }
+
+    /**
+     * Set db data to model
+     *
+     * @param array $attributes
+     * @param bool $merge
+     * @return $this
+     */
+    protected function setDbAttributes(array $attributes, bool $merge = false): self
+    {
+        $this->attributes = array_merge($merge ? $this->attributes : [], $attributes);
+        $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
         return $this;
     }
 
