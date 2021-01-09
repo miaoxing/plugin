@@ -1233,7 +1233,7 @@ trait QueryBuilderTrait
      * @return $this
      * @svc
      */
-    protected function whereNotNULL(string $column): self
+    protected function whereNotNull(string $column): self
     {
         return $this->addWhere($column, 'NOT NULL');
     }
@@ -1334,6 +1334,51 @@ trait QueryBuilderTrait
     protected function whereNotContains(string $column, $value, string $condition = 'OR'): self
     {
         return $this->addWhere($column, 'NOT LIKE', '%' . $value . '%', $condition);
+    }
+
+    /**
+     * Search whether a column has a value other than the default value
+     *
+     * @param string $column
+     * @param bool $has
+     * @return $this
+     * @svc
+     */
+    protected function whereHas(string $column, bool $has = true): self
+    {
+        $config = $this->getColumns()[$column];
+        $nullable = $config['nullable'] ?? false;
+
+        if (array_key_exists('default', $config)) {
+            if ($nullable) {
+                if ($has) {
+                    return $this->where(function (self $qb) use ($column, $config) {
+                        $qb->where($column, '!=', $config['default'])->orWhereNull($column);
+                    });
+                } else {
+                    return $this->where($column, '=', $config['default']);
+                }
+            }
+            return $this->where($column, $has ? '!=' : '=', $config['default']);
+        }
+
+        if ($nullable) {
+            return $has ? $this->whereNotNull($column) : $this->whereNull($column);
+        }
+
+        return $this->where($column, $has ? '!=' : '=', '');
+    }
+
+    /**
+     * Search whether a column dont have a value other than the default value
+     *
+     * @param string $column
+     * @return $this
+     * @svc
+     */
+    protected function whereNotHas(string $column): self
+    {
+        return $this->whereHas($column, false);
     }
 
     /**

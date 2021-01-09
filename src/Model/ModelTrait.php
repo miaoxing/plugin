@@ -519,26 +519,6 @@ trait ModelTrait
     }
 
     /**
-     * 搜索某一列是否有值
-     *
-     * @param string $column
-     * @param bool $value
-     * @return $this
-     */
-    public function whereHas($column, $value = true): self
-    {
-        if (isset($this->defaultValues[$this->getColumnCast($column)])) {
-            $default = $this->defaultValues[$this->getColumnCast($column)];
-        } else {
-            $default = '';
-        }
-        $op = $value ? '!=' : '=';
-        $this->where($column . ' ' . $op . ' \'' . $default . '\'');
-
-        return $this;
-    }
-
-    /**
      * Returns whether the model was inserted in the this request
      *
      * @return bool

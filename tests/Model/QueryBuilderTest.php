@@ -6,6 +6,7 @@ namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Fixture\SexConst;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use PDO;
 
@@ -113,7 +114,10 @@ final class QueryBuilderTest extends BaseTestCase
 
         $sql = Qb::table('test_users')->selectExcept('id')->getSql();
 
-        $this->assertEqualsIgnoringCase('SELECT `group_id`, `name`, `address` FROM `p_test_users`', $sql);
+        $this->assertEqualsIgnoringCase(implode(' ', [
+            'SELECT `group_id`, `name`, `address`, `birthday`, `joined_date`, `signature`',
+            'FROM `p_test_users`',
+        ]), $sql);
     }
 
     public function testWhere()
@@ -381,7 +385,7 @@ final class QueryBuilderTest extends BaseTestCase
 
     public function testWhereNotNull()
     {
-        $sql = Qb::table('test_users')->whereNotNULL('age')->getRawSql();
+        $sql = Qb::table('test_users')->whereNotNull('age')->getRawSql();
 
         $this->assertEquals('SELECT * FROM `p_test_users` WHERE `age` IS NOT NULL', $sql);
     }
@@ -1234,5 +1238,184 @@ final class QueryBuilderTest extends BaseTestCase
         $data = $qb->fetch();
         $this->assertSame('twin', $data['name']);
         $this->assertSame('1', $data['group_id']);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereHas()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'name' => 'hello',
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $qb = Qb::table('test_users')->whereHas('name');
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `name` != ''", $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $qb = Qb::table('test_users')->whereNotHas('name');
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `name` = ''", $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereNotHas()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'name' => '',
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $user = Qb::table('test_users')->whereNotHas('name')->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $user = Qb::table('test_users')->whereHas('name')->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereHasDefaultValue()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'signature' => 'hello',
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $qb = Qb::table('test_users')->whereHas('signature');
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `signature` != 'default'", $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $qb = Qb::table('test_users')->whereNotHas('signature');
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `signature` = 'default'", $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereNotHasDefault()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'signature' => 'default',
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $user = Qb::table('test_users')->whereNotHas('signature')->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $user = Qb::table('test_users')->whereHas('signature')->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereHasNull()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'birthday' => date('Y-m-d'),
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $qb = Qb::table('test_users')->whereHas('birthday');
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `birthday` IS NOT NULL", $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $qb = Qb::table('test_users')->whereNotHas('birthday');
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `birthday` IS NULL", $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereNotHasNull()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'birthday' => null,
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $user = Qb::table('test_users')->whereNotHas('birthday')->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $user = Qb::table('test_users')->whereHas('birthday')->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereHasDefaultAndNull()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'joined_date' => null,
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $qb = Qb::table('test_users')->whereHas('joined_date');
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `p_test_users`",
+            "WHERE (`joined_date` != '2000-01-01' OR `joined_date` IS NULL)",
+        ]), $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $qb = Qb::table('test_users')->whereNotHas('joined_date');
+        $this->assertSame("SELECT * FROM `p_test_users` WHERE `joined_date` = '2000-01-01'", $qb->getRawSql());
+
+        $user = $qb->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
+    }
+
+    /**
+     * @group whereHas
+     */
+    public function testWhereNotHasDefaultAndNull()
+    {
+        $this->initFixtures();
+
+        $this->db->insert('test_users', [
+            'joined_date' => '2000-01-01',
+        ]);
+        $userId = $this->db->lastInsertId();
+
+        $user = Qb::table('test_users')->whereNotHas('joined_date')->desc('id')->first();
+        $this->assertSame($userId, $user['id']);
+
+        $user = Qb::table('test_users')->whereHas('joined_date')->desc('id')->first();
+        $this->assertNotSame($userId, $user['id'] ?? null);
     }
 }

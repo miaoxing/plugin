@@ -588,7 +588,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see AppModel::whereNotNULL
+     * @see AppModel::whereNotNull
      */
     public static function whereNotNULL($column)
     {
@@ -1329,9 +1329,9 @@ class QueryBuilder
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see QueryBuilder::whereNotNull
      */
-    public static function whereNotNULL($column)
+    public static function whereNotNull($column)
     {
     }
 
@@ -2380,7 +2380,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see UserModel::whereNotNULL
+     * @see UserModel::whereNotNull
      */
     public static function whereNotNULL($column)
     {
@@ -3225,7 +3225,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see UserModel::whereNotNULL
+     * @see UserModel::whereNotNull
      */
     public static function whereNotNULL($column)
     {
@@ -4089,7 +4089,7 @@ class AppModel
     /**
      * @param string $column
      * @return $this
-     * @see AppModel::whereNotNULL
+     * @see AppModel::whereNotNull
      */
     public function whereNotNULL($column)
     {
@@ -4830,9 +4830,9 @@ class QueryBuilder
     /**
      * @param string $column
      * @return $this
-     * @see QueryBuilder::whereNotNULL
+     * @see QueryBuilder::whereNotNull
      */
-    public function whereNotNULL($column)
+    public function whereNotNull($column)
     {
     }
 
@@ -5881,7 +5881,7 @@ class User
     /**
      * @param string $column
      * @return $this
-     * @see UserModel::whereNotNULL
+     * @see UserModel::whereNotNull
      */
     public function whereNotNULL($column)
     {
@@ -6726,7 +6726,7 @@ class UserModel
     /**
      * @param string $column
      * @return $this
-     * @see UserModel::whereNotNULL
+     * @see UserModel::whereNotNull
      */
     public function whereNotNULL($column)
     {

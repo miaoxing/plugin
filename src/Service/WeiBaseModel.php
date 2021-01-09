@@ -120,11 +120,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      */
     protected static $modelEvents = [];
 
-    protected $defaultValues = [
-        'date' => '0000-00-00',
-        'datetime' => '0000-00-00 00:00:00',
-    ];
-
     /**
      * @var array
      */

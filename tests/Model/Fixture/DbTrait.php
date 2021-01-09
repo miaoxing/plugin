@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
+use MiaoxingTest\Plugin\Fixture\SexConst;
+
 trait DbTrait
 {
     private static $tablePrefix;
@@ -40,6 +42,9 @@ trait DbTrait
             ->int('group_id')
             ->string('name')
             ->string('address')
+            ->date('birthday')
+            ->date('joined_date')->defaults("'2000-01-01'")->nullable()
+            ->string('signature')->defaults('default')
             ->exec();
 
         wei()->schema->table('test_user_groups')
