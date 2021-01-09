@@ -11,7 +11,7 @@ use Wei\RetTrait;
 use Wei\Wei;
 
 /**
- * @internal
+ * The main functions of the model, expected to be used with \Wei\BaseModel
  */
 trait ModelTrait
 {

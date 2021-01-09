@@ -2,6 +2,11 @@
 
 namespace Miaoxing\Plugin\Model;
 
+/**
+ * Add default scope functions to the model
+ *
+ * @internal Expected to be used only by ModelTrait
+ */
 trait DefaultScopeTrait
 {
     /**

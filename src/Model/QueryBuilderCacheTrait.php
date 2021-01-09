@@ -5,6 +5,11 @@ namespace Miaoxing\Plugin\Model;
 use Wei\BaseCache;
 use Wei\TagCache;
 
+/**
+ * Add cache functions to the query builder
+ *
+ * @internal Expected to be used only by QueryBuilder and ModelTrait
+ */
 trait QueryBuilderCacheTrait
 {
     /**

@@ -7,6 +7,8 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * Add relation functions to the model
+ *
+ * @internal Expected to be used only by ModelTrait
  */
 trait RelationTrait
 {

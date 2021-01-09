@@ -7,6 +7,8 @@ use Miaoxing\Plugin\Db\BaseDriver;
 use Wei\BaseCache;
 
 /**
+ * The main functions of the query builder
+ *
  * @author Twin Huang <twinhuang@qq.com>
  * @mixin \DbMixin
  * @mixin \TagCacheMixin
@@ -14,7 +16,7 @@ use Wei\BaseCache;
  * @property \Wei\Cache $cache A cache service proxy 不引入 \CacheMixin 以免 phpstan 识别为 mixin 的 cache 方法
  * @property string $table The name of the table
  * @property array $columns The column config of the table, it will automatic merged form the database table
- * @internal
+ * @internal Expected to be used only by QueryBuilder and ModelTrait
  */
 trait QueryBuilderTrait
 {

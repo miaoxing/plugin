@@ -5,6 +5,11 @@ namespace Miaoxing\Plugin\Model;
 use InvalidArgumentException;
 use stdClass;
 
+/**
+ * Add cast functions to the model
+ *
+ * @internal Expected to be used only by ModelTrait
+ */
 trait CastTrait
 {
     /**

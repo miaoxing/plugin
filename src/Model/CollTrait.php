@@ -9,6 +9,8 @@ use Wei\Ret;
 
 /**
  * Add collection functions to the model
+ *
+ * @internal Expected to be used only by ModelTrait
  */
 trait CollTrait
 {
