@@ -447,18 +447,6 @@ trait ModelTrait
         static::$modelEvents[static::class][$event][] = $method;
     }
 
-    public function execute()
-    {
-        $this->trigger('beforeExecute');
-        return $this->parentExecute();
-    }
-
-    public function addQueryPart($sqlPartName, $value, $append = false)
-    {
-        $this->trigger('beforeAddQueryPart', func_get_args());
-        return $this->parentAddQueryPart($sqlPartName, $value, $append);
-    }
-
     /**
      * Check if the model's attributes or the specified column is changed
      *
@@ -1108,6 +1096,18 @@ trait ModelTrait
         $this->parentIndexBy($column);
         $this->attributes = $this->executeIndexBy($this->attributes, $column);
         return $this;
+    }
+
+    protected function execute()
+    {
+        $this->trigger('beforeExecute');
+        return $this->parentExecute();
+    }
+
+    protected function addQueryPart($sqlPartName, $value, $append = false)
+    {
+        $this->trigger('beforeAddQueryPart', func_get_args());
+        return $this->parentAddQueryPart($sqlPartName, $value, $append);
     }
 
     /**
