@@ -462,7 +462,7 @@ trait RelationTrait
      *
      * @param string $method
      * @return bool
-     * @scv
+     * @svc
      */
     protected function isRelation(string $method): bool
     {
