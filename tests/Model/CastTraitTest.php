@@ -385,7 +385,7 @@ final class CastTraitTest extends BaseTestCase
         }
         $cast->save();
 
-        $data = $cast->db->select($cast->getTable(), ['int_column' => $cast->int_column]);
+        $data = $this->wei->db->select($cast->getTable(), ['int_column' => $cast->int_column]);
         $this->assertSame([
             'int_column' => (string) $cast->int_column,
             'nullable_int_column' => null,

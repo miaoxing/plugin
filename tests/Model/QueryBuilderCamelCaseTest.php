@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Service\QueryBuilder as Qb;
+use Miaoxing\Plugin\Service\Str;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 
@@ -29,8 +30,8 @@ class QueryBuilderCamelCaseTest extends BaseTestCase
     {
         parent::setUp();
         $this->wei->setConfig('queryBuilder', [
-            'dbKeyConverter' => [Qb::class, 'snake'],
-            'phpKeyConverter' => [Qb::class, 'camel'],
+            'dbKeyConverter' => [Str::class, 'snake'],
+            'phpKeyConverter' => [Str::class, 'camel'],
         ]);
     }
 

@@ -105,8 +105,8 @@ trait ReqQueryTrait
             $table = $related->getTable();
 
             // 处理跨数据库的情况
-            if ($related->db != $this->db) {
-                $table = $related->db->getDbname() . '.' . $table;
+            if ($related->getDb() !== $this->getDb()) {
+                $table = $related->getDb()->getDbname() . '.' . $table;
             }
 
             $this->leftJoin(

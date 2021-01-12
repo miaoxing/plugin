@@ -4,6 +4,8 @@ namespace Miaoxing\Plugin\Model;
 
 use InvalidArgumentException;
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Service\Cls;
+use Miaoxing\Plugin\Service\Str;
 use Wei\Base;
 use Wei\Req;
 use Wei\Ret;
@@ -34,7 +36,6 @@ trait ModelTrait
     {
         // 1. Init service container
         $this->wei = $options['wei'] ?? Wei::getContainer();
-        $this->db = $options['db'] ?? $this->wei->db;
 
         // 2. Set common and model config before set options
         $this->boot();
@@ -344,43 +345,13 @@ trait ModelTrait
         }
 
         static::$booted[$class] = true;
-        foreach ($this->classUsesDeep($this) as $trait) {
+        foreach (Cls::usesDeep($this) as $trait) {
             $parts = explode('\\', $trait);
             $method = 'boot' . array_pop($parts);
             if (method_exists($class, $method)) {
                 $this->{$method}($this);
             }
         }
-    }
-
-    /**
-     * @param object $class
-     * @param bool $autoload
-     * @return array
-     * @see https://www.php.net/manual/en/function.class-uses.php#112671
-     */
-    public function classUsesDeep($class, $autoload = true)
-    {
-        $traits = [];
-
-        // Get traits of all parent classes
-        do {
-            $traits = array_merge(class_uses($class, $autoload), $traits);
-        } while ($class = get_parent_class($class));
-
-        // Get traits of all parent traits
-        $traitsToSearch = $traits;
-        while (!empty($traitsToSearch)) {
-            $newTraits = class_uses(array_pop($traitsToSearch), $autoload);
-            $traits = array_merge($newTraits, $traits);
-            $traitsToSearch = array_merge($newTraits, $traitsToSearch);
-        };
-
-        foreach ($traits as $trait => $same) {
-            $traits = array_merge(class_uses($trait, $autoload), $traits);
-        }
-
-        return array_unique($traits);
     }
 
     /**
@@ -706,11 +677,12 @@ trait ModelTrait
     protected function getTable(): string
     {
         if (!isset($this->table)) {
-            $baseName = $this->baseName();
+            $baseName = Cls::baseName($this);
             if ('Model' === substr($baseName, -5)) {
                 $baseName = substr($baseName, 0, -5);
             }
-            $this->table = $this->pluralize($this->snake($baseName));
+            $str = $this->wei->str;
+            $this->table = $str->pluralize($str->snake($baseName));
         }
         return $this->table;
     }
@@ -787,8 +759,8 @@ trait ModelTrait
             // Receives primary key value when it's empty
             if (!isset($this->attributes[$primaryKey]) || !$this->attributes[$primaryKey]) {
                 // Prepare sequence name for PostgreSQL
-                $sequence = sprintf('%s_%s_seq', $this->db->getTable($this->getTable()), $primaryKey);
-                $this->attributes[$primaryKey] = $this->db->lastInsertId($sequence);
+                $sequence = sprintf('%s_%s_seq', $this->getDb()->getTable($this->getTable()), $primaryKey);
+                $this->attributes[$primaryKey] = $this->getDb()->lastInsertId($sequence);
                 $this->setAttributeSource($primaryKey, static::ATTRIBUTE_SOURCE_DB);
             }
         } else {
@@ -994,7 +966,7 @@ trait ModelTrait
         foreach ($data as $key => $row) {
             $records[$key] = static::new([], [
                 'wei' => $this->wei,
-                'db' => $this->db,
+                'db' => $this->getDb(),
                 'table' => $this->getTable(),
                 'new' => false,
             ])->setDbAttributes($row, true);
@@ -1220,8 +1192,9 @@ trait ModelTrait
     protected function virtualToArray(): array
     {
         $data = [];
+        $str = $this->wei->str;
         foreach ($this->virtual as $column) {
-            $data[$column] = $this->{'get' . $this->camel($column) . 'Attribute'}();
+            $data[$column] = $this->{'get' . $str->camel($column) . 'Attribute'}();
         }
 
         return $data;
@@ -1366,7 +1339,7 @@ trait ModelTrait
      */
     protected function callGetter(string $name, &$value): bool
     {
-        $method = 'get' . $this->camel($name) . 'Attribute';
+        $method = 'get' . Str::camel($name) . 'Attribute';
         if ($result = method_exists($this, $method)) {
             $value = $this->{$method}();
         }
@@ -1380,7 +1353,7 @@ trait ModelTrait
      */
     protected function callSetter(string $name, $value): bool
     {
-        $method = 'set' . $this->camel($name) . 'Attribute';
+        $method = 'set' . Str::camel($name) . 'Attribute';
         if ($result = method_exists($this, $method)) {
             $this->{$method}($value);
         }
@@ -1447,17 +1420,6 @@ trait ModelTrait
         return $attributes;
     }
 
-    private function baseName(): string
-    {
-        $parts = explode('\\', static::class);
-        return end($parts);
-    }
-
-    private function pluralize(string $word): string
-    {
-        return wei()->str->pluralize($word);
-    }
-
     /**
      * 获取当前类的服务名称对应的类
      *
@@ -1476,7 +1438,7 @@ trait ModelTrait
      */
     private function executeDelete(array $conditions): int
     {
-        return $this->db->delete($this->getTable(), $this->convertKeysToDbKeys($conditions));
+        return $this->getDb()->delete($this->getTable(), $this->convertKeysToDbKeys($conditions));
     }
 
     /**
@@ -1487,7 +1449,7 @@ trait ModelTrait
     private function executeSelect(array $conditions): array
     {
         return $this->convertKeysToPhpKeys(
-            $this->db->select($this->getTable(), $this->convertKeysToDbKeys($conditions)) ?: []
+            $this->getDb()->select($this->getTable(), $this->convertKeysToDbKeys($conditions)) ?: []
         );
     }
 
@@ -1498,7 +1460,7 @@ trait ModelTrait
      */
     private function executeInsert(array $data): int
     {
-        return $this->db->insert($this->getTable(), $this->convertKeysToDbKeys($data));
+        return $this->getDb()->insert($this->getTable(), $this->convertKeysToDbKeys($data));
     }
 
     /**
@@ -1509,7 +1471,7 @@ trait ModelTrait
      */
     private function executeUpdate(array $data, array $conditions): int
     {
-        return $this->db->update(
+        return $this->getDb()->update(
             $this->getTable(),
             $this->convertKeysToDbKeys($data),
             $this->convertKeysToDbKeys($conditions)

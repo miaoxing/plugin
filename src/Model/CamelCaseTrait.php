@@ -11,7 +11,7 @@ trait CamelCaseTrait
 
     public function setCamelCaseKeyConverter(): void
     {
-        $this->setDbKeyConverter([$this, 'snake']);
-        $this->setPhpKeyConverter([$this, 'camel']);
+        $this->setDbKeyConverter([$this->wei->str, 'snake']);
+        $this->setPhpKeyConverter([$this->wei->str, 'camel']);
     }
 }

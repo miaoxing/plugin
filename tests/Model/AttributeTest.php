@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model;
 
+use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
@@ -258,5 +260,43 @@ class AttributeTest extends BaseTestCase
         $user->logger = $logger;
 
         $this->assertSame($logger, $user->logger);
+    }
+
+    public function testServiceNameAsColumn()
+    {
+        $schema = wei()->schema;
+
+        $schema->dropIfExists('test_services');
+        $schema->table('test_services')
+            ->string('db')
+            ->string('str')
+            ->string('cls')
+            ->string('cache')
+            ->string('event')
+            ->exec();
+
+        $service = new class() extends WeiBaseModel {
+            use ModelTrait;
+
+            protected $primaryKey = 'db';
+
+            protected $table = 'test_services';
+        };
+
+        foreach ($service->getColumns() as $column => $config) {
+            $service->$column = $column;
+        }
+
+        foreach ($service->getColumns() as $column => $config) {
+            $this->assertSame($column, $service->$column);
+        }
+
+        $service->save();
+
+        foreach ($service->getColumns() as $column => $config) {
+            $this->assertSame($column, $service->$column);
+        }
+
+        $schema->dropIfExists('test_services');
     }
 }

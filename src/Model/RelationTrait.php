@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Model\Attributes\Relation;
+use Miaoxing\Plugin\Service\Str;
 use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
@@ -115,7 +116,7 @@ trait RelationTrait
     {
         $related = $this->instanceRelationModel($model);
         $foreignKey || $foreignKey = $this->getPrimaryKey();
-        $localKey || $localKey = $this->snake($related->getClassServiceName()) . '_' . $this->getPrimaryKey();
+        $localKey || $localKey = Str::snake($related->getClassServiceName()) . '_' . $this->getPrimaryKey();
 
         return $this->hasOne($related, $foreignKey, $localKey);
     }
@@ -135,7 +136,7 @@ trait RelationTrait
         $primaryKey = $this->getPrimaryKey();
         $junctionTable || $junctionTable = $this->getJunctionTable($related);
         $foreignKey || $foreignKey = $this->getForeignKey();
-        $relatedKey || $relatedKey = $this->snake($name) . '_' . $primaryKey;
+        $relatedKey || $relatedKey = Str::snake($name) . '_' . $primaryKey;
         $this->setRelation($name, [
             'junctionTable' => $junctionTable,
             'relatedKey' => $relatedKey,
@@ -309,7 +310,7 @@ trait RelationTrait
      */
     protected function getForeignKey(): string
     {
-        return $this->snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
+        return Str::snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
     }
 
     /**

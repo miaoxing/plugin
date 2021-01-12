@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * @mixin \StrMixin
+ * @mixin \ClsMixin
  * @mixin \PluginMixin
  * @internal will change in the future
  */
@@ -34,42 +35,12 @@ final class GMetadata extends BaseCommand
         );
 
         foreach ($services as $name => $class) {
-            $uses = $this->classUsesDeep($class);
+            $uses = $this->cls->usesDeep($class);
             $camelCase = isset($uses[CamelCaseTrait::class]);
             $this->createClass($name, $plugin, $camelCase);
         }
 
         return $this->suc('创建成功');
-    }
-
-    /**
-     * @param object $class
-     * @param bool $autoload
-     * @return array
-     * @see https://www.php.net/manual/en/function.class-uses.php#112671
-     */
-    public function classUsesDeep($class, $autoload = true)
-    {
-        $traits = [];
-
-        // Get traits of all parent classes
-        do {
-            $traits = array_merge(class_uses($class, $autoload), $traits);
-        } while ($class = get_parent_class($class));
-
-        // Get traits of all parent traits
-        $traitsToSearch = $traits;
-        while (!empty($traitsToSearch)) {
-            $newTraits = class_uses(array_pop($traitsToSearch), $autoload);
-            $traits = array_merge($newTraits, $traits);
-            $traitsToSearch = array_merge($newTraits, $traitsToSearch);
-        };
-
-        foreach ($traits as $trait => $same) {
-            $traits = array_merge(class_uses($trait, $autoload), $traits);
-        }
-
-        return array_unique($traits);
     }
 
     protected function configure()
@@ -92,7 +63,8 @@ final class GMetadata extends BaseCommand
             }
 
             $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
-            $docBlocks[$propertyName] = rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName, $column['Comment']));
+            $docBlocks[$propertyName] = rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName,
+                $column['Comment']));
         }
 
         // 获取getXxxAttribute的定义

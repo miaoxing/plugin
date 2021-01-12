@@ -355,12 +355,18 @@ class CollTest extends BaseTestCase
                 'group_id' => 0,
                 'name' => '',
                 'address' => 'default address',
+                'birthday' => null,
+                'joined_date' => '2000-01-01',
+                'signature' => 'default',
             ],
             'key2' => [
                 'id' => null,
                 'group_id' => 0,
                 'name' => '',
                 'address' => 'default address',
+                'birthday' => null,
+                'joined_date' => '2000-01-01',
+                'signature' => 'default',
             ],
         ], $users);
     }
@@ -402,6 +408,9 @@ class CollTest extends BaseTestCase
                 'group_id' => 0,
                 'name' => '',
                 'address' => 'default address',
+                'birthday' => null,
+                'joined_date' => '2000-01-01',
+                'signature' => 'default',
             ],
         ], $users);
     }

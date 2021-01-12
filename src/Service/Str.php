@@ -7,35 +7,49 @@ use Doctrine\Inflector\InflectorFactory;
 use Miaoxing\Plugin\BaseService;
 
 /**
- * 字符串操作服务
- *
- * @stable
+ * The string util service
  */
 class Str extends BaseService
 {
-    protected static $snakeCache = [];
-
-    protected static $camelCache = [];
-
     /**
      * @var Inflector|null
      */
     protected $inflector;
 
     /**
+     * The cache of snake strings
+     *
+     * @var array
+     */
+    protected static $snakeCache = [];
+
+    /**
+     * The cache of camel strings
+     *
+     * @var array
+     */
+    protected static $camelCache = [];
+
+    /**
+     *  Returns a word in plural form
+     *
      * @param string $word
      * @return string
+     * @svc
      */
-    public function pluralize($word)
+    protected function pluralize(string $word): string
     {
         return $this->getInflector()->pluralize($word);
     }
 
     /**
+     * Returns a word in singular form
+     *
      * @param string $word
      * @return string
+     * @svc
      */
-    public function singularize($word)
+    protected function singularize(string $word): string
     {
         return $this->getInflector()->singularize($word);
     }
@@ -46,8 +60,9 @@ class Str extends BaseService
      * @param string $input
      * @param string $delimiter
      * @return string
+     * @svc
      */
-    public function snake($input, $delimiter = '_')
+    protected function snake(string $input, string $delimiter = '_'): string
     {
         if (isset(static::$snakeCache[$input][$delimiter])) {
             return static::$snakeCache[$input][$delimiter];
@@ -66,8 +81,9 @@ class Str extends BaseService
      *
      * @param string $input
      * @return string
+     * @svc
      */
-    public function camel($input)
+    protected function camel(string $input): string
     {
         if (isset(static::$camelCache[$input])) {
             return static::$camelCache[$input];
@@ -81,23 +97,11 @@ class Str extends BaseService
      *
      * @param string $input
      * @return string
+     * @svc
      */
-    public function dash($input)
+    protected function dash(string $input): string
     {
         return $this->snake($input, '-');
-    }
-
-    /**
-     * 获取对象的基础类名
-     *
-     * @param object|string $object
-     * @return string
-     */
-    public function baseName($object)
-    {
-        $parts = explode('\\', is_string($object) ? $object : get_class($object));
-
-        return end($parts);
     }
 
     /**
@@ -105,7 +109,7 @@ class Str extends BaseService
      *
      * @return Inflector
      */
-    public function getInflector()
+    public function getInflector(): Inflector
     {
         if (!$this->inflector) {
             $this->inflector = InflectorFactory::create()->build();

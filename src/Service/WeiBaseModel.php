@@ -5,6 +5,7 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\ModelTrait;
 use Wei\Db;
+use Wei\Event;
 
 /**
  * @internal 逐步完善后移到 Wei 中
@@ -16,13 +17,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      * @var bool
      */
     protected static $createNewInstance = true;
-
-    /**
-     * The database service
-     *
-     * @var Db
-     */
-    protected $db;
 
     protected $createdAtColumn = 'created_at';
 

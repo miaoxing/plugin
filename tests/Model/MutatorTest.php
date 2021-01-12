@@ -67,9 +67,7 @@ final class MutatorTest extends BaseTestCase
     {
         $mutator = TestMutator::new();
         $mutator->set('setter', 'abc');
-
-        $data = $mutator->getAttributes();
-        $this->assertEquals('YWJj', $data['setter'], '由mutator管理数据');
+        $this->assertEquals('YWJj', $mutator->setter, '由mutator管理数据');
     }
 
     public function testMagicGet()
@@ -81,9 +79,7 @@ final class MutatorTest extends BaseTestCase
     {
         $mutator = TestMutator::new();
         $mutator->setter = 'abc';
-
-        $data = $mutator->getAttributes();
-        $this->assertEquals('YWJj', $data['setter']);
+        $this->assertEquals('YWJj', $mutator->setter);
     }
 
     public function testCreate()

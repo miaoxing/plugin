@@ -119,7 +119,7 @@ final class CamelCaseTraitTest extends BaseTestCase
         $camelCase['testUserId'] = 2;
         $this->assertEquals(2, $camelCase['testUserId']);
 
-        $data = $camelCase->getAttributes();
+        $data = $camelCase->toArray();
         $this->assertArrayHasKey('testUserId', $data);
         $this->assertArrayNotHasKey('test_user_id', $data);
     }

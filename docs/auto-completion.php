@@ -9,9 +9,15 @@ class AppMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\AppModel $appModel 应用模型
- * @method      Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] appModel($table = null)
+ * @method      static appModel($table = null)
  */
 class AppModelMixin {
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\Cls $cls
+ */
+class ClsMixin {
 }
 
 /**
@@ -81,14 +87,14 @@ class TesterMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\User $user 用户
- * @method      Miaoxing\Plugin\Service\User|Miaoxing\Plugin\Service\User[] user($table = null)
+ * @method      static user($table = null)
  */
 class UserMixin {
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\UserModel $userModel
- * @method      Miaoxing\Plugin\Service\UserModel|Miaoxing\Plugin\Service\UserModel[] userModel($table = null)
+ * @method      static userModel($table = null)
  */
 class UserModelMixin {
 }
@@ -96,6 +102,7 @@ class UserModelMixin {
 /**
  * @mixin AppMixin
  * @mixin AppModelMixin
+ * @mixin ClsMixin
  * @mixin ConfigMixin
  * @mixin IsModelExistsMixin
  * @mixin JwtMixin
@@ -128,6 +135,9 @@ $app = wei()->appModel();
 
 /** @var Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] $appModels */
 $apps = wei()->appModel();
+
+/** @var Miaoxing\Plugin\Service\Cls $cls */
+$cls = wei()->cls;
 
 /** @var Miaoxing\Plugin\Service\Config $config */
 $config = wei()->config;

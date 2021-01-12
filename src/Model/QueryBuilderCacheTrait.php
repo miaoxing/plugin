@@ -58,7 +58,7 @@ trait QueryBuilderCacheTrait
     public function getCacheKey(): string
     {
         return $this->cacheKey ?:
-            md5($this->db->getDbname() . $this->getSql() . serialize($this->queryParams) . serialize($this->queryParamTypes));
+            md5($this->getDb()->getDbname() . $this->getSql() . serialize($this->queryParams) . serialize($this->queryParamTypes));
     }
 
     /**

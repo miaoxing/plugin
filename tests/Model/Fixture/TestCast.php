@@ -56,4 +56,9 @@ class TestCast extends WeiBaseModel
             'default' => [],
         ],
     ];
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
 }

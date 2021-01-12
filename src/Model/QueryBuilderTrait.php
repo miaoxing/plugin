@@ -5,12 +5,12 @@ namespace Miaoxing\Plugin\Model;
 use Closure;
 use Miaoxing\Plugin\Db\BaseDriver;
 use Wei\BaseCache;
+use Wei\Db;
 
 /**
  * The main functions of the query builder
  *
  * @author Twin Huang <twinhuang@qq.com>
- * @mixin \DbMixin
  * @mixin \TagCacheMixin
  * @mixin \NearCacheMixin
  * @property \Wei\Cache $cache A cache service proxy 不引入 \CacheMixin 以免 phpstan 识别为 mixin 的 cache 方法
@@ -113,19 +113,16 @@ trait QueryBuilderTrait
     protected $loadedColumns;
 
     /**
+     * The db service
+     *
+     * @var Db
+     */
+    protected $db;
+
+    /**
      * @var BaseDriver[]
      */
     protected static $dbDrivers = [];
-
-    /**
-     * @var array
-     */
-    protected static $snakeCache = [];
-
-    /**
-     * @var array
-     */
-    protected static $camelCache = [];
 
     /**
      * @param string|null $table
@@ -135,7 +132,7 @@ trait QueryBuilderTrait
     {
         return new static([
             'wei' => $this->wei,
-            'db' => $this->db,
+            'db' => $this->getDb(),
             'table' => $table,
         ]);
     }
@@ -165,7 +162,7 @@ trait QueryBuilderTrait
                 return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
             }
         } else {
-            return $this->db->executeUpdate($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
+            return $this->getDb()->executeUpdate($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
         }
     }
 
@@ -662,7 +659,7 @@ trait QueryBuilderTrait
     {
         if (!$this->loadedColumns) {
             $columns = $this->getMetadataCache()->get(
-                'tableColumns:' . $this->db->getDbname() . ':' . $this->getTable(),
+                'tableColumns:' . $this->getDb()->getDbname() . ':' . $this->getTable(),
                 60,
                 function () {
                     return $this->getDbDriver()->getColumns($this->getTable(), $this->phpKeyConverter);
@@ -1578,6 +1575,16 @@ trait QueryBuilderTrait
     }
 
     /**
+     * Return the db service
+     *
+     * @return Db
+     */
+    public function getDb(): Db
+    {
+        return $this->db ?? parent::__get('db');
+    }
+
+    /**
      * @param array $data
      * @param string $column
      * @return array
@@ -1659,7 +1666,7 @@ trait QueryBuilderTrait
         if ($column instanceof Closure) {
             $query = new static([
                 'wei' => $this->wei,
-                'db' => $this->db,
+                'db' => $this->getDb(),
                 'table' => $this->table,
             ]);
             $column($query);
@@ -1745,47 +1752,12 @@ trait QueryBuilderTrait
      */
     protected function getDbDriver(): BaseDriver
     {
-        $driver = $this->db->getDriver();
+        $driver = $this->getDb()->getDriver();
         if (!isset(static::$dbDrivers[$driver])) {
             $class = 'Miaoxing\Plugin\Db\\' . ucfirst($driver);
             static::$dbDrivers[$driver] = new $class();
         }
         return static::$dbDrivers[$driver];
-    }
-
-    /**
-     * Convert a input to snake case
-     *
-     * @param string $input
-     * @return string
-     */
-    protected function snake(string $input): string
-    {
-        if (isset(static::$snakeCache[$input])) {
-            return static::$snakeCache[$input];
-        }
-
-        $value = $input;
-        if (!ctype_lower($input)) {
-            $value = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
-        }
-
-        return static::$snakeCache[$input] = $value;
-    }
-
-    /**
-     * Convert a input to camel case
-     *
-     * @param string $input
-     * @return string
-     */
-    protected function camel(string $input): string
-    {
-        if (isset(static::$camelCache[$input])) {
-            return static::$camelCache[$input];
-        }
-
-        return static::$camelCache[$input] = lcfirst(str_replace(' ', '', ucwords(strtr($input, '_-', '  '))));
     }
 
     /**
@@ -1807,7 +1779,7 @@ trait QueryBuilderTrait
      */
     protected function executeFetchAll(string $sql, array $params = [], array $types = []): array
     {
-        $data = $this->db->fetchAll($sql, $params, $types);
+        $data = $this->getDb()->fetchAll($sql, $params, $types);
         if (isset($data[0])) {
             foreach ($data as &$row) {
                 $row = $this->convertKeysToPhpKeys($row);
