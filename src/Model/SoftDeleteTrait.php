@@ -30,8 +30,8 @@ trait SoftDeleteTrait
     public static function bootSoftDeleteTrait(WeiBaseModel $initModel): void
     {
         $initModel->addDefaultScope('withoutDeleted');
-        static::on('init', 'addedDeleteColumnToGuarded');
-        static::on('destroy', 'executeSoftDelete');
+        static::onModelEvent('init', 'addedDeleteColumnToGuarded');
+        static::onModelEvent('destroy', 'executeSoftDelete');
     }
 
     /**
@@ -171,7 +171,7 @@ trait SoftDeleteTrait
     protected function executeSoftDelete(): bool
     {
         if ($this->reallyDestroy) {
-            return false;
+            return true;
         }
 
         $data = [
@@ -182,7 +182,9 @@ trait SoftDeleteTrait
             $data[$statusColumn] = $this->getDeleteStatusValue();
         }
         $this->saveAttributes($data);
-        return true;
+
+        // Return false to stop the default delete behavior
+        return false;
     }
 
     /**

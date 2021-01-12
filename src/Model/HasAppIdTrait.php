@@ -11,8 +11,8 @@ trait HasAppIdTrait
     {
         $initModel->addDefaultScope('curApp');
 
-        static::on('init', 'addAppIdToGuarded');
-        static::on('beforeCreate', 'setAppId');
+        static::onModelEvent('init', 'addAppIdToGuarded');
+        static::onModelEvent('beforeCreate', 'setAppId');
     }
 
     /**

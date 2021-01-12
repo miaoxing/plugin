@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use MiaoxingTest\Plugin\Fixture\SexConst;
-
 trait DbTrait
 {
     private static $tablePrefix;

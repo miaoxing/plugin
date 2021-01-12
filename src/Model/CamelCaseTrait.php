@@ -6,7 +6,7 @@ trait CamelCaseTrait
 {
     public static function bootCamelCaseTrait(): void
     {
-        static::on('init', 'setCamelCaseKeyConverter');
+        static::onModelEvent('init', 'setCamelCaseKeyConverter');
     }
 
     public function setCamelCaseKeyConverter(): void

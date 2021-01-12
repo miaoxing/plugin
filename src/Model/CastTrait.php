@@ -19,8 +19,8 @@ trait CastTrait
 
     protected static function bootCastTrait(): void
     {
-        static::on('getValue', 'castToPhp');
-        static::on('setValue', 'castToDb');
+        static::onModelEvent('getValue', 'castToPhp');
+        static::onModelEvent('setValue', 'castToDb');
     }
 
     /**

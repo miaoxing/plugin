@@ -105,14 +105,12 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      */
     protected $hidden = [];
 
-    protected static $booted = [];
-
     /**
-     * The events of model
-     *
-     * @var array
+     * @var stirng
      */
-    protected static $modelEvents = [];
+    protected $modelName;
+
+    protected static $booted = [];
 
     /**
      * @var array

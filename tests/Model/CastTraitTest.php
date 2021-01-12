@@ -322,7 +322,7 @@ final class CastTraitTest extends BaseTestCase
     {
         $cast = TestCast::new();
 
-        $cast::on('beforeSave', function () use ($cast) {
+        $cast::onModelEvent('beforeSave', function () use ($cast) {
             $cast->string_column = count($cast->json_column);
         });
 

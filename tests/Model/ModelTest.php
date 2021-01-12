@@ -577,32 +577,6 @@ final class ModelTest extends BaseTestCase
         $this->assertSame($result, $user);
     }
 
-    public function testBeforeAndAfterCreateCallbacks()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::fromArray([
-            'group_id' => 1,
-            'name' => 'twin',
-            'address' => 'xx street',
-        ]);
-
-        $user->save();
-
-        $this->assertEquals('beforeSave->beforeCreate->afterCreate->afterSave', $user->getEventResult());
-    }
-
-    public function testBeforeAndAfterDestroyCallbacks()
-    {
-        $this->initFixtures();
-
-        $user = TestUser::find(1);
-
-        $user->destroy();
-
-        $this->assertEquals('beforeDestroy->afterDestroy', $user->getEventResult());
-    }
-
     public function testFromArray()
     {
         $this->initFixtures();

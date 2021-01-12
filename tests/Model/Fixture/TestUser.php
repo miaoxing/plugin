@@ -24,8 +24,6 @@ class TestUser extends WeiBaseModel
 
     protected $scopes;
 
-    protected $eventResult;
-
     protected $casts = [
         'id' => 'int',
         'group_id' => 'int',
@@ -64,41 +62,6 @@ class TestUser extends WeiBaseModel
     public function methodHasArg($name)
     {
         return $name;
-    }
-
-    public function beforeCreate()
-    {
-        $this->eventResult .= 'beforeCreate->';
-    }
-
-    public function afterCreate()
-    {
-        $this->eventResult .= 'afterCreate->';
-    }
-
-    public function beforeSave()
-    {
-        $this->eventResult .= 'beforeSave->';
-    }
-
-    public function afterSave()
-    {
-        $this->eventResult .= 'afterSave';
-    }
-
-    public function beforeDestroy()
-    {
-        $this->eventResult .= 'beforeDestroy->';
-    }
-
-    public function afterDestroy()
-    {
-        $this->eventResult .= 'afterDestroy';
-    }
-
-    public function getEventResult()
-    {
-        return $this->eventResult;
     }
 
     public function getAddressAttribute()

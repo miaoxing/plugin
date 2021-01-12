@@ -23,6 +23,7 @@ trait ModelTrait
         indexBy as private parentIndexBy;
     }
     use QueryBuilderCacheTrait;
+    use EventTrait;
     use CollTrait;
     use CastTrait;
     use RetTrait;
@@ -39,7 +40,7 @@ trait ModelTrait
 
         // 2. Set common and model config before set options
         $this->boot();
-        $this->trigger('init');
+        $this->triggerModelEvent('init');
 
         // 3. Add default value to model attributes
         $this->attributes += $this->getColumnValues('default');
@@ -252,90 +253,6 @@ trait ModelTrait
         return $this->new;
     }
 
-    /**
-     * The method called after load a record
-     */
-    public function afterLoad()
-    {
-    }
-
-    /**
-     * The method called after find a record
-     */
-    public function afterFind()
-    {
-    }
-
-    /**
-     * The method called before save a record
-     */
-    public function beforeSave()
-    {
-        if ($this->hasColumn($this->updatedAtColumn)) {
-            $this->setColumnValue($this->updatedAtColumn, date('Y-m-d H:i:s'));
-        }
-
-        if ($this->hasColumn($this->updatedByColumn)) {
-            $this->setColumnValue($this->updatedByColumn, (int) $this->user->id);
-        }
-    }
-
-    /**
-     * The method called after save a record
-     */
-    public function afterSave()
-    {
-    }
-
-    /**
-     * The method called before insert a record
-     */
-    public function beforeCreate()
-    {
-        if ($this->hasColumn($this->createdAtColumn) && !$this->getColumnValue($this->createdAtColumn)) {
-            $this->setColumnValue($this->createdAtColumn, date('Y-m-d H:i:s'));
-        }
-
-        if ($this->hasColumn($this->createdByColumn) && !$this->getColumnValue($this->createdByColumn)) {
-            $this->setColumnValue($this->createdByColumn, (int) $this->user->id);
-        }
-    }
-
-    /**
-     * The method called after insert a record
-     */
-    public function afterCreate()
-    {
-    }
-
-    /**
-     * The method called before update a record
-     */
-    public function beforeUpdate()
-    {
-    }
-
-    /**
-     * The method called after update a record
-     */
-    public function afterUpdate()
-    {
-    }
-
-    /**
-     * The method called before delete a record
-     */
-    public function beforeDestroy()
-    {
-    }
-
-    /**
-     * The method called after delete a record
-     */
-    public function afterDestroy()
-    {
-    }
-
     public function boot(): void
     {
         $class = static::class;
@@ -343,11 +260,11 @@ trait ModelTrait
         if (isset(static::$booted[$class])) {
             return;
         }
-
         static::$booted[$class] = true;
-        foreach (Cls::usesDeep($this) as $trait) {
-            $parts = explode('\\', $trait);
-            $method = 'boot' . array_pop($parts);
+
+        $cls = $this->wei->cls;
+        foreach ($cls->usesDeep($this) as $trait) {
+            $method = 'boot' . $cls->baseName($trait);
             if (method_exists($class, $method)) {
                 $this->{$method}($this);
             }
@@ -383,39 +300,6 @@ trait ModelTrait
         $this->hidden = (array) $hidden;
 
         return $this;
-    }
-
-    /**
-     * @param string $event
-     * @param array $data
-     * @return mixed
-     */
-    public function trigger(string $event, $data = [])
-    {
-        $result = null;
-        $class = static::class;
-        if (isset(static::$modelEvents[$class][$event])) {
-            foreach (static::$modelEvents[$class][$event] as $callback) {
-                // 优先使用自身方法
-                if (is_string($callback) && method_exists($this, $callback)) {
-                    $callback = [$this, $callback];
-                }
-                $result = call_user_func_array($callback, (array) $data);
-            }
-        } else {
-            $result = is_array($data) ? current($data) : $data;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $event
-     * @param string|callable $method
-     */
-    public static function on(string $event, $method)
-    {
-        static::$modelEvents[static::class][$event][] = $method;
     }
 
     /**
@@ -609,6 +493,19 @@ trait ModelTrait
     }
 
     /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @svc
+     */
+    protected function saveAttributes(iterable $attributes = []): self
+    {
+        $attributes && $this->setAttributes($attributes);
+        return $this->save();
+    }
+
+    /**
      * Returns the record data as array
      *
      * @param array|callable $returnFields A indexed array specified the fields to return
@@ -637,19 +534,6 @@ trait ModelTrait
             $data = $prepend($this) + $data;
         }
         return $data + $this->virtualToArray() + $this->relationToArray();
-    }
-
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @svc
-     */
-    protected function saveAttributes(iterable $attributes = []): self
-    {
-        $attributes && $this->setAttributes($attributes);
-        return $this->save();
     }
 
     /**
@@ -685,6 +569,24 @@ trait ModelTrait
             $this->table = $str->pluralize($str->snake($baseName));
         }
         return $this->table;
+    }
+
+    /**
+     * Return the unique name that identifies the model class
+     *
+     * @return string
+     * @todo throw exception when found duplicate names
+     */
+    protected function getModelName(): string
+    {
+        if (!$this->modelName) {
+            $name = $this->wei->getServiceName(static::class);
+            if ('Model' !== substr($name, -5)) {
+                $name .= 'Model';
+            }
+            $this->modelName = $name;
+        }
+        return $this->modelName;
     }
 
     /**
@@ -739,9 +641,11 @@ trait ModelTrait
         $isNew = $this->new;
         $primaryKey = $this->getPrimaryKey();
 
+        $this->setColumnStamps();
+
         // 2.2.2 Triggers before callbacks
-        $this->triggerCallback('beforeSave');
-        $this->triggerCallback($isNew ? 'beforeCreate' : 'beforeUpdate');
+        $this->triggerModelEventWithMethod('beforeSave');
+        $this->triggerModelEventWithMethod($isNew ? 'beforeCreate' : 'beforeUpdate');
 
         if ($isNew) {
             $this->convertToDbValues();
@@ -774,8 +678,8 @@ trait ModelTrait
         $this->resetChanges();
 
         // 2.2.5. Triggers after callbacks
-        $this->triggerCallback($isNew ? 'afterCreate' : 'afterUpdate');
-        $this->triggerCallback('afterSave');
+        $this->triggerModelEventWithMethod($isNew ? 'afterCreate' : 'afterUpdate');
+        $this->triggerModelEventWithMethod('afterSave');
 
         return $this;
     }
@@ -796,12 +700,12 @@ trait ModelTrait
             return $this;
         }
 
-        $this->triggerCallback('beforeDestroy');
-        $result = $this->trigger('destroy');
-        if (!$result) {
+        $this->triggerModelEventWithMethod('beforeDestroy');
+        $result = $this->triggerModelEvent('destroy');
+        if (false !== $result) {
             $this->executeDestroy();
         }
-        $this->triggerCallback('afterDestroy');
+        $this->triggerModelEventWithMethod('afterDestroy');
 
         return $this;
     }
@@ -943,7 +847,7 @@ trait ModelTrait
         if ($data) {
             $this->new = false;
             $this->setDbAttributes($data, true);
-            $this->triggerCallback('afterFind');
+            $this->triggerModelEventWithMethod('afterFind');
             return $this;
         } else {
             return null;
@@ -970,7 +874,7 @@ trait ModelTrait
                 'table' => $this->getTable(),
                 'new' => false,
             ])->setDbAttributes($row, true);
-            $records[$key]->triggerCallback('afterFind');
+            $records[$key]->triggerModelEventWithMethod('afterFind');
         }
 
         $this->attributes = $records;
@@ -1072,13 +976,13 @@ trait ModelTrait
 
     protected function execute()
     {
-        $this->trigger('beforeExecute');
+        $this->triggerModelEvent('beforeExecute');
         return $this->parentExecute();
     }
 
     protected function addQueryPart($sqlPartName, $value, $append = false)
     {
-        $this->trigger('beforeAddQueryPart', func_get_args());
+        $this->triggerModelEvent('beforeAddQueryPart', func_get_args());
         return $this->parentAddQueryPart($sqlPartName, $value, $append);
     }
 
@@ -1166,17 +1070,6 @@ trait ModelTrait
     }
 
     /**
-     * Trigger a callback
-     *
-     * @param string $name
-     */
-    protected function triggerCallback(string $name): void
-    {
-        $this->trigger($name);
-        $this->{$name}();
-    }
-
-    /**
      * @param array $columns
      * @return array
      */
@@ -1243,7 +1136,7 @@ trait ModelTrait
         $value = $this->convertToDbValue($name);
 
         // Convert db data to php data
-        $this->attributes[$name] = $this->trigger('getValue', [$value, $name]);
+        $this->attributes[$name] = $this->triggerModelEvent('getValue', [$value, $name]);
         $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_PHP);
 
         return $this->attributes[$name];
@@ -1395,9 +1288,37 @@ trait ModelTrait
         }
 
         // Convert to db value by caster
-        $this->attributes[$column] = $this->trigger('setValue', [$value, $column]);
+        $this->attributes[$column] = $this->triggerModelEvent('setValue', [$value, $column]);
         $this->setAttributeSource($column, static::ATTRIBUTE_SOURCE_DB);
         return $this->attributes[$column];
+    }
+
+    /**
+     * Set the timestamp and user stamp columns' values
+     *
+     * @return $this
+     */
+    protected function setColumnStamps(): self
+    {
+        if ($this->hasColumn($this->updatedAtColumn)) {
+            $this->setColumnValue($this->updatedAtColumn, date('Y-m-d H:i:s'));
+        }
+
+        if ($this->hasColumn($this->updatedByColumn)) {
+            $this->setColumnValue($this->updatedByColumn, $this->user->id);
+        }
+
+        if ($this->new) {
+            if ($this->hasColumn($this->createdAtColumn) && !$this->getColumnValue($this->createdAtColumn)) {
+                $this->setColumnValue($this->createdAtColumn, date('Y-m-d H:i:s'));
+            }
+
+            if ($this->hasColumn($this->createdByColumn) && !$this->getColumnValue($this->createdByColumn)) {
+                $this->setColumnValue($this->createdByColumn, $this->user->id);
+            }
+        }
+
+        return $this;
     }
 
     /**
