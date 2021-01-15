@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Model\QueryBuilderPropsTrait;
 use Wei\Db;
 use Wei\Event;
 
@@ -13,6 +14,8 @@ use Wei\Event;
  */
 abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
 {
+    use QueryBuilderPropsTrait;
+
     /**
      * @var bool
      */
@@ -25,27 +28,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     protected $updatedAtColumn = 'updated_at';
 
     protected $updatedByColumn = 'updated_by';
-
-    /**
-     * The name of the table
-     *
-     * NOTE: Define this property to avoid "Property Invalid" error thrown by the `__set` method
-     *
-     * @var string
-     */
-    protected $table;
-
-    /**
-     * The column names of the table
-     *
-     * If leave it blank, it will automatic generate form the database table,
-     * or fill it to speed up the record
-     *
-     * NOTE: Define this property to avoid "Property Invalid" error thrown by the `__set` method
-     *
-     * @var array
-     */
-    protected $columns = [];
 
     /**
      * The primary key column

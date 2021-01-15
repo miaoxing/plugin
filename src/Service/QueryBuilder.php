@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\QueryBuilderCacheTrait;
+use Miaoxing\Plugin\Model\QueryBuilderPropsTrait;
 use Miaoxing\Plugin\Model\QueryBuilderTrait;
 
 /**
@@ -13,6 +14,7 @@ use Miaoxing\Plugin\Model\QueryBuilderTrait;
  */
 class QueryBuilder extends BaseService
 {
+    use QueryBuilderPropsTrait;
     use QueryBuilderTrait;
     use QueryBuilderCacheTrait;
 
