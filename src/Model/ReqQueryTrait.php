@@ -99,8 +99,7 @@ trait ReqQueryTrait
 
             /** @var BaseModel $related */
             $related = $this->{$relation}();
-            $name = $related->getClassServiceName();
-            $config = $this->relations[$name];
+            $config = $related->getRelation();
 
             $table = $related->getTable();
 

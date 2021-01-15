@@ -51,7 +51,7 @@ trait EventTrait
         $event = $this->getEventService();
 
         // Use a unique event name for every model class
-        $modelEvent = lcfirst($this->getModelName()) . ucfirst($name);
+        $modelEvent = lcfirst($this->getModelUniqueName()) . ucfirst($name);
 
         if (isset(static::$modelEvents[$class][$name])) {
             foreach (static::$modelEvents[$class][$name] as $callback) {

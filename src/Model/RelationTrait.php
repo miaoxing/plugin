@@ -14,11 +14,12 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
 trait RelationTrait
 {
     /**
-     * The relation configs
+     * The relation config
      *
      * @var array
+     * @internal
      */
-    protected $relations = [];
+    protected $relation = [];
 
     /**
      * The loaded relation values
@@ -26,13 +27,6 @@ trait RelationTrait
      * @var array
      */
     protected $relationValues = [];
-
-    /**
-     * The relation attributes to be save with current model
-     *
-     * @var array
-     */
-    protected $relationAttributes = [];
 
     /**
      * The parameter values for the relation base query
@@ -64,11 +58,13 @@ trait RelationTrait
      */
     public function saveRelation(array $attributes = []): self
     {
+        $relationAttributes = [$this->relation['foreignKey'] => $this->relation['localValue']];
+
         if ($this->coll) {
             $this->all();
-            $this->saveColl($attributes, $this->relationAttributes);
+            $this->saveColl($attributes, $relationAttributes);
         } else {
-            $this->findOrInitBy([])->fromArray($attributes)->save($this->relationAttributes);
+            $this->findOrInitBy([])->fromArray($attributes)->save($relationAttributes);
         }
         return $this;
     }
@@ -82,15 +78,20 @@ trait RelationTrait
     public function hasOne($model, $foreignKey = null, $localKey = null): WeiBaseModel
     {
         $related = $this->instanceRelationModel($model);
-        $name = $related->getClassServiceName();
-
         $localKey || $localKey = $this->getPrimaryKey();
         $foreignKey || $foreignKey = $this->getForeignKey();
-        $this->setRelation($name, ['foreignKey' => $foreignKey, 'localKey' => $localKey]);
+
+        $localKey = $this->convertToPhpKey($localKey);
+        $foreignKey = $this->convertToPhpKey($foreignKey);
 
         $value = $this->getRelationParams($localKey);
+        $related->setRelation([
+            'localKey' => $localKey,
+            'foreignKey' => $foreignKey,
+            'localValue' => $value,
+        ]);
+
         $related->where($foreignKey, $value);
-        $related->setRelationAttribute($foreignKey, $value);
 
         return $related;
     }
@@ -116,7 +117,7 @@ trait RelationTrait
     {
         $related = $this->instanceRelationModel($model);
         $foreignKey || $foreignKey = $this->getPrimaryKey();
-        $localKey || $localKey = Str::snake($related->getClassServiceName()) . '_' . $this->getPrimaryKey();
+        $localKey || $localKey = Str::snake($related->getModelBaseName()) . '_' . $this->getPrimaryKey();
 
         return $this->hasOne($related, $foreignKey, $localKey);
     }
@@ -131,17 +132,17 @@ trait RelationTrait
     public function belongsToMany($model, $junctionTable = null, $foreignKey = null, $relatedKey = null): WeiBaseModel
     {
         $related = $this->instanceRelationModel($model);
-        $name = $this->getClassServiceName($related);
 
         $primaryKey = $this->getPrimaryKey();
         $junctionTable || $junctionTable = $this->getJunctionTable($related);
         $foreignKey || $foreignKey = $this->getForeignKey();
-        $relatedKey || $relatedKey = Str::snake($name) . '_' . $primaryKey;
-        $this->setRelation($name, [
+        $relatedKey || $relatedKey = Str::snake($related->getModelBaseName()) . '_' . $primaryKey;
+
+        $related->setRelation([
             'junctionTable' => $junctionTable,
-            'relatedKey' => $relatedKey,
-            'foreignKey' => $foreignKey,
-            'localKey' => $primaryKey,
+            'relatedKey' => $this->convertToPhpKey($relatedKey),
+            'foreignKey' => $this->convertToPhpKey($foreignKey),
+            'localKey' => $this->convertToPhpKey($primaryKey),
         ]);
 
         $relatedTable = $related->getTable();
@@ -175,8 +176,7 @@ trait RelationTrait
             /** @var static $related */
             $related = $this->{$name}();
             $isColl = $related->isColl();
-            $serviceName = $this->getClassServiceName($related);
-            $relation = $this->relations[$serviceName];
+            $relation = $related->getRelation();
 
             // 2. Fetch relation model data
             $ids = $this->getAll($relation['localKey']);
@@ -287,30 +287,13 @@ trait RelationTrait
     }
 
     /**
-     * @param WeiBaseModel|null $object
-     * @return string
-     */
-    protected function getClassServiceName(WeiBaseModel $object = null): string
-    {
-        !$object && $object = $this;
-        $parts = explode('\\', get_class($object));
-        $name = lcfirst(end($parts));
-
-        if ('Model' == substr($name, -5)) {
-            $name = substr($name, 0, -5);
-        }
-
-        return $name;
-    }
-
-    /**
      * Generate the foreign key name
      *
      * @return string
      */
     protected function getForeignKey(): string
     {
-        return Str::snake($this->getClassServiceName($this)) . '_' . $this->getPrimaryKey();
+        return Str::snake($this->getModelBaseName()) . '_' . $this->getPrimaryKey();
     }
 
     /**
@@ -420,8 +403,7 @@ trait RelationTrait
             return $related;
         }
 
-        $serviceName = $this->getClassServiceName($related);
-        $relation = $this->relations[$serviceName];
+        $relation = $related->getRelation();
         $localValue = $this[$relation['localKey']];
 
         if ($related->isColl()) {
@@ -484,27 +466,24 @@ trait RelationTrait
     /**
      * Set the relation config
      *
-     * @param string $name
      * @param array $relation
      * @return $this
      * @internal
      */
-    protected function setRelation(string $name, array $relation): self
+    protected function setRelation(array $relation): self
     {
-        $this->relations[$name] = array_map([$this, 'convertToPhpKey'], $relation);
+        $this->relation = $relation;
         return $this;
     }
 
     /**
-     * Set the relation attributes to be save with current model
+     * Return the relation config
      *
-     * @param string $column
-     * @param mixed $value
-     * @return $this
+     * @return array
+     * @internal
      */
-    protected function setRelationAttribute(string $column, $value): self
+    protected function getRelation(): array
     {
-        $this->relationAttributes[$this->convertToPhpKey($column)] = $value;
-        return $this;
+        return $this->relation;
     }
 }

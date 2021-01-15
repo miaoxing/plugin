@@ -63,16 +63,19 @@ final class RelationTest extends BaseTestCase
         wei()->db->batchInsert('test_articles', [
             [
                 'test_user_id' => 1,
+                'editor_id' => 2,
                 'title' => 'Article 1',
                 'content' => 'Content 1',
             ],
             [
                 'test_user_id' => 2,
+                'editor_id' => 1,
                 'title' => 'Article 2',
                 'content' => 'Content 2',
             ],
             [
                 'test_user_id' => 1,
+                'editor_id' => 2,
                 'title' => 'Article 3',
                 'content' => 'Content 3',
             ],
@@ -734,6 +737,19 @@ final class RelationTest extends BaseTestCase
         $user->hasOne('abc');
     }
 
+    public function testSameRelationClass()
+    {
+        $article = TestArticle::find(1);
+
+        $user = $article->user;
+        $this->assertInstanceOf(TestUser::class, $user);
+        $this->assertSame(1, $user->id);
+
+        $editor = $article->editor;
+        $this->assertInstanceOf(TestUser::class, $editor);
+        $this->assertSame(2, $editor->id);
+    }
+
     protected function clearLogs()
     {
         // preload fields cache
@@ -758,6 +774,7 @@ final class RelationTest extends BaseTestCase
         wei()->schema->table('test_articles')
             ->id()
             ->int('test_user_id')
+            ->int('editor_id')
             ->string('title', 128)
             ->string('content')
             ->exec();

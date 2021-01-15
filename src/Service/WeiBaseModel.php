@@ -105,11 +105,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
      */
     protected $hidden = [];
 
-    /**
-     * @var stirng
-     */
-    protected $modelName;
-
     protected static $booted = [];
 
     /**

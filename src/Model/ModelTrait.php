@@ -561,32 +561,39 @@ trait ModelTrait
     protected function getTable(): string
     {
         if (!isset($this->table)) {
-            $baseName = Cls::baseName($this);
-            if ('Model' === substr($baseName, -5)) {
-                $baseName = substr($baseName, 0, -5);
-            }
             $str = $this->wei->str;
-            $this->table = $str->pluralize($str->snake($baseName));
+            $this->table = $str->pluralize($str->snake($this->getModelBaseName()));
         }
         return $this->table;
     }
 
     /**
-     * Return the unique name that identifies the model class
+     * Return the class base name without "Model" suffix of the class
+     *
+     * @return string
+     */
+    protected function getModelBaseName(): string
+    {
+        $name = Cls::baseName(static::class);
+        if ('Model' !== $name && 'Model' === substr($name, -5)) {
+            $name = substr($name, 0, -5);
+        }
+        return $name;
+    }
+
+    /**
+     * Return the unique name that identifies the model service
      *
      * @return string
      * @todo throw exception when found duplicate names
      */
-    protected function getModelName(): string
+    protected function getModelUniqueName(): string
     {
-        if (!$this->modelName) {
-            $name = $this->wei->getServiceName(static::class);
-            if ('Model' !== substr($name, -5)) {
-                $name .= 'Model';
-            }
-            $this->modelName = $name;
+        $name = Cls::baseName(static::class);
+        if ('Model' !== $name && 'Model' !== substr($name, -5)) {
+            $name .= 'Model';
         }
-        return $this->modelName;
+        return $name;
     }
 
     /**

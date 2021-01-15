@@ -9,8 +9,10 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property TestUser|null $user
+ * @property TestUser|null $editor
  * @property TestTag|TestTag[] $tags
- * @property string $testUserId
+ * @property int $test_user_id
+ * @property int $editor_id
  * @property string $title
  */
 class TestArticle extends WeiBaseModel
@@ -20,6 +22,11 @@ class TestArticle extends WeiBaseModel
     public function user()
     {
         return $this->belongsTo(TestUser::class);
+    }
+
+    public function editor()
+    {
+        return $this->belongsTo(TestUser::class, 'id', 'editor_id');
     }
 
     /**
