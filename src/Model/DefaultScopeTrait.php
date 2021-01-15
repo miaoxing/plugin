@@ -24,12 +24,6 @@ trait DefaultScopeTrait
      */
     protected $withoutScopes = [];
 
-    public static function bootDefaultScopeTrait(): void
-    {
-        static::onModelEvent('beforeExecute', 'applyDefaultScope');
-        static::onModelEvent('beforeAddQueryPart', 'applyDefaultScopeBeforeAddQueryPart');
-    }
-
     /**
      * @param string $method
      * @return $this

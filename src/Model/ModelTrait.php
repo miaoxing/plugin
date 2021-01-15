@@ -981,16 +981,22 @@ trait ModelTrait
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function execute()
     {
-        $this->triggerModelEvent('beforeExecute');
+        $this->applyDefaultScope();
         return $this->parentExecute();
     }
 
-    protected function addQueryPart($sqlPartName, $value, $append = false)
+    /**
+     * {@inheritDoc}
+     */
+    protected function addQueryPart(string $name, $value, bool $append = false)
     {
-        $this->triggerModelEvent('beforeAddQueryPart', func_get_args());
-        return $this->parentAddQueryPart($sqlPartName, $value, $append);
+        $this->applyDefaultScopeBeforeAddQueryPart($name);
+        return $this->parentAddQueryPart($name, $value, $append);
     }
 
     /**
@@ -1143,7 +1149,7 @@ trait ModelTrait
         $value = $this->convertToDbValue($name);
 
         // Convert db data to php data
-        $this->attributes[$name] = $this->triggerModelEvent('getValue', [$value, $name]);
+        $this->attributes[$name] = $this->castColumnToPhp($value, $name);
         $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_PHP);
 
         return $this->attributes[$name];
@@ -1295,7 +1301,7 @@ trait ModelTrait
         }
 
         // Convert to db value by caster
-        $this->attributes[$column] = $this->triggerModelEvent('setValue', [$value, $column]);
+        $this->attributes[$column] = $this->castColumnToDb($value, $column);
         $this->setAttributeSource($column, static::ATTRIBUTE_SOURCE_DB);
         return $this->attributes[$column];
     }

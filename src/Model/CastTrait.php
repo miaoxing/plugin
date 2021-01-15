@@ -17,12 +17,6 @@ trait CastTrait
      */
     protected static $castCache = [];
 
-    protected static function bootCastTrait(): void
-    {
-        static::onModelEvent('getValue', 'castToPhp');
-        static::onModelEvent('setValue', 'castToDb');
-    }
-
     /**
      * Get the column cast configs
      *
@@ -63,14 +57,14 @@ trait CastTrait
      * @return mixed
      * @throws \Exception
      */
-    protected function castToPhp($value, string $column)
+    protected function castColumnToPhp($value, string $column)
     {
         if (null === $value && ($this->getColumns()[$column]['nullable'] ?? false)) {
             return null;
         }
 
         if (!$this->isIgnoreCast($value) && $cast = $this->getColumnCast($column)) {
-            return $this->toPhpType($value, $cast);
+            return $this->castValueToPhp($value, $cast);
         }
 
         return $value;
@@ -83,14 +77,14 @@ trait CastTrait
      * @param string $column
      * @return mixed
      */
-    protected function castToDb($value, string $column)
+    protected function castColumnToDb($value, string $column)
     {
         if (null === $value && ($this->getColumns()[$column]['nullable'] ?? false)) {
             return null;
         }
 
         if (!$this->isIgnoreCast($value) && $cast = $this->getColumnCast($column)) {
-            return $this->toDbType($value, $cast);
+            return $this->castValueToDb($value, $cast);
         }
 
         return $value;
@@ -103,9 +97,9 @@ trait CastTrait
      * @param string|array $type
      * @return mixed
      */
-    protected function toPhpType($value, $type)
+    protected function castValueToPhp($value, $type)
     {
-        [$type, $options] = $this->parseType($type);
+        [$type, $options] = $this->parseCastType($type);
 
         switch ($type) {
             case 'int':
@@ -162,9 +156,9 @@ trait CastTrait
      * @param mixed $value
      * @return mixed
      */
-    protected function toDbType($value, $type)
+    protected function castValueToDb($value, $type)
     {
-        [$type, $options] = $this->parseType($type);
+        [$type, $options] = $this->parseCastType($type);
 
         switch ($type) {
             case 'int':
@@ -224,7 +218,7 @@ trait CastTrait
      * @param string|array $type
      * @return array
      */
-    private function parseType($type): array
+    private function parseCastType($type): array
     {
         if (is_array($type)) {
             $options = $type;
