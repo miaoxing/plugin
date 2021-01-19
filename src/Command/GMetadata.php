@@ -51,7 +51,7 @@ final class GMetadata extends BaseCommand
 
     protected function createClass($model, $plugin, $camelCase)
     {
-        $modelObject = wei()->{$model}();
+        $modelObject = $this->wei->get($model);
         $table = $modelObject->db->getTable($modelObject->getTable());
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
 
