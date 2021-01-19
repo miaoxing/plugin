@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Metadata\UserTrait;
+use Miaoxing\Plugin\Model\HasAppIdTrait;
 use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Wei\Password;
 use Wei\V;
@@ -12,6 +13,7 @@ class UserModel extends BaseModel
 {
     use UserTrait;
     use ReqQueryTrait;
+    use HasAppIdTrait;
 
     protected $hidden = [
         'password',
