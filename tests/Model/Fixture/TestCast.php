@@ -9,6 +9,7 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
  * @property int $int_column
+ * @property int|null $nullable_int_column
  * @property bool $bool_column
  * @property string $string_column
  * @property string|null $datetime_column

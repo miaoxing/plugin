@@ -20,7 +20,7 @@ final class CastTraitTest extends BaseTestCase
 
         wei()->schema->table('test_casts')
             ->id('int_column')
-            ->int('nullable_int_column')->nullable()
+            ->int('nullable_int_column')->nullable()->defaults(2)
             ->bool('bool_column')
             ->bool('nullable_bool_column')->nullable()
             ->string('string_column')
@@ -469,5 +469,16 @@ final class CastTraitTest extends BaseTestCase
 
         // After save, convert back to array
         $this->assertSame(['a' => 'b'], $cast->json_column);
+    }
+
+    public function testNewOverwriteDefault()
+    {
+        $cast = TestCast::new();
+        $this->assertSame(2, $cast->nullable_int_column);
+
+        $cast = TestCast::new([
+            'nullable_int_column' => 1,
+        ]);
+        $this->assertSame(1, $cast->nullable_int_column);
     }
 }
