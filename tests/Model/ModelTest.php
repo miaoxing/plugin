@@ -659,29 +659,23 @@ final class ModelTest extends BaseTestCase
         $this->assertSame(1, $user->id);
     }
 
-    public function testSaveWithNullPrimaryKey()
+    public function testSaveWithInvalidPrimaryKey()
     {
         $this->initFixtures();
 
-        $user = TestUser::new();
-        $user->save([
-            'id' => null,
-            'group_id' => '1',
-            'name' => 'twin',
-            'address' => 'test',
-        ]);
+        $values = [null, '', 0];
+        foreach ($values as $value) {
+            $user = TestUser::new();
+            $user->save([
+                'id' => $value,
+                'group_id' => '1',
+                'name' => 'twin',
+                'address' => 'test',
+            ]);
 
-        $this->assertNotNull($user['id']);
-
-        $user = TestUser::new();
-        $user->save([
-            'id' => '',
-            'group_id' => '1',
-            'name' => 'twin',
-            'address' => 'test',
-        ]);
-
-        $this->assertNotNull($user['id']);
+            $this->assertNotNull($user->id);
+            $this->assertIsInt($user->id);
+        }
     }
 
     public function testSetInvalidPropertyName()
