@@ -350,8 +350,7 @@ class User extends UserModel
      */
     protected function logout()
     {
-        $this->attributes = [];
-        $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
+        $this->setDbAttributes([]);
 
         $this->getAuth()->logout();
 
