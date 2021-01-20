@@ -319,7 +319,7 @@ trait RelationTrait
      */
     protected function getRelationParams(string $column)
     {
-        return $this->relationParams ?: (array_key_exists($column, $this->attributes) ? $this->get($column) : null);
+        return $this->coll ? $this->relationParams : $this->getColumnValue($column);
     }
 
     /**
