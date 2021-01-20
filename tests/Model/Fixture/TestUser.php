@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
 use Miaoxing\Plugin\Model\Attributes\Relation;
+use Miaoxing\Plugin\Model\CacheTrait;
 use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Service\WeiBaseModel;
 
@@ -21,6 +22,7 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
 class TestUser extends WeiBaseModel
 {
     use ModelTrait;
+    use CacheTrait;
 
     protected $scopes;
 
