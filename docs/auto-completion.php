@@ -9,13 +9,13 @@ class AppMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\AppModel $appModel 应用模型
- * @method      static appModel($table = null)
+ * @method      Miaoxing\Plugin\Service\AppModel appModel() 返回当前对象
  */
 class AppModelMixin {
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Cls $cls
+ * @property    Miaoxing\Plugin\Service\Cls $cls The class util service
  */
 class ClsMixin {
 }
@@ -53,7 +53,6 @@ class PluginMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\QueryBuilder $queryBuilder A SQL query builder class
- * @method      static queryBuilder($table = null)
  */
 class QueryBuilderMixin {
 }
@@ -73,7 +72,7 @@ class SessionMixin {
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Str $str 字符串操作服务
+ * @property    Miaoxing\Plugin\Service\Str $str The string util service
  */
 class StrMixin {
 }
@@ -87,14 +86,14 @@ class TesterMixin {
 
 /**
  * @property    Miaoxing\Plugin\Service\User $user 用户
- * @method      static user($table = null)
+ * @method      Miaoxing\Plugin\Service\User user() 返回当前对象
  */
 class UserMixin {
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\UserModel $userModel
- * @method      static userModel($table = null)
+ * @method      Miaoxing\Plugin\Service\UserModel userModel() 返回当前对象
  */
 class UserModelMixin {
 }
@@ -130,10 +129,10 @@ function wei()
 /** @var Miaoxing\Plugin\Service\App $app */
 $app = wei()->app;
 
-/** @var Miaoxing\Plugin\Service\AppModel $appModel */
-$app = wei()->appModel();
+/** @var Miaoxing\Plugin\Service\AppModel $app */
+$app = wei()->appModel;
 
-/** @var Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] $appModels */
+/** @var Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] $apps */
 $apps = wei()->appModel();
 
 /** @var Miaoxing\Plugin\Service\Cls $cls */
@@ -172,8 +171,8 @@ $tester = wei()->tester;
 /** @var Miaoxing\Plugin\Service\User $user */
 $user = wei()->user;
 
-/** @var Miaoxing\Plugin\Service\UserModel $userModel */
-$user = wei()->userModel();
+/** @var Miaoxing\Plugin\Service\UserModel $user */
+$user = wei()->userModel;
 
-/** @var Miaoxing\Plugin\Service\UserModel|Miaoxing\Plugin\Service\UserModel[] $userModels */
+/** @var Miaoxing\Plugin\Service\UserModel|Miaoxing\Plugin\Service\UserModel[] $users */
 $users = wei()->userModel();

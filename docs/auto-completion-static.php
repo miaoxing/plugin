@@ -19,6 +19,17 @@ class App
 class AppModel
 {
     /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see AppModel::saveAttributes
+     */
+    public static function saveAttributes(iterable $attributes = []): self
+    {
+    }
+
+    /**
      * Returns the record data as array
      *
      * @param array|callable $returnFields A indexed array specified the fields to return
@@ -27,17 +38,6 @@ class AppModel
      * @see AppModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see AppModel::saveAttributes
-     */
-    public static function saveAttributes(iterable $attributes = []): self
     {
     }
 
@@ -897,6 +897,18 @@ class AppModel
 
 class Cls
 {
+    /**
+     * Return the traits used by the given class, including those used by all parent classes and other traits
+     *
+     * @param string|object $class
+     * @param bool $autoload
+     * @return array
+     * @see https://www.php.net/manual/en/function.class-uses.php#112671
+     * @see Cls::usesDeep
+     */
+    public static function usesDeep($class, bool $autoload = true): array
+    {
+    }
 }
 
 class Config
@@ -1753,20 +1765,24 @@ class Session
 class Str
 {
     /**
+     * Returns a word in plural form
+     *
      * @param string $word
      * @return string
      * @see Str::pluralize
      */
-    public static function pluralize($word): string
+    public static function pluralize(string $word): string
     {
     }
 
     /**
+     * Returns a word in singular form
+     *
      * @param string $word
      * @return string
      * @see Str::singularize
      */
-    public static function singularize($word): string
+    public static function singularize(string $word): string
     {
     }
 
@@ -1778,7 +1794,7 @@ class Str
      * @return string
      * @see Str::snake
      */
-    public static function snake($input, string $delimiter = '_'): string
+    public static function snake(string $input, string $delimiter = '_'): string
     {
     }
 
@@ -1789,7 +1805,7 @@ class Str
      * @return string
      * @see Str::camel
      */
-    public static function camel($input): string
+    public static function camel(string $input): string
     {
     }
 
@@ -1800,7 +1816,7 @@ class Str
      * @return string
      * @see Str::dash
      */
-    public static function dash($input): string
+    public static function dash(string $input): string
     {
     }
 }
@@ -2883,6 +2899,17 @@ class UserModel
     }
 
     /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see UserModel::saveAttributes
+     */
+    public static function saveAttributes(iterable $attributes = []): self
+    {
+    }
+
+    /**
      * Returns the record data as array
      *
      * @param array|callable $returnFields A indexed array specified the fields to return
@@ -2891,17 +2918,6 @@ class UserModel
      * @see UserModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see UserModel::saveAttributes
-     */
-    public static function saveAttributes(iterable $attributes = []): self
     {
     }
 
@@ -3810,6 +3826,17 @@ class App
 class AppModel
 {
     /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see AppModel::saveAttributes
+     */
+    public function saveAttributes(iterable $attributes = []): self
+    {
+    }
+
+    /**
      * Returns the record data as array
      *
      * @param array|callable $returnFields A indexed array specified the fields to return
@@ -3818,17 +3845,6 @@ class AppModel
      * @see AppModel::toArray
      */
     public function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see AppModel::saveAttributes
-     */
-    public function saveAttributes(iterable $attributes = []): self
     {
     }
 
@@ -4688,6 +4704,18 @@ class AppModel
 
 class Cls
 {
+    /**
+     * Return the traits used by the given class, including those used by all parent classes and other traits
+     *
+     * @param string|object $class
+     * @param bool $autoload
+     * @return array
+     * @see https://www.php.net/manual/en/function.class-uses.php#112671
+     * @see Cls::usesDeep
+     */
+    public function usesDeep($class, bool $autoload = true): array
+    {
+    }
 }
 
 class Config
@@ -5544,20 +5572,24 @@ class Session
 class Str
 {
     /**
+     * Returns a word in plural form
+     *
      * @param string $word
      * @return string
      * @see Str::pluralize
      */
-    public function pluralize($word): string
+    public function pluralize(string $word): string
     {
     }
 
     /**
+     * Returns a word in singular form
+     *
      * @param string $word
      * @return string
      * @see Str::singularize
      */
-    public function singularize($word): string
+    public function singularize(string $word): string
     {
     }
 
@@ -5569,7 +5601,7 @@ class Str
      * @return string
      * @see Str::snake
      */
-    public function snake($input, string $delimiter = '_'): string
+    public function snake(string $input, string $delimiter = '_'): string
     {
     }
 
@@ -5580,7 +5612,7 @@ class Str
      * @return string
      * @see Str::camel
      */
-    public function camel($input): string
+    public function camel(string $input): string
     {
     }
 
@@ -5591,7 +5623,7 @@ class Str
      * @return string
      * @see Str::dash
      */
-    public function dash($input): string
+    public function dash(string $input): string
     {
     }
 }
@@ -6674,6 +6706,17 @@ class UserModel
     }
 
     /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see UserModel::saveAttributes
+     */
+    public function saveAttributes(iterable $attributes = []): self
+    {
+    }
+
+    /**
      * Returns the record data as array
      *
      * @param array|callable $returnFields A indexed array specified the fields to return
@@ -6682,17 +6725,6 @@ class UserModel
      * @see UserModel::toArray
      */
     public function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see UserModel::saveAttributes
-     */
-    public function saveAttributes(iterable $attributes = []): self
     {
     }
 

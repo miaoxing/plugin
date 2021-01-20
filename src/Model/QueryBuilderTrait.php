@@ -19,19 +19,6 @@ use Wei\Db;
 trait QueryBuilderTrait
 {
     /**
-     * @param string|null $table
-     * @return static
-     */
-    public function __invoke(string $table = null): self
-    {
-        return new static([
-            'wei' => $this->wei,
-            'db' => $this->getDb(),
-            'table' => $table,
-        ]);
-    }
-
-    /**
      * Set the record table name
      *
      * @param string $table
@@ -1561,7 +1548,7 @@ trait QueryBuilderTrait
             $query = new static([
                 'wei' => $this->wei,
                 'db' => $this->getDb(),
-                'table' => $this->table,
+                'table' => $this->getTable(),
             ]);
             $column($query);
             $column = $query;

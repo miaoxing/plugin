@@ -30,6 +30,7 @@ use Symfony\Component\Console\Input\InputArgument;
  *
  * @mixin \PluginMixin
  * @mixin \ClassMapMixin
+ * @mixin \StrMixin
  * @see StaticCallTest
  */
 class GAutoCompletion extends BaseCommand
@@ -350,7 +351,7 @@ PHP;
                 $var .= "\n";
             }
 
-            // 排除 wei()->model 服务
+            // 排除模型服务
             $isModel = $this->wei->isEndsWith($name, 'Model', true);
             if ($isModel) {
                 $varName = substr($name, 0, -5);
@@ -358,13 +359,14 @@ PHP;
                 $varName = $name;
             }
 
-            $var .= sprintf('/** @var %s $%s */' . "\n", $class, $name);
-            $var .= sprintf('$%s = wei()->%s%s;' . "\n", $varName, $name, $isModel ? '()' : '');
+            $var .= sprintf('/** @var %s $%s */' . "\n", $class, $varName);
+            $var .= sprintf('$%s = wei()->%s;' . "\n", $varName, $name);
 
             if ($isModel) {
+                $varName = $this->str->pluralize($varName);
                 $var .= "\n";
-                $var .= sprintf('/** @var %s|%s[] $%ss */' . "\n", $class, $class, $name);
-                $var .= sprintf('$%ss = wei()->%s();' . "\n", $varName, $name);
+                $var .= sprintf('/** @var %s|%s[] $%s */' . "\n", $class, $class, $varName);
+                $var .= sprintf('$%s = wei()->%s();' . "\n", $varName, $name);
             }
         }
 
