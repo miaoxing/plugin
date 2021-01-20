@@ -360,7 +360,7 @@ final class CastTraitTest extends BaseTestCase
         $array = TestCast::toArray();
         $this->assertSame([
             'int_column' => null,
-            'nullable_int_column' => null,
+            'nullable_int_column' => 2,
             'bool_column' => false,
             'nullable_bool_column' => null,
             'string_column' => '',
