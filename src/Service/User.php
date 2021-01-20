@@ -166,9 +166,9 @@ class User extends UserModel
             return;
         }
 
-        $id = $this['id'];
-        $user = wei()->userModel()
-            ->setCacheKey($this->getRecordCacheKey($id))
+        $id = $this->get('id');
+        $user = UserModel::new()
+            ->setCacheKey($this->getModelCacheKey($id))
             ->findOrInit($id);
 
         $this->loadRecordData($user);
@@ -181,8 +181,7 @@ class User extends UserModel
      */
     protected function loadRecordData(UserModel $user)
     {
-        $this->setAttributes($user->getAttributes());
-        $this->resetChanges();
+        $this->setDbAttributes($user->convertToDbValues());
     }
 
     /**
