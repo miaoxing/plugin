@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model;
 
+use Miaoxing\Plugin\Service\QueryBuilder;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestCast;
 
@@ -20,7 +21,8 @@ final class CastTraitTest extends BaseTestCase
 
         wei()->schema->table('test_casts')
             ->id('int_column')
-            ->int('nullable_int_column')->nullable()->defaults(2)
+            ->int('nullable_int_column')->nullable()
+            ->int('nullable_default_int_column')->nullable()->defaults(7)
             ->bool('bool_column')
             ->bool('nullable_bool_column')->nullable()
             ->string('string_column')
@@ -355,28 +357,6 @@ final class CastTraitTest extends BaseTestCase
         $this->assertNull($cast->datetime_column);
     }
 
-    public function testDefaultToArray()
-    {
-        $array = TestCast::toArray();
-        $this->assertSame([
-            'int_column' => null,
-            'nullable_int_column' => 2,
-            'bool_column' => false,
-            'nullable_bool_column' => null,
-            'string_column' => '',
-            'nullable_string_column' => null,
-            'datetime_column' => null,
-            'nullable_datetime_column' => null,
-            'date_column' => null,
-            'nullable_date_column' => null,
-            'json_column' => [],
-            'nullable_json_column' => null,
-            'list_column' => [],
-            'nullable_list_column' => null,
-            'list2_column' => [],
-        ], $array);
-    }
-
     public function testSetNull()
     {
         $cast = TestCast::new();
@@ -389,6 +369,7 @@ final class CastTraitTest extends BaseTestCase
         $this->assertSame([
             'int_column' => (string) $cast->int_column,
             'nullable_int_column' => null,
+            'nullable_default_int_column' => null,
             'bool_column' => '0',
             'nullable_bool_column' => null,
             'string_column' => '',
@@ -433,6 +414,7 @@ final class CastTraitTest extends BaseTestCase
         $this->assertSame([
             'int_column' => 'int',
             'nullable_int_column' => 'int',
+            'nullable_default_int_column' => 'int',
             'bool_column' => 'bool',
             'nullable_bool_column' => 'bool',
             'string_column' => 'string',
@@ -471,14 +453,93 @@ final class CastTraitTest extends BaseTestCase
         $this->assertSame(['a' => 'b'], $cast->json_column);
     }
 
-    public function testNewOverwriteDefault()
+    public function testDefaultToArray()
+    {
+        $array = TestCast::toArray();
+        $this->assertSame([
+            'int_column' => null,
+            'nullable_int_column' => null,
+            'nullable_default_int_column' => 7,
+            'bool_column' => false,
+            'nullable_bool_column' => null,
+            'string_column' => '',
+            'nullable_string_column' => null,
+            'datetime_column' => null,
+            'nullable_datetime_column' => null,
+            'date_column' => null,
+            'nullable_date_column' => null,
+            'json_column' => [],
+            'nullable_json_column' => null,
+            'list_column' => [],
+            'nullable_list_column' => null,
+            'list2_column' => [],
+        ], $array);
+    }
+
+    public function testDefaultSave()
+    {
+        $cast = TestCast::save();
+
+        $data = QueryBuilder::table($cast->getTable())->where('int_column', $cast->int_column)->first();
+
+        $this->assertSame('7', $data['nullable_default_int_column']);
+        $this->assertSame('[]', $data['json_column']);
+    }
+
+    public function testDefaultGet()
     {
         $cast = TestCast::new();
-        $this->assertSame(2, $cast->nullable_int_column);
+        $this->assertSame(7, $cast->nullable_default_int_column);
+    }
+
+    public function testDefaultSet()
+    {
+        $cast = TestCast::new();
+
+        $cast->nullable_default_int_column = '7';
+        $this->assertSame(7, $cast->nullable_default_int_column);
+    }
+
+    public function testDefaultOverwriteByNew()
+    {
+        $cast = TestCast::new();
+        $this->assertSame(7, $cast->nullable_default_int_column);
 
         $cast = TestCast::new([
-            'nullable_int_column' => 1,
+            'nullable_default_int_column' => 1,
         ]);
-        $this->assertSame(1, $cast->nullable_int_column);
+        $this->assertSame(1, $cast->nullable_default_int_column);
+    }
+
+    public function testDefaultUnset()
+    {
+        $cast = TestCast::new();
+
+        $cast->nullable_int_column = 1;
+        unset($cast->nullable_int_column);
+        $this->assertNull($cast->nullable_int_column);
+
+        $cast->nullable_default_int_column = 1;
+        unset($cast->nullable_default_int_column);
+        $this->assertSame(null, $cast->nullable_default_int_column);
+    }
+
+    public function testDefaultSetNull()
+    {
+        $cast = TestCast::new();
+
+        $cast->nullable_int_column = null;
+        $this->assertNull($cast->nullable_int_column);
+
+        $cast->nullable_default_int_column = null;
+        $this->assertSame(null, $cast->nullable_default_int_column);
+    }
+
+    public function testDefaultIsset()
+    {
+        $cast = TestCast::new();
+
+        $this->assertFalse(isset($cast->nullable_int_column));
+        $this->assertTrue(isset($cast->nullable_default_int_column));
     }
 }

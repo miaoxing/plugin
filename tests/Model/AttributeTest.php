@@ -231,12 +231,12 @@ class AttributeTest extends BaseTestCase
 
         $user = TestUser::new();
 
-        $this->assertTrue($user->id ?? true);
+        $this->assertFalse(isset($user->id));
 
         $user->id = 123;
-        $this->assertTrue($user->id ?? true);
+        $this->assertTrue(isset($user->id));
 
-        $this->assertTrue($user->notFound ?? true);
+        $this->assertFalse(isset($user->notFound));
     }
 
     public function testMagicGetService()

@@ -181,7 +181,7 @@ class User extends UserModel
      */
     protected function loadRecordData(UserModel $user)
     {
-        $this->setDbAttributes($user->convertToDbValues());
+        $this->setAttributesFromDb($user->convertToDbAttributes());
     }
 
     /**
@@ -350,7 +350,7 @@ class User extends UserModel
      */
     protected function logout()
     {
-        $this->setDbAttributes([]);
+        $this->setAttributesFromDb([]);
 
         $this->getAuth()->logout();
 

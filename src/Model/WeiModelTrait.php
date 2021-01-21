@@ -42,9 +42,11 @@ trait WeiModelTrait
         $this->boot();
         $this->triggerModelEvent('init');
 
-        // 3. Add default value to model attributes
-        $this->attributes += $this->getColumnValues('default');
+        // 3. Set options and add default value to model attributes
         parent::__construct($options);
+        if (!$this->coll) {
+            $this->attributes += $this->getColumnValues('default');
+        }
 
         // 4. Clear changed status after set attributes
         $this->resetChanges();
@@ -156,7 +158,7 @@ trait WeiModelTrait
     public function reload(): self
     {
         $primaryKey = $this->getPrimaryKey();
-        $this->setDbAttributes($this->executeSelect([$primaryKey => $this->get($primaryKey)]));
+        $this->setAttributesFromDb($this->executeSelect([$primaryKey => $this->get($primaryKey)]));
         $this->resetChanges();
         return $this;
     }
@@ -212,9 +214,7 @@ trait WeiModelTrait
      */
     public function remove($name): self
     {
-        unset($this->attributes[$name]);
-        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
-        return $this;
+        return $this->unsetAttribute($name);
     }
 
     /**
@@ -401,7 +401,7 @@ trait WeiModelTrait
      */
     public function offsetExists($offset): bool
     {
-        return isset($this->attributes[$offset]);
+        return $this->issetAttribute($offset);
     }
 
     /**
@@ -433,7 +433,7 @@ trait WeiModelTrait
      */
     public function offsetUnset($offset)
     {
-        $this->remove($offset);
+        $this->unsetAttribute($offset);
     }
 
     /**
@@ -479,7 +479,7 @@ trait WeiModelTrait
      */
     public function __isset($name): bool
     {
-        return isset($this->$name);
+        return $this->issetAttribute($name);
     }
 
     /**
@@ -489,7 +489,7 @@ trait WeiModelTrait
      */
     public function __unset($name): void
     {
-        $this->remove($name);
+        $this->unsetAttribute($name);
     }
 
     /**
@@ -655,29 +655,28 @@ trait WeiModelTrait
         $this->triggerModelEventWithMethod($isNew ? 'beforeCreate' : 'beforeUpdate');
 
         if ($isNew) {
-            $this->convertToDbValues();
+            $attributes = $this->convertToDbAttributes();
 
             // 2.2.3.1 Inserts new record
             // Removes primary key value when it's empty to avoid SQL error
-            if (array_key_exists($primaryKey, $this->attributes) && !$this->attributes[$primaryKey]) {
-                unset($this->attributes[$primaryKey]);
+            if (array_key_exists($primaryKey, $attributes) && !$attributes[$primaryKey]) {
+                unset($attributes[$primaryKey]);
             }
 
-            $this->executeInsert($this->attributes);
+            $this->executeInsert($attributes);
             $this->new = false;
             $this->wasRecentlyCreated = true;
 
             // Receives primary key value when it's empty
-            if (!isset($this->attributes[$primaryKey]) || !$this->attributes[$primaryKey]) {
+            if (!isset($attributes[$primaryKey]) || !$attributes[$primaryKey]) {
                 // Prepare sequence name for PostgreSQL
                 $sequence = sprintf('%s_%s_seq', $this->getDb()->getTable($this->getTable()), $primaryKey);
-                $this->attributes[$primaryKey] = $this->getDb()->lastInsertId($sequence);
-                $this->setAttributeSource($primaryKey, static::ATTRIBUTE_SOURCE_DB);
+                $this->setAttributeFromDb($primaryKey, $this->getDb()->lastInsertId($sequence));
             }
         } else {
             // 2.2.3.2 Updates existing record
             if ($attributes = $this->getUpdateAttributes()) {
-                $this->executeUpdate($attributes, [$primaryKey => $this->attributes[$primaryKey]]);
+                $this->executeUpdate($attributes, [$primaryKey => $this->getColumnValue($primaryKey)]);
             }
         }
 
@@ -720,7 +719,7 @@ trait WeiModelTrait
     protected function executeDestroy()
     {
         $primaryKey = $this->getPrimaryKey();
-        $this->executeDelete([$primaryKey => $this->attributes[$primaryKey]]);
+        $this->executeDelete([$primaryKey => $this->getColumnValue($primaryKey)]);
         $this->new = true;
     }
 
@@ -733,7 +732,7 @@ trait WeiModelTrait
      * @return $this|false
      * @svc
      */
-    protected function set($name, $value = null, bool $throwException = true)
+    protected function set($name, $value, bool $throwException = true)
     {
         if ($this->coll) {
             return $this->setCollValue($name, $value);
@@ -853,7 +852,7 @@ trait WeiModelTrait
         $data = $this->fetch(...func_get_args());
         if ($data) {
             $this->new = false;
-            $this->setDbAttributes($data, true);
+            $this->setAttributesFromDb($data, true);
             $this->triggerModelEventWithMethod('afterFind');
             return $this;
         } else {
@@ -880,7 +879,7 @@ trait WeiModelTrait
                 'db' => $this->getDb(),
                 'table' => $this->getTable(),
                 'new' => false,
-            ])->setDbAttributes($row, true);
+            ])->setAttributesFromDb($row, true);
             $records[$key]->triggerModelEventWithMethod('afterFind');
         }
 
@@ -1000,20 +999,6 @@ trait WeiModelTrait
     }
 
     /**
-     * Set db data to model
-     *
-     * @param array $attributes
-     * @param bool $merge
-     * @return $this
-     */
-    protected function setDbAttributes(array $attributes, bool $merge = false): self
-    {
-        $this->attributes = array_merge($merge ? $this->attributes : [], $attributes);
-        $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
-        return $this;
-    }
-
-    /**
      * Remove all change values  or the specified column change value
      *
      * @param string|null $column
@@ -1114,17 +1099,7 @@ trait WeiModelTrait
     protected function setColumnValue(string $name, $value): self
     {
         $this->setChange($name);
-
-        $result = $this->callSetter($name, $value);
-        if ($result) {
-            $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_DB);
-            return $this;
-        }
-
-        $this->attributes[$name] = $value;
-        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
-
-        return $this;
+        return $this->setAttributeFromUser($name, $value);
     }
 
     /**
@@ -1133,26 +1108,7 @@ trait WeiModelTrait
      */
     protected function &getColumnValue(string $name)
     {
-        $result = $this->callGetter($name, $value);
-        if ($result) {
-            return $value;
-        }
-
-        $source = $this->getAttributeSource($name);
-        if (static::ATTRIBUTE_SOURCE_PHP === $source) {
-            return $this->attributes[$name];
-        }
-
-        // Data flow: user => db => php
-
-        // Convert user data to db data
-        $value = $this->convertToDbValue($name);
-
-        // Convert db data to php data
-        $this->attributes[$name] = $this->castColumnToPhp($value, $name);
-        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_PHP);
-
-        return $this->attributes[$name];
+        return $this->convertToPhpAttribute($name);
     }
 
     /**
@@ -1267,46 +1223,6 @@ trait WeiModelTrait
     }
 
     /**
-     * Generates data for saving to database
-     *
-     * @return array
-     */
-    protected function convertToDbValues(): array
-    {
-        foreach ($this->attributes as $name => $value) {
-            $this->convertToDbValue($name);
-        }
-        return $this->attributes;
-    }
-
-    /**
-     * Convert the attribute value to database value
-     *
-     * @param string $column
-     * @return mixed
-     */
-    protected function convertToDbValue(string $column)
-    {
-        $value = $this->attributes[$column] ?? null;
-
-        if ($this->getAttributeSource($column) === static::ATTRIBUTE_SOURCE_DB) {
-            return $value;
-        }
-
-        // Convert to db value by setter
-        $result = $this->callSetter($column, $value);
-        if ($result) {
-            $this->setAttributeSource($column, static::ATTRIBUTE_SOURCE_DB);
-            return $this->attributes[$column];
-        }
-
-        // Convert to db value by caster
-        $this->attributes[$column] = $this->castColumnToDb($value, $column);
-        $this->setAttributeSource($column, static::ATTRIBUTE_SOURCE_DB);
-        return $this->attributes[$column];
-    }
-
-    /**
      * Set the timestamp and user stamp columns' values
      *
      * @return $this
@@ -1335,6 +1251,147 @@ trait WeiModelTrait
     }
 
     /**
+     * Set the value of the specified attribute, the value is received from the user
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     */
+    protected function setAttributeFromUser(string $name, $value): self
+    {
+        $result = $this->callSetter($name, $value);
+        if ($result) {
+            $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_DB);
+            return $this;
+        }
+
+        $this->attributes[$name] = $value;
+        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
+        return $this;
+    }
+
+    /**
+     * Set all attribute values, the values are received from the database
+     *
+     * @param array $attributes
+     * @param bool $merge
+     * @return $this
+     */
+    protected function setAttributesFromDb(array $attributes, bool $merge = false): self
+    {
+        $this->attributes = array_merge($merge ? $this->attributes : [], $attributes);
+        $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);
+        return $this;
+    }
+
+    /**
+     * Set the value of the specified attribute, the value is received from the database
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     */
+    protected function setAttributeFromDb(string $name, $value): self
+    {
+        $this->attributes[$name] = $value;
+        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_DB);
+        return $this;
+    }
+
+    /**
+     * Convert the specified attribute to a PHP value
+     *
+     * @param string $name
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function &convertToPhpAttribute(string $name)
+    {
+        $result = $this->callGetter($name, $value);
+        if ($result) {
+            return $value;
+        }
+
+        if (static::ATTRIBUTE_SOURCE_PHP === $this->getAttributeSource($name)) {
+            return $this->attributes[$name];
+        }
+
+        // Data flow: user => db => php
+
+        // Convert user data to db data
+        $value = $this->convertToDbAttribute($name);
+
+        // Then convert db data to php data
+        $this->attributes[$name] = $this->castColumnToPhp($value, $name);
+        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_PHP);
+
+        return $this->attributes[$name];
+    }
+
+    /**
+     * Convert all attributes to database values
+     *
+     * @return array
+     */
+    protected function convertToDbAttributes(): array
+    {
+        foreach ($this->attributes as $name => $value) {
+            $this->convertToDbAttribute($name);
+        }
+        return $this->attributes;
+    }
+
+    /**
+     * Convert the specified attribute to a database value
+     *
+     * @param string $column
+     * @return mixed
+     */
+    protected function convertToDbAttribute(string $column)
+    {
+        $value = $this->attributes[$column] ?? null;
+
+        if (static::ATTRIBUTE_SOURCE_DB === $this->getAttributeSource($column)) {
+            return $value;
+        }
+
+        // Convert to db value by setter
+        $result = $this->callSetter($column, $value);
+        if ($result) {
+            $this->setAttributeSource($column, static::ATTRIBUTE_SOURCE_DB);
+            return $this->attributes[$column];
+        }
+
+        // Convert to db value by caster
+        $this->setAttributeFromDb($column, $this->castColumnToDb($value, $column));
+        return $this->attributes[$column];
+    }
+
+    /**
+     * Delete the specified attribute
+     *
+     * @param string|int $name
+     * @return $this
+     */
+    protected function unsetAttribute($name): self
+    {
+        unset($this->attributes[$name]);
+        $this->setAttributeSource($name, static::ATTRIBUTE_SOURCE_USER);
+        return $this;
+    }
+
+    /**
+     * Check if the specified attribute is set and is not NULL
+     *
+     * @param string|int $name
+     * @return bool
+     */
+    protected function issetAttribute($name): bool
+    {
+        return isset($this->attributes[$name]);
+    }
+
+    /**
      * Return the attribute values that should be update to database
      *
      * @return array
@@ -1346,7 +1403,7 @@ trait WeiModelTrait
             // `removeUnchanged` will call `getColumnValue`, which may convert the USER value to a DB value,
             // and then convert the DB value to a PHP value, so here we call `convertToDbValue` in advance
             // to avoid converting the value to a DB value twice
-            $attributes[$column] = $this->convertToDbValue($column);
+            $attributes[$column] = $this->convertToDbAttribute($column);
             if ($this->removeUnchanged($column)) {
                 unset($attributes[$column]);
             }

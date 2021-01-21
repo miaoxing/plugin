@@ -147,6 +147,22 @@ class CollTest extends BaseTestCase
         $users->set('key', 'test');
     }
 
+    public function testMagicIsset()
+    {
+        $this->initFixtures();
+
+        $users = TestUser::newColl([
+            TestUser::new(),
+            'key' => TestUser::new(),
+        ]);
+
+        $this->assertTrue(isset($users->{0}));
+        $this->assertFalse(isset($users->{1}));
+
+        $this->assertTrue(isset($users->key));
+        $this->assertFalse(isset($users->key2));
+    }
+
     public function testMagicGet()
     {
         $this->initFixtures();
@@ -184,6 +200,23 @@ class CollTest extends BaseTestCase
 
         $users->{null} = TestUser::new();
         $this->assertSame(['key', 0, ''], array_keys($users->toArray()));
+    }
+
+    public function testMagicUnset()
+    {
+        $this->initFixtures();
+
+        $users = TestUser::newColl([
+            TestUser::new(),
+            'key' => TestUser::new(),
+        ]);
+        $this->assertSame([0, 'key'], array_keys($users->toArray()));
+
+        unset($users->{0});
+        $this->assertSame(['key'], array_keys($users->toArray()));
+
+        unset($users->key);
+        $this->assertSame([], array_keys($users->toArray()));
     }
 
     public function testResult()
