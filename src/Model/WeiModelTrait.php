@@ -1158,9 +1158,9 @@ trait WeiModelTrait
      */
     protected function &getVirtualValue(string $name)
     {
-        $result = $this->callGetter($name, $this->virtualAttributes[$name]);
+        $result = $this->callGetter($name, $value);
         if ($result) {
-            return $this->virtualAttributes[$name];
+            return $value;
         }
 
         throw new InvalidArgumentException('Invalid virtual column: ' . $name);

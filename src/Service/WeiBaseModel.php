@@ -90,11 +90,6 @@ abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \Iterat
     protected static $booted = [];
 
     /**
-     * @var array
-     */
-    protected $virtualAttributes = [];
-
-    /**
      * Returns whether the model was inserted in the this request
      *
      * @var bool
