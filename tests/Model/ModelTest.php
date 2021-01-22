@@ -884,4 +884,15 @@ final class ModelTest extends BaseTestCase
         $user = TestUser::findByOrCreate(['name' => 'twin'], ['group_id' => 2]);
         $this->assertSame(1, $user->group_id);
     }
+
+    public function testMax()
+    {
+        $this->initFixtures();
+
+        $id = TestUser::max('id');
+
+        $this->assertSame('SELECT MAX(`id`) FROM `p_test_users`', $this->db->getLastQuery());
+        $this->assertIsString($id);
+        $this->assertIsNumeric($id);
+    }
 }

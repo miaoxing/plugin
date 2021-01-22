@@ -74,15 +74,6 @@ trait QueryBuilderTrait
     }
 
     /**
-     * @param string $column
-     * @return string|null
-     */
-    public function max(string $column): ?string
-    {
-        return $this->aggregate('MAX', $column);
-    }
-
-    /**
      * @param string $function
      * @param string[] $columns
      * @return string|null
@@ -733,6 +724,18 @@ trait QueryBuilderTrait
     protected function cnt($column = '*'): int
     {
         return (int) $this->aggregate('COUNT', $column);
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @svc
+     */
+    protected function max(string $column): ?string
+    {
+        return $this->aggregate('MAX', $column);
     }
 
     /**
