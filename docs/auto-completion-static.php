@@ -104,7 +104,7 @@ class AppModel
      * @return $this|false
      * @see AppModel::set
      */
-    public static function set($name, $value = null, bool $throwException = true)
+    public static function set($name, $value, bool $throwException = true)
     {
     }
 
@@ -2076,7 +2076,7 @@ class User
      * @return $this|false
      * @see UserModel::set
      */
-    public static function set($name, $value = null, bool $throwException = true)
+    public static function set($name, $value, bool $throwException = true)
     {
     }
 
@@ -2984,7 +2984,7 @@ class UserModel
      * @return $this|false
      * @see UserModel::set
      */
-    public static function set($name, $value = null, bool $throwException = true)
+    public static function set($name, $value, bool $throwException = true)
     {
     }
 
@@ -3911,7 +3911,7 @@ class AppModel
      * @return $this|false
      * @see AppModel::set
      */
-    public function set($name, $value = null, bool $throwException = true)
+    public function set($name, $value, bool $throwException = true)
     {
     }
 
@@ -5883,7 +5883,7 @@ class User
      * @return $this|false
      * @see UserModel::set
      */
-    public function set($name, $value = null, bool $throwException = true)
+    public function set($name, $value, bool $throwException = true)
     {
     }
 
@@ -6791,7 +6791,7 @@ class UserModel
      * @return $this|false
      * @see UserModel::set
      */
-    public function set($name, $value = null, bool $throwException = true)
+    public function set($name, $value, bool $throwException = true)
     {
     }
 

@@ -2,8 +2,6 @@
 
 namespace Miaoxing\Plugin\Metadata;
 
-use Miaoxing\Plugin\Model\ModelTrait;
-
 /**
  * @property int $id
  * @property int $userId
@@ -24,5 +22,4 @@ use Miaoxing\Plugin\Model\ModelTrait;
  */
 trait AppTrait
 {
-    use ModelTrait;
 }
