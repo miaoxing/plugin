@@ -248,27 +248,42 @@ trait RelationTrait
      * @param WeiBaseModel|null $related
      * @param array $relation
      * @param string $name
-     * @return $this|$this[]
+     * @return WeiBaseModel|WeiBaseModel[]
      */
     protected function loadHasMany(?WeiBaseModel $related, array $relation, string $name)
     {
-        $models = $related ? $related->fetchAll() : [];
-        foreach ($this->attributes as $row) {
-            $rowRelation = $related::newColl();
-            $row->setRelationValue($name, $rowRelation);
-            foreach ($models as $model) {
-                // NOTE: 从数据库取出为 string, 因此必须转换了再比较
-                if ($model[$relation['foreignKey']] === (string) $row[$relation['localKey']]) {
-                    // Remove external data
-                    if (!$related->hasColumn($relation['foreignKey'])) {
-                        unset($model[$relation['foreignKey']]);
-                    }
-                    $rowRelation[] = forward_static_call([$related, 'new'])->setAttributes($model);
-                }
+        $coll = $related ? $related::newColl() : [];
+        $data = $related ? $related->fetchAll() : [];
+        $hasForeignKey = $related ? $related->hasColumn($relation['foreignKey']) : false;
+
+        // An array containing model objects grouped by relational foreign keys
+        $groupBy = [];
+
+        foreach ($data as $row) {
+            /** @var WeiBaseModel $model */
+            $model = call_user_func([$related, 'new']);
+            $coll[] = $model;
+            $groupBy[$row[$relation['foreignKey']]][] = $model;
+
+            // Remove external data
+            if (!$hasForeignKey) {
+                unset($row[$relation['foreignKey']]);
+            }
+            $model->setAttributesFromDb($row);
+        }
+
+        foreach ($this->attributes as $model) {
+            $modelRelation = $related::newColl();
+            $model->setRelationValue($name, $modelRelation);
+
+            // NOTE: 从数据库取出为 string, 因此必须转换了再比较
+            $localValue = (string) $model->getColumnValue($relation['localKey']);
+            if (isset($groupBy[$localValue])) {
+                $modelRelation->setAttributes($groupBy[$localValue]);
             }
         }
 
-        return $models;
+        return $coll;
     }
 
     /**

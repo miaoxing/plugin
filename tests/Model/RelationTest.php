@@ -10,6 +10,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestArticle;
 use MiaoxingTest\Plugin\Model\Fixture\TestProfile;
 use MiaoxingTest\Plugin\Model\Fixture\TestTag;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
+use MiaoxingTest\Plugin\Model\Fixture\TestUserGroup;
 
 /**
  * 数据库关联测试
@@ -31,12 +32,26 @@ final class RelationTest extends BaseTestCase
         wei()->db->batchInsert('test_users', [
             [
                 'name' => 'twin',
+                'group_id' => 1,
             ],
             [
                 'name' => 'admin',
+                'group_id' => 2,
             ],
             [
                 'name' => 'test',
+                'group_id' => 0,
+            ],
+        ]);
+
+        wei()->db->batchInsert('test_user_groups', [
+            [
+                'id' => 1,
+                'name' => 'vip',
+            ],
+            [
+                'id' => 2,
+                'name' => 'vip',
             ],
         ]);
 
@@ -78,6 +93,12 @@ final class RelationTest extends BaseTestCase
                 'editor_id' => 2,
                 'title' => 'Article 3',
                 'content' => 'Content 3',
+            ],
+            [
+                'test_user_id' => 3,
+                'editor_id' => 2,
+                'title' => 'Article 4',
+                'content' => 'Content 4',
             ],
         ]);
 
@@ -213,7 +234,7 @@ final class RelationTest extends BaseTestCase
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
-        $this->assertEquals('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[1]);
+        $this->assertEquals('SELECT * FROM `test_users` WHERE `id` IN (?, ?, ?)', $queries[1]);
         $this->assertCount(2, $queries);
 
         $array = $articles->toArray();
@@ -225,7 +246,7 @@ final class RelationTest extends BaseTestCase
     {
         $articles = TestArticle::new();
 
-        $articles->all();
+        $articles->limit(2)->all();
 
         foreach ($articles as $article) {
             $user = $article->user;
@@ -233,11 +254,10 @@ final class RelationTest extends BaseTestCase
         }
 
         $queries = wei()->db->getQueries();
-        $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
+        $this->assertEquals('SELECT * FROM `test_articles` LIMIT 2', $queries[0]);
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[1]);
-        $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[1]);
-        $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[1]);
-        $this->assertCount(4, $queries);
+        $this->assertEquals('SELECT * FROM `test_users` WHERE `id` = ? LIMIT 1', $queries[2]);
+        $this->assertCount(3, $queries);
 
         $array = $articles->toArray();
         $this->assertArrayHasKey('user', $array[0]);
@@ -370,7 +390,7 @@ final class RelationTest extends BaseTestCase
     {
         $articles = TestArticle::newColl();
 
-        $articles->all()->load('tags');
+        $articles->findAll([1, 2, 3])->load('tags');
 
         foreach ($articles as $article) {
             foreach ($article->tags as $tag) {
@@ -384,7 +404,7 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('life', $articles[2]->tags[0]->name);
 
         $queries = wei()->db->getQueries();
-        $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
+        $this->assertEquals('SELECT * FROM `test_articles` WHERE `id` IN (?, ?, ?)', $queries[0]);
         $this->assertEquals(implode(' ', [
             'SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags`',
             'INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id`',
@@ -401,7 +421,7 @@ final class RelationTest extends BaseTestCase
     {
         $articles = TestArticle::newColl();
 
-        $articles->all()->load('customTags');
+        $articles->findAll([1, 2, 3])->load('customTags');
 
         foreach ($articles as $article) {
             foreach ($article->customTags as $tag) {
@@ -415,7 +435,7 @@ final class RelationTest extends BaseTestCase
         $this->assertEquals('life', $articles[2]->customTags[0]->name);
 
         $queries = wei()->db->getQueries();
-        $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
+        $this->assertEquals('SELECT * FROM `test_articles` WHERE `id` IN (?, ?, ?)', $queries[0]);
         $this->assertEquals(implode(' ', [
             'SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id` FROM `test_tags`',
             'INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id`',
@@ -437,18 +457,18 @@ final class RelationTest extends BaseTestCase
         $this->assertNull($user['profile']);
     }
 
-    public function testNestedRelation()
+    public function testLoadBelongsToHasOne()
     {
         $articles = TestArticle::new();
 
-        $articles->all()->load('user.profile');
+        $articles->findAll([1, 2, 3])->load('user.profile');
 
         $this->assertEquals(1, $articles[0]->id);
         $this->assertEquals(1, $articles[0]->user->id);
         $this->assertEquals(1, $articles[0]->user->profile->id);
 
         $queries = wei()->db->getQueries();
-        $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
+        $this->assertEquals('SELECT * FROM `test_articles` WHERE `id` IN (?, ?, ?)', $queries[0]);
         $this->assertEquals('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[1]);
         $this->assertEquals('SELECT * FROM `test_profiles` WHERE `test_user_id` IN (?, ?)', $queries[2]);
         $this->assertCount(3, $queries);
@@ -457,6 +477,80 @@ final class RelationTest extends BaseTestCase
         $this->assertArrayHasKey('user', $array[0]);
         $this->assertArrayHasKey('profile', $array[0]['user']);
         $this->assertEquals(1, $array[0]['user']['profile']['id']);
+    }
+
+    public function testLoadBelongsToBelongsTo()
+    {
+        $articles = TestArticle::new();
+
+        $articles->findAll([1, 2, 4])->load('user.group');
+
+        $this->assertSame(1, $articles[0]->id);
+        $this->assertSame(1, $articles[0]->user->id);
+        $this->assertSame(1, $articles[0]->user->group->id);
+        $this->assertNull($articles[2]->user->group);
+
+        $queries = wei()->db->getQueries();
+        $this->assertSame('SELECT * FROM `test_articles` WHERE `id` IN (?, ?, ?)', $queries[0]);
+        $this->assertSame('SELECT * FROM `test_users` WHERE `id` IN (?, ?, ?)', $queries[1]);
+        $this->assertSame('SELECT * FROM `test_user_groups` WHERE `id` IN (?, ?)', $queries[2]);
+        $this->assertCount(3, $queries);
+
+        $array = $articles->toArray();
+        $this->assertArrayHasKey('user', $array[0]);
+        $this->assertArrayHasKey('group', $array[0]['user']);
+        $this->assertSame(1, $array[0]['user']['group']['id']);
+    }
+
+    public function testLoadHasManyBelongsTo()
+    {
+        $users = TestUser::new();
+
+        $users->findAll([1, 2])->load('articles.editor');
+
+        $this->assertSame(1, $users[0]->id);
+        $this->assertSame(1, $users[0]->articles[0]->id);
+        $this->assertSame(2, $users[0]->articles[0]->editor->id);
+
+        $queries = $this->db->getQueries();
+
+        $this->assertSame('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[0]);
+        $this->assertSame('SELECT * FROM `test_articles` WHERE `test_user_id` IN (?, ?)', $queries[1]);
+        $this->assertSame('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[2]);
+        $this->assertCount(3, $queries);
+
+        $array = $users->toArray();
+        $this->assertArrayHasKey('articles', $array[0]);
+        $this->assertArrayHasKey('editor', $array[0]['articles'][0]);
+        $this->assertSame(2, $array[0]['articles'][0]['editor']['id']);
+    }
+
+    public function testLoadHasManyBelongsToMany()
+    {
+        $users = TestUser::new();
+
+        $users->findAll([1, 2])->load('articles.tags');
+
+        $this->assertSame(1, $users[0]->id);
+        $this->assertSame(1, $users[0]->articles[0]->id);
+        $this->assertSame(1, $users[0]->articles[0]->tags[0]->id);
+
+        $queries = $this->db->getQueries();
+
+        $this->assertSame('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[0]);
+        $this->assertSame('SELECT * FROM `test_articles` WHERE `test_user_id` IN (?, ?)', $queries[1]);
+        $this->assertSame(implode(' ', [
+            'SELECT `test_tags`.*, `test_articles_test_tags`.`test_article_id`',
+            'FROM `test_tags`',
+            'INNER JOIN `test_articles_test_tags` ON `test_articles_test_tags`.`test_tag_id` = `test_tags`.`id`',
+            'WHERE `test_articles_test_tags`.`test_article_id` IN (?, ?, ?)',
+        ]), $queries[2]);
+        $this->assertCount(3, $queries);
+
+        $array = $users->toArray();
+        $this->assertArrayHasKey('articles', $array[0]);
+        $this->assertArrayHasKey('tags', $array[0]['articles'][0]);
+        $this->assertSame(1, $array[0]['articles'][0]['tags'][0]['id']);
     }
 
     public function testLoadCache()
@@ -468,7 +562,7 @@ final class RelationTest extends BaseTestCase
 
         $queries = wei()->db->getQueries();
         $this->assertEquals('SELECT * FROM `test_articles`', $queries[0]);
-        $this->assertEquals('SELECT * FROM `test_users` WHERE `id` IN (?, ?)', $queries[1]);
+        $this->assertEquals('SELECT * FROM `test_users` WHERE `id` IN (?, ?, ?)', $queries[1]);
         $this->assertCount(2, $queries);
     }
 
@@ -754,6 +848,7 @@ final class RelationTest extends BaseTestCase
     {
         // preload fields cache
         TestUser::getColumns();
+        TestUserGroup::getColumns();
         TestArticle::getColumns();
         TestProfile::getColumns();
         TestTag::getColumns();
