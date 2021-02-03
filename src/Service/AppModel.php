@@ -11,7 +11,6 @@ use Miaoxing\Plugin\Model\ModelTrait;
  * 应用模型
  *
  * @property array $pluginIds 已安装的插件编号
- * @property array $configs 配置
  */
 class AppModel extends BaseModel
 {
@@ -34,19 +33,9 @@ class AppModel extends BaseModel
         self::STATUS_OFFLINE => '下线',
     ];
 
-    protected $attributes = [
-        'configs' => [],
-        'pluginIds' => [],
-    ];
-
     protected $columns = [
-        'configs' => [
-            'cast' => 'json',
-            'default' => [],
-        ],
         'pluginIds' => [
-            'cast' => 'json',
-            'default' => [],
+            'cast' => 'list',
         ],
     ];
 
