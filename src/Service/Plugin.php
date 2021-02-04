@@ -350,7 +350,7 @@ class Plugin extends BaseService
     public function getEvents($fresh = false)
     {
         if (!$this->events || true == $fresh) {
-            $cacheKey = 'plugin-events-' . $this->app->getNamespace();
+            $cacheKey = 'plugin-events-' . $this->app->getId();
 
             // 清除已有缓存
             if ($fresh || $this->isRefresh()) {

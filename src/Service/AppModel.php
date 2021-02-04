@@ -5,6 +5,7 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\ConstTrait;
 use Miaoxing\Plugin\Metadata\AppTrait;
+use Miaoxing\Plugin\Model\CacheTrait;
 use Miaoxing\Plugin\Model\ModelTrait;
 
 /**
@@ -17,6 +18,7 @@ class AppModel extends BaseModel
     use ModelTrait;
     use ConstTrait;
     use AppTrait;
+    use CacheTrait;
 
     const STATUS_ALL = 0;
 
@@ -41,6 +43,6 @@ class AppModel extends BaseModel
 
     public function afterSave()
     {
-        $this->cache->remove('appName:' . $this['name']);
+        $this->removeModelCache();
     }
 }

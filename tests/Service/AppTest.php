@@ -136,25 +136,35 @@ final class AppTest extends BaseTestCase
         ];
     }
 
-    public function testGetIdByDomain()
+    public function testGetId()
     {
-        $prefix = 'appDomain:';
-        $app = AppModel::findOrInitBy(['domain' => 't.test.com']);
+        $app = wei()->app;
+        $curId = $app->getId();
 
-        $app->save([
+        $req = $app->req;
+        $curDomain = $req->getHost();
+
+        $prefix = 'appDomain:';
+
+        $appModel = AppModel::findOrInitBy(['domain' => 't.test.com']);
+        $appModel->save([
             'name' => 'domain',
             'domain' => '',
         ]);
-
         wei()->cache->remove($prefix . 't.test.com');
-        $this->assertFalse(App::getIdByDomain('t.test.com'));
 
+        $app->setId(null);
+        $this->assertSame(1, $app->getId());
+
+        $app->setId(null);
         wei()->cache->remove($prefix . 't.test.com');
-        $app->save(['domain' => 't.test.com']);
+        $req->setServer('HTTP_HOST', 't.test.com');
+        $appModel->save(['domain' => 't.test.com']);
+        $this->assertEquals($appModel->id, $app->getId());
 
-        $this->assertEquals('domain', App::getIdByDomain('t.test.com'));
-
-        $app->destroy();
+        $app->setId($curId);
+        $req->setServer('HTTP_HOST', $curDomain);
+        $appModel->destroy();
     }
 
     protected function execute($action)

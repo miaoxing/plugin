@@ -39,16 +39,6 @@ class App extends \Wei\App
     protected $plugin = false;
 
     /**
-     * @var array
-     */
-    protected $ids = [];
-
-    /**
-     * @var array
-     */
-    protected $dbNames = [];
-
-    /**
      * 默认域名
      *
      * 如果请求的默认域名,就不到数据库查找域名
@@ -58,18 +48,11 @@ class App extends \Wei\App
     protected $domains = [];
 
     /**
-     * 预先定义的应用slug,可以减少查询
+     * The default id of the current application
      *
-     * @var array
+     * @var int
      */
-    protected $predefinedNames = ['app'];
-
-    /**
-     * 默认的应用首页,以便首页不是404
-     *
-     * @var string
-     */
-    protected $defaultNamespace = 'app';
+    protected $defaultId = 1;
 
     /**
      * @var string
@@ -82,9 +65,18 @@ class App extends \Wei\App
     protected $fallbackPathInfo = 'app';
 
     /**
-     * @var \Miaoxing\Plugin\Service\AppModel[]
+     * The id of the current application
+     *
+     * @var int
      */
-    protected $records = [];
+    protected $id;
+
+    /**
+     * 应用模型缓存
+     *
+     * @var AppModel[]
+     */
+    protected $models = [];
 
     /**
      * @var array
@@ -99,39 +91,6 @@ class App extends \Wei\App
         $this->event->trigger('appInit');
 
         return $this->invokeApp($options);
-    }
-
-    public function getNamespace()
-    {
-        if (!$this->namespace) {
-            $this->namespace = $this->detectNamespace();
-        }
-
-        return $this->namespace;
-    }
-
-    /**
-     * Check if the namespace is available
-     *
-     * @param string $namespace
-     * @return bool
-     */
-    public function isNamespaceAvailable($namespace)
-    {
-        // 忽略非数字和字母组成的项目名称
-        if (!ctype_alnum($namespace)) {
-            return false;
-        }
-
-        if (in_array($namespace, $this->predefinedNames, true)) {
-            return true;
-        }
-
-        return $this->cache->get('appExists:' . $namespace, 86400, function () use ($namespace) {
-            $app = wei()->appModel()->select('name')->fetch('name', $namespace);
-
-            return $app && $app['name'] === $namespace;
-        });
     }
 
     /**
@@ -182,70 +141,63 @@ class App extends \Wei\App
             list(, $plugin) = explode('/', $this->page['file'], 3);
             $this->plugin = $plugin;
         }
-
         return $this->plugin;
     }
 
     /**
-     * 获取当前应用模型对象
+     * Return the current application model object
      *
-     * @return \Miaoxing\Plugin\Service\AppModel
+     * @return AppModel
+     * @throws Exception When the application not found
      */
-    public function getModel()
+    public function getModel(): AppModel
     {
-        $namespace = $this->getNamespace();
-        if (!isset($this->records[$namespace])) {
-            $this->records[$namespace] = AppModel::new()
-                ->setCacheKey('appName:' . $namespace)
+        $id = $this->getId();
+        if (!isset($this->models[$id])) {
+            $model = AppModel::new();
+            $this->models[$id] = $model
+                ->setCacheKey($model->getModelCacheKey($id))
                 ->setCacheTime(86400)
-                ->findBy('name', $namespace);
+                ->findOrFail($id);
         }
-
-        return $this->records[$namespace];
+        return $this->models[$id];
     }
 
     /**
-     * 设置当前应用模型对象
+     * Set the current application model object
      *
      * @param AppModel $model
      * @return $this
      */
-    public function setModel(AppModel $model)
+    public function setModel(AppModel $model): self
     {
-        $this->records[$this->getNamespace()] = $model;
+        $this->models[$this->getId()] = $model;
         return $this;
     }
 
     /**
-     * Record: 获取当前项目的编号
+     * Set the id of the current application
      *
-     * @return int
-     * @throws Exception
+     * @param int|null $id
+     * @return $this
      */
-    public function getId()
+    public function setId(?int $id): self
     {
-        $namespace = $this->getNamespace();
-        if (isset($this->ids[$namespace])) {
-            return $this->ids[$namespace];
-        } else {
-            return (int) $this->getModel()->get('id');
-        }
+        $this->id = $id;
+        return $this;
     }
 
     /**
-     * Repo: 根据应用ID获取应用数据库名称
+     * Return the id of the current application
      *
-     * @param int $id
-     * @return string
+     * @return int
      */
-    public function getDbName($id)
+    public function getId(): int
     {
-        if (!$this->dbNames[$id]) {
-            $record = wei()->appModel()->find($id);
-            $this->dbNames[$id] = $record['name'];
+        if (!$this->id) {
+            $this->id = $this->detectId();
         }
-
-        return $this->dbNames[$id];
+        return $this->id;
     }
 
     /**
@@ -451,35 +403,6 @@ class App extends \Wei\App
         return $arg;
     }
 
-    protected function detectNamespace()
-    {
-        // 1. 域名
-        if ($namespace = $this->getNamespaceFromDomain()) {
-            return $namespace;
-        }
-
-        // 2. 请求参数
-        if ($namespace = parent::getNamespace()) {
-            return $namespace;
-        }
-
-        // 3. 默认
-        return $this->defaultNamespace;
-    }
-
-    /**
-     * @return false|string
-     */
-    protected function getNamespaceFromDomain()
-    {
-        $domain = $this->req->getHost();
-        if (!$domain || in_array($domain, $this->domains, true)) {
-            return false;
-        }
-
-        return $this->getIdByDomain($domain);
-    }
-
     /**
      * 转换Ret结构为response
      *
@@ -513,18 +436,41 @@ class App extends \Wei\App
     }
 
     /**
+     * Detect the id of application
+     *
+     * @return int
+     */
+    protected function detectId(): int
+    {
+        // 1. Domain
+        if ($id = $this->getIdByDomain()) {
+            return $id;
+        }
+
+        // 2. Request parameter
+        if ($id = (int) $this->req->get('appId')) {
+            return $id;
+        }
+
+        // 3. Default
+        return $this->defaultId;
+    }
+
+    /**
      * 根据域名查找应用名称
      *
-     * @param string $domain
-     * @return false|string
-     * @svc
+     * @return null|string
      */
-    protected function getIdByDomain($domain)
+    protected function getIdByDomain(): ?string
     {
-        return $this->cache->get('appDomain:' . $domain, 86400, static function () use ($domain) {
-            $app = AppModel::select('name')->fetch('domain', $domain);
+        $domain = $this->req->getHost();
+        if (!$domain || in_array($domain, $this->domains, true)) {
+            return null;
+        }
 
-            return $app ? $app['name'] : false;
+        return $this->cache->get('appDomain:' . $domain, 86400, static function () use ($domain) {
+            $app = AppModel::select('id')->fetch('domain', $domain);
+            return $app ? (int) $app['id'] : null;
         });
     }
 }

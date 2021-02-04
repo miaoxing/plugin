@@ -120,6 +120,12 @@ return [
         'dir' => 'public/uploads',
     ],
 
+    'url' => [
+        'passThroughParams' => [
+            'appId',
+        ],
+    ],
+
     /* @see Wei\View */
     'view' => [
         'defaultLayout' => '@plugin/layouts/default.php',

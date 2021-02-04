@@ -11,7 +11,9 @@ class Session extends \Wei\Session
         if (!isset($options['namespace'])) {
             /** @var Wei $wei */
             $wei = $options['wei'];
-            $options['namespace'] = $wei->app->getNamespace();
+            // NOTE: namespace cant be int, why?
+            // @internal namespace may be change in the future
+            $options['namespace'] = 'miaoxing-' . $wei->app->getId();
         }
 
         parent::__construct($options);

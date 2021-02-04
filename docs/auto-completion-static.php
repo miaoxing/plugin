@@ -4,16 +4,6 @@ namespace Miaoxing\Plugin\Service;
 
 class App
 {
-    /**
-     * 根据域名查找应用名称
-     *
-     * @param string $domain
-     * @return false|string
-     * @see App::getIdByDomain
-     */
-    public static function getIdByDomain($domain)
-    {
-    }
 }
 
 class AppModel
@@ -336,6 +326,17 @@ class AppModel
      * @see AppModel::cnt
      */
     public static function cnt($column = '*'): int
+    {
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see AppModel::max
+     */
+    public static function max(string $column): ?string
     {
     }
 
@@ -1154,6 +1155,17 @@ class QueryBuilder
      * @see QueryBuilder::cnt
      */
     public static function cnt($column = '*'): int
+    {
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see QueryBuilder::max
+     */
+    public static function max(string $column): ?string
     {
     }
 
@@ -2312,6 +2324,17 @@ class User
     }
 
     /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see UserModel::max
+     */
+    public static function max(string $column): ?string
+    {
+    }
+
+    /**
      * Execute a update query with specified data
      *
      * @param array|string $set
@@ -3220,6 +3243,17 @@ class UserModel
     }
 
     /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see UserModel::max
+     */
+    public static function max(string $column): ?string
+    {
+    }
+
+    /**
      * Execute a update query with specified data
      *
      * @param array|string $set
@@ -3811,16 +3845,6 @@ namespace Miaoxing\Plugin\Service;
 if (0) {
 class App
 {
-    /**
-     * 根据域名查找应用名称
-     *
-     * @param string $domain
-     * @return false|string
-     * @see App::getIdByDomain
-     */
-    public function getIdByDomain($domain)
-    {
-    }
 }
 
 class AppModel
@@ -4143,6 +4167,17 @@ class AppModel
      * @see AppModel::cnt
      */
     public function cnt($column = '*'): int
+    {
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see AppModel::max
+     */
+    public function max(string $column): ?string
     {
     }
 
@@ -4961,6 +4996,17 @@ class QueryBuilder
      * @see QueryBuilder::cnt
      */
     public function cnt($column = '*'): int
+    {
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see QueryBuilder::max
+     */
+    public function max(string $column): ?string
     {
     }
 
@@ -6119,6 +6165,17 @@ class User
     }
 
     /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see UserModel::max
+     */
+    public function max(string $column): ?string
+    {
+    }
+
+    /**
      * Execute a update query with specified data
      *
      * @param array|string $set
@@ -7023,6 +7080,17 @@ class UserModel
      * @see UserModel::cnt
      */
     public function cnt($column = '*'): int
+    {
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see UserModel::max
+     */
+    public function max(string $column): ?string
     {
     }
 
