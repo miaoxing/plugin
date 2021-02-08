@@ -23,7 +23,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $country
  * @property string $province
  * @property string $city
- * @property string $area
+ * @property string $district
  * @property string $address
  * @property string $signature
  * @property bool $isEnabled 是否启用

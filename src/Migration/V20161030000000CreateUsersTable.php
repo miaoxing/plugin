@@ -30,7 +30,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
             ->string('country', 32)
             ->string('province', 32)
             ->string('city', 32)
-            ->string('area', 32)
+            ->string('district', 32)
             ->string('address', 128)
             ->string('signature', 64);
 
