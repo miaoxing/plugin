@@ -16,6 +16,13 @@ trait ReqQueryTrait
     protected $reqMaps = [];
 
     /**
+     * The strings used to separate search name and search type
+     *
+     * @var string[]
+     */
+    protected $reqSeparators = [':', '$'];
+
+    /**
      * @param Req $req
      * @return $this
      */
@@ -38,7 +45,7 @@ trait ReqQueryTrait
             $options['only'] = $options;
         }
 
-        $req = (array)$this->req->getData()['search'] ?: [];
+        $req = (array) $this->req->getData()['search'] ?: [];
         if (isset($options['only'])) {
             $req = array_intersect_key($req, array_flip((array) $options['only']));
         }
@@ -298,11 +305,12 @@ trait ReqQueryTrait
      */
     protected function parseNameAndOp(string $name): array
     {
-        if (false === strpos($name, '$')) {
-            return [$name, 'eq'];
-        } else {
-            return explode('$', $name, 2);
+        foreach ($this->reqSeparators as $separator) {
+            if (false !== strpos($name, $separator)) {
+                return explode($separator, $name, 2);
+            }
         }
+        return [$name, 'eq'];
     }
 
     /**
