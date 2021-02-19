@@ -38,7 +38,7 @@ trait ReqQueryTrait
             $options['only'] = $options;
         }
 
-        $req = $this->req->getData();
+        $req = (array)$this->req->getData()['search'] ?: [];
         if (isset($options['only'])) {
             $req = array_intersect_key($req, array_flip((array) $options['only']));
         }
