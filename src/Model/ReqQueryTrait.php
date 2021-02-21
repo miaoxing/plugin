@@ -7,11 +7,13 @@ use Wei\Req;
 
 /**
  * @mixin \ReqMixin
+ * @mixin \IsPresentMixin
  * @property Req $req 需加上 phpstan 才能识别
+ * @experimental 待整理方法命名和参数
  */
 trait ReqQueryTrait
 {
-    protected $joins = [];
+    protected $reqJoins = [];
 
     protected $reqMaps = [];
 
@@ -21,6 +23,20 @@ trait ReqQueryTrait
      * @var string[]
      */
     protected $reqSeparators = [':', '$'];
+
+    /**
+     * The default sort column name
+     *
+     * @var string|array
+     */
+    protected $defaultSortColumn = 'id';
+
+    /**
+     * The default sort direction, optional values are "ASC" and "DESC"
+     *
+     * @var string|array
+     */
+    protected $defaultOrder = 'DESC';
 
     /**
      * @param Req $req
@@ -33,19 +49,29 @@ trait ReqQueryTrait
     }
 
     /**
-     * 根据请求参数,自动执行查询
+     * 根据请求参数，执行分页，排序和搜索操作
+     *
+     * @return $this
+     */
+    public function reqQuery(): self
+    {
+        return $this->reqPage()->reqOrderBy()->reqSearch();
+    }
+
+    /**
+     * 根据请求参数，执行搜索操作
      *
      * @param array $options
      * @return $this
      */
-    public function reqQuery(array $options = []): self
+    public function reqSearch(array $options = []): self
     {
         // 允许传索引数组表示常见的only选项
         if (isset($options[0])) {
             $options['only'] = $options;
         }
 
-        $req = (array) $this->req->getData()['search'] ?: [];
+        $req = (array) $this->req->getData()['search'] ?? [];
         if (isset($options['only'])) {
             $req = array_intersect_key($req, array_flip((array) $options['only']));
         }
@@ -53,7 +79,7 @@ trait ReqQueryTrait
             $req = array_diff_key($req, array_flip((array) $options['except']));
         }
 
-        $isPresent = wei()->isPresent;
+        $isPresent = $this->isPresent;
         foreach ($req as $name => $value) {
             if (!$isPresent($value)) {
                 continue;
@@ -75,151 +101,30 @@ trait ReqQueryTrait
     }
 
     /**
-     * 指定请求值映射
+     * 根据请求参数，执行排序操作
      *
-     * @param string $name
-     * @param array $values
      * @return $this
      */
-    public function reqMap(string $name, array $values)
-    {
-        $this->reqMaps[$name] = $values;
-        return $this;
-    }
-
-    /**
-     * @param array|string $relations
-     * @return $this
-     */
-    public function reqJoin($relations)
-    {
-        foreach ((array) $relations as $relation) {
-            if (isset($this->joins[$relation])
-                || !$this->req->has($relation)
-                || !$this->isRelation($relation)
-            ) {
-                continue;
-            }
-
-            $this->joins[$relation] = true;
-            $this->selectMain();
-
-            /** @var BaseModel $related */
-            $related = $this->{$relation}();
-            $config = $related->getRelation();
-
-            $table = $related->getTable();
-
-            // 处理跨数据库的情况
-            if ($related->getDb() !== $this->getDb()) {
-                $table = $related->getDb()->getDbname() . '.' . $table;
-            }
-
-            $this->leftJoin(
-                $table,
-                $table . '.' . $config['foreignKey'],
-                '=',
-                $this->getTable() . '.' . $config['localKey']
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string|array $columns
-     * @return $this
-     */
-    public function equals($columns): self
-    {
-        foreach ((array) $columns as $column) {
-            if ($this->req->has($column)) {
-                $this->where($column, $this->req[$column]);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string|array $columns
-     * @return $this
-     */
-    public function between($columns): self
-    {
-        if ($this->getQueryPart('join')) {
-            $prefix = $this->getTable() . '.';
-        } else {
-            $prefix = '';
-        }
-
-        foreach ((array) $columns as $column) {
-            // 支持数组形式
-            if ($this->req->has($column) && is_array($this->req[$column])) {
-                if (isset($this->req[$column][0])) {
-                    $this->where($prefix . $column, '>=', $this->req[$column][0]);
-                }
-                if (isset($this->req[$column][1])) {
-                    $this->where($prefix . $column, '<=', $this->req[$column][1]);
-                }
-                continue;
-            }
-
-            // 或是两个字段
-            $min = $column . 'Min';
-            if ($this->req->has($min)) {
-                $this->where($prefix . $column, '>=', $this->req[$min]);
-            }
-
-            $max = $column = 'Max';
-            if ($this->req->has($max)) {
-                $this->where($prefix . $column, '<=', $this->processMaxDate($column, $this->req[$max]));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string|array $columns
-     * @return $this
-     */
-    public function reqHas($columns): self
-    {
-        foreach ((array) $columns as $column) {
-            if ($this->req->has($column)) {
-                $this->whereHas($column, $this->req[$column]);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $defaultColumn
-     * @param string $defaultOrder
-     * @return $this
-     */
-    public function sort(string $defaultColumn = 'id', string $defaultOrder = 'DESC')
+    public function reqOrderBy(): self
     {
         if ($this->req->has('sort')) {
             $name = $this->req['sort'];
             if ($this->hasColumn($name)) {
                 $sort = $name;
             } else {
-                $sort = $defaultColumn;
+                $sort = $this->defaultSortColumn;
             }
         } else {
-            $sort = $defaultColumn;
+            $sort = $this->defaultSortColumn;
         }
 
         if ($this->req->has('order')) {
             $order = strtoupper($this->req['order']);
             if (!in_array($order, ['ASC', 'DESC'], true)) {
-                $order = $defaultOrder;
+                $order = $this->defaultOrder;
             }
         } else {
-            $order = $defaultOrder;
+            $order = $this->defaultOrder;
         }
 
         if ($this->getQueryPart('join')) {
@@ -232,15 +137,28 @@ trait ReqQueryTrait
     }
 
     /**
+     * 根据请求参数，执行分页操作
+     *
      * @return $this
      */
-    public function paginate(): self
+    public function reqPage(): self
     {
         $limit = $this->req['limit'] ?: 10;
         $page = $this->req['page'] ?: 1;
-
         $this->limit($limit)->page($page);
+        return $this;
+    }
 
+    /**
+     * 指定请求值映射
+     *
+     * @param string $name
+     * @param array $values
+     * @return $this
+     */
+    public function reqMap(string $name, array $values): self
+    {
+        $this->reqMaps[$name] = $values;
         return $this;
     }
 
@@ -298,6 +216,44 @@ trait ReqQueryTrait
     }
 
     /**
+     * @param array|string $relations
+     * @return $this
+     */
+    protected function reqJoin($relations)
+    {
+        foreach ((array) $relations as $relation) {
+            if (isset($this->reqJoins[$relation])
+                || !$this->isRelation($relation)
+            ) {
+                continue;
+            }
+
+            $this->reqJoins[$relation] = true;
+            $this->selectMain();
+
+            /** @var BaseModel $related */
+            $related = $this->{$relation}();
+            $config = $related->getRelation();
+
+            $table = $related->getTable();
+
+            // 处理跨数据库的情况
+            if ($related->getDb() !== $this->getDb()) {
+                $table = $related->getDb()->getDbname() . '.' . $table;
+            }
+
+            $this->leftJoin(
+                $table,
+                $table . '.' . $config['foreignKey'],
+                '=',
+                $this->getTable() . '.' . $config['localKey']
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * 从请求名称中解析出字段名称和操作符
      *
      * @param string $name
@@ -348,28 +304,6 @@ trait ReqQueryTrait
             default:
                 return $this;
         }
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @svc
-     */
-    protected function like($columns): self
-    {
-        foreach ((array) $columns as $column) {
-            [$column, $value, $relation] = $this->parseReqColumn($column);
-            if (!wei()->isPresent($value)) {
-                continue;
-            }
-
-            if ($relation) {
-                $this->reqJoin($relation);
-            }
-            $this->whereContains($column, $value);
-        }
-
-        return $this;
     }
 
     protected function processMaxDate($column, $value): string
