@@ -49,6 +49,32 @@ trait ReqQueryTrait
     }
 
     /**
+     * Set default sort column and optional sort direction
+     *
+     * @param string|array $column
+     * @param string|array $order
+     * @return $this
+     */
+    public function setDefaultSortColumn($column, $order = null): self
+    {
+        $this->defaultSortColumn = $column;
+        func_num_args() > 1 && $this->setDefaultOrder($order);
+        return $this;
+    }
+
+    /**
+     * Set default sort direction
+     *
+     * @param string|array $order
+     * @return $this
+     */
+    public function setDefaultOrder($order): self
+    {
+        $this->defaultOrder = $order;
+        return $this;
+    }
+
+    /**
      * 根据请求参数，执行分页，排序和搜索操作
      *
      * @return $this
@@ -108,7 +134,7 @@ trait ReqQueryTrait
     public function reqOrderBy(): self
     {
         $sortColumns = (array) ($this->req['sort'] ?: $this->defaultSortColumn);
-        $orders = (array) $this->req['order'];
+        $orders = (array) ($this->req['order'] ?: $this->defaultOrder);
 
         foreach ($sortColumns as $i => $column) {
             if (!$this->hasColumn($column)) {
@@ -125,7 +151,7 @@ trait ReqQueryTrait
                 $sort = $column;
             }
 
-            $order = strtoupper($orders[$i] ?? $this->defaultOrder);
+            $order = strtoupper($orders[$i] ?? 'DESC');
             if (!in_array($order, ['ASC', 'DESC'], true)) {
                 $order = $this->defaultOrder;
             }

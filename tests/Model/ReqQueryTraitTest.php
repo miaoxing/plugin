@@ -127,6 +127,57 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]), $query->getRawSql());
     }
 
+    public function testSetDefaultSortColumn()
+    {
+        $query = TestReqQuery::new()->setDefaultSortColumn('start_at')->reqOrderBy()->first();
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `test_req_queries`",
+            "ORDER BY `start_at` DESC",
+            "LIMIT 1",
+        ]), $query->getRawSql());
+    }
+
+    public function testSetDefaultSortColumns()
+    {
+        $query = TestReqQuery::new()->setDefaultSortColumn(['start_at', 'id'])->reqOrderBy()->first();
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `test_req_queries`",
+            "ORDER BY `start_at` DESC, `id` DESC",
+            "LIMIT 1",
+        ]), $query->getRawSql());
+    }
+
+    public function testSetDefaultSortColumnAndOrder()
+    {
+        $query = TestReqQuery::new()->setDefaultSortColumn('start_at', 'ASC')->reqOrderBy()->first();
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `test_req_queries`",
+            "ORDER BY `start_at` ASC",
+            "LIMIT 1",
+        ]), $query->getRawSql());
+    }
+
+    public function testSetDefaultOrder()
+    {
+        $query = TestReqQuery::new()->setDefaultOrder('ASC')->reqOrderBy()->first();
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `test_req_queries`",
+            "ORDER BY `id` ASC",
+            "LIMIT 1",
+        ]), $query->getRawSql());
+    }
+
+    public function testSetDefaultOrders()
+    {
+        $query = TestReqQuery::new()->setDefaultSortColumn(['id', 'start_at'])->setDefaultOrder(['ASC', 'DESC'])
+            ->reqOrderBy()->first();
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `test_req_queries`",
+            "ORDER BY `id` ASC, `start_at` DESC",
+            "LIMIT 1",
+        ]), $query->getRawSql());
+    }
+
     public function testReqSearch()
     {
         $req = new Req([
