@@ -92,6 +92,41 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]), $query->getRawSql());
     }
 
+    public function testOrderByMultiple()
+    {
+        $req = new Req([
+            'fromGlobal' => false,
+            'data' => [
+                'sort' => ['start_at', 'id'],
+                'order' => ['asc', 'desc'],
+            ],
+        ]);
+        $query = TestReqQuery::new()->setReq($req)->reqOrderBy()->first();
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `test_req_queries`",
+            "ORDER BY `start_at` ASC, `id` DESC",
+            "LIMIT 1",
+        ]), $query->getRawSql());
+    }
+
+
+    public function testOrderByMultipleWithoutOrder()
+    {
+        $req = new Req([
+            'fromGlobal' => false,
+            'data' => [
+                'sort' => ['start_at', 'id'],
+                'order' => ['asc'],
+            ],
+        ]);
+        $query = TestReqQuery::new()->setReq($req)->reqOrderBy()->first();
+        $this->assertSame(implode(' ', [
+            "SELECT * FROM `test_req_queries`",
+            "ORDER BY `start_at` ASC, `id` DESC",
+            "LIMIT 1",
+        ]), $query->getRawSql());
+    }
+
     public function testReqSearch()
     {
         $req = new Req([

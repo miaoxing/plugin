@@ -107,31 +107,31 @@ trait ReqQueryTrait
      */
     public function reqOrderBy(): self
     {
-        if ($this->req->has('sort')) {
-            $name = $this->req['sort'];
-            if ($this->hasColumn($name)) {
-                $sort = $name;
-            } else {
-                $sort = $this->defaultSortColumn;
+        $sortColumns = (array) ($this->req['sort'] ?: $this->defaultSortColumn);
+        $orders = (array) $this->req['order'];
+
+        foreach ($sortColumns as $i => $column) {
+            if (!$this->hasColumn($column)) {
+                unset($sortColumns[$i]);
+                unset($orders[$i]);
             }
-        } else {
-            $sort = $this->defaultSortColumn;
         }
 
-        if ($this->req->has('order')) {
-            $order = strtoupper($this->req['order']);
+        $hasJoin = $this->getQueryPart('join');
+        foreach ($sortColumns as $i => $column) {
+            if ($hasJoin) {
+                $sort = $this->getTable() . '.' . $column;
+            } else {
+                $sort = $column;
+            }
+
+            $order = strtoupper($orders[$i] ?? $this->defaultOrder);
             if (!in_array($order, ['ASC', 'DESC'], true)) {
                 $order = $this->defaultOrder;
             }
-        } else {
-            $order = $this->defaultOrder;
-        }
 
-        if ($this->getQueryPart('join')) {
-            $sort = $this->getTable() . '.' . $sort;
+            $this->orderBy($sort, $order);
         }
-
-        $this->orderBy($sort, $order);
 
         return $this;
     }
