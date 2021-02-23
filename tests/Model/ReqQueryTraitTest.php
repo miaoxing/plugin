@@ -169,6 +169,156 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]), $query->getRawSql());
     }
 
+    public function testGetReqOrderBy()
+    {
+        $query = TestReqQuery::new()->setReqOrderBy([
+            [['id', 'start_at'], ['DESC', 'ASC']],
+            ['id', 'DESC'],
+            ['id'],
+            'id',
+            [['id', 'start_at']],
+            [['id', 'start_at'], ['DESC']],
+        ]);
+
+        $query->addReqOrderBy('id');
+
+        $this->assertSame([
+            [['id', 'start_at'], ['DESC', 'ASC']],
+            [['id'], ['DESC']],
+            [['id']],
+            [['id']],
+            [['id', 'start_at']],
+            [['id', 'start_at'], ['DESC']],
+            [['id']],
+        ], $query->getReqOrderBy());
+    }
+
+    public function testGetReqOrderByContainsInvalidValue()
+    {
+        $query = TestReqQuery::new()->setReqOrderBy([[]]);
+
+        $this->expectExceptionObject(new \RuntimeException('Expected the order by value contains 0-index value, given: []'));
+        $query->getReqOrderBy();
+    }
+
+    public function testGetReqOrderByReturnsFalse()
+    {
+        $query = TestReqQuery::new()->setReqOrderBy(false);
+        $this->assertFalse($query->getReqOrderBy());
+    }
+
+    /**
+     * @param array $data
+     * @param array|false $reqOrderBy
+     * @param string $sql
+     * @dataProvider providerForSetReqOrderBy
+     */
+    public function testSetReqOrderBy(array $data, $reqOrderBy, string $sql)
+    {
+        $req = new Req([
+            'fromGlobal' => false,
+            'data' => $data,
+        ]);
+        $query = TestReqQuery::new()
+            ->setReq($req)
+            ->setReqOrderBy($reqOrderBy)
+            ->reqOrderBy();
+        $this->assertSame("SELECT * FROM `test_req_queries`" . ($sql ? ' ORDER BY ' . $sql : ''), $query->getRawSql());
+    }
+
+    public function providerForSetReqOrderBy(): array
+    {
+        return [
+            [
+                [],
+                [],
+                '`id` DESC', // default
+            ],
+            [
+                [],
+                false, // dont add order by
+                '',
+            ],
+            [
+                [
+                    'sort' => 'id',
+                    'order' => 'desc',
+                ],
+                [],
+                '`id` DESC', // default
+            ],
+            [
+                [
+                    'sort' => 'custom',
+                    'order' => 'asc',
+                ],
+                [
+                    [['start_at'], ['DESC']],
+                ],
+                '`id` DESC', // not match, fallback to default
+            ],
+            [
+                [
+                    'sort' => 'start_at',
+                    'order' => 'asc',
+                ],
+                [
+                    [['id']],
+                    [['start_at'], ['ASC']], // matched
+                ],
+                '`start_at` ASC',
+            ],
+            [
+                [
+                    'sort' => ['start_at', 'id'],
+                ],
+                [
+                    [['id']],
+                    [['start_at', 'id'], ['DESC']], // matched
+                ],
+                '`start_at` DESC, `id` DESC',
+            ],
+            [
+                [
+                    'sort' => ['start_at', 'id'],
+                ],
+                [
+                    [['start_at'], ['ASC']], // order not match
+                    [['start_at', 'id'], ['DESC']], // matched
+                ],
+                '`start_at` DESC, `id` DESC',
+            ],
+            [
+                [
+                    'sort' => ['start_at', 'id'],
+                    'order' => ['asc', 'asc'],
+                ],
+                [
+                    [['start_at'], ['ASC']],
+                    [['start_at', 'id'], [null, 'ASC']], // matched
+                ],
+                '`start_at` ASC, `id` ASC',
+            ],
+            [
+                [
+                    'sort' => ['start_at', 'id'],
+                    'order' => ['asc', 'asc'],
+                ],
+                [
+                    [['start_at'], ['ASC']],
+                    [['start_at', 'id'], ['', 'ASC']], // matched
+                ],
+                '`start_at` ASC, `id` ASC',
+            ],
+        ];
+    }
+
+    public function testAddReqOrderByWhenReqOrderByIsFalse()
+    {
+        $query = TestReqQuery::new()->setReqOrderBy(false)->addReqOrderBy('id');
+        $this->assertSame([[['id']]], $query->getReqOrderBy());
+    }
+
     public function testReqSearch()
     {
         $req = new Req([

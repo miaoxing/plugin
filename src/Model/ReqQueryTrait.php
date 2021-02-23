@@ -13,8 +13,6 @@ use Wei\Req;
  */
 trait ReqQueryTrait
 {
-    protected $reqJoins = [];
-
     protected $reqMaps = [];
 
     /**
@@ -37,6 +35,21 @@ trait ReqQueryTrait
      * @var string|array
      */
     protected $defaultOrder = 'DESC';
+
+    /**
+     * The columns and orders that allowed to be sorted by request parameters
+     *
+     * eg:
+     * [
+     *   [['id'], ['DESC']],
+     *   [['sort', 'created_at'], ['DESC', null]],
+     * ]
+     *
+     * @var array|false
+     */
+    protected $reqOrderBy = [];
+
+    protected $reqJoins = [];
 
     /**
      * @param Req $req
@@ -72,6 +85,65 @@ trait ReqQueryTrait
     {
         $this->defaultOrder = $order;
         return $this;
+    }
+
+    /**
+     * Set sortable columns and orders
+     *
+     * @param array|false $orderBy
+     * @return $this
+     */
+    public function setReqOrderBy($orderBy): self
+    {
+        $this->reqOrderBy = $orderBy;
+        return $this;
+    }
+
+    /**
+     * Add one sortable columns and orders item
+     *
+     * @param string|array $orderByItem
+     * @return $this
+     */
+    public function addReqOrderBy($orderByItem): self
+    {
+        if (!is_array($this->reqOrderBy)) {
+            $this->reqOrderBy = [];
+        }
+        $this->reqOrderBy[] = (array) $orderByItem;
+        return $this;
+    }
+
+    /**
+     * Return sortable columns and orders
+     *
+     * @return array|false
+     */
+    public function getReqOrderBy()
+    {
+        if ($this->reqOrderBy === false) {
+            return false;
+        }
+
+        foreach ($this->reqOrderBy as $i => &$item) {
+            if (!is_array($item)) {
+                $item = [[$item]];
+                continue;
+            }
+
+            if (!isset($item[0])) {
+                throw new \RuntimeException('Expected the order by value contains 0-index value, given: ' . json_encode($item));
+            }
+
+            if (isset($item[0]) && !is_array($item[0])) {
+                $item[0] = [$item[0]];
+            }
+
+            if (isset($item[1]) && !is_array($item[1])) {
+                $item[1] = [$item[1]];
+            }
+        }
+        return $this->reqOrderBy;
     }
 
     /**
@@ -133,8 +205,11 @@ trait ReqQueryTrait
      */
     public function reqOrderBy(): self
     {
-        $sortColumns = (array) ($this->req['sort'] ?: $this->defaultSortColumn);
-        $orders = (array) ($this->req['order'] ?: $this->defaultOrder);
+        if ($this->reqOrderBy === false) {
+            return $this;
+        }
+
+        [$sortColumns, $orders] = $this->detectReqSortAndOrder();
 
         foreach ($sortColumns as $i => $column) {
             if (!$this->hasColumn($column)) {
@@ -362,5 +437,75 @@ trait ReqQueryTrait
         }
 
         return [$column, $value, $relation];
+    }
+
+    /**
+     * Detect the request sort columns and orders
+     *
+     * @return array[]
+     */
+    protected function detectReqSortAndOrder(): array
+    {
+        $sortColumns = (array) $this->req['sort'];
+        $orders = (array) $this->req['order'];
+
+        if ($this->reqOrderBy) {
+            $orderBy = $this->getReqOrderBy();
+            $match = false;
+            foreach ($orderBy as $item) {
+                if ($this->isArrayStartWiths($item[0], $sortColumns)
+                    && $this->isOrderContains($item[1], $orders, count($sortColumns))
+                ) {
+                    $match = true;
+                    break;
+                }
+            }
+            if (!$match) {
+                $sortColumns = [];
+                $orders = [];
+            }
+        }
+
+        return [
+            $sortColumns ?: (array) $this->defaultSortColumn,
+            $orders ?: (array) $this->defaultOrder,
+        ];
+    }
+
+    private function isArrayStartWiths($arr1, $arr2): bool
+    {
+        if ($arr1 === $arr2) {
+            return true;
+        }
+
+        if (count($arr1) < count($arr2)) {
+            return false;
+        }
+
+        return array_slice($arr1, 0, count($arr2)) === $arr2;
+    }
+
+    private function isOrderContains(array $allows, array $reqs, int $length): bool
+    {
+        // 没有排序限制，返回包含
+        if (!$allows) {
+            return true;
+        }
+
+        // 补齐请求的排序方向，以便逐个判断
+        $reqs = array_pad($reqs, $length, 'DESC');
+
+        foreach ($reqs as $i => $req) {
+            // 没有排序限制，跳过去检查下一个
+            if (!isset($allows[$i]) || !$allows[$i]) {
+                continue;
+            }
+
+            // 有排序限制，必须完全一样，否则不通过
+            if (strtoupper($allows[$i]) !== strtoupper($req)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
