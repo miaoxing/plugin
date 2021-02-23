@@ -895,4 +895,12 @@ final class ModelTest extends BaseTestCase
         $this->assertIsString($id);
         $this->assertIsNumeric($id);
     }
+
+    public function testGetRawSqlContainsTable()
+    {
+        $this->initFixtures();
+
+        $sql = TestUser::new()->orderBy('id')->getRawSql();
+        $this->assertSame('SELECT * FROM `p_test_users` ORDER BY `id` ASC', $sql);
+    }
 }

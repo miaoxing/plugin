@@ -422,7 +422,7 @@ class Mysql extends BaseDriver
         }
     }
 
-    private function parseTableAndAlias(string $table): array
+    private function parseTableAndAlias(?string $table): array
     {
         $pos = strpos($table, ' ');
         if (false !== $pos) {

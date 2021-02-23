@@ -481,6 +481,10 @@ trait QueryBuilderTrait
 
     public function getRawSql(): string
     {
+        if (!$this->queryParts['from']) {
+            $this->queryParts['from'] = $this->getTable();
+        }
+
         return $this->getDbDriver()->getRawSql(
             $this->queryType,
             $this->queryParts,

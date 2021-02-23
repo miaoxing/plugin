@@ -1418,4 +1418,10 @@ final class QueryBuilderTest extends BaseTestCase
         $user = Qb::table('test_users')->whereHas('joined_date')->desc('id')->first();
         $this->assertNotSame($userId, $user['id'] ?? null);
     }
+
+    public function testGetRawSqlWithoutTable()
+    {
+        $sql = Qb::orderBy('x')->getRawSql();
+        $this->assertSame('SELECT * FROM `p_` ORDER BY `x` ASC', $sql);
+    }
 }
