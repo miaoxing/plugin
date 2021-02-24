@@ -43,6 +43,14 @@ trait RelationTrait
     protected $loadedRelations = [];
 
     /**
+     * The relations that have been joined
+     *
+     * @var array
+     * @internal
+     */
+    protected $joinRelations = [];
+
+    /**
      * Save with relation data
      *
      * Use with relation calls like
@@ -207,6 +215,78 @@ trait RelationTrait
         }
 
         return $this;
+    }
+
+    /**
+     * Add a (inner) join base on the relation to the query
+     *
+     * @param string|array $name
+     * @param string $type
+     * @return $this
+     * @svc
+     */
+    protected function joinRelation($name, string $type = 'INNER'): self
+    {
+        foreach ((array) $name as $item) {
+            if (isset($this->joinRelations[$item][$type])) {
+                continue;
+            }
+            $this->joinRelations[$item][$type] = true;
+
+            $related = $this->getRelationModel($item);
+            $config = $related->getRelation();
+            $table = $related->getTable();
+
+            // Dealing with different databases
+            if ($related->getDb() !== $this->getDb()) {
+                $table = $related->getDb()->getDbname() . '.' . $table;
+            }
+
+            $this->join(
+                $table,
+                $table . '.' . $config['foreignKey'],
+                '=',
+                $this->getTable() . '.' . $config['localKey'],
+                $type,
+            );
+        }
+        return $this;
+    }
+
+    /**
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @svc
+     */
+    protected function innerJoinRelation($name): self
+    {
+        return $this->joinRelation($name);
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @svc
+     */
+    protected function leftJoinRelation($name): self
+    {
+        return $this->joinRelation($name, 'LEFT');
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @svc
+     */
+    protected function rightJoinRelation($name): self
+    {
+        return $this->joinRelation($name, 'RIGHT');
     }
 
     /**
