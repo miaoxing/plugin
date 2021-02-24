@@ -326,7 +326,7 @@ final class ReqQueryTraitTest extends BaseTestCase
             'data' => [
                 'search' => [
                     'name' => 'test',
-                    'name$eq' => 'test',
+                    'name$ct' => 'test',
                 ],
             ],
         ]);
@@ -334,8 +334,152 @@ final class ReqQueryTraitTest extends BaseTestCase
         $this->assertSame(implode(' ', [
             "SELECT * FROM `test_req_queries` WHERE",
             "`name` = 'test'",
-            "AND `name` = 'test'",
+            "AND `name` LIKE '%test%'",
         ]), $query->getRawSql());
+    }
+
+    /**
+     * @param array $search
+     * @param array|false $reqSearch
+     * @param string $sql
+     * @dataProvider providerForSetReqSearch
+     */
+    public function testSetReqSearch(array $search, $reqSearch, string $sql)
+    {
+        $req = new Req([
+            'fromGlobal' => false,
+            'data' => [
+                'search' => $search,
+            ],
+        ]);
+        $query = TestReqQuery::new()
+            ->setReq($req)
+            ->setReqSearch($reqSearch)
+            ->reqSearch();
+        $this->assertSame($sql, $query->getRawSql());
+    }
+
+    public function providerForSetReqSearch(): array
+    {
+        return [
+            [
+                [
+                    'name' => 'test',
+                    'id' => 1,
+                ],
+                false,
+                'SELECT * FROM `test_req_queries`',
+            ],
+            [
+                [
+                    'name' => 'test',
+                    'id' => 1,
+                ],
+                [],
+                "SELECT * FROM `test_req_queries` WHERE `name` = 'test' AND `id` = 1",
+            ],
+            [
+                [
+                    'name' => 'test',
+                    'id' => 1,
+                ],
+                [
+                    'name',
+                ],
+                "SELECT * FROM `test_req_queries` WHERE `name` = 'test'",
+            ],
+            [
+                [
+                    'name:ct' => 'test',
+                    'id' => 1,
+                ],
+                [
+                    'name:ct',
+                ],
+                "SELECT * FROM `test_req_queries` WHERE `name` LIKE '%test%'",
+            ],
+            [
+                [
+                    'name$ct' => 'test',
+                    'id' => 1,
+                ],
+                [
+                    'name:ct',
+                ],
+                "SELECT * FROM `test_req_queries` WHERE `name` LIKE '%test%'",
+            ],
+            [
+                [
+                    'name' => 'test',
+                    'id' => 1,
+                ],
+                [
+                    'name',
+                ],
+                "SELECT * FROM `test_req_queries` WHERE `name` = 'test'",
+            ],
+            [
+                [
+                    'name$ct' => 'test',
+                    'detail' => [
+                        'test_req_query_id' => 1,
+                    ],
+                ],
+                [
+                    'name:ct',
+                    'detail' => [
+                        'test_req_query_id',
+                    ],
+                ],
+                implode(' ', [
+                    "SELECT `test_req_queries`.* FROM `test_req_queries`",
+                    "LEFT JOIN `test_req_query_details`",
+                    "ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`",
+                    "WHERE `test_req_queries`.`name` LIKE '%test%' AND `test_req_query_details`.`test_req_query_id` = 1",
+                ]),
+            ],
+            [
+                [
+                    'detail' => [
+                        'test_req_query_id' => 1,
+                    ],
+                    'name$ct' => 'test',
+                ],
+                [
+                    'name:ct',
+                    'detail' => [
+                        'test_req_query_id',
+                    ],
+                ],
+                implode(' ', [
+                    "SELECT `test_req_queries`.* FROM `test_req_queries`",
+                    "LEFT JOIN `test_req_query_details`",
+                    "ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`",
+                    "WHERE `test_req_query_details`.`test_req_query_id` = 1 AND `test_req_queries`.`name` LIKE '%test%'",
+                ]),
+            ],
+            [
+                [
+                    'name' => '1',
+                    'name:ct' => '1',
+                    'name:ge' => '1',
+                    'name:le' => '1',
+                    'name:gt' => '1',
+                    'name:lt' => '1',
+                    'name:hs' => '1',
+                ],
+                [],
+                implode(' ', [
+                    "SELECT * FROM `test_req_queries` WHERE `name` = '1'",
+                    "AND `name` LIKE '%1%'",
+                    "AND `name` >= '1'",
+                    "AND `name` <= '1'",
+                    "AND `name` > '1'",
+                    "AND `name` < '1'",
+                    "AND `name` != ''",
+                ]),
+            ],
+        ];
     }
 
     public function testLikeJoin()
@@ -353,12 +497,12 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]);
         $query = TestReqQuery::new()->setReq($req)->reqSearch()->all();
 
-        $this->assertEquals('test', $query[0]['name']);
-
         $this->assertEquals(implode(' ', [
             'SELECT `test_req_queries`.* FROM `test_req_queries` LEFT JOIN',
             '`test_req_query_details` ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`',
             'WHERE `test_req_queries`.`name` LIKE ? AND `test_req_query_details`.`name` LIKE ?',
         ]), $query->getSql());
+
+        $this->assertEquals('test', $query[0]['name']);
     }
 }

@@ -2,12 +2,13 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\BaseModel;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 use Wei\Req;
 
 /**
  * @mixin \ReqMixin
  * @mixin \IsPresentMixin
+ * @mixin \IsDateMixin
  * @property Req $req 需加上 phpstan 才能识别
  * @experimental 待整理方法命名和参数
  */
@@ -49,7 +50,21 @@ trait ReqQueryTrait
      */
     protected $reqOrderBy = [];
 
-    protected $reqJoins = [];
+    /**
+     * The conditions that can be used for search
+     *
+     * eg:
+     * [
+     *   'name',
+     *   'age$gt',
+     *   'profile' => [
+     *     'city',
+     *   ]
+     * ]
+     *
+     * @var array|false
+     */
+    protected $reqSearch = [];
 
     /**
      * @param Req $req
@@ -147,7 +162,29 @@ trait ReqQueryTrait
     }
 
     /**
-     * 根据请求参数，执行分页，排序和搜索操作
+     * Set the conditions that can be used for search
+     *
+     * @param array|false $reqSearch
+     * @return $this
+     */
+    public function setReqSearch($reqSearch): self
+    {
+        $this->reqSearch = $reqSearch;
+        return $this;
+    }
+
+    /**
+     * Return the conditions that can be used for search
+     *
+     * @return array|false
+     */
+    public function getReqSearch()
+    {
+        return $this->reqSearch;
+    }
+
+    /**
+     * Add paging, sorting and search query based on request parameters
      *
      * @return $this
      */
@@ -157,49 +194,20 @@ trait ReqQueryTrait
     }
 
     /**
-     * 根据请求参数，执行搜索操作
+     * Add paging query based on request parameters
      *
-     * @param array $options
      * @return $this
      */
-    public function reqSearch(array $options = []): self
+    public function reqPage(): self
     {
-        // 允许传索引数组表示常见的only选项
-        if (isset($options[0])) {
-            $options['only'] = $options;
-        }
-
-        $req = (array) $this->req->getData()['search'] ?? [];
-        if (isset($options['only'])) {
-            $req = array_intersect_key($req, array_flip((array) $options['only']));
-        }
-        if (isset($options['except'])) {
-            $req = array_diff_key($req, array_flip((array) $options['except']));
-        }
-
-        $isPresent = $this->isPresent;
-        foreach ($req as $name => $value) {
-            if (!$isPresent($value)) {
-                continue;
-            }
-
-            if (is_array($value)) {
-                foreach ($value as $subName => $subValue) {
-                    if (!$isPresent($subValue)) {
-                        continue;
-                    }
-
-                    $this->processRelationQuery($name, $subName, $subValue);
-                }
-            } else {
-                $this->processColumnQuery($name, $value);
-            }
-        }
+        $limit = $this->req['limit'] ?: 10;
+        $page = $this->req['page'] ?: 1;
+        $this->limit($limit)->page($page);
         return $this;
     }
 
     /**
-     * 根据请求参数，执行排序操作
+     * Add sorting query based on request parameters
      *
      * @return $this
      */
@@ -238,16 +246,17 @@ trait ReqQueryTrait
     }
 
     /**
-     * 根据请求参数，执行分页操作
+     * Add search query based on request parameters
      *
      * @return $this
      */
-    public function reqPage(): self
+    public function reqSearch(): self
     {
-        $limit = $this->req['limit'] ?: 10;
-        $page = $this->req['page'] ?: 1;
-        $this->limit($limit)->page($page);
-        return $this;
+        $reqSearch = $this->getReqSearch();
+        if (false === $reqSearch) {
+            return $this;
+        }
+        return $this->processReqSearch($this, (array) $this->req['search'] ?? [], $reqSearch);
     }
 
     /**
@@ -264,124 +273,91 @@ trait ReqQueryTrait
     }
 
     /**
-     * 查询当前模型的值
+     * Add search query based on request parameters and allowed search conditions
      *
-     * @param string $name
-     * @param mixed $value
-     */
-    protected function processColumnQuery(string $name, $value): void
-    {
-        if (isset($this->reqMaps[$name][$value])) {
-            $value = $this->reqMaps[$name][$value];
-        }
-
-        // 提取出操作
-        list($name, $op) = $this->parseNameAndOp($name);
-
-        // 检查字段是否存在
-        if (!$this->hasColumn($name)) {
-            return;
-        }
-
-        if ($this->getQueryPart('join')) {
-            $name = $this->getTable() . '.' . $name;
-        }
-
-        $this->queryByOp($name, $op, $value);
-    }
-
-    /**
-     * 查询关联模型的值
-     *
-     * @param string $relation
-     * @param string $name
-     * @param mixed $value
-     */
-    protected function processRelationQuery(string $relation, string $name, $value): void
-    {
-        if (!$this->isRelation($relation)) {
-            return;
-        }
-
-        $this->reqJoin($relation);
-
-        list($name, $op) = $this->parseNameAndOp($name);
-
-        /** @var BaseModel $related */
-        $related = $this->{$relation}();
-        if (!$related->hasColumn($name)) {
-            return;
-        }
-
-        $this->queryByOp($related->getTable() . '.' . $name, $op, $value);
-    }
-
-    /**
-     * @param array|string $relations
+     * @param array $search
+     * @param array $allows
+     * @param WeiBaseModel $model
      * @return $this
      */
-    protected function reqJoin($relations)
+    protected function processReqSearch(WeiBaseModel $model, array $search, array $allows): self
     {
-        foreach ((array) $relations as $relation) {
-            if (isset($this->reqJoins[$relation])
-                || !$this->isRelation($relation)
-            ) {
+        foreach ($search as $name => $value) {
+            if (!$this->isPresent($value)) {
                 continue;
             }
 
-            $this->reqJoins[$relation] = true;
-            $this->selectMain();
-
-            /** @var BaseModel $related */
-            $related = $this->{$relation}();
-            $config = $related->getRelation();
-
-            $table = $related->getTable();
-
-            // 处理跨数据库的情况
-            if ($related->getDb() !== $this->getDb()) {
-                $table = $related->getDb()->getDbname() . '.' . $table;
+            if (is_array($value) && $model->isRelation($name)) {
+                $this->selectMain()->leftJoinRelation($name);
+                $relation = $model->getRelationModel($name);
+                $this->processReqSearch($relation, $value, $allows[$name] ?? []);
             }
 
-            $this->leftJoin(
-                $table,
-                $table . '.' . $config['foreignKey'],
-                '=',
-                $this->getTable() . '.' . $config['localKey']
-            );
-        }
+            if ($allows) {
+                $name = str_replace($this->reqSeparators, $this->reqSeparators[0], $name);
+                if (!in_array($name, $allows)) {
+                    continue;
+                }
+            }
 
+            $this->addReqColumnQuery($model, $name, $value);
+        }
         return $this;
     }
 
     /**
-     * 从请求名称中解析出字段名称和操作符
+     * Add query based on model and column name
+     *
+     * @param WeiBaseModel $model
+     * @param string $name
+     * @param mixed $value
+     */
+    protected function addReqColumnQuery(WeiBaseModel $model, string $name, $value): void
+    {
+        [$name, $op] = $this->parseReqNameAndOp($name);
+        if (!$model->hasColumn($name)) {
+            return;
+        }
+
+        if ($model !== $this) {
+            $name = $model->getTable() . '.' . $name;
+        }
+
+        if (isset($this->reqMaps[$name][$value])) {
+            $value = $this->reqMaps[$name][$value];
+        }
+
+        $this->whereReqOp($name, $op, $value);
+    }
+
+    /**
+     * Parse the column name and operator from the request name
      *
      * @param string $name
      * @return array
      */
-    protected function parseNameAndOp(string $name): array
+    protected function parseReqNameAndOp(string $name): array
     {
         foreach ($this->reqSeparators as $separator) {
             if (false !== strpos($name, $separator)) {
                 return explode($separator, $name, 2);
             }
         }
-        return [$name, 'eq'];
+        return [$name, ''];
     }
 
     /**
-     * 根据操作符执行查询
+     * Add a query based on the request operator
      *
      * @param string $column
      * @param string $op
      * @param mixed $value
      * @return $this
      */
-    protected function queryByOp(string $column, string $op, $value): self
+    protected function whereReqOp(string $column, string $op, $value): self
     {
         switch ($op) {
-            case 'eq':
+            case '':
                 return $this->where($column, '=', $value);
 
             case 'ct':
@@ -391,13 +367,13 @@ trait ReqQueryTrait
                 return $this->where($column, '>=', $value);
 
             case 'le':
-                return $this->where($column, '<=', $this->processMaxDate($column, $value));
+                return $this->where($column, '<=', $this->processReqDate($column, $value));
 
             case 'gt':
                 return $this->where($column, '>', $value);
 
             case 'lt':
-                return $this->where($column, '<', $this->processMaxDate($column, $value));
+                return $this->where($column, '<', $this->processReqDate($column, $value));
 
             case 'hs':
                 return $this->whereHas($column, $value);
@@ -407,36 +383,19 @@ trait ReqQueryTrait
         }
     }
 
-    protected function processMaxDate($column, $value): string
+    /**
+     * Add "23:59:59" to the date value
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function processReqDate(string $column, $value): string
     {
-        if ('datetime' === $this->getColumnCast($column) && wei()->isDate($value)) {
+        if ('datetime' === $this->getColumnCast($column) && $this->isDate($value)) {
             return $value . ' 23:59:59';
         }
         return $value;
-    }
-
-    protected function parseReqColumn(string $column): array
-    {
-        if (false === strpos($column, '.')) {
-            // 查询当前表
-            $value = $this->req[$column];
-            $relation = null;
-
-            // 有连表查询,加上表名
-            if ($this->getQueryPart('join')) {
-                $column = $this->getTable() . '.' . $column;
-            }
-        } else {
-            // 查询关联表
-            [$relation, $relationColumn] = explode('.', $column, 2);
-            $value = $this->req[$relation][$relationColumn];
-
-            /** @var BaseModel $related */
-            $related = $this->{$relation}();
-            $column = $related->getTable() . '.' . $relationColumn;
-        }
-
-        return [$column, $value, $relation];
     }
 
     /**
