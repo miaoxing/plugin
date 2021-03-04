@@ -81,7 +81,9 @@ class App extends \Wei\App
     /**
      * @var array
      */
-    private $page = [];
+    private $page = [
+        'file' => '',
+    ];
 
     /**
      * {@inheritdoc}
@@ -136,7 +138,7 @@ class App extends \Wei\App
      */
     public function getPlugin()
     {
-        if (!$this->plugin) {
+        if (!$this->plugin && $this->page['file']) {
             // 认为第二部分是插件名称
             list(, $plugin) = explode('/', $this->page['file'], 3);
             $this->plugin = $plugin;

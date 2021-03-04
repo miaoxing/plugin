@@ -123,7 +123,7 @@ final class AppTest extends BaseTestCase
             ],
             [
                 'returnRetInMiddleware',
-                '{"message":"returnRetInMiddleware","code":1}',
+                '{"message":"returnRetInMiddleware","code":0}',
             ],
             [
                 'returnStringInMiddleware',
