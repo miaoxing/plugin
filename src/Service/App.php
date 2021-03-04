@@ -377,7 +377,7 @@ class App extends \Wei\App
         // Handle Model class
         if ($type
             && !$type->isBuiltin()
-            && is_a($type->getName(), Model::class, true)
+            && is_a($type->getName(), WeiBaseModel::class, true)
         ) {
             return $type->getName()::findOrFail($this->req['id']);
         }
