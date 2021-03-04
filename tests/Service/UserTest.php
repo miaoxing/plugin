@@ -34,6 +34,6 @@ final class UserTest extends BaseTestCase
     {
         User::logout();
         $this->assertNull(User::id());
-        $this->assertNull(User::cur()->name);
+        $this->assertSame('', User::cur()->name);
     }
 }
