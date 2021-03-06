@@ -155,10 +155,13 @@ final class AppTest extends BaseTestCase
         $app->setId(null);
         $this->assertSame(1, $app->getId());
 
-        $app->setId(null);
         wei()->cache->remove($prefix . 't.test.com');
         $req->setServer('HTTP_HOST', 't.test.com');
         $appModel->save(['domain' => 't.test.com']);
+        wei()->cache->remove($prefix . 't.test.com');
+
+        // Clear id before get, other step may get id, cause id become 1
+        $app->setId(null);
         $this->assertEquals($appModel->id, $app->getId());
 
         $app->setId($curId);
