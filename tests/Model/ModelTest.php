@@ -15,6 +15,7 @@ use Wei\Res;
  * @mixin \DbMixin
  *
  * @internal
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  */
 final class ModelTest extends BaseTestCase
 {

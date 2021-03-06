@@ -32,6 +32,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * @mixin \ClassMapMixin
  * @mixin \StrMixin
  * @see StaticCallTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GAutoCompletion extends BaseCommand
 {
