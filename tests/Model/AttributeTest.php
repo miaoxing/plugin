@@ -221,7 +221,7 @@ class AttributeTest extends BaseTestCase
         $user = TestUser::new();
         $this->assertSame([], $user->getHidden());
 
-        $user->hidden = null;
+        unset($user->hidden);
         $this->assertSame([], $user->getHidden());
     }
 
