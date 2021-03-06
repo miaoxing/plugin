@@ -123,13 +123,13 @@ class User extends UserModel
     /**
      * {@inheritdoc}
      */
-    public function save(iterable $data = []): self
+    protected function save(iterable $attributes = []): UserModel
     {
         // 确保是更新操作,同时有ID作为更新条件
         $this->new = false;
         $this['id'] = $this->getAuth()->getData()['id'];
 
-        return parent::save($data);
+        return parent::save($attributes);
     }
 
     /**
