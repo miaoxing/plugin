@@ -849,14 +849,21 @@ final class ModelTest extends BaseTestCase
     {
         $this->initFixtures();
 
+        $req = new Req([
+            'wei' => $this->wei,
+            'fromGlobal' => false,
+            'servers' => [
+                'HTTP_ACCEPT' => 'application/json',
+            ],
+        ]);
         $res = new Res(['wei' => $this->wei]);
 
         $user = TestUser::first();
-        $user->toRet()->toRes(null, $res);
+        $user->toRet()->toRes($req, $res);
         $this->assertSame(200, $res->getStatusCode());
 
         $user = TestUser::save();
-        $user->toRet()->toRes(null, $res);
+        $user->toRet()->toRes($req, $res);
         $this->assertSame(201, $res->getStatusCode());
     }
 
