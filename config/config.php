@@ -6,7 +6,7 @@ return [
         'debug' => true,
         'inis' => [
             'display_errors' => true,
-            'error_reporting' => \E_ALL & ~\E_NOTICE & ~\E_STRICT & ~\E_DEPRECATED,
+            'error_reporting' => \E_ALL & ~\E_NOTICE & ~\E_STRICT & ~\E_DEPRECATED & ~\E_USER_DEPRECATED,
             'date.timezone' => 'Asia/Shanghai',
         ],
         'aliases' => [

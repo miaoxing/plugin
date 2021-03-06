@@ -3,6 +3,9 @@
 return [
     /* @see Wei\Wei */
     'wei' => [
+        'inis' => [
+            'error_reporting' => \E_ALL,
+        ],
         'aliases' => [
             'plugin' => Miaoxing\Plugin\Service\Plugin::class,
         ],
