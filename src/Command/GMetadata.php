@@ -63,8 +63,12 @@ final class GMetadata extends BaseCommand
             }
 
             $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
-            $docBlocks[$propertyName] = rtrim(sprintf(' * @property %s $%s %s', $phpType, $propertyName,
-                $column['Comment']));
+            $docBlocks[$propertyName] = rtrim(sprintf(
+                ' * @property %s $%s %s',
+                $phpType,
+                $propertyName,
+                $column['Comment']
+            ));
         }
 
         // 获取getXxxAttribute的定义
