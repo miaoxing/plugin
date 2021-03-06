@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Miaoxing\Plugin\Service;
 
+use DateTimeImmutable;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer;
@@ -92,11 +93,12 @@ class Jwt extends BaseService
      */
     protected function generate(array $claims, int $expire = 86400 * 30): Token
     {
-        $time = time();
+        $jti = base64_encode(random_bytes(8));
         $builder = (new Builder())->issuedBy($this->req->getSchemeAndHost())
-            ->identifiedBy(base64_encode(random_bytes(8)), true)
-            ->issuedAt($time)
-            ->expiresAt($time + $expire);
+            ->identifiedBy($jti)
+            ->withHeader('jti', $jti)
+            ->issuedAt(new DateTimeImmutable())
+            ->expiresAt(new DateTimeImmutable('@' . (time() + $expire)));
         foreach ($claims as $name => $value) {
             $builder->withClaim($name, $value);
         }
@@ -127,11 +129,11 @@ class Jwt extends BaseService
             ]);
         }
 
-        if ($parsedToken->isExpired()) {
+        if ($parsedToken->isExpired(new DateTimeImmutable())) {
             return err('Token 已过期', static::CODE_EXPIRED);
         }
 
-        if (!$parsedToken->verify($this->getSigner(), $this->getPublicKey())) {
+        if (!$parsedToken->verify($this->getSigner(), new Key($this->getPublicKey()))) {
             return err('Token 签名错误');
         }
 
