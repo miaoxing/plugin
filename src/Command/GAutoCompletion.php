@@ -509,7 +509,7 @@ PHP;
     {
         $validators = [];
         foreach ($services as $name => $class) {
-            if (substr($name, 0, 2) === 'is') {
+            if ('is' === substr($name, 0, 2)) {
                 $validators[$name] = $class;
             }
         }

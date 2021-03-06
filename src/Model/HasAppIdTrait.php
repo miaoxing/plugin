@@ -45,6 +45,6 @@ trait HasAppIdTrait
      */
     protected function addAppIdToGuarded(): void
     {
-        array_push($this->guarded, 'appId');
+        $this->guarded[] = 'appId';
     }
 }

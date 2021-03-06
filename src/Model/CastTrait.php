@@ -178,7 +178,7 @@ trait CastTrait
 
             case 'array':
             case 'json':
-                return json_encode((array) $value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                return json_encode((array) $value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
 
             case 'list':
                 return implode($options['separator'] ?? ',', (array) $value);

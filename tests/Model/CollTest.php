@@ -215,7 +215,7 @@ class CollTest extends BaseTestCase
         unset($users->{0});
         $this->assertSame(['key'], array_keys($users->toArray()));
 
-        unset($users->key);
+        $users->key = null;
         $this->assertSame([], array_keys($users->toArray()));
     }
 
@@ -575,7 +575,6 @@ class CollTest extends BaseTestCase
 
         $user = TestUser::new();
         $user->filter(function () {
-
         });
     }
 

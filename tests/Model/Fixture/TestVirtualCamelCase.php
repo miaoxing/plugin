@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
 use Miaoxing\Plugin\Model\CamelCaseTrait;
-use Miaoxing\Plugin\Model\ModelTrait;
 
 /**
  * @property mixed $virtualColumn

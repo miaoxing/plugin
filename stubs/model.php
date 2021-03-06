@@ -1,11 +1,11 @@
-<?= '<?php', "\n" ?>
+<?php echo '<?php', "\n" ?>
 
-namespace <?= $namespace ?>;
+namespace <?php echo $namespace ?>;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Model\ModelTrait;
 
-class <?= $class ?> extends BaseModel
+class <?php echo $class ?> extends BaseModel
 {
     use ModelTrait;
 }

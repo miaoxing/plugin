@@ -10,6 +10,6 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
 
 class TestCamelCase extends WeiBaseModel
 {
-    use ModelTrait;
     use CamelCaseTrait;
+    use ModelTrait;
 }

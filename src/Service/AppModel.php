@@ -15,10 +15,10 @@ use Miaoxing\Plugin\Model\ModelTrait;
  */
 class AppModel extends BaseModel
 {
-    use ModelTrait;
-    use ConstTrait;
     use AppTrait;
     use CacheTrait;
+    use ConstTrait;
+    use ModelTrait;
 
     const STATUS_ALL = 0;
 

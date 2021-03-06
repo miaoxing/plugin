@@ -107,31 +107,31 @@ class Mysql extends BaseDriver
         }
 
         // Bool
-        if ($type === 'tinyint' && $length === 1) {
-            return [(bool) $default, $default !== '0'];
+        if ('tinyint' === $type && 1 === $length) {
+            return [(bool) $default, '0' !== $default];
         }
 
-        if (in_array($type, ['tinyint', 'int', 'smallint', 'mediumint', 'bigint'])) {
+        if (in_array($type, ['tinyint', 'int', 'smallint', 'mediumint', 'bigint'], true)) {
             // When the column is the primary key, it cant have default value, $default is null
-            return [(int) $default, $default !== '0' && $default !== null];
+            return [(int) $default, '0' !== $default && null !== $default];
         }
 
-        if (in_array($type, ['decimal'])) {
-            return [(float) $default, (float) $default !== 0.0];
+        if (in_array($type, ['decimal'], true)) {
+            return [(float) $default, 0.0 !== (float) $default];
         }
 
         // MySQL 5.7 *text and json columns cant have default value, so always use empty string and array as custom default value
         // TODO Mysql 8.0 support expression as default value
 
-        if (in_array($column['Type'], ['tinytext', 'text', 'mediumtext', 'longtext'])) {
+        if (in_array($column['Type'], ['tinytext', 'text', 'mediumtext', 'longtext'], true)) {
             return ['', true];
         }
 
-        if (in_array($type, ['json'])) {
+        if (in_array($type, ['json'], true)) {
             return [[], true];
         }
 
-        return [$default, $default !== ''];
+        return [$default, '' !== $default];
     }
 
     /**
@@ -251,7 +251,6 @@ class Mysql extends BaseDriver
                     $query .= $column . ' ' . $where['operator'] . ' ' . $this->wrap($where['value']);
                     // TODO refactor
                     continue 2;
-
                 default:
                     break;
             }

@@ -69,8 +69,8 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]);
         $query = TestReqQuery::new()->setReq($req)->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `id` DESC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `id` DESC',
         ]), $query->getRawSql());
     }
 
@@ -85,8 +85,8 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]);
         $query = TestReqQuery::new()->setReq($req)->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `start_at` ASC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `start_at` ASC',
         ]), $query->getRawSql());
     }
 
@@ -101,11 +101,10 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]);
         $query = TestReqQuery::new()->setReq($req)->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `start_at` ASC, `id` DESC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `start_at` ASC, `id` DESC',
         ]), $query->getRawSql());
     }
-
 
     public function testOrderByMultipleWithoutOrder()
     {
@@ -118,8 +117,8 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]);
         $query = TestReqQuery::new()->setReq($req)->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `start_at` ASC, `id` DESC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `start_at` ASC, `id` DESC',
         ]), $query->getRawSql());
     }
 
@@ -127,8 +126,8 @@ final class ReqQueryTraitTest extends BaseTestCase
     {
         $query = TestReqQuery::new()->setDefaultSortColumn('start_at')->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `start_at` DESC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `start_at` DESC',
         ]), $query->getRawSql());
     }
 
@@ -136,8 +135,8 @@ final class ReqQueryTraitTest extends BaseTestCase
     {
         $query = TestReqQuery::new()->setDefaultSortColumn(['start_at', 'id'])->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `start_at` DESC, `id` DESC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `start_at` DESC, `id` DESC',
         ]), $query->getRawSql());
     }
 
@@ -145,8 +144,8 @@ final class ReqQueryTraitTest extends BaseTestCase
     {
         $query = TestReqQuery::new()->setDefaultSortColumn('start_at', 'ASC')->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `start_at` ASC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `start_at` ASC',
         ]), $query->getRawSql());
     }
 
@@ -154,8 +153,8 @@ final class ReqQueryTraitTest extends BaseTestCase
     {
         $query = TestReqQuery::new()->setDefaultOrder('ASC')->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `id` ASC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `id` ASC',
         ]), $query->getRawSql());
     }
 
@@ -164,8 +163,8 @@ final class ReqQueryTraitTest extends BaseTestCase
         $query = TestReqQuery::new()->setDefaultSortColumn(['id', 'start_at'])->setDefaultOrder(['ASC', 'DESC'])
             ->reqOrderBy();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries`",
-            "ORDER BY `id` ASC, `start_at` DESC",
+            'SELECT * FROM `test_req_queries`',
+            'ORDER BY `id` ASC, `start_at` DESC',
         ]), $query->getRawSql());
     }
 
@@ -223,7 +222,7 @@ final class ReqQueryTraitTest extends BaseTestCase
             ->setReq($req)
             ->setReqOrderBy($reqOrderBy)
             ->reqOrderBy();
-        $this->assertSame("SELECT * FROM `test_req_queries`" . ($sql ? ' ORDER BY ' . $sql : ''), $query->getRawSql());
+        $this->assertSame('SELECT * FROM `test_req_queries`' . ($sql ? ' ORDER BY ' . $sql : ''), $query->getRawSql());
     }
 
     public function providerForSetReqOrderBy(): array
@@ -332,7 +331,7 @@ final class ReqQueryTraitTest extends BaseTestCase
         ]);
         $query = TestReqQuery::new()->setReq($req)->reqSearch();
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_req_queries` WHERE",
+            'SELECT * FROM `test_req_queries` WHERE',
             "`name` = 'test'",
             "AND `name` LIKE '%test%'",
         ]), $query->getRawSql());
@@ -432,9 +431,9 @@ final class ReqQueryTraitTest extends BaseTestCase
                     ],
                 ],
                 implode(' ', [
-                    "SELECT `test_req_queries`.* FROM `test_req_queries`",
-                    "LEFT JOIN `test_req_query_details`",
-                    "ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`",
+                    'SELECT `test_req_queries`.* FROM `test_req_queries`',
+                    'LEFT JOIN `test_req_query_details`',
+                    'ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`',
                     "WHERE `test_req_queries`.`name` LIKE '%test%' AND `test_req_query_details`.`test_req_query_id` = 1",
                 ]),
             ],
@@ -452,9 +451,9 @@ final class ReqQueryTraitTest extends BaseTestCase
                     ],
                 ],
                 implode(' ', [
-                    "SELECT `test_req_queries`.* FROM `test_req_queries`",
-                    "LEFT JOIN `test_req_query_details`",
-                    "ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`",
+                    'SELECT `test_req_queries`.* FROM `test_req_queries`',
+                    'LEFT JOIN `test_req_query_details`',
+                    'ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`',
                     "WHERE `test_req_query_details`.`test_req_query_id` = 1 AND `test_req_queries`.`name` LIKE '%test%'",
                 ]),
             ],

@@ -13,11 +13,11 @@ use Wei\V;
 
 class UserModel extends BaseModel
 {
-    use ModelTrait;
-    use UserTrait;
     use CacheTrait;
-    use ReqQueryTrait;
     use HasAppIdTrait;
+    use ModelTrait;
+    use ReqQueryTrait;
+    use UserTrait;
 
     protected $hidden = [
         'password',

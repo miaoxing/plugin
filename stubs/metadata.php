@@ -1,11 +1,11 @@
-<?= '<?php', "\n" ?>
+<?php echo '<?php', "\n" ?>
 
-namespace <?= $namespace ?>;
+namespace <?php echo $namespace ?>;
 
 /**
-<?= $docBlock ?>
+<?php echo $docBlock ?>
  * @internal will change in the future
  */
-trait <?= $class, "\n" ?>
+trait <?php echo $class, "\n" ?>
 {
 }

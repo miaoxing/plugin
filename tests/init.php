@@ -42,7 +42,7 @@ $wei->setConfig(getConfig($files));
 // NOTE: 安装需依赖CI环境的配置，暂时放到这里
 if ($isCi) {
     $out = static function ($message) {
-        fwrite(STDOUT, $message . "\n");
+        fwrite(\STDOUT, $message . "\n");
     };
 
     // 1. 初始化数据库

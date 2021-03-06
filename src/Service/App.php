@@ -415,7 +415,7 @@ class App extends \Wei\App
     protected function handleRet($ret)
     {
         if (is_array($ret)) {
-            if ($ret['code'] === 1) {
+            if (1 === $ret['code']) {
                 $ret = Ret::suc($ret);
             } else {
                 $ret = Ret::err($ret);
@@ -461,7 +461,7 @@ class App extends \Wei\App
     /**
      * 根据域名查找应用名称
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getIdByDomain(): ?string
     {

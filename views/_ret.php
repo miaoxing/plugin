@@ -1,15 +1,15 @@
 <?php $view->layout() ?>
 
-<?= $block->css() ?>
+<?php echo $block->css() ?>
 <style>
-  <?= file_get_contents(__DIR__ . '/../css/ret.css') ?>
+  <?php echo file_get_contents(__DIR__ . '/../css/ret.css') ?>
 </style>
-<?= $block->end() ?>
+<?php echo $block->end() ?>
 
-<div class="ret ret-<?= $type ?>">
+<div class="ret ret-<?php echo $type ?>">
   <div class="ret-icon-container">
-    <i class="ret-icon ret-icon-<?= $type ?>"></i>
+    <i class="ret-icon ret-icon-<?php echo $type ?>"></i>
   </div>
-  <h2 class="ret-title"><?= $message ?></h2>
+  <h2 class="ret-title"><?php echo $message ?></h2>
   <!--<p class="ret-detail">详细提示</p>-->
 </div>

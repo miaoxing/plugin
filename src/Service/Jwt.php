@@ -154,7 +154,7 @@ class Jwt extends BaseService
     {
         $res = openssl_pkey_new([
             'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            'private_key_type' => \OPENSSL_KEYTYPE_RSA,
         ]);
 
         openssl_pkey_export($res, $privateKey);

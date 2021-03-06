@@ -8,7 +8,7 @@ abstract class DbCallback
     {
         $message = $sql;
         if ($params) {
-            $message .= ' with parameters: ' . json_encode($params, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            $message .= ' with parameters: ' . json_encode($params, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
         }
         wei()->logger->debug($message);
     }

@@ -99,7 +99,7 @@ trait QueryBuilderCacheTrait
      */
     public function getCacheTags(): ?array
     {
-        if ($this->cacheTags === true) {
+        if (true === $this->cacheTags) {
             $cacheTags[] = $this->getTable();
             foreach ($this->queryParts['join'] as $join) {
                 $cacheTags[] = $join['table'];

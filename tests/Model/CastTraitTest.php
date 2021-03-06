@@ -516,12 +516,12 @@ final class CastTraitTest extends BaseTestCase
         $cast = TestCast::new();
 
         $cast->nullable_int_column = 1;
-        unset($cast->nullable_int_column);
+        $cast->nullable_int_column = null;
         $this->assertNull($cast->nullable_int_column);
 
         $cast->nullable_default_int_column = 1;
-        unset($cast->nullable_default_int_column);
-        $this->assertSame(null, $cast->nullable_default_int_column);
+        $cast->nullable_default_int_column = null;
+        $this->assertNull($cast->nullable_default_int_column);
     }
 
     public function testDefaultSetNull()
@@ -532,7 +532,7 @@ final class CastTraitTest extends BaseTestCase
         $this->assertNull($cast->nullable_int_column);
 
         $cast->nullable_default_int_column = null;
-        $this->assertSame(null, $cast->nullable_default_int_column);
+        $this->assertNull($cast->nullable_default_int_column);
     }
 
     public function testDefaultIsset()

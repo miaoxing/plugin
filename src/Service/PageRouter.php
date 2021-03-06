@@ -21,7 +21,7 @@ class PageRouter extends BaseService
      */
     public function generatePages(): array
     {
-        $dirs = glob($this->pageDirGlob, GLOB_BRACE | GLOB_ONLYDIR);
+        $dirs = glob($this->pageDirGlob, \GLOB_BRACE | \GLOB_ONLYDIR);
         $pages = [];
         foreach ($dirs as $dir) {
             $pages = $this->scanPages($dir, $dir, $pages);

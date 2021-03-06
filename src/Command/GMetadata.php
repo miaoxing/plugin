@@ -58,7 +58,7 @@ final class GMetadata extends BaseCommand
         $docBlocks = [];
         foreach ($columns as $column) {
             $phpType = $this->getPhpType($column['Type']);
-            if ($column['Null'] === 'YES') {
+            if ('YES' === $column['Null']) {
                 $phpType .= '|null';
             }
 

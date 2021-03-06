@@ -1521,7 +1521,7 @@ trait QueryBuilderTrait
         }
 
         if ($append) {
-            if (in_array($name, ['orderBy', 'groupBy', 'select', 'set'])) {
+            if (in_array($name, ['orderBy', 'groupBy', 'select', 'set'], true)) {
                 // merge
                 $this->queryParts[$name] = array_merge($this->queryParts[$name], $value);
             } elseif ($isMultiple) {

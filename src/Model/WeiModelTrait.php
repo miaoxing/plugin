@@ -17,18 +17,18 @@ use Wei\Wei;
  */
 trait WeiModelTrait
 {
+    use CastTrait;
+    use CollTrait;
+    use DefaultScopeTrait;
+    use EventTrait;
+    use QueryBuilderCacheTrait;
     use QueryBuilderTrait {
         addQueryPart as private parentAddQueryPart;
         execute as private parentExecute;
         indexBy as private parentIndexBy;
     }
-    use QueryBuilderCacheTrait;
-    use EventTrait;
-    use CollTrait;
-    use CastTrait;
-    use RetTrait;
-    use DefaultScopeTrait;
     use RelationTrait;
+    use RetTrait;
 
     /**
      * {@inheritdoc}

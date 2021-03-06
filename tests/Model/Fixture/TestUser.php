@@ -21,8 +21,8 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
  */
 class TestUser extends WeiBaseModel
 {
-    use ModelTrait;
     use CacheTrait;
+    use ModelTrait;
 
     protected $scopes;
 

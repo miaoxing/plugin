@@ -53,7 +53,7 @@ class Ret extends \Wei\Ret
      */
     protected function err($message, $code = null, $level = null)
     {
-        if (is_null($code) && $this->env->isDev()) {
+        if (null === $code && $this->env->isDev()) {
             $code = $this->generateCode($message) ?? $this->defaultErrCode;
         }
         return parent::err($message, $code, $level);
@@ -66,7 +66,7 @@ class Ret extends \Wei\Ret
      */
     private function generateCode($message)
     {
-        $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4);
+        $traces = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 4);
 
         if ('err' === $traces[3]['function']) {
             // err();
@@ -77,7 +77,7 @@ class Ret extends \Wei\Ret
         }
 
         $parts = explode('/plugins/', $file);
-        if (count($parts) === 1) {
+        if (1 === count($parts)) {
             // Not in plugin
             return null;
         }

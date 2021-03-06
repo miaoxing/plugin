@@ -828,7 +828,7 @@ final class ModelTest extends BaseTestCase
 
     public function testToRet()
     {
-        $this->initFixtures();;
+        $this->initFixtures();
 
         $user = TestUser::first();
 

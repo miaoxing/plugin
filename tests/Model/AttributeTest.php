@@ -211,7 +211,7 @@ class AttributeTest extends BaseTestCase
         ]);
         $this->assertSame(123, $user->id);
 
-        unset($user->id);
+        $user->id = null;
         $this->assertNull($user->id);
     }
 
@@ -221,7 +221,7 @@ class AttributeTest extends BaseTestCase
         $user = TestUser::new();
         $this->assertSame([], $user->getHidden());
 
-        unset($user->hidden);
+        $user->hidden = null;
         $this->assertSame([], $user->getHidden());
     }
 
@@ -284,17 +284,17 @@ class AttributeTest extends BaseTestCase
         };
 
         foreach ($service->getColumns() as $column => $config) {
-            $service->$column = $column;
+            $service->{$column} = $column;
         }
 
         foreach ($service->getColumns() as $column => $config) {
-            $this->assertSame($column, $service->$column);
+            $this->assertSame($column, $service->{$column});
         }
 
         $service->save();
 
         foreach ($service->getColumns() as $column => $config) {
-            $this->assertSame($column, $service->$column);
+            $this->assertSame($column, $service->{$column});
         }
 
         $schema->dropIfExists('test_services');

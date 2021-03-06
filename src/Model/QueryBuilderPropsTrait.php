@@ -35,7 +35,7 @@ trait QueryBuilderPropsTrait
      *
      * @var callable|null
      */
-    protected $dbKeyConverter = null;
+    protected $dbKeyConverter;
 
     /**
      * A callback, used to convert the name of the table or column to the format required by PHP,
@@ -43,7 +43,7 @@ trait QueryBuilderPropsTrait
      *
      * @var callable|null
      */
-    protected $phpKeyConverter = null;
+    protected $phpKeyConverter;
 
     /**
      * The parts of query

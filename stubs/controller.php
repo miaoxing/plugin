@@ -1,10 +1,10 @@
-<?= '<?php', "\n" ?>
+<?php echo '<?php', "\n" ?>
 
-namespace <?= $namespace ?>;
+namespace <?php echo $namespace ?>;
 
 use Miaoxing\Plugin\BaseController;
 
-class <?= $class ?> extends BaseController
+class <?php echo $class ?> extends BaseController
 {
 
 }

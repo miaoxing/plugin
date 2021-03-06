@@ -180,7 +180,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
     public function exec()
     {
         if (!$this->controller) {
-            $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+            $traces = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 3);
             if (isset($traces[1]['class']) && __CLASS__ !== $traces[1]['class']) {
                 $match = $traces[1];
             } else {
@@ -464,7 +464,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
             case 'json':
             case 'jsonObject':
                 $data = json_decode($data, 'json' === $this->dataType);
-                if (null === $data && JSON_ERROR_NONE != json_last_error()) {
+                if (null === $data && \JSON_ERROR_NONE != json_last_error()) {
                     $exception = new \ErrorException('JSON parsing error', json_last_error());
                 }
                 break;

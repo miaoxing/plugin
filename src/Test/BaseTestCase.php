@@ -161,7 +161,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 
     protected function buildRetMessage($ret, $assertMessage = null)
     {
-        return $assertMessage . ' ret is ' . json_encode($ret, JSON_UNESCAPED_UNICODE);
+        return $assertMessage . ' ret is ' . json_encode($ret, \JSON_UNESCAPED_UNICODE);
     }
 
     /**

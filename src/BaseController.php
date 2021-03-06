@@ -18,8 +18,8 @@ use Wei\RetTrait;
  */
 abstract class BaseController extends \Wei\BaseController
 {
-    use RetTrait;
     use HandleRetTrait;
+    use RetTrait;
 
     /**
      * @var array

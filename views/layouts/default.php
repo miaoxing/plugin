@@ -6,15 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
-  <title><?= $e($wei->page->getTitle()) ?></title>
-  <?= $wei->page->renderHead() ?>
+  <title><?php echo $e($wei->page->getTitle()) ?></title>
+  <?php echo $wei->page->renderHead() ?>
 </head>
 <body>
 <?php $event->trigger('bodyStart') ?>
 
-<?= $content ?: '<div id="root"></div>' ?>
-<?= $block->get('html') ?>
+<?php echo $content ?: '<div id="root"></div>' ?>
+<?php echo $block->get('html') ?>
 
-<?= $wei->page->renderFooter() ?>
+<?php echo $wei->page->renderFooter() ?>
 </body>
 </html>

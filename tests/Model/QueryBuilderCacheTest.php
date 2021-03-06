@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model;
 
+use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
-use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 
 class QueryBuilderCacheTest extends BaseTestCase
 {

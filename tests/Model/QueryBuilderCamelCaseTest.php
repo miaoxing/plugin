@@ -26,7 +26,7 @@ class QueryBuilderCamelCaseTest extends BaseTestCase
         parent::tearDownAfterClass();
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->wei->setConfig('queryBuilder', [

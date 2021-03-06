@@ -848,8 +848,8 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::new()->joinRelation('profile');
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_users`",
-            "INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`",
+            'SELECT * FROM `test_users`',
+            'INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`',
         ]), $user->getSql());
     }
 
@@ -857,8 +857,8 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::new()->innerJoinRelation('profile');
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_users`",
-            "INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`",
+            'SELECT * FROM `test_users`',
+            'INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`',
         ]), $user->getSql());
     }
 
@@ -866,8 +866,8 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::new()->leftJoinRelation('profile');
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_users`",
-            "LEFT JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`",
+            'SELECT * FROM `test_users`',
+            'LEFT JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`',
         ]), $user->getSql());
     }
 
@@ -875,8 +875,8 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::new()->rightJoinRelation('profile');
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_users`",
-            "RIGHT JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`",
+            'SELECT * FROM `test_users`',
+            'RIGHT JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`',
         ]), $user->getSql());
     }
 
@@ -884,9 +884,9 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::new()->joinRelation(['profile', 'group']);
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_users`",
-            "INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`",
-            "INNER JOIN `test_user_groups` ON `test_user_groups`.`id` = `test_users`.`group_id`"
+            'SELECT * FROM `test_users`',
+            'INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`',
+            'INNER JOIN `test_user_groups` ON `test_user_groups`.`id` = `test_users`.`group_id`',
         ]), $user->getSql());
     }
 
@@ -894,8 +894,8 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::new()->joinRelation('profile')->joinRelation('profile');
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `test_users`",
-            "INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`",
+            'SELECT * FROM `test_users`',
+            'INNER JOIN `test_profiles` ON `test_profiles`.`test_user_id` = `test_users`.`id`',
         ]), $user->getSql());
     }
 

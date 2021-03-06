@@ -20,7 +20,7 @@ final class RefTest extends BaseTestCase
 
         static::dropTables();
 
-        $table = 'test_refs';//TestRef::getTable();
+        $table = 'test_refs'; //TestRef::getTable();
         wei()->schema->table($table)
             ->id()
             ->string('json')

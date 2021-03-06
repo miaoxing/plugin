@@ -14,9 +14,9 @@ use Miaoxing\Plugin\Model\QueryBuilderTrait;
  */
 class QueryBuilder extends BaseService
 {
+    use QueryBuilderCacheTrait;
     use QueryBuilderPropsTrait;
     use QueryBuilderTrait;
-    use QueryBuilderCacheTrait;
 
     /**
      * @var bool

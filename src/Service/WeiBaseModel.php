@@ -5,8 +5,6 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Model\QueryBuilderPropsTrait;
-use Wei\Db;
-use Wei\Event;
 
 /**
  * @internal 逐步完善后移到 Wei 中

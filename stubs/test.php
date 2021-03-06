@@ -4,10 +4,10 @@ echo '<?php';
 ?>
 
 
-namespace <?= $namespace ?>;
+namespace <?php echo $namespace ?>;
 
 use Miaoxing\Plugin\Test\BaseControllerTestCase;
 
-class <?= $class ?> extends BaseControllerTestCase
+class <?php echo $class ?> extends BaseControllerTestCase
 {
 }

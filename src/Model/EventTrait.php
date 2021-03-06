@@ -58,7 +58,7 @@ trait EventTrait
                 // Prefer self class method
                 if (is_string($callback) && method_exists($this, $callback)) {
                     $callback = function ($model, ...$args) use ($callback) {
-                        return $model->$callback(...$args);
+                        return $model->{$callback}(...$args);
                     };
                 }
                 $event->on($modelEvent, $callback);
@@ -82,7 +82,7 @@ trait EventTrait
      */
     protected function triggerModelEventWithMethod(string $name)
     {
-        if (false === $this->$name()) {
+        if (false === $this->{$name}()) {
             return false;
         }
         return $this->triggerModelEvent($name);

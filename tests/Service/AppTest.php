@@ -2,7 +2,6 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\App;
 use Miaoxing\Plugin\Service\AppModel;
 use Miaoxing\Plugin\Service\User;
 use Miaoxing\Plugin\Test\BaseTestCase;
@@ -95,7 +94,7 @@ final class AppTest extends BaseTestCase
         return [
             [
                 'sucAction',
-                json_encode(wei()->ret->suc(), JSON_UNESCAPED_UNICODE),
+                json_encode(wei()->ret->suc(), \JSON_UNESCAPED_UNICODE),
             ],
             [
                 'errAction',

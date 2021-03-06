@@ -177,7 +177,7 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
     protected function display($data = [])
     {
         // eg onScript
-        $function = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
+        $function = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
         $event = lcfirst(substr($function, 2));
         $id = $this->getId();
 

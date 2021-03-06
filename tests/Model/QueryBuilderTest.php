@@ -6,7 +6,6 @@ namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Service\QueryBuilder as Qb;
 use Miaoxing\Plugin\Test\BaseTestCase;
-use MiaoxingTest\Plugin\Fixture\SexConst;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use PDO;
 
@@ -33,7 +32,7 @@ final class QueryBuilderTest extends BaseTestCase
         parent::tearDownAfterClass();
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -1341,13 +1340,13 @@ final class QueryBuilderTest extends BaseTestCase
         $userId = $this->db->lastInsertId();
 
         $qb = Qb::table('test_users')->whereHas('birthday');
-        $this->assertSame("SELECT * FROM `p_test_users` WHERE `birthday` IS NOT NULL", $qb->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `birthday` IS NOT NULL', $qb->getRawSql());
 
         $user = $qb->desc('id')->first();
         $this->assertSame($userId, $user['id']);
 
         $qb = Qb::table('test_users')->whereNotHas('birthday');
-        $this->assertSame("SELECT * FROM `p_test_users` WHERE `birthday` IS NULL", $qb->getRawSql());
+        $this->assertSame('SELECT * FROM `p_test_users` WHERE `birthday` IS NULL', $qb->getRawSql());
 
         $user = $qb->desc('id')->first();
         $this->assertNotSame($userId, $user['id'] ?? null);
@@ -1386,7 +1385,7 @@ final class QueryBuilderTest extends BaseTestCase
 
         $qb = Qb::table('test_users')->whereHas('joined_date');
         $this->assertSame(implode(' ', [
-            "SELECT * FROM `p_test_users`",
+            'SELECT * FROM `p_test_users`',
             "WHERE (`joined_date` != '2000-01-01' OR `joined_date` IS NULL)",
         ]), $qb->getRawSql());
 

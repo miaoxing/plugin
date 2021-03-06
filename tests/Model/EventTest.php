@@ -35,7 +35,7 @@ class EventTest extends BaseTestCase
         wei()->schema->dropIfExists('test_events');
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Event::off('testEventModelAfterFind')->off('testEventModelBeforeSave');
 

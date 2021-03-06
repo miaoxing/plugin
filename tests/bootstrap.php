@@ -32,7 +32,7 @@ $paths = [
     'packages/wei',
     'vendor/wei/wei',
 ];
-foreach ($paths as  $path) {
+foreach ($paths as $path) {
     if (is_dir($path)) {
         $loader->addPsr4('WeiTest\\', $path . '/tests/unit');
         break;

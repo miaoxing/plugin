@@ -4,7 +4,6 @@ namespace Miaoxing\Plugin\Model;
 
 use ArrayIterator;
 use BadMethodCallException;
-use Closure;
 use Wei\Ret;
 
 /**
@@ -252,7 +251,7 @@ trait CollTrait
     protected function ensureColl(): void
     {
         if (!$this->coll) {
-            $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $traces = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             throw new BadMethodCallException(sprintf(
                 'Method "%s" can be called when the object is a collection',
                 $traces[1]['function']

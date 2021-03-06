@@ -1,10 +1,10 @@
-<?= '<?php', "\n" ?>
+<?php echo '<?php', "\n" ?>
 
-namespace <?= $namespace ?>;
+namespace <?php echo $namespace ?>;
 
 use Miaoxing\Plugin\BaseService;
 
-class <?= $class ?> extends BaseService
+class <?php echo $class ?> extends BaseService
 {
 
 }

@@ -4,12 +4,12 @@ echo '<?php';
 ?>
 
 
-namespace <?= $namespace ?> {
+namespace <?php echo $namespace ?> {
 
     /**
-<?= $docBlock ?>
+<?php echo $docBlock ?>
      */
-    class <?= $class, "\n" ?>
+    class <?php echo $class, "\n" ?>
     {
     }
 }
@@ -17,13 +17,13 @@ namespace <?= $namespace ?> {
 namespace {
 
     /**
-     * @return <?= $namespace ?>\<?= $class, "\n" ?>
+     * @return <?php echo $namespace ?>\<?php echo $class, "\n" ?>
      */
     function wei()
     {
     }
 
-<?= $mixin ?>
+<?php echo $mixin ?>
 
-<?= $viewVars ?>
+<?php echo $viewVars ?>
 }

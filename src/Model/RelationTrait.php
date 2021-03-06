@@ -550,12 +550,12 @@ trait RelationTrait
             return false;
         }
 
-        if (PHP_MAJOR_VERSION >= 8 && $ref->getAttributes(Relation::class)) {
+        if (\PHP_MAJOR_VERSION >= 8 && $ref->getAttributes(Relation::class)) {
             return true;
         }
 
         // Compat with PHP less than 8
-        return strpos($ref->getDocComment() ?: '', '@Relation') !== false;
+        return false !== strpos($ref->getDocComment() ?: '', '@Relation');
     }
 
     /**

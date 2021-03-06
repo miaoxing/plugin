@@ -136,7 +136,7 @@ trait ReqQueryTrait
      */
     public function getReqOrderBy()
     {
-        if ($this->reqOrderBy === false) {
+        if (false === $this->reqOrderBy) {
             return false;
         }
 
@@ -213,7 +213,7 @@ trait ReqQueryTrait
      */
     public function reqOrderBy(): self
     {
-        if ($this->reqOrderBy === false) {
+        if (false === $this->reqOrderBy) {
             return $this;
         }
 
@@ -221,8 +221,7 @@ trait ReqQueryTrait
 
         foreach ($sortColumns as $i => $column) {
             if (!$this->hasColumn($column)) {
-                unset($sortColumns[$i]);
-                unset($orders[$i]);
+                unset($sortColumns[$i], $orders[$i]);
             }
         }
 
@@ -295,7 +294,7 @@ trait ReqQueryTrait
 
             if ($allows) {
                 $name = str_replace($this->reqSeparators, $this->reqSeparators[0], $name);
-                if (!in_array($name, $allows)) {
+                if (!in_array($name, $allows, true)) {
                     continue;
                 }
             }

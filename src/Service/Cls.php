@@ -49,7 +49,7 @@ class Cls extends BaseService
             $newTraits = class_uses(array_pop($traitsToSearch), $autoload);
             $traits = array_merge($newTraits, $traits);
             $traitsToSearch = array_merge($newTraits, $traitsToSearch);
-        };
+        }
 
         foreach ($traits as $trait => $same) {
             $traits = array_merge(class_uses($trait, $autoload), $traits);
