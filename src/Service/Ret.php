@@ -40,7 +40,7 @@ class Ret extends \Wei\Ret
         if ($req->acceptJson() || $this->isApi($req)) {
             return $res->json($this);
         } else {
-            $type = $this->data['retType'] ?? (1 === $this->isSuc() ? 'success' : 'warning');
+            $type = $this->data['retType'] ?? ($this->isSuc() ? 'success' : 'warning');
             $content = $this->view->render('@plugin/_ret.php', $this->data + ['type' => $type]);
             return $res->setContent($content);
         }
@@ -61,7 +61,7 @@ class Ret extends \Wei\Ret
 
     /**
      * @param string|array $message
-     * @return int
+     * @return int|null
      * @throws \Exception
      */
     private function generateCode($message)
