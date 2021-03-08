@@ -542,7 +542,7 @@ trait WeiModelTrait
      * Returns the success result with model data
      *
      * @param array $merge
-     * @return Ret|\Miaoxing\Plugin\Service\Ret
+     * @return Ret
      * @svc
      */
     protected function toRet(array $merge = []): Ret
