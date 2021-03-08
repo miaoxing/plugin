@@ -573,8 +573,9 @@ trait WeiModelTrait
      * Return the class base name without "Model" suffix of the class
      *
      * @return string
+     * @internal For model use only
      */
-    protected function getModelBaseName(): string
+    public function getModelBaseName(): string
     {
         $name = Cls::baseName(static::class);
         if ('Model' !== $name && 'Model' === substr($name, -5)) {
@@ -1281,8 +1282,9 @@ trait WeiModelTrait
      * @param array $attributes
      * @param bool $merge
      * @return $this
+     * @internal For model use only
      */
-    protected function setAttributesFromDb(array $attributes, bool $merge = false): self
+    public function setAttributesFromDb(array $attributes, bool $merge = false): self
     {
         $this->attributes = array_merge($merge ? $this->attributes : [], $attributes);
         $this->setAttributeSource('*', static::ATTRIBUTE_SOURCE_DB, true);

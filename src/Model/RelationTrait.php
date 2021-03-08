@@ -449,8 +449,9 @@ trait RelationTrait
      * @param string $name
      * @param bool $throw
      * @return WeiBaseModel|null
+     * @internal For model use only
      */
-    protected function getRelationModel(string $name, bool $throw = true): ?WeiBaseModel
+    public function getRelationModel(string $name, bool $throw = true): ?WeiBaseModel
     {
         // Ignore parent method
         if (method_exists(ModelTrait::class, $name)) {
@@ -566,9 +567,9 @@ trait RelationTrait
      *
      * @param array $relation
      * @return $this
-     * @internal
+     * @internal For model use only
      */
-    protected function setRelation(array $relation): self
+    public function setRelation(array $relation): self
     {
         $this->relation = $relation;
         return $this;
@@ -578,9 +579,9 @@ trait RelationTrait
      * Return the relation config
      *
      * @return array
-     * @internal
+     * @internal For model use only
      */
-    protected function getRelation(): array
+    public function getRelation(): array
     {
         return $this->relation;
     }
