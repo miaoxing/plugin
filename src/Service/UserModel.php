@@ -111,7 +111,7 @@ class UserModel extends BaseModel
 
     /**
      * @param array|\ArrayAccess $req
-     * @return Ret
+     * @return \Wei\Ret
      * @svc
      */
     protected function updatePassword($req)

@@ -10,9 +10,6 @@ parameters:
         - docs/auto-completion.php
         - vendor/wei/wei/docs/auto-completion.php
 
-    excludes_analyse:
-        - src/BaseModel.php
-
     ignoreErrors:
         # 自定义扩展未能识别到，暂时忽略
         -
