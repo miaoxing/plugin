@@ -459,11 +459,11 @@ class App extends \Wei\App
     }
 
     /**
-     * 根据域名查找应用名称
+     * 根据域名查找应用编号
      *
-     * @return string|null
+     * @return int|null
      */
-    protected function getIdByDomain(): ?string
+    protected function getIdByDomain(): ?int
     {
         $domain = $this->req->getHost();
         if (!$domain || in_array($domain, $this->domains, true)) {
