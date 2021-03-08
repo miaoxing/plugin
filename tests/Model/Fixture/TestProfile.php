@@ -8,6 +8,7 @@ use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
+ * @property int|null $id
  * @property string|null $test_user_id
  * @property string|null $description
  */

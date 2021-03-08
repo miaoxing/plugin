@@ -77,11 +77,13 @@ class AttributeSourceTest extends BaseTestCase
         $user->name = 'test';
         $this->assertSame(static::ATTRIBUTE_SOURCE_USER, $getAttributeSource('name'));
 
-        $user->name;
+        $name = $user->name;
+        $this->assertSame('test', $name);
         $this->assertSame(static::ATTRIBUTE_SOURCE_PHP, $getAttributeSource('name'));
 
         // Get it again, the data source is still php
-        $user->name;
+        $name = $user->name;
+        $this->assertSame('test', $name);
         $this->assertSame(static::ATTRIBUTE_SOURCE_PHP, $getAttributeSource('name'));
     }
 

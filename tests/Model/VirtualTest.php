@@ -106,6 +106,7 @@ final class VirtualTest extends BaseTestCase
     {
         $virtual = TestVirtual::new();
         $this->expectExceptionMessage('Property or object "virtualColumn" (class "Wei\VirtualColumn") not found');
+        // @phpstan-ignore-next-line
         $virtual->virtualColumn;
     }
 
@@ -113,6 +114,7 @@ final class VirtualTest extends BaseTestCase
     {
         $virtual = TestVirtual::new();
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: virtualColumn'));
+        // @phpstan-ignore-next-line
         $virtual->virtualColumn = 'abc';
     }
 }

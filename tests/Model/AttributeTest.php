@@ -62,6 +62,7 @@ class AttributeTest extends BaseTestCase
         ]);
 
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: key'));
+        // @phpstan-ignore-next-line
         $user['key'];
     }
 
@@ -175,6 +176,7 @@ class AttributeTest extends BaseTestCase
 
         $this->expectException(\BadMethodCallException::class);
         $this->expectExceptionMessageMatches('/Property or object "key2" \(class "Wei\\\Key2"\) not found, called in file/');
+        // @phpstan-ignore-next-line
         $this->assertNull($user->key2);
     }
 
@@ -199,6 +201,7 @@ class AttributeTest extends BaseTestCase
         ]);
 
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: key'));
+        // @phpstan-ignore-next-line
         $user->key = 'abc';
     }
 
@@ -245,6 +248,7 @@ class AttributeTest extends BaseTestCase
 
         $user = TestUser::new();
 
+        // @phpstan-ignore-next-line
         $logger = $user->logger;
         $this->assertInstanceOf(Logger::class, $logger);
     }
@@ -254,9 +258,11 @@ class AttributeTest extends BaseTestCase
         $this->initFixtures();
 
         $user = TestUser::new();
+        // @phpstan-ignore-next-line
         $logger = $user->logger;
 
         $user = TestUser::new();
+        // @phpstan-ignore-next-line
         $user->logger = $logger;
 
         $this->assertSame($logger, $user->logger);

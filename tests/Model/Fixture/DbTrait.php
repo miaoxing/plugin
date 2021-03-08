@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
+/**
+ * @mixin \DbMixin
+ */
 trait DbTrait
 {
     private static $tablePrefix;

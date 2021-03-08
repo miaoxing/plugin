@@ -6,6 +6,9 @@ use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
+/**
+ * @mixin \IsModelExistsMixin
+ */
 class IsModelExistsTest extends BaseTestCase
 {
     use DbTrait;

@@ -325,6 +325,7 @@ final class CastTraitTest extends BaseTestCase
         $cast = TestCast::new();
 
         $cast::onModelEvent('beforeSave', function () use ($cast) {
+            // @phpstan-ignore-next-line cast to string
             $cast->string_column = count($cast->json_column);
         });
 
@@ -397,10 +398,13 @@ final class CastTraitTest extends BaseTestCase
     {
         $cast = TestCast::new();
 
+        // @phpstan-ignore-next-line cast to []
         $cast->list_column = '';
         $this->assertSame([], $cast->list_column);
 
+        // @phpstan-ignore-next-line cast to []
         $cast->list_column = null;
+        // @phpstan-ignore-next-line
         $this->assertSame([], $cast->list_column);
 
         $cast->list_column = [];
@@ -496,6 +500,7 @@ final class CastTraitTest extends BaseTestCase
     {
         $cast = TestCast::new();
 
+        // @phpstan-ignore-next-line cast to int
         $cast->nullable_default_int_column = '7';
         $this->assertSame(7, $cast->nullable_default_int_column);
     }

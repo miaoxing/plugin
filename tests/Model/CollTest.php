@@ -59,6 +59,7 @@ class CollTest extends BaseTestCase
 
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: 0'));
         $users = TestUser::newColl();
+        // @phpstan-ignore-next-line
         $users[0];
     }
 
@@ -172,6 +173,7 @@ class CollTest extends BaseTestCase
             'key' => TestUser::new(),
         ]);
         $this->assertInstanceOf(TestUser::class, $users->{0});
+        // @phpstan-ignore-next-line
         $this->assertInstanceOf(TestUser::class, $users->key);
     }
 
@@ -183,6 +185,7 @@ class CollTest extends BaseTestCase
 
         $this->expectException(\BadMethodCallException::class);
         $this->expectExceptionMessageMatches('/Property or object "key2" \(class "Wei\\\Key2"\) not found, called in file/');
+        // @phpstan-ignore-next-line
         $this->assertNull($users->key2);
     }
 
@@ -192,6 +195,7 @@ class CollTest extends BaseTestCase
 
         $users = TestUser::newColl();
 
+        // @phpstan-ignore-next-line
         $users->key = TestUser::new();
         $this->assertArrayHasKey('key', $users);
 
@@ -547,12 +551,12 @@ class CollTest extends BaseTestCase
         $this->initFixtures();
 
         $users = TestUser::findAll([1, 2]);
-        $this->assertSame(2, count($users));
+        $this->assertCount(2, $users);
 
         $users->destroy();
 
         $users = TestUser::findAll([1, 2]);
-        $this->assertSame(0, count($users));
+        $this->assertCount(0, $users);
     }
 
     public function testSave()

@@ -155,12 +155,15 @@ class QueryBuilderCacheTest extends BaseTestCase
         $this->assertNull($user->getCacheTags());
 
         $user->setCacheTags();
+        // @phpstan-ignore-next-line invalid check
         $this->assertSame(['test_users'], $user->getCacheTags());
 
         $user->join('test_user_groups', 'test_users.group_id', '=', 'test_user_groups.id');
+        // @phpstan-ignore-next-line invalid check
         $this->assertSame(['test_users', 'test_user_groups'], $user->getCacheTags());
 
         $user->setCacheTags(['tag1', 'tag2']);
+        // @phpstan-ignore-next-line invalid check
         $this->assertSame(['tag1', 'tag2'], $user->getCacheTags());
     }
 }

@@ -68,7 +68,7 @@ trait SoftDeleteTrait
      * @return $this
      * @svc
      */
-    protected function reallyDestroy($id = false): self
+    protected function reallyDestroy($id = null): self
     {
         $this->reallyDestroy = true;
         $this->destroy($id);

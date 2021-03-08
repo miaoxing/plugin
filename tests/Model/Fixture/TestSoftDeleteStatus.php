@@ -9,7 +9,8 @@ use Miaoxing\Plugin\Model\SoftDeleteTrait;
 use Miaoxing\Plugin\Service\WeiBaseModel;
 
 /**
- * @property string|null status
+ * @property int|null $id
+ * @property int|null $status
  */
 class TestSoftDeleteStatus extends WeiBaseModel
 {

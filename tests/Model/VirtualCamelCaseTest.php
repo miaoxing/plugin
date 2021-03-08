@@ -106,6 +106,7 @@ final class VirtualCamelCaseTest extends BaseTestCase
     {
         $virtual = TestVirtualCamelCase::new();
         $this->expectExceptionMessage('Property or object "virtual_column" (class "Wei\Virtual_column") not found');
+        // @phpstan-ignore-next-line
         $virtual->virtual_column;
     }
 

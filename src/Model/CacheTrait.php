@@ -23,7 +23,7 @@ trait CacheTrait
     /**
      * Return the model cache key
      *
-     * @param int|null $id
+     * @param string|int|null $id
      * @return string
      */
     public function getModelCacheKey($id = null): string

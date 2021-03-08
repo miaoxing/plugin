@@ -29,13 +29,7 @@ class TestArticle extends WeiBaseModel
         return $this->belongsTo(TestUser::class, 'id', 'editor_id');
     }
 
-    /**
-     * NOTE: 使用参数是避免和父类方法冲突
-     *
-     * @param mixed|null $tags
-     * @return static
-     */
-    public function tags($tags = null)
+    public function tags()
     {
         return $this->belongsToMany(TestTag::class);
     }
