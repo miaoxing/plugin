@@ -23,7 +23,7 @@ trait EventTrait
      *
      * NOTE: use `eventService` instead of `event` to avoid conflict with model relation
      *
-     * @var Event
+     * @var Event|null
      */
     protected $eventService;
 
@@ -96,8 +96,10 @@ trait EventTrait
     protected function getEventService(): Event
     {
         if (!isset($this->eventService)) {
+            // @phpstan-ignore-next-line $eventService (Wei\Event|null) does not accept Wei\Base.
             $this->eventService = $this->wei->get('event', [], $this->providers);
         }
+        // @phpstan-ignore-next-line should return Wei\Event but returns Wei\Base.
         return $this->eventService;
     }
 

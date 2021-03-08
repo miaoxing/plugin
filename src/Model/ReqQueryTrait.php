@@ -255,7 +255,7 @@ trait ReqQueryTrait
         if (false === $reqSearch) {
             return $this;
         }
-        return $this->processReqSearch($this, (array) $this->req['search'] ?? [], $reqSearch);
+        return $this->processReqSearch($this, (array) ($this->req['search'] ?? []), $reqSearch);
     }
 
     /**
@@ -389,7 +389,7 @@ trait ReqQueryTrait
      * @param mixed $value
      * @return mixed
      */
-    protected function processReqDate(string $column, $value): string
+    protected function processReqDate(string $column, $value)
     {
         if ('datetime' === $this->getColumnCast($column) && $this->isDate($value)) {
             return $value . ' 23:59:59';

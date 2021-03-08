@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Model;
 
 use Miaoxing\Plugin\Db\BaseDriver;
 use Wei\BaseCache;
+use Wei\Db;
 
 /**
  * The properties of the the query builder
@@ -15,7 +16,7 @@ trait QueryBuilderPropsTrait
     /**
      * The name of the table
      *
-     * @var string
+     * @var string|null
      */
     protected $table;
 
@@ -110,7 +111,7 @@ trait QueryBuilderPropsTrait
     /**
      * The cache service that stores metadata
      *
-     * @var BaseCache
+     * @var BaseCache|null
      */
     protected $metadataCache;
 
@@ -124,7 +125,7 @@ trait QueryBuilderPropsTrait
     /**
      * The db service
      *
-     * @var Db
+     * @var Db|null
      */
     protected $db;
 

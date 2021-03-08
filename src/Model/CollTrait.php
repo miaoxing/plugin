@@ -26,6 +26,7 @@ trait CollTrait
      * @param iterable $attributes
      * @param array $options
      * @return $this|$this[]
+     * @phpstan-return $this
      */
     public static function newColl(iterable $attributes = [], array $options = []): self
     {
@@ -46,6 +47,7 @@ trait CollTrait
      * Clear the default attribute values and convert to a collection
      *
      * @return $this|$this[]
+     * @phpstan-return $this
      */
     public function beColl(): self
     {
@@ -155,6 +157,7 @@ trait CollTrait
      *
      * @param callable $fn
      * @return $this|$this[]
+     * @phpstan-return $this
      */
     public function filter(callable $fn)
     {
@@ -200,7 +203,7 @@ trait CollTrait
     /**
      * Set the value of the specified key name in the collection
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param self $value
      * @return $this
      */

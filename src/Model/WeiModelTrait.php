@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Model;
 
 use InvalidArgumentException;
-use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Service\Cls;
 use Miaoxing\Plugin\Service\Str;
 use Wei\Base;
@@ -14,6 +13,8 @@ use Wei\Wei;
 
 /**
  * The main functions of the model, expected to be used with \Wei\BaseModel
+ *
+ * @mixin \UserMixin
  */
 trait WeiModelTrait
 {
@@ -61,6 +62,7 @@ trait WeiModelTrait
      */
     public static function new($attributes = [], array $options = []): self
     {
+        /** @var class-string<$this> $class */
         $class = static::getServiceClass();
         return new $class($options + ['attributes' => $attributes]);
     }
@@ -438,7 +440,7 @@ trait WeiModelTrait
 
     /**
      * @param string|int $name
-     * @return BaseService|$this
+     * @return Base|$this
      * @throws \Exception
      */
     public function &__get($name)
@@ -726,7 +728,7 @@ trait WeiModelTrait
     /**
      * Set the record field value
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
@@ -832,6 +834,7 @@ trait WeiModelTrait
      *
      * @param array $ids
      * @return $this|$this[]
+     * @phpstan-return $this
      * @svc
      */
     protected function findAll(array $ids): self
@@ -865,6 +868,7 @@ trait WeiModelTrait
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
+     * @phpstan-return $this
      * @svc
      */
     protected function findAllBy($column, $operator = null, $value = null): self
@@ -954,6 +958,7 @@ trait WeiModelTrait
 
     /**
      * @return $this|$this[]
+     * @phpstan-return $this
      * @svc
      */
     protected function all(): self

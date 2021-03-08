@@ -138,7 +138,7 @@ trait CastTrait
                 }
 
                 $value = explode($options['separator'] ?? ',', $value);
-                if ($options['type'] ?? 'string' === 'int') {
+                if (($options['type'] ?? 'string') === 'int') {
                     $value = array_map('intval', $value);
                 }
 

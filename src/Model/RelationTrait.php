@@ -78,7 +78,7 @@ trait RelationTrait
     }
 
     /**
-     * @param self|string $model
+     * @param WeiBaseModel|string $model
      * @param string|null $foreignKey
      * @param string|null $localKey
      * @return WeiBaseModel
@@ -167,6 +167,7 @@ trait RelationTrait
      *
      * @param array|string $names
      * @return $this|$this[]
+     * @phpstan-return $this
      */
     public function load($names): self
     {
@@ -247,7 +248,7 @@ trait RelationTrait
                 $table . '.' . $config['foreignKey'],
                 '=',
                 $this->getTable() . '.' . $config['localKey'],
-                $type,
+                $type
             );
         }
         return $this;
@@ -329,6 +330,7 @@ trait RelationTrait
      * @param array $relation
      * @param string $name
      * @return WeiBaseModel|WeiBaseModel[]
+     * @phpstan-return WeiBaseModel
      */
     protected function loadHasMany(?WeiBaseModel $related, array $relation, string $name)
     {
@@ -370,7 +372,8 @@ trait RelationTrait
      * @param WeiBaseModel|null $related
      * @param array $relation
      * @param string $name
-     * @return $this|$this[]
+     * @return WeiBaseModel|WeiBaseModel[]
+     * @phpstan-return WeiBaseModel
      */
     protected function loadBelongsToMany(?WeiBaseModel $related, array $relation, string $name)
     {
@@ -399,7 +402,6 @@ trait RelationTrait
      */
     protected function getJunctionTable(WeiBaseModel $related): string
     {
-        /** @var ModelTrait $related */
         $tables = [$this->getTable(), $related->getTable()];
         sort($tables);
 
@@ -433,6 +435,7 @@ trait RelationTrait
         } else {
             throw new \InvalidArgumentException(sprintf(
                 'Expected "model" argument to be a subclass or an instance of WeiBaseModel, "%s" given',
+                // @phpstan-ignore-next-line Else branch is unreachable because ternary operator condition is always true.
                 is_object($model) ? get_class($model) : (is_string($model) ? $model : gettype($model))
             ));
         }
@@ -459,7 +462,6 @@ trait RelationTrait
         }
 
         // WARNING: Do not pass any untrusted names to avoid being attacked
-        /** @var static $related */
         $related = $this->{$name}();
 
         if (!$related instanceof WeiBaseModel) {
@@ -550,7 +552,8 @@ trait RelationTrait
             return false;
         }
 
-        if (\PHP_MAJOR_VERSION >= 8 && $ref->getAttributes(Relation::class)) {
+        // PHP 8
+        if (method_exists($ref, 'getAttributes') && $ref->getAttributes(Relation::class)) {
             return true;
         }
 

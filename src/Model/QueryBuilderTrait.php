@@ -75,7 +75,7 @@ trait QueryBuilderTrait
 
     /**
      * @param string $function
-     * @param string[] $columns
+     * @param string|string[] $columns
      * @return string|null
      */
     public function aggregate($function, $columns = ['*']): ?string
@@ -333,7 +333,7 @@ trait QueryBuilderTrait
      *
      * @param int|string $key The parameter position or name
      * @param mixed $value The parameter value
-     * @param string|null $type
+     * @param string $type
      * @return $this
      */
     public function setQueryParam($key, $value, string $type = 'where'): self
@@ -541,7 +541,7 @@ trait QueryBuilderTrait
                     return $this->getDbDriver()->getColumns($this->getTable(), $this->phpKeyConverter);
                 }
             );
-            $this->columns = array_replace_recursive($columns, isset($this->columns) ? $this->columns : []);
+            $this->columns = array_replace_recursive($columns, $this->columns);
             $this->loadedColumns = true;
         }
         return $this->columns;
@@ -1552,6 +1552,7 @@ trait QueryBuilderTrait
         string $type = null
     ): self {
         if ($column instanceof Closure) {
+            // @phpstan-ignore-next-line Allow new static
             $query = new static([
                 'wei' => $this->wei,
                 'db' => $this->getDb(),
@@ -1576,6 +1577,12 @@ trait QueryBuilderTrait
         return $this;
     }
 
+    /**
+     * @param array $args
+     * @param string $condition
+     * @param string|null $type
+     * @return $this
+     */
     protected function addWhereArgs(array $args, string $condition = 'AND', string $type = null): self
     {
         if (2 === count($args)) {

@@ -23,7 +23,7 @@ class IsModelExists extends BaseValidator
     /**
      * The class name of model or model instance
      *
-     * @var string|Model
+     * @var string|WeiBaseModel
      */
     protected $model;
 
@@ -56,7 +56,6 @@ class IsModelExists extends BaseValidator
     protected function doValidate($input)
     {
         if (is_string($this->model) && is_subclass_of($this->model, WeiBaseModel::class)) {
-            /** @var Model $model */
             $this->model = $this->model::where($this->column, $input);
         } elseif ($this->model instanceof WeiBaseModel) {
             $this->model->where($this->column, $input);
@@ -79,9 +78,9 @@ class IsModelExists extends BaseValidator
      * Returns the type of model
      *
      * @param mixed $model
-     * @return false|string
+     * @return string
      */
-    private function getType($model)
+    private function getType($model): string
     {
         if (is_object($model)) {
             return get_class($model);

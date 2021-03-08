@@ -8,6 +8,7 @@ use Miaoxing\Plugin\Model\QueryBuilderPropsTrait;
 
 /**
  * @internal 逐步完善后移到 Wei 中
+ * @phpstan-ignore-next-line PHPStorm allows trait type to prompt code call
  * @mixin ModelTrait
  */
 abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable

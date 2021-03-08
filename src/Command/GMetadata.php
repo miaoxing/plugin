@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Plugin\Model\CamelCaseTrait;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
@@ -51,8 +52,9 @@ final class GMetadata extends BaseCommand
 
     protected function createClass($model, $plugin, $camelCase)
     {
+        /** @var WeiBaseModel $modelObject */
         $modelObject = $this->wei->get($model);
-        $table = $modelObject->db->getTable($modelObject->getTable());
+        $table = $modelObject->getDb()->getTable($modelObject->getTable());
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
 
         $docBlocks = [];
@@ -202,43 +204,5 @@ final class GMetadata extends BaseCommand
         }
 
         return false;
-    }
-
-    /**
-     * @param mixed $var
-     * @param string $indent
-     * @return string
-     * @link https://stackoverflow.com/questions/24316347/how-to-format-var-export-to-php5-4-array-syntax
-     */
-    private function varExport($var, $indent = '')
-    {
-        switch (gettype($var)) {
-            case 'string':
-                return '\'' . addcslashes($var, "\\\$\\'\r\n\t\v\f") . '\'';
-            case 'array':
-                $indexed = array_keys($var) === range(0, count($var) - 1);
-                $result = [];
-                foreach ($var as $key => $value) {
-                    $result[] = $indent . '    '
-                        . ($indexed ? '' : $this->varExport($key) . ' => ')
-                        . $this->varExport($value, "$indent    ");
-                }
-
-                return "[\n" . implode(",\n", $result) . ($result ? ',' : '') . "\n" . $indent . ']';
-            case 'boolean':
-                return $var ? 'true' : 'false';
-
-            case 'NULL':
-                return 'null';
-
-            case 'object':
-                if (isset($var->express)) {
-                    return $var->express;
-                }
-            // no break
-
-            default:
-                return var_export($var, true);
-        }
     }
 }
