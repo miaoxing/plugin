@@ -1,3 +1,25 @@
+## [0.3.3](https://github.com/miaoxing/plugin/compare/v0.3.2...v0.3.3) (2021-03-09)
+
+
+### Bug Fixes
+
+* 子类方法的返回值未兼容 ([9cc9e03](https://github.com/miaoxing/plugin/commit/9cc9e0335c7155808e5b7ab81faac80751aeba73))
+
+
+### Features
+
+* 兼容 Composer 2 ([7594996](https://github.com/miaoxing/plugin/commit/7594996c094026827ae7a1622b663d9636551f8a))
+* 支持 `lcobucci/jwt` 3.4 ([65e0a53](https://github.com/miaoxing/plugin/commit/65e0a5343cc40fd75bd44f1022955178a0fa3223))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from 6.2.0 to 6.3.0
+* **@wei/wei:** upgrade from 0.10.2 to 0.10.3
+
 ## [0.3.2](https://github.com/miaoxing/plugin/compare/v0.3.1...v0.3.2) (2021-03-05)
 
 
