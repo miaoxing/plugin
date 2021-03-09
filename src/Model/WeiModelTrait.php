@@ -5,6 +5,7 @@ namespace Miaoxing\Plugin\Model;
 use InvalidArgumentException;
 use Miaoxing\Plugin\Service\Cls;
 use Miaoxing\Plugin\Service\Str;
+use Miaoxing\Plugin\Service\User;
 use Wei\Base;
 use Wei\Req;
 use Wei\Ret;
@@ -13,8 +14,6 @@ use Wei\Wei;
 
 /**
  * The main functions of the model, expected to be used with \Wei\BaseModel
- *
- * @mixin \UserMixin
  */
 trait WeiModelTrait
 {
@@ -1240,7 +1239,7 @@ trait WeiModelTrait
         }
 
         if ($this->hasColumn($this->updatedByColumn)) {
-            $this->setColumnValue($this->updatedByColumn, $this->user->id);
+            $this->setColumnValue($this->updatedByColumn, $this->wei->user->id);
         }
 
         if ($this->new) {
@@ -1249,7 +1248,7 @@ trait WeiModelTrait
             }
 
             if ($this->hasColumn($this->createdByColumn) && !$this->getColumnValue($this->createdByColumn)) {
-                $this->setColumnValue($this->createdByColumn, $this->user->id);
+                $this->setColumnValue($this->createdByColumn, $this->wei->user->id);
             }
         }
 
