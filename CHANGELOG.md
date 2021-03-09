@@ -1,3 +1,26 @@
+# [0.4.0](https://github.com/miaoxing/plugin/compare/v0.3.3...v0.4.0) (2021-03-09)
+
+
+### Bug Fixes
+
+* **App:** `App::getIdByDomain` 返回值由 `string` 改为 `int` ([9108bf7](https://github.com/miaoxing/plugin/commit/9108bf7e4e6d74c0de52533c7e9dacc4d386fad5))
+* **Model:** 解决错误调用了模型的 protected 方法 ([935e05a](https://github.com/miaoxing/plugin/commit/935e05a044bc26a7409ea6a05e4e92e96b3874d9))
+
+
+### BREAKING CHANGES
+
+* **Model:** 模型的 `getRelationModel`，`setRelation`，`getRelation`，`getModelBaseName`，`setAttributesFromDb` 由 `protected` 改为 `public`，并加上 `@internal` 标识
+* **App:** `App::getIdByDomain` 返回值由 `string` 改为 `int`
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from 6.3.0 to 6.3.1
+* **@wei/wei:** upgrade from 0.10.3 to 0.10.4
+
 ## [0.3.3](https://github.com/miaoxing/plugin/compare/v0.3.2...v0.3.3) (2021-03-09)
 
 
