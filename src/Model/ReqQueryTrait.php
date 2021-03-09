@@ -9,7 +9,6 @@ use Wei\Req;
  * @mixin \ReqMixin
  * @mixin \IsPresentMixin
  * @mixin \IsDateMixin
- * @property Req $req 需加上 phpstan 才能识别
  * @experimental 待整理方法命名和参数
  */
 trait ReqQueryTrait

@@ -11,7 +11,6 @@ use Wei\Db;
  * The main functions of the query builder
  *
  * @author Twin Huang <twinhuang@qq.com>
- * @mixin \TagCacheMixin
  * @mixin \NearCacheMixin
  * @property \Wei\Cache $cache A cache service proxy 不引入 \CacheMixin 以免 phpstan 识别为 mixin 的 cache 方法
  * @internal Expected to be used only by QueryBuilder and ModelTrait

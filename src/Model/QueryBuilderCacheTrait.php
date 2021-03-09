@@ -8,6 +8,7 @@ use Wei\TagCache;
 /**
  * Add cache functions to the query builder
  *
+ * @mixin \TagCacheMixin
  * @internal Expected to be used only by QueryBuilder and ModelTrait
  */
 trait QueryBuilderCacheTrait
