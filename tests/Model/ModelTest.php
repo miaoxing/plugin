@@ -859,11 +859,15 @@ final class ModelTest extends BaseTestCase
         $res = new Res(['wei' => $this->wei]);
 
         $user = TestUser::first();
-        $user->toRet()->toRes($req, $res);
+        /** @var Ret $ret */
+        $ret = $user->toRet();
+        $ret->toRes($req, $res);
         $this->assertSame(200, $res->getStatusCode());
 
         $user = TestUser::save();
-        $user->toRet()->toRes($req, $res);
+        /** @var Ret $ret */
+        $ret = $user->toRet();
+        $ret->toRes($req, $res);
         $this->assertSame(201, $res->getStatusCode());
     }
 

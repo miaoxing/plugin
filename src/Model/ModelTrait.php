@@ -2,8 +2,6 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\Service\Ret;
-
 trait ModelTrait
 {
     use WeiModelTrait;
@@ -18,14 +16,5 @@ trait ModelTrait
     public function __invoke(): self
     {
         return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @svc
-     */
-    protected function toRet(array $merge = []): Ret
-    {
-        return parent::toRet($merge);
     }
 }
