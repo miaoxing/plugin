@@ -248,7 +248,7 @@ class AttributeTest extends BaseTestCase
 
         $user = TestUser::new();
 
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $logger = $user->logger;
         $this->assertInstanceOf(Logger::class, $logger);
     }
@@ -258,7 +258,7 @@ class AttributeTest extends BaseTestCase
         $this->initFixtures();
 
         $user = TestUser::new();
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $logger = $user->logger;
 
         $user = TestUser::new();

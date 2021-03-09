@@ -1551,7 +1551,7 @@ trait QueryBuilderTrait
         string $type = null
     ): self {
         if ($column instanceof Closure) {
-            // @phpstan-ignore-next-line Allow new static
+            /** @phpstan-ignore-next-line Allow new static */
             $query = new static([
                 'wei' => $this->wei,
                 'db' => $this->getDb(),
