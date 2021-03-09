@@ -430,15 +430,17 @@ trait RelationTrait
     {
         if ($model instanceof WeiBaseModel) {
             return $model;
-        } elseif (is_subclass_of($model, WeiBaseModel::class)) {
-            return forward_static_call([$model, 'new']);
-        } else {
-            throw new \InvalidArgumentException(sprintf(
-                'Expected "model" argument to be a subclass or an instance of WeiBaseModel, "%s" given',
-                // @phpstan-ignore-next-line Else branch is unreachable because ternary operator condition is always true.
-                is_object($model) ? get_class($model) : (is_string($model) ? $model : gettype($model))
-            ));
         }
+
+        if (is_subclass_of($model, WeiBaseModel::class)) {
+            return forward_static_call([$model, 'new']);
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Expected "model" argument to be a subclass or an instance of WeiBaseModel, "%s" given',
+            // @phpstan-ignore-next-line Else branch is unreachable because ternary operator condition is always true.
+            is_object($model) ? get_class($model) : (is_string($model) ? $model : gettype($model))
+        ));
     }
 
     /**

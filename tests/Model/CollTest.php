@@ -9,6 +9,9 @@ use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 use TypeError;
 
+/**
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ */
 class CollTest extends BaseTestCase
 {
     use DbTrait;
@@ -184,7 +187,9 @@ class CollTest extends BaseTestCase
         $users = TestUser::newColl();
 
         $this->expectException(\BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/Property or object "key2" \(class "Wei\\\Key2"\) not found, called in file/');
+        $this->expectExceptionMessageMatches(
+            '/Property or object "key2" \(class "Wei\\\Key2"\) not found, called in file/'
+        );
         // @phpstan-ignore-next-line
         $this->assertNull($users->key2);
     }
@@ -575,7 +580,9 @@ class CollTest extends BaseTestCase
 
     public function testFilterCallByModel()
     {
-        $this->expectExceptionObject(new \BadMethodCallException('Method "filter" can be called when the object is a collection'));
+        $this->expectExceptionObject(new \BadMethodCallException(
+            'Method "filter" can be called when the object is a collection'
+        ));
 
         $user = TestUser::new();
         $user->filter(function () {

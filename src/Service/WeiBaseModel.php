@@ -2,6 +2,10 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
+use JsonSerializable;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Model\QueryBuilderPropsTrait;
@@ -11,7 +15,7 @@ use Miaoxing\Plugin\Model\QueryBuilderPropsTrait;
  * @phpstan-ignore-next-line PHPStorm allows trait type to prompt code call
  * @mixin ModelTrait
  */
-abstract class WeiBaseModel extends BaseService implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable
+abstract class WeiBaseModel extends BaseService implements ArrayAccess, IteratorAggregate, Countable, JsonSerializable
 {
     use QueryBuilderPropsTrait;
 

@@ -10,6 +10,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestMutator;
 
 /**
  * @internal
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
  */
 final class MutatorTest extends BaseTestCase
 {

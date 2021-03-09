@@ -196,7 +196,9 @@ final class ReqQueryTraitTest extends BaseTestCase
     {
         $query = TestReqQuery::new()->setReqOrderBy([[]]);
 
-        $this->expectExceptionObject(new \RuntimeException('Expected the order by value contains 0-index value, given: []'));
+        $this->expectExceptionObject(
+            new \RuntimeException('Expected the order by value contains 0-index value, given: []')
+        );
         $query->getReqOrderBy();
     }
 
@@ -434,7 +436,8 @@ final class ReqQueryTraitTest extends BaseTestCase
                     'SELECT `test_req_queries`.* FROM `test_req_queries`',
                     'LEFT JOIN `test_req_query_details`',
                     'ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`',
-                    "WHERE `test_req_queries`.`name` LIKE '%test%' AND `test_req_query_details`.`test_req_query_id` = 1",
+                    "WHERE `test_req_queries`.`name` LIKE '%test%'",
+                    'AND `test_req_query_details`.`test_req_query_id` = 1',
                 ]),
             ],
             [
@@ -454,7 +457,8 @@ final class ReqQueryTraitTest extends BaseTestCase
                     'SELECT `test_req_queries`.* FROM `test_req_queries`',
                     'LEFT JOIN `test_req_query_details`',
                     'ON `test_req_query_details`.`test_req_query_id` = `test_req_queries`.`id`',
-                    "WHERE `test_req_query_details`.`test_req_query_id` = 1 AND `test_req_queries`.`name` LIKE '%test%'",
+                    'WHERE `test_req_query_details`.`test_req_query_id` = 1',
+                    "AND `test_req_queries`.`name` LIKE '%test%'",
                 ]),
             ],
             [

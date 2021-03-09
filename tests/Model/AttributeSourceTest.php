@@ -9,6 +9,9 @@ use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 use ReflectionMethod;
 
+/**
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ */
 class AttributeSourceTest extends BaseTestCase
 {
     use DbTrait;

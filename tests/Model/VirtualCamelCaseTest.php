@@ -9,6 +9,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestVirtualCamelCase;
 
 /**
  * @internal
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
  */
 final class VirtualCamelCaseTest extends BaseTestCase
 {

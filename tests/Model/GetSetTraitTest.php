@@ -9,6 +9,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestGetSet;
 
 /**
  * @internal
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
  */
 final class GetSetTraitTest extends BaseTestCase
 {

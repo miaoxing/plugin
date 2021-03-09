@@ -120,7 +120,9 @@ class Mysql extends BaseDriver
             return [(float) $default, 0.0 !== (float) $default];
         }
 
-        // MySQL 5.7 *text and json columns cant have default value, so always use empty string and array as custom default value
+        // MySQL 5.7 *text and json columns cant have default value,
+        // so always use empty string and array as custom default value
+
         // TODO Mysql 8.0 support expression as default value
 
         if (in_array($column['Type'], ['tinytext', 'text', 'mediumtext', 'longtext'], true)) {

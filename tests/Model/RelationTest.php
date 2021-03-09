@@ -17,6 +17,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUserGroup;
  *
  * @internal
  * @mixin \DbMixin
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
  */
 final class RelationTest extends BaseTestCase
 {
@@ -759,7 +760,9 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::save();
 
-        $this->expectExceptionObject(new \BadMethodCallException('Method "load" can be called when the object is a collection'));
+        $this->expectExceptionObject(
+            new \BadMethodCallException('Method "load" can be called when the object is a collection')
+        );
 
         $user->load('profile');
     }
@@ -769,7 +772,9 @@ final class RelationTest extends BaseTestCase
         $user = TestUser::new();
 
         $this->expectException(\BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/Property or object "getEventResult" \(class "Wei\\\GetEventResult"\) not found, called in file/');
+        $this->expectExceptionMessageMatches(
+            '/Property or object "getEventResult" \(class "Wei\\\GetEventResult"\) not found, called in file/'
+        );
 
         // @phpstan-ignore-next-line
         $user->getEventResult;
@@ -780,7 +785,9 @@ final class RelationTest extends BaseTestCase
         $user = TestUser::new();
 
         $this->expectException(\BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/Property or object "getGuarded" \(class "Wei\\\GetGuarded"\) not found, called in file/');
+        $this->expectExceptionMessageMatches(
+            '/Property or object "getGuarded" \(class "Wei\\\GetGuarded"\) not found, called in file/'
+        );
 
         // @phpstan-ignore-next-line
         $user->getGuarded;
@@ -791,7 +798,10 @@ final class RelationTest extends BaseTestCase
         $user = TestUser::new();
 
         $this->expectException(\ArgumentCountError::class);
-        $this->expectExceptionMessageMatches('/Too few arguments to function MiaoxingTest\\\Plugin\\\Model\\\Fixture\\\TestUser::methodHasArg\(\), 0 passed /');
+        $this->expectExceptionMessageMatches(implode(' ', [
+            '/Too few arguments to function',
+            'MiaoxingTest\\\Plugin\\\Model\\\Fixture\\\TestUser::methodHasArg\(\), 0 passed/',
+        ]));
 
         // @phpstan-ignore-next-line
         $user->methodHasArg;
@@ -826,7 +836,12 @@ final class RelationTest extends BaseTestCase
     {
         $user = TestUser::new();
 
-        $this->expectExceptionObject(new \InvalidArgumentException('Expected "model" argument to be a subclass or an instance of WeiBaseModel, "abc" given'));
+        $this->expectExceptionObject(
+            new \InvalidArgumentException(implode(' ', [
+                'Expected "model" argument to be a subclass or an instance of WeiBaseModel,',
+                '"abc" given',
+            ]))
+        );
 
         $user->hasOne('abc');
     }

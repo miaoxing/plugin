@@ -146,7 +146,9 @@ trait ReqQueryTrait
             }
 
             if (!isset($item[0])) {
-                throw new \RuntimeException('Expected the order by value contains 0-index value, given: ' . json_encode($item));
+                throw new \RuntimeException(
+                    'Expected the order by value contains 0-index value, given: ' . json_encode($item)
+                );
             }
 
             if (isset($item[0]) && !is_array($item[0])) {

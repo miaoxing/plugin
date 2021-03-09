@@ -7,6 +7,9 @@ use MiaoxingTest\Plugin\Model\Fixture\TestEvent;
 use MiaoxingTest\Plugin\Model\Fixture\TestEvent2;
 use Wei\Event;
 
+/**
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ */
 class EventTest extends BaseTestCase
 {
     public static function setUpBeforeClass(): void

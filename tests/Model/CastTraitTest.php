@@ -10,6 +10,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestCast;
 
 /**
  * @internal
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
  */
 final class CastTraitTest extends BaseTestCase
 {

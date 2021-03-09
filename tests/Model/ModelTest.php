@@ -16,6 +16,7 @@ use Wei\Res;
  *
  * @internal
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
  */
 final class ModelTest extends BaseTestCase
 {

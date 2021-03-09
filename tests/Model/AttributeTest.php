@@ -11,6 +11,9 @@ use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 use Wei\Logger;
 
+/**
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ */
 class AttributeTest extends BaseTestCase
 {
     use DbTrait;
@@ -175,7 +178,10 @@ class AttributeTest extends BaseTestCase
         ]);
 
         $this->expectException(\BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/Property or object "key2" \(class "Wei\\\Key2"\) not found, called in file/');
+        $this->expectExceptionMessageMatches(
+            '/Property or object "key2" \(class "Wei\\\Key2"\) not found, called in file/'
+        );
+
         // @phpstan-ignore-next-line
         $this->assertNull($user->key2);
     }
