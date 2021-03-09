@@ -11,6 +11,8 @@ use Miaoxing\Plugin\Service\Ret;
  * @mixin \LoggerMixin
  * @mixin \ReqMixin
  * @mixin \StrMixin
+ * @mixin \AppMixin
+ * @mixin \PluginMixin
  */
 abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
 {

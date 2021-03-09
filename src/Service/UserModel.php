@@ -101,7 +101,7 @@ class UserModel extends BaseModel
      */
     protected function can($permissionId)
     {
-        $result = $this->event->until('userCan', [$permissionId, $this]);
+        $result = $this->getEventService()->until('userCan', [$permissionId, $this]);
         if (null === $result) {
             $result = true;
         }
