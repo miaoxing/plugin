@@ -17,6 +17,7 @@ class JwtAuth extends BaseAuth
     public function login(UserModel $user)
     {
         $token = $this->jwt->generate(['id' => $user->id]);
+        $this->loginRet = suc(['token' => $token]);
         return suc([
             'message' => '登录成功',
             'token' => (string) $token,
