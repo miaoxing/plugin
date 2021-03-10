@@ -182,6 +182,7 @@ class User extends UserModel
     protected function loadRecordData(UserModel $user)
     {
         $this->setAttributesFromDb($user->convertToDbAttributes());
+        $this->new = false;
     }
 
     /**
@@ -194,7 +195,7 @@ class User extends UserModel
     }
 
     /**
-     * @return UserModel
+     * @return $this
      * @svc
      */
     protected function cur()
@@ -366,7 +367,7 @@ class User extends UserModel
      */
     protected function refresh(UserModel $user)
     {
-        if ($user->id === $this->getAuth()->getData()['id']) {
+        if ($user->id === ($this->getAuth()->getData()['id'] ?? null)) {
             $this->loginByModel($user);
         }
 
