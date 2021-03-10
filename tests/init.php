@@ -1,7 +1,7 @@
 <?php
 
 use Composer\Autoload\ClassLoader;
-use Miaoxing\Plugin\Service\AppModel;
+use Miaoxing\Plugin\Service\Jwt;
 use Miaoxing\Plugin\Service\UserModel;
 use Wei\Password;
 
@@ -60,6 +60,7 @@ if ($isCi) {
         'username' => 'admin',
         'password' => Password::hash('password'),
     ]);
+    Jwt::generateDefaultKeys();
 
     // 4. 逐个安装插件
     foreach ($wei->plugin->getAll() as $plugin) {
