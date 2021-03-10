@@ -9,7 +9,7 @@ class PageRouter extends BaseService
     /**
      * @var string
      */
-    protected $pageDirGlob = 'plugins/*/pages';
+    protected $pageDirGlob = '{pages,plugins/*/pages}';
 
     /**
      * @var array|null
