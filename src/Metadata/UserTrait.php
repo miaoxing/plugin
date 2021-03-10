@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Metadata;
 
 /**
- * @property int $id
+ * @property int|null $id
  * @property int $appId
  * @property string $outId
  * @property int $groupId 用户组

@@ -1912,7 +1912,7 @@ class User
     }
 
     /**
-     * @return UserModel
+     * @return $this
      * @see User::cur
      */
     public static function cur()
@@ -5753,7 +5753,7 @@ class User
     }
 
     /**
-     * @return UserModel
+     * @return $this
      * @see User::cur
      */
     public function cur()

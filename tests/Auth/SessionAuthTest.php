@@ -13,9 +13,9 @@ use Miaoxing\Plugin\Test\BaseTestCase;
 class SessionAuthTest extends BaseTestCase
 {
     /**
-     * @var User
+     * @var UserModel|null
      */
-    protected $user;
+    protected $newUser;
 
     public function testGetDataWontCauseUserKeyToNull()
     {
@@ -103,12 +103,12 @@ class SessionAuthTest extends BaseTestCase
 
     protected function getUser()
     {
-        $this->user || $this->user = UserModel::save([
+        $this->newUser || $this->newUser = UserModel::save([
             'nickName' => 'nickName',
             'email' => 'test@example.com',
             'name' => 'name',
         ]);
 
-        return $this->user;
+        return $this->newUser;
     }
 }
