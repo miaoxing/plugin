@@ -39,6 +39,15 @@ foreach (['WERCKER', 'GITHUB_ACTIONS'] as $ci) {
 }
 $wei->setConfig(getConfig($files));
 
+// 测试前生成 jwt key
+$path = Jwt::getPublicKey();
+if ('file://' === substr($path, 0, 7)) {
+    $path = substr($path, 7);
+}
+if (!is_file($path)) {
+    Jwt::generateDefaultKeys();
+}
+
 // NOTE: 安装需依赖CI环境的配置，暂时放到这里
 if ($isCi) {
     $out = static function ($message) {
@@ -60,7 +69,6 @@ if ($isCi) {
         'username' => 'admin',
         'password' => Password::hash('password'),
     ]);
-    Jwt::generateDefaultKeys();
 
     // 4. 逐个安装插件
     foreach ($wei->plugin->getAll() as $plugin) {

@@ -20,8 +20,4 @@ return [
     'env' => [
         'configFile' => 'storage/configs/%env%.php',
     ],
-
-    'user' => [
-        'authClass' => Miaoxing\Plugin\Auth\SessionAuth::class,
-    ],
 ];
