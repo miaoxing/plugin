@@ -56,11 +56,14 @@ final class GMetadata extends BaseCommand
         $modelObject = $this->wei->get($model);
         $table = $modelObject->getDb()->getTable($modelObject->getTable());
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);
+        $modelColumns = $modelObject->getColumns();
 
         $docBlocks = [];
         foreach ($columns as $column) {
+            $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
+
             $phpType = $this->getPhpType($column['Type']);
-            if ('YES' === $column['Null']) {
+            if (isset($modelColumns[$propertyName]['nullable']) && $modelColumns[$propertyName]['nullable']) {
                 $phpType .= '|null';
             }
 
