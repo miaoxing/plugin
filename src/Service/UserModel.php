@@ -11,6 +11,9 @@ use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Wei\Password;
 use Wei\V;
 
+/**
+ * @mixin \UserMixin
+ */
 class UserModel extends BaseModel
 {
     use CacheTrait;
@@ -144,5 +147,10 @@ class UserModel extends BaseModel
         User::logout();
 
         return suc();
+    }
+
+    protected function afterSave()
+    {
+        $this->user->refresh($this);
     }
 }
