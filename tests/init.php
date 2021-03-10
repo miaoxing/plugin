@@ -54,10 +54,8 @@ if ($isCi) {
     $wei->migration->migrate();
 
     // 3. 创建默认应用和用户
-    AppModel::findByOrCreate([
-        'userId' => 1,
-        'name' => 'app',
-    ]);
+    // 直接创建，如果数据表没有记录，调用 AppModel 会加载事件，从数据表查找当前应用，导致出错
+    $wei->db->insert('apps', ['user_id' => 1, 'name' => 'app']);
     UserModel::findByOrCreate([
         'username' => 'admin',
         'password' => Password::hash('password'),
