@@ -10,13 +10,13 @@
   "require": {
     "ext-json": "*",
     "ext-openssl": "*",
-    "wei/wei": "^0.10.4",
+    "wei/wei": "^0.10.5",
     "doctrine/inflector": "^1.4|^2.0",
     "lcobucci/jwt": "^3.3",
     "oomphinc/composer-installers-extender": "^1.1|^2.0"
   },
   "require-dev": {
-    "miaoxing/dev": "^6.3.1",
+    "miaoxing/dev": "^6.3.2",
     "nette/php-generator": "^3.4"
   },
   "autoload": {

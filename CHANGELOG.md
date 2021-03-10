@@ -1,3 +1,25 @@
+## [0.4.1](https://github.com/miaoxing/plugin/compare/v0.4.0...v0.4.1) (2021-03-10)
+
+
+### Bug Fixes
+
+* **JwtAuth:** 解决调用 `login` 后再调用 `isLogin` 返回 `false` ([85b1773](https://github.com/miaoxing/plugin/commit/85b1773fb2f297f4eef4bdd686ed69e45b41d6d4))
+* **User:** 加载外部的数据，要将记录更改为已存在 ([74a1b52](https://github.com/miaoxing/plugin/commit/74a1b52be60962d104b1dc72b0fd0da9e93869dc))
+
+
+### Features
+
+* **PageRouter:** 增加识别 `pages` 目录下的页面 ([edb01b3](https://github.com/miaoxing/plugin/commit/edb01b31bb2ce56d50d627cb54249ff59dc473ad))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from 6.3.1 to 6.3.2
+* **@wei/wei:** upgrade from 0.10.4 to 0.10.5
+
 # [0.4.0](https://github.com/miaoxing/plugin/compare/v0.3.3...v0.4.0) (2021-03-09)
 
 
