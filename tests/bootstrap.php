@@ -5,9 +5,6 @@ require 'init.php';
 $loader = require 'vendor/autoload.php';
 $wei = wei();
 
-$app = isset($_SERVER['WEI_APP']) ? $_SERVER['WEI_APP'] : 'app';
-
-$wei->app->setNamespace($app);
 $wei->event->trigger('appInit');
 
 // 动态加载所有插件的dev类,用于主项目中测试子插件

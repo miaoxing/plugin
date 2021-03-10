@@ -21,10 +21,6 @@ return [
         'configFile' => 'storage/configs/%env%.php',
     ],
 
-    'db' => [
-        'tablePrefix' => 'mx_',
-    ],
-
     'user' => [
         'authClass' => Miaoxing\Plugin\Auth\SessionAuth::class,
     ],
