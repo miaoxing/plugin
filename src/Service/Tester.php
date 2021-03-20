@@ -305,7 +305,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      * @return mixed
      * @svc
      */
-    public function get(string $page)
+    protected function get(string $page)
     {
         return $this->call($page, 'get');
     }

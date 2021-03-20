@@ -1918,6 +1918,15 @@ class Str
 class Tester
 {
     /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::get
+     */
+    public static function get(string $page)
+    {
+    }
+
+    /**
      * @param array $request
      * @return $this
      * @see Tester::request
@@ -5928,6 +5937,15 @@ class Str
 
 class Tester
 {
+    /**
+     * @param string $page
+     * @return mixed
+     * @see Tester::get
+     */
+    public function get(string $page)
+    {
+    }
+
     /**
      * @param array $request
      * @return $this
