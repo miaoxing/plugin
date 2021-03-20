@@ -88,7 +88,7 @@ class AppModel
     /**
      * Set the record field value
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
@@ -160,6 +160,7 @@ class AppModel
      *
      * @param array $ids
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see AppModel::findAll
      */
     public static function findAll(array $ids): self
@@ -182,6 +183,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see AppModel::findAllBy
      */
     public static function findAllBy($column, $operator = null, $value = null): self
@@ -234,6 +236,7 @@ class AppModel
 
     /**
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see AppModel::all
      */
     public static function all(): self
@@ -248,6 +251,26 @@ class AppModel
      * @see AppModel::indexBy
      */
     public static function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see AppModel::unscoped
+     */
+    public static function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see AppModel::setCacheTime
+     */
+    public static function setCacheTime(?int $seconds): self
     {
     }
 
@@ -485,8 +508,13 @@ class AppModel
      * @return $this
      * @see AppModel::join
      */
-    public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public static function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -499,8 +527,12 @@ class AppModel
      * @return $this
      * @see AppModel::innerJoin
      */
-    public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function innerJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -513,8 +545,12 @@ class AppModel
      * @return $this
      * @see AppModel::leftJoin
      */
-    public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function leftJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -527,8 +563,12 @@ class AppModel
      * @return $this
      * @see AppModel::rightJoin
      */
-    public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function rightJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -861,22 +901,47 @@ class AppModel
     }
 
     /**
-     * Set or remove cache time for the query
+     * Add a (inner) join base on the relation to the query
      *
-     * @param int|null $seconds
+     * @param string|array $name
+     * @param string $type
      * @return $this
-     * @see AppModel::setCacheTime
+     * @see AppModel::joinRelation
      */
-    public static function setCacheTime(?int $seconds): self
+    public static function joinRelation($name, string $type = 'INNER'): self
     {
     }
 
     /**
-     * @param array|string|true $scopes
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
      * @return $this
-     * @see AppModel::unscoped
+     * @see AppModel::innerJoinRelation
      */
-    public static function unscoped($scopes = []): self
+    public static function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see AppModel::leftJoinRelation
+     */
+    public static function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see AppModel::rightJoinRelation
+     */
+    public static function rightJoinRelation($name): self
     {
     }
 
@@ -1052,6 +1117,17 @@ class Plugin
 
 class QueryBuilder
 {
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see QueryBuilder::setCacheTime
+     */
+    public static function setCacheTime(?int $seconds): self
+    {
+    }
+
     /**
      * Return the record table name
      *
@@ -1314,8 +1390,13 @@ class QueryBuilder
      * @return $this
      * @see QueryBuilder::join
      */
-    public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public static function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -1328,8 +1409,12 @@ class QueryBuilder
      * @return $this
      * @see QueryBuilder::innerJoin
      */
-    public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function innerJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -1342,8 +1427,12 @@ class QueryBuilder
      * @return $this
      * @see QueryBuilder::leftJoin
      */
-    public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function leftJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -1356,8 +1445,12 @@ class QueryBuilder
      * @return $this
      * @see QueryBuilder::rightJoin
      */
-    public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function rightJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -1697,17 +1790,6 @@ class QueryBuilder
      * @see QueryBuilder::setPhpKeyConverter
      */
     public static function setPhpKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * Set or remove cache time for the query
-     *
-     * @param int|null $seconds
-     * @return $this
-     * @see QueryBuilder::setCacheTime
-     */
-    public static function setCacheTime(?int $seconds): self
     {
     }
 }
@@ -2018,7 +2100,7 @@ class User
 
     /**
      * @param array|\ArrayAccess $req
-     * @return Ret
+     * @return \Wei\Ret
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
@@ -2082,7 +2164,7 @@ class User
     /**
      * Set the record field value
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
@@ -2154,6 +2236,7 @@ class User
      *
      * @param array $ids
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAll
      */
     public static function findAll(array $ids): self
@@ -2176,6 +2259,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAllBy
      */
     public static function findAllBy($column, $operator = null, $value = null): self
@@ -2228,6 +2312,7 @@ class User
 
     /**
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::all
      */
     public static function all(): self
@@ -2242,6 +2327,26 @@ class User
      * @see UserModel::indexBy
      */
     public static function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see UserModel::unscoped
+     */
+    public static function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see UserModel::setCacheTime
+     */
+    public static function setCacheTime(?int $seconds): self
     {
     }
 
@@ -2479,8 +2584,13 @@ class User
      * @return $this
      * @see UserModel::join
      */
-    public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public static function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -2493,8 +2603,12 @@ class User
      * @return $this
      * @see UserModel::innerJoin
      */
-    public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function innerJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -2507,8 +2621,12 @@ class User
      * @return $this
      * @see UserModel::leftJoin
      */
-    public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function leftJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -2521,8 +2639,12 @@ class User
      * @return $this
      * @see UserModel::rightJoin
      */
-    public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function rightJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -2855,22 +2977,47 @@ class User
     }
 
     /**
-     * Set or remove cache time for the query
+     * Add a (inner) join base on the relation to the query
      *
-     * @param int|null $seconds
+     * @param string|array $name
+     * @param string $type
      * @return $this
-     * @see UserModel::setCacheTime
+     * @see UserModel::joinRelation
      */
-    public static function setCacheTime(?int $seconds): self
+    public static function joinRelation($name, string $type = 'INNER'): self
     {
     }
 
     /**
-     * @param array|string|true $scopes
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
      * @return $this
-     * @see UserModel::unscoped
+     * @see UserModel::innerJoinRelation
      */
-    public static function unscoped($scopes = []): self
+    public static function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::leftJoinRelation
+     */
+    public static function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::rightJoinRelation
+     */
+    public static function rightJoinRelation($name): self
     {
     }
 
@@ -2886,15 +3033,6 @@ class User
      * @see UserModel::isRelation
      */
     public static function isRelation(string $method): bool
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::like
-     */
-    public static function like($columns): self
     {
     }
 }
@@ -2914,7 +3052,7 @@ class UserModel
 
     /**
      * @param array|\ArrayAccess $req
-     * @return Ret
+     * @return \Wei\Ret
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
@@ -3001,7 +3139,7 @@ class UserModel
     /**
      * Set the record field value
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
@@ -3073,6 +3211,7 @@ class UserModel
      *
      * @param array $ids
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAll
      */
     public static function findAll(array $ids): self
@@ -3095,6 +3234,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAllBy
      */
     public static function findAllBy($column, $operator = null, $value = null): self
@@ -3147,6 +3287,7 @@ class UserModel
 
     /**
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::all
      */
     public static function all(): self
@@ -3161,6 +3302,26 @@ class UserModel
      * @see UserModel::indexBy
      */
     public static function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see UserModel::unscoped
+     */
+    public static function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see UserModel::setCacheTime
+     */
+    public static function setCacheTime(?int $seconds): self
     {
     }
 
@@ -3398,8 +3559,13 @@ class UserModel
      * @return $this
      * @see UserModel::join
      */
-    public static function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public static function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -3412,8 +3578,12 @@ class UserModel
      * @return $this
      * @see UserModel::innerJoin
      */
-    public static function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function innerJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -3426,8 +3596,12 @@ class UserModel
      * @return $this
      * @see UserModel::leftJoin
      */
-    public static function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function leftJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -3440,8 +3614,12 @@ class UserModel
      * @return $this
      * @see UserModel::rightJoin
      */
-    public static function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
+    public static function rightJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
     }
 
     /**
@@ -3774,22 +3952,47 @@ class UserModel
     }
 
     /**
-     * Set or remove cache time for the query
+     * Add a (inner) join base on the relation to the query
      *
-     * @param int|null $seconds
+     * @param string|array $name
+     * @param string $type
      * @return $this
-     * @see UserModel::setCacheTime
+     * @see UserModel::joinRelation
      */
-    public static function setCacheTime(?int $seconds): self
+    public static function joinRelation($name, string $type = 'INNER'): self
     {
     }
 
     /**
-     * @param array|string|true $scopes
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
      * @return $this
-     * @see UserModel::unscoped
+     * @see UserModel::innerJoinRelation
      */
-    public static function unscoped($scopes = []): self
+    public static function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::leftJoinRelation
+     */
+    public static function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::rightJoinRelation
+     */
+    public static function rightJoinRelation($name): self
     {
     }
 
@@ -3805,15 +4008,6 @@ class UserModel
      * @see UserModel::isRelation
      */
     public static function isRelation(string $method): bool
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::like
-     */
-    public static function like($columns): self
     {
     }
 }
@@ -3929,7 +4123,7 @@ class AppModel
     /**
      * Set the record field value
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
@@ -4001,6 +4195,7 @@ class AppModel
      *
      * @param array $ids
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see AppModel::findAll
      */
     public function findAll(array $ids): self
@@ -4023,6 +4218,7 @@ class AppModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see AppModel::findAllBy
      */
     public function findAllBy($column, $operator = null, $value = null): self
@@ -4075,6 +4271,7 @@ class AppModel
 
     /**
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see AppModel::all
      */
     public function all(): self
@@ -4089,6 +4286,26 @@ class AppModel
      * @see AppModel::indexBy
      */
     public function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see AppModel::unscoped
+     */
+    public function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see AppModel::setCacheTime
+     */
+    public function setCacheTime(?int $seconds): self
     {
     }
 
@@ -4326,8 +4543,13 @@ class AppModel
      * @return $this
      * @see AppModel::join
      */
-    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -4702,22 +4924,47 @@ class AppModel
     }
 
     /**
-     * Set or remove cache time for the query
+     * Add a (inner) join base on the relation to the query
      *
-     * @param int|null $seconds
+     * @param string|array $name
+     * @param string $type
      * @return $this
-     * @see AppModel::setCacheTime
+     * @see AppModel::joinRelation
      */
-    public function setCacheTime(?int $seconds): self
+    public function joinRelation($name, string $type = 'INNER'): self
     {
     }
 
     /**
-     * @param array|string|true $scopes
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
      * @return $this
-     * @see AppModel::unscoped
+     * @see AppModel::innerJoinRelation
      */
-    public function unscoped($scopes = []): self
+    public function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see AppModel::leftJoinRelation
+     */
+    public function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see AppModel::rightJoinRelation
+     */
+    public function rightJoinRelation($name): self
     {
     }
 
@@ -4893,6 +5140,17 @@ class Plugin
 
 class QueryBuilder
 {
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see QueryBuilder::setCacheTime
+     */
+    public function setCacheTime(?int $seconds): self
+    {
+    }
+
     /**
      * Return the record table name
      *
@@ -5155,8 +5413,13 @@ class QueryBuilder
      * @return $this
      * @see QueryBuilder::join
      */
-    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -5540,17 +5803,6 @@ class QueryBuilder
     public function setPhpKeyConverter(callable $converter = null): self
     {
     }
-
-    /**
-     * Set or remove cache time for the query
-     *
-     * @param int|null $seconds
-     * @return $this
-     * @see QueryBuilder::setCacheTime
-     */
-    public function setCacheTime(?int $seconds): self
-    {
-    }
 }
 
 class Ret
@@ -5859,7 +6111,7 @@ class User
 
     /**
      * @param array|\ArrayAccess $req
-     * @return Ret
+     * @return \Wei\Ret
      * @see UserModel::updatePassword
      */
     public function updatePassword($req)
@@ -5923,7 +6175,7 @@ class User
     /**
      * Set the record field value
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
@@ -5995,6 +6247,7 @@ class User
      *
      * @param array $ids
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAll
      */
     public function findAll(array $ids): self
@@ -6017,6 +6270,7 @@ class User
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAllBy
      */
     public function findAllBy($column, $operator = null, $value = null): self
@@ -6069,6 +6323,7 @@ class User
 
     /**
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::all
      */
     public function all(): self
@@ -6083,6 +6338,26 @@ class User
      * @see UserModel::indexBy
      */
     public function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see UserModel::unscoped
+     */
+    public function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see UserModel::setCacheTime
+     */
+    public function setCacheTime(?int $seconds): self
     {
     }
 
@@ -6320,8 +6595,13 @@ class User
      * @return $this
      * @see UserModel::join
      */
-    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -6696,22 +6976,47 @@ class User
     }
 
     /**
-     * Set or remove cache time for the query
+     * Add a (inner) join base on the relation to the query
      *
-     * @param int|null $seconds
+     * @param string|array $name
+     * @param string $type
      * @return $this
-     * @see UserModel::setCacheTime
+     * @see UserModel::joinRelation
      */
-    public function setCacheTime(?int $seconds): self
+    public function joinRelation($name, string $type = 'INNER'): self
     {
     }
 
     /**
-     * @param array|string|true $scopes
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
      * @return $this
-     * @see UserModel::unscoped
+     * @see UserModel::innerJoinRelation
      */
-    public function unscoped($scopes = []): self
+    public function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::leftJoinRelation
+     */
+    public function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::rightJoinRelation
+     */
+    public function rightJoinRelation($name): self
     {
     }
 
@@ -6727,15 +7032,6 @@ class User
      * @see UserModel::isRelation
      */
     public function isRelation(string $method): bool
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::like
-     */
-    public function like($columns): self
     {
     }
 }
@@ -6755,7 +7051,7 @@ class UserModel
 
     /**
      * @param array|\ArrayAccess $req
-     * @return Ret
+     * @return \Wei\Ret
      * @see UserModel::updatePassword
      */
     public function updatePassword($req)
@@ -6842,7 +7138,7 @@ class UserModel
     /**
      * Set the record field value
      *
-     * @param string|int $name
+     * @param string|int|null $name
      * @param mixed $value
      * @param bool $throwException
      * @return $this|false
@@ -6914,6 +7210,7 @@ class UserModel
      *
      * @param array $ids
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAll
      */
     public function findAll(array $ids): self
@@ -6936,6 +7233,7 @@ class UserModel
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::findAllBy
      */
     public function findAllBy($column, $operator = null, $value = null): self
@@ -6988,6 +7286,7 @@ class UserModel
 
     /**
      * @return $this|$this[]
+     * @phpstan-return $this
      * @see UserModel::all
      */
     public function all(): self
@@ -7002,6 +7301,26 @@ class UserModel
      * @see UserModel::indexBy
      */
     public function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see UserModel::unscoped
+     */
+    public function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see UserModel::setCacheTime
+     */
+    public function setCacheTime(?int $seconds): self
     {
     }
 
@@ -7239,8 +7558,13 @@ class UserModel
      * @return $this
      * @see UserModel::join
      */
-    public function join(string $table, string $first = null, string $operator = '=', string $second = null, string $type = 'INNER'): self
-    {
+    public function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
     }
 
     /**
@@ -7615,22 +7939,47 @@ class UserModel
     }
 
     /**
-     * Set or remove cache time for the query
+     * Add a (inner) join base on the relation to the query
      *
-     * @param int|null $seconds
+     * @param string|array $name
+     * @param string $type
      * @return $this
-     * @see UserModel::setCacheTime
+     * @see UserModel::joinRelation
      */
-    public function setCacheTime(?int $seconds): self
+    public function joinRelation($name, string $type = 'INNER'): self
     {
     }
 
     /**
-     * @param array|string|true $scopes
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
      * @return $this
-     * @see UserModel::unscoped
+     * @see UserModel::innerJoinRelation
      */
-    public function unscoped($scopes = []): self
+    public function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::leftJoinRelation
+     */
+    public function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see UserModel::rightJoinRelation
+     */
+    public function rightJoinRelation($name): self
     {
     }
 
@@ -7646,15 +7995,6 @@ class UserModel
      * @see UserModel::isRelation
      */
     public function isRelation(string $method): bool
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::like
-     */
-    public function like($columns): self
     {
     }
 }
