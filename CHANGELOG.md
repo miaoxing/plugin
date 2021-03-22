@@ -1,3 +1,20 @@
+## [0.4.3](https://github.com/miaoxing/plugin/compare/v0.4.2...v0.4.3) (2021-03-22)
+
+
+### Features
+
+* **Tester:** `get` 方法允许静态调用 ([7073706](https://github.com/miaoxing/plugin/commit/70737062af3162c53a90ff888cf7bd880fd0ae32))
+* 增加 `watch-php` 命令，用于监听文件更改，更新插件缓存，事件缓存和自动完成文档 ([395b79a](https://github.com/miaoxing/plugin/commit/395b79ae34b38763a8cf5d86adf71b764f1279a1))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `6.3.3` to `6.3.4`
+* **@wei/wei:** upgrade from `0.10.6` to `0.10.7`
+
 ## [0.4.2](https://github.com/miaoxing/plugin/compare/v0.4.1...v0.4.2) (2021-03-12)
 
 
