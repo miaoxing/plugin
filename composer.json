@@ -17,7 +17,8 @@
   },
   "require-dev": {
     "miaoxing/dev": "^6.3.4",
-    "nette/php-generator": "^3.4"
+    "nette/php-generator": "^3.4",
+    "phpstan/phpstan": "^0.12.30 <=0.12.81"
   },
   "autoload": {
     "files": [
