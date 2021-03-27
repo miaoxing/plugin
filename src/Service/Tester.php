@@ -387,6 +387,16 @@ class Tester extends \Miaoxing\Plugin\BaseService
      * @return mixed
      * @svc
      */
+    protected function put(string $page)
+    {
+        return $this->call($page, 'put');
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
+     * @svc
+     */
     protected function delete(string $page)
     {
         return $this->call($page, 'delete');
@@ -422,6 +432,17 @@ class Tester extends \Miaoxing\Plugin\BaseService
     protected function patchAdminApi(string $page, $data = [])
     {
         return $this->request($data)->patch('/admin-api/' . $page);
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @svc
+     */
+    protected function putAdminApi(string $page, $data = [])
+    {
+        return $this->request($data)->put('/admin-api/' . $page);
     }
 
     /**

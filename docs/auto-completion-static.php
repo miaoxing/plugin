@@ -1947,6 +1947,15 @@ class Tester
     /**
      * @param string $page
      * @return mixed
+     * @see Tester::put
+     */
+    public static function put(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
      * @see Tester::delete
      */
     public static function delete(string $page)
@@ -1979,6 +1988,16 @@ class Tester
      * @see Tester::patchAdminApi
      */
     public static function patchAdminApi(string $page, $data = [])
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @see Tester::putAdminApi
+     */
+    public static function putAdminApi(string $page, $data = [])
     {
     }
 
@@ -5967,6 +5986,15 @@ class Tester
     /**
      * @param string $page
      * @return mixed
+     * @see Tester::put
+     */
+    public function put(string $page)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @return mixed
      * @see Tester::delete
      */
     public function delete(string $page)
@@ -5999,6 +6027,16 @@ class Tester
      * @see Tester::patchAdminApi
      */
     public function patchAdminApi(string $page, $data = [])
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param array $data
+     * @return mixed
+     * @see Tester::putAdminApi
+     */
+    public function putAdminApi(string $page, $data = [])
     {
     }
 
