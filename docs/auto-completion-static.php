@@ -1856,6 +1856,35 @@ class Ret
     }
 }
 
+class Seeder
+{
+    /**
+     * @param OutputInterface $output
+     * @return $this
+     * @see Seeder::setOutput
+     */
+    public static function setOutput(\Symfony\Component\Console\Output\OutputInterface $output)
+    {
+    }
+
+    /**
+     * @see Seeder::run
+     */
+    public static function run()
+    {
+    }
+
+    /**
+     * @param array $options
+     * @throws \ReflectionException
+     * @throws \Exception
+     * @see Seeder::create
+     */
+    public static function create($options)
+    {
+    }
+}
+
 class Session
 {
 }
@@ -5906,6 +5935,35 @@ class Ret
      * @see Ret::alert
      */
     public function alert($message, $code = null)
+    {
+    }
+}
+
+class Seeder
+{
+    /**
+     * @param OutputInterface $output
+     * @return $this
+     * @see Seeder::setOutput
+     */
+    public function setOutput(\Symfony\Component\Console\Output\OutputInterface $output)
+    {
+    }
+
+    /**
+     * @see Seeder::run
+     */
+    public function run()
+    {
+    }
+
+    /**
+     * @param array $options
+     * @throws \ReflectionException
+     * @throws \Exception
+     * @see Seeder::create
+     */
+    public function create($options)
     {
     }
 }
