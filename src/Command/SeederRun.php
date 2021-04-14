@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\Service\Seeder;
+use Symfony\Component\Console\Input\InputArgument;
 
 class SeederRun extends BaseCommand
 {
@@ -11,12 +12,15 @@ class SeederRun extends BaseCommand
      */
     public function handle()
     {
-        Seeder::setOutput($this->output)->run();
+        Seeder::setOutput($this->output)->run([
+            'name' => $this->getArgument('name'),
+        ]);
     }
 
     protected function configure()
     {
         $this->setDescription('Run the seeders')
-            ->setAliases(['seed']);
+            ->setAliases(['seed'])
+            ->addArgument('name', InputArgument::OPTIONAL, 'The name of the seeder');
     }
 }

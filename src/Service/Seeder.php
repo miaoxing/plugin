@@ -109,8 +109,13 @@ class Seeder extends BaseService
     /**
      * @svc
      */
-    protected function run()
+    protected function run(array $options = [])
     {
+        if (isset($options['name'])) {
+            $this->runOne($options['name']);
+            return;
+        }
+
         $classes = $this->getSeederClasses();
 
         $seeders = $this->db->init($this->table)
@@ -129,17 +134,40 @@ class Seeder extends BaseService
             return;
         }
 
-        foreach ($classes as $id => $class) {
-            $seeder = $this->instance($classes[$id]);
-            $seeder->run();
-
-            $this->db->insert($this->table, [
-                'id' => $id,
-                'created_at' => date('Y-m-d H:i:s'),
-            ]);
-
-            $this->writeln('<info>Ran: </info>' . $id);
+        foreach ($classes as $name => $class) {
+            $this->runByName($name, $classes);
         }
+    }
+
+    protected function runOne($name)
+    {
+        $classes = $this->getSeederClasses();
+        $this->runByName($name, $classes);
+    }
+
+    protected function runByName($name, $classes)
+    {
+        if (!isset($classes[$name])) {
+            $this->writeln(sprintf('<error>Seeder "%s" not found</error>', $name));
+            return;
+        }
+
+        $seeder = $this->instance($classes[$name]);
+        $seeder->run();
+
+        if ($this->db->select($this->table, ['id' => $name])) {
+            $this->db->update($this->table, [
+                'updated_at' => date('Y-m-d H:i:s'),
+            ], ['id' => $name]);
+        } else {
+            $this->db->insert($this->table, [
+                'id' => $name,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+        }
+
+        $this->writeln('<info>Ran: </info>' . $name);
     }
 
     protected function getSeederClasses()
@@ -215,6 +243,7 @@ class Seeder extends BaseService
             $this->schema->table($this->table)
                 ->string('id', 128)
                 ->timestamp('created_at')
+                ->timestamp('updated_at')
                 ->exec();
         }
     }
