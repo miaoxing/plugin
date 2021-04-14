@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Seeder\BaseSeeder;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -79,7 +80,7 @@ class Seeder extends BaseService
     /**
      * @return array
      */
-    public function getStatus()
+    public function getStatus(): array
     {
         $data = [];
         $ranIds = $this->getRanIds();
@@ -100,7 +101,7 @@ class Seeder extends BaseService
      * @return $this
      * @svc
      */
-    protected function setOutput(OutputInterface $output)
+    protected function setOutput(OutputInterface $output): self
     {
         $this->output = $output;
         return $this;
@@ -113,6 +114,11 @@ class Seeder extends BaseService
     {
         if (isset($options['name'])) {
             $this->runOne($options['name']);
+            return;
+        }
+
+        if (isset($options['from'])) {
+            $this->runFrom($options['from']);
             return;
         }
 
@@ -132,6 +138,23 @@ class Seeder extends BaseService
         if (!$classes) {
             $this->writeln('<info>Nothing to run.</info>');
             return;
+        }
+
+        foreach ($classes as $name => $class) {
+            $this->runByName($name, $classes);
+        }
+    }
+
+    protected function runFrom($name)
+    {
+        $classes = $this->getSeederClasses();
+
+        if ('root' !== $name) {
+            if (!isset($classes[$name])) {
+                $this->writeln(sprintf('<error>Seeder "%s" not found</error>', $name));
+                return;
+            }
+            $classes = array_slice($classes, array_search($name, array_keys($classes), true));
         }
 
         foreach ($classes as $name => $class) {
@@ -170,18 +193,17 @@ class Seeder extends BaseService
         $this->writeln('<info>Ran: </info>' . $name);
     }
 
-    protected function getSeederClasses()
+    protected function getSeederClasses(): array
     {
         return $this->classMap->generate($this->paths, '/Seeder/*.php', 'Seeder', false);
     }
 
     /**
      * @param array $options
-     * @throws \ReflectionException
      * @throws \Exception
      * @svc
      */
-    protected function create($options)
+    protected function create(array $options)
     {
         $class = 'V' . date('YmdHis') . ucfirst($options['name']);
         $path = $options['path'] ?? $this->defaultPath;
@@ -200,7 +222,7 @@ class Seeder extends BaseService
         $this->writeln(sprintf('<info>Created the file: %s</info>', $file));
     }
 
-    protected function generateContent($vars)
+    protected function generateContent($vars): string
     {
         extract($vars);
 
@@ -209,7 +231,7 @@ class Seeder extends BaseService
         return ob_get_clean();
     }
 
-    protected function getRanIds()
+    protected function getRanIds(): array
     {
         $seeders = $this->db->init($this->table)
             ->desc('id')
@@ -225,13 +247,11 @@ class Seeder extends BaseService
      * @param string $class
      * @return BaseSeeder
      */
-    protected function instance($class)
+    protected function instance(string $class): BaseSeeder
     {
-        $object = new $class([
+        return new $class([
             'wei' => $this->wei,
         ]);
-
-        return $object;
     }
 
     /**
