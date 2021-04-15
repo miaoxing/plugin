@@ -47,6 +47,9 @@
     },
     "branch-alias": {
       "dev-develop/page": "0.4.x-dev"
+    },
+    "require-ci": {
+      "miaoxing/dev": "miaoxing/dev as 6.x-dev"
     }
   }
 }
