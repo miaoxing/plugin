@@ -10,7 +10,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 use TypeError;
 
 /**
- * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
  */
 class CollTest extends BaseTestCase
 {

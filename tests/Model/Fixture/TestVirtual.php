@@ -12,7 +12,7 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
  * @property string $first_name
  * @property string $last_name
  * @property string $full_name
- * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
  */
 class TestVirtual extends WeiBaseModel
 {

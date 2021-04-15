@@ -10,7 +10,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 
 /**
  * @group change
- * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
  */
 class ChangeTest extends BaseTestCase
 {

@@ -9,7 +9,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestVirtual;
 
 /**
  * @internal
- * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
  */
 final class VirtualTest extends BaseTestCase
 {

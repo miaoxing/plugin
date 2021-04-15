@@ -8,7 +8,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestEvent2;
 use Wei\Event;
 
 /**
- * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
  */
 class EventTest extends BaseTestCase
 {

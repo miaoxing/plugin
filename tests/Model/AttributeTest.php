@@ -12,7 +12,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 use Wei\Logger;
 
 /**
- * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
  */
 class AttributeTest extends BaseTestCase
 {

@@ -17,7 +17,7 @@ use MiaoxingTest\Plugin\Model\Fixture\TestUserGroup;
  *
  * @internal
  * @mixin \DbMixin
- * @phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+ * @phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
  */
 final class RelationTest extends BaseTestCase
 {
