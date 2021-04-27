@@ -127,6 +127,9 @@ trait CastTrait
                 // Ignore default array value
                 return is_array($value) ? $value : $this->cacheJsonDecode($value, true);
 
+            case 'object':
+                return is_object($value) ? $value : json_decode($value);
+
             case 'list':
                 // Ignore default array value
                 if (is_array($value)) {
@@ -179,6 +182,10 @@ trait CastTrait
             case 'array':
             case 'json':
                 return json_encode((array) $value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+
+            case 'object':
+                // TODO keep original object, and cast to db string before save
+                return json_encode((object) $value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
 
             case 'list':
                 return implode($options['separator'] ?? ',', (array) $value);
