@@ -1,3 +1,35 @@
+## [0.4.4](https://github.com/miaoxing/plugin/compare/v0.4.3...v0.4.4) (2021-04-27)
+
+
+### Bug Fixes
+
+* **Tester:** 每次调用时创建新对象 ([86db4b4](https://github.com/miaoxing/plugin/commit/86db4b490793dc67723d930f73844ecaa21cd01f))
+
+
+### Features
+
+* 增加创建页面测试数据的 Seeder ([bf9bc9a](https://github.com/miaoxing/plugin/commit/bf9bc9a1bb886a2ad7fc21bd0513f417f62a2a2a))
+* **Cast:** 支持转换数据为 `object` 类型 ([2d0b948](https://github.com/miaoxing/plugin/commit/2d0b948bc316670c1ebb2112a029bf3354146e20))
+* **Coll:** `saveColl` 支持数组中的数据为对象 ([75fa975](https://github.com/miaoxing/plugin/commit/75fa975860edc35806ffe5a79bac39c461d13bda))
+* **experimental, ObjectReq:** 增加 `ObjectReq` 服务，用于以对象的形式获取请求数据 ([c5cff75](https://github.com/miaoxing/plugin/commit/c5cff751a47972dbd71d0eab70cb28cd60e14229))
+* **GMetadata:** 支持识别出 `object` 类型 ([e675384](https://github.com/miaoxing/plugin/commit/e6753843b1074b7d464ff64d8548f3deec1386f3))
+* **Seeder:** `seeder:run` 命令增加可选参数，允许指定运行的 Seeder 名称 ([7c84e73](https://github.com/miaoxing/plugin/commit/7c84e733f8c2573c38330101f2f246458ebafdb4))
+* **Seeder:** `seeder:run` 命令增加可选项 `--form`，允许从哪个 Seeder 开始运行 ([5f71530](https://github.com/miaoxing/plugin/commit/5f71530aa0bd415469e6cea9e436cbad89299d9c))
+* **Seeder:** 增加 `g:seeder` 命令为插件生成 Seeder ([6e06cd4](https://github.com/miaoxing/plugin/commit/6e06cd496b5d49fe01a4cde4f65e8ffe76ae80d3))
+* **Seeder:** 增加 `seeder:run` 命令来运行 Seeder ([0428879](https://github.com/miaoxing/plugin/commit/04288798e691454bb84f83ee2f90467d5540dc2d))
+* **Seeder:** 增加 `seeder:status` 命令来查看 Seeder 运行状态 ([3e6a0c2](https://github.com/miaoxing/plugin/commit/3e6a0c291cd9954994629546545b6f9ab58bbfed))
+* **Tester:** 增加 `put` 和 `putAdminApi` 方法 ([4bd6cc4](https://github.com/miaoxing/plugin/commit/4bd6cc409e8dcfae26e27b9a97d51010f7f1d9cd))
+* **Tester:** 增加 `setReq` 方法 ([7e84d39](https://github.com/miaoxing/plugin/commit/7e84d3989ae586ab841e9ce87c19d541d7c808d8))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `6.3.4` to `6.4.0`
+* **@wei/wei:** upgrade from `0.10.7` to `0.10.8`
+
 ## [0.4.3](https://github.com/miaoxing/plugin/compare/v0.4.2...v0.4.3) (2021-03-22)
 
 

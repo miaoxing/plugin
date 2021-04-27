@@ -10,14 +10,14 @@
   "require": {
     "ext-json": "*",
     "ext-openssl": "*",
-    "wei/wei": "^0.10.7",
+    "wei/wei": "^0.10.8",
     "doctrine/inflector": "^1.4|^2.0",
     "lcobucci/jwt": "^3.3",
     "oomphinc/composer-installers-extender": "^1.1|^2.0",
     "fakerphp/faker": "^1.14"
   },
   "require-dev": {
-    "miaoxing/dev": "^6.3.4",
+    "miaoxing/dev": "^6.4.0",
     "nette/php-generator": "^3.4",
     "phpstan/phpstan": "^0.12.30 <=0.12.81"
   },
