@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\RetException;
+use Wei\Req;
 
 /**
  * 测试
@@ -193,13 +194,13 @@ class Tester extends \Miaoxing\Plugin\BaseService
         $wei = $this->wei;
 
         // 1. 注入各种配置
-        $wei->req->clear();
-        $wei->req->set($this->request);
-        $wei->req->setOption('gets', $this->query);
-        $wei->req->setOption('posts', $this->post);
-        $wei->req->setMethod($this->method);
-        $wei->req->set('_format', $this->dataType);
-        $wei->req->setContent($this->content);
+        $this->req->clear();
+        $this->req->set($this->request);
+        $this->req->setOption('gets', $this->query);
+        $this->req->setOption('posts', $this->post);
+        $this->req->setMethod($this->method);
+        $this->req->set('_format', $this->dataType);
+        $this->req->setContent($this->content);
 
         $wei->session->set($this->session);
 
@@ -215,12 +216,12 @@ class Tester extends \Miaoxing\Plugin\BaseService
         ob_end_clean();
 
         // 3. 还原原来的配置
-        $wei->req->clear();
-        $wei->req->setOption('gets', []);
-        $wei->req->setOption('posts', []);
-        $wei->req->setMethod('GET');
-        $wei->req->set('_format', '');
-        $wei->req->setContent('');
+        $this->req->clear();
+        $this->req->setOption('gets', []);
+        $this->req->setOption('posts', []);
+        $this->req->setMethod('GET');
+        $this->req->set('_format', '');
+        $this->req->setContent('');
 
         foreach ($this->session as $key => $value) {
             $wei->session->remove($key);
@@ -332,13 +333,13 @@ class Tester extends \Miaoxing\Plugin\BaseService
         $wei = $this->wei;
 
         // 1. 注入各种配置
-        $wei->req->clear();
-        $wei->req->set($this->request);
-        $wei->req->setOption('gets', $this->query);
-        $wei->req->setOption('posts', $this->post);
-        $wei->req->setMethod($method);
-        $wei->req->set('_format', $this->dataType);
-        $wei->req->setContent($this->content);
+        $this->req->clear();
+        $this->req->set($this->request);
+        $this->req->setOption('gets', $this->query);
+        $this->req->setOption('posts', $this->post);
+        $this->req->setMethod($method);
+        $this->req->set('_format', $this->dataType);
+        $this->req->setContent($this->content);
 
         $wei->session->set($this->session);
 
@@ -346,9 +347,9 @@ class Tester extends \Miaoxing\Plugin\BaseService
         ob_start();
         try {
             $result = wei()->pageRouter->match($page);
-            $wei->req->set($result['params']);
+            $this->req->set($result['params']);
             $page = require $result['file'];
-            $ret = $page->{$method}($wei->req, $wei->res);
+            $ret = $page->{$method}($this->req, $wei->res);
         } catch (RetException $e) {
             $ret = err($e->getMessage(), $e->getCode());
         } catch (\Exception $e) {
@@ -358,18 +359,31 @@ class Tester extends \Miaoxing\Plugin\BaseService
         ob_end_clean();
 
         // 3. 还原原来的配置
-        $wei->req->clear();
-        $wei->req->setOption('gets', []);
-        $wei->req->setOption('posts', []);
-        $wei->req->setMethod('GET');
-        $wei->req->set('_format', '');
-        $wei->req->setContent('');
+        $this->req->clear();
+        $this->req->setOption('gets', []);
+        $this->req->setOption('posts', []);
+        $this->req->setMethod('GET');
+        $this->req->set('_format', '');
+        $this->req->setContent('');
 
         foreach ($this->session as $key => $value) {
             $wei->session->remove($key);
         }
 
         return $ret;
+    }
+
+    /**
+     * Set the request service
+     *
+     * @param Req $req
+     * @return $this
+     * @svc
+     */
+    protected function setReq(Req $req)
+    {
+        $this->req = $req;
+        return $this;
     }
 
     /**

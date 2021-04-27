@@ -1940,6 +1940,17 @@ class Tester
     }
 
     /**
+     * Set the request service
+     *
+     * @param Req $req
+     * @return $this
+     * @see Tester::setReq
+     */
+    public static function setReq(Req $req)
+    {
+    }
+
+    /**
      * @param string $page
      * @return mixed
      * @see Tester::patch
@@ -5979,6 +5990,17 @@ class Tester
      * @see Tester::request
      */
     public function request(array $request)
+    {
+    }
+
+    /**
+     * Set the request service
+     *
+     * @param Req $req
+     * @return $this
+     * @see Tester::setReq
+     */
+    public function setReq(Req $req)
     {
     }
 
