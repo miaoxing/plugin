@@ -12,6 +12,8 @@ use Wei\Req;
  */
 class Tester extends \Miaoxing\Plugin\BaseService
 {
+    protected static $createNewInstance = true;
+
     /**
      * @var string
      */
