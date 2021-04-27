@@ -40,6 +40,13 @@ class JwtMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\ObjectReq $objectReq
+ * @method      string|null objectReq($name, $default = '') Returns a *stringify* or user defined($default) parameter value
+ */
+class ObjectReqMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\PageRouter $pageRouter
  */
 class PageRouterMixin {
@@ -105,6 +112,7 @@ class UserModelMixin {
  * @mixin ConfigMixin
  * @mixin IsModelExistsMixin
  * @mixin JwtMixin
+ * @mixin ObjectReqMixin
  * @mixin PageRouterMixin
  * @mixin PluginMixin
  * @mixin QueryBuilderMixin
@@ -146,6 +154,9 @@ $isModelExists = wei()->isModelExists;
 
 /** @var Miaoxing\Plugin\Service\Jwt $jwt */
 $jwt = wei()->jwt;
+
+/** @var Miaoxing\Plugin\Service\ObjectReq $objectReq */
+$objectReq = wei()->objectReq;
 
 /** @var Miaoxing\Plugin\Service\PageRouter $pageRouter */
 $pageRouter = wei()->pageRouter;

@@ -1075,6 +1075,10 @@ class Jwt
     }
 }
 
+class ObjectReq
+{
+}
+
 class PageRouter
 {
 }
@@ -5124,6 +5128,10 @@ class Jwt
     public function generateDefaultKeys(): Ret
     {
     }
+}
+
+class ObjectReq
+{
 }
 
 class PageRouter
