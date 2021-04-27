@@ -63,6 +63,12 @@ final class GMetadata extends BaseCommand
             $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
 
             $phpType = $this->getPhpType($column['Type']);
+
+            // TODO 支持其他类型
+            if ('json' === $column['Type'] && ($modelColumns[$propertyName]['cast'] ?? null) === 'object') {
+                $phpType = 'object';
+            }
+
             if (isset($modelColumns[$propertyName]['nullable']) && $modelColumns[$propertyName]['nullable']) {
                 $phpType .= '|null';
             }
