@@ -756,6 +756,27 @@ final class RelationTest extends BaseTestCase
         $this->assertCount(0, $articles);
     }
 
+    /**
+     * @group saveRelation
+     */
+    public function testSaveRelationWithObject()
+    {
+        $user = TestUser::save();
+
+        /** @var TestArticle|TestArticle[] $articles */
+        $articles = $user->articles()->saveRelation([
+            (object) [
+                'title' => 'title 1',
+            ],
+            (object) [
+                'title' => 'title 2',
+            ],
+        ]);
+
+        $this->assertCount(2, $articles);
+        $this->assertSame($user->id, $articles[0]->test_user_id);
+    }
+
     public function testModelLoadWillThrowsException()
     {
         $user = TestUser::save();

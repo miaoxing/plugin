@@ -85,7 +85,7 @@ trait CollTrait
 
         // 2. Removes empty rows from data
         foreach ($attributes as $index => $row) {
-            if (!array_filter($row)) {
+            if (empty($row)) {
                 unset($attributes[$index]);
             }
         }
@@ -93,6 +93,10 @@ trait CollTrait
         // 3. Removes missing rows
         $existIds = [];
         foreach ($attributes as $row) {
+            if (is_object($row)) {
+                $row = (array) $row;
+            }
+
             if (isset($row[$primaryKey]) && null !== $row[$primaryKey]) {
                 $existIds[] = $row[$primaryKey];
             }
@@ -107,6 +111,10 @@ trait CollTrait
 
         // 4. Merges existing rows or create new rows
         foreach ($attributes as $index => $row) {
+            if (is_object($row)) {
+                $row = (array) $row;
+            }
+
             if ($sortColumn) {
                 $row[$sortColumn] = $index;
             }
