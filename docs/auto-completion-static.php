@@ -1863,24 +1863,23 @@ class Seeder
      * @return $this
      * @see Seeder::setOutput
      */
-    public static function setOutput(\Symfony\Component\Console\Output\OutputInterface $output)
+    public static function setOutput(\Symfony\Component\Console\Output\OutputInterface $output): self
     {
     }
 
     /**
      * @see Seeder::run
      */
-    public static function run()
+    public static function run(array $options = [])
     {
     }
 
     /**
      * @param array $options
-     * @throws \ReflectionException
      * @throws \Exception
      * @see Seeder::create
      */
-    public static function create($options)
+    public static function create(array $options)
     {
     }
 }
@@ -1951,6 +1950,15 @@ class Str
 class Tester
 {
     /**
+     * @param array $query
+     * @return $this
+     * @see Tester::query
+     */
+    public static function query(array $query)
+    {
+    }
+
+    /**
      * @param string $page
      * @return mixed
      * @see Tester::get
@@ -1975,7 +1983,7 @@ class Tester
      * @return $this
      * @see Tester::setReq
      */
-    public static function setReq(Req $req)
+    public static function setReq(\Wei\Req $req)
     {
     }
 
@@ -5946,24 +5954,23 @@ class Seeder
      * @return $this
      * @see Seeder::setOutput
      */
-    public function setOutput(\Symfony\Component\Console\Output\OutputInterface $output)
+    public function setOutput(\Symfony\Component\Console\Output\OutputInterface $output): self
     {
     }
 
     /**
      * @see Seeder::run
      */
-    public function run()
+    public function run(array $options = [])
     {
     }
 
     /**
      * @param array $options
-     * @throws \ReflectionException
      * @throws \Exception
      * @see Seeder::create
      */
-    public function create($options)
+    public function create(array $options)
     {
     }
 }
@@ -6034,6 +6041,15 @@ class Str
 class Tester
 {
     /**
+     * @param array $query
+     * @return $this
+     * @see Tester::query
+     */
+    public function query(array $query)
+    {
+    }
+
+    /**
      * @param string $page
      * @return mixed
      * @see Tester::get
@@ -6058,7 +6074,7 @@ class Tester
      * @return $this
      * @see Tester::setReq
      */
-    public function setReq(Req $req)
+    public function setReq(\Wei\Req $req)
     {
     }
 

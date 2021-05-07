@@ -114,8 +114,9 @@ class Tester extends \Miaoxing\Plugin\BaseService
     /**
      * @param array $query
      * @return $this
+     * @svc
      */
-    public function query(array $query)
+    protected function query(array $query)
     {
         $this->query = $query;
 
