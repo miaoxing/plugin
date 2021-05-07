@@ -3,13 +3,10 @@ import * as chokidar from 'chokidar';
 import * as execa from 'execa';
 import log from '@gitsync/log';
 import theme from 'chalk-theme';
-import {ExecaReturnValue} from "execa";
-import * as path from "path";
+import {ExecaReturnValue} from 'execa';
+import * as path from 'path';
 
-let command: CommandModule = {
-  handler: () => {
-  }
-};
+const command: Partial<CommandModule> = {};
 
 command.command = path.basename(__filename, '.ts');
 
@@ -19,10 +16,10 @@ command.handler = async () => {
   await watchPluginConfig();
   await watchEvents();
   await watchGAutoCompletion();
-}
+};
 
 async function watchPluginConfig() {
-  log.info('Start scanning files.')
+  log.info('Start scanning files.');
 
   let ready = false;
 
@@ -56,7 +53,7 @@ async function watchPluginConfig() {
   }
 }
 
-async function watchGAutoCompletion() {
+async function watchGAutoCompletion(): Promise<void> {
   const watcher = chokidar.watch([
     'plugins/*/src/Service/*.php',
   ]);
