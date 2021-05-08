@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Callback;
 
 abstract class HttpCallback
 {
-    const MAX_LOG_LENGTH = 1024;
+    public const MAX_LOG_LENGTH = 1024;
 
     /**
      * @param mixed $response

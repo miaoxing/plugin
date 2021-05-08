@@ -20,11 +20,11 @@ class AppModel extends BaseModel
     use ConstTrait;
     use ModelTrait;
 
-    const STATUS_ALL = 0;
+    public const STATUS_ALL = 0;
 
-    const STATUS_ONLINE = 1;
+    public const STATUS_ONLINE = 1;
 
-    const STATUS_OFFLINE = 2;
+    public const STATUS_OFFLINE = 2;
 
     /**
      * @var array

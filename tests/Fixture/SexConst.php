@@ -11,9 +11,9 @@ class SexConst
 {
     use ConstTrait;
 
-    const SEX_MALE = 1;
+    public const SEX_MALE = 1;
 
-    const SEX_FEMALE = 2;
+    public const SEX_FEMALE = 2;
 
     protected $sexNames = [
         self::SEX_MALE => '男',

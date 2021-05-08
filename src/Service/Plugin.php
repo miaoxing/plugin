@@ -24,7 +24,7 @@ class Plugin extends BaseService
     /**
      * The default priority for plugin event
      */
-    const DEFAULT_PRIORITY = 100;
+    protected const DEFAULT_PRIORITY = 100;
 
     /**
      * 插件所在的目录,允许使用通配符

@@ -17,9 +17,9 @@ class TestSoftDeleteStatus extends WeiBaseModel
     use ModelTrait;
     use SoftDeleteTrait;
 
-    const STATUS_NORMAL = 1;
+    public const STATUS_NORMAL = 1;
 
-    const STATUS_DELETED = 9;
+    public const STATUS_DELETED = 9;
 
     protected $table = 'test_soft_deletes';
 

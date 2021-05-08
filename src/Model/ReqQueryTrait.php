@@ -412,7 +412,8 @@ trait ReqQueryTrait
             $orderBy = $this->getReqOrderBy();
             $match = false;
             foreach ($orderBy as $item) {
-                if ($this->isArrayStartWiths($item[0], $sortColumns)
+                if (
+                    $this->isArrayStartWiths($item[0], $sortColumns)
                     && $this->isOrderContains($item[1], $orders, count($sortColumns))
                 ) {
                     $match = true;

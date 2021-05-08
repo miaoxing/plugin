@@ -377,7 +377,8 @@ class App extends \Wei\App
         $type = $param->getType();
 
         // Handle Model class
-        if ($type
+        if (
+            $type
             && !$type->isBuiltin()
             && is_a($type->getName(), WeiBaseModel::class, true)
         ) {

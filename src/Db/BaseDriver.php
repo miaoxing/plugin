@@ -11,9 +11,9 @@ abstract class BaseDriver extends Base
 {
     // The query types.
 
-    const SELECT = 0;
-    const DELETE = 1;
-    const UPDATE = 2;
+    public const SELECT = 0;
+    public const DELETE = 1;
+    public const UPDATE = 2;
 
     /**
      * @var string

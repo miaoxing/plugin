@@ -7,7 +7,7 @@ use Miaoxing\Plugin\Service\UserModel;
 
 abstract class BaseAuth extends BaseService
 {
-    const CODE_UNAUTHORIZED = 401;
+    public const CODE_UNAUTHORIZED = 401;
 
     abstract public function login(UserModel $user);
 
