@@ -287,7 +287,7 @@ class AttributeTest extends BaseTestCase
             ->string('event')
             ->exec();
 
-        $service = new class () extends WeiBaseModel {
+        $service = new class() extends WeiBaseModel {
             use ModelTrait;
 
             protected $primaryKey = 'db';
