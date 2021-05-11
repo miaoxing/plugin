@@ -1,3 +1,21 @@
+## [0.4.5](https://github.com/miaoxing/plugin/compare/v0.4.4...v0.4.5) (2021-05-11)
+
+
+### Features
+
+* **plugin:** 使用 `composer/installers` 安装 `miaoxing` 插件到 `plugins` 目录 ([4b0c9bd](https://github.com/miaoxing/plugin/commit/4b0c9bd4bad3ba95e3e8c30367156f1433afcbc4))
+* **tester:** 允许静态调用 `Tester::query` 方法 ([11ccc90](https://github.com/miaoxing/plugin/commit/11ccc906d5b514b1c7f8947fc1242346c10f2659))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `6.4.0` to `7.0.0`
+* **@mxjs/cli:** upgrade from `0.1.0` to `0.1.1`
+* **@wei/wei:** upgrade from `0.10.8` to `0.10.9`
+
 ## [0.4.4](https://github.com/miaoxing/plugin/compare/v0.4.3...v0.4.4) (2021-04-27)
 
 
