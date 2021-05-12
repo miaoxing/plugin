@@ -1,13 +1,13 @@
 {
   "name": "@miaoxing/plugin",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "private": true,
   "main": "index.js",
   "repository": "https://github.com/miaoxing/plugin",
   "license": "MIT",
   "devDependencies": {
-    "@miaoxing/dev": "^7.0.0",
-    "@mxjs/cli": "^0.1.1"
+    "@miaoxing/dev": "^7.0.1",
+    "@mxjs/cli": "^0.1.2"
   },
   "jest": {
     "preset": "jest-preset-miaoxing"
