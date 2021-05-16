@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model;
 
+use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Service\QueryBuilder;
+use Miaoxing\Plugin\Service\WeiBaseModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestCast;
 
@@ -54,6 +56,11 @@ final class CastTraitTest extends BaseTestCase
                 'list2_column' => '1|2|3',
             ],
         ]);
+
+        wei()->schema->table('test_cast_objects')
+            ->id()
+            ->string('object_column')
+            ->exec();
     }
 
     public static function tearDownAfterClass(): void
@@ -65,6 +72,7 @@ final class CastTraitTest extends BaseTestCase
     public static function dropTables()
     {
         wei()->schema->dropIfExists('test_casts');
+        wei()->schema->dropIfExists('test_cast_objects');
     }
 
     public static function providerForSet()
@@ -306,6 +314,57 @@ final class CastTraitTest extends BaseTestCase
         $cast = TestCast::new();
         $cast->object_column->test = 'value';
         $this->assertSame('value', $cast->object_column->test);
+    }
+
+    public function providerForTestStringAsObject(): array
+    {
+        return [
+            [
+                [],
+                '{}',
+            ],
+            [
+                null,
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerForTestStringAsObject
+     * @param mixed $default
+     * @param mixed $dbValue
+     */
+    public function testStringAsObject($default, $dbValue)
+    {
+        $object = new /**
+         * @property int $id
+         */
+        class ($default) extends WeiBaseModel {
+            use ModelTrait {
+                __construct as modelConstruct;
+            }
+
+            protected $table = 'test_cast_objects';
+
+            protected $columns = [
+                'object_column' => [
+                    'cast' => 'object',
+                ],
+            ];
+
+            public function __construct($default)
+            {
+                if (null !== $default) {
+                    $this->columns['object_column']['default'] = $default;
+                }
+                $this->modelConstruct();
+            }
+        };
+
+        $object->save();
+        $data = wei()->db->select('test_cast_objects', $object->id);
+        $this->assertSame($dbValue, $data['object_column']);
     }
 
     public function testIncr()
