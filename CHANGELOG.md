@@ -1,3 +1,13 @@
+## [0.4.7](https://github.com/miaoxing/plugin/compare/v0.4.6...v0.4.7) (2021-05-21)
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.10.10` to `0.10.11`
+
 ## [0.4.6](https://github.com/miaoxing/plugin/compare/v0.4.5...v0.4.6) (2021-05-12)
 
 
