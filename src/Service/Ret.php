@@ -140,6 +140,10 @@ class Ret extends \Wei\Ret
     private function isApi(Req $req)
     {
         $pathInfo = $req->getRouterPathInfo();
-        return 0 === strpos($pathInfo, '/api') || 0 === strpos($pathInfo, '/admin-api');
+        $path = explode('/', $pathInfo, 3)[1];
+        if ('api' === $path || '-api' === substr($path, -4)) {
+            return true;
+        }
+        return false;
     }
 }
