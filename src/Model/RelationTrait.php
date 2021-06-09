@@ -219,6 +219,19 @@ trait RelationTrait
     }
 
     /**
+     * Set relation value
+     *
+     * @param string $name
+     * @param WeiBaseModel|null $value
+     * @return $this
+     */
+    public function setRelationValue(string $name, ?WeiBaseModel $value): self
+    {
+        $this->relationValues[$name] = $value;
+        return $this;
+    }
+
+    /**
      * Add a (inner) join base on the relation to the query
      *
      * @param string|array $name
@@ -521,19 +534,6 @@ trait RelationTrait
         }
 
         return $this->relationValues[$name];
-    }
-
-    /**
-     * Set relation value
-     *
-     * @param string $name
-     * @param WeiBaseModel|null $value
-     * @return $this
-     */
-    protected function setRelationValue(string $name, ?WeiBaseModel $value): self
-    {
-        $this->relationValues[$name] = $value;
-        return $this;
     }
 
     /**
