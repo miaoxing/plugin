@@ -567,6 +567,28 @@ final class RelationTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
+    public function testModelIsLoaded()
+    {
+        $user = TestUser::new();
+        $user = $user->find(1);
+        $this->assertFalse($user->isLoaded('group'));
+
+        $group = $user->group;
+        $this->assertInstanceOf(TestUserGroup::class, $group);
+        $this->assertTrue($user->isLoaded('group'));
+    }
+
+    public function testCollIsLoaded()
+    {
+        $users = TestUser::new();
+        $users->limit(2)->all();
+
+        $this->assertFalse($users->isLoaded('group'));
+
+        $users->load('group');
+        $this->assertTrue($users->isLoaded('group'));
+    }
+
     public function testEmptyLocalKeyDoNotExecuteQuery()
     {
         wei()->db->insert('test_articles', [
