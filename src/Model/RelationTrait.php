@@ -219,6 +219,17 @@ trait RelationTrait
     }
 
     /**
+     * Check if the relation is loaded
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function isLoaded(string $name): bool
+    {
+        return array_key_exists($name, $this->isColl() ? $this->loadedRelations : $this->relationValues);
+    }
+
+    /**
      * Set relation value
      *
      * @param string $name
