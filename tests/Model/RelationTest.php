@@ -567,6 +567,49 @@ final class RelationTest extends BaseTestCase
         $this->assertCount(2, $queries);
     }
 
+    public function testModelLoadModel()
+    {
+        $user = TestUser::new();
+        $user = $user->find(1);
+
+        $user->load('group');
+
+        $query = wei()->db->getLastQuery();
+        $this->assertEquals('SELECT * FROM `test_user_groups` WHERE `id` = ? LIMIT 1', $query);
+
+        $this->assertTrue($user->isLoaded('group'));
+    }
+
+    public function testModelLoadModelThenModel()
+    {
+        $user = TestUser::new();
+        $user = $user->find(1);
+
+        $user->load('group.users');
+
+        $queries = wei()->db->getQueries();
+        $this->assertSame('SELECT * FROM `test_user_groups` WHERE `id` = ? LIMIT 1', $queries[count($queries) - 2]);
+        $this->assertSame('SELECT * FROM `test_users` WHERE `group_id` = ?', $queries[count($queries) - 1]);
+
+        $this->assertTrue($user->isLoaded('group'));
+        $this->assertTrue($user->group->isLoaded('users'));
+    }
+
+    public function testModelLoadCollThenModel()
+    {
+        $group = TestUserGroup::new();
+        $group->find(1);
+
+        $group->load('users.group');
+
+        $queries = wei()->db->getQueries();
+        $this->assertSame('SELECT * FROM `test_users` WHERE `group_id` = ?', $queries[count($queries) - 2]);
+        $this->assertSame('SELECT * FROM `test_user_groups` WHERE `id` IN (?)', $queries[count($queries) - 1]);
+
+        $this->assertTrue($group->isLoaded('users'));
+        $this->assertTrue($group->users->isLoaded('group'));
+    }
+
     public function testModelIsLoaded()
     {
         $user = TestUser::new();
@@ -797,17 +840,6 @@ final class RelationTest extends BaseTestCase
 
         $this->assertCount(2, $articles);
         $this->assertSame($user->id, $articles[0]->test_user_id);
-    }
-
-    public function testModelLoadWillThrowsException()
-    {
-        $user = TestUser::save();
-
-        $this->expectExceptionObject(
-            new \BadMethodCallException('Method "load" can be called when the object is a collection')
-        );
-
-        $user->load('profile');
     }
 
     public function testGetSelfMethodAsRelation()

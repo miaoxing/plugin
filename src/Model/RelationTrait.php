@@ -171,13 +171,22 @@ trait RelationTrait
      */
     public function load($names): self
     {
-        $this->ensureColl();
-
         foreach ((array) $names as $name) {
             // 1. Load relation config
             $parts = explode('.', $name, 2);
             $name = $parts[0];
-            $next = isset($parts[1]) ? $parts[1] : null;
+            $next = $parts[1] ?? null;
+
+            // Load model
+            if (!$this->isColl()) {
+                $value = $this->getRelationValue($name);
+                if ($next && $value) {
+                    $value->load($next);
+                }
+                continue;
+            }
+
+            // Load collection
             if (isset($this->loadedRelations[$name])) {
                 continue;
             }
