@@ -62,7 +62,7 @@ trait RelationTrait
      *
      * @param array $attributes
      * @return $this
-     * @expertimental
+     * @experimental
      */
     public function saveRelation(array $attributes = []): self
     {
