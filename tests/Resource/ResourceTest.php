@@ -5,6 +5,8 @@ namespace MiaoxingTest\Plugin\Resource;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
+use MiaoxingTest\Plugin\Model\Fixture\TestUserGroup;
+use Wei\Ret;
 
 class ResourceTest extends BaseTestCase
 {
@@ -168,5 +170,22 @@ class ResourceTest extends BaseTestCase
                 'name' => 'vip',
             ],
         ], $resource->toArray($user)['data']);
+    }
+
+    public function testToResource()
+    {
+        $group = TestUserGroup::new([
+            'id' => 1,
+            'name' => 'test',
+        ]);
+
+        $ret = $group->toResource(TestUserGroupResource::class);
+
+        $this->assertInstanceOf(Ret::class, $ret);
+
+        $this->assertSame([
+            'id' => 1,
+            'name' => 'test',
+        ], $ret['data']);
     }
 }
