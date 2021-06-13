@@ -1,0 +1,194 @@
+<?php
+
+namespace Miaoxing\Plugin\Resource;
+
+use Closure;
+use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Service\WeiBaseModel;
+
+/**
+ * Convert the model object to array for API response, reference from Laravel
+ *
+ * @method array transform($model) Convert the model object to array
+ * @experimental 可能调整命名，更改静态方法为服务方法等
+ * @link https://laravel.com/docs/8.x/eloquent-resources
+ */
+abstract class BaseResource extends BaseService
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected static $createNewInstance = true;
+
+    /**
+     * @var MissingValue|null
+     */
+    protected static $missingValue;
+
+    /**
+     * @var array
+     */
+    protected $includes = [];
+
+    /**
+     * Create a new resource object
+     *
+     * @return static
+     */
+    public static function new(): self
+    {
+        return new static();
+    }
+
+    /**
+     * Convert the model object to array with wrapper and meta data
+     *
+     * @param WeiBaseModel $model
+     * @return array
+     * @svc
+     * @todo 支持 meta 等数据
+     */
+    protected function toArray(WeiBaseModel $model): array
+    {
+        return [
+            'data' => $this->transformData($model),
+        ];
+    }
+
+    /**
+     * Convert the model object to array
+     *
+     * @param WeiBaseModel $model
+     * @return array
+     * @svc
+     */
+    protected function transformData(WeiBaseModel $model): array
+    {
+        $resource = $this;
+
+        if (!$model->isColl()) {
+            return $resource->filter($resource->transform($model), $model);
+        }
+
+        $data = [];
+        foreach ($model as $item) {
+            $data[] = $resource->filter($resource->transform($item), $item);
+        }
+        return $data;
+    }
+
+    /**
+     * Transform the relation value when relation is loaded, or ignore the resource array key by condition
+     *
+     * @param WeiBaseModel $model
+     * @param string $relation
+     * @return array|MissingValue
+     */
+    public static function transformDataWhenLoaded(WeiBaseModel $model, string $relation)
+    {
+        // Loaded but may be null
+        if ($model->isLoaded($relation) && $model->{$relation}) {
+            return static::new()->transformData($model->{$relation});
+        }
+        return static::missingValue();
+    }
+
+    /**
+     * Alias of `transformWhenLoaded`
+     *
+     * @param WeiBaseModel $model
+     * @param string $relation
+     * @return array|MissingValue
+     */
+    public static function whenLoaded(WeiBaseModel $model, string $relation)
+    {
+        return static::transformDataWhenLoaded($model, $relation);
+    }
+
+    /**
+     * Return the preset `MissingValue` object
+     *
+     * @return MissingValue
+     */
+    protected static function missingValue(): MissingValue
+    {
+        if (!static::$missingValue) {
+            static::$missingValue = new MissingValue();
+        }
+        return static::$missingValue;
+    }
+
+    /**
+     * Remove missing value and expand merged value
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function filter(array $data): array
+    {
+        $result = [];
+        // TODO 调用了 merge 或 missing value 才需要循环检查
+        foreach ($data as $key => $value) {
+            if ($value instanceof MissingValue) {
+                continue;
+            }
+
+            if ($value instanceof MergeValue) {
+                $result = array_merge($result, $value->getValue());
+                continue;
+            }
+
+            $result[$key] = $value;
+        }
+        return $result;
+    }
+
+    /**
+     * Return the model array by specified columns that will be merge into the resource array
+     *
+     * @param WeiBaseModel $model
+     * @param array $columns
+     * @return MergeValue
+     */
+    protected function extract(WeiBaseModel $model, array $columns): MergeValue
+    {
+        $data = [];
+        foreach ($columns as $column) {
+            // TODO 支持隐藏个别 $column => $this->when('xx')
+            $data[$column] = $model->get($column);
+        }
+        return new MergeValue($data);
+    }
+
+    /**
+     * Return the value or ignore the resource array key by condition
+     *
+     * @param bool $bool
+     * @param mixed $value
+     * @return mixed|MissingValue
+     */
+    protected function when(bool $bool, $value)
+    {
+        if (!$bool) {
+            return static::missingValue();
+        }
+
+        return $value instanceof Closure ? $value() : $value;
+    }
+
+    /**
+     * Return an array that will be merged into the resource array, or ignore the value by condition
+     *
+     * @param bool $bool
+     * @param array|Closure $value
+     * @return MergeValue|MissingValue
+     */
+    protected function mergeWhen(bool $bool, $value)
+    {
+        if (!$bool) {
+            return static::missingValue();
+        }
+
+        return new MergeValue($value instanceof Closure ? $value() : $value);
+    }
+}
