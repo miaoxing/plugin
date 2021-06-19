@@ -53,6 +53,19 @@ class MineTraitTest extends BaseTestCase
         $this->assertSame($mine->id, $mine2->id);
     }
 
+    public function testFindOrInitMineAndSave()
+    {
+        User::loginById(1);
+
+        TestMine::mine()->all()->destroy();
+
+        $mine = TestMine::findOrInitMine();
+        $this->assertTrue($mine->isNew());
+
+        $mine->save();
+        $this->assertSame(1, $mine->get('user_id'));
+    }
+
     public function testFindOrInitMineCached()
     {
         User::loginById(1);
