@@ -119,12 +119,26 @@ abstract class BaseResource extends BaseService
     }
 
     /**
+     * Specify which include* methods to call to append data when transforming
+     *
+     * @param string|array $includes
+     * @return $this
+     * @svc
+     */
+    protected function includes($includes): self
+    {
+        $this->includes = (array) $includes;
+        return $this;
+    }
+
+    /**
      * Remove missing value and expand merged value
      *
      * @param array $data
+     * @param WeiBaseModel $model
      * @return array
      */
-    protected function filter(array $data): array
+    protected function filter(array $data, WeiBaseModel $model): array
     {
         $result = [];
         // TODO 调用了 merge 或 missing value 才需要循环检查
@@ -140,6 +154,15 @@ abstract class BaseResource extends BaseService
 
             $result[$key] = $value;
         }
+
+        foreach ($this->includes as $name) {
+            $method = 'include' . ucfirst($name);
+            if (!method_exists($this, $method)) {
+                throw new \RuntimeException(sprintf('Method "%s" not found', $method));
+            }
+            $result[$name] = $this->{$method}($model);
+        }
+
         return $result;
     }
 
