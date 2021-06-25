@@ -172,14 +172,31 @@ class ResourceTest extends BaseTestCase
         ], $resource->toArray($user)['data']);
     }
 
-    public function testToResource()
+    public function testToRetClass()
     {
         $group = TestUserGroup::new([
             'id' => 1,
             'name' => 'test',
         ]);
 
-        $ret = $group->toResource(TestUserGroupResource::class);
+        $ret = $group->toRet(TestUserGroupResource::class);
+
+        $this->assertInstanceOf(Ret::class, $ret);
+
+        $this->assertSame([
+            'id' => 1,
+            'name' => 'test',
+        ], $ret['data']);
+    }
+
+    public function testToRetObject()
+    {
+        $group = TestUserGroup::new([
+            'id' => 1,
+            'name' => 'test',
+        ]);
+
+        $ret = $group->toRet(TestUserGroupResource::new());
 
         $this->assertInstanceOf(Ret::class, $ret);
 
