@@ -7,8 +7,6 @@ namespace Miaoxing\Plugin\Metadata;
  * @property int $appId
  * @property string $outId
  * @property int $groupId 用户组
- * @property string $wechatOpenId 微信的OpenID
- * @property string $wechatUnionId
  * @property bool $isAdmin
  * @property string $nickName
  * @property string $remarkName
@@ -23,7 +21,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $country
  * @property string $province
  * @property string $city
- * @property string $district
+ * @property string $area
  * @property string $address
  * @property string $signature
  * @property bool $isEnabled 是否启用
@@ -34,11 +32,8 @@ namespace Miaoxing\Plugin\Metadata;
  * @property int $createdBy
  * @property int $updatedBy
  * @property int $score 积分
- * @property float $money 账户余额
- * @property float $rechargeMoney 充值账户余额
- * @property bool $isSubscribed 是否关注
- * @property string|null $subscribedAt 关注时间
- * @property string|null $unsubscribedAt 取关时间
+ * @property string $money 账户余额
+ * @property string $rechargeMoney 充值账户余额
  * @property string $source 用户来源
  * @property mixed $isMobileVerified
  * @property string|null $displayName
