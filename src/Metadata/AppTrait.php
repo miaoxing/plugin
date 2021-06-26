@@ -3,17 +3,13 @@
 namespace Miaoxing\Plugin\Metadata;
 
 /**
- * @property int $id
- * @property int $userId
- * @property string $pluginIds
- * @property string $name
- * @property string $title
- * @property string $secret
- * @property string $domain
- * @property string $description
- * @property string $industry
- * @property int $status
- * @property string $configs
+ * @property int|null $id
+ * @property int $userId 所属用户的编号
+ * @property string $pluginIds 已安装的插件编号
+ * @property string $name 名称
+ * @property string $domain 绑定的域名
+ * @property string $description 描述
+ * @property int $status 状态
  * @property string|null $createdAt
  * @property string|null $updatedAt
  * @property int $createdBy
