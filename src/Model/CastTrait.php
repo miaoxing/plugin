@@ -130,6 +130,10 @@ trait CastTrait
             case 'object':
                 return is_object($value) ? $value : json_decode($value);
 
+            case 'decimal':
+                // Remove ending 0
+                return (string) (float) $value;
+
             case 'list':
                 // Ignore default array value
                 if (is_array($value)) {
@@ -172,6 +176,7 @@ trait CastTrait
 
             case 'string':
             case 'float':
+            case 'decimal':
                 return (string) $value;
 
             case 'date':

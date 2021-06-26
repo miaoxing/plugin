@@ -117,7 +117,8 @@ class Mysql extends BaseDriver
         }
 
         if (in_array($type, ['decimal'], true)) {
-            return [(float) $default, 0.0 !== (float) $default];
+            // Remove ending 0
+            return [(string) (float) $default, 0.0 !== (float) $default];
         }
 
         // MySQL 5.7 *text and json columns cant have default value,
@@ -409,7 +410,7 @@ class Mysql extends BaseDriver
                 return 'date';
 
             case 'decimal':
-                return 'float';
+                return 'decimal';
 
             case 'json':
                 return 'json';
