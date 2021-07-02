@@ -34,11 +34,11 @@ class AppModel
     /**
      * Returns the success result with model data
      *
-     * @param array $merge
+     * @param array|string|BaseResource $merge
      * @return Ret
      * @see AppModel::toRet
      */
-    public static function toRet(array $merge = []): \Wei\Ret
+    public static function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -1968,11 +1968,32 @@ class Tester
     }
 
     /**
+     * Execute a POST request
+     *
+     * @param string $page
+     * @return mixed
+     * @see Tester::post
+     */
+    public static function post(string $page)
+    {
+    }
+
+    /**
      * @param array $request
      * @return $this
      * @see Tester::request
      */
     public static function request(array $request)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param string $method
+     * @return mixed
+     * @see Tester::call
+     */
+    public static function call(string $page, string $method)
     {
     }
 
@@ -2201,11 +2222,11 @@ class User
     /**
      * Returns the success result with model data
      *
-     * @param array $merge
+     * @param array|string|BaseResource $merge
      * @return Ret
      * @see UserModel::toRet
      */
-    public static function toRet(array $merge = []): \Wei\Ret
+    public static function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -3165,11 +3186,11 @@ class UserModel
     /**
      * Returns the success result with model data
      *
-     * @param array $merge
+     * @param array|string|BaseResource $merge
      * @return Ret
      * @see UserModel::toRet
      */
-    public static function toRet(array $merge = []): \Wei\Ret
+    public static function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -4149,11 +4170,11 @@ class AppModel
     /**
      * Returns the success result with model data
      *
-     * @param array $merge
+     * @param array|string|BaseResource $merge
      * @return Ret
      * @see AppModel::toRet
      */
-    public function toRet(array $merge = []): \Wei\Ret
+    public function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -6059,11 +6080,32 @@ class Tester
     }
 
     /**
+     * Execute a POST request
+     *
+     * @param string $page
+     * @return mixed
+     * @see Tester::post
+     */
+    public function post(string $page)
+    {
+    }
+
+    /**
      * @param array $request
      * @return $this
      * @see Tester::request
      */
     public function request(array $request)
+    {
+    }
+
+    /**
+     * @param string $page
+     * @param string $method
+     * @return mixed
+     * @see Tester::call
+     */
+    public function call(string $page, string $method)
     {
     }
 
@@ -6292,11 +6334,11 @@ class User
     /**
      * Returns the success result with model data
      *
-     * @param array $merge
+     * @param array|string|BaseResource $merge
      * @return Ret
      * @see UserModel::toRet
      */
-    public function toRet(array $merge = []): \Wei\Ret
+    public function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -7244,11 +7286,11 @@ class UserModel
     /**
      * Returns the success result with model data
      *
-     * @param array $merge
+     * @param array|string|BaseResource $merge
      * @return Ret
      * @see UserModel::toRet
      */
-    public function toRet(array $merge = []): \Wei\Ret
+    public function toRet($merge = []): \Wei\Ret
     {
     }
 

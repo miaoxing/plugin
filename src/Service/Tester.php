@@ -37,7 +37,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
     /**
      * @var array
      */
-    protected $post = [];
+    protected $data = [];
 
     /**
      * @var array
@@ -124,12 +124,12 @@ class Tester extends \Miaoxing\Plugin\BaseService
     }
 
     /**
-     * @param array $post
+     * @param array $data
      * @return $this
      */
-    public function post(array $post)
+    public function data(array $data)
     {
-        $this->post = $post;
+        $this->data = $data;
 
         return $this;
     }
@@ -200,7 +200,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
         $this->req->clear();
         $this->req->set($this->request);
         $this->req->setOption('gets', $this->query);
-        $this->req->setOption('posts', $this->post);
+        $this->req->setOption('posts', $this->data);
         $this->req->setMethod($this->method);
         $this->req->set('_format', $this->dataType);
         $this->req->setContent($this->content);
@@ -315,6 +315,18 @@ class Tester extends \Miaoxing\Plugin\BaseService
     }
 
     /**
+     * Execute a POST request
+     *
+     * @param string $page
+     * @return mixed
+     * @svc
+     */
+    protected function post(string $page)
+    {
+        return $this->call($page, 'post');
+    }
+
+    /**
      * @param array $request
      * @return $this
      * @svc
@@ -330,6 +342,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      * @param string $page
      * @param string $method
      * @return mixed
+     * @svc
      */
     protected function call(string $page, string $method)
     {
@@ -339,7 +352,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
         $this->req->clear();
         $this->req->set($this->request);
         $this->req->setOption('gets', $this->query);
-        $this->req->setOption('posts', $this->post);
+        $this->req->setOption('posts', $this->data);
         $this->req->setMethod($method);
         $this->req->set('_format', $this->dataType);
         $this->req->setContent($this->content);
