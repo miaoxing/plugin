@@ -2,6 +2,9 @@
 
 namespace Miaoxing\Plugin\Test;
 
+use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Service\Cls;
+use PHPUnit\Framework\MockObject\MockObject;
 use Wei\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;
@@ -34,9 +37,9 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
     {
         $wei = $this->wei;
 
-        // 还原被mock的服务
-        foreach ($this->mockServices as $name => $service) {
-            $wei->{$name} = $service;
+        // 移除被 mock 的服务
+        foreach ($this->mockServices as $name) {
+            $wei->remove($name);
         }
 
         $wei->req->clear();
@@ -47,42 +50,64 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * 获取服务的mock对象
+     * 获取服务的 Mock 对象
      *
-     * @param string $name
-     * @param array $methods
-     * @param array $arguments
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @param string $class
+     * @param array<string> $methods
+     * @return BaseService&MockObject
+     *
+     * @phpstan-template T
+     * @phpstan-param class-string<BaseService>&class-string<T> $class
+     * @phpstan-return MockObject&BaseService&T
      */
-    public function getServiceMock($name, $methods = [], array $arguments = [])
+    public function getServiceMock(string $class, array $methods = [])
     {
-        $service = $this->wei->{$name};
-        $this->mockServices[$name] = $service;
+        /** @var MockObject&BaseService&T $service */
+        $service = $this->getMockBuilder($class)
+            ->onlyMethods($methods)
+            ->getMock();
 
-        $class = get_class($service);
-        $mock = $this->createMock($class);
-        $this->wei->{$name} = $mock;
+        $this->registerMockServices($class, $service);
 
-        return $mock;
+        return $service;
     }
 
-    public function getModelServiceMock($name, $methods = [], array $arguments = [])
+    /**
+     * 获取模型的 Mock 对象
+     *
+     * @param string $class
+     * @param array<string> $methods
+     * @return BaseService&MockObject
+     *
+     * @phpstan-template T
+     * @phpstan-param class-string<BaseService>&class-string<T> $class
+     * @phpstan-return MockObject&BaseService&T
+     */
+    public function getModelServiceMock(string $class, array $methods = [])
     {
-        $table = wei()->{$name}()->getTable();
+        /** @var MockObject&BaseService&T $model */
+        $model = $this->getMockBuilder($class)
+            ->onlyMethods($methods)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        // TODO PHPUnit?空方法会导致其他方法都返回null,
-        $methods || $methods = ['__fake'];
-
-        $model = $this->getServiceMock($name, $methods, $arguments);
-
-        // TODO 通过db服务调用getTableFields会出现错误 Illegal offset type in isset or empty in services/DbCallback.php on line 16
-        $fields = wei()->db->getTableFields($table);
-        // @phpstan-ignore-next-line
-        $model->setOption('fields', $fields);
-
-        wei()->plugin->getPluginIdByClass('ss');
+        $this->registerMockServices($class, $model);
 
         return $model;
+    }
+
+    /**
+     * 记录 Mock 对象
+     *
+     * @param string $class
+     * @param BaseService $service
+     */
+    protected function registerMockServices(string $class, BaseService $service)
+    {
+        $name = lcfirst(Cls::baseName($class));
+        $service->setOption('wei', $this->wei);
+        $this->wei->set($name, $service);
+        $this->mockServices[] = $name;
     }
 
     /**
