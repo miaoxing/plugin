@@ -980,6 +980,17 @@ final class RelationTest extends BaseTestCase
         ]), $user->getSql());
     }
 
+    public function testSetRelationValue()
+    {
+        $user = TestUser::new();
+        $this->assertNull($user->group);
+
+        $user = TestUser::new();
+        $group = TestUserGroup::new();
+        $user->setRelationValue('group', $group);
+        $this->assertSame($group, $user->group);
+    }
+
     public function testJoinRelationCache()
     {
         $user = TestUser::new()->joinRelation('profile')->joinRelation('profile');
