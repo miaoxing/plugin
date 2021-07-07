@@ -1,10 +1,10 @@
 <?php $view->layout() ?>
 
-<?php echo $block->css() ?>
+<?php echo $view->block->css() ?>
 <style>
   <?php echo file_get_contents(__DIR__ . '/../css/ret.css') ?>
 </style>
-<?php echo $block->end() ?>
+<?php echo $view->block->end() ?>
 
 <div class="ret ret-<?php echo $type ?>">
   <div class="ret-icon-container">
