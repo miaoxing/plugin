@@ -17,12 +17,4 @@ parameters:
             count: 1
             path: src/Service/UserModel.php
 
-        -
-            message: "#^Unsafe usage of new static\\(\\)\\.$#"
-            count: 2
-            path: src/Service/QueryBuilder.php
-
-        -
-            message: "#^Unsafe usage of new static\\(\\)\\.$#"
-            count: 1
-            path: src/Service/Tester.php
+        -   "#^Unsafe usage of new static\\(\\)\\.$#"
