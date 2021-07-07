@@ -135,25 +135,37 @@ trait CastTrait
                 return (string) (float) $value;
 
             case 'list':
-                // Ignore default array value
-                if (is_array($value)) {
-                    return $value;
-                }
-
-                if (in_array($value, [null, ''], true)) {
-                    return [];
-                }
-
-                $value = explode($options['separator'] ?? ',', $value);
-                if (($options['type'] ?? 'string') === 'int') {
-                    $value = array_map('intval', $value);
-                }
-
-                return $value;
+                return $this->castValueToPhpList($value, $options);
 
             default:
                 throw new InvalidArgumentException('Unsupported cast type: ' . $type);
         }
+    }
+
+    /**
+     * Cast db value to PHP array
+     *
+     * @param string|array $value
+     * @param array $options
+     * @return array<string|int>
+     */
+    protected function castValueToPhpList($value, array $options): array
+    {
+        // Ignore default array value
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (in_array($value, [null, ''], true)) {
+            return [];
+        }
+
+        $value = explode($options['separator'] ?? ',', $value);
+        if (($options['type'] ?? 'string') === 'int') {
+            $value = array_map('intval', $value);
+        }
+
+        return $value;
     }
 
     /**
