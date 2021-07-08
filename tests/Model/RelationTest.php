@@ -694,6 +694,18 @@ final class RelationTest extends BaseTestCase
         $this->assertArrayNotHasKey('test_user_id', $array);
     }
 
+    public function testToArrayWithRelationName()
+    {
+        $user = TestUser::new()->first();
+
+        $user->load('profile');
+
+        $array = $user->toArray(['profile']);
+
+        $this->assertSame(['profile'], array_keys($array));
+        $this->assertSame($array['profile'], $user->profile);
+    }
+
     /**
      * @group saveRelation
      */

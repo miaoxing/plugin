@@ -535,7 +535,12 @@ trait WeiModelTrait
         if ($prepend) {
             $data = $prepend($this) + $data;
         }
-        return $data + $this->virtualToArray() + $this->relationToArray();
+
+        if (!$returnFields) {
+            $data += $this->virtualToArray() + $this->relationToArray();
+        }
+
+        return $data;
     }
 
     /**

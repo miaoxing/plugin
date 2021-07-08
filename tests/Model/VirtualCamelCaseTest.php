@@ -117,4 +117,18 @@ final class VirtualCamelCaseTest extends BaseTestCase
         $this->expectExceptionObject(new \InvalidArgumentException('Invalid property: virtual_column'));
         $virtual->virtual_column = 'abc';
     }
+
+    public function testToArray()
+    {
+        $virtual = TestVirtualCamelCase::new();
+        $array = $virtual->toArray(['id']);
+        $this->assertSame(['id'], array_keys($array));
+    }
+
+    public function testToArrayWithVirtualColumns()
+    {
+        $virtual = TestVirtualCamelCase::new();
+        $array = $virtual->toArray(['virtualColumn']);
+        $this->assertSame(['virtualColumn'], array_keys($array));
+    }
 }
