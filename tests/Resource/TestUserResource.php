@@ -14,4 +14,14 @@ class TestUserResource extends BaseResource
     {
         return parent::toArray($model);
     }
+
+    /**
+     * @param array|string $includes
+     * @return BaseResource
+     * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
+     */
+    public function includes($includes): BaseResource
+    {
+        return parent::includes($includes);
+    }
 }

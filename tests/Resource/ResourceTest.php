@@ -205,4 +205,30 @@ class ResourceTest extends BaseTestCase
             'name' => 'test',
         ], $ret['data']);
     }
+
+    public function testIncludes()
+    {
+        $user = TestUser::new();
+        $user->name = 'foo';
+        $user->address = 'bar';
+
+        $resource = new class () extends TestUserResource {
+            public function transform(TestUser $user)
+            {
+                return [
+                    'id' => 1,
+                ];
+            }
+
+            public function includeTest(): string
+            {
+                return 'included';
+            }
+        };
+
+        $this->assertSame([
+            'id' => 1,
+            'test' => 'included',
+        ], $resource->includes('test')->toArray($user)['data']);
+    }
 }
