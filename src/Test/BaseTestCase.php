@@ -149,6 +149,18 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         $this->assertArrayContains($expected, $ret->toArray(), $assertMessage);
     }
 
+    /**
+     * 测试两个 Ret 的内容是否完全相等
+     *
+     * @param Ret $expected
+     * @param Ret $actual
+     * @param string $message
+     */
+    public function assertSameRet(Ret $expected, Ret $actual, string $message = ''): void
+    {
+        $this->assertSame($expected->toArray(), $actual->toArray(), $message);
+    }
+
     public static function assertArrayContains($subset, $array, $message = '')
     {
         $array = array_intersect_key($array, array_flip(array_keys($subset)));
