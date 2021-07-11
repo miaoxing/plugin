@@ -47,6 +47,28 @@ class Ret extends \Wei\Ret
     }
 
     /**
+     * Transform result data if exists
+     *
+     * @param string|class-string|object $class
+     * @return $this
+     * @experimental maybe rename
+     */
+    public function transform($class): self
+    {
+        if (isset($this->data['data'])) {
+            if (method_exists($class, 'toArray')) {
+                $this->data['data'] = $class::toArray($this->data['data'])['data'];
+            } else {
+                throw new \InvalidArgumentException(sprintf(
+                    'Expected class `%s` to have method `toArray`',
+                    is_object($class) ? get_class($class) : $class
+                ));
+            }
+        }
+        return $this;
+    }
+
+    /**
      * {@inheritDoc}
      * @throws \Exception
      * @svc
