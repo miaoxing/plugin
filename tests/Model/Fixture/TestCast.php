@@ -18,6 +18,7 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
  * @property array $json_column
  * @property object $object_column
  * @property object|null $nullable_object_column
+ * @property object $default_object_column
  * @property array $list_column
  * @property array $list2_column
  */
@@ -51,6 +52,9 @@ class TestCast extends WeiBaseModel
             'cast' => 'object',
         ],
         'nullable_object_column' => [
+            'cast' => 'object',
+        ],
+        'default_object_column' => [
             'cast' => 'object',
         ],
         'list_column' => [
