@@ -38,6 +38,7 @@ final class CastTraitTest extends BaseTestCase
             ->string('nullable_json_column')->nullable()
             ->string('object_column')
             ->string('nullable_object_column')->nullable()
+            ->string('default_object_column')->defaults('{"a":"c"}')
             ->string('list_column')
             ->string('nullable_list_column')->nullable()
             ->string('list2_column')
@@ -309,6 +310,31 @@ final class CastTraitTest extends BaseTestCase
         $this->assertNotSame($cast->object_column, $cast2->object_column);
     }
 
+    public function testObjectSaveBeDefaultValue()
+    {
+        $cast = TestCast::save();
+
+        $cast = TestCast::fetch('int_column', $cast->int_column);
+
+        $this->assertSame('{"a":"c"}', $cast['default_object_column']);
+    }
+
+    public function testObjectTouchSaveBeDefaultValue()
+    {
+        $cast = TestCast::new();
+
+        // convert default db value to PHP value
+        $default = $cast->default_object_column;
+        $this->assertEquals((object) ['a' => 'c'], $default);
+
+        // convert PHP value to db value
+        $cast->save();
+
+        $cast = TestCast::fetch('int_column', $cast->int_column);
+
+        $this->assertSame('{"a":"c"}', $cast['default_object_column']);
+    }
+
     public function testObjectSetValue()
     {
         $cast = TestCast::new();
@@ -458,13 +484,28 @@ final class CastTraitTest extends BaseTestCase
             ],
             [
                 '1',
-                '{"scalar":"1"}',
+                '{"scalar":1}',
                 (object) '1',
             ],
             [
                 1,
                 '{"scalar":1}',
                 (object) 1,
+            ],
+            [
+                '"1"',
+                '{"scalar":"1"}',
+                (object) '1',
+            ],
+            [
+                '{"a":"d"}',
+                '{"a":"d"}',
+                (object) ['a' => 'd'],
+            ],
+            [
+                '{"a":"}', // invalid
+                '{}',
+                (object) [],
             ],
         ];
     }
@@ -532,6 +573,7 @@ final class CastTraitTest extends BaseTestCase
             'nullable_json_column' => null,
             'object_column' => '{}',
             'nullable_object_column' => null,
+            'default_object_column' => '{}',
             'list_column' => '',
             'nullable_list_column' => null,
             'list2_column' => '',
@@ -582,6 +624,7 @@ final class CastTraitTest extends BaseTestCase
             'nullable_json_column' => 'string',
             'object_column' => 'object',
             'nullable_object_column' => 'object',
+            'default_object_column' => 'object',
             'list_column' => 'list',
             'nullable_list_column' => 'string',
             'list2_column' => [
@@ -616,6 +659,8 @@ final class CastTraitTest extends BaseTestCase
 
         $this->assertInstanceOf(\stdClass::class, $array['object_column']);
 
+        $this->assertEquals((object) ['a' => 'c'], $array['default_object_column']);
+
         $this->assertSame([
             'int_column' => null,
             'nullable_int_column' => null,
@@ -632,6 +677,7 @@ final class CastTraitTest extends BaseTestCase
             'nullable_json_column' => null,
             'object_column' => $array['object_column'],
             'nullable_object_column' => null,
+            'default_object_column' => $array['default_object_column'],
             'list_column' => [],
             'nullable_list_column' => null,
             'list2_column' => [],

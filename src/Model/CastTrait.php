@@ -201,6 +201,10 @@ trait CastTrait
                 return json_encode((array) $value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
 
             case 'object':
+                // Parse default value from database
+                if (is_string($value)) {
+                    $value = json_decode($value);
+                }
                 // TODO keep original object, and cast to db string before save
                 return json_encode((object) $value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
 
