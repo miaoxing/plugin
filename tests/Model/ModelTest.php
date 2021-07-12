@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model;
 
+use Miaoxing\Payment\Payment\Test;
 use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
@@ -433,6 +434,27 @@ final class ModelTest extends BaseTestCase
 
         $user->save();
         $this->assertSame(1, $user->id);
+    }
+
+    public function testDestroyOrFail()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::destroyOrFail(1);
+        $this->assertInstanceOf(TestUser::class, $user);
+        $this->assertTrue($user->isNew());
+
+        $user = TestUser::find(1);
+        $this->assertNull($user);
+    }
+
+    public function testDestroyOrFailNotFound()
+    {
+        $this->initFixtures();
+
+        $this->expectExceptionObject(new \Exception('Record not found', 404));
+
+        TestUser::destroyOrFail(99);
     }
 
     public function testGetTable()

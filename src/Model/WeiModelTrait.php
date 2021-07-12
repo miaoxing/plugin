@@ -737,6 +737,19 @@ trait WeiModelTrait
         return $this;
     }
 
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @svc
+     */
+    protected function destroyOrFail($id): self
+    {
+        return $this->findOrFail($id)->destroy();
+    }
+
     protected function executeDestroy()
     {
         $primaryKey = $this->getPrimaryKey();
