@@ -435,6 +435,27 @@ final class ModelTest extends BaseTestCase
         $this->assertSame(1, $user->id);
     }
 
+    public function testDestroyOrFail()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::destroyOrFail(1);
+        $this->assertInstanceOf(TestUser::class, $user);
+        $this->assertTrue($user->isNew());
+
+        $user = TestUser::find(1);
+        $this->assertNull($user);
+    }
+
+    public function testDestroyOrFailNotFound()
+    {
+        $this->initFixtures();
+
+        $this->expectExceptionObject(new \Exception('Record not found', 404));
+
+        TestUser::destroyOrFail(99);
+    }
+
     public function testGetTable()
     {
         $this->initFixtures();
