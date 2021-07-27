@@ -751,4 +751,15 @@ final class CastTraitTest extends BaseTestCase
         $this->assertFalse(isset($cast->nullable_int_column));
         $this->assertTrue(isset($cast->nullable_default_int_column));
     }
+
+    public function testSaveRawObject()
+    {
+        $cast = TestCast::save([
+            'object_column' => (object) 'test',
+        ]);
+        $this->assertEquals((object) 'test', $cast->object_column);
+
+        $cast->reload();
+        $this->assertEquals((object) 'test', $cast->object_column);
+    }
 }

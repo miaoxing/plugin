@@ -8,6 +8,7 @@ use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
 use MiaoxingTest\Plugin\Model\Fixture\TestUser;
+use Wei\Db;
 use Wei\Req;
 use Wei\Res;
 
@@ -560,7 +561,7 @@ final class ModelTest extends BaseTestCase
         $user = TestUser::find(1);
         $group_id = $user->group_id;
 
-        $user->group_id = (object) 'group_id + 1';
+        $user->group_id = Db::raw('group_id + 1');
         $user->save();
         $user->reload();
 

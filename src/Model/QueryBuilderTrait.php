@@ -98,7 +98,7 @@ trait QueryBuilderTrait
      */
     public function raw($expression): object
     {
-        return (object) $expression;
+        return $this->getDb()->raw($expression);
     }
 
     /**

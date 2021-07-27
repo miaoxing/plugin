@@ -115,11 +115,11 @@ abstract class BaseDriver extends Base
 
     protected function getRawValue($expression)
     {
-        return $expression->scalar;
+        return $this->db->getRawValue($expression);
     }
 
     protected function isRaw($expression)
     {
-        return $expression instanceof \stdClass && isset($expression->scalar);
+        return $this->db->isRaw($expression);
     }
 }

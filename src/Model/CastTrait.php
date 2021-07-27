@@ -235,11 +235,10 @@ trait CastTrait
     /**
      * @param mixed $value
      * @return bool
-     * @todo object操作移到单独区域
      */
     protected function isIgnoreCast($value): bool
     {
-        return $value instanceof stdClass && isset($value->scalar);
+        return $this->db->isRaw($value);
     }
 
     /**

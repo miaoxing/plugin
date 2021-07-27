@@ -228,7 +228,7 @@ trait WeiModelTrait
      */
     public function incr(string $name, $offset = 1): self
     {
-        $this[$name] = (object) ($this->convertToDbKey($name) . ' + ' . $offset);
+        $this[$name] = $this->db->raw($this->convertToDbKey($name) . ' + ' . $offset);
         return $this;
     }
 
@@ -241,7 +241,7 @@ trait WeiModelTrait
      */
     public function decr(string $name, $offset = 1): self
     {
-        $this[$name] = (object) ($this->convertToDbKey($name) . ' - ' . $offset);
+        $this[$name] = $this->db->raw($this->convertToDbKey($name) . ' - ' . $offset);
         return $this;
     }
 
