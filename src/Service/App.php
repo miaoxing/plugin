@@ -65,6 +65,12 @@ class App extends \Wei\App
     protected $fallbackPathInfo = 'app';
 
     /**
+     * @var string
+     * @internal
+     */
+    protected $accessControlAllowOrigin = '*';
+
+    /**
      * The id of the current application
      *
      * @var int
@@ -289,6 +295,11 @@ class App extends \Wei\App
             'page' => $page,
         ];
 
+        $this->res->setHeader('Access-Control-Allow-Origin', $this->accessControlAllowOrigin);
+        if ($this->req->isPreflight()) {
+            return $this->handlePreflight();
+        }
+
         $method = $this->req->getMethod();
         if (!method_exists($page, $method)) {
             $this->res->setStatusCode(static::METHOD_NOT_ALLOWED);
@@ -475,5 +486,19 @@ class App extends \Wei\App
             $app = AppModel::select('id')->fetch('domain', $domain);
             return $app ? (int) $app['id'] : null;
         });
+    }
+
+    /**
+     * @return Res
+     * @internal
+     * @todo 改为 middleware 或插件
+     */
+    protected function handlePreflight(): Res
+    {
+        return $this->res
+            ->setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
+            ->setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization')
+            ->setHeader('Access-Control-Max-Age', 0)
+            ->send();
     }
 }
