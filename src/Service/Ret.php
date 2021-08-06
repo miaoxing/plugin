@@ -84,6 +84,9 @@ class Ret extends \Wei\Ret
 
         $name = explode('/', $parts[1], 2)[0];
         $plugin = $this->plugin->getOneById($name);
+        if (!$plugin->getCode()) {
+            return null;
+        }
 
         $errors = $this->getErrors($name);
         $key = is_array($message) ? ($message['message'] ?? $message[0]) : $message;
