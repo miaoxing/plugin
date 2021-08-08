@@ -53,7 +53,7 @@ class Ret extends \Wei\Ret
      */
     protected function err($message, $code = null, $level = null)
     {
-        if (null === $code && $this->env->isDev()) {
+        if (null === $code && !isset($message['code']) && $this->env->isDev()) {
             $code = $this->generateCode($message) ?? $this->defaultErrCode;
         }
         return parent::err($message, $code, $level);
