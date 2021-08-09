@@ -93,8 +93,7 @@ class Ret extends \Wei\Ret
         if (isset($errors[$key])) {
             $code = $errors[$key];
         } else {
-            $lastCode = end($errors);
-            $code = $lastCode ? $lastCode + 1 : $plugin->getCode() * 1000;
+            $code = (end($errors) ?: $plugin->getCode() * 1000) + 1;
             $errors[$key] = $code;
             $this->setErrors($name, $errors);
         }
