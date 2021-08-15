@@ -73,7 +73,7 @@ if ($isCi) {
     // 4. 逐个安装插件
     foreach ($wei->plugin->getAll() as $plugin) {
         $ret = $wei->plugin->install($plugin->getId());
-        $out($plugin->getId() . ': ' . $ret['message']);
+        $out($plugin->getId() . ': ' . $ret->getMessage());
     }
 
     $out('Install successfully');

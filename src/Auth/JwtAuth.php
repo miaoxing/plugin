@@ -38,8 +38,8 @@ class JwtAuth extends BaseAuth
             } else {
                 $ret = $this->jwt->verify($auth);
                 if ($ret->isErr()) {
-                    Jwt::CODE_EXPIRED === $ret['code'] && $ret['message'] = '您的登录已过期，请重新登录';
-                    $ret['code'] = static::CODE_UNAUTHORIZED;
+                    Jwt::CODE_EXPIRED === $ret->getCode() && $ret->setMessage('您的登录已过期，请重新登录');
+                    $ret->setCode(static::CODE_UNAUTHORIZED);
                 }
             }
 
