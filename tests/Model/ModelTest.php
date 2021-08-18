@@ -186,6 +186,15 @@ final class ModelTest extends BaseTestCase
         $this->assertSame('name', $user->name);
     }
 
+    public function testFindOrInitByWithoutArgument()
+    {
+        $this->initFixtures();
+
+        $user = TestUser::findOrInitBy();
+
+        $this->assertInstanceOf(TestUser::class, $user);
+    }
+
     public function testFindByOrFail()
     {
         $this->initFixtures();

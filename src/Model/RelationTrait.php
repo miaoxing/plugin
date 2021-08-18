@@ -72,7 +72,7 @@ trait RelationTrait
             $this->all();
             $this->saveColl($attributes, $relationAttributes);
         } else {
-            $this->findOrInitBy([])->fromArray($attributes)->save($relationAttributes);
+            $this->findOrInitBy()->fromArray($attributes)->save($relationAttributes);
         }
         return $this;
     }

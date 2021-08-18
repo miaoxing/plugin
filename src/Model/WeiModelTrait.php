@@ -929,7 +929,7 @@ trait WeiModelTrait
      * @return $this
      * @svc
      */
-    protected function findOrInitBy(array $attributes, $data = []): self
+    protected function findOrInitBy(array $attributes = [], $data = []): self
     {
         if (!$this->findBy($attributes)) {
             // Convert to object to array
