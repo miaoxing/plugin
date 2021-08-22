@@ -5,6 +5,7 @@ namespace Miaoxing\Plugin\Test;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Service\Cls;
 use PHPUnit\Framework\MockObject\MockObject;
+use Wei\Base;
 use Wei\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;
@@ -111,9 +112,9 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      * 记录 Mock 对象
      *
      * @param string $class
-     * @param BaseService $service
+     * @param Base $service
      */
-    protected function registerMockServices(string $class, BaseService $service)
+    protected function registerMockServices(string $class, Base $service)
     {
         $name = lcfirst(Cls::baseName($class));
         $service->setOption('wei', $this->wei);
