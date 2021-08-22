@@ -85,10 +85,21 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      */
     public function getModelServiceMock(string $class, array $methods = [])
     {
+        $name = Cls::baseName($class);
+        if ('Model' !== $name && 'Model' === substr($name, -5)) {
+            $name = substr($name, 0, -5);
+        }
+        $str = $this->wei->str;
+        $table = $str->pluralize($str->snake($name));
+
         /** @var MockObject&BaseService&T $model */
         $model = $this->getMockBuilder($class)
             ->onlyMethods($methods)
-            ->disableOriginalConstructor()
+            ->setConstructorArgs([
+                [
+                    'table' => $table,
+                ],
+            ])
             ->getMock();
 
         $this->registerMockServices($class, $model);
