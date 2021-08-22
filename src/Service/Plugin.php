@@ -89,7 +89,7 @@ class Plugin extends BaseService
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $options)
+    public function __construct(array $options = [])
     {
         // Trigger setAutoload
         if (!isset($options['autoload'])) {
