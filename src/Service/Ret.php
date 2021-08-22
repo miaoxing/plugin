@@ -63,8 +63,9 @@ class Ret extends \Wei\Ret
      * @param string|array $message
      * @return int|null
      * @throws \Exception
+     * @internal
      */
-    private function generateCode($message)
+    protected function generateCode($message)
     {
         $traces = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 4);
 
@@ -101,7 +102,12 @@ class Ret extends \Wei\Ret
         return $code;
     }
 
-    private function getErrors($name)
+    /**
+     * @param string $name
+     * @return array
+     * @internal
+     */
+    protected function getErrors(string $name): array
     {
         if (!isset(static::$errors[$name])) {
             $file = $this->getErrorFile($name);
@@ -114,7 +120,12 @@ class Ret extends \Wei\Ret
         return static::$errors[$name];
     }
 
-    private function setErrors($name, $errors)
+    /**
+     * @param string $name
+     * @param array $errors
+     * @internal
+     */
+    protected function setErrors(string $name, array $errors): void
     {
         static::$errors[$name] = $errors;
         $file = $this->getErrorFile($name);
@@ -128,7 +139,12 @@ class Ret extends \Wei\Ret
         file_put_contents($this->getErrorFile($name), $content);
     }
 
-    private function getErrorFile($name)
+    /**
+     * @param string $name
+     * @return string
+     * @internal
+     */
+    protected function getErrorFile(string $name): string
     {
         return 'plugins/' . $name . '/config/errors.php';
     }

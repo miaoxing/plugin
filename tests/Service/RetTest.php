@@ -2,6 +2,9 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
+use Miaoxing\Plugin\BasePlugin;
+use Miaoxing\Plugin\Service\Plugin;
+use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Wei\Req;
 use Wei\Res;
@@ -49,5 +52,41 @@ class RetTest extends BaseTestCase
         $ret->toRes($req, $res);
 
         $this->assertSame('{"message":"err","code":1}', $res->getContent());
+    }
+
+    public function testGenerateCode()
+    {
+        $plugin = $this->getServiceMock(Plugin::class, [
+            'getOneById',
+        ]);
+
+        $pluginInstance = $this->getMockBuilder(BasePlugin::class)
+            ->onlyMethods(['getCode'])
+            ->getMock();
+
+        $pluginInstance->expects($this->exactly(3))
+            ->method('getCode')
+            ->willReturn(999);
+
+        $plugin->expects($this->exactly(2))
+            ->method('getOneById')
+            ->willReturn($pluginInstance);
+
+        $errorFile = __DIR__ . '/test_errors.php';
+        $ret = $this->getServiceMock(Ret::class, ['getErrorFile']);
+        $ret->expects($this->exactly(3))
+            ->method('getErrorFile')
+            ->willReturn($errorFile);
+
+        $ret->setOption('plugin', $plugin);
+
+        $message = 'test' . time();
+        $ret->err($message);
+        $this->assertSame(999001, $ret->getCode());
+
+        $ret->err($message);
+        $this->assertSame(999001, $ret->getCode());
+
+        unlink($errorFile);
     }
 }
