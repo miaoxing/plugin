@@ -80,4 +80,22 @@ class SnowflakeTest extends BaseTestCase
         $this->assertSame(1, $result['workerId']);
         $this->assertSame(0, $result['sequence']);
     }
+
+    public function testWorkerId()
+    {
+        $snowflake = new Snowflake([
+            'workerId' => 1,
+        ]);
+
+        $this->expectExceptionObject(new \InvalidArgumentException('Worker ID must be greater than 0'));
+        $snowflake->setWorkerId(-1);
+
+        $this->expectExceptionObject(new \InvalidArgumentException('Worker ID must be less than or equal to 1023'));
+        $snowflake->setWorkerId(1024);
+
+        $this->assertSame(1, $snowflake->getWorkerId());
+
+        $snowflake->setWorkerId(1023);
+        $this->assertSame(1023, $snowflake->getWorkerId());
+    }
 }
