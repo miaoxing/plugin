@@ -92,7 +92,7 @@ class UserModel extends BaseModel
      */
     public function isSuperAdmin()
     {
-        return 1 === $this->id;
+        return '1' === $this->id;
     }
 
     /**

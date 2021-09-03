@@ -28,8 +28,8 @@ final class UserTest extends BaseTestCase
 
     public function testId()
     {
-        User::loginById(1);
-        $this->assertSame(1, User::id());
+        User::loginById('1');
+        $this->assertSame('1', User::id());
 
         User::logout();
         $this->assertNull(User::id());
@@ -91,7 +91,7 @@ final class UserTest extends BaseTestCase
         $user = $this->getUser();
         User::loginByModel($user);
 
-        $this->assertIsInt(User::cur()->id);
+        $this->assertIsString(User::cur()->id);
     }
 
     protected function getUser()

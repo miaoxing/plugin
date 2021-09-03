@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Metadata;
 
 /**
- * @property int|null $id
+ * @property string|null $id
  * @property int $appId
  * @property string $outId
  * @property int $groupId 用户组
@@ -29,8 +29,8 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string|null $lastLoginAt
  * @property string|null $createdAt
  * @property string|null $updatedAt
- * @property int $createdBy
- * @property int $updatedBy
+ * @property string $createdBy
+ * @property string $updatedBy
  * @property int $score 积分
  * @property string $money 账户余额
  * @property string $rechargeMoney 充值账户余额

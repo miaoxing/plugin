@@ -7,7 +7,7 @@ use Miaoxing\Plugin\Service\User;
 /**
  * Add functions to the model to query the current logged in user's record
  *
- *  @property-read string $userIdColumn The column contains user id
+ * @property-read string $userIdColumn The column contains user id
  */
 trait MineTrait
 {
@@ -24,7 +24,7 @@ trait MineTrait
      */
     protected function mine(): self
     {
-        return $this->where([$this->getUserIdColumn() => (int) User::id()]);
+        return $this->where([$this->getUserIdColumn() => (string) User::id()]);
     }
 
     /**
@@ -35,7 +35,9 @@ trait MineTrait
      */
     protected function findOrInitMine(): self
     {
-        return $this->findOrInitBy([$this->getUserIdColumn() => (int) User::id()]);
+        // NOTE: 未登录时，将 null 转为空字符串
+        // 考虑对未登录做显式梳理
+        return $this->findOrInitBy([$this->getUserIdColumn() => (string) User::id()]);
     }
 
     /**

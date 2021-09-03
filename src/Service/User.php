@@ -186,7 +186,7 @@ class User extends UserModel
     }
 
     /**
-     * @return int|null
+     * @return string|null
      * @svc
      */
     protected function id()
@@ -294,7 +294,7 @@ class User extends UserModel
     /**
      * 根据用户ID直接登录用户
      *
-     * @param int $id
+     * @param string|int $id
      * @return Ret
      * @svc
      */

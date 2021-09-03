@@ -114,12 +114,12 @@ final class GMetadata extends BaseCommand
             case 'int':
             case 'smallint':
             case 'mediumint':
-            case 'bigint':
                 return 'int';
 
             case 'tinyint':
                 return 1 === $length ? 'bool' : 'int';
 
+            case 'bigint':
             case 'varchar':
             case 'char':
             case 'mediumtext':

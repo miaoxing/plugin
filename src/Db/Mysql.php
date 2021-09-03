@@ -396,7 +396,6 @@ class Mysql extends BaseDriver
             case 'int':
             case 'smallint':
             case 'mediumint':
-            case 'bigint':
                 return 'int';
 
             case 'tinyint':
@@ -415,6 +414,7 @@ class Mysql extends BaseDriver
             case 'json':
                 return 'json';
 
+            case 'bigint':
             case 'varchar':
             case 'char':
             case 'mediumtext':
