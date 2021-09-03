@@ -98,4 +98,25 @@ class SnowflakeTest extends BaseTestCase
         $snowflake->setWorkerId(1023);
         $this->assertSame(1023, $snowflake->getWorkerId());
     }
+
+    public function testStartTimestamp()
+    {
+        $snowflake = new Snowflake([
+            'startTimestamp' => 0,
+        ]);
+
+        $this->expectExceptionObject(new \InvalidArgumentException('Start timestamp must be greater than 0'));
+        $snowflake->setStartTimestamp(-1);
+
+        $this->expectExceptionObject(new \InvalidArgumentException(
+            'Start timestamp must be less than or equal to to the current time'
+        ));
+        $snowflake->setStartTimestamp(time() * 1000 + 1);
+
+        $this->assertSame(0, $snowflake->getStartTimestamp());
+
+        $now = time() * 1000;
+        $snowflake->setStartTimestamp($now);
+        $this->assertSame($now, $snowflake->getStartTimestamp());
+    }
 }
