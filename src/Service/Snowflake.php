@@ -5,6 +5,9 @@ namespace Miaoxing\Plugin\Service;
 use InvalidArgumentException;
 use Miaoxing\Plugin\BaseService;
 
+/**
+ * @mixin \CacheMixin
+ */
 class Snowflake extends BaseService
 {
     /**
@@ -36,13 +39,6 @@ class Snowflake extends BaseService
     protected $workerId;
 
     /**
-     * 当前毫秒内生成的序列数
-     *
-     * @var int
-     */
-    protected $sequence = 0;
-
-    /**
      * 是否随机生成开始的序列数，如果为 false 则从 0 开始
      *
      * 优点
@@ -57,13 +53,6 @@ class Snowflake extends BaseService
      * @var bool
      */
     protected $randomStartSequence = true;
-
-    /**
-     * 当前时间，以毫秒为单位
-     *
-     * @var int
-     */
-    protected $lastTimestamp;
 
     /**
      * @return int
@@ -184,14 +173,13 @@ class Snowflake extends BaseService
      */
     protected function getSequence(int $timestamp): int
     {
-        if ($timestamp === $this->lastTimestamp) {
-            return ++$this->sequence;
-        } else {
-            $this->lastTimestamp = $timestamp;
-            // TODO 考虑增加比例，减少跨毫秒的情况
-            $this->sequence = $this->randomStartSequence ? mt_rand(0, $this->getMaxNumber($this->sequenceBits)) : 0;
-            return $this->sequence;
+        $key = 'snowflake:' . $timestamp;
+        // TODO 考虑增加比例，减少跨毫秒的情况
+        $startSequence = $this->randomStartSequence ? mt_rand(0, $this->getMaxNumber($this->sequenceBits)) : 0;
+        if ($this->cache->add($key, $startSequence, 1)) {
+            return $startSequence;
         }
+        return $this->cache->incr($key);
     }
 
     /**
