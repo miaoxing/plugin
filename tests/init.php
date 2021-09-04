@@ -66,6 +66,7 @@ if ($isCi) {
     // 直接创建，如果数据表没有记录，调用 AppModel 会加载事件，从数据表查找当前应用，导致出错
     $wei->db->insert('apps', ['user_id' => 1, 'name' => 'app']);
     UserModel::findByOrCreate([
+        'id' => '1',
         'username' => 'admin',
         'password' => Password::hash('password'),
     ]);
