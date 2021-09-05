@@ -34,7 +34,7 @@ class AppModel
     /**
      * Returns the success result with model data
      *
-     * @param array|string|BaseResource $merge
+     * @param array|string|BaseResource|mixed $merge
      * @return Ret
      * @see AppModel::toRet
      */
@@ -82,6 +82,18 @@ class AppModel
      * @see AppModel::destroy
      */
     public static function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see AppModel::destroyOrFail
+     */
+    public static function destroyOrFail($id): self
     {
     }
 
@@ -196,7 +208,7 @@ class AppModel
      * @return $this
      * @see AppModel::findOrInitBy
      */
-    public static function findOrInitBy(array $attributes, $data = []): self
+    public static function findOrInitBy(array $attributes = [], $data = []): self
     {
     }
 
@@ -1006,6 +1018,17 @@ class Config
 
 class IsModelExists
 {
+    /**
+     * Check the input value, return a Ret object
+     *
+     * @param mixed $input
+     * @param string $name
+     * @return Ret
+     * @see BaseValidator::check
+     */
+    public static function check($input, string $name = '%name%'): \Wei\Ret
+    {
+    }
 }
 
 class Jwt
@@ -1077,6 +1100,38 @@ class Jwt
 
 class ObjectReq
 {
+    /**
+     * Check if the specified header is set
+     *
+     * @param string $name
+     * @return bool
+     * @see Req::hasHeader
+     */
+    public static function hasHeader(string $name): bool
+    {
+    }
+
+    /**
+     * Return the specified header value
+     *
+     * @param string $name
+     * @return string|null
+     * @see Req::getHeader
+     */
+    public static function getHeader(string $name): ?string
+    {
+    }
+
+    /**
+     * Check if current request is a preflight request
+     *
+     * @return bool
+     * @link https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
+     * @see Req::isPreflight
+     */
+    public static function isPreflight(): bool
+    {
+    }
 }
 
 class PageRouter
@@ -1888,6 +1943,70 @@ class Session
 {
 }
 
+class Snowflake
+{
+    /**
+     * @return int
+     * @see Snowflake::getWorkerId
+     */
+    public static function getWorkerId(): int
+    {
+    }
+
+    /**
+     * Set the worker id
+     *
+     * @param int $workerId
+     * @return $this
+     * @see Snowflake::setWorkerId
+     */
+    public static function setWorkerId(int $workerId): self
+    {
+    }
+
+    /**
+     * Return the start timestamp
+     *
+     * @return int
+     * @see Snowflake::getStartTimestamp
+     */
+    public static function getStartTimestamp(): int
+    {
+    }
+
+    /**
+     * Set the start timestamp
+     *
+     * @param int $startTimestamp
+     * @return $this
+     * @see Snowflake::setStartTimestamp
+     */
+    public static function setStartTimestamp(int $startTimestamp): self
+    {
+    }
+
+    /**
+     * Generate an id
+     *
+     * @return string
+     * @see Snowflake::next
+     */
+    public static function next(): string
+    {
+    }
+
+    /**
+     * Parse the given id, return timestamp, worker ID and sequence
+     *
+     * @param string|int $id
+     * @return array{timestamp: int, workerId: int, sequence: int}
+     * @see Snowflake::parse
+     */
+    public static function parse($id): array
+    {
+    }
+}
+
 class Str
 {
     /**
@@ -2222,7 +2341,7 @@ class User
     /**
      * Returns the success result with model data
      *
-     * @param array|string|BaseResource $merge
+     * @param array|string|BaseResource|mixed $merge
      * @return Ret
      * @see UserModel::toRet
      */
@@ -2259,6 +2378,18 @@ class User
      * @see UserModel::destroy
      */
     public static function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see UserModel::destroyOrFail
+     */
+    public static function destroyOrFail($id): self
     {
     }
 
@@ -2373,7 +2504,7 @@ class User
      * @return $this
      * @see UserModel::findOrInitBy
      */
-    public static function findOrInitBy(array $attributes, $data = []): self
+    public static function findOrInitBy(array $attributes = [], $data = []): self
     {
     }
 
@@ -3186,7 +3317,7 @@ class UserModel
     /**
      * Returns the success result with model data
      *
-     * @param array|string|BaseResource $merge
+     * @param array|string|BaseResource|mixed $merge
      * @return Ret
      * @see UserModel::toRet
      */
@@ -3234,6 +3365,18 @@ class UserModel
      * @see UserModel::destroy
      */
     public static function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see UserModel::destroyOrFail
+     */
+    public static function destroyOrFail($id): self
     {
     }
 
@@ -3348,7 +3491,7 @@ class UserModel
      * @return $this
      * @see UserModel::findOrInitBy
      */
-    public static function findOrInitBy(array $attributes, $data = []): self
+    public static function findOrInitBy(array $attributes = [], $data = []): self
     {
     }
 
@@ -4170,7 +4313,7 @@ class AppModel
     /**
      * Returns the success result with model data
      *
-     * @param array|string|BaseResource $merge
+     * @param array|string|BaseResource|mixed $merge
      * @return Ret
      * @see AppModel::toRet
      */
@@ -4218,6 +4361,18 @@ class AppModel
      * @see AppModel::destroy
      */
     public function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see AppModel::destroyOrFail
+     */
+    public function destroyOrFail($id): self
     {
     }
 
@@ -4332,7 +4487,7 @@ class AppModel
      * @return $this
      * @see AppModel::findOrInitBy
      */
-    public function findOrInitBy(array $attributes, $data = []): self
+    public function findOrInitBy(array $attributes = [], $data = []): self
     {
     }
 
@@ -5130,6 +5285,17 @@ class Config
 
 class IsModelExists
 {
+    /**
+     * Check the input value, return a Ret object
+     *
+     * @param mixed $input
+     * @param string $name
+     * @return Ret
+     * @see BaseValidator::check
+     */
+    public function check($input, string $name = '%name%'): \Wei\Ret
+    {
+    }
 }
 
 class Jwt
@@ -5201,6 +5367,38 @@ class Jwt
 
 class ObjectReq
 {
+    /**
+     * Check if the specified header is set
+     *
+     * @param string $name
+     * @return bool
+     * @see Req::hasHeader
+     */
+    public function hasHeader(string $name): bool
+    {
+    }
+
+    /**
+     * Return the specified header value
+     *
+     * @param string $name
+     * @return string|null
+     * @see Req::getHeader
+     */
+    public function getHeader(string $name): ?string
+    {
+    }
+
+    /**
+     * Check if current request is a preflight request
+     *
+     * @return bool
+     * @link https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
+     * @see Req::isPreflight
+     */
+    public function isPreflight(): bool
+    {
+    }
 }
 
 class PageRouter
@@ -6000,6 +6198,70 @@ class Session
 {
 }
 
+class Snowflake
+{
+    /**
+     * @return int
+     * @see Snowflake::getWorkerId
+     */
+    public function getWorkerId(): int
+    {
+    }
+
+    /**
+     * Set the worker id
+     *
+     * @param int $workerId
+     * @return $this
+     * @see Snowflake::setWorkerId
+     */
+    public function setWorkerId(int $workerId): self
+    {
+    }
+
+    /**
+     * Return the start timestamp
+     *
+     * @return int
+     * @see Snowflake::getStartTimestamp
+     */
+    public function getStartTimestamp(): int
+    {
+    }
+
+    /**
+     * Set the start timestamp
+     *
+     * @param int $startTimestamp
+     * @return $this
+     * @see Snowflake::setStartTimestamp
+     */
+    public function setStartTimestamp(int $startTimestamp): self
+    {
+    }
+
+    /**
+     * Generate an id
+     *
+     * @return string
+     * @see Snowflake::next
+     */
+    public function next(): string
+    {
+    }
+
+    /**
+     * Parse the given id, return timestamp, worker ID and sequence
+     *
+     * @param string|int $id
+     * @return array{timestamp: int, workerId: int, sequence: int}
+     * @see Snowflake::parse
+     */
+    public function parse($id): array
+    {
+    }
+}
+
 class Str
 {
     /**
@@ -6334,7 +6596,7 @@ class User
     /**
      * Returns the success result with model data
      *
-     * @param array|string|BaseResource $merge
+     * @param array|string|BaseResource|mixed $merge
      * @return Ret
      * @see UserModel::toRet
      */
@@ -6371,6 +6633,18 @@ class User
      * @see UserModel::destroy
      */
     public function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see UserModel::destroyOrFail
+     */
+    public function destroyOrFail($id): self
     {
     }
 
@@ -6485,7 +6759,7 @@ class User
      * @return $this
      * @see UserModel::findOrInitBy
      */
-    public function findOrInitBy(array $attributes, $data = []): self
+    public function findOrInitBy(array $attributes = [], $data = []): self
     {
     }
 
@@ -7286,7 +7560,7 @@ class UserModel
     /**
      * Returns the success result with model data
      *
-     * @param array|string|BaseResource $merge
+     * @param array|string|BaseResource|mixed $merge
      * @return Ret
      * @see UserModel::toRet
      */
@@ -7334,6 +7608,18 @@ class UserModel
      * @see UserModel::destroy
      */
     public function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see UserModel::destroyOrFail
+     */
+    public function destroyOrFail($id): self
     {
     }
 
@@ -7448,7 +7734,7 @@ class UserModel
      * @return $this
      * @see UserModel::findOrInitBy
      */
-    public function findOrInitBy(array $attributes, $data = []): self
+    public function findOrInitBy(array $attributes = [], $data = []): self
     {
     }
 

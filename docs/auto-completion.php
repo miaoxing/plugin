@@ -85,6 +85,12 @@ class SessionMixin {
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Snowflake $snowflake
+ */
+class SnowflakeMixin {
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Str $str The string util service
  */
 class StrMixin {
@@ -125,6 +131,7 @@ class UserModelMixin {
  * @mixin RetMixin
  * @mixin SeederMixin
  * @mixin SessionMixin
+ * @mixin SnowflakeMixin
  * @mixin StrMixin
  * @mixin TesterMixin
  * @mixin UserMixin
@@ -182,6 +189,9 @@ $seeder = wei()->seeder;
 
 /** @var Miaoxing\Plugin\Service\Session $session */
 $session = wei()->session;
+
+/** @var Miaoxing\Plugin\Service\Snowflake $snowflake */
+$snowflake = wei()->snowflake;
 
 /** @var Miaoxing\Plugin\Service\Str $str */
 $str = wei()->str;
