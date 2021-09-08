@@ -21,7 +21,7 @@ class Config extends BaseService
      */
     protected $configFile = 'storage/configs/%env%.php';
 
-    public function __construct($options)
+    public function __construct($options = [])
     {
         parent::__construct($options);
 
