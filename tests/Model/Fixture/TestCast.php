@@ -11,6 +11,8 @@ use Miaoxing\Plugin\Service\WeiBaseModel;
  * @property int $int_column
  * @property int|null $nullable_int_column
  * @property int|null $nullable_default_int_column
+ * @property string $big_int_column
+ * @property string|null $nullable_big_int_column
  * @property bool $bool_column
  * @property string $string_column
  * @property string|null $datetime_column

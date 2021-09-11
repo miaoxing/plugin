@@ -26,6 +26,8 @@ final class CastTraitTest extends BaseTestCase
             ->id('int_column')
             ->int('nullable_int_column')->nullable()
             ->int('nullable_default_int_column')->nullable()->defaults(7)
+            ->bigInt('big_int_column')
+            ->bigInt('nullable_big_int_column')->nullable()
             ->bool('bool_column')
             ->bool('nullable_bool_column')->nullable()
             ->string('string_column')
@@ -561,6 +563,8 @@ final class CastTraitTest extends BaseTestCase
             'int_column' => (string) $cast->int_column,
             'nullable_int_column' => null,
             'nullable_default_int_column' => null,
+            'big_int_column' => '0',
+            'nullable_big_int_column' => null,
             'bool_column' => '0',
             'nullable_bool_column' => null,
             'string_column' => '',
@@ -612,6 +616,8 @@ final class CastTraitTest extends BaseTestCase
             'int_column' => 'int',
             'nullable_int_column' => 'int',
             'nullable_default_int_column' => 'int',
+            'big_int_column' => 'intString',
+            'nullable_big_int_column' => 'intString',
             'bool_column' => 'bool',
             'nullable_bool_column' => 'bool',
             'string_column' => 'string',
@@ -665,6 +671,8 @@ final class CastTraitTest extends BaseTestCase
             'int_column' => null,
             'nullable_int_column' => null,
             'nullable_default_int_column' => 7,
+            'big_int_column' => '0',
+            'nullable_big_int_column' => null,
             'bool_column' => false,
             'nullable_bool_column' => null,
             'string_column' => '',
@@ -761,5 +769,15 @@ final class CastTraitTest extends BaseTestCase
 
         $cast->reload();
         $this->assertEquals((object) 'test', $cast->object_column);
+    }
+
+    public function testIntString()
+    {
+        $cast = TestCast::save([
+            'big_int_column' => '',
+            'nullable_big_int_column' => '1abc',
+        ]);
+        $this->assertSame('0', $cast->big_int_column);
+        $this->assertSame('1', $cast->nullable_big_int_column);
     }
 }
