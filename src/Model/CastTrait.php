@@ -106,6 +106,7 @@ trait CastTrait
                 return (int) $value;
 
             case 'string':
+            case 'intString':
                 return (string) $value;
 
             case 'datetime':
@@ -182,6 +183,9 @@ trait CastTrait
         switch ($type) {
             case 'int':
                 return (int) $value;
+
+            case 'intString':
+                return is_numeric($value) ? $value : (int) $value;
 
             case 'bool':
                 return (bool) $value;

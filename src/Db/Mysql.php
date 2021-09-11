@@ -401,6 +401,9 @@ class Mysql extends BaseDriver
             case 'tinyint':
                 return 1 === $length ? 'bool' : 'int';
 
+            case 'bigint':
+                return 'intString';
+
             case 'timestamp':
             case 'datetime':
                 return 'datetime';
@@ -414,7 +417,6 @@ class Mysql extends BaseDriver
             case 'json':
                 return 'json';
 
-            case 'bigint':
             case 'varchar':
             case 'char':
             case 'mediumtext':
