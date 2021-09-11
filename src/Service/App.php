@@ -478,7 +478,12 @@ class App extends \Wei\App
     protected function getIdByDomain(): ?int
     {
         $domain = $this->req->getHost();
-        if (!$domain || in_array($domain, $this->domains, true)) {
+        if (!$domain) {
+            // CLI 下默认没有域名，直接返回
+            return null;
+        }
+
+        if (in_array($domain, $this->domains, true)) {
             return null;
         }
 
