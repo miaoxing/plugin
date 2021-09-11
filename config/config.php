@@ -98,6 +98,7 @@ return [
     'schema' => [
         'charset' => 'utf8mb4',
         'collate' => 'utf8mb4_unicode_ci',
+        'userIdType' => 'uBigInt',
     ],
 
     /* @see Wei\Session */
