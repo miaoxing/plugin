@@ -6,6 +6,7 @@ use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Plugin\Service\Plugin;
 use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
+use Wei\Env;
 use Wei\Req;
 use Wei\Res;
 
@@ -71,6 +72,11 @@ class RetTest extends BaseTestCase
         $plugin->expects($this->exactly(2))
             ->method('getOneById')
             ->willReturn($pluginInstance);
+
+        $env = $this->getServiceMock(Env::class, ['isDev']);
+        $env->expects($this->exactly(2))
+            ->method('isDev')
+            ->willReturn(true);
 
         $errorFile = __DIR__ . '/test_errors.php';
         $ret = $this->getServiceMock(Ret::class, ['getErrorFile']);
