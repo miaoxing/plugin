@@ -16,7 +16,7 @@ class MineTraitTest extends BaseTestCase
 
         wei()->schema->table('test_mines')
             ->id()
-            ->int('user_id')
+            ->uBigInt('user_id')
             ->exec();
 
         TestMine::save(['user_id' => 1]);
@@ -63,7 +63,7 @@ class MineTraitTest extends BaseTestCase
         $this->assertTrue($mine->isNew());
 
         $mine->save();
-        $this->assertSame(1, $mine->get('user_id'));
+        $this->assertSame('1', $mine->get('user_id'));
     }
 
     public function testFindOrInitMineCached()
