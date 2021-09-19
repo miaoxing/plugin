@@ -169,6 +169,17 @@ final class AppTest extends BaseTestCase
         $appModel->destroy();
     }
 
+    public function testSetModelNull()
+    {
+        $app = wei()->app;
+        $model = $app->getModel();
+        $this->assertInstanceOf(AppModel::class, $model);
+
+        $app->setModel(null);
+        $model2 = $app->getModel();
+        $this->assertNotSame($model, $model2);
+    }
+
     protected function execute($action)
     {
         User::loginById(1);

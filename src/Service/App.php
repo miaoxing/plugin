@@ -174,10 +174,10 @@ class App extends \Wei\App
     /**
      * Set the current application model object
      *
-     * @param AppModel $model
+     * @param AppModel|null $model
      * @return $this
      */
-    public function setModel(AppModel $model): self
+    public function setModel(?AppModel $model): self
     {
         $this->models[$this->getId()] = $model;
         return $this;
