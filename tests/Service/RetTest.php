@@ -79,10 +79,14 @@ class RetTest extends BaseTestCase
             ->willReturn(true);
 
         $errorFile = __DIR__ . '/test_errors.php';
-        $ret = $this->getServiceMock(Ret::class, ['getErrorFile']);
+        $ret = $this->getServiceMock(Ret::class, ['getErrorFile', 'getPluginFromFile']);
         $ret->expects($this->exactly(3))
             ->method('getErrorFile')
             ->willReturn($errorFile);
+
+        $ret->expects($this->exactly(2))
+            ->method('getPluginFromFile')
+            ->willReturn('plugin');
 
         $ret->setOption('plugin', $plugin);
 

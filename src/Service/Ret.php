@@ -77,13 +77,11 @@ class Ret extends \Wei\Ret
             $file = $traces[2]['file'];
         }
 
-        $parts = explode('/plugins/', $file);
-        if (1 === count($parts)) {
-            // Not in plugin
+        $name = $this->getPluginFromFile($file);
+        if (!$name) {
             return null;
         }
 
-        $name = explode('/', $parts[1], 2)[0];
         $plugin = $this->plugin->getOneById($name);
         if (!$plugin->getCode()) {
             return null;
@@ -100,6 +98,21 @@ class Ret extends \Wei\Ret
         }
 
         return $code;
+    }
+
+    /**
+     * @param string $file
+     * @return string|null
+     * @internal
+     */
+    protected function getPluginFromFile(string $file): ?string
+    {
+        $parts = explode('/plugins/', $file);
+        if (1 === count($parts)) {
+            // Not in plugin
+            return null;
+        }
+        return explode('/', $parts[1], 2)[0];
     }
 
     /**
