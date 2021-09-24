@@ -31,7 +31,7 @@ $wei = wei(getConfig($files));
 // Add configuration file for CI
 $isCi = false;
 $files = [];
-foreach (['WERCKER', 'GITHUB_ACTIONS'] as $ci) {
+foreach (['GITHUB_ACTIONS'] as $ci) {
     if (getenv($ci)) {
         $isCi = true;
         $files[] = 'config-' . strtolower(strtr($ci, '_', '-')) . '.php';
