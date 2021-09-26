@@ -67,10 +67,6 @@ trait CollTrait
      */
     public function saveColl(array $attributes, array $extra = [], string $sortColumn = null): self
     {
-        if (!is_array($attributes)) {
-            return $this;
-        }
-
         // 1. Uses primary key as data index
         $newAttributes = [];
         $primaryKey = $this->getPrimaryKey();
