@@ -258,7 +258,7 @@ class GAutoCompletion extends BaseCommand
  */
 function wei()
 {
-    return new AutoCompletion;
+    return new AutoCompletion();
 }
 
 
@@ -277,12 +277,19 @@ PHP;
         // Remove first (<?php\n) line
         $dynamics = substr($dynamics, strpos($dynamics, "\n") + 1);
 
+        // indent 4 spaces
+        $lines = [];
+        foreach (explode("\n", $dynamics) as $line) {
+            $lines[] = $line ? ('    ' . $line) : '';
+        }
+        $dynamics = implode("\n", $lines);
+
         // Wrap `if (0) ` outside class definition
         $index = 0;
-        $dynamics = preg_replace_callback('/namespace (.+?)\n/mi', function ($matches) use (&$index) {
+        $dynamics = preg_replace_callback('/    namespace (.+?)\n/mi', function ($matches) use (&$index) {
             ++$index;
             $prefix = 1 === $index ? '' : "\n}\n";
-            return $prefix . $matches[0] . "\nif (0) {";
+            return $prefix . ltrim($matches[0]) . "\nif (0) {";
         }, $dynamics);
         $dynamics .= "}\n";
 
@@ -500,7 +507,8 @@ PHP;
 /**
 $comment
  */
-class $class {
+class $class
+{
 }
 
 PHP;
