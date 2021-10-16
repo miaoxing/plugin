@@ -2206,7 +2206,7 @@ class Tester
 class User
 {
     /**
-     * @return int|null
+     * @return string|null
      * @see User::id
      */
     public static function id()
@@ -2255,7 +2255,7 @@ class User
     /**
      * 根据用户ID直接登录用户
      *
-     * @param int $id
+     * @param string|int $id
      * @return Ret
      * @see User::loginById
      */
@@ -4281,4211 +4281,4211 @@ class V
 namespace Miaoxing\Plugin\Service;
 
 if (0) {
-class App
-{
-}
-
-class AppModel
-{
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see AppModel::saveAttributes
-     */
-    public function saveAttributes(iterable $attributes = []): self
-    {
-    }
-
-    /**
-     * Returns the record data as array
-     *
-     * @param array|callable $returnFields A indexed array specified the fields to return
-     * @param callable|null $prepend
-     * @return array
-     * @see AppModel::toArray
-     */
-    public function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Returns the success result with model data
-     *
-     * @param array|string|BaseResource|mixed $merge
-     * @return Ret
-     * @see AppModel::toRet
-     */
-    public function toRet($merge = []): \Wei\Ret
-    {
-    }
-
-    /**
-     * Return the record table name
-     *
-     * @return string
-     * @see AppModel::getTable
-     */
-    public function getTable(): string
-    {
-    }
-
-    /**
-     * Import a PHP array in this record
-     *
-     * @param iterable $array
-     * @return $this
-     * @see AppModel::fromArray
-     */
-    public function fromArray(iterable $array): self
-    {
-    }
-
-    /**
-     * Save the record or data to database
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see AppModel::save
-     */
-    public function save(iterable $attributes = []): self
-    {
-    }
-
-    /**
-     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
-     *
-     * @param int|string $id
-     * @return $this
-     * @see AppModel::destroy
-     */
-    public function destroy($id = null): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
-     *
-     * @param string|int $id
-     * @return $this
-     * @throws \Exception when record not found
-     * @see AppModel::destroyOrFail
-     */
-    public function destroyOrFail($id): self
-    {
-    }
-
-    /**
-     * Set the record field value
-     *
-     * @param string|int|null $name
-     * @param mixed $value
-     * @param bool $throwException
-     * @return $this|false
-     * @see AppModel::set
-     */
-    public function set($name, $value, bool $throwException = true)
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record object or false
-     *
-     * @param int|string|array|null $id
-     * @return $this|null
-     * @see AppModel::find
-     */
-    public function find($id): ?self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or throws 404 exception if record not found
-     *
-     * @param int|string $id
-     * @return $this
-     * @throws \Exception
-     * @see AppModel::findOrFail
-     */
-    public function findOrFail($id): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or init with the specified attributes if record not found
-     *
-     * @param int|string $id
-     * @param array|object $attributes
-     * @return $this
-     * @see AppModel::findOrInit
-     */
-    public function findOrInit($id = null, $attributes = []): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or save with the specified attributes if record not found
-     *
-     * @param int|string $id
-     * @param array $attributes
-     * @return $this
-     * @see AppModel::findOrCreate
-     */
-    public function findOrCreate($id, $attributes = []): self
-    {
-    }
-
-    /**
-     * @param array $attributes
-     * @param array|object $data
-     * @return $this
-     * @see AppModel::findByOrCreate
-     */
-    public function findByOrCreate($attributes, $data = []): self
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record collection object or false
-     *
-     * @param array $ids
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see AppModel::findAll
-     */
-    public function findAll(array $ids): self
-    {
-    }
-
-    /**
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this|null
-     * @see AppModel::findBy
-     */
-    public function findBy($column, $operator = null, $value = null): ?self
-    {
-    }
-
-    /**
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see AppModel::findAllBy
-     */
-    public function findAllBy($column, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param array $attributes
-     * @param array|object $data
-     * @return $this
-     * @see AppModel::findOrInitBy
-     */
-    public function findOrInitBy(array $attributes = [], $data = []): self
-    {
-    }
-
-    /**
-     * Find a record by primary key value and throws 404 exception if record not found
-     *
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @throws \Exception
-     * @see AppModel::findByOrFail
-     */
-    public function findByOrFail($column, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @see AppModel::findFromReq
-     */
-    public function findFromReq(\Wei\Req $req = null): self
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record object or null if not found
-     *
-     * @return $this|null
-     * @see AppModel::first
-     */
-    public function first(): ?self
-    {
-    }
-
-    /**
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see AppModel::all
-     */
-    public function all(): self
-    {
-    }
-
-    /**
-     * Coll: Specifies a field to be the key of the fetched array
-     *
-     * @param string $column
-     * @return $this
-     * @see AppModel::indexBy
-     */
-    public function indexBy(string $column): self
-    {
-    }
-
-    /**
-     * @param array|string|true $scopes
-     * @return $this
-     * @see AppModel::unscoped
-     */
-    public function unscoped($scopes = []): self
-    {
-    }
-
-    /**
-     * Set or remove cache time for the query
-     *
-     * @param int|null $seconds
-     * @return $this
-     * @see AppModel::setCacheTime
-     */
-    public function setCacheTime(?int $seconds): self
-    {
-    }
-
-    /**
-     * Returns the name of columns of current table
-     *
-     * @return array
-     * @see AppModel::getColumns
-     */
-    public function getColumns(): array
-    {
-    }
-
-    /**
-     * Check if column name exists
-     *
-     * @param string|int|null $name
-     * @return bool
-     * @see AppModel::hasColumn
-     */
-    public function hasColumn($name): bool
-    {
-    }
-
-    /**
-     * Executes the generated query and returns the first array result
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array|null
-     * @see AppModel::fetch
-     */
-    public function fetch($column = null, $operator = null, $value = null): ?array
-    {
-    }
-
-    /**
-     * Executes the generated query and returns all array results
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array
-     * @see AppModel::fetchAll
-     */
-    public function fetchAll($column = null, $operator = null, $value = null): array
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param string|null $index
-     * @return array
-     * @see AppModel::pluck
-     */
-    public function pluck(string $column, string $index = null): array
-    {
-    }
-
-    /**
-     * @param int $count
-     * @param callable $callback
-     * @return bool
-     * @see AppModel::chunk
-     */
-    public function chunk(int $count, callable $callback): bool
-    {
-    }
-
-    /**
-     * Executes a COUNT query to receive the rows number
-     *
-     * @param string $column
-     * @return int
-     * @see AppModel::cnt
-     */
-    public function cnt($column = '*'): int
-    {
-    }
-
-    /**
-     * Executes a MAX query to receive the max value of column
-     *
-     * @param string $column
-     * @return string|null
-     * @see AppModel::max
-     */
-    public function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see AppModel::update
-     */
-    public function update($set = [], $value = null): int
-    {
-    }
-
-    /**
-     * Execute a delete query with specified conditions
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return int
-     * @see AppModel::delete
-     */
-    public function delete($column = null, $operator = null, $value = null): int
-    {
-    }
-
-    /**
-     * Sets the position of the first result to retrieve (the "offset")
-     *
-     * @param int|float|string $offset The first result to return
-     * @return $this
-     * @see AppModel::offset
-     */
-    public function offset($offset): self
-    {
-    }
-
-    /**
-     * Sets the maximum number of results to retrieve (the "limit")
-     *
-     * @param int|float|string $limit The maximum number of results to retrieve
-     * @return $this
-     * @see AppModel::limit
-     */
-    public function limit($limit): self
-    {
-    }
-
-    /**
-     * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
-     *
-     * @param int $page The page number
-     * @return $this
-     * @see AppModel::page
-     */
-    public function page($page): self
-    {
-    }
-
-    /**
-     * Specifies an item that is to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns the selection expressions
-     * @return $this
-     * @see AppModel::select
-     */
-    public function select($columns = ['*']): self
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see AppModel::selectDistinct
-     */
-    public function selectDistinct($columns): self
-    {
-    }
-
-    /**
-     * @param string $expression
-     * @return $this
-     * @see AppModel::selectRaw
-     */
-    public function selectRaw($expression): self
-    {
-    }
-
-    /**
-     * Specifies columns that are not to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns
-     * @return $this
-     * @see AppModel::selectExcept
-     */
-    public function selectExcept($columns): self
-    {
-    }
-
-    /**
-     * Specifies an item of the main table that is to be returned in the query result.
-     * Default to all columns of the main table
-     *
-     * @param string $column
-     * @return $this
-     * @see AppModel::selectMain
-     */
-    public function selectMain(string $column = '*'): self
-    {
-    }
-
-    /**
-     * Sets table for FROM query
-     *
-     * @param string $table
-     * @param string|null $alias
-     * @return $this
-     * @see AppModel::from
-     */
-    public function from(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * @param string $table
-     * @param mixed|null $alias
-     * @return $this
-     * @see AppModel::table
-     */
-    public function table(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @param string $type
-     * @return $this
-     * @see AppModel::join
-     */
-    public function join(
-        string $table,
-        string $first = null,
-        string $operator = '=',
-        string $second = null,
-        string $type = 'INNER'
-    ): self {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see AppModel::innerJoin
-     */
-    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a left join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see AppModel::leftJoin
-     */
-    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a right join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see AppModel::rightJoin
-     */
-    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Specifies one or more restrictions to the query result.
-     * Replaces any previously specified restrictions, if any.
-     *
-     * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
-     * ```
-     *
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see AppModel::where
-     */
-    public function where($column = null, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param scalar $expression
-     * @param mixed $params
-     * @return $this
-     * @see AppModel::whereRaw
-     */
-    public function whereRaw($expression, $params = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see AppModel::whereBetween
-     */
-    public function whereBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see AppModel::whereNotBetween
-     */
-    public function whereNotBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see AppModel::whereIn
-     */
-    public function whereIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see AppModel::whereNotIn
-     */
-    public function whereNotIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see AppModel::whereNull
-     */
-    public function whereNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see AppModel::whereNotNull
-     */
-    public function whereNotNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see AppModel::whereDate
-     */
-    public function whereDate(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see AppModel::whereMonth
-     */
-    public function whereMonth(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see AppModel::whereDay
-     */
-    public function whereDay(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see AppModel::whereYear
-     */
-    public function whereYear(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see AppModel::whereTime
-     */
-    public function whereTime(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrColumn2
-     * @param mixed|null $column2
-     * @return $this
-     * @see AppModel::whereColumn
-     */
-    public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
-    {
-    }
-
-    /**
-     * 搜索字段是否包含某个值
-     *
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see AppModel::whereContains
-     */
-    public function whereContains(string $column, $value, string $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see AppModel::whereNotContains
-     */
-    public function whereNotContains(string $column, $value, string $condition = 'OR'): self
-    {
-    }
-
-    /**
-     * Search whether a column has a value other than the default value
-     *
-     * @param string $column
-     * @param bool $has
-     * @return $this
-     * @see AppModel::whereHas
-     */
-    public function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * Search whether a column dont have a value other than the default value
-     *
-     * @param string $column
-     * @return $this
-     * @see AppModel::whereNotHas
-     */
-    public function whereNotHas(string $column): self
-    {
-    }
-
-    /**
-     * Specifies a grouping over the results of the query.
-     * Replaces any previously specified groupings, if any.
-     *
-     * @param mixed $column the grouping column
-     * @return $this
-     * @see AppModel::groupBy
-     */
-    public function groupBy($column): self
-    {
-    }
-
-    /**
-     * Specifies a restriction over the groups of the query.
-     * Replaces any previous having restrictions, if any.
-     *
-     * @param mixed $column
-     * @param mixed $operator
-     * @param mixed|null $value
-     * @param mixed $condition
-     * @return $this
-     * @see AppModel::having
-     */
-    public function having($column, $operator, $value = null, $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * Specifies an ordering for the query results.
-     * Replaces any previously specified orderings, if any.
-     *
-     * @param string $column the ordering expression
-     * @param string $order the ordering direction
-     * @return $this
-     * @see AppModel::orderBy
-     */
-    public function orderBy(string $column, $order = 'ASC'): self
-    {
-    }
-
-    /**
-     * Adds a DESC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see AppModel::desc
-     */
-    public function desc(string $field): self
-    {
-    }
-
-    /**
-     * Add an ASC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see AppModel::asc
-     */
-    public function asc(string $field): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see AppModel::forUpdate
-     */
-    public function forUpdate(): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see AppModel::forShare
-     */
-    public function forShare(): self
-    {
-    }
-
-    /**
-     * @param string|bool $lock
-     * @return $this
-     * @see AppModel::lock
-     */
-    public function lock($lock): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see AppModel::when
-     */
-    public function when($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see AppModel::unless
-     */
-    public function unless($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see AppModel::setDbKeyConverter
-     */
-    public function setDbKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see AppModel::setPhpKeyConverter
-     */
-    public function setPhpKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * Add a (inner) join base on the relation to the query
-     *
-     * @param string|array $name
-     * @param string $type
-     * @return $this
-     * @see AppModel::joinRelation
-     */
-    public function joinRelation($name, string $type = 'INNER'): self
-    {
-    }
-
-    /**
-     * Add a inner join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see AppModel::innerJoinRelation
-     */
-    public function innerJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Add a left join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see AppModel::leftJoinRelation
-     */
-    public function leftJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Add a right join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see AppModel::rightJoinRelation
-     */
-    public function rightJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
-     *
-     * This method only checks whether the specified method has the "Relation" attribute,
-     * and does not check the actual logic.
-     * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
-     *
-     * @param string $method
-     * @return bool
-     * @see AppModel::isRelation
-     */
-    public function isRelation(string $method): bool
-    {
-    }
-}
-
-class Cls
-{
-    /**
-     * Return the traits used by the given class, including those used by all parent classes and other traits
-     *
-     * @param string|object $class
-     * @param bool $autoload
-     * @return array
-     * @see https://www.php.net/manual/en/function.class-uses.php#112671
-     * @see Cls::usesDeep
-     */
-    public function usesDeep($class, bool $autoload = true): array
-    {
-    }
-}
-
-class Config
-{
-    /**
-     * @see Config::save
-     * @param array|string $name
-     * @param mixed $value
-     * @return void
-     */
-    public function save($name, $value = null)
-    {
-    }
-
-    /**
-     * @see Config::write
-     */
-    public function write()
-    {
-    }
-
-    /**
-     * @see Config::load
-     */
-    public function load()
-    {
-    }
-}
-
-class IsModelExists
-{
-    /**
-     * Check the input value, return a Ret object
-     *
-     * @param mixed $input
-     * @param string $name
-     * @return Ret
-     * @see BaseValidator::check
-     */
-    public function check($input, string $name = '%name%'): \Wei\Ret
-    {
-    }
-}
-
-class Jwt
-{
-    /**
-     * @return string
-     * @see Jwt::getPrivateKey
-     */
-    public function getPrivateKey()
-    {
-    }
-
-    /**
-     * @param string $privateKey
-     * @return $this
-     * @see Jwt::setPrivateKey
-     */
-    public function setPrivateKey(string $privateKey)
-    {
-    }
-
-    /**
-     * @return string
-     * @see Jwt::getPublicKey
-     */
-    public function getPublicKey()
-    {
-    }
-
-    /**
-     * @param string $publicKey
-     * @return $this
-     * @see Jwt::setPublicKey
-     */
-    public function setPublicKey(string $publicKey)
-    {
-    }
-
-    /**
-     * @param array $claims
-     * @param int $expire
-     * @return Token
-     * @throws \Exception
-     * @see Jwt::generate
-     */
-    public function generate(array $claims, int $expire = 2592000): \Lcobucci\JWT\Token
-    {
-    }
-
-    /**
-     * @param string $token
-     * @return Ret
-     * @see Jwt::verify
-     */
-    public function verify(string $token): Ret
-    {
-    }
-
-    /**
-     * 生成默认配置所需的密钥
-     *
-     * @see Jwt::generateDefaultKeys
-     * @experimental
-     */
-    public function generateDefaultKeys(): Ret
-    {
-    }
-}
-
-class ObjectReq
-{
-    /**
-     * Check if the specified header is set
-     *
-     * @param string $name
-     * @return bool
-     * @see Req::hasHeader
-     */
-    public function hasHeader(string $name): bool
-    {
-    }
-
-    /**
-     * Return the specified header value
-     *
-     * @param string $name
-     * @return string|null
-     * @see Req::getHeader
-     */
-    public function getHeader(string $name): ?string
-    {
-    }
-
-    /**
-     * Check if current request is a preflight request
-     *
-     * @return bool
-     * @link https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
-     * @see Req::isPreflight
-     */
-    public function isPreflight(): bool
-    {
-    }
-}
-
-class PageRouter
-{
-}
-
-class Plugin
-{
-    /**
-     * Load service configs
-     *
-     * @param bool $refresh
-     * @return $this
-     * @see Plugin::loadConfig
-     */
-    public function loadConfig($refresh = false)
-    {
-    }
-
-    /**
-     * Check if a plugin exists
-     *
-     * @param string $id
-     * @return bool
-     * @see Plugin::has
-     */
-    public function has($id)
-    {
-    }
-
-    /**
-     * Check if a plugin is installed
-     *
-     * @param string $id
-     * @return bool
-     * @see Plugin::isInstalled
-     */
-    public function isInstalled($id)
-    {
-    }
-}
-
-class QueryBuilder
-{
-    /**
-     * Set or remove cache time for the query
-     *
-     * @param int|null $seconds
-     * @return $this
-     * @see QueryBuilder::setCacheTime
-     */
-    public function setCacheTime(?int $seconds): self
-    {
-    }
-
-    /**
-     * Return the record table name
-     *
-     * @return string|null
-     * @see QueryBuilder::getTable
-     */
-    public function getTable(): ?string
-    {
-    }
-
-    /**
-     * Returns the name of columns of current table
-     *
-     * @return array
-     * @see QueryBuilder::getColumns
-     */
-    public function getColumns(): array
-    {
-    }
-
-    /**
-     * Check if column name exists
-     *
-     * @param string|int|null $name
-     * @return bool
-     * @see QueryBuilder::hasColumn
-     */
-    public function hasColumn($name): bool
-    {
-    }
-
-    /**
-     * Executes the generated query and returns the first array result
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array|null
-     * @see QueryBuilder::fetch
-     */
-    public function fetch($column = null, $operator = null, $value = null): ?array
-    {
-    }
-
-    /**
-     * Executes the generated query and returns all array results
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array
-     * @see QueryBuilder::fetchAll
-     */
-    public function fetchAll($column = null, $operator = null, $value = null): array
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record object or null if not found
-     *
-     * @return array|null
-     * @see QueryBuilder::first
-     */
-    public function first(): ?array
-    {
-    }
-
-    /**
-     * @return array
-     * @see QueryBuilder::all
-     */
-    public function all(): array
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param string|null $index
-     * @return array
-     * @see QueryBuilder::pluck
-     */
-    public function pluck(string $column, string $index = null): array
-    {
-    }
-
-    /**
-     * @param int $count
-     * @param callable $callback
-     * @return bool
-     * @see QueryBuilder::chunk
-     */
-    public function chunk(int $count, callable $callback): bool
-    {
-    }
-
-    /**
-     * Executes a COUNT query to receive the rows number
-     *
-     * @param string $column
-     * @return int
-     * @see QueryBuilder::cnt
-     */
-    public function cnt($column = '*'): int
-    {
-    }
-
-    /**
-     * Executes a MAX query to receive the max value of column
-     *
-     * @param string $column
-     * @return string|null
-     * @see QueryBuilder::max
-     */
-    public function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see QueryBuilder::update
-     */
-    public function update($set = [], $value = null): int
-    {
-    }
-
-    /**
-     * Execute a delete query with specified conditions
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return int
-     * @see QueryBuilder::delete
-     */
-    public function delete($column = null, $operator = null, $value = null): int
-    {
-    }
-
-    /**
-     * Sets the position of the first result to retrieve (the "offset")
-     *
-     * @param int|float|string $offset The first result to return
-     * @return $this
-     * @see QueryBuilder::offset
-     */
-    public function offset($offset): self
-    {
-    }
-
-    /**
-     * Sets the maximum number of results to retrieve (the "limit")
-     *
-     * @param int|float|string $limit The maximum number of results to retrieve
-     * @return $this
-     * @see QueryBuilder::limit
-     */
-    public function limit($limit): self
-    {
-    }
-
-    /**
-     * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
-     *
-     * @param int $page The page number
-     * @return $this
-     * @see QueryBuilder::page
-     */
-    public function page($page): self
-    {
-    }
-
-    /**
-     * Specifies an item that is to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns the selection expressions
-     * @return $this
-     * @see QueryBuilder::select
-     */
-    public function select($columns = ['*']): self
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see QueryBuilder::selectDistinct
-     */
-    public function selectDistinct($columns): self
-    {
-    }
-
-    /**
-     * @param string $expression
-     * @return $this
-     * @see QueryBuilder::selectRaw
-     */
-    public function selectRaw($expression): self
-    {
-    }
-
-    /**
-     * Specifies columns that are not to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns
-     * @return $this
-     * @see QueryBuilder::selectExcept
-     */
-    public function selectExcept($columns): self
-    {
-    }
-
-    /**
-     * Specifies an item of the main table that is to be returned in the query result.
-     * Default to all columns of the main table
-     *
-     * @param string $column
-     * @return $this
-     * @see QueryBuilder::selectMain
-     */
-    public function selectMain(string $column = '*'): self
-    {
-    }
-
-    /**
-     * Sets table for FROM query
-     *
-     * @param string $table
-     * @param string|null $alias
-     * @return $this
-     * @see QueryBuilder::from
-     */
-    public function from(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * @param string $table
-     * @param mixed|null $alias
-     * @return $this
-     * @see QueryBuilder::table
-     */
-    public function table(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @param string $type
-     * @return $this
-     * @see QueryBuilder::join
-     */
-    public function join(
-        string $table,
-        string $first = null,
-        string $operator = '=',
-        string $second = null,
-        string $type = 'INNER'
-    ): self {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see QueryBuilder::innerJoin
-     */
-    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a left join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see QueryBuilder::leftJoin
-     */
-    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a right join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see QueryBuilder::rightJoin
-     */
-    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Specifies one or more restrictions to the query result.
-     * Replaces any previously specified restrictions, if any.
-     *
-     * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
-     * ```
-     *
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see QueryBuilder::where
-     */
-    public function where($column = null, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param scalar $expression
-     * @param mixed $params
-     * @return $this
-     * @see QueryBuilder::whereRaw
-     */
-    public function whereRaw($expression, $params = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereBetween
-     */
-    public function whereBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotBetween
-     */
-    public function whereNotBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereIn
-     */
-    public function whereIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see QueryBuilder::whereNotIn
-     */
-    public function whereNotIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see QueryBuilder::whereNull
-     */
-    public function whereNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see QueryBuilder::whereNotNull
-     */
-    public function whereNotNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see QueryBuilder::whereDate
-     */
-    public function whereDate(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see QueryBuilder::whereMonth
-     */
-    public function whereMonth(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see QueryBuilder::whereDay
-     */
-    public function whereDay(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see QueryBuilder::whereYear
-     */
-    public function whereYear(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see QueryBuilder::whereTime
-     */
-    public function whereTime(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrColumn2
-     * @param mixed|null $column2
-     * @return $this
-     * @see QueryBuilder::whereColumn
-     */
-    public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
-    {
-    }
-
-    /**
-     * 搜索字段是否包含某个值
-     *
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see QueryBuilder::whereContains
-     */
-    public function whereContains(string $column, $value, string $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see QueryBuilder::whereNotContains
-     */
-    public function whereNotContains(string $column, $value, string $condition = 'OR'): self
-    {
-    }
-
-    /**
-     * Search whether a column has a value other than the default value
-     *
-     * @param string $column
-     * @param bool $has
-     * @return $this
-     * @see QueryBuilder::whereHas
-     */
-    public function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * Search whether a column dont have a value other than the default value
-     *
-     * @param string $column
-     * @return $this
-     * @see QueryBuilder::whereNotHas
-     */
-    public function whereNotHas(string $column): self
-    {
-    }
-
-    /**
-     * Specifies a grouping over the results of the query.
-     * Replaces any previously specified groupings, if any.
-     *
-     * @param mixed $column the grouping column
-     * @return $this
-     * @see QueryBuilder::groupBy
-     */
-    public function groupBy($column): self
-    {
-    }
-
-    /**
-     * Specifies a restriction over the groups of the query.
-     * Replaces any previous having restrictions, if any.
-     *
-     * @param mixed $column
-     * @param mixed $operator
-     * @param mixed|null $value
-     * @param mixed $condition
-     * @return $this
-     * @see QueryBuilder::having
-     */
-    public function having($column, $operator, $value = null, $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * Specifies an ordering for the query results.
-     * Replaces any previously specified orderings, if any.
-     *
-     * @param string $column the ordering expression
-     * @param string $order the ordering direction
-     * @return $this
-     * @see QueryBuilder::orderBy
-     */
-    public function orderBy(string $column, $order = 'ASC'): self
-    {
-    }
-
-    /**
-     * Adds a DESC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see QueryBuilder::desc
-     */
-    public function desc(string $field): self
-    {
-    }
-
-    /**
-     * Add an ASC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see QueryBuilder::asc
-     */
-    public function asc(string $field): self
-    {
-    }
-
-    /**
-     * Specifies a field to be the key of the fetched array
-     *
-     * @param string $column
-     * @return $this
-     * @see QueryBuilder::indexBy
-     */
-    public function indexBy(string $column): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forUpdate
-     */
-    public function forUpdate(): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see QueryBuilder::forShare
-     */
-    public function forShare(): self
-    {
-    }
-
-    /**
-     * @param string|bool $lock
-     * @return $this
-     * @see QueryBuilder::lock
-     */
-    public function lock($lock): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see QueryBuilder::when
-     */
-    public function when($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see QueryBuilder::unless
-     */
-    public function unless($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see QueryBuilder::setDbKeyConverter
-     */
-    public function setDbKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see QueryBuilder::setPhpKeyConverter
-     */
-    public function setPhpKeyConverter(callable $converter = null): self
-    {
-    }
-}
-
-class Ret
-{
-    /**
-     * {@inheritDoc}
-     * @throws \Exception
-     * @see Ret::err
-     */
-    public function err($message, $code = null, $level = null)
-    {
-    }
-
-    /**
-     * Return operation successful result
-     *
-     * ```php
-     * // Specified message
-     * $this->suc('Payment successful');
-     *
-     * // Format
-     * $this->suc(['me%sage', 'ss']);
-     *
-     * // More data
-     * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
-     * ```
-     *
-     * @param array|string|null $message
-     * @return $this
-     * @see Ret::suc
-     */
-    public function suc($message = null)
-    {
-    }
-
-    /**
-     * Return operation failed result, and logs with a warning level
-     *
-     * @param string $message
-     * @param int $code
-     * @return $this
-     * @see Ret::warning
-     */
-    public function warning($message, $code = null)
-    {
-    }
-
-    /**
-     * Return operation failed result, and logs with an alert level
-     *
-     * @param string $message
-     * @param int $code
-     * @return $this
-     * @see Ret::alert
-     */
-    public function alert($message, $code = null)
-    {
-    }
-}
-
-class Seeder
-{
-    /**
-     * @param OutputInterface $output
-     * @return $this
-     * @see Seeder::setOutput
-     */
-    public function setOutput(\Symfony\Component\Console\Output\OutputInterface $output): self
-    {
-    }
-
-    /**
-     * @see Seeder::run
-     */
-    public function run(array $options = [])
-    {
-    }
-
-    /**
-     * @param array $options
-     * @throws \Exception
-     * @see Seeder::create
-     */
-    public function create(array $options)
-    {
-    }
-}
-
-class Session
-{
-}
-
-class Snowflake
-{
-    /**
-     * @return int
-     * @see Snowflake::getWorkerId
-     */
-    public function getWorkerId(): int
-    {
-    }
-
-    /**
-     * Set the worker id
-     *
-     * @param int $workerId
-     * @return $this
-     * @see Snowflake::setWorkerId
-     */
-    public function setWorkerId(int $workerId): self
-    {
-    }
-
-    /**
-     * Return the start timestamp
-     *
-     * @return int
-     * @see Snowflake::getStartTimestamp
-     */
-    public function getStartTimestamp(): int
-    {
-    }
-
-    /**
-     * Set the start timestamp
-     *
-     * @param int $startTimestamp
-     * @return $this
-     * @see Snowflake::setStartTimestamp
-     */
-    public function setStartTimestamp(int $startTimestamp): self
-    {
-    }
-
-    /**
-     * Generate an id
-     *
-     * @return string
-     * @see Snowflake::next
-     */
-    public function next(): string
-    {
-    }
-
-    /**
-     * Parse the given id, return timestamp, worker ID and sequence
-     *
-     * @param string|int $id
-     * @return array{timestamp: int, workerId: int, sequence: int}
-     * @see Snowflake::parse
-     */
-    public function parse($id): array
-    {
-    }
-}
-
-class Str
-{
-    /**
-     * Returns a word in plural form
-     *
-     * @param string $word
-     * @return string
-     * @see Str::pluralize
-     */
-    public function pluralize(string $word): string
-    {
-    }
-
-    /**
-     * Returns a word in singular form
-     *
-     * @param string $word
-     * @return string
-     * @see Str::singularize
-     */
-    public function singularize(string $word): string
-    {
-    }
-
-    /**
-     * Convert a input to snake case
-     *
-     * @param string $input
-     * @param string $delimiter
-     * @return string
-     * @see Str::snake
-     */
-    public function snake(string $input, string $delimiter = '_'): string
-    {
-    }
-
-    /**
-     * Convert a input to camel case
-     *
-     * @param string $input
-     * @return string
-     * @see Str::camel
-     */
-    public function camel(string $input): string
-    {
-    }
-
-    /**
-     * Convert a input to dash case
-     *
-     * @param string $input
-     * @return string
-     * @see Str::dash
-     */
-    public function dash(string $input): string
-    {
-    }
-}
-
-class Tester
-{
-    /**
-     * @param array $query
-     * @return $this
-     * @see Tester::query
-     */
-    public function query(array $query)
-    {
-    }
-
-    /**
-     * @param string $page
-     * @return mixed
-     * @see Tester::get
-     */
-    public function get(string $page)
-    {
-    }
-
-    /**
-     * Execute a POST request
-     *
-     * @param string $page
-     * @return mixed
-     * @see Tester::post
-     */
-    public function post(string $page)
-    {
-    }
-
-    /**
-     * @param array $request
-     * @return $this
-     * @see Tester::request
-     */
-    public function request(array $request)
-    {
-    }
-
-    /**
-     * @param string $page
-     * @param string $method
-     * @return mixed
-     * @see Tester::call
-     */
-    public function call(string $page, string $method)
-    {
-    }
-
-    /**
-     * Set the request service
-     *
-     * @param Req $req
-     * @return $this
-     * @see Tester::setReq
-     */
-    public function setReq(\Wei\Req $req)
-    {
-    }
-
-    /**
-     * @param string $page
-     * @return mixed
-     * @see Tester::patch
-     */
-    public function patch(string $page)
-    {
-    }
-
-    /**
-     * @param string $page
-     * @return mixed
-     * @see Tester::put
-     */
-    public function put(string $page)
-    {
-    }
-
-    /**
-     * @param string $page
-     * @return mixed
-     * @see Tester::delete
-     */
-    public function delete(string $page)
-    {
-    }
-
-    /**
-     * @param string $page
-     * @return mixed
-     * @see Tester::getAdminApi
-     */
-    public function getAdminApi(string $page)
-    {
-    }
-
-    /**
-     * @param string $page
-     * @param array $data
-     * @return mixed
-     * @see Tester::postAdminApi
-     */
-    public function postAdminApi(string $page, $data = [])
-    {
-    }
-
-    /**
-     * @param string $page
-     * @param array $data
-     * @return mixed
-     * @see Tester::patchAdminApi
-     */
-    public function patchAdminApi(string $page, $data = [])
-    {
-    }
-
-    /**
-     * @param string $page
-     * @param array $data
-     * @return mixed
-     * @see Tester::putAdminApi
-     */
-    public function putAdminApi(string $page, $data = [])
-    {
-    }
-
-    /**
-     * @param string $page
-     * @return mixed
-     * @see Tester::deleteAdminApi
-     */
-    public function deleteAdminApi(string $page)
-    {
-    }
-}
-
-class User
-{
-    /**
-     * @return int|null
-     * @see User::id
-     */
-    public function id()
-    {
-    }
-
-    /**
-     * @return $this
-     * @see User::cur
-     */
-    public function cur()
-    {
-    }
-
-    /**
-     * 判断用户是否登录
-     *
-     * @return bool
-     * @see User::isLogin
-     */
-    public function isLogin()
-    {
-    }
-
-    /**
-     * 检查用户是否登录
-     *
-     * @return Ret
-     * @see User::checkLogin
-     */
-    public function checkLogin()
-    {
-    }
-
-    /**
-     * 根据用户账号密码,登录用户
-     *
-     * @param mixed $data
-     * @return Ret
-     * @see User::login
-     */
-    public function login($data)
-    {
-    }
-
-    /**
-     * 根据用户ID直接登录用户
-     *
-     * @param int $id
-     * @return Ret
-     * @see User::loginById
-     */
-    public function loginById($id)
-    {
-    }
-
-    /**
-     * 根据条件查找或创建用户,并登录
-     *
-     * @param mixed $conditions
-     * @param array $data
-     * @return $this
-     * @see User::loginBy
-     */
-    public function loginBy($conditions, $data = [])
-    {
-    }
-
-    /**
-     * 根据用户对象登录用户
-     *
-     * @param UserModel $user
-     * @return Ret
-     * @see User::loginByModel
-     */
-    public function loginByModel(UserModel $user)
-    {
-    }
-
-    /**
-     * 销毁用户会话,退出登录
-     *
-     * @return Ret
-     * @see User::logout
-     */
-    public function logout()
-    {
-    }
-
-    /**
-     * 当用户信息更改后,可以主动调用该方法,刷新会话中的数据
-     *
-     * @param UserModel $user
-     * @return $this
-     * @see User::refresh
-     */
-    public function refresh(UserModel $user)
-    {
-    }
-
-    /**
-     * 通过外部检查用户是否有某个权限
-     *
-     * @param string $permissionId
-     * @return bool
-     * @see UserModel::can
-     */
-    public function can($permissionId)
-    {
-    }
-
-    /**
-     * @param array|\ArrayAccess $req
-     * @return \Wei\Ret
-     * @see UserModel::updatePassword
-     */
-    public function updatePassword($req)
-    {
-    }
-
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see UserModel::saveAttributes
-     */
-    public function saveAttributes(iterable $attributes = []): self
-    {
-    }
-
-    /**
-     * Returns the success result with model data
-     *
-     * @param array|string|BaseResource|mixed $merge
-     * @return Ret
-     * @see UserModel::toRet
-     */
-    public function toRet($merge = []): \Wei\Ret
-    {
-    }
-
-    /**
-     * Return the record table name
-     *
-     * @return string
-     * @see UserModel::getTable
-     */
-    public function getTable(): string
-    {
-    }
-
-    /**
-     * Import a PHP array in this record
-     *
-     * @param iterable $array
-     * @return $this
-     * @see UserModel::fromArray
-     */
-    public function fromArray(iterable $array): self
-    {
-    }
-
-    /**
-     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
-     *
-     * @param int|string $id
-     * @return $this
-     * @see UserModel::destroy
-     */
-    public function destroy($id = null): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
-     *
-     * @param string|int $id
-     * @return $this
-     * @throws \Exception when record not found
-     * @see UserModel::destroyOrFail
-     */
-    public function destroyOrFail($id): self
-    {
-    }
-
-    /**
-     * Set the record field value
-     *
-     * @param string|int|null $name
-     * @param mixed $value
-     * @param bool $throwException
-     * @return $this|false
-     * @see UserModel::set
-     */
-    public function set($name, $value, bool $throwException = true)
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record object or false
-     *
-     * @param int|string|array|null $id
-     * @return $this|null
-     * @see UserModel::find
-     */
-    public function find($id): ?self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or throws 404 exception if record not found
-     *
-     * @param int|string $id
-     * @return $this
-     * @throws \Exception
-     * @see UserModel::findOrFail
-     */
-    public function findOrFail($id): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or init with the specified attributes if record not found
-     *
-     * @param int|string $id
-     * @param array|object $attributes
-     * @return $this
-     * @see UserModel::findOrInit
-     */
-    public function findOrInit($id = null, $attributes = []): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or save with the specified attributes if record not found
-     *
-     * @param int|string $id
-     * @param array $attributes
-     * @return $this
-     * @see UserModel::findOrCreate
-     */
-    public function findOrCreate($id, $attributes = []): self
-    {
-    }
-
-    /**
-     * @param array $attributes
-     * @param array|object $data
-     * @return $this
-     * @see UserModel::findByOrCreate
-     */
-    public function findByOrCreate($attributes, $data = []): self
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record collection object or false
-     *
-     * @param array $ids
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see UserModel::findAll
-     */
-    public function findAll(array $ids): self
-    {
-    }
-
-    /**
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this|null
-     * @see UserModel::findBy
-     */
-    public function findBy($column, $operator = null, $value = null): ?self
-    {
-    }
-
-    /**
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see UserModel::findAllBy
-     */
-    public function findAllBy($column, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param array $attributes
-     * @param array|object $data
-     * @return $this
-     * @see UserModel::findOrInitBy
-     */
-    public function findOrInitBy(array $attributes = [], $data = []): self
-    {
-    }
-
-    /**
-     * Find a record by primary key value and throws 404 exception if record not found
-     *
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @throws \Exception
-     * @see UserModel::findByOrFail
-     */
-    public function findByOrFail($column, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @see UserModel::findFromReq
-     */
-    public function findFromReq(\Wei\Req $req = null): self
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record object or null if not found
-     *
-     * @return $this|null
-     * @see UserModel::first
-     */
-    public function first(): ?self
-    {
-    }
-
-    /**
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see UserModel::all
-     */
-    public function all(): self
-    {
-    }
-
-    /**
-     * Coll: Specifies a field to be the key of the fetched array
-     *
-     * @param string $column
-     * @return $this
-     * @see UserModel::indexBy
-     */
-    public function indexBy(string $column): self
-    {
-    }
-
-    /**
-     * @param array|string|true $scopes
-     * @return $this
-     * @see UserModel::unscoped
-     */
-    public function unscoped($scopes = []): self
-    {
-    }
-
-    /**
-     * Set or remove cache time for the query
-     *
-     * @param int|null $seconds
-     * @return $this
-     * @see UserModel::setCacheTime
-     */
-    public function setCacheTime(?int $seconds): self
-    {
-    }
-
-    /**
-     * Returns the name of columns of current table
-     *
-     * @return array
-     * @see UserModel::getColumns
-     */
-    public function getColumns(): array
-    {
-    }
-
-    /**
-     * Check if column name exists
-     *
-     * @param string|int|null $name
-     * @return bool
-     * @see UserModel::hasColumn
-     */
-    public function hasColumn($name): bool
-    {
-    }
-
-    /**
-     * Executes the generated query and returns the first array result
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array|null
-     * @see UserModel::fetch
-     */
-    public function fetch($column = null, $operator = null, $value = null): ?array
-    {
-    }
-
-    /**
-     * Executes the generated query and returns all array results
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array
-     * @see UserModel::fetchAll
-     */
-    public function fetchAll($column = null, $operator = null, $value = null): array
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param string|null $index
-     * @return array
-     * @see UserModel::pluck
-     */
-    public function pluck(string $column, string $index = null): array
-    {
-    }
-
-    /**
-     * @param int $count
-     * @param callable $callback
-     * @return bool
-     * @see UserModel::chunk
-     */
-    public function chunk(int $count, callable $callback): bool
-    {
-    }
-
-    /**
-     * Executes a COUNT query to receive the rows number
-     *
-     * @param string $column
-     * @return int
-     * @see UserModel::cnt
-     */
-    public function cnt($column = '*'): int
-    {
-    }
-
-    /**
-     * Executes a MAX query to receive the max value of column
-     *
-     * @param string $column
-     * @return string|null
-     * @see UserModel::max
-     */
-    public function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see UserModel::update
-     */
-    public function update($set = [], $value = null): int
-    {
-    }
-
-    /**
-     * Execute a delete query with specified conditions
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return int
-     * @see UserModel::delete
-     */
-    public function delete($column = null, $operator = null, $value = null): int
-    {
-    }
-
-    /**
-     * Sets the position of the first result to retrieve (the "offset")
-     *
-     * @param int|float|string $offset The first result to return
-     * @return $this
-     * @see UserModel::offset
-     */
-    public function offset($offset): self
-    {
-    }
-
-    /**
-     * Sets the maximum number of results to retrieve (the "limit")
-     *
-     * @param int|float|string $limit The maximum number of results to retrieve
-     * @return $this
-     * @see UserModel::limit
-     */
-    public function limit($limit): self
-    {
-    }
-
-    /**
-     * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
-     *
-     * @param int $page The page number
-     * @return $this
-     * @see UserModel::page
-     */
-    public function page($page): self
-    {
-    }
-
-    /**
-     * Specifies an item that is to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns the selection expressions
-     * @return $this
-     * @see UserModel::select
-     */
-    public function select($columns = ['*']): self
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::selectDistinct
-     */
-    public function selectDistinct($columns): self
-    {
-    }
-
-    /**
-     * @param string $expression
-     * @return $this
-     * @see UserModel::selectRaw
-     */
-    public function selectRaw($expression): self
-    {
-    }
-
-    /**
-     * Specifies columns that are not to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::selectExcept
-     */
-    public function selectExcept($columns): self
-    {
-    }
-
-    /**
-     * Specifies an item of the main table that is to be returned in the query result.
-     * Default to all columns of the main table
-     *
-     * @param string $column
-     * @return $this
-     * @see UserModel::selectMain
-     */
-    public function selectMain(string $column = '*'): self
-    {
-    }
-
-    /**
-     * Sets table for FROM query
-     *
-     * @param string $table
-     * @param string|null $alias
-     * @return $this
-     * @see UserModel::from
-     */
-    public function from(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * @param string $table
-     * @param mixed|null $alias
-     * @return $this
-     * @see UserModel::table
-     */
-    public function table(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @param string $type
-     * @return $this
-     * @see UserModel::join
-     */
-    public function join(
-        string $table,
-        string $first = null,
-        string $operator = '=',
-        string $second = null,
-        string $type = 'INNER'
-    ): self {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see UserModel::innerJoin
-     */
-    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a left join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see UserModel::leftJoin
-     */
-    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a right join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see UserModel::rightJoin
-     */
-    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Specifies one or more restrictions to the query result.
-     * Replaces any previously specified restrictions, if any.
-     *
-     * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
-     * ```
-     *
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::where
-     */
-    public function where($column = null, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param scalar $expression
-     * @param mixed $params
-     * @return $this
-     * @see UserModel::whereRaw
-     */
-    public function whereRaw($expression, $params = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereBetween
-     */
-    public function whereBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereNotBetween
-     */
-    public function whereNotBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereIn
-     */
-    public function whereIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereNotIn
-     */
-    public function whereNotIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see UserModel::whereNull
-     */
-    public function whereNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see UserModel::whereNotNull
-     */
-    public function whereNotNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereDate
-     */
-    public function whereDate(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereMonth
-     */
-    public function whereMonth(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereDay
-     */
-    public function whereDay(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereYear
-     */
-    public function whereYear(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereTime
-     */
-    public function whereTime(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrColumn2
-     * @param mixed|null $column2
-     * @return $this
-     * @see UserModel::whereColumn
-     */
-    public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
-    {
-    }
-
-    /**
-     * 搜索字段是否包含某个值
-     *
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see UserModel::whereContains
-     */
-    public function whereContains(string $column, $value, string $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see UserModel::whereNotContains
-     */
-    public function whereNotContains(string $column, $value, string $condition = 'OR'): self
-    {
-    }
-
-    /**
-     * Search whether a column has a value other than the default value
-     *
-     * @param string $column
-     * @param bool $has
-     * @return $this
-     * @see UserModel::whereHas
-     */
-    public function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * Search whether a column dont have a value other than the default value
-     *
-     * @param string $column
-     * @return $this
-     * @see UserModel::whereNotHas
-     */
-    public function whereNotHas(string $column): self
-    {
-    }
-
-    /**
-     * Specifies a grouping over the results of the query.
-     * Replaces any previously specified groupings, if any.
-     *
-     * @param mixed $column the grouping column
-     * @return $this
-     * @see UserModel::groupBy
-     */
-    public function groupBy($column): self
-    {
-    }
-
-    /**
-     * Specifies a restriction over the groups of the query.
-     * Replaces any previous having restrictions, if any.
-     *
-     * @param mixed $column
-     * @param mixed $operator
-     * @param mixed|null $value
-     * @param mixed $condition
-     * @return $this
-     * @see UserModel::having
-     */
-    public function having($column, $operator, $value = null, $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * Specifies an ordering for the query results.
-     * Replaces any previously specified orderings, if any.
-     *
-     * @param string $column the ordering expression
-     * @param string $order the ordering direction
-     * @return $this
-     * @see UserModel::orderBy
-     */
-    public function orderBy(string $column, $order = 'ASC'): self
-    {
-    }
-
-    /**
-     * Adds a DESC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see UserModel::desc
-     */
-    public function desc(string $field): self
-    {
-    }
-
-    /**
-     * Add an ASC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see UserModel::asc
-     */
-    public function asc(string $field): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see UserModel::forUpdate
-     */
-    public function forUpdate(): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see UserModel::forShare
-     */
-    public function forShare(): self
-    {
-    }
-
-    /**
-     * @param string|bool $lock
-     * @return $this
-     * @see UserModel::lock
-     */
-    public function lock($lock): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see UserModel::when
-     */
-    public function when($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see UserModel::unless
-     */
-    public function unless($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see UserModel::setDbKeyConverter
-     */
-    public function setDbKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see UserModel::setPhpKeyConverter
-     */
-    public function setPhpKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * Add a (inner) join base on the relation to the query
-     *
-     * @param string|array $name
-     * @param string $type
-     * @return $this
-     * @see UserModel::joinRelation
-     */
-    public function joinRelation($name, string $type = 'INNER'): self
-    {
-    }
-
-    /**
-     * Add a inner join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see UserModel::innerJoinRelation
-     */
-    public function innerJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Add a left join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see UserModel::leftJoinRelation
-     */
-    public function leftJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Add a right join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see UserModel::rightJoinRelation
-     */
-    public function rightJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
-     *
-     * This method only checks whether the specified method has the "Relation" attribute,
-     * and does not check the actual logic.
-     * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
-     *
-     * @param string $method
-     * @return bool
-     * @see UserModel::isRelation
-     */
-    public function isRelation(string $method): bool
-    {
-    }
-}
-
-class UserModel
-{
-    /**
-     * 通过外部检查用户是否有某个权限
-     *
-     * @param string $permissionId
-     * @return bool
-     * @see UserModel::can
-     */
-    public function can($permissionId)
-    {
-    }
-
-    /**
-     * @param array|\ArrayAccess $req
-     * @return \Wei\Ret
-     * @see UserModel::updatePassword
-     */
-    public function updatePassword($req)
-    {
-    }
-
-    /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see UserModel::saveAttributes
-     */
-    public function saveAttributes(iterable $attributes = []): self
-    {
-    }
-
-    /**
-     * Returns the record data as array
-     *
-     * @param array|callable $returnFields A indexed array specified the fields to return
-     * @param callable|null $prepend
-     * @return array
-     * @see UserModel::toArray
-     */
-    public function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Returns the success result with model data
-     *
-     * @param array|string|BaseResource|mixed $merge
-     * @return Ret
-     * @see UserModel::toRet
-     */
-    public function toRet($merge = []): \Wei\Ret
-    {
-    }
-
-    /**
-     * Return the record table name
-     *
-     * @return string
-     * @see UserModel::getTable
-     */
-    public function getTable(): string
-    {
-    }
-
-    /**
-     * Import a PHP array in this record
-     *
-     * @param iterable $array
-     * @return $this
-     * @see UserModel::fromArray
-     */
-    public function fromArray(iterable $array): self
-    {
-    }
-
-    /**
-     * Save the record or data to database
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see UserModel::save
-     */
-    public function save(iterable $attributes = []): self
-    {
-    }
-
-    /**
-     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
-     *
-     * @param int|string $id
-     * @return $this
-     * @see UserModel::destroy
-     */
-    public function destroy($id = null): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
-     *
-     * @param string|int $id
-     * @return $this
-     * @throws \Exception when record not found
-     * @see UserModel::destroyOrFail
-     */
-    public function destroyOrFail($id): self
-    {
-    }
-
-    /**
-     * Set the record field value
-     *
-     * @param string|int|null $name
-     * @param mixed $value
-     * @param bool $throwException
-     * @return $this|false
-     * @see UserModel::set
-     */
-    public function set($name, $value, bool $throwException = true)
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record object or false
-     *
-     * @param int|string|array|null $id
-     * @return $this|null
-     * @see UserModel::find
-     */
-    public function find($id): ?self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or throws 404 exception if record not found
-     *
-     * @param int|string $id
-     * @return $this
-     * @throws \Exception
-     * @see UserModel::findOrFail
-     */
-    public function findOrFail($id): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or init with the specified attributes if record not found
-     *
-     * @param int|string $id
-     * @param array|object $attributes
-     * @return $this
-     * @see UserModel::findOrInit
-     */
-    public function findOrInit($id = null, $attributes = []): self
-    {
-    }
-
-    /**
-     * Find a record by primary key, or save with the specified attributes if record not found
-     *
-     * @param int|string $id
-     * @param array $attributes
-     * @return $this
-     * @see UserModel::findOrCreate
-     */
-    public function findOrCreate($id, $attributes = []): self
-    {
-    }
-
-    /**
-     * @param array $attributes
-     * @param array|object $data
-     * @return $this
-     * @see UserModel::findByOrCreate
-     */
-    public function findByOrCreate($attributes, $data = []): self
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record collection object or false
-     *
-     * @param array $ids
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see UserModel::findAll
-     */
-    public function findAll(array $ids): self
-    {
-    }
-
-    /**
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this|null
-     * @see UserModel::findBy
-     */
-    public function findBy($column, $operator = null, $value = null): ?self
-    {
-    }
-
-    /**
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see UserModel::findAllBy
-     */
-    public function findAllBy($column, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param array $attributes
-     * @param array|object $data
-     * @return $this
-     * @see UserModel::findOrInitBy
-     */
-    public function findOrInitBy(array $attributes = [], $data = []): self
-    {
-    }
-
-    /**
-     * Find a record by primary key value and throws 404 exception if record not found
-     *
-     * @param mixed $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @throws \Exception
-     * @see UserModel::findByOrFail
-     */
-    public function findByOrFail($column, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param Req|null $req
-     * @return $this
-     * @throws \Exception
-     * @see UserModel::findFromReq
-     */
-    public function findFromReq(\Wei\Req $req = null): self
-    {
-    }
-
-    /**
-     * Executes the generated SQL and returns the found record object or null if not found
-     *
-     * @return $this|null
-     * @see UserModel::first
-     */
-    public function first(): ?self
-    {
-    }
-
-    /**
-     * @return $this|$this[]
-     * @phpstan-return $this
-     * @see UserModel::all
-     */
-    public function all(): self
-    {
-    }
-
-    /**
-     * Coll: Specifies a field to be the key of the fetched array
-     *
-     * @param string $column
-     * @return $this
-     * @see UserModel::indexBy
-     */
-    public function indexBy(string $column): self
-    {
-    }
-
-    /**
-     * @param array|string|true $scopes
-     * @return $this
-     * @see UserModel::unscoped
-     */
-    public function unscoped($scopes = []): self
-    {
-    }
-
-    /**
-     * Set or remove cache time for the query
-     *
-     * @param int|null $seconds
-     * @return $this
-     * @see UserModel::setCacheTime
-     */
-    public function setCacheTime(?int $seconds): self
-    {
-    }
-
-    /**
-     * Returns the name of columns of current table
-     *
-     * @return array
-     * @see UserModel::getColumns
-     */
-    public function getColumns(): array
-    {
-    }
-
-    /**
-     * Check if column name exists
-     *
-     * @param string|int|null $name
-     * @return bool
-     * @see UserModel::hasColumn
-     */
-    public function hasColumn($name): bool
-    {
-    }
-
-    /**
-     * Executes the generated query and returns the first array result
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array|null
-     * @see UserModel::fetch
-     */
-    public function fetch($column = null, $operator = null, $value = null): ?array
-    {
-    }
-
-    /**
-     * Executes the generated query and returns all array results
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return array
-     * @see UserModel::fetchAll
-     */
-    public function fetchAll($column = null, $operator = null, $value = null): array
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param string|null $index
-     * @return array
-     * @see UserModel::pluck
-     */
-    public function pluck(string $column, string $index = null): array
-    {
-    }
-
-    /**
-     * @param int $count
-     * @param callable $callback
-     * @return bool
-     * @see UserModel::chunk
-     */
-    public function chunk(int $count, callable $callback): bool
-    {
-    }
-
-    /**
-     * Executes a COUNT query to receive the rows number
-     *
-     * @param string $column
-     * @return int
-     * @see UserModel::cnt
-     */
-    public function cnt($column = '*'): int
-    {
-    }
-
-    /**
-     * Executes a MAX query to receive the max value of column
-     *
-     * @param string $column
-     * @return string|null
-     * @see UserModel::max
-     */
-    public function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see UserModel::update
-     */
-    public function update($set = [], $value = null): int
-    {
-    }
-
-    /**
-     * Execute a delete query with specified conditions
-     *
-     * @param mixed|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return int
-     * @see UserModel::delete
-     */
-    public function delete($column = null, $operator = null, $value = null): int
-    {
-    }
-
-    /**
-     * Sets the position of the first result to retrieve (the "offset")
-     *
-     * @param int|float|string $offset The first result to return
-     * @return $this
-     * @see UserModel::offset
-     */
-    public function offset($offset): self
-    {
-    }
-
-    /**
-     * Sets the maximum number of results to retrieve (the "limit")
-     *
-     * @param int|float|string $limit The maximum number of results to retrieve
-     * @return $this
-     * @see UserModel::limit
-     */
-    public function limit($limit): self
-    {
-    }
-
-    /**
-     * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
-     *
-     * @param int $page The page number
-     * @return $this
-     * @see UserModel::page
-     */
-    public function page($page): self
-    {
-    }
-
-    /**
-     * Specifies an item that is to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns the selection expressions
-     * @return $this
-     * @see UserModel::select
-     */
-    public function select($columns = ['*']): self
-    {
-    }
-
-    /**
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::selectDistinct
-     */
-    public function selectDistinct($columns): self
-    {
-    }
-
-    /**
-     * @param string $expression
-     * @return $this
-     * @see UserModel::selectRaw
-     */
-    public function selectRaw($expression): self
-    {
-    }
-
-    /**
-     * Specifies columns that are not to be returned in the query result.
-     * Replaces any previously specified selections, if any.
-     *
-     * @param array|string $columns
-     * @return $this
-     * @see UserModel::selectExcept
-     */
-    public function selectExcept($columns): self
-    {
-    }
-
-    /**
-     * Specifies an item of the main table that is to be returned in the query result.
-     * Default to all columns of the main table
-     *
-     * @param string $column
-     * @return $this
-     * @see UserModel::selectMain
-     */
-    public function selectMain(string $column = '*'): self
-    {
-    }
-
-    /**
-     * Sets table for FROM query
-     *
-     * @param string $table
-     * @param string|null $alias
-     * @return $this
-     * @see UserModel::from
-     */
-    public function from(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * @param string $table
-     * @param mixed|null $alias
-     * @return $this
-     * @see UserModel::table
-     */
-    public function table(string $table, $alias = null): self
-    {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @param string $type
-     * @return $this
-     * @see UserModel::join
-     */
-    public function join(
-        string $table,
-        string $first = null,
-        string $operator = '=',
-        string $second = null,
-        string $type = 'INNER'
-    ): self {
-    }
-
-    /**
-     * Adds a inner join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see UserModel::innerJoin
-     */
-    public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a left join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see UserModel::leftJoin
-     */
-    public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Adds a right join to the query
-     *
-     * @param string $table The table name to join
-     * @param string|null $first
-     * @param string $operator
-     * @param string|null $second
-     * @return $this
-     * @see UserModel::rightJoin
-     */
-    public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
-    {
-    }
-
-    /**
-     * Specifies one or more restrictions to the query result.
-     * Replaces any previously specified restrictions, if any.
-     *
-     * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
-     * ```
-     *
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::where
-     */
-    public function where($column = null, $operator = null, $value = null): self
-    {
-    }
-
-    /**
-     * @param scalar $expression
-     * @param mixed $params
-     * @return $this
-     * @see UserModel::whereRaw
-     */
-    public function whereRaw($expression, $params = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereBetween
-     */
-    public function whereBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereNotBetween
-     */
-    public function whereNotBetween(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereIn
-     */
-    public function whereIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param array $params
-     * @return $this
-     * @see UserModel::whereNotIn
-     */
-    public function whereNotIn(string $column, array $params): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see UserModel::whereNull
-     */
-    public function whereNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @return $this
-     * @see UserModel::whereNotNull
-     */
-    public function whereNotNull(string $column): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereDate
-     */
-    public function whereDate(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereMonth
-     */
-    public function whereMonth(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereDay
-     */
-    public function whereDay(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereYear
-     */
-    public function whereYear(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrValue
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereTime
-     */
-    public function whereTime(string $column, $opOrValue, $value = null): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $opOrColumn2
-     * @param mixed|null $column2
-     * @return $this
-     * @see UserModel::whereColumn
-     */
-    public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
-    {
-    }
-
-    /**
-     * 搜索字段是否包含某个值
-     *
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see UserModel::whereContains
-     */
-    public function whereContains(string $column, $value, string $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * @param string $column
-     * @param mixed $value
-     * @param string $condition
-     * @return $this
-     * @see UserModel::whereNotContains
-     */
-    public function whereNotContains(string $column, $value, string $condition = 'OR'): self
-    {
-    }
-
-    /**
-     * Search whether a column has a value other than the default value
-     *
-     * @param string $column
-     * @param bool $has
-     * @return $this
-     * @see UserModel::whereHas
-     */
-    public function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * Search whether a column dont have a value other than the default value
-     *
-     * @param string $column
-     * @return $this
-     * @see UserModel::whereNotHas
-     */
-    public function whereNotHas(string $column): self
-    {
-    }
-
-    /**
-     * Specifies a grouping over the results of the query.
-     * Replaces any previously specified groupings, if any.
-     *
-     * @param mixed $column the grouping column
-     * @return $this
-     * @see UserModel::groupBy
-     */
-    public function groupBy($column): self
-    {
-    }
-
-    /**
-     * Specifies a restriction over the groups of the query.
-     * Replaces any previous having restrictions, if any.
-     *
-     * @param mixed $column
-     * @param mixed $operator
-     * @param mixed|null $value
-     * @param mixed $condition
-     * @return $this
-     * @see UserModel::having
-     */
-    public function having($column, $operator, $value = null, $condition = 'AND'): self
-    {
-    }
-
-    /**
-     * Specifies an ordering for the query results.
-     * Replaces any previously specified orderings, if any.
-     *
-     * @param string $column the ordering expression
-     * @param string $order the ordering direction
-     * @return $this
-     * @see UserModel::orderBy
-     */
-    public function orderBy(string $column, $order = 'ASC'): self
-    {
-    }
-
-    /**
-     * Adds a DESC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see UserModel::desc
-     */
-    public function desc(string $field): self
-    {
-    }
-
-    /**
-     * Add an ASC ordering to the query
-     *
-     * @param string $field The name of field
-     * @return $this
-     * @see UserModel::asc
-     */
-    public function asc(string $field): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see UserModel::forUpdate
-     */
-    public function forUpdate(): self
-    {
-    }
-
-    /**
-     * @return $this
-     * @see UserModel::forShare
-     */
-    public function forShare(): self
-    {
-    }
-
-    /**
-     * @param string|bool $lock
-     * @return $this
-     * @see UserModel::lock
-     */
-    public function lock($lock): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see UserModel::when
-     */
-    public function when($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param mixed $value
-     * @param callable $callback
-     * @param callable|null $default
-     * @return $this
-     * @see UserModel::unless
-     */
-    public function unless($value, callable $callback, callable $default = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see UserModel::setDbKeyConverter
-     */
-    public function setDbKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * @param callable|null $converter
-     * @return $this
-     * @see UserModel::setPhpKeyConverter
-     */
-    public function setPhpKeyConverter(callable $converter = null): self
-    {
-    }
-
-    /**
-     * Add a (inner) join base on the relation to the query
-     *
-     * @param string|array $name
-     * @param string $type
-     * @return $this
-     * @see UserModel::joinRelation
-     */
-    public function joinRelation($name, string $type = 'INNER'): self
-    {
-    }
-
-    /**
-     * Add a inner join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see UserModel::innerJoinRelation
-     */
-    public function innerJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Add a left join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see UserModel::leftJoinRelation
-     */
-    public function leftJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Add a right join base on the relation to the query
-     *
-     * @param string|array $name
-     * @return $this
-     * @see UserModel::rightJoinRelation
-     */
-    public function rightJoinRelation($name): self
-    {
-    }
-
-    /**
-     * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
-     *
-     * This method only checks whether the specified method has the "Relation" attribute,
-     * and does not check the actual logic.
-     * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
-     *
-     * @param string $method
-     * @return bool
-     * @see UserModel::isRelation
-     */
-    public function isRelation(string $method): bool
-    {
+    class App
+    {
+    }
+
+    class AppModel
+    {
+        /**
+         * Set each attribute value, without checking whether the column is fillable, and save the model
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see AppModel::saveAttributes
+         */
+        public function saveAttributes(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Returns the record data as array
+         *
+         * @param array|callable $returnFields A indexed array specified the fields to return
+         * @param callable|null $prepend
+         * @return array
+         * @see AppModel::toArray
+         */
+        public function toArray($returnFields = [], callable $prepend = null): array
+        {
+        }
+
+        /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see AppModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @see AppModel::getTable
+         */
+        public function getTable(): string
+        {
+        }
+
+        /**
+         * Import a PHP array in this record
+         *
+         * @param iterable $array
+         * @return $this
+         * @see AppModel::fromArray
+         */
+        public function fromArray(iterable $array): self
+        {
+        }
+
+        /**
+         * Save the record or data to database
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see AppModel::save
+         */
+        public function save(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param int|string $id
+         * @return $this
+         * @see AppModel::destroy
+         */
+        public function destroy($id = null): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+         *
+         * @param string|int $id
+         * @return $this
+         * @throws \Exception when record not found
+         * @see AppModel::destroyOrFail
+         */
+        public function destroyOrFail($id): self
+        {
+        }
+
+        /**
+         * Set the record field value
+         *
+         * @param string|int|null $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this|false
+         * @see AppModel::set
+         */
+        public function set($name, $value, bool $throwException = true)
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or false
+         *
+         * @param int|string|array|null $id
+         * @return $this|null
+         * @see AppModel::find
+         */
+        public function find($id): ?self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found
+         *
+         * @param int|string $id
+         * @return $this
+         * @throws \Exception
+         * @see AppModel::findOrFail
+         */
+        public function findOrFail($id): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or init with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array|object $attributes
+         * @return $this
+         * @see AppModel::findOrInit
+         */
+        public function findOrInit($id = null, $attributes = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or save with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array $attributes
+         * @return $this
+         * @see AppModel::findOrCreate
+         */
+        public function findOrCreate($id, $attributes = []): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see AppModel::findByOrCreate
+         */
+        public function findByOrCreate($attributes, $data = []): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record collection object or false
+         *
+         * @param array $ids
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see AppModel::findAll
+         */
+        public function findAll(array $ids): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|null
+         * @see AppModel::findBy
+         */
+        public function findBy($column, $operator = null, $value = null): ?self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see AppModel::findAllBy
+         */
+        public function findAllBy($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see AppModel::findOrInitBy
+         */
+        public function findOrInitBy(array $attributes = [], $data = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key value and throws 404 exception if record not found
+         *
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @throws \Exception
+         * @see AppModel::findByOrFail
+         */
+        public function findByOrFail($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param Req|null $req
+         * @return $this
+         * @throws \Exception
+         * @see AppModel::findFromReq
+         */
+        public function findFromReq(\Wei\Req $req = null): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return $this|null
+         * @see AppModel::first
+         */
+        public function first(): ?self
+        {
+        }
+
+        /**
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see AppModel::all
+         */
+        public function all(): self
+        {
+        }
+
+        /**
+         * Coll: Specifies a field to be the key of the fetched array
+         *
+         * @param string $column
+         * @return $this
+         * @see AppModel::indexBy
+         */
+        public function indexBy(string $column): self
+        {
+        }
+
+        /**
+         * @param array|string|true $scopes
+         * @return $this
+         * @see AppModel::unscoped
+         */
+        public function unscoped($scopes = []): self
+        {
+        }
+
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null $seconds
+         * @return $this
+         * @see AppModel::setCacheTime
+         */
+        public function setCacheTime(?int $seconds): self
+        {
+        }
+
+        /**
+         * Returns the name of columns of current table
+         *
+         * @return array
+         * @see AppModel::getColumns
+         */
+        public function getColumns(): array
+        {
+        }
+
+        /**
+         * Check if column name exists
+         *
+         * @param string|int|null $name
+         * @return bool
+         * @see AppModel::hasColumn
+         */
+        public function hasColumn($name): bool
+        {
+        }
+
+        /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array|null
+         * @see AppModel::fetch
+         */
+        public function fetch($column = null, $operator = null, $value = null): ?array
+        {
+        }
+
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array
+         * @see AppModel::fetchAll
+         */
+        public function fetchAll($column = null, $operator = null, $value = null): array
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @see AppModel::pluck
+         */
+        public function pluck(string $column, string $index = null): array
+        {
+        }
+
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @see AppModel::chunk
+         */
+        public function chunk(int $count, callable $callback): bool
+        {
+        }
+
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @see AppModel::cnt
+         */
+        public function cnt($column = '*'): int
+        {
+        }
+
+        /**
+         * Executes a MAX query to receive the max value of column
+         *
+         * @param string $column
+         * @return string|null
+         * @see AppModel::max
+         */
+        public function max(string $column): ?string
+        {
+        }
+
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see AppModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return int
+         * @see AppModel::delete
+         */
+        public function delete($column = null, $operator = null, $value = null): int
+        {
+        }
+
+        /**
+         * Sets the position of the first result to retrieve (the "offset")
+         *
+         * @param int|float|string $offset The first result to return
+         * @return $this
+         * @see AppModel::offset
+         */
+        public function offset($offset): self
+        {
+        }
+
+        /**
+         * Sets the maximum number of results to retrieve (the "limit")
+         *
+         * @param int|float|string $limit The maximum number of results to retrieve
+         * @return $this
+         * @see AppModel::limit
+         */
+        public function limit($limit): self
+        {
+        }
+
+        /**
+         * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+         *
+         * @param int $page The page number
+         * @return $this
+         * @see AppModel::page
+         */
+        public function page($page): self
+        {
+        }
+
+        /**
+         * Specifies an item that is to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns the selection expressions
+         * @return $this
+         * @see AppModel::select
+         */
+        public function select($columns = ['*']): self
+        {
+        }
+
+        /**
+         * @param array|string $columns
+         * @return $this
+         * @see AppModel::selectDistinct
+         */
+        public function selectDistinct($columns): self
+        {
+        }
+
+        /**
+         * @param string $expression
+         * @return $this
+         * @see AppModel::selectRaw
+         */
+        public function selectRaw($expression): self
+        {
+        }
+
+        /**
+         * Specifies columns that are not to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns
+         * @return $this
+         * @see AppModel::selectExcept
+         */
+        public function selectExcept($columns): self
+        {
+        }
+
+        /**
+         * Specifies an item of the main table that is to be returned in the query result.
+         * Default to all columns of the main table
+         *
+         * @param string $column
+         * @return $this
+         * @see AppModel::selectMain
+         */
+        public function selectMain(string $column = '*'): self
+        {
+        }
+
+        /**
+         * Sets table for FROM query
+         *
+         * @param string $table
+         * @param string|null $alias
+         * @return $this
+         * @see AppModel::from
+         */
+        public function from(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * @param string $table
+         * @param mixed|null $alias
+         * @return $this
+         * @see AppModel::table
+         */
+        public function table(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
+         * @return $this
+         * @see AppModel::join
+         */
+        public function join(
+            string $table,
+            string $first = null,
+            string $operator = '=',
+            string $second = null,
+            string $type = 'INNER'
+        ): self {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see AppModel::innerJoin
+         */
+        public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a left join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see AppModel::leftJoin
+         */
+        public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a right join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see AppModel::rightJoin
+         */
+        public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Specifies one or more restrictions to the query result.
+         * Replaces any previously specified restrictions, if any.
+         *
+         * ```php
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * ```
+         *
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see AppModel::where
+         */
+        public function where($column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @param mixed $params
+         * @return $this
+         * @see AppModel::whereRaw
+         */
+        public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see AppModel::whereBetween
+         */
+        public function whereBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see AppModel::whereNotBetween
+         */
+        public function whereNotBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see AppModel::whereIn
+         */
+        public function whereIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see AppModel::whereNotIn
+         */
+        public function whereNotIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see AppModel::whereNull
+         */
+        public function whereNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see AppModel::whereNotNull
+         */
+        public function whereNotNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see AppModel::whereDate
+         */
+        public function whereDate(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see AppModel::whereMonth
+         */
+        public function whereMonth(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see AppModel::whereDay
+         */
+        public function whereDay(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see AppModel::whereYear
+         */
+        public function whereYear(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see AppModel::whereTime
+         */
+        public function whereTime(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrColumn2
+         * @param mixed|null $column2
+         * @return $this
+         * @see AppModel::whereColumn
+         */
+        public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+        {
+        }
+
+        /**
+         * 搜索字段是否包含某个值
+         *
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see AppModel::whereContains
+         */
+        public function whereContains(string $column, $value, string $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see AppModel::whereNotContains
+         */
+        public function whereNotContains(string $column, $value, string $condition = 'OR'): self
+        {
+        }
+
+        /**
+         * Search whether a column has a value other than the default value
+         *
+         * @param string $column
+         * @param bool $has
+         * @return $this
+         * @see AppModel::whereHas
+         */
+        public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * Search whether a column dont have a value other than the default value
+         *
+         * @param string $column
+         * @return $this
+         * @see AppModel::whereNotHas
+         */
+        public function whereNotHas(string $column): self
+        {
+        }
+
+        /**
+         * Specifies a grouping over the results of the query.
+         * Replaces any previously specified groupings, if any.
+         *
+         * @param mixed $column the grouping column
+         * @return $this
+         * @see AppModel::groupBy
+         */
+        public function groupBy($column): self
+        {
+        }
+
+        /**
+         * Specifies a restriction over the groups of the query.
+         * Replaces any previous having restrictions, if any.
+         *
+         * @param mixed $column
+         * @param mixed $operator
+         * @param mixed|null $value
+         * @param mixed $condition
+         * @return $this
+         * @see AppModel::having
+         */
+        public function having($column, $operator, $value = null, $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * Specifies an ordering for the query results.
+         * Replaces any previously specified orderings, if any.
+         *
+         * @param string $column the ordering expression
+         * @param string $order the ordering direction
+         * @return $this
+         * @see AppModel::orderBy
+         */
+        public function orderBy(string $column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * Adds a DESC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see AppModel::desc
+         */
+        public function desc(string $field): self
+        {
+        }
+
+        /**
+         * Add an ASC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see AppModel::asc
+         */
+        public function asc(string $field): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see AppModel::forUpdate
+         */
+        public function forUpdate(): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see AppModel::forShare
+         */
+        public function forShare(): self
+        {
+        }
+
+        /**
+         * @param string|bool $lock
+         * @return $this
+         * @see AppModel::lock
+         */
+        public function lock($lock): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see AppModel::when
+         */
+        public function when($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see AppModel::unless
+         */
+        public function unless($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see AppModel::setDbKeyConverter
+         */
+        public function setDbKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see AppModel::setPhpKeyConverter
+         */
+        public function setPhpKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * Add a (inner) join base on the relation to the query
+         *
+         * @param string|array $name
+         * @param string $type
+         * @return $this
+         * @see AppModel::joinRelation
+         */
+        public function joinRelation($name, string $type = 'INNER'): self
+        {
+        }
+
+        /**
+         * Add a inner join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see AppModel::innerJoinRelation
+         */
+        public function innerJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a left join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see AppModel::leftJoinRelation
+         */
+        public function leftJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a right join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see AppModel::rightJoinRelation
+         */
+        public function rightJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
+         *
+         * This method only checks whether the specified method has the "Relation" attribute,
+         * and does not check the actual logic.
+         * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
+         *
+         * @param string $method
+         * @return bool
+         * @see AppModel::isRelation
+         */
+        public function isRelation(string $method): bool
+        {
+        }
+    }
+
+    class Cls
+    {
+        /**
+         * Return the traits used by the given class, including those used by all parent classes and other traits
+         *
+         * @param string|object $class
+         * @param bool $autoload
+         * @return array
+         * @see https://www.php.net/manual/en/function.class-uses.php#112671
+         * @see Cls::usesDeep
+         */
+        public function usesDeep($class, bool $autoload = true): array
+        {
+        }
+    }
+
+    class Config
+    {
+        /**
+         * @see Config::save
+         * @param array|string $name
+         * @param mixed $value
+         * @return void
+         */
+        public function save($name, $value = null)
+        {
+        }
+
+        /**
+         * @see Config::write
+         */
+        public function write()
+        {
+        }
+
+        /**
+         * @see Config::load
+         */
+        public function load()
+        {
+        }
+    }
+
+    class IsModelExists
+    {
+        /**
+         * Check the input value, return a Ret object
+         *
+         * @param mixed $input
+         * @param string $name
+         * @return Ret
+         * @see BaseValidator::check
+         */
+        public function check($input, string $name = '%name%'): \Wei\Ret
+        {
+        }
+    }
+
+    class Jwt
+    {
+        /**
+         * @return string
+         * @see Jwt::getPrivateKey
+         */
+        public function getPrivateKey()
+        {
+        }
+
+        /**
+         * @param string $privateKey
+         * @return $this
+         * @see Jwt::setPrivateKey
+         */
+        public function setPrivateKey(string $privateKey)
+        {
+        }
+
+        /**
+         * @return string
+         * @see Jwt::getPublicKey
+         */
+        public function getPublicKey()
+        {
+        }
+
+        /**
+         * @param string $publicKey
+         * @return $this
+         * @see Jwt::setPublicKey
+         */
+        public function setPublicKey(string $publicKey)
+        {
+        }
+
+        /**
+         * @param array $claims
+         * @param int $expire
+         * @return Token
+         * @throws \Exception
+         * @see Jwt::generate
+         */
+        public function generate(array $claims, int $expire = 2592000): \Lcobucci\JWT\Token
+        {
+        }
+
+        /**
+         * @param string $token
+         * @return Ret
+         * @see Jwt::verify
+         */
+        public function verify(string $token): Ret
+        {
+        }
+
+        /**
+         * 生成默认配置所需的密钥
+         *
+         * @see Jwt::generateDefaultKeys
+         * @experimental
+         */
+        public function generateDefaultKeys(): Ret
+        {
+        }
+    }
+
+    class ObjectReq
+    {
+        /**
+         * Check if the specified header is set
+         *
+         * @param string $name
+         * @return bool
+         * @see Req::hasHeader
+         */
+        public function hasHeader(string $name): bool
+        {
+        }
+
+        /**
+         * Return the specified header value
+         *
+         * @param string $name
+         * @return string|null
+         * @see Req::getHeader
+         */
+        public function getHeader(string $name): ?string
+        {
+        }
+
+        /**
+         * Check if current request is a preflight request
+         *
+         * @return bool
+         * @link https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
+         * @see Req::isPreflight
+         */
+        public function isPreflight(): bool
+        {
+        }
+    }
+
+    class PageRouter
+    {
+    }
+
+    class Plugin
+    {
+        /**
+         * Load service configs
+         *
+         * @param bool $refresh
+         * @return $this
+         * @see Plugin::loadConfig
+         */
+        public function loadConfig($refresh = false)
+        {
+        }
+
+        /**
+         * Check if a plugin exists
+         *
+         * @param string $id
+         * @return bool
+         * @see Plugin::has
+         */
+        public function has($id)
+        {
+        }
+
+        /**
+         * Check if a plugin is installed
+         *
+         * @param string $id
+         * @return bool
+         * @see Plugin::isInstalled
+         */
+        public function isInstalled($id)
+        {
+        }
+    }
+
+    class QueryBuilder
+    {
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null $seconds
+         * @return $this
+         * @see QueryBuilder::setCacheTime
+         */
+        public function setCacheTime(?int $seconds): self
+        {
+        }
+
+        /**
+         * Return the record table name
+         *
+         * @return string|null
+         * @see QueryBuilder::getTable
+         */
+        public function getTable(): ?string
+        {
+        }
+
+        /**
+         * Returns the name of columns of current table
+         *
+         * @return array
+         * @see QueryBuilder::getColumns
+         */
+        public function getColumns(): array
+        {
+        }
+
+        /**
+         * Check if column name exists
+         *
+         * @param string|int|null $name
+         * @return bool
+         * @see QueryBuilder::hasColumn
+         */
+        public function hasColumn($name): bool
+        {
+        }
+
+        /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array|null
+         * @see QueryBuilder::fetch
+         */
+        public function fetch($column = null, $operator = null, $value = null): ?array
+        {
+        }
+
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array
+         * @see QueryBuilder::fetchAll
+         */
+        public function fetchAll($column = null, $operator = null, $value = null): array
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return array|null
+         * @see QueryBuilder::first
+         */
+        public function first(): ?array
+        {
+        }
+
+        /**
+         * @return array
+         * @see QueryBuilder::all
+         */
+        public function all(): array
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @see QueryBuilder::pluck
+         */
+        public function pluck(string $column, string $index = null): array
+        {
+        }
+
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @see QueryBuilder::chunk
+         */
+        public function chunk(int $count, callable $callback): bool
+        {
+        }
+
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @see QueryBuilder::cnt
+         */
+        public function cnt($column = '*'): int
+        {
+        }
+
+        /**
+         * Executes a MAX query to receive the max value of column
+         *
+         * @param string $column
+         * @return string|null
+         * @see QueryBuilder::max
+         */
+        public function max(string $column): ?string
+        {
+        }
+
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see QueryBuilder::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return int
+         * @see QueryBuilder::delete
+         */
+        public function delete($column = null, $operator = null, $value = null): int
+        {
+        }
+
+        /**
+         * Sets the position of the first result to retrieve (the "offset")
+         *
+         * @param int|float|string $offset The first result to return
+         * @return $this
+         * @see QueryBuilder::offset
+         */
+        public function offset($offset): self
+        {
+        }
+
+        /**
+         * Sets the maximum number of results to retrieve (the "limit")
+         *
+         * @param int|float|string $limit The maximum number of results to retrieve
+         * @return $this
+         * @see QueryBuilder::limit
+         */
+        public function limit($limit): self
+        {
+        }
+
+        /**
+         * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+         *
+         * @param int $page The page number
+         * @return $this
+         * @see QueryBuilder::page
+         */
+        public function page($page): self
+        {
+        }
+
+        /**
+         * Specifies an item that is to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns the selection expressions
+         * @return $this
+         * @see QueryBuilder::select
+         */
+        public function select($columns = ['*']): self
+        {
+        }
+
+        /**
+         * @param array|string $columns
+         * @return $this
+         * @see QueryBuilder::selectDistinct
+         */
+        public function selectDistinct($columns): self
+        {
+        }
+
+        /**
+         * @param string $expression
+         * @return $this
+         * @see QueryBuilder::selectRaw
+         */
+        public function selectRaw($expression): self
+        {
+        }
+
+        /**
+         * Specifies columns that are not to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns
+         * @return $this
+         * @see QueryBuilder::selectExcept
+         */
+        public function selectExcept($columns): self
+        {
+        }
+
+        /**
+         * Specifies an item of the main table that is to be returned in the query result.
+         * Default to all columns of the main table
+         *
+         * @param string $column
+         * @return $this
+         * @see QueryBuilder::selectMain
+         */
+        public function selectMain(string $column = '*'): self
+        {
+        }
+
+        /**
+         * Sets table for FROM query
+         *
+         * @param string $table
+         * @param string|null $alias
+         * @return $this
+         * @see QueryBuilder::from
+         */
+        public function from(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * @param string $table
+         * @param mixed|null $alias
+         * @return $this
+         * @see QueryBuilder::table
+         */
+        public function table(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
+         * @return $this
+         * @see QueryBuilder::join
+         */
+        public function join(
+            string $table,
+            string $first = null,
+            string $operator = '=',
+            string $second = null,
+            string $type = 'INNER'
+        ): self {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see QueryBuilder::innerJoin
+         */
+        public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a left join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see QueryBuilder::leftJoin
+         */
+        public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a right join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see QueryBuilder::rightJoin
+         */
+        public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Specifies one or more restrictions to the query result.
+         * Replaces any previously specified restrictions, if any.
+         *
+         * ```php
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * ```
+         *
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see QueryBuilder::where
+         */
+        public function where($column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @param mixed $params
+         * @return $this
+         * @see QueryBuilder::whereRaw
+         */
+        public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see QueryBuilder::whereBetween
+         */
+        public function whereBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see QueryBuilder::whereNotBetween
+         */
+        public function whereNotBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see QueryBuilder::whereIn
+         */
+        public function whereIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see QueryBuilder::whereNotIn
+         */
+        public function whereNotIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see QueryBuilder::whereNull
+         */
+        public function whereNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see QueryBuilder::whereNotNull
+         */
+        public function whereNotNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see QueryBuilder::whereDate
+         */
+        public function whereDate(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see QueryBuilder::whereMonth
+         */
+        public function whereMonth(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see QueryBuilder::whereDay
+         */
+        public function whereDay(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see QueryBuilder::whereYear
+         */
+        public function whereYear(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see QueryBuilder::whereTime
+         */
+        public function whereTime(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrColumn2
+         * @param mixed|null $column2
+         * @return $this
+         * @see QueryBuilder::whereColumn
+         */
+        public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+        {
+        }
+
+        /**
+         * 搜索字段是否包含某个值
+         *
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see QueryBuilder::whereContains
+         */
+        public function whereContains(string $column, $value, string $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see QueryBuilder::whereNotContains
+         */
+        public function whereNotContains(string $column, $value, string $condition = 'OR'): self
+        {
+        }
+
+        /**
+         * Search whether a column has a value other than the default value
+         *
+         * @param string $column
+         * @param bool $has
+         * @return $this
+         * @see QueryBuilder::whereHas
+         */
+        public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * Search whether a column dont have a value other than the default value
+         *
+         * @param string $column
+         * @return $this
+         * @see QueryBuilder::whereNotHas
+         */
+        public function whereNotHas(string $column): self
+        {
+        }
+
+        /**
+         * Specifies a grouping over the results of the query.
+         * Replaces any previously specified groupings, if any.
+         *
+         * @param mixed $column the grouping column
+         * @return $this
+         * @see QueryBuilder::groupBy
+         */
+        public function groupBy($column): self
+        {
+        }
+
+        /**
+         * Specifies a restriction over the groups of the query.
+         * Replaces any previous having restrictions, if any.
+         *
+         * @param mixed $column
+         * @param mixed $operator
+         * @param mixed|null $value
+         * @param mixed $condition
+         * @return $this
+         * @see QueryBuilder::having
+         */
+        public function having($column, $operator, $value = null, $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * Specifies an ordering for the query results.
+         * Replaces any previously specified orderings, if any.
+         *
+         * @param string $column the ordering expression
+         * @param string $order the ordering direction
+         * @return $this
+         * @see QueryBuilder::orderBy
+         */
+        public function orderBy(string $column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * Adds a DESC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see QueryBuilder::desc
+         */
+        public function desc(string $field): self
+        {
+        }
+
+        /**
+         * Add an ASC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see QueryBuilder::asc
+         */
+        public function asc(string $field): self
+        {
+        }
+
+        /**
+         * Specifies a field to be the key of the fetched array
+         *
+         * @param string $column
+         * @return $this
+         * @see QueryBuilder::indexBy
+         */
+        public function indexBy(string $column): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see QueryBuilder::forUpdate
+         */
+        public function forUpdate(): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see QueryBuilder::forShare
+         */
+        public function forShare(): self
+        {
+        }
+
+        /**
+         * @param string|bool $lock
+         * @return $this
+         * @see QueryBuilder::lock
+         */
+        public function lock($lock): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see QueryBuilder::when
+         */
+        public function when($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see QueryBuilder::unless
+         */
+        public function unless($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see QueryBuilder::setDbKeyConverter
+         */
+        public function setDbKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see QueryBuilder::setPhpKeyConverter
+         */
+        public function setPhpKeyConverter(callable $converter = null): self
+        {
+        }
+    }
+
+    class Ret
+    {
+        /**
+         * {@inheritDoc}
+         * @throws \Exception
+         * @see Ret::err
+         */
+        public function err($message, $code = null, $level = null)
+        {
+        }
+
+        /**
+         * Return operation successful result
+         *
+         * ```php
+         * // Specified message
+         * $this->suc('Payment successful');
+         *
+         * // Format
+         * $this->suc(['me%sage', 'ss']);
+         *
+         * // More data
+         * $this->suc(['message' => 'Read successful', 'page' => 1, 'rows' => 123]);
+         * ```
+         *
+         * @param array|string|null $message
+         * @return $this
+         * @see Ret::suc
+         */
+        public function suc($message = null)
+        {
+        }
+
+        /**
+         * Return operation failed result, and logs with a warning level
+         *
+         * @param string $message
+         * @param int $code
+         * @return $this
+         * @see Ret::warning
+         */
+        public function warning($message, $code = null)
+        {
+        }
+
+        /**
+         * Return operation failed result, and logs with an alert level
+         *
+         * @param string $message
+         * @param int $code
+         * @return $this
+         * @see Ret::alert
+         */
+        public function alert($message, $code = null)
+        {
+        }
+    }
+
+    class Seeder
+    {
+        /**
+         * @param OutputInterface $output
+         * @return $this
+         * @see Seeder::setOutput
+         */
+        public function setOutput(\Symfony\Component\Console\Output\OutputInterface $output): self
+        {
+        }
+
+        /**
+         * @see Seeder::run
+         */
+        public function run(array $options = [])
+        {
+        }
+
+        /**
+         * @param array $options
+         * @throws \Exception
+         * @see Seeder::create
+         */
+        public function create(array $options)
+        {
+        }
+    }
+
+    class Session
+    {
+    }
+
+    class Snowflake
+    {
+        /**
+         * @return int
+         * @see Snowflake::getWorkerId
+         */
+        public function getWorkerId(): int
+        {
+        }
+
+        /**
+         * Set the worker id
+         *
+         * @param int $workerId
+         * @return $this
+         * @see Snowflake::setWorkerId
+         */
+        public function setWorkerId(int $workerId): self
+        {
+        }
+
+        /**
+         * Return the start timestamp
+         *
+         * @return int
+         * @see Snowflake::getStartTimestamp
+         */
+        public function getStartTimestamp(): int
+        {
+        }
+
+        /**
+         * Set the start timestamp
+         *
+         * @param int $startTimestamp
+         * @return $this
+         * @see Snowflake::setStartTimestamp
+         */
+        public function setStartTimestamp(int $startTimestamp): self
+        {
+        }
+
+        /**
+         * Generate an id
+         *
+         * @return string
+         * @see Snowflake::next
+         */
+        public function next(): string
+        {
+        }
+
+        /**
+         * Parse the given id, return timestamp, worker ID and sequence
+         *
+         * @param string|int $id
+         * @return array{timestamp: int, workerId: int, sequence: int}
+         * @see Snowflake::parse
+         */
+        public function parse($id): array
+        {
+        }
+    }
+
+    class Str
+    {
+        /**
+         * Returns a word in plural form
+         *
+         * @param string $word
+         * @return string
+         * @see Str::pluralize
+         */
+        public function pluralize(string $word): string
+        {
+        }
+
+        /**
+         * Returns a word in singular form
+         *
+         * @param string $word
+         * @return string
+         * @see Str::singularize
+         */
+        public function singularize(string $word): string
+        {
+        }
+
+        /**
+         * Convert a input to snake case
+         *
+         * @param string $input
+         * @param string $delimiter
+         * @return string
+         * @see Str::snake
+         */
+        public function snake(string $input, string $delimiter = '_'): string
+        {
+        }
+
+        /**
+         * Convert a input to camel case
+         *
+         * @param string $input
+         * @return string
+         * @see Str::camel
+         */
+        public function camel(string $input): string
+        {
+        }
+
+        /**
+         * Convert a input to dash case
+         *
+         * @param string $input
+         * @return string
+         * @see Str::dash
+         */
+        public function dash(string $input): string
+        {
+        }
+    }
+
+    class Tester
+    {
+        /**
+         * @param array $query
+         * @return $this
+         * @see Tester::query
+         */
+        public function query(array $query)
+        {
+        }
+
+        /**
+         * @param string $page
+         * @return mixed
+         * @see Tester::get
+         */
+        public function get(string $page)
+        {
+        }
+
+        /**
+         * Execute a POST request
+         *
+         * @param string $page
+         * @return mixed
+         * @see Tester::post
+         */
+        public function post(string $page)
+        {
+        }
+
+        /**
+         * @param array $request
+         * @return $this
+         * @see Tester::request
+         */
+        public function request(array $request)
+        {
+        }
+
+        /**
+         * @param string $page
+         * @param string $method
+         * @return mixed
+         * @see Tester::call
+         */
+        public function call(string $page, string $method)
+        {
+        }
+
+        /**
+         * Set the request service
+         *
+         * @param Req $req
+         * @return $this
+         * @see Tester::setReq
+         */
+        public function setReq(\Wei\Req $req)
+        {
+        }
+
+        /**
+         * @param string $page
+         * @return mixed
+         * @see Tester::patch
+         */
+        public function patch(string $page)
+        {
+        }
+
+        /**
+         * @param string $page
+         * @return mixed
+         * @see Tester::put
+         */
+        public function put(string $page)
+        {
+        }
+
+        /**
+         * @param string $page
+         * @return mixed
+         * @see Tester::delete
+         */
+        public function delete(string $page)
+        {
+        }
+
+        /**
+         * @param string $page
+         * @return mixed
+         * @see Tester::getAdminApi
+         */
+        public function getAdminApi(string $page)
+        {
+        }
+
+        /**
+         * @param string $page
+         * @param array $data
+         * @return mixed
+         * @see Tester::postAdminApi
+         */
+        public function postAdminApi(string $page, $data = [])
+        {
+        }
+
+        /**
+         * @param string $page
+         * @param array $data
+         * @return mixed
+         * @see Tester::patchAdminApi
+         */
+        public function patchAdminApi(string $page, $data = [])
+        {
+        }
+
+        /**
+         * @param string $page
+         * @param array $data
+         * @return mixed
+         * @see Tester::putAdminApi
+         */
+        public function putAdminApi(string $page, $data = [])
+        {
+        }
+
+        /**
+         * @param string $page
+         * @return mixed
+         * @see Tester::deleteAdminApi
+         */
+        public function deleteAdminApi(string $page)
+        {
+        }
+    }
+
+    class User
+    {
+        /**
+         * @return string|null
+         * @see User::id
+         */
+        public function id()
+        {
+        }
+
+        /**
+         * @return $this
+         * @see User::cur
+         */
+        public function cur()
+        {
+        }
+
+        /**
+         * 判断用户是否登录
+         *
+         * @return bool
+         * @see User::isLogin
+         */
+        public function isLogin()
+        {
+        }
+
+        /**
+         * 检查用户是否登录
+         *
+         * @return Ret
+         * @see User::checkLogin
+         */
+        public function checkLogin()
+        {
+        }
+
+        /**
+         * 根据用户账号密码,登录用户
+         *
+         * @param mixed $data
+         * @return Ret
+         * @see User::login
+         */
+        public function login($data)
+        {
+        }
+
+        /**
+         * 根据用户ID直接登录用户
+         *
+         * @param string|int $id
+         * @return Ret
+         * @see User::loginById
+         */
+        public function loginById($id)
+        {
+        }
+
+        /**
+         * 根据条件查找或创建用户,并登录
+         *
+         * @param mixed $conditions
+         * @param array $data
+         * @return $this
+         * @see User::loginBy
+         */
+        public function loginBy($conditions, $data = [])
+        {
+        }
+
+        /**
+         * 根据用户对象登录用户
+         *
+         * @param UserModel $user
+         * @return Ret
+         * @see User::loginByModel
+         */
+        public function loginByModel(UserModel $user)
+        {
+        }
+
+        /**
+         * 销毁用户会话,退出登录
+         *
+         * @return Ret
+         * @see User::logout
+         */
+        public function logout()
+        {
+        }
+
+        /**
+         * 当用户信息更改后,可以主动调用该方法,刷新会话中的数据
+         *
+         * @param UserModel $user
+         * @return $this
+         * @see User::refresh
+         */
+        public function refresh(UserModel $user)
+        {
+        }
+
+        /**
+         * 通过外部检查用户是否有某个权限
+         *
+         * @param string $permissionId
+         * @return bool
+         * @see UserModel::can
+         */
+        public function can($permissionId)
+        {
+        }
+
+        /**
+         * @param array|\ArrayAccess $req
+         * @return \Wei\Ret
+         * @see UserModel::updatePassword
+         */
+        public function updatePassword($req)
+        {
+        }
+
+        /**
+         * Set each attribute value, without checking whether the column is fillable, and save the model
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see UserModel::saveAttributes
+         */
+        public function saveAttributes(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see UserModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @see UserModel::getTable
+         */
+        public function getTable(): string
+        {
+        }
+
+        /**
+         * Import a PHP array in this record
+         *
+         * @param iterable $array
+         * @return $this
+         * @see UserModel::fromArray
+         */
+        public function fromArray(iterable $array): self
+        {
+        }
+
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param int|string $id
+         * @return $this
+         * @see UserModel::destroy
+         */
+        public function destroy($id = null): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+         *
+         * @param string|int $id
+         * @return $this
+         * @throws \Exception when record not found
+         * @see UserModel::destroyOrFail
+         */
+        public function destroyOrFail($id): self
+        {
+        }
+
+        /**
+         * Set the record field value
+         *
+         * @param string|int|null $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this|false
+         * @see UserModel::set
+         */
+        public function set($name, $value, bool $throwException = true)
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or false
+         *
+         * @param int|string|array|null $id
+         * @return $this|null
+         * @see UserModel::find
+         */
+        public function find($id): ?self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found
+         *
+         * @param int|string $id
+         * @return $this
+         * @throws \Exception
+         * @see UserModel::findOrFail
+         */
+        public function findOrFail($id): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or init with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array|object $attributes
+         * @return $this
+         * @see UserModel::findOrInit
+         */
+        public function findOrInit($id = null, $attributes = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or save with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array $attributes
+         * @return $this
+         * @see UserModel::findOrCreate
+         */
+        public function findOrCreate($id, $attributes = []): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see UserModel::findByOrCreate
+         */
+        public function findByOrCreate($attributes, $data = []): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record collection object or false
+         *
+         * @param array $ids
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see UserModel::findAll
+         */
+        public function findAll(array $ids): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|null
+         * @see UserModel::findBy
+         */
+        public function findBy($column, $operator = null, $value = null): ?self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see UserModel::findAllBy
+         */
+        public function findAllBy($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see UserModel::findOrInitBy
+         */
+        public function findOrInitBy(array $attributes = [], $data = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key value and throws 404 exception if record not found
+         *
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @throws \Exception
+         * @see UserModel::findByOrFail
+         */
+        public function findByOrFail($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param Req|null $req
+         * @return $this
+         * @throws \Exception
+         * @see UserModel::findFromReq
+         */
+        public function findFromReq(\Wei\Req $req = null): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return $this|null
+         * @see UserModel::first
+         */
+        public function first(): ?self
+        {
+        }
+
+        /**
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see UserModel::all
+         */
+        public function all(): self
+        {
+        }
+
+        /**
+         * Coll: Specifies a field to be the key of the fetched array
+         *
+         * @param string $column
+         * @return $this
+         * @see UserModel::indexBy
+         */
+        public function indexBy(string $column): self
+        {
+        }
+
+        /**
+         * @param array|string|true $scopes
+         * @return $this
+         * @see UserModel::unscoped
+         */
+        public function unscoped($scopes = []): self
+        {
+        }
+
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null $seconds
+         * @return $this
+         * @see UserModel::setCacheTime
+         */
+        public function setCacheTime(?int $seconds): self
+        {
+        }
+
+        /**
+         * Returns the name of columns of current table
+         *
+         * @return array
+         * @see UserModel::getColumns
+         */
+        public function getColumns(): array
+        {
+        }
+
+        /**
+         * Check if column name exists
+         *
+         * @param string|int|null $name
+         * @return bool
+         * @see UserModel::hasColumn
+         */
+        public function hasColumn($name): bool
+        {
+        }
+
+        /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array|null
+         * @see UserModel::fetch
+         */
+        public function fetch($column = null, $operator = null, $value = null): ?array
+        {
+        }
+
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array
+         * @see UserModel::fetchAll
+         */
+        public function fetchAll($column = null, $operator = null, $value = null): array
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @see UserModel::pluck
+         */
+        public function pluck(string $column, string $index = null): array
+        {
+        }
+
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @see UserModel::chunk
+         */
+        public function chunk(int $count, callable $callback): bool
+        {
+        }
+
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @see UserModel::cnt
+         */
+        public function cnt($column = '*'): int
+        {
+        }
+
+        /**
+         * Executes a MAX query to receive the max value of column
+         *
+         * @param string $column
+         * @return string|null
+         * @see UserModel::max
+         */
+        public function max(string $column): ?string
+        {
+        }
+
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see UserModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return int
+         * @see UserModel::delete
+         */
+        public function delete($column = null, $operator = null, $value = null): int
+        {
+        }
+
+        /**
+         * Sets the position of the first result to retrieve (the "offset")
+         *
+         * @param int|float|string $offset The first result to return
+         * @return $this
+         * @see UserModel::offset
+         */
+        public function offset($offset): self
+        {
+        }
+
+        /**
+         * Sets the maximum number of results to retrieve (the "limit")
+         *
+         * @param int|float|string $limit The maximum number of results to retrieve
+         * @return $this
+         * @see UserModel::limit
+         */
+        public function limit($limit): self
+        {
+        }
+
+        /**
+         * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+         *
+         * @param int $page The page number
+         * @return $this
+         * @see UserModel::page
+         */
+        public function page($page): self
+        {
+        }
+
+        /**
+         * Specifies an item that is to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns the selection expressions
+         * @return $this
+         * @see UserModel::select
+         */
+        public function select($columns = ['*']): self
+        {
+        }
+
+        /**
+         * @param array|string $columns
+         * @return $this
+         * @see UserModel::selectDistinct
+         */
+        public function selectDistinct($columns): self
+        {
+        }
+
+        /**
+         * @param string $expression
+         * @return $this
+         * @see UserModel::selectRaw
+         */
+        public function selectRaw($expression): self
+        {
+        }
+
+        /**
+         * Specifies columns that are not to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns
+         * @return $this
+         * @see UserModel::selectExcept
+         */
+        public function selectExcept($columns): self
+        {
+        }
+
+        /**
+         * Specifies an item of the main table that is to be returned in the query result.
+         * Default to all columns of the main table
+         *
+         * @param string $column
+         * @return $this
+         * @see UserModel::selectMain
+         */
+        public function selectMain(string $column = '*'): self
+        {
+        }
+
+        /**
+         * Sets table for FROM query
+         *
+         * @param string $table
+         * @param string|null $alias
+         * @return $this
+         * @see UserModel::from
+         */
+        public function from(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * @param string $table
+         * @param mixed|null $alias
+         * @return $this
+         * @see UserModel::table
+         */
+        public function table(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
+         * @return $this
+         * @see UserModel::join
+         */
+        public function join(
+            string $table,
+            string $first = null,
+            string $operator = '=',
+            string $second = null,
+            string $type = 'INNER'
+        ): self {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see UserModel::innerJoin
+         */
+        public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a left join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see UserModel::leftJoin
+         */
+        public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a right join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see UserModel::rightJoin
+         */
+        public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Specifies one or more restrictions to the query result.
+         * Replaces any previously specified restrictions, if any.
+         *
+         * ```php
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * ```
+         *
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::where
+         */
+        public function where($column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @param mixed $params
+         * @return $this
+         * @see UserModel::whereRaw
+         */
+        public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereBetween
+         */
+        public function whereBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereNotBetween
+         */
+        public function whereNotBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereIn
+         */
+        public function whereIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereNotIn
+         */
+        public function whereNotIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see UserModel::whereNull
+         */
+        public function whereNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see UserModel::whereNotNull
+         */
+        public function whereNotNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereDate
+         */
+        public function whereDate(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereMonth
+         */
+        public function whereMonth(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereDay
+         */
+        public function whereDay(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereYear
+         */
+        public function whereYear(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereTime
+         */
+        public function whereTime(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrColumn2
+         * @param mixed|null $column2
+         * @return $this
+         * @see UserModel::whereColumn
+         */
+        public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+        {
+        }
+
+        /**
+         * 搜索字段是否包含某个值
+         *
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see UserModel::whereContains
+         */
+        public function whereContains(string $column, $value, string $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see UserModel::whereNotContains
+         */
+        public function whereNotContains(string $column, $value, string $condition = 'OR'): self
+        {
+        }
+
+        /**
+         * Search whether a column has a value other than the default value
+         *
+         * @param string $column
+         * @param bool $has
+         * @return $this
+         * @see UserModel::whereHas
+         */
+        public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * Search whether a column dont have a value other than the default value
+         *
+         * @param string $column
+         * @return $this
+         * @see UserModel::whereNotHas
+         */
+        public function whereNotHas(string $column): self
+        {
+        }
+
+        /**
+         * Specifies a grouping over the results of the query.
+         * Replaces any previously specified groupings, if any.
+         *
+         * @param mixed $column the grouping column
+         * @return $this
+         * @see UserModel::groupBy
+         */
+        public function groupBy($column): self
+        {
+        }
+
+        /**
+         * Specifies a restriction over the groups of the query.
+         * Replaces any previous having restrictions, if any.
+         *
+         * @param mixed $column
+         * @param mixed $operator
+         * @param mixed|null $value
+         * @param mixed $condition
+         * @return $this
+         * @see UserModel::having
+         */
+        public function having($column, $operator, $value = null, $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * Specifies an ordering for the query results.
+         * Replaces any previously specified orderings, if any.
+         *
+         * @param string $column the ordering expression
+         * @param string $order the ordering direction
+         * @return $this
+         * @see UserModel::orderBy
+         */
+        public function orderBy(string $column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * Adds a DESC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see UserModel::desc
+         */
+        public function desc(string $field): self
+        {
+        }
+
+        /**
+         * Add an ASC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see UserModel::asc
+         */
+        public function asc(string $field): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see UserModel::forUpdate
+         */
+        public function forUpdate(): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see UserModel::forShare
+         */
+        public function forShare(): self
+        {
+        }
+
+        /**
+         * @param string|bool $lock
+         * @return $this
+         * @see UserModel::lock
+         */
+        public function lock($lock): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see UserModel::when
+         */
+        public function when($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see UserModel::unless
+         */
+        public function unless($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see UserModel::setDbKeyConverter
+         */
+        public function setDbKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see UserModel::setPhpKeyConverter
+         */
+        public function setPhpKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * Add a (inner) join base on the relation to the query
+         *
+         * @param string|array $name
+         * @param string $type
+         * @return $this
+         * @see UserModel::joinRelation
+         */
+        public function joinRelation($name, string $type = 'INNER'): self
+        {
+        }
+
+        /**
+         * Add a inner join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see UserModel::innerJoinRelation
+         */
+        public function innerJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a left join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see UserModel::leftJoinRelation
+         */
+        public function leftJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a right join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see UserModel::rightJoinRelation
+         */
+        public function rightJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
+         *
+         * This method only checks whether the specified method has the "Relation" attribute,
+         * and does not check the actual logic.
+         * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
+         *
+         * @param string $method
+         * @return bool
+         * @see UserModel::isRelation
+         */
+        public function isRelation(string $method): bool
+        {
+        }
+    }
+
+    class UserModel
+    {
+        /**
+         * 通过外部检查用户是否有某个权限
+         *
+         * @param string $permissionId
+         * @return bool
+         * @see UserModel::can
+         */
+        public function can($permissionId)
+        {
+        }
+
+        /**
+         * @param array|\ArrayAccess $req
+         * @return \Wei\Ret
+         * @see UserModel::updatePassword
+         */
+        public function updatePassword($req)
+        {
+        }
+
+        /**
+         * Set each attribute value, without checking whether the column is fillable, and save the model
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see UserModel::saveAttributes
+         */
+        public function saveAttributes(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Returns the record data as array
+         *
+         * @param array|callable $returnFields A indexed array specified the fields to return
+         * @param callable|null $prepend
+         * @return array
+         * @see UserModel::toArray
+         */
+        public function toArray($returnFields = [], callable $prepend = null): array
+        {
+        }
+
+        /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see UserModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @see UserModel::getTable
+         */
+        public function getTable(): string
+        {
+        }
+
+        /**
+         * Import a PHP array in this record
+         *
+         * @param iterable $array
+         * @return $this
+         * @see UserModel::fromArray
+         */
+        public function fromArray(iterable $array): self
+        {
+        }
+
+        /**
+         * Save the record or data to database
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see UserModel::save
+         */
+        public function save(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param int|string $id
+         * @return $this
+         * @see UserModel::destroy
+         */
+        public function destroy($id = null): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+         *
+         * @param string|int $id
+         * @return $this
+         * @throws \Exception when record not found
+         * @see UserModel::destroyOrFail
+         */
+        public function destroyOrFail($id): self
+        {
+        }
+
+        /**
+         * Set the record field value
+         *
+         * @param string|int|null $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this|false
+         * @see UserModel::set
+         */
+        public function set($name, $value, bool $throwException = true)
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or false
+         *
+         * @param int|string|array|null $id
+         * @return $this|null
+         * @see UserModel::find
+         */
+        public function find($id): ?self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found
+         *
+         * @param int|string $id
+         * @return $this
+         * @throws \Exception
+         * @see UserModel::findOrFail
+         */
+        public function findOrFail($id): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or init with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array|object $attributes
+         * @return $this
+         * @see UserModel::findOrInit
+         */
+        public function findOrInit($id = null, $attributes = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or save with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array $attributes
+         * @return $this
+         * @see UserModel::findOrCreate
+         */
+        public function findOrCreate($id, $attributes = []): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see UserModel::findByOrCreate
+         */
+        public function findByOrCreate($attributes, $data = []): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record collection object or false
+         *
+         * @param array $ids
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see UserModel::findAll
+         */
+        public function findAll(array $ids): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|null
+         * @see UserModel::findBy
+         */
+        public function findBy($column, $operator = null, $value = null): ?self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see UserModel::findAllBy
+         */
+        public function findAllBy($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see UserModel::findOrInitBy
+         */
+        public function findOrInitBy(array $attributes = [], $data = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key value and throws 404 exception if record not found
+         *
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @throws \Exception
+         * @see UserModel::findByOrFail
+         */
+        public function findByOrFail($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param Req|null $req
+         * @return $this
+         * @throws \Exception
+         * @see UserModel::findFromReq
+         */
+        public function findFromReq(\Wei\Req $req = null): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return $this|null
+         * @see UserModel::first
+         */
+        public function first(): ?self
+        {
+        }
+
+        /**
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see UserModel::all
+         */
+        public function all(): self
+        {
+        }
+
+        /**
+         * Coll: Specifies a field to be the key of the fetched array
+         *
+         * @param string $column
+         * @return $this
+         * @see UserModel::indexBy
+         */
+        public function indexBy(string $column): self
+        {
+        }
+
+        /**
+         * @param array|string|true $scopes
+         * @return $this
+         * @see UserModel::unscoped
+         */
+        public function unscoped($scopes = []): self
+        {
+        }
+
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null $seconds
+         * @return $this
+         * @see UserModel::setCacheTime
+         */
+        public function setCacheTime(?int $seconds): self
+        {
+        }
+
+        /**
+         * Returns the name of columns of current table
+         *
+         * @return array
+         * @see UserModel::getColumns
+         */
+        public function getColumns(): array
+        {
+        }
+
+        /**
+         * Check if column name exists
+         *
+         * @param string|int|null $name
+         * @return bool
+         * @see UserModel::hasColumn
+         */
+        public function hasColumn($name): bool
+        {
+        }
+
+        /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array|null
+         * @see UserModel::fetch
+         */
+        public function fetch($column = null, $operator = null, $value = null): ?array
+        {
+        }
+
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array
+         * @see UserModel::fetchAll
+         */
+        public function fetchAll($column = null, $operator = null, $value = null): array
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @see UserModel::pluck
+         */
+        public function pluck(string $column, string $index = null): array
+        {
+        }
+
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @see UserModel::chunk
+         */
+        public function chunk(int $count, callable $callback): bool
+        {
+        }
+
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @see UserModel::cnt
+         */
+        public function cnt($column = '*'): int
+        {
+        }
+
+        /**
+         * Executes a MAX query to receive the max value of column
+         *
+         * @param string $column
+         * @return string|null
+         * @see UserModel::max
+         */
+        public function max(string $column): ?string
+        {
+        }
+
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see UserModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return int
+         * @see UserModel::delete
+         */
+        public function delete($column = null, $operator = null, $value = null): int
+        {
+        }
+
+        /**
+         * Sets the position of the first result to retrieve (the "offset")
+         *
+         * @param int|float|string $offset The first result to return
+         * @return $this
+         * @see UserModel::offset
+         */
+        public function offset($offset): self
+        {
+        }
+
+        /**
+         * Sets the maximum number of results to retrieve (the "limit")
+         *
+         * @param int|float|string $limit The maximum number of results to retrieve
+         * @return $this
+         * @see UserModel::limit
+         */
+        public function limit($limit): self
+        {
+        }
+
+        /**
+         * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+         *
+         * @param int $page The page number
+         * @return $this
+         * @see UserModel::page
+         */
+        public function page($page): self
+        {
+        }
+
+        /**
+         * Specifies an item that is to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns the selection expressions
+         * @return $this
+         * @see UserModel::select
+         */
+        public function select($columns = ['*']): self
+        {
+        }
+
+        /**
+         * @param array|string $columns
+         * @return $this
+         * @see UserModel::selectDistinct
+         */
+        public function selectDistinct($columns): self
+        {
+        }
+
+        /**
+         * @param string $expression
+         * @return $this
+         * @see UserModel::selectRaw
+         */
+        public function selectRaw($expression): self
+        {
+        }
+
+        /**
+         * Specifies columns that are not to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns
+         * @return $this
+         * @see UserModel::selectExcept
+         */
+        public function selectExcept($columns): self
+        {
+        }
+
+        /**
+         * Specifies an item of the main table that is to be returned in the query result.
+         * Default to all columns of the main table
+         *
+         * @param string $column
+         * @return $this
+         * @see UserModel::selectMain
+         */
+        public function selectMain(string $column = '*'): self
+        {
+        }
+
+        /**
+         * Sets table for FROM query
+         *
+         * @param string $table
+         * @param string|null $alias
+         * @return $this
+         * @see UserModel::from
+         */
+        public function from(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * @param string $table
+         * @param mixed|null $alias
+         * @return $this
+         * @see UserModel::table
+         */
+        public function table(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
+         * @return $this
+         * @see UserModel::join
+         */
+        public function join(
+            string $table,
+            string $first = null,
+            string $operator = '=',
+            string $second = null,
+            string $type = 'INNER'
+        ): self {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see UserModel::innerJoin
+         */
+        public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a left join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see UserModel::leftJoin
+         */
+        public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a right join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see UserModel::rightJoin
+         */
+        public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Specifies one or more restrictions to the query result.
+         * Replaces any previously specified restrictions, if any.
+         *
+         * ```php
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * ```
+         *
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::where
+         */
+        public function where($column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @param mixed $params
+         * @return $this
+         * @see UserModel::whereRaw
+         */
+        public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereBetween
+         */
+        public function whereBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereNotBetween
+         */
+        public function whereNotBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereIn
+         */
+        public function whereIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see UserModel::whereNotIn
+         */
+        public function whereNotIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see UserModel::whereNull
+         */
+        public function whereNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see UserModel::whereNotNull
+         */
+        public function whereNotNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereDate
+         */
+        public function whereDate(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereMonth
+         */
+        public function whereMonth(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereDay
+         */
+        public function whereDay(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereYear
+         */
+        public function whereYear(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereTime
+         */
+        public function whereTime(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrColumn2
+         * @param mixed|null $column2
+         * @return $this
+         * @see UserModel::whereColumn
+         */
+        public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+        {
+        }
+
+        /**
+         * 搜索字段是否包含某个值
+         *
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see UserModel::whereContains
+         */
+        public function whereContains(string $column, $value, string $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see UserModel::whereNotContains
+         */
+        public function whereNotContains(string $column, $value, string $condition = 'OR'): self
+        {
+        }
+
+        /**
+         * Search whether a column has a value other than the default value
+         *
+         * @param string $column
+         * @param bool $has
+         * @return $this
+         * @see UserModel::whereHas
+         */
+        public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * Search whether a column dont have a value other than the default value
+         *
+         * @param string $column
+         * @return $this
+         * @see UserModel::whereNotHas
+         */
+        public function whereNotHas(string $column): self
+        {
+        }
+
+        /**
+         * Specifies a grouping over the results of the query.
+         * Replaces any previously specified groupings, if any.
+         *
+         * @param mixed $column the grouping column
+         * @return $this
+         * @see UserModel::groupBy
+         */
+        public function groupBy($column): self
+        {
+        }
+
+        /**
+         * Specifies a restriction over the groups of the query.
+         * Replaces any previous having restrictions, if any.
+         *
+         * @param mixed $column
+         * @param mixed $operator
+         * @param mixed|null $value
+         * @param mixed $condition
+         * @return $this
+         * @see UserModel::having
+         */
+        public function having($column, $operator, $value = null, $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * Specifies an ordering for the query results.
+         * Replaces any previously specified orderings, if any.
+         *
+         * @param string $column the ordering expression
+         * @param string $order the ordering direction
+         * @return $this
+         * @see UserModel::orderBy
+         */
+        public function orderBy(string $column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * Adds a DESC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see UserModel::desc
+         */
+        public function desc(string $field): self
+        {
+        }
+
+        /**
+         * Add an ASC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see UserModel::asc
+         */
+        public function asc(string $field): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see UserModel::forUpdate
+         */
+        public function forUpdate(): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see UserModel::forShare
+         */
+        public function forShare(): self
+        {
+        }
+
+        /**
+         * @param string|bool $lock
+         * @return $this
+         * @see UserModel::lock
+         */
+        public function lock($lock): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see UserModel::when
+         */
+        public function when($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see UserModel::unless
+         */
+        public function unless($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see UserModel::setDbKeyConverter
+         */
+        public function setDbKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see UserModel::setPhpKeyConverter
+         */
+        public function setPhpKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * Add a (inner) join base on the relation to the query
+         *
+         * @param string|array $name
+         * @param string $type
+         * @return $this
+         * @see UserModel::joinRelation
+         */
+        public function joinRelation($name, string $type = 'INNER'): self
+        {
+        }
+
+        /**
+         * Add a inner join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see UserModel::innerJoinRelation
+         */
+        public function innerJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a left join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see UserModel::leftJoinRelation
+         */
+        public function leftJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a right join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see UserModel::rightJoinRelation
+         */
+        public function rightJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
+         *
+         * This method only checks whether the specified method has the "Relation" attribute,
+         * and does not check the actual logic.
+         * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
+         *
+         * @param string $method
+         * @return bool
+         * @see UserModel::isRelation
+         */
+        public function isRelation(string $method): bool
+        {
+        }
     }
-}
 
 
 
@@ -8493,22 +8493,22 @@ class UserModel
 namespace Wei;
 
 if (0) {
-class V
-{
-    /**
-     * @return $this
-     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
-     */
-    public function modelExists($model = null, $column = 'id')
+    class V
     {
-    }
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+         */
+        public function modelExists($model = null, $column = 'id')
+        {
+        }
 
-    /**
-     * @return $this
-     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
-     */
-    public function notModelExists($model = null, $column = 'id')
-    {
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+         */
+        public function notModelExists($model = null, $column = 'id')
+        {
+        }
     }
-}
 }

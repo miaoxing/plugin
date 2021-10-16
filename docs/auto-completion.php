@@ -4,117 +4,135 @@
  * @property    Miaoxing\Plugin\Service\App $app 应用
  * @method      mixed app($options = [])
  */
-class AppMixin {
+class AppMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\AppModel $appModel 应用模型
  * @method      Miaoxing\Plugin\Service\AppModel appModel() 返回当前对象
  */
-class AppModelMixin {
+class AppModelMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Cls $cls The class util service
  */
-class ClsMixin {
+class ClsMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Config $config
  */
-class ConfigMixin {
+class ConfigMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
  * @method      bool isModelExists($input = null, $model = null, $column = 'id') Check if the input is existing model
  */
-class IsModelExistsMixin {
+class IsModelExistsMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Jwt $jwt
  */
-class JwtMixin {
+class JwtMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\ObjectReq $objectReq
  * @method      string|null objectReq($name, $default = '') Returns a *stringify* or user defined($default) parameter value
  */
-class ObjectReqMixin {
+class ObjectReqMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\PageRouter $pageRouter
  */
-class PageRouterMixin {
+class PageRouterMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Plugin $plugin 插件管理器
  */
-class PluginMixin {
+class PluginMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\QueryBuilder $queryBuilder A SQL query builder class
  */
-class QueryBuilderMixin {
+class QueryBuilderMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Ret $ret
  * @method      Miaoxing\Plugin\Service\Ret ret($message, $code = null, $type = null) Return operation result data
  */
-class RetMixin {
+class RetMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Seeder $seeder Seeder
  */
-class SeederMixin {
+class SeederMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Session $session
  * @method      mixed session($key, $value = null) Get or set session
  */
-class SessionMixin {
+class SessionMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Snowflake $snowflake
  */
-class SnowflakeMixin {
+class SnowflakeMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Str $str The string util service
  */
-class StrMixin {
+class StrMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\Tester $tester 测试
  * @method      static tester($controller = null, $action = null)
  */
-class TesterMixin {
+class TesterMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\User $user 用户
  * @method      Miaoxing\Plugin\Service\User user() 返回当前对象
  */
-class UserMixin {
+class UserMixin
+{
 }
 
 /**
  * @property    Miaoxing\Plugin\Service\UserModel $userModel
  * @method      Miaoxing\Plugin\Service\UserModel userModel() 返回当前对象
  */
-class UserModelMixin {
+class UserModelMixin
+{
 }
 
 /**
@@ -137,7 +155,8 @@ class UserModelMixin {
  * @mixin UserMixin
  * @mixin UserModelMixin
  */
-class AutoCompletion {
+class AutoCompletion
+{
 }
 
 /**
@@ -145,7 +164,7 @@ class AutoCompletion {
  */
 function wei()
 {
-    return new AutoCompletion;
+    return new AutoCompletion();
 }
 
 /** @var Miaoxing\Plugin\Service\App $app */
