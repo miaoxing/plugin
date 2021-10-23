@@ -1856,7 +1856,6 @@ class QueryBuilder
 class Ret
 {
     /**
-     * {@inheritDoc}
      * @throws \Exception
      * @see Ret::err
      */
@@ -4256,7 +4255,6 @@ class UserModel
     }
 }
 
-
 namespace Wei;
 
 class V
@@ -4264,6 +4262,8 @@ class V
     /**
      * @return $this
      * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     * @param mixed|null $model
+     * @param mixed $column
      */
     public static function modelExists($model = null, $column = 'id')
     {
@@ -4272,6 +4272,8 @@ class V
     /**
      * @return $this
      * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     * @param mixed|null $model
+     * @param mixed $column
      */
     public static function notModelExists($model = null, $column = 'id')
     {
@@ -6111,7 +6113,6 @@ if (0) {
     class Ret
     {
         /**
-         * {@inheritDoc}
          * @throws \Exception
          * @see Ret::err
          */
@@ -8486,10 +8487,8 @@ if (0) {
         {
         }
     }
-
-
-
 }
+
 namespace Wei;
 
 if (0) {
@@ -8498,6 +8497,8 @@ if (0) {
         /**
          * @return $this
          * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+         * @param mixed|null $model
+         * @param mixed $column
          */
         public function modelExists($model = null, $column = 'id')
         {
@@ -8506,6 +8507,8 @@ if (0) {
         /**
          * @return $this
          * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+         * @param mixed|null $model
+         * @param mixed $column
          */
         public function notModelExists($model = null, $column = 'id')
         {
