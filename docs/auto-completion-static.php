@@ -1858,6 +1858,9 @@ class Ret
     /**
      * @throws \Exception
      * @see Ret::err
+     * @param mixed $message
+     * @param mixed|null $code
+     * @param mixed|null $level
      */
     public static function err($message, $code = null, $level = null)
     {
@@ -6115,6 +6118,9 @@ if (0) {
         /**
          * @throws \Exception
          * @see Ret::err
+         * @param mixed $message
+         * @param mixed|null $code
+         * @param mixed|null $level
          */
         public function err($message, $code = null, $level = null)
         {
