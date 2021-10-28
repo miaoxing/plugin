@@ -1,3 +1,70 @@
+# [0.5.0](https://github.com/miaoxing/plugin/compare/v0.4.7...v0.5.0) (2021-10-28)
+
+
+### Bug Fixes
+
+* **BaseTestCase:** `getModelServiceMock` 时允许调用构造函数，解决获取字段值失败 ([10f90dd](https://github.com/miaoxing/plugin/commit/10f90dde7ff84d88c9ee981913b4c19b442159e6))
+* **BaseTestCase:** 允许 mock 直接继承`\Wei\Base` 的服务 ([d4a76e9](https://github.com/miaoxing/plugin/commit/d4a76e9fbeebed5a0777c0d0e1a4d48cb12caa5c))
+* **BaseTestCase:** 解决 mock 服务不可用 ([0675c2e](https://github.com/miaoxing/plugin/commit/0675c2ef93059ed30bec09fa3c9218a75a639f04))
+* **Cast:** `decimal` 字段转换为 PHP 变量时，由浮点数改为字符串 ([b8eb290](https://github.com/miaoxing/plugin/commit/b8eb2902dd12f218ec9808ba28394915b7655c0b))
+* **Cast:** `decimal` 字段转换为 PHP 变量时，由浮点数改为字符串 ([58ed5b5](https://github.com/miaoxing/plugin/commit/58ed5b556efb4b6c16bee8b979fca2fe10a1fc2a))
+* **CastTrait:** `object` 类型允许传入字符串，会转换为对象 ([3bb852d](https://github.com/miaoxing/plugin/commit/3bb852d937f08c51c5c9e0b13b3b8ffd0bd1e1f6))
+* **Config:** 构造函数的参数允许为空数组 ([5c4ab1f](https://github.com/miaoxing/plugin/commit/5c4ab1f41ebb365a1d2f53bd934feb41f35342b2))
+* **Model:** `toArray` 指定了返回字段，则不附加虚拟列和关联对象 ([23f6c24](https://github.com/miaoxing/plugin/commit/23f6c2438c924317e41649be6337bca214e445ef))
+* **plugin, Model:** `bigint` 字段转换为字符串，解决 js 不支持 19 位以上数字的问题 ([5ba7dd6](https://github.com/miaoxing/plugin/commit/5ba7dd6a95a7946de246ff07d05dba406fd61e21))
+* **plugin, Ret:** 调用 `err([code => xx, message => xx])` 时无需生成 `code` ([fbe5b0a](https://github.com/miaoxing/plugin/commit/fbe5b0a82f7adb7f16ea70f828fb3c1814f6a1f4))
+* **Ret:** 插件未定义 `code`，则不生成错误码 ([9a009ac](https://github.com/miaoxing/plugin/commit/9a009acc9813aecbaa35c71c9149f22ae21e1cd7))
+* **Ret:** 通过 `view` 服务调用 `block` 服务，以免未配置 `block` 服务出错 ([bd50ebd](https://github.com/miaoxing/plugin/commit/bd50ebd5f660a7b5c9127eafdc6aa9e88686dc69))
+* **Seeder:** 构造函数的参数允许为空数组 ([ffa6acb](https://github.com/miaoxing/plugin/commit/ffa6acb87c88c05e624545343878125eac630af3))
+
+
+### Features
+
+* **App:** `setModel` 允许传入 `null` 值清除已有模型 ([b04a85e](https://github.com/miaoxing/plugin/commit/b04a85e6d2ba05e58c3d026f3096545f3ebdf8ee))
+* **App, internal:** 支持跨域请求 ([44b454c](https://github.com/miaoxing/plugin/commit/44b454cb3413e55cbe2e6d61aa3a210867c2eadb))
+* **BaseTestCase:** 增加 `assertSameRet` 方法 ([3aaeb62](https://github.com/miaoxing/plugin/commit/3aaeb62da7dc79a30e9c2009a7f6f98fda146eec))
+* **Cast:** 增加 `intString` 类型，将 `bigint` 转换为 `intString` ([b892015](https://github.com/miaoxing/plugin/commit/b8920151f00dd3e73f14356346039be30501e9d8))
+* **MineTrait:** 增加 `MineTrait`，用于查询当前用户的记录 ([a73d0d0](https://github.com/miaoxing/plugin/commit/a73d0d08da36586263c8475ddf22982ac2c15c2e))
+* **Model:** `findOrInitBy` 方法允许不传参数 ([88ac57a](https://github.com/miaoxing/plugin/commit/88ac57ab6ddae74bc0330f438e9b74392ac7d3df))
+* **Model:** `toRet` 支持传入 Resource 类名和对象 ([f20c0d3](https://github.com/miaoxing/plugin/commit/f20c0d36eb7f21d7fc9a3276343760d5d825c345))
+* **Model:** 增加 `destroyOrFail` 方法 ([6f58b7f](https://github.com/miaoxing/plugin/commit/6f58b7ff3c0f7d218dade71f0b2c7d97345702b3))
+* **plugin:** `Snowflake` 服务通过缓存服务确保序列数不重复 ([3821ede](https://github.com/miaoxing/plugin/commit/3821ede28bea566dabbb66cc9795187947fc7927))
+* **plugin:** 增加 `Snowflake` 服务 ([fde8232](https://github.com/miaoxing/plugin/commit/fde8232aa11da3820621dbcc2284c8c8998fee5b))
+* **plugin:** 增加 `SnowflakeTrait`，用于插入数据库前生成 snowflake id ([03b2ab2](https://github.com/miaoxing/plugin/commit/03b2ab262d1b950efc593a42c1709e96c2e537e5))
+* **plugin:** 用户 id 字段由 `uInt` 改为 `uBigInt` 类型 ([b7ef11b](https://github.com/miaoxing/plugin/commit/b7ef11b56648a373268da38d4875b49d5d5120bf))
+* 数据表主键 由 `int` 改为 `bigint` ([3f6d3b7](https://github.com/miaoxing/plugin/commit/3f6d3b7719738401d1cf06f2b96f0cc1c93e9b4e))
+* 模型通过 `SnowflakeTrait` 生成 id ([11f52c1](https://github.com/miaoxing/plugin/commit/11f52c1dd447a87e7cc705100d2eb947f02e13c1))
+* **plugin, internal:** 对任意 "-api" 结尾的请求路径返回 JSON 数据 ([d2d4110](https://github.com/miaoxing/plugin/commit/d2d41108b80d33ad10c012785c6412c676095c59))
+* **RelationTrait:** 单个模型对象支持调用 `load` 方法来加载关联模型 ([9259b54](https://github.com/miaoxing/plugin/commit/9259b5426eff91d6994f30d87c4335aedb66c4a8))
+* **RelationTrait:** 增加 `isLoaded` 方法，用于判断关联对象是否已加载 ([10ace6d](https://github.com/miaoxing/plugin/commit/10ace6da048b4b4f46986e4db915eec17e1b8d6b))
+* **RelationTrait:** 更改 `setRelationValue` 方法为 `public`，允许外部设置关联值 ([8e1c755](https://github.com/miaoxing/plugin/commit/8e1c755bf447c6899fe2e0c1e70448d46bd23ca1))
+* **Resource:** 增加 `Resource` 功能，用于将模型对象转换为接口响应数组，参考自 Laravel ([c910280](https://github.com/miaoxing/plugin/commit/c9102802e36598bd10480c02376d3f7d7983c66e))
+* **Resource:** 支持调用 `includes` 为组合添加额外数据 ([267b28c](https://github.com/miaoxing/plugin/commit/267b28c64ccf917ba2843218f2f0ea03413b1bcf))
+* **Tester:** `post` 方法改为 `data`，增加 `post` 方法表示发送 `POST` 请求 ([955c534](https://github.com/miaoxing/plugin/commit/955c5347fa0adbb576cb0866b94ec36e8d9154a3))
+
+
+### BREAKING CHANGES
+
+* **App:** `App::setModel` 参数改为可选
+* **plugin:** 用户 id 字段由 `uInt` 改为 `uBigInt` 类型
+* 数据表主键 由 `int` 改为 `bigint`
+* **plugin, Model:** `bigint` 字段转换为字符串，解决 js 不支持 19 位以上数字的问题
+* **Tester:** Tester 服务的 `post` 方法改为 `data`
+* **Cast:** `decimal` 字段转换为 PHP 变量时，由浮点数改为字符串
+* **Cast:** `decimal` 字段转换为 PHP 变量时，由浮点数改为字符串
+* **Model:** `toRet` 方法的参数去掉 `array` 类型
+* **RelationTrait:** 更改 `setRelationValue` 方法为 `public`，允许外部设置关联值
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `7.0.1` to `8.0.0`
+* **@mxjs/cli:** upgrade from `0.1.2` to `0.1.3`
+* **@wei/wei:** upgrade from `0.10.11` to `0.11.0`
+
 ## [0.4.7](https://github.com/miaoxing/plugin/compare/v0.4.6...v0.4.7) (2021-05-21)
 
 
