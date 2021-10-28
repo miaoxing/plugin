@@ -16,8 +16,9 @@ class Ret extends \Wei\Ret
 {
     /**
      * @var array
+     * @internal
      */
-    private static $errors = [];
+    protected static $errors = [];
 
     /**
      * Convert Ret object to response
