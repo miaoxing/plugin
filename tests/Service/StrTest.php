@@ -50,4 +50,45 @@ final class StrTest extends BaseTestCase
     {
         $this->assertEquals($output, wei()->str->dash($input));
     }
+
+    public function providerForSingularize()
+    {
+        return [
+            ['test', 'test'],
+            ['tests', 'test'],
+            ['queries', 'query'],
+            ['news', 'news'],
+            ['myLists', 'myList'],
+        ];
+    }
+
+    /**
+     * @param string $input
+     * @param string $output
+     * @dataProvider providerForSingularize
+     */
+    public function testSingularize($input, $output)
+    {
+        $this->assertEquals($output, wei()->str->singularize($input));
+    }
+
+    public function providerForPluralize()
+    {
+        return [
+            ['test', 'tests'],
+            ['query', 'queries'],
+            ['news', 'news'],
+            ['myList', 'myLists'],
+        ];
+    }
+
+    /**
+     * @param string $input
+     * @param string $output
+     * @dataProvider providerForPluralize
+     */
+    public function testPluralize($input, $output)
+    {
+        $this->assertEquals($output, wei()->str->pluralize($input));
+    }
 }
