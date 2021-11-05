@@ -24,4 +24,20 @@ final class UserModelTest extends BaseTestCase
         $user->nickName = 'nickName';
         $this->assertSame('nickName', $user->displayName);
     }
+
+    public function testSetPassword()
+    {
+        $user = UserModel::new();
+        $user->setPlainPassword('test');
+        $this->assertNotEquals('test', $user->password);
+    }
+
+    public function testVerifyPassword()
+    {
+        $user = UserModel::new();
+        $this->assertFalse($user->verifyPassword('test'));
+
+        $user->setPlainPassword('test');
+        $this->assertTrue($user->verifyPassword('test'));
+    }
 }
