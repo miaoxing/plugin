@@ -133,7 +133,7 @@ class Snowflake extends BaseService
             $sequence = $this->getSequence($timestamp);
         }
 
-        return (string) (($timestamp - $this->startTimestamp << ($this->workerBits + $this->sequenceBits))
+        return (string) (($timestamp - $this->getStartTimestamp() << ($this->workerBits + $this->sequenceBits))
             | ($this->getWorkerId() << $this->sequenceBits)
             | $sequence);
     }
