@@ -73,7 +73,7 @@ class SnowflakeTest extends BaseTestCase
         ]);
 
         $id = $snowflake->next();
-        $this->assertTrue(in_array(strlen($id), [9, 10], true));
+        $this->assertLessThanOrEqual(10, strlen($id));
 
         $result = $snowflake->parse($id);
         $this->assertGreaterThanOrEqual($startTimestamp, $result['timestamp']);
