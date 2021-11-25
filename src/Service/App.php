@@ -502,7 +502,8 @@ class App extends \Wei\App
     {
         return $this->res
             ->setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
-            ->setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization')
+            // NOTE: antd upload 组件上传会加上 XMLHttpRequest 头
+            ->setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, X-Requested-With')
             ->setHeader('Access-Control-Max-Age', 0)
             ->send();
     }
