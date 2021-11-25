@@ -49,7 +49,7 @@ class User extends UserModel
             'default' => false,
         ],
         'defaultAvatar' => [
-            'default' => '/images/head.jpg',
+            'default' => '',
         ],
         'enableLogin' => [
             'default' => true,
