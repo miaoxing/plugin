@@ -1256,6 +1256,17 @@ trait QueryBuilderTrait
     }
 
     /**
+     * @param mixed $if
+     * @param mixed ...$args
+     * @return $this
+     */
+    protected function whereIf($if, ...$args): self
+    {
+        $if && $this->where(...$args);
+        return $this;
+    }
+
+    /**
      * Search whether a column dont have a value other than the default value
      *
      * @param string $column

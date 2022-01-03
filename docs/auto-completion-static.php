@@ -775,6 +775,18 @@ class AppModel
     }
 
     /**
+     * @param mixed $if
+     * @param array|Closure|string|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @see AppModel::whereIf
+     */
+    public static function whereIf($if, $column = null, $operator = null, $value = null): self
+    {
+    }
+
+    /**
      * Search whether a column dont have a value other than the default value
      *
      * @param string $column
@@ -1700,6 +1712,18 @@ class QueryBuilder
      * @see QueryBuilder::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * @param mixed $if
+     * @param array|Closure|string|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @see QueryBuilder::whereIf
+     */
+    public static function whereIf($if, $column = null, $operator = null, $value = null): self
     {
     }
 
@@ -3071,6 +3095,18 @@ class User
     }
 
     /**
+     * @param mixed $if
+     * @param array|Closure|string|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @see UserModel::whereIf
+     */
+    public static function whereIf($if, $column = null, $operator = null, $value = null): self
+    {
+    }
+
+    /**
      * Search whether a column dont have a value other than the default value
      *
      * @param string $column
@@ -4054,6 +4090,18 @@ class UserModel
      * @see UserModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * @param mixed $if
+     * @param array|Closure|string|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @see UserModel::whereIf
+     */
+    public static function whereIf($if, $column = null, $operator = null, $value = null): self
     {
     }
 
@@ -5042,6 +5090,18 @@ if (0) {
         }
 
         /**
+         * @param mixed $if
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see AppModel::whereIf
+         */
+        public function whereIf($if, $column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
          * Search whether a column dont have a value other than the default value
          *
          * @param string $column
@@ -5955,6 +6015,18 @@ if (0) {
          * @see QueryBuilder::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * @param mixed $if
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see QueryBuilder::whereIf
+         */
+        public function whereIf($if, $column = null, $operator = null, $value = null): self
         {
         }
 
@@ -7314,6 +7386,18 @@ if (0) {
         }
 
         /**
+         * @param mixed $if
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereIf
+         */
+        public function whereIf($if, $column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
          * Search whether a column dont have a value other than the default value
          *
          * @param string $column
@@ -8285,6 +8369,18 @@ if (0) {
          * @see UserModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * @param mixed $if
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see UserModel::whereIf
+         */
+        public function whereIf($if, $column = null, $operator = null, $value = null): self
         {
         }
 
