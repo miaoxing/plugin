@@ -5,6 +5,9 @@
   "main": "index.js",
   "repository": "https://github.com/miaoxing/plugin",
   "license": "MIT",
+  "workspaces": [
+    "plugins/*"
+  ],
   "devDependencies": {
     "@miaoxing/dev": "^8.0.0",
     "@mxjs/cli": "^0.1.3"
