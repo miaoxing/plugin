@@ -1,3 +1,31 @@
+# [0.6.0](https://github.com/miaoxing/plugin/compare/v0.5.0...v0.6.0) (2022-01-12)
+
+
+### Code Refactoring
+
+* **plugin:** 移除 `AssetLink` 命令，可通过 Webpack CopyPlugin 实现一样的功能 ([b04355d](https://github.com/miaoxing/plugin/commit/b04355daa94ae8f18ad47a172729726d18613c00))
+
+
+### Features
+
+* **plugin:** `QueryBuilder` 增加 `whereIf` 方法 ([a84a9a9](https://github.com/miaoxing/plugin/commit/a84a9a955b28db2a4c05a70822b12f8eeb857eb1))
+* **plugin:** Preflight 允许 `X-Requested-With` 头 ([0265250](https://github.com/miaoxing/plugin/commit/02652507b47e913c9c32add6506c872e2eb77179))
+
+
+### BREAKING CHANGES
+
+* **plugin:** 移除 `AssetLink` 命令，可通过 Webpack CopyPlugin 实现一样的功能
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.0.0` to `8.0.1`
+* **@mxjs/cli:** upgrade from `0.1.3` to `0.1.4`
+* **@wei/wei:** upgrade from `0.11.0` to `0.11.1`
+
 # [0.5.0](https://github.com/miaoxing/plugin/compare/v0.4.7...v0.5.0) (2021-10-28)
 
 
