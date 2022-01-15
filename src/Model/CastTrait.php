@@ -106,8 +106,10 @@ trait CastTrait
                 return (int) $value;
 
             case 'string':
-            case 'intString':
                 return (string) $value;
+
+            case 'intString':
+                return $value ? (string) $value : '';
 
             case 'datetime':
                 return '0000-00-00 00:00:00' === $value ? '' : $value;

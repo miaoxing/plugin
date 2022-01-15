@@ -671,7 +671,7 @@ final class CastTraitTest extends BaseTestCase
             'int_column' => null,
             'nullable_int_column' => null,
             'nullable_default_int_column' => 7,
-            'big_int_column' => '0',
+            'big_int_column' => '',
             'nullable_big_int_column' => null,
             'bool_column' => false,
             'nullable_bool_column' => null,
@@ -777,7 +777,7 @@ final class CastTraitTest extends BaseTestCase
             'big_int_column' => '',
             'nullable_big_int_column' => '1abc',
         ]);
-        $this->assertSame('0', $cast->big_int_column);
+        $this->assertSame('', $cast->big_int_column);
         $this->assertSame('1', $cast->nullable_big_int_column);
     }
 }
