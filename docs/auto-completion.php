@@ -31,6 +31,22 @@ class ConfigMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\ConfigModel $configModel 配置模型
+ * @method      Miaoxing\Plugin\Service\ConfigModel configModel() 返回当前对象
+ */
+class ConfigModelMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\GlobalConfigModel $globalConfigModel
+ * @method      Miaoxing\Plugin\Service\GlobalConfigModel globalConfigModel() 返回当前对象
+ */
+class GlobalConfigModelMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
  * @method      bool isModelExists($input = null, $model = null, $column = 'id') Check if the input is existing model
  */
@@ -140,6 +156,8 @@ class UserModelMixin
  * @mixin AppModelMixin
  * @mixin ClsMixin
  * @mixin ConfigMixin
+ * @mixin ConfigModelMixin
+ * @mixin GlobalConfigModelMixin
  * @mixin IsModelExistsMixin
  * @mixin JwtMixin
  * @mixin ObjectReqMixin
@@ -181,6 +199,18 @@ $cls = wei()->cls;
 
 /** @var Miaoxing\Plugin\Service\Config $config */
 $config = wei()->config;
+
+/** @var Miaoxing\Plugin\Service\ConfigModel $config */
+$config = wei()->configModel;
+
+/** @var Miaoxing\Plugin\Service\ConfigModel|Miaoxing\Plugin\Service\ConfigModel[] $configs */
+$configs = wei()->configModel();
+
+/** @var Miaoxing\Plugin\Service\GlobalConfigModel $globalConfig */
+$globalConfig = wei()->globalConfigModel;
+
+/** @var Miaoxing\Plugin\Service\GlobalConfigModel|Miaoxing\Plugin\Service\GlobalConfigModel[] $globalConfigs */
+$globalConfigs = wei()->globalConfigModel();
 
 /** @var Miaoxing\Plugin\Service\IsModelExists $isModelExists */
 $isModelExists = wei()->isModelExists;

@@ -775,18 +775,6 @@ class AppModel
     }
 
     /**
-     * @param mixed $if
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see AppModel::whereIf
-     */
-    public static function whereIf($if, $column = null, $operator = null, $value = null): self
-    {
-    }
-
-    /**
      * Search whether a column dont have a value other than the default value
      *
      * @param string $column
@@ -1004,6 +992,125 @@ class Cls
 class Config
 {
     /**
+     * @see Config::get
+     */
+    public static function get($name, $default = null)
+    {
+    }
+
+    /**
+     * @see Config::set
+     */
+    public static function set($name, $value, array $options = []): self
+    {
+    }
+
+    /**
+     * @see Config::getMultiple
+     */
+    public static function getMultiple(array $names, $default = null): array
+    {
+    }
+
+    /**
+     * @see Config::setMultiple
+     */
+    public static function setMultiple(array $values, $options = []): self
+    {
+    }
+
+    /**
+     * @see Config::getSection
+     */
+    public static function getSection(string $name)
+    {
+    }
+
+    /**
+     * @see Config::getGlobal
+     */
+    public static function getGlobal($name, $default = null)
+    {
+    }
+
+    /**
+     * @see Config::setGlobal
+     */
+    public static function setGlobal($name, $value): self
+    {
+    }
+
+    /**
+     * @see Config::deleteGlobal
+     */
+    public static function deleteGlobal(string $name): self
+    {
+    }
+
+    /**
+     * @see Config::getGlobalMultiple
+     */
+    public static function getGlobalMultiple($names, $default = null): array
+    {
+    }
+
+    /**
+     * @see Config::setGlobalMultiple
+     */
+    public static function setGlobalMultiple($values): self
+    {
+    }
+
+    /**
+     * @see Config::getGlobalSection
+     */
+    public static function getGlobalSection($name): array
+    {
+    }
+
+    /**
+     * @see Config::getApp
+     */
+    public static function getApp($name, $default = null)
+    {
+    }
+
+    /**
+     * @see Config::setApp
+     */
+    public static function setApp($name, $value, array $options = []): self
+    {
+    }
+
+    /**
+     * @see Config::deleteApp
+     */
+    public static function deleteApp(string $name): self
+    {
+    }
+
+    /**
+     * @see Config::getAppMultiple
+     */
+    public static function getAppMultiple($names, $default = null)
+    {
+    }
+
+    /**
+     * @see Config::setAppMultiple
+     */
+    public static function setAppMultiple($values, array $options = []): self
+    {
+    }
+
+    /**
+     * @see Config::getAppSection
+     */
+    public static function getAppSection($name): array
+    {
+    }
+
+    /**
      * @see Config::save
      * @param array|string $name
      * @param mixed $value
@@ -1024,6 +1131,2022 @@ class Config
      * @see Config::load
      */
     public static function load()
+    {
+    }
+}
+
+class ConfigModel
+{
+    /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see ConfigModel::saveAttributes
+     */
+    public static function saveAttributes(iterable $attributes = []): self
+    {
+    }
+
+    /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see ConfigModel::toArray
+     */
+    public static function toArray($returnFields = [], callable $prepend = null): array
+    {
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array|string|BaseResource|mixed $merge
+     * @return Ret
+     * @see ConfigModel::toRet
+     */
+    public static function toRet($merge = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * Return the record table name
+     *
+     * @return string
+     * @see ConfigModel::getTable
+     */
+    public static function getTable(): string
+    {
+    }
+
+    /**
+     * Import a PHP array in this record
+     *
+     * @param iterable $array
+     * @return $this
+     * @see ConfigModel::fromArray
+     */
+    public static function fromArray(iterable $array): self
+    {
+    }
+
+    /**
+     * Save the record or data to database
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see ConfigModel::save
+     */
+    public static function save(iterable $attributes = []): self
+    {
+    }
+
+    /**
+     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+     *
+     * @param int|string $id
+     * @return $this
+     * @see ConfigModel::destroy
+     */
+    public static function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see ConfigModel::destroyOrFail
+     */
+    public static function destroyOrFail($id): self
+    {
+    }
+
+    /**
+     * Set the record field value
+     *
+     * @param string|int|null $name
+     * @param mixed $value
+     * @param bool $throwException
+     * @return $this|false
+     * @see ConfigModel::set
+     */
+    public static function set($name, $value, bool $throwException = true)
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record object or false
+     *
+     * @param int|string|array|null $id
+     * @return $this|null
+     * @see ConfigModel::find
+     */
+    public static function find($id): ?self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found
+     *
+     * @param int|string $id
+     * @return $this
+     * @throws \Exception
+     * @see ConfigModel::findOrFail
+     */
+    public static function findOrFail($id): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or init with the specified attributes if record not found
+     *
+     * @param int|string $id
+     * @param array|object $attributes
+     * @return $this
+     * @see ConfigModel::findOrInit
+     */
+    public static function findOrInit($id = null, $attributes = []): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or save with the specified attributes if record not found
+     *
+     * @param int|string $id
+     * @param array $attributes
+     * @return $this
+     * @see ConfigModel::findOrCreate
+     */
+    public static function findOrCreate($id, $attributes = []): self
+    {
+    }
+
+    /**
+     * @param array $attributes
+     * @param array|object $data
+     * @return $this
+     * @see ConfigModel::findByOrCreate
+     */
+    public static function findByOrCreate($attributes, $data = []): self
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record collection object or false
+     *
+     * @param array $ids
+     * @return $this|$this[]
+     * @phpstan-return $this
+     * @see ConfigModel::findAll
+     */
+    public static function findAll(array $ids): self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this|null
+     * @see ConfigModel::findBy
+     */
+    public static function findBy($column, $operator = null, $value = null): ?self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this|$this[]
+     * @phpstan-return $this
+     * @see ConfigModel::findAllBy
+     */
+    public static function findAllBy($column, $operator = null, $value = null): self
+    {
+    }
+
+    /**
+     * @param array $attributes
+     * @param array|object $data
+     * @return $this
+     * @see ConfigModel::findOrInitBy
+     */
+    public static function findOrInitBy(array $attributes = [], $data = []): self
+    {
+    }
+
+    /**
+     * Find a record by primary key value and throws 404 exception if record not found
+     *
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @throws \Exception
+     * @see ConfigModel::findByOrFail
+     */
+    public static function findByOrFail($column, $operator = null, $value = null): self
+    {
+    }
+
+    /**
+     * @param Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see ConfigModel::findFromReq
+     */
+    public static function findFromReq(\Wei\Req $req = null): self
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record object or null if not found
+     *
+     * @return $this|null
+     * @see ConfigModel::first
+     */
+    public static function first(): ?self
+    {
+    }
+
+    /**
+     * @return $this|$this[]
+     * @phpstan-return $this
+     * @see ConfigModel::all
+     */
+    public static function all(): self
+    {
+    }
+
+    /**
+     * Coll: Specifies a field to be the key of the fetched array
+     *
+     * @param string $column
+     * @return $this
+     * @see ConfigModel::indexBy
+     */
+    public static function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see ConfigModel::unscoped
+     */
+    public static function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see ConfigModel::setCacheTime
+     */
+    public static function setCacheTime(?int $seconds): self
+    {
+    }
+
+    /**
+     * Returns the name of columns of current table
+     *
+     * @return array
+     * @see ConfigModel::getColumns
+     */
+    public static function getColumns(): array
+    {
+    }
+
+    /**
+     * Check if column name exists
+     *
+     * @param string|int|null $name
+     * @return bool
+     * @see ConfigModel::hasColumn
+     */
+    public static function hasColumn($name): bool
+    {
+    }
+
+    /**
+     * Executes the generated query and returns the first array result
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return array|null
+     * @see ConfigModel::fetch
+     */
+    public static function fetch($column = null, $operator = null, $value = null): ?array
+    {
+    }
+
+    /**
+     * Executes the generated query and returns all array results
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return array
+     * @see ConfigModel::fetchAll
+     */
+    public static function fetchAll($column = null, $operator = null, $value = null): array
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param string|null $index
+     * @return array
+     * @see ConfigModel::pluck
+     */
+    public static function pluck(string $column, string $index = null): array
+    {
+    }
+
+    /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @see ConfigModel::chunk
+     */
+    public static function chunk(int $count, callable $callback): bool
+    {
+    }
+
+    /**
+     * Executes a COUNT query to receive the rows number
+     *
+     * @param string $column
+     * @return int
+     * @see ConfigModel::cnt
+     */
+    public static function cnt($column = '*'): int
+    {
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see ConfigModel::max
+     */
+    public static function max(string $column): ?string
+    {
+    }
+
+    /**
+     * Execute a update query with specified data
+     *
+     * @param array|string $set
+     * @param mixed $value
+     * @return int
+     * @see ConfigModel::update
+     */
+    public static function update($set = [], $value = null): int
+    {
+    }
+
+    /**
+     * Execute a delete query with specified conditions
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return int
+     * @see ConfigModel::delete
+     */
+    public static function delete($column = null, $operator = null, $value = null): int
+    {
+    }
+
+    /**
+     * Sets the position of the first result to retrieve (the "offset")
+     *
+     * @param int|float|string $offset The first result to return
+     * @return $this
+     * @see ConfigModel::offset
+     */
+    public static function offset($offset): self
+    {
+    }
+
+    /**
+     * Sets the maximum number of results to retrieve (the "limit")
+     *
+     * @param int|float|string $limit The maximum number of results to retrieve
+     * @return $this
+     * @see ConfigModel::limit
+     */
+    public static function limit($limit): self
+    {
+    }
+
+    /**
+     * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+     *
+     * @param int $page The page number
+     * @return $this
+     * @see ConfigModel::page
+     */
+    public static function page($page): self
+    {
+    }
+
+    /**
+     * Specifies an item that is to be returned in the query result.
+     * Replaces any previously specified selections, if any.
+     *
+     * @param array|string $columns the selection expressions
+     * @return $this
+     * @see ConfigModel::select
+     */
+    public static function select($columns = ['*']): self
+    {
+    }
+
+    /**
+     * @param array|string $columns
+     * @return $this
+     * @see ConfigModel::selectDistinct
+     */
+    public static function selectDistinct($columns): self
+    {
+    }
+
+    /**
+     * @param string $expression
+     * @return $this
+     * @see ConfigModel::selectRaw
+     */
+    public static function selectRaw($expression): self
+    {
+    }
+
+    /**
+     * Specifies columns that are not to be returned in the query result.
+     * Replaces any previously specified selections, if any.
+     *
+     * @param array|string $columns
+     * @return $this
+     * @see ConfigModel::selectExcept
+     */
+    public static function selectExcept($columns): self
+    {
+    }
+
+    /**
+     * Specifies an item of the main table that is to be returned in the query result.
+     * Default to all columns of the main table
+     *
+     * @param string $column
+     * @return $this
+     * @see ConfigModel::selectMain
+     */
+    public static function selectMain(string $column = '*'): self
+    {
+    }
+
+    /**
+     * Sets table for FROM query
+     *
+     * @param string $table
+     * @param string|null $alias
+     * @return $this
+     * @see ConfigModel::from
+     */
+    public static function from(string $table, $alias = null): self
+    {
+    }
+
+    /**
+     * @param string $table
+     * @param mixed|null $alias
+     * @return $this
+     * @see ConfigModel::table
+     */
+    public static function table(string $table, $alias = null): self
+    {
+    }
+
+    /**
+     * Adds a inner join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
+     * @return $this
+     * @see ConfigModel::join
+     */
+    public static function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
+    }
+
+    /**
+     * Adds a inner join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @return $this
+     * @see ConfigModel::innerJoin
+     */
+    public static function innerJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
+    }
+
+    /**
+     * Adds a left join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @return $this
+     * @see ConfigModel::leftJoin
+     */
+    public static function leftJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
+    }
+
+    /**
+     * Adds a right join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @return $this
+     * @see ConfigModel::rightJoin
+     */
+    public static function rightJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
+    }
+
+    /**
+     * Specifies one or more restrictions to the query result.
+     * Replaces any previously specified restrictions, if any.
+     *
+     * ```php
+     * $user = wei()->db('user')->where('id = 1');
+     * $user = wei()->db('user')->where('id = ?', 1);
+     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+     * $users = wei()->where(array('id' => array('1', '2', '3')));
+     * ```
+     *
+     * @param array|Closure|string|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @see ConfigModel::where
+     */
+    public static function where($column = null, $operator = null, $value = null): self
+    {
+    }
+
+    /**
+     * @param scalar $expression
+     * @param mixed $params
+     * @return $this
+     * @see ConfigModel::whereRaw
+     */
+    public static function whereRaw($expression, $params = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see ConfigModel::whereBetween
+     */
+    public static function whereBetween(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see ConfigModel::whereNotBetween
+     */
+    public static function whereNotBetween(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see ConfigModel::whereIn
+     */
+    public static function whereIn(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see ConfigModel::whereNotIn
+     */
+    public static function whereNotIn(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     * @see ConfigModel::whereNull
+     */
+    public static function whereNull(string $column): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     * @see ConfigModel::whereNotNull
+     */
+    public static function whereNotNull(string $column): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see ConfigModel::whereDate
+     */
+    public static function whereDate(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see ConfigModel::whereMonth
+     */
+    public static function whereMonth(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see ConfigModel::whereDay
+     */
+    public static function whereDay(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see ConfigModel::whereYear
+     */
+    public static function whereYear(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see ConfigModel::whereTime
+     */
+    public static function whereTime(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrColumn2
+     * @param mixed|null $column2
+     * @return $this
+     * @see ConfigModel::whereColumn
+     */
+    public static function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+    {
+    }
+
+    /**
+     * 搜索字段是否包含某个值
+     *
+     * @param string $column
+     * @param mixed $value
+     * @param string $condition
+     * @return $this
+     * @see ConfigModel::whereContains
+     */
+    public static function whereContains(string $column, $value, string $condition = 'AND'): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @param string $condition
+     * @return $this
+     * @see ConfigModel::whereNotContains
+     */
+    public static function whereNotContains(string $column, $value, string $condition = 'OR'): self
+    {
+    }
+
+    /**
+     * Search whether a column has a value other than the default value
+     *
+     * @param string $column
+     * @param bool $has
+     * @return $this
+     * @see ConfigModel::whereHas
+     */
+    public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * Search whether a column dont have a value other than the default value
+     *
+     * @param string $column
+     * @return $this
+     * @see ConfigModel::whereNotHas
+     */
+    public static function whereNotHas(string $column): self
+    {
+    }
+
+    /**
+     * Specifies a grouping over the results of the query.
+     * Replaces any previously specified groupings, if any.
+     *
+     * @param mixed $column the grouping column
+     * @return $this
+     * @see ConfigModel::groupBy
+     */
+    public static function groupBy($column): self
+    {
+    }
+
+    /**
+     * Specifies a restriction over the groups of the query.
+     * Replaces any previous having restrictions, if any.
+     *
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
+     * @return $this
+     * @see ConfigModel::having
+     */
+    public static function having($column, $operator, $value = null, $condition = 'AND'): self
+    {
+    }
+
+    /**
+     * Specifies an ordering for the query results.
+     * Replaces any previously specified orderings, if any.
+     *
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
+     * @return $this
+     * @see ConfigModel::orderBy
+     */
+    public static function orderBy(string $column, $order = 'ASC'): self
+    {
+    }
+
+    /**
+     * Adds a DESC ordering to the query
+     *
+     * @param string $field The name of field
+     * @return $this
+     * @see ConfigModel::desc
+     */
+    public static function desc(string $field): self
+    {
+    }
+
+    /**
+     * Add an ASC ordering to the query
+     *
+     * @param string $field The name of field
+     * @return $this
+     * @see ConfigModel::asc
+     */
+    public static function asc(string $field): self
+    {
+    }
+
+    /**
+     * @return $this
+     * @see ConfigModel::forUpdate
+     */
+    public static function forUpdate(): self
+    {
+    }
+
+    /**
+     * @return $this
+     * @see ConfigModel::forShare
+     */
+    public static function forShare(): self
+    {
+    }
+
+    /**
+     * @param string|bool $lock
+     * @return $this
+     * @see ConfigModel::lock
+     */
+    public static function lock($lock): self
+    {
+    }
+
+    /**
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
+     * @return $this
+     * @see ConfigModel::when
+     */
+    public static function when($value, callable $callback, callable $default = null): self
+    {
+    }
+
+    /**
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
+     * @return $this
+     * @see ConfigModel::unless
+     */
+    public static function unless($value, callable $callback, callable $default = null): self
+    {
+    }
+
+    /**
+     * @param callable|null $converter
+     * @return $this
+     * @see ConfigModel::setDbKeyConverter
+     */
+    public static function setDbKeyConverter(callable $converter = null): self
+    {
+    }
+
+    /**
+     * @param callable|null $converter
+     * @return $this
+     * @see ConfigModel::setPhpKeyConverter
+     */
+    public static function setPhpKeyConverter(callable $converter = null): self
+    {
+    }
+
+    /**
+     * Add a (inner) join base on the relation to the query
+     *
+     * @param string|array $name
+     * @param string $type
+     * @return $this
+     * @see ConfigModel::joinRelation
+     */
+    public static function joinRelation($name, string $type = 'INNER'): self
+    {
+    }
+
+    /**
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see ConfigModel::innerJoinRelation
+     */
+    public static function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see ConfigModel::leftJoinRelation
+     */
+    public static function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see ConfigModel::rightJoinRelation
+     */
+    public static function rightJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
+     *
+     * This method only checks whether the specified method has the "Relation" attribute,
+     * and does not check the actual logic.
+     * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
+     *
+     * @param string $method
+     * @return bool
+     * @see ConfigModel::isRelation
+     */
+    public static function isRelation(string $method): bool
+    {
+    }
+
+    /**
+     * Really remove the record from database
+     *
+     * @param int|string $id
+     * @return $this
+     * @see ConfigModel::reallyDestroy
+     */
+    public static function reallyDestroy($id = null): self
+    {
+    }
+
+    /**
+     * Add a query to filter soft deleted records
+     *
+     * @return $this
+     * @see ConfigModel::withoutDeleted
+     */
+    public static function withoutDeleted(): self
+    {
+    }
+
+    /**
+     * Add a query to return only deleted records
+     *
+     * @return $this
+     * @see ConfigModel::onlyDeleted
+     */
+    public static function onlyDeleted(): self
+    {
+    }
+
+    /**
+     * Remove "withoutDeleted" in the query, expect to return all records
+     *
+     * @return $this
+     * @see ConfigModel::withDeleted
+     */
+    public static function withDeleted(): self
+    {
+    }
+}
+
+class GlobalConfigModel
+{
+    /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see GlobalConfigModel::saveAttributes
+     */
+    public static function saveAttributes(iterable $attributes = []): self
+    {
+    }
+
+    /**
+     * Returns the record data as array
+     *
+     * @param array|callable $returnFields A indexed array specified the fields to return
+     * @param callable|null $prepend
+     * @return array
+     * @see GlobalConfigModel::toArray
+     */
+    public static function toArray($returnFields = [], callable $prepend = null): array
+    {
+    }
+
+    /**
+     * Returns the success result with model data
+     *
+     * @param array|string|BaseResource|mixed $merge
+     * @return Ret
+     * @see GlobalConfigModel::toRet
+     */
+    public static function toRet($merge = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * Return the record table name
+     *
+     * @return string
+     * @see GlobalConfigModel::getTable
+     */
+    public static function getTable(): string
+    {
+    }
+
+    /**
+     * Import a PHP array in this record
+     *
+     * @param iterable $array
+     * @return $this
+     * @see GlobalConfigModel::fromArray
+     */
+    public static function fromArray(iterable $array): self
+    {
+    }
+
+    /**
+     * Save the record or data to database
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see GlobalConfigModel::save
+     */
+    public static function save(iterable $attributes = []): self
+    {
+    }
+
+    /**
+     * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+     *
+     * @param int|string $id
+     * @return $this
+     * @see GlobalConfigModel::destroy
+     */
+    public static function destroy($id = null): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+     *
+     * @param string|int $id
+     * @return $this
+     * @throws \Exception when record not found
+     * @see GlobalConfigModel::destroyOrFail
+     */
+    public static function destroyOrFail($id): self
+    {
+    }
+
+    /**
+     * Set the record field value
+     *
+     * @param string|int|null $name
+     * @param mixed $value
+     * @param bool $throwException
+     * @return $this|false
+     * @see GlobalConfigModel::set
+     */
+    public static function set($name, $value, bool $throwException = true)
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record object or false
+     *
+     * @param int|string|array|null $id
+     * @return $this|null
+     * @see GlobalConfigModel::find
+     */
+    public static function find($id): ?self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or throws 404 exception if record not found
+     *
+     * @param int|string $id
+     * @return $this
+     * @throws \Exception
+     * @see GlobalConfigModel::findOrFail
+     */
+    public static function findOrFail($id): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or init with the specified attributes if record not found
+     *
+     * @param int|string $id
+     * @param array|object $attributes
+     * @return $this
+     * @see GlobalConfigModel::findOrInit
+     */
+    public static function findOrInit($id = null, $attributes = []): self
+    {
+    }
+
+    /**
+     * Find a record by primary key, or save with the specified attributes if record not found
+     *
+     * @param int|string $id
+     * @param array $attributes
+     * @return $this
+     * @see GlobalConfigModel::findOrCreate
+     */
+    public static function findOrCreate($id, $attributes = []): self
+    {
+    }
+
+    /**
+     * @param array $attributes
+     * @param array|object $data
+     * @return $this
+     * @see GlobalConfigModel::findByOrCreate
+     */
+    public static function findByOrCreate($attributes, $data = []): self
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record collection object or false
+     *
+     * @param array $ids
+     * @return $this|$this[]
+     * @phpstan-return $this
+     * @see GlobalConfigModel::findAll
+     */
+    public static function findAll(array $ids): self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this|null
+     * @see GlobalConfigModel::findBy
+     */
+    public static function findBy($column, $operator = null, $value = null): ?self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this|$this[]
+     * @phpstan-return $this
+     * @see GlobalConfigModel::findAllBy
+     */
+    public static function findAllBy($column, $operator = null, $value = null): self
+    {
+    }
+
+    /**
+     * @param array $attributes
+     * @param array|object $data
+     * @return $this
+     * @see GlobalConfigModel::findOrInitBy
+     */
+    public static function findOrInitBy(array $attributes = [], $data = []): self
+    {
+    }
+
+    /**
+     * Find a record by primary key value and throws 404 exception if record not found
+     *
+     * @param mixed $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @throws \Exception
+     * @see GlobalConfigModel::findByOrFail
+     */
+    public static function findByOrFail($column, $operator = null, $value = null): self
+    {
+    }
+
+    /**
+     * @param Req|null $req
+     * @return $this
+     * @throws \Exception
+     * @see GlobalConfigModel::findFromReq
+     */
+    public static function findFromReq(\Wei\Req $req = null): self
+    {
+    }
+
+    /**
+     * Executes the generated SQL and returns the found record object or null if not found
+     *
+     * @return $this|null
+     * @see GlobalConfigModel::first
+     */
+    public static function first(): ?self
+    {
+    }
+
+    /**
+     * @return $this|$this[]
+     * @phpstan-return $this
+     * @see GlobalConfigModel::all
+     */
+    public static function all(): self
+    {
+    }
+
+    /**
+     * Coll: Specifies a field to be the key of the fetched array
+     *
+     * @param string $column
+     * @return $this
+     * @see GlobalConfigModel::indexBy
+     */
+    public static function indexBy(string $column): self
+    {
+    }
+
+    /**
+     * @param array|string|true $scopes
+     * @return $this
+     * @see GlobalConfigModel::unscoped
+     */
+    public static function unscoped($scopes = []): self
+    {
+    }
+
+    /**
+     * Set or remove cache time for the query
+     *
+     * @param int|null $seconds
+     * @return $this
+     * @see GlobalConfigModel::setCacheTime
+     */
+    public static function setCacheTime(?int $seconds): self
+    {
+    }
+
+    /**
+     * Returns the name of columns of current table
+     *
+     * @return array
+     * @see GlobalConfigModel::getColumns
+     */
+    public static function getColumns(): array
+    {
+    }
+
+    /**
+     * Check if column name exists
+     *
+     * @param string|int|null $name
+     * @return bool
+     * @see GlobalConfigModel::hasColumn
+     */
+    public static function hasColumn($name): bool
+    {
+    }
+
+    /**
+     * Executes the generated query and returns the first array result
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return array|null
+     * @see GlobalConfigModel::fetch
+     */
+    public static function fetch($column = null, $operator = null, $value = null): ?array
+    {
+    }
+
+    /**
+     * Executes the generated query and returns all array results
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return array
+     * @see GlobalConfigModel::fetchAll
+     */
+    public static function fetchAll($column = null, $operator = null, $value = null): array
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param string|null $index
+     * @return array
+     * @see GlobalConfigModel::pluck
+     */
+    public static function pluck(string $column, string $index = null): array
+    {
+    }
+
+    /**
+     * @param int $count
+     * @param callable $callback
+     * @return bool
+     * @see GlobalConfigModel::chunk
+     */
+    public static function chunk(int $count, callable $callback): bool
+    {
+    }
+
+    /**
+     * Executes a COUNT query to receive the rows number
+     *
+     * @param string $column
+     * @return int
+     * @see GlobalConfigModel::cnt
+     */
+    public static function cnt($column = '*'): int
+    {
+    }
+
+    /**
+     * Executes a MAX query to receive the max value of column
+     *
+     * @param string $column
+     * @return string|null
+     * @see GlobalConfigModel::max
+     */
+    public static function max(string $column): ?string
+    {
+    }
+
+    /**
+     * Execute a update query with specified data
+     *
+     * @param array|string $set
+     * @param mixed $value
+     * @return int
+     * @see GlobalConfigModel::update
+     */
+    public static function update($set = [], $value = null): int
+    {
+    }
+
+    /**
+     * Execute a delete query with specified conditions
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return int
+     * @see GlobalConfigModel::delete
+     */
+    public static function delete($column = null, $operator = null, $value = null): int
+    {
+    }
+
+    /**
+     * Sets the position of the first result to retrieve (the "offset")
+     *
+     * @param int|float|string $offset The first result to return
+     * @return $this
+     * @see GlobalConfigModel::offset
+     */
+    public static function offset($offset): self
+    {
+    }
+
+    /**
+     * Sets the maximum number of results to retrieve (the "limit")
+     *
+     * @param int|float|string $limit The maximum number of results to retrieve
+     * @return $this
+     * @see GlobalConfigModel::limit
+     */
+    public static function limit($limit): self
+    {
+    }
+
+    /**
+     * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+     *
+     * @param int $page The page number
+     * @return $this
+     * @see GlobalConfigModel::page
+     */
+    public static function page($page): self
+    {
+    }
+
+    /**
+     * Specifies an item that is to be returned in the query result.
+     * Replaces any previously specified selections, if any.
+     *
+     * @param array|string $columns the selection expressions
+     * @return $this
+     * @see GlobalConfigModel::select
+     */
+    public static function select($columns = ['*']): self
+    {
+    }
+
+    /**
+     * @param array|string $columns
+     * @return $this
+     * @see GlobalConfigModel::selectDistinct
+     */
+    public static function selectDistinct($columns): self
+    {
+    }
+
+    /**
+     * @param string $expression
+     * @return $this
+     * @see GlobalConfigModel::selectRaw
+     */
+    public static function selectRaw($expression): self
+    {
+    }
+
+    /**
+     * Specifies columns that are not to be returned in the query result.
+     * Replaces any previously specified selections, if any.
+     *
+     * @param array|string $columns
+     * @return $this
+     * @see GlobalConfigModel::selectExcept
+     */
+    public static function selectExcept($columns): self
+    {
+    }
+
+    /**
+     * Specifies an item of the main table that is to be returned in the query result.
+     * Default to all columns of the main table
+     *
+     * @param string $column
+     * @return $this
+     * @see GlobalConfigModel::selectMain
+     */
+    public static function selectMain(string $column = '*'): self
+    {
+    }
+
+    /**
+     * Sets table for FROM query
+     *
+     * @param string $table
+     * @param string|null $alias
+     * @return $this
+     * @see GlobalConfigModel::from
+     */
+    public static function from(string $table, $alias = null): self
+    {
+    }
+
+    /**
+     * @param string $table
+     * @param mixed|null $alias
+     * @return $this
+     * @see GlobalConfigModel::table
+     */
+    public static function table(string $table, $alias = null): self
+    {
+    }
+
+    /**
+     * Adds a inner join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @param string $type
+     * @return $this
+     * @see GlobalConfigModel::join
+     */
+    public static function join(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null,
+        string $type = 'INNER'
+    ): self {
+    }
+
+    /**
+     * Adds a inner join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @return $this
+     * @see GlobalConfigModel::innerJoin
+     */
+    public static function innerJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
+    }
+
+    /**
+     * Adds a left join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @return $this
+     * @see GlobalConfigModel::leftJoin
+     */
+    public static function leftJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
+    }
+
+    /**
+     * Adds a right join to the query
+     *
+     * @param string $table The table name to join
+     * @param string|null $first
+     * @param string $operator
+     * @param string|null $second
+     * @return $this
+     * @see GlobalConfigModel::rightJoin
+     */
+    public static function rightJoin(
+        string $table,
+        string $first = null,
+        string $operator = '=',
+        string $second = null
+    ): self {
+    }
+
+    /**
+     * Specifies one or more restrictions to the query result.
+     * Replaces any previously specified restrictions, if any.
+     *
+     * ```php
+     * $user = wei()->db('user')->where('id = 1');
+     * $user = wei()->db('user')->where('id = ?', 1);
+     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+     * $users = wei()->where(array('id' => array('1', '2', '3')));
+     * ```
+     *
+     * @param array|Closure|string|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return $this
+     * @see GlobalConfigModel::where
+     */
+    public static function where($column = null, $operator = null, $value = null): self
+    {
+    }
+
+    /**
+     * @param scalar $expression
+     * @param mixed $params
+     * @return $this
+     * @see GlobalConfigModel::whereRaw
+     */
+    public static function whereRaw($expression, $params = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see GlobalConfigModel::whereBetween
+     */
+    public static function whereBetween(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see GlobalConfigModel::whereNotBetween
+     */
+    public static function whereNotBetween(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see GlobalConfigModel::whereIn
+     */
+    public static function whereIn(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param array $params
+     * @return $this
+     * @see GlobalConfigModel::whereNotIn
+     */
+    public static function whereNotIn(string $column, array $params): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     * @see GlobalConfigModel::whereNull
+     */
+    public static function whereNull(string $column): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     * @see GlobalConfigModel::whereNotNull
+     */
+    public static function whereNotNull(string $column): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see GlobalConfigModel::whereDate
+     */
+    public static function whereDate(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see GlobalConfigModel::whereMonth
+     */
+    public static function whereMonth(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see GlobalConfigModel::whereDay
+     */
+    public static function whereDay(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see GlobalConfigModel::whereYear
+     */
+    public static function whereYear(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrValue
+     * @param mixed|null $value
+     * @return $this
+     * @see GlobalConfigModel::whereTime
+     */
+    public static function whereTime(string $column, $opOrValue, $value = null): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $opOrColumn2
+     * @param mixed|null $column2
+     * @return $this
+     * @see GlobalConfigModel::whereColumn
+     */
+    public static function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+    {
+    }
+
+    /**
+     * 搜索字段是否包含某个值
+     *
+     * @param string $column
+     * @param mixed $value
+     * @param string $condition
+     * @return $this
+     * @see GlobalConfigModel::whereContains
+     */
+    public static function whereContains(string $column, $value, string $condition = 'AND'): self
+    {
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @param string $condition
+     * @return $this
+     * @see GlobalConfigModel::whereNotContains
+     */
+    public static function whereNotContains(string $column, $value, string $condition = 'OR'): self
+    {
+    }
+
+    /**
+     * Search whether a column has a value other than the default value
+     *
+     * @param string $column
+     * @param bool $has
+     * @return $this
+     * @see GlobalConfigModel::whereHas
+     */
+    public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * Search whether a column dont have a value other than the default value
+     *
+     * @param string $column
+     * @return $this
+     * @see GlobalConfigModel::whereNotHas
+     */
+    public static function whereNotHas(string $column): self
+    {
+    }
+
+    /**
+     * Specifies a grouping over the results of the query.
+     * Replaces any previously specified groupings, if any.
+     *
+     * @param mixed $column the grouping column
+     * @return $this
+     * @see GlobalConfigModel::groupBy
+     */
+    public static function groupBy($column): self
+    {
+    }
+
+    /**
+     * Specifies a restriction over the groups of the query.
+     * Replaces any previous having restrictions, if any.
+     *
+     * @param mixed $column
+     * @param mixed $operator
+     * @param mixed|null $value
+     * @param mixed $condition
+     * @return $this
+     * @see GlobalConfigModel::having
+     */
+    public static function having($column, $operator, $value = null, $condition = 'AND'): self
+    {
+    }
+
+    /**
+     * Specifies an ordering for the query results.
+     * Replaces any previously specified orderings, if any.
+     *
+     * @param string $column the ordering expression
+     * @param string $order the ordering direction
+     * @return $this
+     * @see GlobalConfigModel::orderBy
+     */
+    public static function orderBy(string $column, $order = 'ASC'): self
+    {
+    }
+
+    /**
+     * Adds a DESC ordering to the query
+     *
+     * @param string $field The name of field
+     * @return $this
+     * @see GlobalConfigModel::desc
+     */
+    public static function desc(string $field): self
+    {
+    }
+
+    /**
+     * Add an ASC ordering to the query
+     *
+     * @param string $field The name of field
+     * @return $this
+     * @see GlobalConfigModel::asc
+     */
+    public static function asc(string $field): self
+    {
+    }
+
+    /**
+     * @return $this
+     * @see GlobalConfigModel::forUpdate
+     */
+    public static function forUpdate(): self
+    {
+    }
+
+    /**
+     * @return $this
+     * @see GlobalConfigModel::forShare
+     */
+    public static function forShare(): self
+    {
+    }
+
+    /**
+     * @param string|bool $lock
+     * @return $this
+     * @see GlobalConfigModel::lock
+     */
+    public static function lock($lock): self
+    {
+    }
+
+    /**
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
+     * @return $this
+     * @see GlobalConfigModel::when
+     */
+    public static function when($value, callable $callback, callable $default = null): self
+    {
+    }
+
+    /**
+     * @param mixed $value
+     * @param callable $callback
+     * @param callable|null $default
+     * @return $this
+     * @see GlobalConfigModel::unless
+     */
+    public static function unless($value, callable $callback, callable $default = null): self
+    {
+    }
+
+    /**
+     * @param callable|null $converter
+     * @return $this
+     * @see GlobalConfigModel::setDbKeyConverter
+     */
+    public static function setDbKeyConverter(callable $converter = null): self
+    {
+    }
+
+    /**
+     * @param callable|null $converter
+     * @return $this
+     * @see GlobalConfigModel::setPhpKeyConverter
+     */
+    public static function setPhpKeyConverter(callable $converter = null): self
+    {
+    }
+
+    /**
+     * Add a (inner) join base on the relation to the query
+     *
+     * @param string|array $name
+     * @param string $type
+     * @return $this
+     * @see GlobalConfigModel::joinRelation
+     */
+    public static function joinRelation($name, string $type = 'INNER'): self
+    {
+    }
+
+    /**
+     * Add a inner join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see GlobalConfigModel::innerJoinRelation
+     */
+    public static function innerJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a left join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see GlobalConfigModel::leftJoinRelation
+     */
+    public static function leftJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Add a right join base on the relation to the query
+     *
+     * @param string|array $name
+     * @return $this
+     * @see GlobalConfigModel::rightJoinRelation
+     */
+    public static function rightJoinRelation($name): self
+    {
+    }
+
+    /**
+     * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
+     *
+     * This method only checks whether the specified method has the "Relation" attribute,
+     * and does not check the actual logic.
+     * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
+     *
+     * @param string $method
+     * @return bool
+     * @see GlobalConfigModel::isRelation
+     */
+    public static function isRelation(string $method): bool
+    {
+    }
+
+    /**
+     * Really remove the record from database
+     *
+     * @param int|string $id
+     * @return $this
+     * @see GlobalConfigModel::reallyDestroy
+     */
+    public static function reallyDestroy($id = null): self
+    {
+    }
+
+    /**
+     * Add a query to filter soft deleted records
+     *
+     * @return $this
+     * @see GlobalConfigModel::withoutDeleted
+     */
+    public static function withoutDeleted(): self
+    {
+    }
+
+    /**
+     * Add a query to return only deleted records
+     *
+     * @return $this
+     * @see GlobalConfigModel::onlyDeleted
+     */
+    public static function onlyDeleted(): self
+    {
+    }
+
+    /**
+     * Remove "withoutDeleted" in the query, expect to return all records
+     *
+     * @return $this
+     * @see GlobalConfigModel::withDeleted
+     */
+    public static function withDeleted(): self
     {
     }
 }
@@ -1712,18 +3835,6 @@ class QueryBuilder
      * @see QueryBuilder::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * @param mixed $if
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see QueryBuilder::whereIf
-     */
-    public static function whereIf($if, $column = null, $operator = null, $value = null): self
     {
     }
 
@@ -3095,18 +5206,6 @@ class User
     }
 
     /**
-     * @param mixed $if
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereIf
-     */
-    public static function whereIf($if, $column = null, $operator = null, $value = null): self
-    {
-    }
-
-    /**
      * Search whether a column dont have a value other than the default value
      *
      * @param string $column
@@ -4090,18 +6189,6 @@ class UserModel
      * @see UserModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * @param mixed $if
-     * @param array|Closure|string|null $column
-     * @param mixed|null $operator
-     * @param mixed|null $value
-     * @return $this
-     * @see UserModel::whereIf
-     */
-    public static function whereIf($if, $column = null, $operator = null, $value = null): self
     {
     }
 
@@ -5090,18 +7177,6 @@ if (0) {
         }
 
         /**
-         * @param mixed $if
-         * @param array|Closure|string|null $column
-         * @param mixed|null $operator
-         * @param mixed|null $value
-         * @return $this
-         * @see AppModel::whereIf
-         */
-        public function whereIf($if, $column = null, $operator = null, $value = null): self
-        {
-        }
-
-        /**
          * Search whether a column dont have a value other than the default value
          *
          * @param string $column
@@ -5319,6 +7394,125 @@ if (0) {
     class Config
     {
         /**
+         * @see Config::get
+         */
+        public function get($name, $default = null)
+        {
+        }
+
+        /**
+         * @see Config::set
+         */
+        public function set($name, $value, array $options = []): self
+        {
+        }
+
+        /**
+         * @see Config::getMultiple
+         */
+        public function getMultiple(array $names, $default = null): array
+        {
+        }
+
+        /**
+         * @see Config::setMultiple
+         */
+        public function setMultiple(array $values, $options = []): self
+        {
+        }
+
+        /**
+         * @see Config::getSection
+         */
+        public function getSection(string $name)
+        {
+        }
+
+        /**
+         * @see Config::getGlobal
+         */
+        public function getGlobal($name, $default = null)
+        {
+        }
+
+        /**
+         * @see Config::setGlobal
+         */
+        public function setGlobal($name, $value): self
+        {
+        }
+
+        /**
+         * @see Config::deleteGlobal
+         */
+        public function deleteGlobal(string $name): self
+        {
+        }
+
+        /**
+         * @see Config::getGlobalMultiple
+         */
+        public function getGlobalMultiple($names, $default = null): array
+        {
+        }
+
+        /**
+         * @see Config::setGlobalMultiple
+         */
+        public function setGlobalMultiple($values): self
+        {
+        }
+
+        /**
+         * @see Config::getGlobalSection
+         */
+        public function getGlobalSection($name): array
+        {
+        }
+
+        /**
+         * @see Config::getApp
+         */
+        public function getApp($name, $default = null)
+        {
+        }
+
+        /**
+         * @see Config::setApp
+         */
+        public function setApp($name, $value, array $options = []): self
+        {
+        }
+
+        /**
+         * @see Config::deleteApp
+         */
+        public function deleteApp(string $name): self
+        {
+        }
+
+        /**
+         * @see Config::getAppMultiple
+         */
+        public function getAppMultiple($names, $default = null)
+        {
+        }
+
+        /**
+         * @see Config::setAppMultiple
+         */
+        public function setAppMultiple($values, array $options = []): self
+        {
+        }
+
+        /**
+         * @see Config::getAppSection
+         */
+        public function getAppSection($name): array
+        {
+        }
+
+        /**
          * @see Config::save
          * @param array|string $name
          * @param mixed $value
@@ -5339,6 +7533,1998 @@ if (0) {
          * @see Config::load
          */
         public function load()
+        {
+        }
+    }
+
+    class ConfigModel
+    {
+        /**
+         * Set each attribute value, without checking whether the column is fillable, and save the model
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see ConfigModel::saveAttributes
+         */
+        public function saveAttributes(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Returns the record data as array
+         *
+         * @param array|callable $returnFields A indexed array specified the fields to return
+         * @param callable|null $prepend
+         * @return array
+         * @see ConfigModel::toArray
+         */
+        public function toArray($returnFields = [], callable $prepend = null): array
+        {
+        }
+
+        /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see ConfigModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @see ConfigModel::getTable
+         */
+        public function getTable(): string
+        {
+        }
+
+        /**
+         * Import a PHP array in this record
+         *
+         * @param iterable $array
+         * @return $this
+         * @see ConfigModel::fromArray
+         */
+        public function fromArray(iterable $array): self
+        {
+        }
+
+        /**
+         * Save the record or data to database
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see ConfigModel::save
+         */
+        public function save(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param int|string $id
+         * @return $this
+         * @see ConfigModel::destroy
+         */
+        public function destroy($id = null): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+         *
+         * @param string|int $id
+         * @return $this
+         * @throws \Exception when record not found
+         * @see ConfigModel::destroyOrFail
+         */
+        public function destroyOrFail($id): self
+        {
+        }
+
+        /**
+         * Set the record field value
+         *
+         * @param string|int|null $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this|false
+         * @see ConfigModel::set
+         */
+        public function set($name, $value, bool $throwException = true)
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or false
+         *
+         * @param int|string|array|null $id
+         * @return $this|null
+         * @see ConfigModel::find
+         */
+        public function find($id): ?self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found
+         *
+         * @param int|string $id
+         * @return $this
+         * @throws \Exception
+         * @see ConfigModel::findOrFail
+         */
+        public function findOrFail($id): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or init with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array|object $attributes
+         * @return $this
+         * @see ConfigModel::findOrInit
+         */
+        public function findOrInit($id = null, $attributes = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or save with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array $attributes
+         * @return $this
+         * @see ConfigModel::findOrCreate
+         */
+        public function findOrCreate($id, $attributes = []): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see ConfigModel::findByOrCreate
+         */
+        public function findByOrCreate($attributes, $data = []): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record collection object or false
+         *
+         * @param array $ids
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see ConfigModel::findAll
+         */
+        public function findAll(array $ids): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|null
+         * @see ConfigModel::findBy
+         */
+        public function findBy($column, $operator = null, $value = null): ?self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see ConfigModel::findAllBy
+         */
+        public function findAllBy($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see ConfigModel::findOrInitBy
+         */
+        public function findOrInitBy(array $attributes = [], $data = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key value and throws 404 exception if record not found
+         *
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @throws \Exception
+         * @see ConfigModel::findByOrFail
+         */
+        public function findByOrFail($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param Req|null $req
+         * @return $this
+         * @throws \Exception
+         * @see ConfigModel::findFromReq
+         */
+        public function findFromReq(\Wei\Req $req = null): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return $this|null
+         * @see ConfigModel::first
+         */
+        public function first(): ?self
+        {
+        }
+
+        /**
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see ConfigModel::all
+         */
+        public function all(): self
+        {
+        }
+
+        /**
+         * Coll: Specifies a field to be the key of the fetched array
+         *
+         * @param string $column
+         * @return $this
+         * @see ConfigModel::indexBy
+         */
+        public function indexBy(string $column): self
+        {
+        }
+
+        /**
+         * @param array|string|true $scopes
+         * @return $this
+         * @see ConfigModel::unscoped
+         */
+        public function unscoped($scopes = []): self
+        {
+        }
+
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null $seconds
+         * @return $this
+         * @see ConfigModel::setCacheTime
+         */
+        public function setCacheTime(?int $seconds): self
+        {
+        }
+
+        /**
+         * Returns the name of columns of current table
+         *
+         * @return array
+         * @see ConfigModel::getColumns
+         */
+        public function getColumns(): array
+        {
+        }
+
+        /**
+         * Check if column name exists
+         *
+         * @param string|int|null $name
+         * @return bool
+         * @see ConfigModel::hasColumn
+         */
+        public function hasColumn($name): bool
+        {
+        }
+
+        /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array|null
+         * @see ConfigModel::fetch
+         */
+        public function fetch($column = null, $operator = null, $value = null): ?array
+        {
+        }
+
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array
+         * @see ConfigModel::fetchAll
+         */
+        public function fetchAll($column = null, $operator = null, $value = null): array
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @see ConfigModel::pluck
+         */
+        public function pluck(string $column, string $index = null): array
+        {
+        }
+
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @see ConfigModel::chunk
+         */
+        public function chunk(int $count, callable $callback): bool
+        {
+        }
+
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @see ConfigModel::cnt
+         */
+        public function cnt($column = '*'): int
+        {
+        }
+
+        /**
+         * Executes a MAX query to receive the max value of column
+         *
+         * @param string $column
+         * @return string|null
+         * @see ConfigModel::max
+         */
+        public function max(string $column): ?string
+        {
+        }
+
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see ConfigModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return int
+         * @see ConfigModel::delete
+         */
+        public function delete($column = null, $operator = null, $value = null): int
+        {
+        }
+
+        /**
+         * Sets the position of the first result to retrieve (the "offset")
+         *
+         * @param int|float|string $offset The first result to return
+         * @return $this
+         * @see ConfigModel::offset
+         */
+        public function offset($offset): self
+        {
+        }
+
+        /**
+         * Sets the maximum number of results to retrieve (the "limit")
+         *
+         * @param int|float|string $limit The maximum number of results to retrieve
+         * @return $this
+         * @see ConfigModel::limit
+         */
+        public function limit($limit): self
+        {
+        }
+
+        /**
+         * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+         *
+         * @param int $page The page number
+         * @return $this
+         * @see ConfigModel::page
+         */
+        public function page($page): self
+        {
+        }
+
+        /**
+         * Specifies an item that is to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns the selection expressions
+         * @return $this
+         * @see ConfigModel::select
+         */
+        public function select($columns = ['*']): self
+        {
+        }
+
+        /**
+         * @param array|string $columns
+         * @return $this
+         * @see ConfigModel::selectDistinct
+         */
+        public function selectDistinct($columns): self
+        {
+        }
+
+        /**
+         * @param string $expression
+         * @return $this
+         * @see ConfigModel::selectRaw
+         */
+        public function selectRaw($expression): self
+        {
+        }
+
+        /**
+         * Specifies columns that are not to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns
+         * @return $this
+         * @see ConfigModel::selectExcept
+         */
+        public function selectExcept($columns): self
+        {
+        }
+
+        /**
+         * Specifies an item of the main table that is to be returned in the query result.
+         * Default to all columns of the main table
+         *
+         * @param string $column
+         * @return $this
+         * @see ConfigModel::selectMain
+         */
+        public function selectMain(string $column = '*'): self
+        {
+        }
+
+        /**
+         * Sets table for FROM query
+         *
+         * @param string $table
+         * @param string|null $alias
+         * @return $this
+         * @see ConfigModel::from
+         */
+        public function from(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * @param string $table
+         * @param mixed|null $alias
+         * @return $this
+         * @see ConfigModel::table
+         */
+        public function table(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
+         * @return $this
+         * @see ConfigModel::join
+         */
+        public function join(
+            string $table,
+            string $first = null,
+            string $operator = '=',
+            string $second = null,
+            string $type = 'INNER'
+        ): self {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see ConfigModel::innerJoin
+         */
+        public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a left join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see ConfigModel::leftJoin
+         */
+        public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a right join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see ConfigModel::rightJoin
+         */
+        public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Specifies one or more restrictions to the query result.
+         * Replaces any previously specified restrictions, if any.
+         *
+         * ```php
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * ```
+         *
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see ConfigModel::where
+         */
+        public function where($column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @param mixed $params
+         * @return $this
+         * @see ConfigModel::whereRaw
+         */
+        public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see ConfigModel::whereBetween
+         */
+        public function whereBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see ConfigModel::whereNotBetween
+         */
+        public function whereNotBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see ConfigModel::whereIn
+         */
+        public function whereIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see ConfigModel::whereNotIn
+         */
+        public function whereNotIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see ConfigModel::whereNull
+         */
+        public function whereNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see ConfigModel::whereNotNull
+         */
+        public function whereNotNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see ConfigModel::whereDate
+         */
+        public function whereDate(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see ConfigModel::whereMonth
+         */
+        public function whereMonth(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see ConfigModel::whereDay
+         */
+        public function whereDay(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see ConfigModel::whereYear
+         */
+        public function whereYear(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see ConfigModel::whereTime
+         */
+        public function whereTime(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrColumn2
+         * @param mixed|null $column2
+         * @return $this
+         * @see ConfigModel::whereColumn
+         */
+        public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+        {
+        }
+
+        /**
+         * 搜索字段是否包含某个值
+         *
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see ConfigModel::whereContains
+         */
+        public function whereContains(string $column, $value, string $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see ConfigModel::whereNotContains
+         */
+        public function whereNotContains(string $column, $value, string $condition = 'OR'): self
+        {
+        }
+
+        /**
+         * Search whether a column has a value other than the default value
+         *
+         * @param string $column
+         * @param bool $has
+         * @return $this
+         * @see ConfigModel::whereHas
+         */
+        public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * Search whether a column dont have a value other than the default value
+         *
+         * @param string $column
+         * @return $this
+         * @see ConfigModel::whereNotHas
+         */
+        public function whereNotHas(string $column): self
+        {
+        }
+
+        /**
+         * Specifies a grouping over the results of the query.
+         * Replaces any previously specified groupings, if any.
+         *
+         * @param mixed $column the grouping column
+         * @return $this
+         * @see ConfigModel::groupBy
+         */
+        public function groupBy($column): self
+        {
+        }
+
+        /**
+         * Specifies a restriction over the groups of the query.
+         * Replaces any previous having restrictions, if any.
+         *
+         * @param mixed $column
+         * @param mixed $operator
+         * @param mixed|null $value
+         * @param mixed $condition
+         * @return $this
+         * @see ConfigModel::having
+         */
+        public function having($column, $operator, $value = null, $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * Specifies an ordering for the query results.
+         * Replaces any previously specified orderings, if any.
+         *
+         * @param string $column the ordering expression
+         * @param string $order the ordering direction
+         * @return $this
+         * @see ConfigModel::orderBy
+         */
+        public function orderBy(string $column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * Adds a DESC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see ConfigModel::desc
+         */
+        public function desc(string $field): self
+        {
+        }
+
+        /**
+         * Add an ASC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see ConfigModel::asc
+         */
+        public function asc(string $field): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see ConfigModel::forUpdate
+         */
+        public function forUpdate(): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see ConfigModel::forShare
+         */
+        public function forShare(): self
+        {
+        }
+
+        /**
+         * @param string|bool $lock
+         * @return $this
+         * @see ConfigModel::lock
+         */
+        public function lock($lock): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see ConfigModel::when
+         */
+        public function when($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see ConfigModel::unless
+         */
+        public function unless($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see ConfigModel::setDbKeyConverter
+         */
+        public function setDbKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see ConfigModel::setPhpKeyConverter
+         */
+        public function setPhpKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * Add a (inner) join base on the relation to the query
+         *
+         * @param string|array $name
+         * @param string $type
+         * @return $this
+         * @see ConfigModel::joinRelation
+         */
+        public function joinRelation($name, string $type = 'INNER'): self
+        {
+        }
+
+        /**
+         * Add a inner join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see ConfigModel::innerJoinRelation
+         */
+        public function innerJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a left join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see ConfigModel::leftJoinRelation
+         */
+        public function leftJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a right join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see ConfigModel::rightJoinRelation
+         */
+        public function rightJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
+         *
+         * This method only checks whether the specified method has the "Relation" attribute,
+         * and does not check the actual logic.
+         * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
+         *
+         * @param string $method
+         * @return bool
+         * @see ConfigModel::isRelation
+         */
+        public function isRelation(string $method): bool
+        {
+        }
+
+        /**
+         * Really remove the record from database
+         *
+         * @param int|string $id
+         * @return $this
+         * @see ConfigModel::reallyDestroy
+         */
+        public function reallyDestroy($id = null): self
+        {
+        }
+
+        /**
+         * Add a query to filter soft deleted records
+         *
+         * @return $this
+         * @see ConfigModel::withoutDeleted
+         */
+        public function withoutDeleted(): self
+        {
+        }
+
+        /**
+         * Add a query to return only deleted records
+         *
+         * @return $this
+         * @see ConfigModel::onlyDeleted
+         */
+        public function onlyDeleted(): self
+        {
+        }
+
+        /**
+         * Remove "withoutDeleted" in the query, expect to return all records
+         *
+         * @return $this
+         * @see ConfigModel::withDeleted
+         */
+        public function withDeleted(): self
+        {
+        }
+    }
+
+    class GlobalConfigModel
+    {
+        /**
+         * Set each attribute value, without checking whether the column is fillable, and save the model
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see GlobalConfigModel::saveAttributes
+         */
+        public function saveAttributes(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Returns the record data as array
+         *
+         * @param array|callable $returnFields A indexed array specified the fields to return
+         * @param callable|null $prepend
+         * @return array
+         * @see GlobalConfigModel::toArray
+         */
+        public function toArray($returnFields = [], callable $prepend = null): array
+        {
+        }
+
+        /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see GlobalConfigModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Return the record table name
+         *
+         * @return string
+         * @see GlobalConfigModel::getTable
+         */
+        public function getTable(): string
+        {
+        }
+
+        /**
+         * Import a PHP array in this record
+         *
+         * @param iterable $array
+         * @return $this
+         * @see GlobalConfigModel::fromArray
+         */
+        public function fromArray(iterable $array): self
+        {
+        }
+
+        /**
+         * Save the record or data to database
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see GlobalConfigModel::save
+         */
+        public function save(iterable $attributes = []): self
+        {
+        }
+
+        /**
+         * Delete the current record and trigger the beforeDestroy and afterDestroy callback
+         *
+         * @param int|string $id
+         * @return $this
+         * @see GlobalConfigModel::destroy
+         */
+        public function destroy($id = null): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found, then destroy the record
+         *
+         * @param string|int $id
+         * @return $this
+         * @throws \Exception when record not found
+         * @see GlobalConfigModel::destroyOrFail
+         */
+        public function destroyOrFail($id): self
+        {
+        }
+
+        /**
+         * Set the record field value
+         *
+         * @param string|int|null $name
+         * @param mixed $value
+         * @param bool $throwException
+         * @return $this|false
+         * @see GlobalConfigModel::set
+         */
+        public function set($name, $value, bool $throwException = true)
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or false
+         *
+         * @param int|string|array|null $id
+         * @return $this|null
+         * @see GlobalConfigModel::find
+         */
+        public function find($id): ?self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or throws 404 exception if record not found
+         *
+         * @param int|string $id
+         * @return $this
+         * @throws \Exception
+         * @see GlobalConfigModel::findOrFail
+         */
+        public function findOrFail($id): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or init with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array|object $attributes
+         * @return $this
+         * @see GlobalConfigModel::findOrInit
+         */
+        public function findOrInit($id = null, $attributes = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key, or save with the specified attributes if record not found
+         *
+         * @param int|string $id
+         * @param array $attributes
+         * @return $this
+         * @see GlobalConfigModel::findOrCreate
+         */
+        public function findOrCreate($id, $attributes = []): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see GlobalConfigModel::findByOrCreate
+         */
+        public function findByOrCreate($attributes, $data = []): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record collection object or false
+         *
+         * @param array $ids
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see GlobalConfigModel::findAll
+         */
+        public function findAll(array $ids): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|null
+         * @see GlobalConfigModel::findBy
+         */
+        public function findBy($column, $operator = null, $value = null): ?self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see GlobalConfigModel::findAllBy
+         */
+        public function findAllBy($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param array $attributes
+         * @param array|object $data
+         * @return $this
+         * @see GlobalConfigModel::findOrInitBy
+         */
+        public function findOrInitBy(array $attributes = [], $data = []): self
+        {
+        }
+
+        /**
+         * Find a record by primary key value and throws 404 exception if record not found
+         *
+         * @param mixed $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @throws \Exception
+         * @see GlobalConfigModel::findByOrFail
+         */
+        public function findByOrFail($column, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param Req|null $req
+         * @return $this
+         * @throws \Exception
+         * @see GlobalConfigModel::findFromReq
+         */
+        public function findFromReq(\Wei\Req $req = null): self
+        {
+        }
+
+        /**
+         * Executes the generated SQL and returns the found record object or null if not found
+         *
+         * @return $this|null
+         * @see GlobalConfigModel::first
+         */
+        public function first(): ?self
+        {
+        }
+
+        /**
+         * @return $this|$this[]
+         * @phpstan-return $this
+         * @see GlobalConfigModel::all
+         */
+        public function all(): self
+        {
+        }
+
+        /**
+         * Coll: Specifies a field to be the key of the fetched array
+         *
+         * @param string $column
+         * @return $this
+         * @see GlobalConfigModel::indexBy
+         */
+        public function indexBy(string $column): self
+        {
+        }
+
+        /**
+         * @param array|string|true $scopes
+         * @return $this
+         * @see GlobalConfigModel::unscoped
+         */
+        public function unscoped($scopes = []): self
+        {
+        }
+
+        /**
+         * Set or remove cache time for the query
+         *
+         * @param int|null $seconds
+         * @return $this
+         * @see GlobalConfigModel::setCacheTime
+         */
+        public function setCacheTime(?int $seconds): self
+        {
+        }
+
+        /**
+         * Returns the name of columns of current table
+         *
+         * @return array
+         * @see GlobalConfigModel::getColumns
+         */
+        public function getColumns(): array
+        {
+        }
+
+        /**
+         * Check if column name exists
+         *
+         * @param string|int|null $name
+         * @return bool
+         * @see GlobalConfigModel::hasColumn
+         */
+        public function hasColumn($name): bool
+        {
+        }
+
+        /**
+         * Executes the generated query and returns the first array result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array|null
+         * @see GlobalConfigModel::fetch
+         */
+        public function fetch($column = null, $operator = null, $value = null): ?array
+        {
+        }
+
+        /**
+         * Executes the generated query and returns all array results
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return array
+         * @see GlobalConfigModel::fetchAll
+         */
+        public function fetchAll($column = null, $operator = null, $value = null): array
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param string|null $index
+         * @return array
+         * @see GlobalConfigModel::pluck
+         */
+        public function pluck(string $column, string $index = null): array
+        {
+        }
+
+        /**
+         * @param int $count
+         * @param callable $callback
+         * @return bool
+         * @see GlobalConfigModel::chunk
+         */
+        public function chunk(int $count, callable $callback): bool
+        {
+        }
+
+        /**
+         * Executes a COUNT query to receive the rows number
+         *
+         * @param string $column
+         * @return int
+         * @see GlobalConfigModel::cnt
+         */
+        public function cnt($column = '*'): int
+        {
+        }
+
+        /**
+         * Executes a MAX query to receive the max value of column
+         *
+         * @param string $column
+         * @return string|null
+         * @see GlobalConfigModel::max
+         */
+        public function max(string $column): ?string
+        {
+        }
+
+        /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see GlobalConfigModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
+         * Execute a delete query with specified conditions
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return int
+         * @see GlobalConfigModel::delete
+         */
+        public function delete($column = null, $operator = null, $value = null): int
+        {
+        }
+
+        /**
+         * Sets the position of the first result to retrieve (the "offset")
+         *
+         * @param int|float|string $offset The first result to return
+         * @return $this
+         * @see GlobalConfigModel::offset
+         */
+        public function offset($offset): self
+        {
+        }
+
+        /**
+         * Sets the maximum number of results to retrieve (the "limit")
+         *
+         * @param int|float|string $limit The maximum number of results to retrieve
+         * @return $this
+         * @see GlobalConfigModel::limit
+         */
+        public function limit($limit): self
+        {
+        }
+
+        /**
+         * Sets the page number, the "OFFSET" value is equals "($page - 1) * LIMIT"
+         *
+         * @param int $page The page number
+         * @return $this
+         * @see GlobalConfigModel::page
+         */
+        public function page($page): self
+        {
+        }
+
+        /**
+         * Specifies an item that is to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns the selection expressions
+         * @return $this
+         * @see GlobalConfigModel::select
+         */
+        public function select($columns = ['*']): self
+        {
+        }
+
+        /**
+         * @param array|string $columns
+         * @return $this
+         * @see GlobalConfigModel::selectDistinct
+         */
+        public function selectDistinct($columns): self
+        {
+        }
+
+        /**
+         * @param string $expression
+         * @return $this
+         * @see GlobalConfigModel::selectRaw
+         */
+        public function selectRaw($expression): self
+        {
+        }
+
+        /**
+         * Specifies columns that are not to be returned in the query result.
+         * Replaces any previously specified selections, if any.
+         *
+         * @param array|string $columns
+         * @return $this
+         * @see GlobalConfigModel::selectExcept
+         */
+        public function selectExcept($columns): self
+        {
+        }
+
+        /**
+         * Specifies an item of the main table that is to be returned in the query result.
+         * Default to all columns of the main table
+         *
+         * @param string $column
+         * @return $this
+         * @see GlobalConfigModel::selectMain
+         */
+        public function selectMain(string $column = '*'): self
+        {
+        }
+
+        /**
+         * Sets table for FROM query
+         *
+         * @param string $table
+         * @param string|null $alias
+         * @return $this
+         * @see GlobalConfigModel::from
+         */
+        public function from(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * @param string $table
+         * @param mixed|null $alias
+         * @return $this
+         * @see GlobalConfigModel::table
+         */
+        public function table(string $table, $alias = null): self
+        {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @param string $type
+         * @return $this
+         * @see GlobalConfigModel::join
+         */
+        public function join(
+            string $table,
+            string $first = null,
+            string $operator = '=',
+            string $second = null,
+            string $type = 'INNER'
+        ): self {
+        }
+
+        /**
+         * Adds a inner join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see GlobalConfigModel::innerJoin
+         */
+        public function innerJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a left join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see GlobalConfigModel::leftJoin
+         */
+        public function leftJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Adds a right join to the query
+         *
+         * @param string $table The table name to join
+         * @param string|null $first
+         * @param string $operator
+         * @param string|null $second
+         * @return $this
+         * @see GlobalConfigModel::rightJoin
+         */
+        public function rightJoin(string $table, string $first = null, string $operator = '=', string $second = null): self
+        {
+        }
+
+        /**
+         * Specifies one or more restrictions to the query result.
+         * Replaces any previously specified restrictions, if any.
+         *
+         * ```php
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * ```
+         *
+         * @param array|Closure|string|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return $this
+         * @see GlobalConfigModel::where
+         */
+        public function where($column = null, $operator = null, $value = null): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @param mixed $params
+         * @return $this
+         * @see GlobalConfigModel::whereRaw
+         */
+        public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see GlobalConfigModel::whereBetween
+         */
+        public function whereBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see GlobalConfigModel::whereNotBetween
+         */
+        public function whereNotBetween(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see GlobalConfigModel::whereIn
+         */
+        public function whereIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param array $params
+         * @return $this
+         * @see GlobalConfigModel::whereNotIn
+         */
+        public function whereNotIn(string $column, array $params): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see GlobalConfigModel::whereNull
+         */
+        public function whereNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @return $this
+         * @see GlobalConfigModel::whereNotNull
+         */
+        public function whereNotNull(string $column): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see GlobalConfigModel::whereDate
+         */
+        public function whereDate(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see GlobalConfigModel::whereMonth
+         */
+        public function whereMonth(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see GlobalConfigModel::whereDay
+         */
+        public function whereDay(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see GlobalConfigModel::whereYear
+         */
+        public function whereYear(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrValue
+         * @param mixed|null $value
+         * @return $this
+         * @see GlobalConfigModel::whereTime
+         */
+        public function whereTime(string $column, $opOrValue, $value = null): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $opOrColumn2
+         * @param mixed|null $column2
+         * @return $this
+         * @see GlobalConfigModel::whereColumn
+         */
+        public function whereColumn(string $column, $opOrColumn2, $column2 = null): self
+        {
+        }
+
+        /**
+         * 搜索字段是否包含某个值
+         *
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see GlobalConfigModel::whereContains
+         */
+        public function whereContains(string $column, $value, string $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * @param string $column
+         * @param mixed $value
+         * @param string $condition
+         * @return $this
+         * @see GlobalConfigModel::whereNotContains
+         */
+        public function whereNotContains(string $column, $value, string $condition = 'OR'): self
+        {
+        }
+
+        /**
+         * Search whether a column has a value other than the default value
+         *
+         * @param string $column
+         * @param bool $has
+         * @return $this
+         * @see GlobalConfigModel::whereHas
+         */
+        public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * Search whether a column dont have a value other than the default value
+         *
+         * @param string $column
+         * @return $this
+         * @see GlobalConfigModel::whereNotHas
+         */
+        public function whereNotHas(string $column): self
+        {
+        }
+
+        /**
+         * Specifies a grouping over the results of the query.
+         * Replaces any previously specified groupings, if any.
+         *
+         * @param mixed $column the grouping column
+         * @return $this
+         * @see GlobalConfigModel::groupBy
+         */
+        public function groupBy($column): self
+        {
+        }
+
+        /**
+         * Specifies a restriction over the groups of the query.
+         * Replaces any previous having restrictions, if any.
+         *
+         * @param mixed $column
+         * @param mixed $operator
+         * @param mixed|null $value
+         * @param mixed $condition
+         * @return $this
+         * @see GlobalConfigModel::having
+         */
+        public function having($column, $operator, $value = null, $condition = 'AND'): self
+        {
+        }
+
+        /**
+         * Specifies an ordering for the query results.
+         * Replaces any previously specified orderings, if any.
+         *
+         * @param string $column the ordering expression
+         * @param string $order the ordering direction
+         * @return $this
+         * @see GlobalConfigModel::orderBy
+         */
+        public function orderBy(string $column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * Adds a DESC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see GlobalConfigModel::desc
+         */
+        public function desc(string $field): self
+        {
+        }
+
+        /**
+         * Add an ASC ordering to the query
+         *
+         * @param string $field The name of field
+         * @return $this
+         * @see GlobalConfigModel::asc
+         */
+        public function asc(string $field): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see GlobalConfigModel::forUpdate
+         */
+        public function forUpdate(): self
+        {
+        }
+
+        /**
+         * @return $this
+         * @see GlobalConfigModel::forShare
+         */
+        public function forShare(): self
+        {
+        }
+
+        /**
+         * @param string|bool $lock
+         * @return $this
+         * @see GlobalConfigModel::lock
+         */
+        public function lock($lock): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see GlobalConfigModel::when
+         */
+        public function when($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param mixed $value
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this
+         * @see GlobalConfigModel::unless
+         */
+        public function unless($value, callable $callback, callable $default = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see GlobalConfigModel::setDbKeyConverter
+         */
+        public function setDbKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * @param callable|null $converter
+         * @return $this
+         * @see GlobalConfigModel::setPhpKeyConverter
+         */
+        public function setPhpKeyConverter(callable $converter = null): self
+        {
+        }
+
+        /**
+         * Add a (inner) join base on the relation to the query
+         *
+         * @param string|array $name
+         * @param string $type
+         * @return $this
+         * @see GlobalConfigModel::joinRelation
+         */
+        public function joinRelation($name, string $type = 'INNER'): self
+        {
+        }
+
+        /**
+         * Add a inner join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see GlobalConfigModel::innerJoinRelation
+         */
+        public function innerJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a left join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see GlobalConfigModel::leftJoinRelation
+         */
+        public function leftJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Add a right join base on the relation to the query
+         *
+         * @param string|array $name
+         * @return $this
+         * @see GlobalConfigModel::rightJoinRelation
+         */
+        public function rightJoinRelation($name): self
+        {
+        }
+
+        /**
+         * Check if the model method defines the "Relation" attribute (or the "@Relation" tag in doc comment)
+         *
+         * This method only checks whether the specified method has the "Relation" attribute,
+         * and does not check the actual logic.
+         * It is provided for external use to avoid directly calling `$this->$relation()` to cause attacks.
+         *
+         * @param string $method
+         * @return bool
+         * @see GlobalConfigModel::isRelation
+         */
+        public function isRelation(string $method): bool
+        {
+        }
+
+        /**
+         * Really remove the record from database
+         *
+         * @param int|string $id
+         * @return $this
+         * @see GlobalConfigModel::reallyDestroy
+         */
+        public function reallyDestroy($id = null): self
+        {
+        }
+
+        /**
+         * Add a query to filter soft deleted records
+         *
+         * @return $this
+         * @see GlobalConfigModel::withoutDeleted
+         */
+        public function withoutDeleted(): self
+        {
+        }
+
+        /**
+         * Add a query to return only deleted records
+         *
+         * @return $this
+         * @see GlobalConfigModel::onlyDeleted
+         */
+        public function onlyDeleted(): self
+        {
+        }
+
+        /**
+         * Remove "withoutDeleted" in the query, expect to return all records
+         *
+         * @return $this
+         * @see GlobalConfigModel::withDeleted
+         */
+        public function withDeleted(): self
         {
         }
     }
@@ -6015,18 +10201,6 @@ if (0) {
          * @see QueryBuilder::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
-        {
-        }
-
-        /**
-         * @param mixed $if
-         * @param array|Closure|string|null $column
-         * @param mixed|null $operator
-         * @param mixed|null $value
-         * @return $this
-         * @see QueryBuilder::whereIf
-         */
-        public function whereIf($if, $column = null, $operator = null, $value = null): self
         {
         }
 
@@ -7386,18 +11560,6 @@ if (0) {
         }
 
         /**
-         * @param mixed $if
-         * @param array|Closure|string|null $column
-         * @param mixed|null $operator
-         * @param mixed|null $value
-         * @return $this
-         * @see UserModel::whereIf
-         */
-        public function whereIf($if, $column = null, $operator = null, $value = null): self
-        {
-        }
-
-        /**
          * Search whether a column dont have a value other than the default value
          *
          * @param string $column
@@ -8369,18 +12531,6 @@ if (0) {
          * @see UserModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
-        {
-        }
-
-        /**
-         * @param mixed $if
-         * @param array|Closure|string|null $column
-         * @param mixed|null $operator
-         * @param mixed|null $value
-         * @return $this
-         * @see UserModel::whereIf
-         */
-        public function whereIf($if, $column = null, $operator = null, $value = null): self
         {
         }
 

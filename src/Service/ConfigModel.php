@@ -20,19 +20,23 @@ class ConfigModel extends BaseModel
     use ModelTrait;
     use SoftDeleteTrait;
 
-    public const TYPE_STRING = 1;
+    public const TYPE_STRING = 's';
 
-    public const TYPE_BOOL = 2;
+    public const TYPE_BOOL = 'b';
 
-    public const TYPE_INT = 3;
+    public const TYPE_INT = 'i';
 
-    public const TYPE_FLOAT = 4;
+    public const TYPE_FLOAT = 'f';
 
-    public const TYPE_NULL = 5;
+    public const TYPE_NULL = 'n';
 
-    public const TYPE_JSON = 6;
+    public const TYPE_ARRAY = 'a';
 
-    public const TYPE_EXPRESS = 7;
+    public const TYPE_OBJECT = 'o';
+
+    public const TYPE_JSON = 'j';
+
+    public const TYPE_EXPRESS = 'e';
 
     /**
      * @var array
