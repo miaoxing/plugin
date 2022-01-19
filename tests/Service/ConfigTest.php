@@ -59,4 +59,46 @@ class ConfigTest extends BaseTestCase
         $this->assertSame(__FUNCTION__ . '1', Config::getApp('test'));
         $this->assertSame(__FUNCTION__ . '2', Config::getApp('test2'));
     }
+
+    public function testGetSetGlobal()
+    {
+        $value = Config::getGlobal('notfound:' . time());
+        $this->assertNull($value);
+
+        Config::setGlobal('test', __FUNCTION__);
+        $this->assertSame(__FUNCTION__, Config::getGlobal('test'));
+
+        Config::get('test');
+    }
+
+    public function testDeleteGlobal()
+    {
+        Config::deleteGlobal('test');
+
+        $this->assertNull(Config::getGlobal('test'));
+    }
+
+    public function testScope()
+    {
+        $time = time();
+        Config::setGlobal('test', $time);
+        $this->assertNotSame($time, Config::getApp('test'));
+
+        Config::setApp('test', $time + 1);
+        $this->assertNotSame($time + 1, Config::getGlobal('test'));
+    }
+
+    public function testGetFromApp()
+    {
+        Config::setApp('test', 1);
+        $this->assertSame(1, Config::get('test'));
+    }
+
+    public function testGetFallbackToGlobal()
+    {
+        Config::deleteApp('test');
+        Config::setGlobal('test', 1);
+
+        $this->assertSame(1, Config::get('test'));
+    }
 }
