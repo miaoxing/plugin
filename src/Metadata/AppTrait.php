@@ -12,8 +12,8 @@ namespace Miaoxing\Plugin\Metadata;
  * @property int $status 状态
  * @property string|null $createdAt
  * @property string|null $updatedAt
- * @property int $createdBy
- * @property int $updatedBy
+ * @property string $createdBy
+ * @property string $updatedBy
  * @internal will change in the future
  */
 trait AppTrait

@@ -6,7 +6,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string|null $id
  * @property int $appId
  * @property string $outId
- * @property int $groupId 用户组
+ * @property string $groupId 用户组
  * @property bool $isAdmin
  * @property string $nickName
  * @property string $remarkName
@@ -21,7 +21,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string $country
  * @property string $province
  * @property string $city
- * @property string $area
+ * @property string $district
  * @property string $address
  * @property string $signature
  * @property bool $isEnabled 是否启用
