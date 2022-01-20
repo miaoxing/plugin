@@ -60,6 +60,20 @@ class ConfigTest extends BaseTestCase
         $this->assertSame(__FUNCTION__ . '2', Config::getApp('test2'));
     }
 
+    public function testGetAppSection()
+    {
+        Config::setAppMultiple([
+            'testSms.appKey' => '123',
+            'testSms.appSecret' => '456',
+        ]);
+
+        $configs = Config::getAppSection('testSms');
+        $this->assertSame([
+            'appKey' => '123',
+            'appSecret' => '456',
+        ], $configs);
+    }
+
     public function testGetSetGlobal()
     {
         $value = Config::getGlobal('notfound:' . time());
