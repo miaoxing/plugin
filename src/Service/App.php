@@ -487,7 +487,7 @@ class App extends \Wei\App
             return null;
         }
 
-        return $this->cache->get('appDomain:' . $domain, 86400, static function () use ($domain) {
+        return $this->cache->remember('appDomain:' . $domain, 86400, static function () use ($domain) {
             $app = AppModel::select('id')->fetch('domain', $domain);
             return $app ? (int) $app['id'] : null;
         });

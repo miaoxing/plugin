@@ -357,7 +357,7 @@ class Plugin extends BaseService
                 $this->cache->remove($cacheKey);
             }
 
-            $this->events = $this->cache->get($cacheKey, function () {
+            $this->events = $this->cache->remember($cacheKey, function () {
                 $events = [];
                 foreach ($this->getAll() as $plugin) {
                     $id = $plugin->getId();
@@ -531,7 +531,7 @@ class Plugin extends BaseService
             $this->configCache->remove($key);
         }
 
-        return $this->configCache->get($key, function () use ($fn) {
+        return $this->configCache->remember($key, function () use ($fn) {
             return $fn();
         });
     }

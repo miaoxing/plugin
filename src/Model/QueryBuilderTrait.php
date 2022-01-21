@@ -533,7 +533,7 @@ trait QueryBuilderTrait
     protected function getColumns(): array
     {
         if (!$this->loadedColumns) {
-            $columns = $this->getMetadataCache()->get(
+            $columns = $this->getMetadataCache()->remember(
                 'tableColumns:' . $this->getDb()->getDbname() . ':' . $this->getTable(),
                 60,
                 function () {
@@ -1670,7 +1670,7 @@ trait QueryBuilderTrait
      */
     protected function fetchFromCache()
     {
-        return $this->getCache()->get($this->getCacheKey(), $this->getCacheTime(), function () {
+        return $this->getCache()->remember($this->getCacheKey(), $this->getCacheTime(), function () {
             return $this->executeFetchAll($this->getSql(), $this->getBindParams(), $this->queryParamTypes);
         });
     }
