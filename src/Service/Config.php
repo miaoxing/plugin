@@ -3,13 +3,60 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Model\ModelTrait;
 
 /**
  * @mixin \EnvMixin
  * @mixin \CacheMixin
+ * @mixin \AppMixin
  */
 class Config extends \Wei\Config
 {
+    /**
+     * @internal
+     */
+    protected const TYPE_STRING = 's';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_BOOL = 'b';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_INT = 'i';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_FLOAT = 'f';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_NULL = 'n';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_ARRAY = 'a';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_OBJECT = 'o';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_JSON = 'j';
+
+    /**
+     * @internal
+     */
+    protected const TYPE_EXPRESS = 'e';
+
     /**
      * @var array
      */
@@ -23,25 +70,25 @@ class Config extends \Wei\Config
     protected $configFile = 'storage/configs/%env%.php';
 
     /**
-     * @var string
+     * The missing config names of the last get action
+     *
+     * @var array<string>
      */
-    protected $cacheKeyPrefix = 'config:';
+    protected $missing = [];
 
     /**
-     * @var string
+     * Native scalar type to config type
+     *
+     * @var string[]
+     * @internal
      */
-    protected $globalCacheKeyPrefix = 'globalConfig:';
-
-    protected $nativeTypes = [
-        'boolean' => ConfigModel::TYPE_BOOL,
-        'integer' => ConfigModel::TYPE_INT,
-        'double' => ConfigModel::TYPE_FLOAT,
-        'string' => ConfigModel::TYPE_STRING,
-        'NULL' => ConfigModel::TYPE_NULL,
-        //'array' => ConfigModel::TYPE_ARRAY,
-        //'object' => ConfigModel::TYPE_JSON, // object?
-        // unknown type
-        // resource (closed)
+    protected $scalarTypes = [
+        'boolean' => self::TYPE_BOOL,
+        'integer' => self::TYPE_INT,
+        'double' => self::TYPE_FLOAT,
+        'string' => self::TYPE_STRING,
+        'NULL' => self::TYPE_NULL,
+        // ignore non-scalar types
     ];
 
     public function __construct($options = [])
@@ -66,28 +113,32 @@ class Config extends \Wei\Config
 
     /**
      * @svc
+     * @param mixed $default
      */
-    protected function get($name, $default = null)
+    protected function get(string $name, $default = null)
     {
-        $value = $this->getApp($name, $default);
-        if ($value !== $default) {
+        $value = $this->getApp($name);
+        if (!$this->missing) {
             return $value;
         }
 
-        $value = $this->getGlobal($name, $default);
-        if ($value !== $default) {
+        $value = $this->getGlobal($name);
+        if (!$this->missing) {
+            // 记录全局配置到 app 中，以便下次直接读取到
+            $this->cache->set($this->getPrefix(ConfigModel::class) . $name, $value);
             return $value;
         }
 
-        // TODO 行为不一致
-        // From file
+        // 注意: 配置名称不含 . 时，文件配置会返回所有下级数据
+        // 行为和数据库存储配置不一致，但一般不影响使用
         return $this->wei->getConfig($name, $default);
     }
 
     /**
      * @svc
+     * @param mixed $value
      */
-    protected function set($name, $value, array $options = []): self
+    protected function set(string $name, $value, array $options = []): self
     {
         return $this->setApp($name, $value, $options);
     }
@@ -95,20 +146,17 @@ class Config extends \Wei\Config
     /**
      * @svc
      */
-    protected function getMultiple(array $names, $default = null): array
+    protected function getMultiple(array $names, array $defaults = []): array
     {
-        $values = $this->getAppMultiple($names, $default);
+        $values = $this->getAppMultiple($names);
 
-        $missing = [];
-        foreach ($values as $name => $value) {
-            if ($value === $default) {
-                $missing[] = $name;
-            }
+        if ($this->missing) {
+            $globalValues = $this->getGlobalMultiple($this->missing, $defaults);
+            $values = array_merge($values, $globalValues);
         }
 
-        if ($missing) {
-            $globalValues = $this->getGlobalMultiple($missing, $default);
-            $values = array_merge($values, $globalValues);
+        foreach ($this->missing as $name) {
+            $values[$name] = $this->wei->getConfig($name, $defaults[$name] ?? null);
         }
 
         return $values;
@@ -117,7 +165,7 @@ class Config extends \Wei\Config
     /**
      * @svc
      */
-    protected function setMultiple(array $values, $options = []): self
+    protected function setMultiple(array $values, array $options = []): self
     {
         return $this->setAppMultiple($values, $options);
     }
@@ -127,43 +175,25 @@ class Config extends \Wei\Config
      */
     protected function getSection(string $name): array
     {
-        return array_merge($this->getGlobalSection($name), $this->getAppSection($name));
+        return array_merge($this->wei->getConfig($name), $this->getGlobalSection($name), $this->getAppSection($name));
     }
 
     /**
      * @svc
+     * @param mixed $default
      */
-    protected function getGlobal($name, $default = null)
+    protected function getGlobal(string $name, $default = null)
     {
-        // From cache
-        $key = $this->globalCacheKeyPrefix . $name;
-        $value = $this->cache->get($key);
-        if (null !== $value) {
-            return $value;
-        }
-
-        $config = GlobalConfigModel::select(['type', 'value'])->where('name', $name)->fetch();
-        if ($config) {
-            $value = $this->decode($config);
-            $this->cache->set($key, $value);
-            return $value;
-        }
-
-        return $default;
+        return $this->getBy(GlobalConfigModel::class, $name, $default);
     }
 
     /**
      * @svc
+     * @param mixed $value
      */
-    protected function setGlobal($name, $value): self
+    protected function setGlobal(string $name, $value, array $options = []): self
     {
-        [$type, $dbValue] = $this->encode($value);
-        GlobalConfigModel::findOrInitBy(['name' => $name])->save([
-            'type' => $type,
-            'value' => $dbValue,
-        ]);
-        $this->cache->set($this->globalCacheKeyPrefix . $name, $value);
-        return $this;
+        return $this->setBy(GlobalConfigModel::class, $name, $value, $options);
     }
 
     /**
@@ -171,143 +201,49 @@ class Config extends \Wei\Config
      */
     protected function deleteGlobal(string $name): self
     {
-        $this->cache->delete($this->globalCacheKeyPrefix . $name);
-
-        $config = GlobalConfigModel::findBy('name', $name);
-        $config && $config->destroy();
-
-        return $this;
+        return $this->deleteBy(GlobalConfigModel::class, $name);
     }
 
     /**
      * @svc
      */
-    protected function getGlobalMultiple($names, $default = null): array
+    protected function getGlobalMultiple(array $names, array $defaults = []): array
     {
-        // From cache
-        $keys = [];
-        foreach ($names as $name) {
-            $keys[] = $this->globalCacheKeyPrefix . $name;
-        }
-        $caches = $this->cache->getMultiple($keys, $default);
-
-        $values = [];
-        $missing = [];
-        foreach ($caches as $name => $value) {
-            $name = substr($name, strlen($this->globalCacheKeyPrefix));
-            if ($value !== $default) {
-                $values[$name] = $value;
-            } else {
-                $missing[] = $name;
-            }
-        }
-
-        // From database
-        if ($missing) {
-            $configs = GlobalConfigModel::select(['name', 'type', 'value'])
-                ->where('name', $names)
-                ->indexBy('name')
-                ->fetchAll();
-            $dbValues = [];
-            foreach ($configs as $config) {
-                $dbValues[$config['name']] = $this->decode($config);
-            }
-            $values = array_merge($values, $dbValues);
-        }
-
-        return $values;
+        return $this->getMultipleBy(GlobalConfigModel::class, $names, $defaults);
     }
 
     /**
      * @svc
      */
-    protected function setGlobalMultiple($values): self
+    protected function setGlobalMultiple(array $values, array $options = []): self
     {
-        if (!$values) {
-            return $this;
-        }
-
-        $configs = GlobalConfigModel
-            ::where('name', array_keys($values))
-            ->indexBy('name')
-            ->all();
-
-        foreach ($values as $name => $value) {
-            if (!isset($configs[$name])) {
-                $configs[$name] = GlobalConfigModel::fromArray(['name' => $name]);
-            }
-
-            [$type, $value] = $this->encode($value);
-            $configs[$name]->fromArray([
-                'type' => $type,
-                'value' => $value,
-            ]);
-        }
-
-        $configs->save();
-
-        $data = [];
-        foreach ($values as $key => $value) {
-            $data[$this->globalCacheKeyPrefix . $key] = $value;
-        }
-        $this->cache->setMultiple($data);
-
-        return $this;
+        return $this->setMultipleBy(GlobalConfigModel::class, $values, $options);
     }
 
     /**
      * @svc
      */
-    protected function getGlobalSection($name): array
+    protected function getGlobalSection(string $name): array
     {
-        // From database
-        $configs = GlobalConfigModel::select(['name', 'type', 'value'])
-            ->where('name', 'like', $name . '.%')
-            ->indexBy('name')
-            ->fetchAll();
-
-        $values = [];
-        foreach ($configs as $config) {
-            $values[substr($config['name'], strlen($name) + 1)] = $this->decode($config);
-        }
-
-        return $values;
+        return $this->getSectionBy(GlobalConfigModel::class, $name);
     }
 
     /**
      * @svc
+     * @param mixed $default
      */
-    protected function getApp($name, $default = null)
+    protected function getApp(string $name, $default = null)
     {
-        // From cache
-        $value = $this->getCacheItem($name);
-        if (null !== $value) {
-            return $value;
-        }
-
-        // From database
-        $config = ConfigModel::select(['type', 'value'])->where('name', $name)->fetch();
-        if ($config) {
-            $value = $this->decode($config);
-            $this->setCacheItem($name, $value);
-            return $value;
-        }
-
-        return $default;
+        return $this->getBy(ConfigModel::class, $name, $default);
     }
 
     /**
      * @svc
+     * @param mixed $value
      */
-    protected function setApp($name, $value, array $options = []): self
+    protected function setApp(string $name, $value, array $options = []): self
     {
-        [$type, $dbValue] = $this->encode($value);
-        ConfigModel::findOrInitBy(['name' => $name])->save([
-            'type' => $type,
-            'value' => $dbValue,
-        ]);
-        $this->setCacheItem($name, $value);
-        return $this;
+        return $this->setBy(ConfigModel::class, $name, $value, $options);
     }
 
     /**
@@ -315,70 +251,159 @@ class Config extends \Wei\Config
      */
     protected function deleteApp(string $name): self
     {
-        $this->cache->delete($this->cacheKeyPrefix . $name);
-
-        $config = ConfigModel::findBy('name', $name);
-        $config && $config->destroy();
-
-        return $this;
+        return $this->deleteBy(ConfigModel::class, $name);
     }
 
     /**
      * @svc
      */
-    protected function getAppMultiple($names, $default = null): array
+    protected function getAppMultiple(array $names, array $defaults = []): array
     {
-        // From cache
-        $keys = [];
-        foreach ($names as $name) {
-            $keys[] = $this->cacheKeyPrefix . $name;
-        }
-        $caches = $this->cache->getMultiple($keys, $default);
+        return $this->getMultipleBy(ConfigModel::class, $names, $defaults);
+    }
 
-        $values = [];
+    /**
+     * @svc
+     */
+    protected function setAppMultiple(array $values, array $options = []): self
+    {
+        return $this->setMultipleBy(ConfigModel::class, $values, $options);
+    }
+
+    /**
+     * @svc
+     */
+    protected function getAppSection(string $name): array
+    {
+        return $this->getSectionBy(ConfigModel::class, $name);
+    }
+
+    /**
+     * @param string|class-string<ModelTrait> $model
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     * @internal
+     */
+    protected function getBy(string $model, string $name, $default = null)
+    {
+        $this->missing = [];
+        $prefix = $this->getPrefix($model);
+
+        // From cache
+        $value = $this->cache->get($prefix . $name);
+        if ($this->cache->isHit()) {
+            return $value;
+        }
+
+        // From database
+        $config = $model::select(['type', 'value'])->where('name', $name)->fetch();
+        if ($config) {
+            $value = $this->decode($config['value'], $config['type']);
+        }
+
+        $this->missing = [$name];
+
+        // Next time will fetch from cache
+        $this->cache->set($prefix . $name, $value);
+
+        return $config ? $value : $default;
+    }
+
+    /**
+     * @param string|class-string<ModelTrait> $model
+     * @param array $names
+     * @param array $defaults
+     * @return array
+     */
+    protected function getMultipleBy(string $model, array $names, array $defaults): array
+    {
+        $this->missing = [];
+        $prefix = $this->getPrefix($model);
+
+        // From cache
+        $values = $this->cacheWithPrefix($prefix, function () use ($names) {
+            return $this->cache->getMultiple($names);
+        });
+
         $missing = [];
-        foreach ($caches as $name => $value) {
-            $name = substr($name, strlen($this->cacheKeyPrefix));
-            if ($value !== $default) {
-                $values[$name] = $value;
-            } else {
+        foreach ($values as $name => $value) {
+            if (!$this->cache->isHit($name)) {
                 $missing[] = $name;
+                $values[$name] = $defaults[$name] ?? null;
             }
         }
 
         // From database
         if ($missing) {
-            $configs = ConfigModel::select(['name', 'type', 'value'])
-                ->where('name', $names)
-                ->indexBy('name')
+            $dbConfigs = $model::select(['name', 'type', 'value'])
+                ->where('name', $missing)
                 ->fetchAll();
-            $dbValues = [];
-            foreach ($configs as $config) {
-                $dbValues[$config['name']] = $this->decode($config);
+            if (!$dbConfigs) {
+                // TODO 要计入缓存
+                $this->missing = $missing;
+                return $values;
             }
-            $values = array_merge($values, $dbValues);
+
+            $configs = [];
+            foreach ($dbConfigs as $config) {
+                $configs[$config['name']] = $this->decode($config['value'], $config['type']);
+            }
+
+            $this->cacheWithPrefix($prefix, function () use ($configs) {
+                $this->cache->setMultiple($configs);
+            });
+
+            $this->missing = array_diff($missing, array_keys($configs));
+            $values = array_merge($values, $configs);
         }
 
         return $values;
     }
 
     /**
-     * @svc
+     * @param string|class-string<ModelTrait> $model
+     * @param string $name
+     * @param mixed $value
+     * @param array $options
+     * @return $this
+     * @internal
      */
-    protected function setAppMultiple($values, array $options = []): self
+    protected function setBy(string $model, string $name, $value, array $options = []): self
+    {
+        $prefix = $this->getPrefix($model);
+
+        [$dbValue, $type] = $this->encode($value);
+        $model::findOrInitBy(['name' => $name])->save([
+            'type' => $type,
+            'value' => $dbValue,
+        ]);
+        $this->cache->set($prefix . $name, $value);
+        return $this;
+    }
+
+    /**
+     * @param string|class-string<ModelTrait> $model
+     * @param array $values
+     * @param array $options
+     * @return $this
+     */
+    protected function setMultipleBy(string $model, array $values, array $options = []): self
     {
         if (!$values) {
             return $this;
         }
 
-        $configs = $this->createQuery(array_keys($values))->selectMain()->all();
+        $configs = $model::where('name', array_keys($values))
+            ->indexBy('name')
+            ->all();
 
         foreach ($values as $name => $value) {
             if (!isset($configs[$name])) {
-                $configs[$name] = ConfigModel::fromArray(['name' => $name]);
+                $configs[$name] = $model::fromArray(['name' => $name]);
             }
 
-            [$type, $value] = $this->encode($value);
+            [$value, $type] = $this->encode($value);
             $configs[$name]->fromArray([
                 'type' => $type,
                 'value' => $value,
@@ -388,8 +413,9 @@ class Config extends \Wei\Config
         $configs->save();
 
         $data = [];
+        $prefix = $this->getPrefix($model);
         foreach ($values as $key => $value) {
-            $data[$this->cacheKeyPrefix . $key] = $value;
+            $data[$prefix . $key] = $value;
         }
         $this->cache->setMultiple($data);
 
@@ -397,105 +423,128 @@ class Config extends \Wei\Config
     }
 
     /**
-     * @svc
+     * @param string|class-string<ModelTrait> $model
+     * @param string $name
+     * @return $this
+     * @internal
      */
-    protected function getAppSection($name): array
+    protected function deleteBy(string $model, string $name): self
     {
-        // From cache ?
+        $this->cache->delete($this->getPrefix($model) . $name);
 
+        $config = $model::findBy('name', $name);
+        $config && $config->destroy();
+
+        return $this;
+    }
+
+    /**
+     * @param string|class-string<ModelTrait> $model
+     * @param string $name
+     * @return array
+     */
+    protected function getSectionBy(string $model, string $name): array
+    {
         // From database
-        $configs = ConfigModel::select(['name', 'type', 'value'])
+        $configs = $model::select(['name', 'type', 'value'])
             ->where('name', 'like', $name . '.%')
-            ->indexBy('name')
             ->fetchAll();
 
+        $length = strlen($name) + 1;
         $values = [];
         foreach ($configs as $config) {
-            $values[substr($config['name'], strlen($name) + 1)] = $this->decode($config);
+            $values[substr($config['name'], $length)] = $this->decode($config['value'], $config['type']);
         }
 
         return $values;
     }
 
-    protected function createQuery($names)
+    /**
+     * @param string $model
+     * @return string
+     */
+    protected function getPrefix(string $model): string
     {
-        return ConfigModel::select(['name', 'type', 'value'])
-            ->where('name', $names)
-            ->indexBy('name');
+        if (ConfigModel::class === $model) {
+            return 'config:' . $this->app->getId() . ':';
+        }
+        return 'globalConfig:';
     }
 
-    protected function getCacheItem(string $name)
+    /**
+     * @param string $prefix
+     * @param callable $fn
+     * @return mixed
+     * @internal
+     */
+    protected function cacheWithPrefix(string $prefix, callable $fn)
     {
-        return $this->cache->get($this->cacheKeyPrefix . $name);
+        $namespace = $this->cache->getNamespace();
+        $this->cache->setNamespace($namespace . $prefix);
+        $result = $fn();
+        $this->cache->setNamespace($namespace);
+        return $result;
     }
 
-    protected function setCacheItem(string $name, $value): self
-    {
-        $this->cache->set($this->cacheKeyPrefix . $name, $value);
-        return $this;
-    }
-
+    /**
+     * Convert PHP value to config value
+     *
+     * @param mixed $value
+     * @return array
+     * @internal
+     */
     protected function encode($value): array
     {
         $type = gettype($value);
-        if (isset($this->nativeTypes[$type])) {
-            return [
-                $this->nativeTypes[$type],
-                $value,
-            ];
+        if (isset($this->scalarTypes[$type])) {
+            return [$value, $this->scalarTypes[$type]];
         }
 
-        if ($type === 'array') {
-            return [
-                ConfigModel::TYPE_ARRAY,
-                json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-            ];
+        if ('array' === $type) {
+            return [json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE), static::TYPE_ARRAY];
         }
 
         if ($value instanceof \stdClass) {
-            return [
-                ConfigModel::TYPE_JSON,
-                json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-            ];
+            return [json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE), static::TYPE_JSON];
         }
 
-        return [
-            ConfigModel::TYPE_OBJECT,
-            serialize($value),
-        ];
+        return [serialize($value), static::TYPE_OBJECT];
     }
 
-    protected function decode(array $config)
+    /**
+     * Convert config value to PHP value
+     *
+     * @param mixed $value
+     * @param string $type
+     * @return mixed
+     * @internal
+     */
+    protected function decode($value, string $type)
     {
-        $type = $config['type'];
-        $value = $config['value'];
         switch ($type) {
-            case ConfigModel::TYPE_STRING:
+            case static::TYPE_STRING:
                 return (string) $value;
 
-            case ConfigModel::TYPE_INT:
+            case static::TYPE_INT:
                 return (int) $value;
 
-            case ConfigModel::TYPE_FLOAT:
+            case static::TYPE_FLOAT:
                 return (float) $value;
 
-            case ConfigModel::TYPE_BOOL:
+            case static::TYPE_BOOL:
                 return filter_var($value, \FILTER_VALIDATE_BOOLEAN);
 
-            case ConfigModel::TYPE_ARRAY:
+            case static::TYPE_ARRAY:
                 return json_decode($value, true);
 
-            case ConfigModel::TYPE_JSON:
+            case static::TYPE_JSON:
                 return json_decode($value);
 
-            case ConfigModel::TYPE_OBJECT:
+            case static::TYPE_OBJECT:
                 return unserialize($value);
 
-            case ConfigModel::TYPE_EXPRESS:
-                $object = new stdClass();
-                $object->express = (string) $value;
-
-                return $object;
+            case static::TYPE_NULL:
+                return null;
 
             default:
                 return $value;

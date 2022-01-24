@@ -994,49 +994,49 @@ class Config
     /**
      * @see Config::get
      */
-    public static function get($name, $default = null)
+    public static function get(string $name, $default = null)
     {
     }
 
     /**
      * @see Config::set
      */
-    public static function set($name, $value, array $options = []): self
+    public static function set(string $name, $value, array $options = []): self
     {
     }
 
     /**
      * @see Config::getMultiple
      */
-    public static function getMultiple(array $names, $default = null): array
+    public static function getMultiple(array $names, array $defaults = []): array
     {
     }
 
     /**
      * @see Config::setMultiple
      */
-    public static function setMultiple(array $values, $options = []): self
+    public static function setMultiple(array $values, array $options = []): self
     {
     }
 
     /**
      * @see Config::getSection
      */
-    public static function getSection(string $name)
+    public static function getSection(string $name): array
     {
     }
 
     /**
      * @see Config::getGlobal
      */
-    public static function getGlobal($name, $default = null)
+    public static function getGlobal(string $name, $default = null)
     {
     }
 
     /**
      * @see Config::setGlobal
      */
-    public static function setGlobal($name, $value): self
+    public static function setGlobal(string $name, $value, array $options = []): self
     {
     }
 
@@ -1050,35 +1050,35 @@ class Config
     /**
      * @see Config::getGlobalMultiple
      */
-    public static function getGlobalMultiple($names, $default = null): array
+    public static function getGlobalMultiple(array $names, array $defaults = []): array
     {
     }
 
     /**
      * @see Config::setGlobalMultiple
      */
-    public static function setGlobalMultiple($values): self
+    public static function setGlobalMultiple(array $values, array $options = []): self
     {
     }
 
     /**
      * @see Config::getGlobalSection
      */
-    public static function getGlobalSection($name): array
+    public static function getGlobalSection(string $name): array
     {
     }
 
     /**
      * @see Config::getApp
      */
-    public static function getApp($name, $default = null)
+    public static function getApp(string $name, $default = null)
     {
     }
 
     /**
      * @see Config::setApp
      */
-    public static function setApp($name, $value, array $options = []): self
+    public static function setApp(string $name, $value, array $options = []): self
     {
     }
 
@@ -1092,21 +1092,21 @@ class Config
     /**
      * @see Config::getAppMultiple
      */
-    public static function getAppMultiple($names, $default = null)
+    public static function getAppMultiple(array $names, array $defaults = []): array
     {
     }
 
     /**
      * @see Config::setAppMultiple
      */
-    public static function setAppMultiple($values, array $options = []): self
+    public static function setAppMultiple(array $values, array $options = []): self
     {
     }
 
     /**
      * @see Config::getAppSection
      */
-    public static function getAppSection($name): array
+    public static function getAppSection(string $name): array
     {
     }
 
@@ -7396,49 +7396,49 @@ if (0) {
         /**
          * @see Config::get
          */
-        public function get($name, $default = null)
+        public function get(string $name, $default = null)
         {
         }
 
         /**
          * @see Config::set
          */
-        public function set($name, $value, array $options = []): self
+        public function set(string $name, $value, array $options = []): self
         {
         }
 
         /**
          * @see Config::getMultiple
          */
-        public function getMultiple(array $names, $default = null): array
+        public function getMultiple(array $names, array $defaults = []): array
         {
         }
 
         /**
          * @see Config::setMultiple
          */
-        public function setMultiple(array $values, $options = []): self
+        public function setMultiple(array $values, array $options = []): self
         {
         }
 
         /**
          * @see Config::getSection
          */
-        public function getSection(string $name)
+        public function getSection(string $name): array
         {
         }
 
         /**
          * @see Config::getGlobal
          */
-        public function getGlobal($name, $default = null)
+        public function getGlobal(string $name, $default = null)
         {
         }
 
         /**
          * @see Config::setGlobal
          */
-        public function setGlobal($name, $value): self
+        public function setGlobal(string $name, $value, array $options = []): self
         {
         }
 
@@ -7452,35 +7452,35 @@ if (0) {
         /**
          * @see Config::getGlobalMultiple
          */
-        public function getGlobalMultiple($names, $default = null): array
+        public function getGlobalMultiple(array $names, array $defaults = []): array
         {
         }
 
         /**
          * @see Config::setGlobalMultiple
          */
-        public function setGlobalMultiple($values): self
+        public function setGlobalMultiple(array $values, array $options = []): self
         {
         }
 
         /**
          * @see Config::getGlobalSection
          */
-        public function getGlobalSection($name): array
+        public function getGlobalSection(string $name): array
         {
         }
 
         /**
          * @see Config::getApp
          */
-        public function getApp($name, $default = null)
+        public function getApp(string $name, $default = null)
         {
         }
 
         /**
          * @see Config::setApp
          */
-        public function setApp($name, $value, array $options = []): self
+        public function setApp(string $name, $value, array $options = []): self
         {
         }
 
@@ -7494,21 +7494,21 @@ if (0) {
         /**
          * @see Config::getAppMultiple
          */
-        public function getAppMultiple($names, $default = null)
+        public function getAppMultiple(array $names, array $defaults = []): array
         {
         }
 
         /**
          * @see Config::setAppMultiple
          */
-        public function setAppMultiple($values, array $options = []): self
+        public function setAppMultiple(array $values, array $options = []): self
         {
         }
 
         /**
          * @see Config::getAppSection
          */
-        public function getAppSection($name): array
+        public function getAppSection(string $name): array
         {
         }
 
