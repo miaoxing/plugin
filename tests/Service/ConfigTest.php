@@ -114,5 +114,8 @@ class ConfigTest extends BaseTestCase
         Config::setGlobal('test', 1);
 
         $this->assertSame(1, Config::get('test'));
+
+        // app cache wont be cache to null
+        $this->assertSame(1, Config::get('test'));
     }
 }
