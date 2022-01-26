@@ -193,7 +193,7 @@ class Config extends \Wei\Config
      */
     protected function setGlobal(string $name, $value, array $options = []): self
     {
-        return $this->setBy(GlobalConfigModel::class, $name, $value, $options);
+        return $this->setMultipleBy(GlobalConfigModel::class, [$name => $value], $options);
     }
 
     /**
@@ -243,7 +243,7 @@ class Config extends \Wei\Config
      */
     protected function setApp(string $name, $value, array $options = []): self
     {
-        return $this->setBy(ConfigModel::class, $name, $value, $options);
+        return $this->setMultipleBy(ConfigModel::class, [$name => $value], $options);
     }
 
     /**
@@ -359,27 +359,6 @@ class Config extends \Wei\Config
         }
 
         return $values;
-    }
-
-    /**
-     * @param string|class-string<ModelTrait> $model
-     * @param string $name
-     * @param mixed $value
-     * @param array $options
-     * @return $this
-     * @internal
-     */
-    protected function setBy(string $model, string $name, $value, array $options = []): self
-    {
-        $prefix = $this->getPrefix($model);
-
-        [$dbValue, $type] = $this->encode($value);
-        $model::findOrInitBy(['name' => $name])->save([
-            'type' => $type,
-            'value' => $dbValue,
-        ]);
-        $this->cache->set($prefix . $name, $value);
-        return $this;
     }
 
     /**
