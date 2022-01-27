@@ -9,6 +9,7 @@ use Miaoxing\Plugin\Model\ModelTrait;
  * @mixin \EnvMixin
  * @mixin \CacheMixin
  * @mixin \AppMixin
+ * @mixin \PhpFileCacheMixin
  */
 class Config extends \Wei\Config
 {
@@ -279,6 +280,57 @@ class Config extends \Wei\Config
     }
 
     /**
+     * @template T
+     * @param string|class-string<T> $name
+     * @return Base
+     * @phpstan-return T|BaseService
+     * @svc
+     */
+    protected function createService(string $name): Base
+    {
+        $name = $this->wei->getServiceName($name);
+        $options = $this->getSection($name);
+        return $this->wei->newInstance($name, $options);
+    }
+
+    /**
+     * @template T
+     * @param string|class-string<T> $name
+     * @return Base
+     * @phpstan-return T|BaseService
+     * @svc
+     */
+    protected function getService(string $name): Base
+    {
+        $appId = $this->app->getId();
+        $name = $this->wei->getServiceName($name);
+        if (!isset($this->services[$appId][$name])) {
+            $this->services[$appId][$name] = $this->createService($name);
+        }
+        return $this->services[$appId][$name];
+    }
+
+    /**
+     * 预加载全局配置
+     *
+     * @experimental
+     * @svc
+     */
+    protected function preloadGlobal()
+    {
+        // 1. 先获取本地配置
+        $configs = $this->getPhpFileCache('global-config', []);
+
+        // 2. 检查更新配置
+        if ($this->needsUpdate($configs)) {
+            $configs = $this->setPreloadCache();
+        }
+
+        // 3. 加载配置
+        $this->wei->setConfig($configs);
+    }
+
+    /**
      * @param string|class-string<ModelTrait> $model
      * @param array $names
      * @param array $defaults
@@ -361,6 +413,11 @@ class Config extends \Wei\Config
                 'type' => $type,
                 'value' => $value,
             ]);
+
+            // For global config
+            if (isset($options['preload'])) {
+                $configs[$name]->preload = $options['preload'];
+            }
         }
 
         $configs->save();
@@ -607,5 +664,80 @@ class Config extends \Wei\Config
             default:
                 return var_export($var, true);
         }
+    }
+
+
+
+    /**
+     * 判断本地的配置是否需要更改
+     *
+     * @param array $configs
+     * @return bool
+     * @internal
+     */
+    protected function needsUpdate(array $configs): bool
+    {
+        $key = 'config.version';
+
+        $version = $this->getGlobal($key);
+        if (!$version) {
+            $version = date('Y-m-d H:i:s');
+            $this->setGlobal($key, $version, ['preload' => true]);
+        }
+
+        [$service, $option] = explode('.', $key);
+        return !isset($configs[$service][$option]) || $configs[$service][$option] < $version;
+    }
+
+    /**
+     * @return array
+     * @internal
+     */
+    protected function setPreloadCache(): array
+    {
+        $configs = GlobalConfigModel::select('name', 'type', 'value')
+            ->where('preload', true)
+            ->fetchAll();
+
+        $data = [];
+        foreach ($configs as $config) {
+            // 从右边的点(.)拆分为两部分,兼容a.b.c的等情况
+            $pos = strrpos($config['name'], '.');
+            $service = substr($config['name'], 0, $pos);
+            $option = substr($config['name'], $pos + 1);
+            $data[$service][$option] = $this->decode($config['value'], $config['type']);
+        }
+
+        $this->setPhpFileCache('global-config', $data);
+
+        return $data;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @internal
+     */
+    protected function setPhpFileCache(string $key, $value)
+    {
+        $file = $this->phpFileCache->getDir() . '/' . $key . '.php';
+        $content = $this->generateContent($value);
+        file_put_contents($file, $content);
+        function_exists('opcache_invalidate') && opcache_invalidate($file);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     * @internal
+     */
+    protected function getPhpFileCache(string $key, $default = null)
+    {
+        $file = $this->phpFileCache->getDir() . '/' . $key . '.php';
+        if (is_file($file)) {
+            return require $file;
+        }
+        return $default;
     }
 }

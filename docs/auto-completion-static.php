@@ -1128,6 +1128,16 @@ class Config
     }
 
     /**
+     * 预加载全局配置
+     *
+     * @experimental
+     * @see Config::preloadGlobal
+     */
+    public static function preloadGlobal()
+    {
+    }
+
+    /**
      * @see Config::load
      */
     public static function load()
@@ -7526,6 +7536,16 @@ if (0) {
          * @see Config::write
          */
         public function write()
+        {
+        }
+
+        /**
+         * 预加载全局配置
+         *
+         * @experimental
+         * @see Config::preloadGlobal
+         */
+        public function preloadGlobal()
         {
         }
 

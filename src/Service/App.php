@@ -19,6 +19,7 @@ use Wei\Res;
  * @mixin \AppModelMixin
  * @mixin \CacheMixin
  * @mixin \PageRouterMixin
+ * @mixin \ConfigMixin
  */
 class App extends \Wei\App
 {
@@ -96,6 +97,9 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
+        // Load global config
+        $this->config->preloadGlobal();
+
         $this->event->trigger('appInit');
 
         return $this->invokeApp($options);
