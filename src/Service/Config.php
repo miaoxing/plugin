@@ -184,7 +184,7 @@ class Config extends \Wei\Config
      */
     protected function getGlobal(string $name, $default = null)
     {
-        return $this->getBy(GlobalConfigModel::class, $name, $default);
+        return $this->getMultipleBy(GlobalConfigModel::class, [$name], [$name => $default])[$name];
     }
 
     /**
@@ -234,7 +234,7 @@ class Config extends \Wei\Config
      */
     protected function getApp(string $name, $default = null)
     {
-        return $this->getBy(ConfigModel::class, $name, $default);
+        return $this->getMultipleBy(ConfigModel::class, [$name], [$name => $default])[$name];
     }
 
     /**
@@ -280,38 +280,6 @@ class Config extends \Wei\Config
 
     /**
      * @param string|class-string<ModelTrait> $model
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     * @internal
-     */
-    protected function getBy(string $model, string $name, $default = null)
-    {
-        $this->missing = [];
-        $prefix = $this->getPrefix($model);
-
-        // From cache
-        $value = $this->cache->get($prefix . $name);
-        if ($this->cache->isHit()) {
-            return $value;
-        }
-
-        // From database
-        $config = $model::select(['type', 'value'])->where('name', $name)->fetch();
-        if ($config) {
-            $value = $this->decode($config['value'], $config['type']);
-        }
-
-        $this->missing = [$name];
-
-        // Next time will fetch from cache
-        $this->cache->set($prefix . $name, $value);
-
-        return $config ? $value : $default;
-    }
-
-    /**
-     * @param string|class-string<ModelTrait> $model
      * @param array $names
      * @param array $defaults
      * @return array
@@ -322,9 +290,14 @@ class Config extends \Wei\Config
         $prefix = $this->getPrefix($model);
 
         // From cache
-        $values = $this->cacheWithPrefix($prefix, function () use ($names) {
-            return $this->cache->getMultiple($names);
-        });
+        if (count($names) === 1) {
+            $key = current($names);
+            $values = [$key => $this->cache->get($prefix . $key)];
+        } else {
+            $values = $this->cacheWithPrefix($prefix, function () use ($names) {
+                return $this->cache->getMultiple($names);
+            });
+        }
 
         $missing = [];
         foreach ($values as $name => $value) {
@@ -350,6 +323,7 @@ class Config extends \Wei\Config
                 $configs[$config['name']] = $this->decode($config['value'], $config['type']);
             }
 
+            // Next time will fetch from cache
             $this->cacheWithPrefix($prefix, function () use ($configs) {
                 $this->cache->setMultiple($configs);
             });
