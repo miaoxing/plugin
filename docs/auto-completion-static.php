@@ -1111,6 +1111,28 @@ class Config
     }
 
     /**
+     * @template T
+     * @param string|class-string<T> $name
+     * @return Base
+     * @phpstan-return T|BaseService
+     * @see Config::createService
+     */
+    public static function createService(string $name): \Wei\Base
+    {
+    }
+
+    /**
+     * @template T
+     * @param string|class-string<T> $name
+     * @return Base
+     * @phpstan-return T|BaseService
+     * @see Config::getService
+     */
+    public static function getService(string $name): \Wei\Base
+    {
+    }
+
+    /**
      * 预加载全局配置
      *
      * @experimental
@@ -7505,6 +7527,28 @@ if (0) {
          * @see Config::getAppSection
          */
         public function getAppSection(string $name): array
+        {
+        }
+
+        /**
+         * @template T
+         * @param string|class-string<T> $name
+         * @return Base
+         * @phpstan-return T|BaseService
+         * @see Config::createService
+         */
+        public function createService(string $name): \Wei\Base
+        {
+        }
+
+        /**
+         * @template T
+         * @param string|class-string<T> $name
+         * @return Base
+         * @phpstan-return T|BaseService
+         * @see Config::getService
+         */
+        public function getService(string $name): \Wei\Base
         {
         }
 

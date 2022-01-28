@@ -2,8 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\ModelTrait;
+use Wei\Base;
 
 /**
  * @mixin \EnvMixin
@@ -64,6 +64,11 @@ class Config extends \Wei\Config
      * @var string
      */
     protected $localFile = 'storage/configs/%env%.php';
+
+    /**
+     * @var array
+     */
+    protected $services = [];
 
     /**
      * The missing config names of the last get action
@@ -151,7 +156,11 @@ class Config extends \Wei\Config
      */
     protected function getSection(string $name): array
     {
-        return array_merge($this->wei->getConfig($name), $this->getGlobalSection($name), $this->getAppSection($name));
+        return array_merge(
+            (array) $this->wei->getConfig($name),
+            $this->getGlobalSection($name),
+            $this->getAppSection($name)
+        );
     }
 
     /**
@@ -257,8 +266,7 @@ class Config extends \Wei\Config
     /**
      * @template T
      * @param string|class-string<T> $name
-     * @return Base
-     * @phpstan-return T|BaseService
+     * @return T|Base
      * @svc
      */
     protected function createService(string $name): Base
@@ -271,8 +279,7 @@ class Config extends \Wei\Config
     /**
      * @template T
      * @param string|class-string<T> $name
-     * @return Base
-     * @phpstan-return T|BaseService
+     * @return T|Base
      * @svc
      */
     protected function getService(string $name): Base
