@@ -1111,23 +1111,6 @@ class Config
     }
 
     /**
-     * @see Config::save
-     * @param array|string $name
-     * @param mixed $value
-     * @return void
-     */
-    public static function save($name, $value = null)
-    {
-    }
-
-    /**
-     * @see Config::write
-     */
-    public static function write()
-    {
-    }
-
-    /**
      * 预加载全局配置
      *
      * @experimental
@@ -1138,9 +1121,12 @@ class Config
     }
 
     /**
-     * @see Config::load
+     * 更新配置到本地文件中
+     *
+     * @param array $configs
+     * @see Config::updateLocal
      */
-    public static function load()
+    public static function updateLocal(array $configs)
     {
     }
 }
@@ -7523,23 +7509,6 @@ if (0) {
         }
 
         /**
-         * @see Config::save
-         * @param array|string $name
-         * @param mixed $value
-         * @return void
-         */
-        public function save($name, $value = null)
-        {
-        }
-
-        /**
-         * @see Config::write
-         */
-        public function write()
-        {
-        }
-
-        /**
          * 预加载全局配置
          *
          * @experimental
@@ -7550,9 +7519,12 @@ if (0) {
         }
 
         /**
-         * @see Config::load
+         * 更新配置到本地文件中
+         *
+         * @param array $configs
+         * @see Config::updateLocal
          */
-        public function load()
+        public function updateLocal(array $configs)
         {
         }
     }

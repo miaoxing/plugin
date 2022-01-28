@@ -59,16 +59,11 @@ class Config extends \Wei\Config
     protected const TYPE_EXPRESS = 'e';
 
     /**
-     * @var array
-     */
-    protected $configs = [];
-
-    /**
-     * 配置文件的路径
+     * The local config file path
      *
      * @var string
      */
-    protected $configFile = 'storage/configs/%env%.php';
+    protected $localFile = 'storage/configs/%env%.php';
 
     /**
      * The missing config names of the last get action
@@ -91,26 +86,6 @@ class Config extends \Wei\Config
         'NULL' => self::TYPE_NULL,
         // ignore non-scalar types
     ];
-
-    public function __construct($options = [])
-    {
-        parent::__construct($options);
-
-        $file = $this->getConfigFile();
-        if (is_file($file)) {
-            $this->configs = require $this->getConfigFile();
-        }
-    }
-
-    /**
-     * 获取配置文件
-     *
-     * @return string
-     */
-    public function getConfigFile()
-    {
-        return str_replace('%env%', $this->env->getName(), $this->configFile);
-    }
 
     /**
      * @svc
@@ -562,59 +537,51 @@ class Config extends \Wei\Config
     }
 
     /**
-     * 设置一项配置的值
+     * 获取配置文件
      *
-     * @param array|string $name
-     * @param mixed $value
-     * @return $this
+     * @return string
      */
-    protected function update($name, $value = null)
+    protected function getLocalFile(): string
     {
-        if (is_array($name)) {
-            foreach ($name as $item => $value) {
-                $this->update($item, $value);
-            }
-            return $this;
-        }
+        return str_replace('%env%', $this->env->getName(), $this->localFile);
+    }
 
-        if (isset($this->configs[$name])) {
-            $this->configs[$name] = array_merge($this->configs[$name], $value);
+    /**
+     * 更新配置到本地文件中
+     *
+     * @param array $configs
+     * @svc
+     */
+    protected function updateLocal(array $configs)
+    {
+        $file = $this->getLocalFile();
+        if (is_file($file)) {
+            $localConfigs = require $file;
         } else {
-            $this->configs[$name] = $value;
+            $localConfigs = [];
         }
-        return $this;
+
+        foreach ($configs as $name => $value) {
+            if (isset($localConfigs[$name])) {
+                $localConfigs[$name] = array_merge($localConfigs[$name], $value);
+            } else {
+                $localConfigs[$name] = $value;
+            }
+        }
+
+        $this->writeConfig($file, $localConfigs);
+        $this->wei->setConfig($configs);
     }
 
     /**
-     * @svc
-     * @param array|string $name
-     * @param mixed $value
-     * @return void
+     * @param string $file
+     * @param mixed $configs
      */
-    protected function save($name, $value = null)
+    protected function writeConfig(string $file, $configs): void
     {
-        $this->update($name, $value)->write();
-    }
-
-    /**
-     * @svc
-     */
-    protected function write()
-    {
-        $file = $this->getConfigFile();
-        $content = $this->generateContent($this->configs);
+        $content = $this->generateContent($configs);
         file_put_contents($file, $content);
-
         function_exists('opcache_invalidate') && opcache_invalidate($file);
-    }
-
-    /**
-     * @svc
-     */
-    protected function load()
-    {
-        $this->env->loadConfigFile($this->getConfigFile());
-        return $this;
     }
 
     /**
@@ -721,9 +688,7 @@ class Config extends \Wei\Config
     protected function setPhpFileCache(string $key, $value)
     {
         $file = $this->phpFileCache->getDir() . '/' . $key . '.php';
-        $content = $this->generateContent($value);
-        file_put_contents($file, $content);
-        function_exists('opcache_invalidate') && opcache_invalidate($file);
+        $this->writeConfig($file, $value);
     }
 
     /**
