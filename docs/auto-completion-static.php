@@ -4,10 +4,31 @@ namespace Miaoxing\Plugin\Service;
 
 class App
 {
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class AppModel
 {
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
+
     /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
@@ -987,6 +1008,17 @@ class Cls
     public static function usesDeep($class, bool $autoload = true): array
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class Config
@@ -1151,10 +1183,32 @@ class Config
     public static function updateLocal(array $configs)
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class ConfigModel
 {
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
+
     /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
@@ -2163,6 +2217,17 @@ class ConfigModel
 
 class GlobalConfigModel
 {
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
+
     /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
@@ -3182,6 +3247,17 @@ class IsModelExists
     public static function check($input, string $name = '%name%'): \Wei\Ret
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class Jwt
@@ -3249,6 +3325,17 @@ class Jwt
     public static function generateDefaultKeys(): Ret
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class ObjectReq
@@ -3285,10 +3372,31 @@ class ObjectReq
     public static function isPreflight(): bool
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class PageRouter
 {
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class Plugin
@@ -3325,10 +3433,32 @@ class Plugin
     public static function isInstalled($id)
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class QueryBuilder
 {
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
+
     /**
      * Set or remove cache time for the query
      *
@@ -4062,6 +4192,17 @@ class Ret
     public static function alert($message, $code = null)
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class Seeder
@@ -4090,10 +4231,31 @@ class Seeder
     public static function create(array $options)
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class Session
 {
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class Snowflake
@@ -4158,6 +4320,17 @@ class Snowflake
     public static function parse($id): array
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class Str
@@ -4215,6 +4388,17 @@ class Str
      * @see Str::dash
      */
     public static function dash(string $input): string
+    {
+    }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
     {
     }
 }
@@ -4354,6 +4538,17 @@ class Tester
     public static function deleteAdminApi(string $page)
     {
     }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
 }
 
 class User
@@ -4477,6 +4672,17 @@ class User
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
+    {
+    }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
     {
     }
 
@@ -5441,6 +5647,17 @@ class UserModel
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
+    {
+    }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
     {
     }
 
@@ -6436,10 +6653,31 @@ namespace Miaoxing\Plugin\Service;
 if (0) {
     class App
     {
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class AppModel
     {
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
+
         /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
@@ -7407,6 +7645,17 @@ if (0) {
         public function usesDeep($class, bool $autoload = true): array
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class Config
@@ -7571,10 +7820,32 @@ if (0) {
         public function updateLocal(array $configs)
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class ConfigModel
     {
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
+
         /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
@@ -8571,6 +8842,17 @@ if (0) {
 
     class GlobalConfigModel
     {
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
+
         /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
@@ -9578,6 +9860,17 @@ if (0) {
         public function check($input, string $name = '%name%'): \Wei\Ret
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class Jwt
@@ -9645,6 +9938,17 @@ if (0) {
         public function generateDefaultKeys(): Ret
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class ObjectReq
@@ -9681,10 +9985,31 @@ if (0) {
         public function isPreflight(): bool
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class PageRouter
     {
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class Plugin
@@ -9721,10 +10046,32 @@ if (0) {
         public function isInstalled($id)
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class QueryBuilder
     {
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
+
         /**
          * Set or remove cache time for the query
          *
@@ -10446,6 +10793,17 @@ if (0) {
         public function alert($message, $code = null)
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class Seeder
@@ -10474,10 +10832,31 @@ if (0) {
         public function create(array $options)
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class Session
     {
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class Snowflake
@@ -10542,6 +10921,17 @@ if (0) {
         public function parse($id): array
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class Str
@@ -10599,6 +10989,17 @@ if (0) {
          * @see Str::dash
          */
         public function dash(string $input): string
+        {
+        }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
         {
         }
     }
@@ -10738,6 +11139,17 @@ if (0) {
         public function deleteAdminApi(string $page)
         {
         }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
+        {
+        }
     }
 
     class User
@@ -10861,6 +11273,17 @@ if (0) {
          * @see UserModel::updatePassword
          */
         public function updatePassword($req)
+        {
+        }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
         {
         }
 
@@ -11813,6 +12236,17 @@ if (0) {
          * @see UserModel::updatePassword
          */
         public function updatePassword($req)
+        {
+        }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
         {
         }
 
