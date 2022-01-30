@@ -5,6 +5,7 @@ namespace MiaoxingTest\Plugin\Service;
 use Miaoxing\Plugin\Service\Config;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Wei\Cache;
+use Wei\NullCache;
 
 class ConfigTest extends BaseTestCase
 {
@@ -22,20 +23,7 @@ class ConfigTest extends BaseTestCase
      */
     public function testGetTypes($key, $value)
     {
-        $cache = $this->getModelServiceMock(Cache::class, [
-            'setMultiple',
-            'get'
-        ]);
-
-        $cache->expects($this->exactly(2))
-            ->method('setMultiple')
-            ->willReturn(false);
-
-        $cache->expects($this->once())
-            ->method('get')
-            ->willReturn(null);
-
-        Config::instance()->setOption('cache', $cache);
+        Config::instance()->setOption('cache', NullCache::instance());
         Config::setGlobal($key, $value);
 
         $result = Config::getGlobal($key);
@@ -173,5 +161,12 @@ class ConfigTest extends BaseTestCase
 
         // app cache wont be cache to null
         $this->assertSame(1, Config::get('test'));
+    }
+
+    public function testNullCache()
+    {
+        Config::instance()->setOption('cache', NullCache::instance());
+
+        $this->testGetFallbackToWeiConfig();
     }
 }
