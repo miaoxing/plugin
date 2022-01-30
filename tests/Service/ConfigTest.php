@@ -4,12 +4,68 @@ namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Service\Config;
 use Miaoxing\Plugin\Test\BaseTestCase;
+use Wei\Cache;
 
 class ConfigTest extends BaseTestCase
 {
+    public function testGetFallbackToWeiConfig()
+    {
+        $this->wei->setConfig(__FUNCTION__, 'value');
+
+        $value = Config::get(__FUNCTION__);
+
+        $this->assertSame('value', $value);
+    }
+
+    /**
+     * @dataProvider providerForTypes
+     */
+    public function testGetTypes($key, $value)
+    {
+        $cache = $this->getModelServiceMock(Cache::class, [
+            'setMultiple',
+            'get'
+        ]);
+
+        $cache->expects($this->exactly(2))
+            ->method('setMultiple')
+            ->willReturn(false);
+
+        $cache->expects($this->once())
+            ->method('get')
+            ->willReturn(null);
+
+        Config::instance()->setOption('cache', $cache);
+        Config::setGlobal($key, $value);
+
+        $result = Config::getGlobal($key);
+
+        if (is_scalar($value)) {
+            $this->assertSame($result, $value);
+        } else {
+            $this->assertEquals($result, $value);
+        }
+    }
+
+    public function providerForTypes(): array
+    {
+        return [
+            ['test1', null],
+            ['test2', 'string'],
+            ['test3', 1],
+            ['test4', 1.1],
+            ['test5', true],
+            ['test6', false],
+            ['test7', []],
+            ['test8', ['a' => 'b']],
+            ['test8', (object) ['c' => 'd']],
+            ['test9', new \ArrayObject(['e' => 'f'])]
+        ];
+    }
+
     public function testGetSetApp()
     {
-        $value = Config::getApp('notfound:' . time());
+        $value = Config::getApp('notFound:' . time());
         $this->assertNull($value);
 
         Config::setApp('test', __FUNCTION__);
