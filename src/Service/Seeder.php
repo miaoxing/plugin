@@ -175,7 +175,7 @@ class Seeder extends BaseService
             return;
         }
 
-        $seeder = $this->instance($classes[$name]);
+        $seeder = $this->newInstance($classes[$name]);
         $seeder->run();
 
         if ($this->db->select($this->table, ['id' => $name])) {
@@ -247,7 +247,7 @@ class Seeder extends BaseService
      * @param string $class
      * @return BaseSeeder
      */
-    protected function instance(string $class): BaseSeeder
+    protected function newInstance(string $class): BaseSeeder
     {
         return new $class([
             'wei' => $this->wei,
