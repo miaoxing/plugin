@@ -388,4 +388,45 @@ class ConfigTest extends BaseTestCase
 
         $this->assertSame($config2, $config);
     }
+
+    public function testUpdateLocal()
+    {
+        $options = [
+            'null' => null,
+            'string' => 'string',
+            'int' => 1,
+            'float' => 1.1,
+            'true' => true,
+            'false' => false,
+            'empty-array' => [],
+            'array' => [
+                'a' => 'b'
+            ],
+        ];
+
+        $file = 'storage/test.php';
+        if (is_file($file)) {
+            unlink($file);
+        }
+
+        /** @var Config $config */
+        $config = $this->wei->newInstance('config', [
+            'localFile' => $file,
+        ]);
+
+        $config->updateLocal([
+            'test' => $options,
+        ]);
+        $this->assertArrayContains($options, $this->wei->getConfig('test'));
+
+        $config->updateLocal([
+           'test' => [
+               'string' => 'string2'
+           ],
+        ]);
+
+        $this->assertSame('string2', $this->wei->getConfig('test.string'));
+
+        unlink($file);
+    }
 }
