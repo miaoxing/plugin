@@ -3,8 +3,8 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Service\Config;
+use Miaoxing\Plugin\Service\GlobalConfigModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
-use Wei\Cache;
 use Wei\NullCache;
 
 class ConfigTest extends BaseTestCase
@@ -70,6 +70,7 @@ class ConfigTest extends BaseTestCase
         ]);
 
         $configs = Config::getAppSection('testSms');
+        ksort($configs);
         $this->assertSame([
             'appKey' => '123',
             'appSecret' => '456',
@@ -85,6 +86,16 @@ class ConfigTest extends BaseTestCase
         $this->assertSame(__FUNCTION__, Config::getGlobal('test'));
 
         Config::get('test');
+    }
+
+    public function testSetGlobalWithPreload()
+    {
+        Config::deleteGlobal('test');
+
+        Config::setGlobal('test', 'value', ['preload' => true]);
+
+        $config = GlobalConfigModel::findBy('name', 'test');
+        $this->assertTrue($config->preload);
     }
 
     public function testDeleteGlobal()
@@ -167,6 +178,44 @@ class ConfigTest extends BaseTestCase
         ], $values);
     }
 
+    public function testGetMultipleFallbackToGlobal()
+    {
+        Config::setApp('test', 'value');
+        Config::deleteApp('test2');
+        Config::setGlobal('test2', 2);
+
+        $values = Config::getMultiple(['test', 'test2']);
+
+        // Get from app
+        $this->assertSame('value', $values['test']);
+
+        // Get from global
+        $this->assertSame(2, $values['test2']);
+    }
+
+    public function testGetMultipleFallbackToContainerConfig()
+    {
+        Config::setApp('test', 'value');
+
+        Config::deleteApp('test2');
+        Config::setGlobal('test2', 2);
+
+        Config::deleteGlobal('test3');
+        Config::deleteApp('test3');
+        $this->wei->setConfig('test3', 3);
+
+        $values = Config::getMultiple(['test', 'test2', 'test3']);
+
+        // Get from app
+        $this->assertSame('value', $values['test']);
+
+        // Get from global
+        $this->assertSame(2, $values['test2']);
+
+        // Get from global
+        $this->assertSame(3, $values['test3']);
+    }
+
     public function testSetMultiple()
     {
         Config::setMultiple([
@@ -176,6 +225,12 @@ class ConfigTest extends BaseTestCase
 
         $this->assertSame(__FUNCTION__ . '1', Config::get('test'));
         $this->assertSame(__FUNCTION__ . '2', Config::get('test2'));
+    }
+
+    public function testSetMultipleWithEmptyArray()
+    {
+        $config = Config::setMultiple([]);
+        $this->assertInstanceOf(Config::class, $config);
     }
 
     public function testGetSection()
@@ -190,6 +245,44 @@ class ConfigTest extends BaseTestCase
             'appKey' => '123',
             'appSecret' => '456',
         ], $configs);
+    }
+
+    public function testGetSectionFallbackToGlobal()
+    {
+        Config::setGlobalMultiple([
+            'testSms.appKey' => 'globalKey',
+        ]);
+
+        Config::deleteApp('testSms.appKey');
+        Config::setAppMultiple([
+            'testSms.appSecret' => '456',
+        ]);
+
+        $configs = Config::getSection('testSms');
+        $this->assertSame([
+            'appKey' => 'globalKey',
+            'appSecret' => '456',
+        ], $configs);
+    }
+
+    public function testGetSectionFallbackToContainerConfig()
+    {
+        $this->wei->setConfig('testSms.limit', 1);
+
+        Config::deleteGlobal('testSms.limit');
+        Config::setGlobal('testSms.appKey', 'globalKey');
+
+        Config::deleteApp('testSms.appKey');
+        Config::setApp('testSms.appSecret', '456');
+
+        $configs = Config::getSection('testSms');
+        $this->assertSame([
+            'limit' => 1,
+            'appKey' => 'globalKey',
+            'appSecret' => '456',
+        ], $configs);
+
+        $this->wei->removeConfig('testSms.limit');
     }
 
     public function testGetFromApp()
