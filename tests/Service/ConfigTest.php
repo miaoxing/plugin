@@ -9,48 +9,6 @@ use Wei\NullCache;
 
 class ConfigTest extends BaseTestCase
 {
-    public function testGetFallbackToWeiConfig()
-    {
-        $this->wei->setConfig(__FUNCTION__, 'value');
-
-        $value = Config::get(__FUNCTION__);
-
-        $this->assertSame('value', $value);
-    }
-
-    /**
-     * @dataProvider providerForTypes
-     */
-    public function testGetTypes($key, $value)
-    {
-        Config::instance()->setOption('cache', NullCache::instance());
-        Config::setGlobal($key, $value);
-
-        $result = Config::getGlobal($key);
-
-        if (is_scalar($value)) {
-            $this->assertSame($result, $value);
-        } else {
-            $this->assertEquals($result, $value);
-        }
-    }
-
-    public function providerForTypes(): array
-    {
-        return [
-            ['test1', null],
-            ['test2', 'string'],
-            ['test3', 1],
-            ['test4', 1.1],
-            ['test5', true],
-            ['test6', false],
-            ['test7', []],
-            ['test8', ['a' => 'b']],
-            ['test8', (object) ['c' => 'd']],
-            ['test9', new \ArrayObject(['e' => 'f'])]
-        ];
-    }
-
     public function testGetSetApp()
     {
         $value = Config::getApp('notFound:' . time());
@@ -136,14 +94,102 @@ class ConfigTest extends BaseTestCase
         $this->assertNull(Config::getGlobal('test'));
     }
 
-    public function testScope()
+    public function testGetGlobalMultiple()
     {
-        $time = time();
-        Config::setGlobal('test', $time);
-        $this->assertNotSame($time, Config::getApp('test'));
+        Config::setGlobal('test', 1);
+        Config::setGlobal('test2', 2);
 
-        Config::setApp('test', $time + 1);
-        $this->assertNotSame($time + 1, Config::getGlobal('test'));
+        $values = Config::getGlobalMultiple(['test', 'test2']);
+
+        $this->assertSame([
+            'test' => 1,
+            'test2' => 2,
+        ], $values);
+    }
+
+    public function testSetGlobalMultiple()
+    {
+        Config::setAppMultiple([
+            'test' => __FUNCTION__ . '1',
+            'test2' => __FUNCTION__ . '2',
+        ]);
+
+        $this->assertSame(__FUNCTION__ . '1', Config::getApp('test'));
+        $this->assertSame(__FUNCTION__ . '2', Config::getApp('test2'));
+    }
+
+    public function testSetGlobalMultipleWithNewConfig()
+    {
+        Config::deleteGlobal('test');
+
+        Config::setGlobalMultiple([
+            'test' => __FUNCTION__ . '1',
+            'test2' => __FUNCTION__ . '2',
+        ]);
+
+        $this->assertSame(__FUNCTION__ . '1', Config::getGlobal('test'));
+        $this->assertSame(__FUNCTION__ . '2', Config::getGlobal('test2'));
+    }
+
+    public function testGetGlobalSection()
+    {
+        Config::setGlobalMultiple([
+            'testSms.appKey' => '123',
+            'testSms.appSecret' => '456',
+        ]);
+
+        $configs = Config::getGlobalSection('testSms');
+        $this->assertSame([
+            'appKey' => '123',
+            'appSecret' => '456',
+        ], $configs);
+    }
+
+    public function testGetSet()
+    {
+        $value = Config::get('notFound:' . time());
+        $this->assertNull($value);
+
+        Config::set('test', __FUNCTION__);
+        $this->assertSame(__FUNCTION__, Config::get('test'));
+    }
+
+    public function testGetMultiple()
+    {
+        Config::set('test', 1);
+        Config::set('test2', 2);
+
+        $values = Config::getMultiple(['test', 'test2']);
+
+        $this->assertSame([
+            'test' => 1,
+            'test2' => 2,
+        ], $values);
+    }
+
+    public function testSetMultiple()
+    {
+        Config::setMultiple([
+            'test' => __FUNCTION__ . '1',
+            'test2' => __FUNCTION__ . '2',
+        ]);
+
+        $this->assertSame(__FUNCTION__ . '1', Config::get('test'));
+        $this->assertSame(__FUNCTION__ . '2', Config::get('test2'));
+    }
+
+    public function testGetSection()
+    {
+        Config::setAppMultiple([
+            'testSms.appKey' => '123',
+            'testSms.appSecret' => '456',
+        ]);
+
+        $configs = Config::getSection('testSms');
+        $this->assertSame([
+            'appKey' => '123',
+            'appSecret' => '456',
+        ], $configs);
     }
 
     public function testGetFromApp()
@@ -163,10 +209,56 @@ class ConfigTest extends BaseTestCase
         $this->assertSame(1, Config::get('test'));
     }
 
-    public function testNullCache()
+    public function testGetFallbackToContainerConfig()
+    {
+        $this->wei->setConfig(__FUNCTION__, 'value');
+
+        $value = Config::get(__FUNCTION__);
+
+        $this->assertSame('value', $value);
+    }
+
+    /**
+     * @dataProvider providerForTypes
+     * @param mixed $value
+     */
+    public function testGetTypes(string $key, $value)
     {
         Config::instance()->setOption('cache', NullCache::instance());
+        Config::setGlobal($key, $value);
 
-        $this->testGetFallbackToWeiConfig();
+        $result = Config::getGlobal($key);
+
+        if (is_scalar($value)) {
+            $this->assertSame($result, $value);
+        } else {
+            $this->assertEquals($result, $value);
+        }
+    }
+
+    public function providerForTypes(): array
+    {
+        return [
+            ['test1', null],
+            ['test2', 'string'],
+            ['test3', 1],
+            ['test4', 1.1],
+            ['test5', true],
+            ['test6', false],
+            ['test7', []],
+            ['test8', ['a' => 'b']],
+            ['test8', (object) ['c' => 'd']],
+            ['test9', new \ArrayObject(['e' => 'f'])],
+        ];
+    }
+
+    public function testScope()
+    {
+        $time = time();
+        Config::setGlobal('test', $time);
+        $this->assertNotSame($time, Config::getApp('test'));
+
+        Config::setApp('test', $time + 1);
+        $this->assertNotSame($time + 1, Config::getGlobal('test'));
     }
 }
