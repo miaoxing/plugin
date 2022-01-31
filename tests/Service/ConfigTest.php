@@ -354,4 +354,38 @@ class ConfigTest extends BaseTestCase
         Config::setApp('test', $time + 1);
         $this->assertNotSame($time + 1, Config::getGlobal('test'));
     }
+
+    public function testCreateService()
+    {
+        Config::setApp('config.localFile', 'test.php');
+
+        $config = Config::createService('config');
+        $this->assertInstanceOf(Config::class, $config);
+
+        $config2 = Config::createService('config');
+        $this->assertEquals($config, $config2);
+        $this->assertNotSame($config, $config2);
+
+        $this->assertSame('test.php', $config->getOption('localFile'));
+    }
+
+    public function testGetService()
+    {
+        $ret = Config::getService('config');
+        $this->assertInstanceOf(Config::class, $ret);
+
+        $ret2 = Config::getService('config');
+        $this->assertSame($ret, $ret2);
+    }
+
+    public function testGetServiceByClass()
+    {
+        $config = Config::getService(Config::class);
+        $this->assertInstanceOf(Config::class, $config);
+
+        $config2 = Config::getService(\Wei\Config::class);
+        $this->assertInstanceOf(Config::class, $config2);
+
+        $this->assertSame($config2, $config);
+    }
 }
