@@ -540,4 +540,33 @@ class ConfigTest extends BaseTestCase
 
         unlink($file);
     }
+
+    public function testPublishPreload()
+    {
+        $this->wei->removeConfig('test.now');
+
+        $now = time();
+        Config::setGlobal('test.now', $now, ['preload' => true]);
+
+        $testNow = $this->wei->getConfig('test.now');
+        $this->assertNotSame($now, $testNow);
+
+        Config::publishPreload();
+
+        $testNow = $this->wei->getConfig('test.now');
+        $this->assertSame($now, $testNow);
+    }
+
+    public function testPreloadGlobal()
+    {
+        $key = Config::getPreloadVersionKey();
+
+        Config::deleteGlobal($key);
+
+        Config::preloadGlobal();
+
+        $version = Config::getGlobal($key);
+
+        $this->assertNotNull($version);
+    }
 }
