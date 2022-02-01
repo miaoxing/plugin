@@ -1175,12 +1175,28 @@ class Config
     }
 
     /**
+     * @return $this
+     * @see Config::publishPreload
+     */
+    public static function publishPreload(): self
+    {
+    }
+
+    /**
      * 更新配置到本地文件中
      *
      * @param array $configs
      * @see Config::updateLocal
      */
     public static function updateLocal(array $configs)
+    {
+    }
+
+    /**
+     * @return string
+     * @see Config::getPreloadVersionKey
+     */
+    public static function getPreloadVersionKey(): string
     {
     }
 
@@ -7812,12 +7828,28 @@ if (0) {
         }
 
         /**
+         * @return $this
+         * @see Config::publishPreload
+         */
+        public function publishPreload(): self
+        {
+        }
+
+        /**
          * 更新配置到本地文件中
          *
          * @param array $configs
          * @see Config::updateLocal
          */
         public function updateLocal(array $configs)
+        {
+        }
+
+        /**
+         * @return string
+         * @see Config::getPreloadVersionKey
+         */
+        public function getPreloadVersionKey(): string
         {
         }
 

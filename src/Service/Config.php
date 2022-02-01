@@ -304,12 +304,35 @@ class Config extends \Wei\Config
         $configs = $this->getPhpFileCache('global-config', []);
 
         // 2. 检查更新配置
-        if ($this->needsUpdate($configs)) {
+        if ($this->needsUpdatePreload($configs)) {
             $configs = $this->setPreloadCache();
         }
 
         // 3. 加载配置
         $this->wei->setConfig($configs);
+    }
+
+    /**
+     * @return $this
+     * @svc
+     */
+    protected function publishPreload(): self
+    {
+        $this->updatePreloadVersion();
+        $configs = $this->setPreloadCache();
+        $this->wei->setConfig($configs);
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @internal
+     */
+    protected function updatePreloadVersion(): string
+    {
+        $version = date('Y-m-d H:i:s');
+        $this->setGlobal($this->getPreloadVersionKey(), $version, ['preload' => true]);
+        return $version;
     }
 
     /**
@@ -640,8 +663,6 @@ class Config extends \Wei\Config
         }
     }
 
-
-
     /**
      * 判断本地的配置是否需要更改
      *
@@ -649,18 +670,26 @@ class Config extends \Wei\Config
      * @return bool
      * @internal
      */
-    protected function needsUpdate(array $configs): bool
+    protected function needsUpdatePreload(array $configs): bool
     {
-        $key = 'config.version';
+        $key = $this->getPreloadVersionKey();
 
         $version = $this->getGlobal($key);
         if (!$version) {
-            $version = date('Y-m-d H:i:s');
-            $this->setGlobal($key, $version, ['preload' => true]);
+            $version = $this->updatePreloadVersion();
         }
 
         [$service, $option] = explode('.', $key);
         return !isset($configs[$service][$option]) || $configs[$service][$option] < $version;
+    }
+
+    /**
+     * @return string
+     * @svc
+     */
+    protected function getPreloadVersionKey(): string
+    {
+        return 'config.preloadVersion';
     }
 
     /**
