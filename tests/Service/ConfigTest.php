@@ -18,6 +18,17 @@ class ConfigTest extends BaseTestCase
         $this->assertSame(__FUNCTION__, Config::getApp('test'));
     }
 
+    public function testGetAppWithDefault()
+    {
+        $key = 'notFound' . time();
+
+        $value = Config::getApp($key, 'default');
+        $this->assertSame($value, 'default');
+
+        $value = Config::getApp($key, 'default2');
+        $this->assertSame($value, 'default2');
+    }
+
     public function testDeleteApp()
     {
         Config::deleteApp('test');
@@ -35,6 +46,32 @@ class ConfigTest extends BaseTestCase
         $this->assertSame([
             'test' => 1,
             'test2' => 2,
+        ], $values);
+    }
+
+    public function testGetAppMultipleWithDefault()
+    {
+        $key1 = 'test' . time();
+        $key2 = 'test2' . time();
+
+        $values = Config::getAppMultiple([$key1, $key2], [
+            $key1 => 'test',
+            $key2 => 'test2',
+        ]);
+
+        $this->assertSame([
+            $key1 => 'test',
+            $key2 => 'test2',
+        ], $values);
+
+        $values = Config::getAppMultiple([$key1, $key2], [
+            $key1 => 'test2',
+            $key2 => 'test3',
+        ]);
+
+        $this->assertSame([
+            $key1 => 'test2',
+            $key2 => 'test3',
         ], $values);
     }
 
@@ -88,6 +125,17 @@ class ConfigTest extends BaseTestCase
         Config::get('test');
     }
 
+    public function testGetGlobalWithDefault()
+    {
+        $key = 'notFound' . time();
+
+        $value = Config::getGlobal($key, 'default');
+        $this->assertSame($value, 'default');
+
+        $value = Config::getGlobal($key, 'default2');
+        $this->assertSame($value, 'default2');
+    }
+
     public function testSetGlobalWithPreload()
     {
         Config::deleteGlobal('test');
@@ -115,6 +163,32 @@ class ConfigTest extends BaseTestCase
         $this->assertSame([
             'test' => 1,
             'test2' => 2,
+        ], $values);
+    }
+
+    public function testGetGlobalMultipleWithDefault()
+    {
+        $key1 = 'test' . time();
+        $key2 = 'test2' . time();
+
+        $values = Config::getGlobalMultiple([$key1, $key2], [
+            $key1 => 'test',
+            $key2 => 'test2',
+        ]);
+
+        $this->assertSame([
+            $key1 => 'test',
+            $key2 => 'test2',
+        ], $values);
+
+        $values = Config::getGlobalMultiple([$key1, $key2], [
+            $key1 => 'test2',
+            $key2 => 'test3',
+        ]);
+
+        $this->assertSame([
+            $key1 => 'test2',
+            $key2 => 'test3',
         ], $values);
     }
 
@@ -165,6 +239,17 @@ class ConfigTest extends BaseTestCase
         $this->assertSame(__FUNCTION__, Config::get('test'));
     }
 
+    public function testGetWithDefault()
+    {
+        $key = 'notFound' . time();
+
+        $value = Config::get($key, 'default');
+        $this->assertSame($value, 'default');
+
+        $value = Config::get($key, 'default2');
+        $this->assertSame($value, 'default2');
+    }
+
     public function testGetMultiple()
     {
         Config::set('test', 1);
@@ -175,6 +260,32 @@ class ConfigTest extends BaseTestCase
         $this->assertSame([
             'test' => 1,
             'test2' => 2,
+        ], $values);
+    }
+
+    public function testGetMultipleWithDefault()
+    {
+        $key1 = 'test' . time();
+        $key2 = 'test2' . time();
+
+        $values = Config::getMultiple([$key1, $key2], [
+            $key1 => 'test',
+            $key2 => 'test2',
+        ]);
+
+        $this->assertSame([
+            $key1 => 'test',
+            $key2 => 'test2',
+        ], $values);
+
+        $values = Config::getMultiple([$key1, $key2], [
+            $key1 => 'test2',
+            $key2 => 'test3',
+        ]);
+
+        $this->assertSame([
+            $key1 => 'test2',
+            $key2 => 'test3',
         ], $values);
     }
 
@@ -400,7 +511,7 @@ class ConfigTest extends BaseTestCase
             'false' => false,
             'empty-array' => [],
             'array' => [
-                'a' => 'b'
+                'a' => 'b',
             ],
         ];
 
@@ -420,9 +531,9 @@ class ConfigTest extends BaseTestCase
         $this->assertArrayContains($options, $this->wei->getConfig('test'));
 
         $config->updateLocal([
-           'test' => [
-               'string' => 'string2'
-           ],
+            'test' => [
+                'string' => 'string2',
+            ],
         ]);
 
         $this->assertSame('string2', $this->wei->getConfig('test.string'));
