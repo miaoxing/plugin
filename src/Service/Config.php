@@ -98,21 +98,7 @@ class Config extends \Wei\Config
      */
     protected function get(string $name, $default = null)
     {
-        $value = $this->getApp($name);
-        if (!$this->missing) {
-            return $value;
-        }
-
-        $value = $this->getGlobal($name);
-        if (!$this->missing) {
-            // 记录全局配置到 app 中，以便下次直接读取到
-            $this->cache->set($this->getPrefix(ConfigModel::class) . $name, $value);
-            return $value;
-        }
-
-        // 注意: 配置名称不含 . 时，文件配置会返回所有下级数据
-        // 行为和数据库存储配置不一致，但一般不影响使用
-        return $this->wei->getConfig($name, $default);
+        return $this->getMultiple([$name], [$name => $default])[$name];
     }
 
     /**
@@ -137,6 +123,8 @@ class Config extends \Wei\Config
         }
 
         foreach ($this->missing as $name) {
+            // 注意: 配置名称不含 . 时，文件配置会返回所有下级数据
+            // 行为和数据库存储配置不一致，但一般不影响使用
             $values[$name] = $this->wei->getConfig($name, $defaults[$name] ?? null);
         }
 
