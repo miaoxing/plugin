@@ -111,21 +111,32 @@ class Config extends \Wei\Config
     }
 
     /**
+     * Get multiple configs
+     *
+     * @param array $names The names of config
+     * @param array $defaults The values to return when config not found or is null
+     * @return array
      * @svc
      */
     protected function getMultiple(array $names, array $defaults = []): array
     {
         $values = $this->getAppMultiple($names);
+        $nulls = $this->getNullKeys($values);
 
-        if ($this->missing) {
-            $globalValues = $this->getGlobalMultiple($this->missing, $defaults);
+        if ($nulls) {
+            $globalValues = $this->getGlobalMultiple($nulls);
             $values = array_merge($values, $globalValues);
+            $nulls = $this->getNullKeys($globalValues);
         }
 
-        foreach ($this->missing as $name) {
+        foreach ($nulls as $name) {
             // 注意: 配置名称不含 . 时，文件配置会返回所有下级数据
             // 行为和数据库存储配置不一致，但一般不影响使用
-            $values[$name] = $this->wei->getConfig($name, $defaults[$name] ?? null);
+            $values[$name] = $this->wei->getConfig($name);
+        }
+
+        foreach ($names as $name) {
+            $values[$name] = $values[$name] ?? $defaults[$name] ?? null;
         }
 
         return $values;
@@ -335,7 +346,42 @@ class Config extends \Wei\Config
         $prefix = $this->getPrefix($model);
 
         // From cache
-        if (count($names) === 1) {
+        [$values, $missing] = $this->getMultipleFromCache($prefix, $names);
+
+        // From database
+        if ($missing) {
+            [$dbValues, $missing] = $this->getMultipleFromDb($model, $names);
+            $values = array_merge($values, $dbValues);
+
+            // Next time will fetch from cache
+            $cacheValues = $dbValues;
+            foreach ($missing as $name) {
+                $cacheValues[$name] = null;
+            }
+            $this->cacheWithPrefix($prefix, function () use ($cacheValues) {
+                $this->cache->setMultiple($cacheValues);
+            });
+        }
+        $this->missing = $missing;
+
+        // Add default value
+        foreach ($values as $name => $value) {
+            $values[$name] = $value ?? $defaults[$name] ?? null;
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param string $prefix
+     * @param array $names
+     * @return array
+     * @internal
+     */
+    protected function getMultipleFromCache(string $prefix, array $names): array
+    {
+        // From cache
+        if (1 === count($names)) {
             $key = current($names);
             $values = [$key => $this->cache->get($prefix . $key)];
         } else {
@@ -346,38 +392,39 @@ class Config extends \Wei\Config
 
         $missing = [];
         foreach ($values as $name => $value) {
-            if (!$this->cache->isHit($name)) {
+            if (!$this->cache->isHit($prefix . $name)) {
                 $missing[] = $name;
-                $values[$name] = $defaults[$name] ?? null;
             }
         }
 
-        // From database
-        if ($missing) {
-            $dbConfigs = $model::select(['name', 'type', 'value'])
-                ->where('name', $missing)
-                ->fetchAll();
-            if (!$dbConfigs) {
-                // TODO 要计入缓存
-                $this->missing = $missing;
-                return $values;
-            }
+        return [$values, $missing];
+    }
 
-            $configs = [];
-            foreach ($dbConfigs as $config) {
-                $configs[$config['name']] = $this->decode($config['value'], $config['type']);
-            }
+    /**
+     * @param string|class-string<ModelTrait> $model
+     * @param array $names
+     * @return array
+     * @internal
+     */
+    protected function getMultipleFromDb(string $model, array $names): array
+    {
+        $configs = $model::select(['name', 'type', 'value'])
+            ->where('name', $names)
+            ->fetchAll();
 
-            // Next time will fetch from cache
-            $this->cacheWithPrefix($prefix, function () use ($configs) {
-                $this->cache->setMultiple($configs);
-            });
-
-            $this->missing = array_diff($missing, array_keys($configs));
-            $values = array_merge($values, $configs);
+        $values = [];
+        foreach ($configs as $config) {
+            $values[$config['name']] = $this->decode($config['value'], $config['type']);
         }
 
-        return $values;
+        $missing = [];
+        foreach ($names as $name) {
+            if (!array_key_exists($name, $values)) {
+                $missing[] = $name;
+            }
+        }
+
+        return [$values, $missing];
     }
 
     /**
@@ -728,5 +775,21 @@ class Config extends \Wei\Config
             return require $file;
         }
         return $default;
+    }
+
+    /**
+     * @param array $values
+     * @return array
+     * @internal
+     */
+    protected function getNullKeys(array $values): array
+    {
+        $nulls = [];
+        foreach ($values as $name => $value) {
+            if (null === $value) {
+                $nulls[] = $name;
+            }
+        }
+        return $nulls;
     }
 }
