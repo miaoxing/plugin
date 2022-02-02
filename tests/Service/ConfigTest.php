@@ -3,6 +3,7 @@
 namespace MiaoxingTest\Plugin\Service;
 
 use Miaoxing\Plugin\Service\Config;
+use Miaoxing\Plugin\Service\ConfigModel;
 use Miaoxing\Plugin\Service\GlobalConfigModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use Wei\NullCache;
@@ -27,6 +28,26 @@ class ConfigTest extends BaseTestCase
 
         $value = Config::getApp($key, 'default2');
         $this->assertSame($value, 'default2');
+    }
+
+    public function testGetAppFromCache()
+    {
+        $key = 'test:' . microtime(true);
+
+        $config = $this->getServiceMock(Config::class, [
+            'getMultipleFromDb',
+        ]);
+
+        $config->expects($this->once())
+            ->method('getMultipleFromDb')
+            ->with(ConfigModel::class, [$key])
+            ->willReturn([[], [$key]]);
+
+        $value = $config->getApp($key, 'default');
+        $this->assertSame('default', $value);
+
+        $value = $config->getApp($key, 'default2');
+        $this->assertSame('default2', $value);
     }
 
     public function testDeleteApp()
@@ -241,10 +262,10 @@ class ConfigTest extends BaseTestCase
 
     public function testGetWithDefault()
     {
-        $key = 'notFound' . time();
+        $key = 'test:' . microtime(true);
 
         $value = Config::get($key, 'default');
-        $this->assertSame($value, 'default');
+        $this->assertSame('default', $value);
 
         $value = Config::get($key, 'default2');
         $this->assertSame($value, 'default2');
