@@ -1025,6 +1025,7 @@ class Config
 {
     /**
      * @see Config::get
+     * @param mixed $default
      */
     public static function get(string $name, $default = null)
     {
@@ -1032,12 +1033,18 @@ class Config
 
     /**
      * @see Config::set
+     * @param mixed $value
      */
     public static function set(string $name, $value, array $options = []): self
     {
     }
 
     /**
+     * Get multiple configs
+     *
+     * @param array $names The names of config
+     * @param array $defaults The values to return when config not found or is null
+     * @return array
      * @see Config::getMultiple
      */
     public static function getMultiple(array $names, array $defaults = []): array
@@ -1060,6 +1067,7 @@ class Config
 
     /**
      * @see Config::getGlobal
+     * @param mixed $default
      */
     public static function getGlobal(string $name, $default = null)
     {
@@ -1067,6 +1075,7 @@ class Config
 
     /**
      * @see Config::setGlobal
+     * @param mixed $value
      */
     public static function setGlobal(string $name, $value, array $options = []): self
     {
@@ -1102,6 +1111,7 @@ class Config
 
     /**
      * @see Config::getApp
+     * @param mixed $default
      */
     public static function getApp(string $name, $default = null)
     {
@@ -1109,6 +1119,7 @@ class Config
 
     /**
      * @see Config::setApp
+     * @param mixed $value
      */
     public static function setApp(string $name, $value, array $options = []): self
     {
@@ -1143,10 +1154,10 @@ class Config
     }
 
     /**
-     * @template T
+     * @template T of Base
+     * @phpstan-ignore-next-line [bleedingEdge]Template type T xxx is not referenced in a parameter. phpstan#5175
      * @param string|class-string<T> $name
-     * @return Base
-     * @phpstan-return T|BaseService
+     * @return Base|T
      * @see Config::createService
      */
     public static function createService(string $name): \Wei\Base
@@ -1154,10 +1165,10 @@ class Config
     }
 
     /**
-     * @template T
+     * @template T of Base
+     * @phpstan-ignore-next-line [bleedingEdge]Template type T xxx is not referenced in a parameter. phpstan#5175
      * @param string|class-string<T> $name
-     * @return Base
-     * @phpstan-return T|BaseService
+     * @return Base|T
      * @see Config::getService
      */
     public static function getService(string $name): \Wei\Base
@@ -7678,6 +7689,7 @@ if (0) {
     {
         /**
          * @see Config::get
+         * @param mixed $default
          */
         public function get(string $name, $default = null)
         {
@@ -7685,12 +7697,18 @@ if (0) {
 
         /**
          * @see Config::set
+         * @param mixed $value
          */
         public function set(string $name, $value, array $options = []): self
         {
         }
 
         /**
+         * Get multiple configs
+         *
+         * @param array $names The names of config
+         * @param array $defaults The values to return when config not found or is null
+         * @return array
          * @see Config::getMultiple
          */
         public function getMultiple(array $names, array $defaults = []): array
@@ -7713,6 +7731,7 @@ if (0) {
 
         /**
          * @see Config::getGlobal
+         * @param mixed $default
          */
         public function getGlobal(string $name, $default = null)
         {
@@ -7720,6 +7739,7 @@ if (0) {
 
         /**
          * @see Config::setGlobal
+         * @param mixed $value
          */
         public function setGlobal(string $name, $value, array $options = []): self
         {
@@ -7755,6 +7775,7 @@ if (0) {
 
         /**
          * @see Config::getApp
+         * @param mixed $default
          */
         public function getApp(string $name, $default = null)
         {
@@ -7762,6 +7783,7 @@ if (0) {
 
         /**
          * @see Config::setApp
+         * @param mixed $value
          */
         public function setApp(string $name, $value, array $options = []): self
         {
@@ -7796,10 +7818,10 @@ if (0) {
         }
 
         /**
-         * @template T
+         * @template T of Base
+         * @phpstan-ignore-next-line [bleedingEdge]Template type T xxx is not referenced in a parameter. phpstan#5175
          * @param string|class-string<T> $name
-         * @return Base
-         * @phpstan-return T|BaseService
+         * @return Base|T
          * @see Config::createService
          */
         public function createService(string $name): \Wei\Base
@@ -7807,10 +7829,10 @@ if (0) {
         }
 
         /**
-         * @template T
+         * @template T of Base
+         * @phpstan-ignore-next-line [bleedingEdge]Template type T xxx is not referenced in a parameter. phpstan#5175
          * @param string|class-string<T> $name
-         * @return Base
-         * @phpstan-return T|BaseService
+         * @return Base|T
          * @see Config::getService
          */
         public function getService(string $name): \Wei\Base

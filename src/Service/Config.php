@@ -263,9 +263,10 @@ class Config extends \Wei\Config
     }
 
     /**
-     * @template T
+     * @template T of Base
+     * @phpstan-ignore-next-line [bleedingEdge]Template type T xxx is not referenced in a parameter. phpstan#5175
      * @param string|class-string<T> $name
-     * @return T|Base
+     * @return Base|T
      * @svc
      */
     protected function createService(string $name): Base
@@ -276,9 +277,10 @@ class Config extends \Wei\Config
     }
 
     /**
-     * @template T
+     * @template T of Base
+     * @phpstan-ignore-next-line [bleedingEdge]Template type T xxx is not referenced in a parameter. phpstan#5175
      * @param string|class-string<T> $name
-     * @return T|Base
+     * @return Base|T
      * @svc
      */
     protected function getService(string $name): Base
