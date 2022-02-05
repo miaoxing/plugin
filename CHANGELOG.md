@@ -1,3 +1,41 @@
+# [0.7.0](https://github.com/miaoxing/plugin/compare/v0.6.0...v0.7.0) (2022-02-05)
+
+
+### Bug Fixes
+
+* **plugin, CastTrait:** `bigint` 类型默认值由字符串 "0" 改为空字符串 ([db8926e](https://github.com/miaoxing/plugin/commit/db8926e993cfba77a57841344a2b73d8c356db90))
+
+
+### Code Refactoring
+
+* **Config:** 写入本地配置改为 `updateLocal` 方法，移除原有的实现 ([63d5d6a](https://github.com/miaoxing/plugin/commit/63d5d6af1faced7cec5c09ea117ec91ff010daf8))
+
+
+### Features
+
+* **Config:** 初始化 `Config` 服务 ([63e97f9](https://github.com/miaoxing/plugin/commit/63e97f9d344d10f5a272d8d7eba7ba03c191a280))
+* **Config:** 增加 `createService` 和 `getService`，用于结合应用配置创建服务 ([ab5d439](https://github.com/miaoxing/plugin/commit/ab5d439b6c5f10cb62636f2d339091f4914cc1e8))
+* **Config:** 增加 `publishPreload` 和 `getPreloadVersionKey` 方法用于管理预加载配置 ([8cbda59](https://github.com/miaoxing/plugin/commit/8cbda59ba3cf16716f4dfa44a11e036da5386b50))
+* **Config:** 完善 Config 服务 ([dbbcda6](https://github.com/miaoxing/plugin/commit/dbbcda669c200c665b5ac6514f116a0193c9c9eb))
+* **Config, experimental:** 增加预加载全局配置功能 ([640d4ed](https://github.com/miaoxing/plugin/commit/640d4edd3e2940732fc4c3ea778dac1bc99425ab))
+* **plugin:** 初始化配置数据表和模型 ([1582a94](https://github.com/miaoxing/plugin/commit/1582a94dc53055729106e131557331b80d48ab14))
+
+
+### BREAKING CHANGES
+
+* **Config:** 写入本地配置改为 `updateLocal` 方法，移除原有的实现
+* **plugin, CastTrait:** `bigint` 类型默认值由字符串 0 改为空字符串
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.0.1` to `8.1.0`
+* **@mxjs/cli:** upgrade from `0.1.4` to `0.1.5`
+* **@wei/wei:** upgrade from `0.11.1` to `0.12.0`
+
 # [0.6.0](https://github.com/miaoxing/plugin/compare/v0.5.0...v0.6.0) (2022-01-12)
 
 
