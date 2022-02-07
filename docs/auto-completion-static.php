@@ -2242,6 +2242,38 @@ class ConfigModel
     }
 }
 
+class Fs
+{
+    /**
+     * Create if directory not exists
+     *
+     * @see Fs::ensureDir
+     */
+    public static function ensureDir(string $dir, int $permissions = 511): self
+    {
+    }
+
+    /**
+     * Get the file extension name
+     *
+     * @see Fs::getExt
+     */
+    public static function getExt(string $file, string $default = null): ?string
+    {
+    }
+
+    /**
+     * Return the current service object
+     *
+     * @return $this
+     * @experimental
+     * @see Base::instance
+     */
+    public static function instance(): self
+    {
+    }
+}
+
 class GlobalConfigModel
 {
     /**
@@ -8890,6 +8922,38 @@ if (0) {
          * @see ConfigModel::withDeleted
          */
         public function withDeleted(): self
+        {
+        }
+    }
+
+    class Fs
+    {
+        /**
+         * Create if directory not exists
+         *
+         * @see Fs::ensureDir
+         */
+        public function ensureDir(string $dir, int $permissions = 511): self
+        {
+        }
+
+        /**
+         * Get the file extension name
+         *
+         * @see Fs::getExt
+         */
+        public function getExt(string $file, string $default = null): ?string
+        {
+        }
+
+        /**
+         * Return the current service object
+         *
+         * @return $this
+         * @experimental
+         * @see Base::instance
+         */
+        public function instance(): self
         {
         }
     }

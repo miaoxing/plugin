@@ -39,6 +39,13 @@ class ConfigModelMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Fs $fs
+ */
+class FsMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\GlobalConfigModel $globalConfigModel
  * @method      Miaoxing\Plugin\Service\GlobalConfigModel globalConfigModel() 返回当前对象
  */
@@ -157,6 +164,7 @@ class UserModelMixin
  * @mixin ClsMixin
  * @mixin ConfigMixin
  * @mixin ConfigModelMixin
+ * @mixin FsMixin
  * @mixin GlobalConfigModelMixin
  * @mixin IsModelExistsMixin
  * @mixin JwtMixin
@@ -205,6 +213,9 @@ $config = wei()->configModel;
 
 /** @var Miaoxing\Plugin\Service\ConfigModel|Miaoxing\Plugin\Service\ConfigModel[] $configs */
 $configs = wei()->configModel();
+
+/** @var Miaoxing\Plugin\Service\Fs $fs */
+$fs = wei()->fs;
 
 /** @var Miaoxing\Plugin\Service\GlobalConfigModel $globalConfig */
 $globalConfig = wei()->globalConfigModel;
