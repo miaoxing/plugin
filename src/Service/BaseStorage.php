@@ -50,4 +50,18 @@ abstract class BaseStorage extends BaseService
         $path = $options['path'] ?? $file;
         return $this->write($path, file_get_contents($file), $options);
     }
+
+    /**
+     * 将本地文件写入到文件系统中并删除原来的文件
+     *
+     * @svc
+     */
+    protected function moveLocal(string $path, array $options = []): Ret
+    {
+        $ret = $this->writeFile($path, $options);
+
+        $ret->isSuc() && unlink($path);
+
+        return $ret;
+    }
 }

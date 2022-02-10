@@ -36,4 +36,14 @@ class LocalStorage extends BaseStorage
 
         return $this->req->getUrlFor('/' . $path);
     }
+
+    /**
+     * {@inheritdoc}
+     * @svc
+     */
+    protected function moveLocal(string $path, array $options = []): Ret
+    {
+        // 文件已在本地，暂无需操作
+        return Ret::suc();
+    }
 }
