@@ -4,31 +4,10 @@ namespace Miaoxing\Plugin\Service;
 
 class App
 {
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class AppModel
 {
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
-
     /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
@@ -1008,17 +987,6 @@ class Cls
     public static function usesDeep($class, bool $autoload = true): array
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class Config
@@ -1210,32 +1178,10 @@ class Config
     public static function getPreloadVersionKey(): string
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class ConfigModel
 {
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
-
     /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
@@ -2261,32 +2207,10 @@ class Fs
     public static function getExt(string $file, string $default = null): ?string
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class GlobalConfigModel
 {
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
-
     /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
@@ -3306,17 +3230,6 @@ class IsModelExists
     public static function check($input, string $name = '%name%'): \Wei\Ret
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class Jwt
@@ -3384,15 +3297,27 @@ class Jwt
     public static function generateDefaultKeys(): Ret
     {
     }
+}
+
+class LocalStorage
+{
+    /**
+     * {@inheritdoc}
+     * @see LocalStorage::moveLocal
+     */
+    public static function moveLocal(string $path, array $options = []): \Wei\Ret
+    {
+    }
 
     /**
-     * Return the current service object
+     * 将本地文件写入到文件系统中
      *
-     * @return $this
-     * @experimental
-     * @see Base::instance
+     * @param string $file
+     * @param array{path?: string} $options
+     * @return Ret
+     * @see BaseStorage::writeFile
      */
-    public static function instance(): self
+    public static function writeFile(string $file, array $options = []): \Wei\Ret
     {
     }
 }
@@ -3431,31 +3356,10 @@ class ObjectReq
     public static function isPreflight(): bool
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class PageRouter
 {
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class Plugin
@@ -3492,32 +3396,10 @@ class Plugin
     public static function isInstalled($id)
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class QueryBuilder
 {
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
-
     /**
      * Set or remove cache time for the query
      *
@@ -4251,17 +4133,6 @@ class Ret
     public static function alert($message, $code = null)
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class Seeder
@@ -4290,31 +4161,10 @@ class Seeder
     public static function create(array $options)
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class Session
 {
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class Snowflake
@@ -4379,15 +4229,62 @@ class Snowflake
     public static function parse($id): array
     {
     }
+}
+
+class Storage
+{
+    /**
+     * {@inheritdoc}
+     * @see Storage::write
+     */
+    public static function write(string $path, string $content, array $options = []): Ret
+    {
+    }
 
     /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
+     * {@inheritdoc}
+     * @see Storage::getUrl
      */
-    public static function instance(): self
+    public static function getUrl(string $path): string
+    {
+    }
+
+    /**
+     * Get the file driver
+     *
+     * @see Storage::getDriver
+     */
+    public static function getDriver(): string
+    {
+    }
+
+    /**
+     * Set file driver
+     *
+     * @see Storage::setDriver
+     */
+    public static function setDriver(string $driver): self
+    {
+    }
+
+    /**
+     * 将本地文件写入到文件系统中
+     *
+     * @param string $file
+     * @param array{path?: string} $options
+     * @return Ret
+     * @see BaseStorage::writeFile
+     */
+    public static function writeFile(string $file, array $options = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * 将本地文件写入到文件系统中并删除原来的文件
+     *
+     * @see BaseStorage::moveLocal
+     */
+    public static function moveLocal(string $path, array $options = []): \Wei\Ret
     {
     }
 }
@@ -4447,17 +4344,6 @@ class Str
      * @see Str::dash
      */
     public static function dash(string $input): string
-    {
-    }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
     {
     }
 }
@@ -4597,17 +4483,6 @@ class Tester
     public static function deleteAdminApi(string $page)
     {
     }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
-    {
-    }
 }
 
 class User
@@ -4731,17 +4606,6 @@ class User
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
-    {
-    }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
     {
     }
 
@@ -5706,17 +5570,6 @@ class UserModel
      * @see UserModel::updatePassword
      */
     public static function updatePassword($req)
-    {
-    }
-
-    /**
-     * Return the current service object
-     *
-     * @return $this
-     * @experimental
-     * @see Base::instance
-     */
-    public static function instance(): self
     {
     }
 
@@ -6712,31 +6565,10 @@ namespace Miaoxing\Plugin\Service;
 if (0) {
     class App
     {
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class AppModel
     {
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
-
         /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
@@ -7704,17 +7536,6 @@ if (0) {
         public function usesDeep($class, bool $autoload = true): array
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class Config
@@ -7906,32 +7727,10 @@ if (0) {
         public function getPreloadVersionKey(): string
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class ConfigModel
     {
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
-
         /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
@@ -8945,32 +8744,10 @@ if (0) {
         public function getExt(string $file, string $default = null): ?string
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class GlobalConfigModel
     {
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
-
         /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
@@ -9978,17 +9755,6 @@ if (0) {
         public function check($input, string $name = '%name%'): \Wei\Ret
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class Jwt
@@ -10056,15 +9822,27 @@ if (0) {
         public function generateDefaultKeys(): Ret
         {
         }
+    }
+
+    class LocalStorage
+    {
+        /**
+         * {@inheritdoc}
+         * @see LocalStorage::moveLocal
+         */
+        public function moveLocal(string $path, array $options = []): \Wei\Ret
+        {
+        }
 
         /**
-         * Return the current service object
+         * 将本地文件写入到文件系统中
          *
-         * @return $this
-         * @experimental
-         * @see Base::instance
+         * @param string $file
+         * @param array{path?: string} $options
+         * @return Ret
+         * @see BaseStorage::writeFile
          */
-        public function instance(): self
+        public function writeFile(string $file, array $options = []): \Wei\Ret
         {
         }
     }
@@ -10103,31 +9881,10 @@ if (0) {
         public function isPreflight(): bool
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class PageRouter
     {
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class Plugin
@@ -10164,32 +9921,10 @@ if (0) {
         public function isInstalled($id)
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class QueryBuilder
     {
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
-
         /**
          * Set or remove cache time for the query
          *
@@ -10911,17 +10646,6 @@ if (0) {
         public function alert($message, $code = null)
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class Seeder
@@ -10950,31 +10674,10 @@ if (0) {
         public function create(array $options)
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class Session
     {
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class Snowflake
@@ -11039,15 +10742,62 @@ if (0) {
         public function parse($id): array
         {
         }
+    }
+
+    class Storage
+    {
+        /**
+         * {@inheritdoc}
+         * @see Storage::write
+         */
+        public function write(string $path, string $content, array $options = []): Ret
+        {
+        }
 
         /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
+         * {@inheritdoc}
+         * @see Storage::getUrl
          */
-        public function instance(): self
+        public function getUrl(string $path): string
+        {
+        }
+
+        /**
+         * Get the file driver
+         *
+         * @see Storage::getDriver
+         */
+        public function getDriver(): string
+        {
+        }
+
+        /**
+         * Set file driver
+         *
+         * @see Storage::setDriver
+         */
+        public function setDriver(string $driver): self
+        {
+        }
+
+        /**
+         * 将本地文件写入到文件系统中
+         *
+         * @param string $file
+         * @param array{path?: string} $options
+         * @return Ret
+         * @see BaseStorage::writeFile
+         */
+        public function writeFile(string $file, array $options = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * 将本地文件写入到文件系统中并删除原来的文件
+         *
+         * @see BaseStorage::moveLocal
+         */
+        public function moveLocal(string $path, array $options = []): \Wei\Ret
         {
         }
     }
@@ -11107,17 +10857,6 @@ if (0) {
          * @see Str::dash
          */
         public function dash(string $input): string
-        {
-        }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
         {
         }
     }
@@ -11257,17 +10996,6 @@ if (0) {
         public function deleteAdminApi(string $page)
         {
         }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
-        {
-        }
     }
 
     class User
@@ -11391,17 +11119,6 @@ if (0) {
          * @see UserModel::updatePassword
          */
         public function updatePassword($req)
-        {
-        }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
         {
         }
 
@@ -12354,17 +12071,6 @@ if (0) {
          * @see UserModel::updatePassword
          */
         public function updatePassword($req)
-        {
-        }
-
-        /**
-         * Return the current service object
-         *
-         * @return $this
-         * @experimental
-         * @see Base::instance
-         */
-        public function instance(): self
         {
         }
 

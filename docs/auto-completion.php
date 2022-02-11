@@ -69,6 +69,13 @@ class JwtMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\LocalStorage $localStorage
+ */
+class LocalStorageMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\ObjectReq $objectReq
  * @method      string|null objectReq($name, $default = '') Returns a *stringify* or user defined($default) parameter value
  */
@@ -128,6 +135,13 @@ class SnowflakeMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Storage $storage
+ */
+class StorageMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Str $str The string util service
  */
 class StrMixin
@@ -168,6 +182,7 @@ class UserModelMixin
  * @mixin GlobalConfigModelMixin
  * @mixin IsModelExistsMixin
  * @mixin JwtMixin
+ * @mixin LocalStorageMixin
  * @mixin ObjectReqMixin
  * @mixin PageRouterMixin
  * @mixin PluginMixin
@@ -176,6 +191,7 @@ class UserModelMixin
  * @mixin SeederMixin
  * @mixin SessionMixin
  * @mixin SnowflakeMixin
+ * @mixin StorageMixin
  * @mixin StrMixin
  * @mixin TesterMixin
  * @mixin UserMixin
@@ -229,6 +245,9 @@ $isModelExists = wei()->isModelExists;
 /** @var Miaoxing\Plugin\Service\Jwt $jwt */
 $jwt = wei()->jwt;
 
+/** @var Miaoxing\Plugin\Service\LocalStorage $localStorage */
+$localStorage = wei()->localStorage;
+
 /** @var Miaoxing\Plugin\Service\ObjectReq $objectReq */
 $objectReq = wei()->objectReq;
 
@@ -252,6 +271,9 @@ $session = wei()->session;
 
 /** @var Miaoxing\Plugin\Service\Snowflake $snowflake */
 $snowflake = wei()->snowflake;
+
+/** @var Miaoxing\Plugin\Service\Storage $storage */
+$storage = wei()->storage;
 
 /** @var Miaoxing\Plugin\Service\Str $str */
 $str = wei()->str;
