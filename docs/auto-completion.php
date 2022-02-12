@@ -157,6 +157,14 @@ class TesterMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Upload $upload
+ * @method      bool upload($field = null, $options = []) Upload a file
+ */
+class UploadMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\User $user 用户
  * @method      Miaoxing\Plugin\Service\User user() 返回当前对象
  */
@@ -194,6 +202,7 @@ class UserModelMixin
  * @mixin StorageMixin
  * @mixin StrMixin
  * @mixin TesterMixin
+ * @mixin UploadMixin
  * @mixin UserMixin
  * @mixin UserModelMixin
  */
@@ -280,6 +289,9 @@ $str = wei()->str;
 
 /** @var Miaoxing\Plugin\Service\Tester $tester */
 $tester = wei()->tester;
+
+/** @var Miaoxing\Plugin\Service\Upload $upload */
+$upload = wei()->upload;
 
 /** @var Miaoxing\Plugin\Service\User $user */
 $user = wei()->user;

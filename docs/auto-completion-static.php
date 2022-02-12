@@ -4237,7 +4237,7 @@ class Storage
      * {@inheritdoc}
      * @see Storage::write
      */
-    public static function write(string $path, string $content, array $options = []): Ret
+    public static function write(string $path, string $content, array $options = []): \Wei\Ret
     {
     }
 
@@ -4481,6 +4481,68 @@ class Tester
      * @see Tester::deleteAdminApi
      */
     public static function deleteAdminApi(string $page)
+    {
+    }
+}
+
+class Upload
+{
+    /**
+     * 获取图片的扩展名
+     *
+     * @see Upload::getAllowedImageExts
+     */
+    public static function getAllowedImageExts(): array
+    {
+    }
+
+    /**
+     * 检查扩展名是否为允许的图片类型
+     *
+     * @see Upload::isAllowedImageExt
+     */
+    public static function isAllowedImageExt(string $ext): bool
+    {
+    }
+
+    /**
+     * 获取所有允许上传的文件扩展名
+     *
+     * @see Upload::getAllowedExts
+     */
+    public static function getAllowedExts(): array
+    {
+    }
+
+    /**
+     * 上传图片文件
+     *
+     * @see Upload::saveImage
+     */
+    public static function saveImage(array $options = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * Upload a file, return a Ret object
+     *
+     * @param array $options
+     * @return Ret|array{file: string, name: string, size: int, mimeType: string}
+     * @see Upload::save
+     */
+    public static function save(array $options = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * Check the input value, return a Ret object
+     *
+     * @param mixed $input
+     * @param string $name
+     * @return Ret
+     * @see BaseValidator::check
+     */
+    public static function check($input, string $name = '%name%'): \Wei\Ret
     {
     }
 }
@@ -10750,7 +10812,7 @@ if (0) {
          * {@inheritdoc}
          * @see Storage::write
          */
-        public function write(string $path, string $content, array $options = []): Ret
+        public function write(string $path, string $content, array $options = []): \Wei\Ret
         {
         }
 
@@ -10994,6 +11056,68 @@ if (0) {
          * @see Tester::deleteAdminApi
          */
         public function deleteAdminApi(string $page)
+        {
+        }
+    }
+
+    class Upload
+    {
+        /**
+         * 获取图片的扩展名
+         *
+         * @see Upload::getAllowedImageExts
+         */
+        public function getAllowedImageExts(): array
+        {
+        }
+
+        /**
+         * 检查扩展名是否为允许的图片类型
+         *
+         * @see Upload::isAllowedImageExt
+         */
+        public function isAllowedImageExt(string $ext): bool
+        {
+        }
+
+        /**
+         * 获取所有允许上传的文件扩展名
+         *
+         * @see Upload::getAllowedExts
+         */
+        public function getAllowedExts(): array
+        {
+        }
+
+        /**
+         * 上传图片文件
+         *
+         * @see Upload::saveImage
+         */
+        public function saveImage(array $options = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Upload a file, return a Ret object
+         *
+         * @param array $options
+         * @return Ret|array{file: string, name: string, size: int, mimeType: string}
+         * @see Upload::save
+         */
+        public function save(array $options = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Check the input value, return a Ret object
+         *
+         * @param mixed $input
+         * @param string $name
+         * @return Ret
+         * @see BaseValidator::check
+         */
+        public function check($input, string $name = '%name%'): \Wei\Ret
         {
         }
     }
