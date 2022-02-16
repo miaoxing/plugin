@@ -33,4 +33,23 @@ class Fs extends BaseService
             return $default;
         }
     }
+
+    /**
+     * Remove "public/" in path
+     *
+     * @param string $path
+     * @return string
+     * @svc
+     */
+    protected function stripPublic(string $path): string
+    {
+        $publicDir = 'public/';
+        $length = strlen($publicDir);
+
+        if (substr($path, 0, $length) === $publicDir) {
+            return substr($path, $length);
+        }
+
+        return $path;
+    }
 }

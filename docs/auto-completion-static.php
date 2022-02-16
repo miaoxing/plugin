@@ -2207,6 +2207,17 @@ class Fs
     public static function getExt(string $file, string $default = null): ?string
     {
     }
+
+    /**
+     * Remove "public/" in path
+     *
+     * @param string $path
+     * @return string
+     * @see Fs::stripPublic
+     */
+    public static function stripPublic(string $path): string
+    {
+    }
 }
 
 class GlobalConfigModel
@@ -3303,6 +3314,22 @@ class LocalStorage
 {
     /**
      * {@inheritdoc}
+     * @see LocalStorage::write
+     */
+    public static function write(string $path, string $content, array $options = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     * @see LocalStorage::getUrl
+     */
+    public static function getUrl(string $path): string
+    {
+    }
+
+    /**
+     * {@inheritdoc}
      * @see LocalStorage::moveLocal
      */
     public static function moveLocal(string $path, array $options = []): \Wei\Ret
@@ -4243,6 +4270,14 @@ class Storage
 
     /**
      * {@inheritdoc}
+     * @see Storage::moveLocal
+     */
+    public static function moveLocal(string $path, array $options = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * {@inheritdoc}
      * @see Storage::getUrl
      */
     public static function getUrl(string $path): string
@@ -4276,15 +4311,6 @@ class Storage
      * @see BaseStorage::writeFile
      */
     public static function writeFile(string $file, array $options = []): \Wei\Ret
-    {
-    }
-
-    /**
-     * 将本地文件写入到文件系统中并删除原来的文件
-     *
-     * @see BaseStorage::moveLocal
-     */
-    public static function moveLocal(string $path, array $options = []): \Wei\Ret
     {
     }
 }
@@ -8806,6 +8832,17 @@ if (0) {
         public function getExt(string $file, string $default = null): ?string
         {
         }
+
+        /**
+         * Remove "public/" in path
+         *
+         * @param string $path
+         * @return string
+         * @see Fs::stripPublic
+         */
+        public function stripPublic(string $path): string
+        {
+        }
     }
 
     class GlobalConfigModel
@@ -9890,6 +9927,22 @@ if (0) {
     {
         /**
          * {@inheritdoc}
+         * @see LocalStorage::write
+         */
+        public function write(string $path, string $content, array $options = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * {@inheritdoc}
+         * @see LocalStorage::getUrl
+         */
+        public function getUrl(string $path): string
+        {
+        }
+
+        /**
+         * {@inheritdoc}
          * @see LocalStorage::moveLocal
          */
         public function moveLocal(string $path, array $options = []): \Wei\Ret
@@ -10818,6 +10871,14 @@ if (0) {
 
         /**
          * {@inheritdoc}
+         * @see Storage::moveLocal
+         */
+        public function moveLocal(string $path, array $options = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * {@inheritdoc}
          * @see Storage::getUrl
          */
         public function getUrl(string $path): string
@@ -10851,15 +10912,6 @@ if (0) {
          * @see BaseStorage::writeFile
          */
         public function writeFile(string $file, array $options = []): \Wei\Ret
-        {
-        }
-
-        /**
-         * 将本地文件写入到文件系统中并删除原来的文件
-         *
-         * @see BaseStorage::moveLocal
-         */
-        public function moveLocal(string $path, array $options = []): \Wei\Ret
         {
         }
     }
