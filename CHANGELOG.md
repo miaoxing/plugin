@@ -1,3 +1,23 @@
+## [0.7.1](https://github.com/miaoxing/plugin/compare/v0.7.0...v0.7.1) (2022-02-28)
+
+
+### Features
+
+* **file:** 增加存储系统基类和本地存储系统的实现 ([5771cb1](https://github.com/miaoxing/plugin/commit/5771cb1026645c7ba7e1fa7032819d50419aafef))
+* **Fs:** 增加 `Fs` 服务，用于处理文件操作 ([ccc1cd1](https://github.com/miaoxing/plugin/commit/ccc1cd18b398ab4de7dbb071a5dff008dab2e051))
+* **Fs:** 增加 `stripPublic` 方法 ([9ebdb38](https://github.com/miaoxing/plugin/commit/9ebdb3861ff77eb0fa78d17b594ad18ae946938e))
+* **Storage:** 增加 `moveLocal` 方法，用于将本地文件写入到文件系统中并删除原来的文件 ([613455d](https://github.com/miaoxing/plugin/commit/613455d30541d9c9c404607677d3cd0fbe130530))
+* **Storage:** 增加 `Storage` 服务 ([fb073a2](https://github.com/miaoxing/plugin/commit/fb073a226dce32fd8e62b8a724b34a34b4f5b623))
+* **Upload:** Upload 服务增加图片扩展名配置和快速上传图片方法 ([acd6ef3](https://github.com/miaoxing/plugin/commit/acd6ef36a96c382802f94c9b2270256d6ad7e690))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.12.0` to `0.12.1`
+
 # [0.7.0](https://github.com/miaoxing/plugin/compare/v0.6.0...v0.7.0) (2022-02-05)
 
 
