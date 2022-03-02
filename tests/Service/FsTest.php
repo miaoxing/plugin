@@ -26,4 +26,13 @@ class FsTest extends BaseTestCase
             ['path/test.gif', 'gif'],
         ];
     }
+
+    public function testStripPublic()
+    {
+        $url = $this->fs->stripPublic('public/uploads/1.jpg');
+        $this->assertSame('uploads/1.jpg', $url);
+
+        $url = $this->fs->stripPublic('uploads/1.jpg');
+        $this->assertSame('uploads/1.jpg', $url);
+    }
 }
