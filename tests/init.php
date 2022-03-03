@@ -69,6 +69,7 @@ if ($isCi) {
         'id' => '1',
         'username' => 'admin',
         'password' => Password::hash('password'),
+        'adminType' => UserModel::ADMIN_TYPE_SUPER,
     ]);
 
     // 4. 逐个安装插件

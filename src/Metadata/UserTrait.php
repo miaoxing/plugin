@@ -6,6 +6,7 @@ namespace Miaoxing\Plugin\Metadata;
  * @property string|null $id
  * @property int $appId
  * @property string $outId
+ * @property int $adminType 管理员类型
  * @property string $groupId 用户组
  * @property bool $isAdmin
  * @property string $nickName

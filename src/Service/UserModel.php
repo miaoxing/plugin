@@ -25,6 +25,10 @@ class UserModel extends BaseModel
     use SnowflakeTrait;
     use UserTrait;
 
+    public const ADMIN_TYPE_DEFAULT = 1;
+
+    public const ADMIN_TYPE_SUPER = 2;
+
     protected $hidden = [
         'password',
     ];
@@ -95,7 +99,7 @@ class UserModel extends BaseModel
      */
     public function isSuperAdmin()
     {
-        return '1' === $this->id;
+        return self::ADMIN_TYPE_SUPER === $this->adminType;
     }
 
     /**
@@ -130,7 +134,10 @@ class UserModel extends BaseModel
         }, static function (V $v) {
             $v->length(6, 50);
         });
-        $v->string('passwordConfirm', '重复密码')->equalTo($req['password'])->message('equalTo', '两次输入的密码不相等');
+        $v->string('passwordConfirm', '重复密码')->equalTo($req['password'])->message(
+            'equalTo',
+            '两次输入的密码不相等'
+        );
         $ret = $v->check($req);
         if ($ret->isErr()) {
             return $ret;
