@@ -12,7 +12,7 @@ class V20161030182708CreateAppsTable extends BaseMigration
     public function up()
     {
         $this->schema->table('apps')->tableComment('应用')
-            ->id()
+            ->bigId()
             ->uInt('user_id')->comment('所属用户的编号')
             ->string('plugin_ids', 2048)->comment('已安装的插件编号')
             ->string('name', 64)->comment('名称')

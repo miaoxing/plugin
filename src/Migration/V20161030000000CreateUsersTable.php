@@ -14,7 +14,7 @@ class V20161030000000CreateUsersTable extends BaseMigration
         $table = $this->schema->table('users');
         $table->tableComment('用户')
             ->bigId()
-            ->uInt('app_id')
+            ->uBigInt('app_id')
             ->string('out_id', 32)
             ->bool('is_admin')
             ->string('nick_name', 32)

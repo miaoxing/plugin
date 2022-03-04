@@ -13,7 +13,7 @@ class V20220118203156CreateConfigTables extends BaseMigration
     {
         $this->schema->table('configs')
             ->id()
-            ->uInt('app_id')->comment('应用编号')
+            ->uBigInt('app_id')->comment('应用编号')
             ->string('name', 64)
             ->char('type', 1)->comment('值的类型,s:字符串')
             ->string('value', 2048)
