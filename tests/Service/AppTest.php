@@ -153,7 +153,7 @@ final class AppTest extends BaseTestCase
         wei()->cache->remove($prefix . 't.test.com');
 
         $app->setId(null);
-        $this->assertSame(1, $app->getId());
+        $this->assertSame('1', $app->getId());
 
         wei()->cache->remove($prefix . 't.test.com');
         $req->setServer('HTTP_HOST', 't.test.com');

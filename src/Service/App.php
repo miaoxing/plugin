@@ -49,13 +49,6 @@ class App extends \Wei\App
     protected $domains = [];
 
     /**
-     * The default id of the current application
-     *
-     * @var int
-     */
-    protected $defaultId = 1;
-
-    /**
      * @var string
      */
     protected $defaultViewFile = '@plugin/_default.php';
@@ -74,7 +67,7 @@ class App extends \Wei\App
     /**
      * The id of the current application
      *
-     * @var int
+     * @var string
      */
     protected $id;
 
@@ -202,9 +195,9 @@ class App extends \Wei\App
     /**
      * Return the id of the current application
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         if (!$this->id) {
             $this->id = $this->detectId();
@@ -456,9 +449,9 @@ class App extends \Wei\App
     /**
      * Detect the id of application
      *
-     * @return int
+     * @return string
      */
-    protected function detectId(): int
+    protected function detectId(): string
     {
         // 1. Domain
         if ($id = $this->getIdByDomain()) {
@@ -466,20 +459,22 @@ class App extends \Wei\App
         }
 
         // 2. Request parameter
-        if ($id = (int) $this->req->get('appId')) {
+        if ($id = $this->req->get('appId')) {
             return $id;
         }
 
-        // 3. Default
-        return $this->defaultId;
+        // 3. First id from database
+        return $this->cache->remember('app:firstId', 86400, static function () {
+            return AppModel::select('id')->asc('id')->fetchColumn();
+        });
     }
 
     /**
      * 根据域名查找应用编号
      *
-     * @return int|null
+     * @return string|null
      */
-    protected function getIdByDomain(): ?int
+    protected function getIdByDomain(): ?string
     {
         $domain = $this->req->getHost();
         if (!$domain) {
@@ -493,7 +488,7 @@ class App extends \Wei\App
 
         return $this->cache->remember('appDomain:' . $domain, 86400, static function () use ($domain) {
             $app = AppModel::select('id')->fetch('domain', $domain);
-            return $app ? (int) $app['id'] : null;
+            return $app ? $app['id'] : null;
         });
     }
 
