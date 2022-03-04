@@ -1,3 +1,21 @@
+# [0.8.0](https://github.com/miaoxing/plugin/compare/v0.7.1...v0.8.0) (2022-03-04)
+
+
+### Code Refactoring
+
+* **app:** 应用编号改为字符串，默认读取第一个应用 ([cbcb80f](https://github.com/miaoxing/plugin/commit/cbcb80fc7e9353e429b98a6de08c14435294bb24))
+
+
+### Features
+
+* 数据表 `app_id` 字段由 `int` 升级到 `bigint` ([d05c376](https://github.com/miaoxing/plugin/commit/d05c376a22f3cb4deb950022236c72b9fcf980c0))
+
+
+### BREAKING CHANGES
+
+* **app:** 应用编号改为字符串，默认读取第一个应用
+* 数据表 `app_id` 字段由 `int` 升级到 `bigint`
+
 ## [0.7.1](https://github.com/miaoxing/plugin/compare/v0.7.0...v0.7.1) (2022-02-28)
 
 
