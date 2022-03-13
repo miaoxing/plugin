@@ -74,8 +74,7 @@ final class CastTraitTest extends BaseTestCase
 
     public static function dropTables()
     {
-        wei()->schema->dropIfExists('test_casts');
-        wei()->schema->dropIfExists('test_cast_objects');
+        wei()->schema->dropIfExists(['test_casts', 'test_cast_objects']);
     }
 
     public static function providerForSet()

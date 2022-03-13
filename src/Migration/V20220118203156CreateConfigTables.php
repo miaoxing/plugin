@@ -41,7 +41,6 @@ class V20220118203156CreateConfigTables extends BaseMigration
      */
     public function down()
     {
-        $this->schema->dropIfExists('configs');
-        $this->schema->dropIfExists('global_configs');
+        $this->schema->dropIfExists(['configs', 'global_configs']);
     }
 }

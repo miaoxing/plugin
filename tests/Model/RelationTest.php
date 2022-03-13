@@ -1057,9 +1057,6 @@ final class RelationTest extends BaseTestCase
     private static function dropRelationTables()
     {
         static::dropTables();
-        wei()->schema->dropIfExists('test_profiles');
-        wei()->schema->dropIfExists('test_articles');
-        wei()->schema->dropIfExists('test_tags');
-        wei()->schema->dropIfExists('test_articles_test_tags');
+        wei()->schema->dropIfExists(['test_profiles', 'test_articles', 'test_tags', 'test_articles_test_tags']);
     }
 }

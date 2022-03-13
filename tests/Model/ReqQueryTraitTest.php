@@ -58,8 +58,7 @@ final class ReqQueryTraitTest extends BaseTestCase
 
     public static function dropTables()
     {
-        wei()->schema->dropIfExists('test_req_queries');
-        wei()->schema->dropIfExists('test_req_query_details');
+        wei()->schema->dropIfExists(['test_req_queries', 'test_req_query_details']);
     }
 
     public function testOrderBy()

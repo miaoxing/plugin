@@ -56,9 +56,7 @@ trait DbTrait
 
     protected static function dropTables()
     {
-        wei()->schema
-            ->dropIfExists('test_users')
-            ->dropIfExists('test_user_groups');
+        wei()->schema->dropIfExists(['test_users', 'test_user_groups']);
     }
 
     private static function setTablePrefix($tablePrefix = '')
