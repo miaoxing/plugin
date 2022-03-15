@@ -13,7 +13,7 @@ class EventRefresh extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->getArgument('app'));
+        wei()->app->setId($this->getArgument('app'));
         wei()->plugin->getEvents(true);
         $this->suc('Refreshed the event cache!');
     }
@@ -21,6 +21,6 @@ class EventRefresh extends BaseCommand
     protected function configure()
     {
         $this->setDescription('Refreshed the event cache');
-        $this->addArgument('app', InputArgument::OPTIONAL, 'Then name of the app', 'app');
+        $this->addArgument('app', InputArgument::OPTIONAL, 'The id of the app');
     }
 }

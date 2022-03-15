@@ -14,7 +14,7 @@ class PluginList extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->getArgument('app'));
+        wei()->app->setId($this->getArgument('app'));
 
         $table = new Table($this->output);
         $table->setHeaders(['ID', 'Name', 'Version', 'Description', 'Installed']);
@@ -32,6 +32,6 @@ class PluginList extends BaseCommand
     protected function configure()
     {
         $this->setDescription('List the plugins')
-            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
+            ->addArgument('app', InputArgument::OPTIONAL, 'The id of the app');
     }
 }

@@ -13,7 +13,7 @@ class PluginInstall extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->getArgument('app'));
+        wei()->app->setId($this->getArgument('app'));
         $ret = wei()->plugin->install($this->getArgument('id'));
         $this->ret($ret);
     }
@@ -22,6 +22,6 @@ class PluginInstall extends BaseCommand
     {
         $this->setDescription('Install the plugin')
             ->addArgument('id', InputArgument::REQUIRED, 'The id of the plugin')
-            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
+            ->addArgument('app', InputArgument::OPTIONAL, 'The id of the app');
     }
 }

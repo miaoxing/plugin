@@ -14,7 +14,7 @@ class EventList extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setNamespace($this->getArgument('app'));
+        wei()->app->setId($this->getArgument('app'));
         $events = wei()->plugin->getEvents();
 
         $table = new Table($this->output);
@@ -35,6 +35,6 @@ class EventList extends BaseCommand
     protected function configure()
     {
         $this->setDescription('List the available events');
-        $this->addArgument('app', InputArgument::OPTIONAL, 'Then name of the app', 'app');
+        $this->addArgument('app', InputArgument::OPTIONAL, 'The id of the app');
     }
 }

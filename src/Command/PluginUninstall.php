@@ -8,7 +8,7 @@ class PluginUninstall extends BaseCommand
 {
     public function handle()
     {
-        wei()->app->setNamespace($this->getArgument('app'));
+        wei()->app->setId($this->getArgument('app'));
         $ret = wei()->plugin->uninstall($this->getArgument('id'));
         return $this->ret($ret);
     }
@@ -17,6 +17,6 @@ class PluginUninstall extends BaseCommand
     {
         $this->setDescription('Install the plugin')
             ->addArgument('id', InputArgument::REQUIRED, 'The id of the plugin')
-            ->addArgument('app', InputArgument::OPTIONAL, 'The name of the app', 'app');
+            ->addArgument('app', InputArgument::OPTIONAL, 'The id of the app');
     }
 }
