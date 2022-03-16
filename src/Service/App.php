@@ -183,10 +183,10 @@ class App extends \Wei\App
     /**
      * Set the id of the current application
      *
-     * @param int|null $id
+     * @param string|null $id
      * @return $this
      */
-    public function setId(?int $id): self
+    public function setId(?string $id): self
     {
         $this->id = $id;
         return $this;
