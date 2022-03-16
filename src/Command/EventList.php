@@ -5,6 +5,10 @@ namespace Miaoxing\Plugin\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \AppMixin
+ * @mixin \PluginMixin
+ */
 class EventList extends BaseCommand
 {
     /**
@@ -14,8 +18,8 @@ class EventList extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setId($this->getArgument('app'));
-        $events = wei()->plugin->getEvents();
+        $this->app->setId((int) $this->getArgument('app'));
+        $events = $this->plugin->getEvents();
 
         $table = new Table($this->output);
         $table->setHeaders(['Name', 'Priority', 'Plugins']);

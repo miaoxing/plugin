@@ -4,6 +4,10 @@ namespace Miaoxing\Plugin\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \AppMixin
+ * @mixin \PluginMixin
+ */
 class PluginInstall extends BaseCommand
 {
     /**
@@ -13,8 +17,8 @@ class PluginInstall extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setId($this->getArgument('app'));
-        $ret = wei()->plugin->install($this->getArgument('id'));
+        $this->app->setId($this->getArgument('app'));
+        $ret = $this->plugin->install($this->getArgument('id'));
         $this->ret($ret);
     }
 

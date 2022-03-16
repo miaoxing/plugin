@@ -4,12 +4,16 @@ namespace Miaoxing\Plugin\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \AppMixin
+ * @mixin \PluginMixin
+ */
 class PluginUninstall extends BaseCommand
 {
     public function handle()
     {
-        wei()->app->setId($this->getArgument('app'));
-        $ret = wei()->plugin->uninstall($this->getArgument('id'));
+        $this->app->setId($this->getArgument('app'));
+        $ret = $this->plugin->uninstall($this->getArgument('id'));
         return $this->ret($ret);
     }
 

@@ -5,6 +5,10 @@ namespace Miaoxing\Plugin\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \AppMixin
+ * @mixin \PluginMixin
+ */
 class PluginList extends BaseCommand
 {
     /**
@@ -14,16 +18,14 @@ class PluginList extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setId($this->getArgument('app'));
+        $this->app->setId($this->getArgument('app'));
 
         $table = new Table($this->output);
         $table->setHeaders(['ID', 'Name', 'Version', 'Description', 'Installed']);
 
-        $plugin = wei()->plugin;
-        $plugins = $plugin->getAll();
-        foreach ($plugins as $row) {
+        foreach ($this->plugin->getAll() as $row) {
             $table->addRow($row->toArray() + [
-                    'installed' => $plugin->isInstalled($row->getId()) ? 'Y' : 'N',
+                    'installed' => $this->plugin->isInstalled($row->getId()) ? 'Y' : 'N',
                 ]);
         }
         $table->render();

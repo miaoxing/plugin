@@ -4,6 +4,10 @@ namespace Miaoxing\Plugin\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @mixin \AppMixin
+ * @mixin \PluginMixin
+ */
 class EventRefresh extends BaseCommand
 {
     /**
@@ -13,8 +17,8 @@ class EventRefresh extends BaseCommand
      */
     public function handle()
     {
-        wei()->app->setId($this->getArgument('app'));
-        wei()->plugin->getEvents(true);
+        $this->app->setId($this->getArgument('app'));
+        $this->plugin->getEvents(true);
         $this->suc('Refreshed the event cache!');
     }
 
