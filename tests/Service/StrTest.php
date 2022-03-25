@@ -6,6 +6,7 @@ use Miaoxing\Plugin\Test\BaseTestCase;
 
 /**
  * @internal
+ * @mixin \StrMixin
  */
 final class StrTest extends BaseTestCase
 {
@@ -49,6 +50,28 @@ final class StrTest extends BaseTestCase
     public function testDash($input, $output)
     {
         $this->assertEquals($output, wei()->str->dash($input));
+    }
+
+    public function providerForCamel(): array
+    {
+        return [
+            ['a', 'a'],
+            ['abc', 'abc'],
+            ['abC', 'abC'],
+            ['a-bc', 'aBc'],
+            ['a_bc', 'aBc'],
+            ['ab-cd_ef', 'abCdEf'],
+        ];
+    }
+
+    /**
+     * @param string $input
+     * @param string $output
+     * @dataProvider providerForCamel
+     */
+    public function testCamel(string $input, string $output)
+    {
+        $this->assertEquals($output, $this->str->camel($input));
     }
 
     public function providerForSingularize()
