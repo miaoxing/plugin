@@ -28,7 +28,7 @@ final class StrTest extends BaseTestCase
      */
     public function testSnake($input, $output)
     {
-        $this->assertEquals($output, wei()->str->snake($input));
+        $this->assertEquals($output, $this->str->snake($input));
     }
 
     public function providerForDash()
@@ -49,7 +49,7 @@ final class StrTest extends BaseTestCase
      */
     public function testDash($input, $output)
     {
-        $this->assertEquals($output, wei()->str->dash($input));
+        $this->assertEquals($output, $this->str->dash($input));
     }
 
     public function providerForCamel(): array
@@ -92,7 +92,7 @@ final class StrTest extends BaseTestCase
      */
     public function testSingularize($input, $output)
     {
-        $this->assertEquals($output, wei()->str->singularize($input));
+        $this->assertEquals($output, $this->str->singularize($input));
     }
 
     public function providerForPluralize()
@@ -112,6 +112,6 @@ final class StrTest extends BaseTestCase
      */
     public function testPluralize($input, $output)
     {
-        $this->assertEquals($output, wei()->str->pluralize($input));
+        $this->assertEquals($output, $this->str->pluralize($input));
     }
 }
