@@ -151,8 +151,14 @@ class UserModel extends BaseModel
         return suc();
     }
 
+    protected function afterDestroy()
+    {
+        $this->removeModelCache();
+    }
+
     protected function afterSave()
     {
+        $this->removeModelCache();
         $this->user->refresh($this);
     }
 }
