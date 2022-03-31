@@ -1,3 +1,20 @@
+## [0.8.1](https://github.com/miaoxing/plugin/compare/v0.8.0...v0.8.1) (2022-03-31)
+
+
+### Bug Fixes
+
+* **App:** `setId` 传入参数应为字符串 ([b8ffe69](https://github.com/miaoxing/plugin/commit/b8ffe6936375456ec56e1da94476d603bd82a675))
+* **plugin:** 保存当前用户再读取，缓存未更新 ([40bf9bb](https://github.com/miaoxing/plugin/commit/40bf9bbaf76e5908467b434c9d63fbeb3ca313ec))
+* 传入 app 参数应设置为 app id ([f3cc29f](https://github.com/miaoxing/plugin/commit/f3cc29fcb9ebe37ce87aba1de4e9e69738d3d614))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.12.1` to `0.12.2`
+
 # [0.8.0](https://github.com/miaoxing/plugin/compare/v0.7.1...v0.8.0) (2022-03-04)
 
 
