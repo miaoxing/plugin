@@ -90,6 +90,8 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
+        $this->prepareHeaders();
+
         // Load global config
         $this->config->preloadGlobal();
 
@@ -292,9 +294,8 @@ class App extends \Wei\App
             'page' => $page,
         ];
 
-        $this->res->setHeader('Access-Control-Allow-Origin', $this->accessControlAllowOrigin);
         if ($this->req->isPreflight()) {
-            return $this->handlePreflight();
+            return $this->res->send();
         }
 
         $method = $this->req->getMethod();
@@ -493,17 +494,20 @@ class App extends \Wei\App
     }
 
     /**
-     * @return Res
+     * 根据请求设置跨域标头信息
+     *
+     * @return void
      * @internal
-     * @todo 改为 middleware 或插件
      */
-    protected function handlePreflight(): Res
+    public function prepareHeaders()
     {
-        return $this->res
-            ->setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
-            // NOTE: antd upload 组件上传会加上 XMLHttpRequest 头
-            ->setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, X-Requested-With')
-            ->setHeader('Access-Control-Max-Age', 0)
-            ->send();
+        $this->res->setHeader('Access-Control-Allow-Origin', $this->accessControlAllowOrigin);
+        if ($this->req->isPreflight()) {
+            $this->res
+                ->setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
+                // NOTE: antd upload 组件上传会加上 XMLHttpRequest 头
+                ->setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, X-Requested-With')
+                ->setHeader('Access-Control-Max-Age', 0);
+        }
     }
 }
