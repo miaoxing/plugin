@@ -121,6 +121,7 @@ return [
         'dir' => 'public/uploads',
     ],
 
+    /* @see Wei\Url */
     'url' => [
         'passThroughParams' => [
             'appId',
