@@ -107,4 +107,20 @@ final class GetSetTraitTest extends BaseTestCase
         $this->assertTrue($getSet->isChanged('name'));
         $this->assertTrue($getSet->isChanged());
     }
+
+    public function testDecrSave()
+    {
+        $getSet = TestGetSet::new();
+        $getSet->decrSave('user_count', 2);
+        $this->assertEquals(-2, $getSet->user_count);
+        $this->assertFalse($getSet->isChanged('user_count'));
+        $this->assertFalse($getSet->isChanged());
+
+        $getSet->decrSave('user_count', 3);
+        $getSet->name = 'test';
+        $this->assertEquals(-5, $getSet->user_count);
+        $this->assertFalse($getSet->isChanged('user_count'));
+        $this->assertTrue($getSet->isChanged('name'));
+        $this->assertTrue($getSet->isChanged());
+    }
 }

@@ -352,6 +352,16 @@ trait WeiModelTrait
     }
 
     /**
+     * @param string $name
+     * @param int|float|string $offset
+     * @return $this
+     */
+    public function decrSave(string $name, $offset = 1): self
+    {
+        return $this->incrSave($name, -$offset);
+    }
+
+    /**
      * @return $this
      * @throws \Exception
      */
