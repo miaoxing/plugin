@@ -339,6 +339,7 @@ trait WeiModelTrait
     /**
      * @param string $name
      * @param int|float|string $offset
+     * @phpstan-param int|float|numeric-string $offset
      * @return $this
      */
     public function incrSave(string $name, $offset = 1): self
@@ -354,6 +355,7 @@ trait WeiModelTrait
     /**
      * @param string $name
      * @param int|float|string $offset
+     * @phpstan-param int|float|numeric-string $offset
      * @return $this
      */
     public function decrSave(string $name, $offset = 1): self
