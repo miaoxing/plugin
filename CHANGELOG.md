@@ -1,3 +1,19 @@
+## [0.8.2](https://github.com/miaoxing/plugin/compare/v0.8.1...v0.8.2) (2022-04-30)
+
+
+### Features
+
+* **plugin, internal:** 启用应用时就设置好标头信息 ([ff1baf2](https://github.com/miaoxing/plugin/commit/ff1baf2f23ac399c6a0c8b5964f8b2e7de8673e1))
+* **plugin, Model:** 增加 `decrSave` 方法 ([b22a8b3](https://github.com/miaoxing/plugin/commit/b22a8b309a437d2a568dbe2858a029edc6ce507b))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.12.2` to `0.12.3`
+
 ## [0.8.1](https://github.com/miaoxing/plugin/compare/v0.8.0...v0.8.1) (2022-03-31)
 
 
