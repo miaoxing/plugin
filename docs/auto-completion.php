@@ -62,6 +62,14 @@ class IsModelExistsMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\IsUBigIntString $isUBigIntString
+ * @method      mixed isUBigIntString($input, $min = null, $max = null)
+ */
+class IsUBigIntStringMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Jwt $jwt
  */
 class JwtMixin
@@ -189,6 +197,7 @@ class UserModelMixin
  * @mixin FsMixin
  * @mixin GlobalConfigModelMixin
  * @mixin IsModelExistsMixin
+ * @mixin IsUBigIntStringMixin
  * @mixin JwtMixin
  * @mixin LocalStorageMixin
  * @mixin ObjectReqMixin
@@ -250,6 +259,9 @@ $globalConfigs = wei()->globalConfigModel();
 
 /** @var Miaoxing\Plugin\Service\IsModelExists $isModelExists */
 $isModelExists = wei()->isModelExists;
+
+/** @var Miaoxing\Plugin\Service\IsUBigIntString $isUBigIntString */
+$isUBigIntString = wei()->isUBigIntString;
 
 /** @var Miaoxing\Plugin\Service\Jwt $jwt */
 $jwt = wei()->jwt;

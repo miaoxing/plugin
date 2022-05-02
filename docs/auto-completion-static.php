@@ -3243,6 +3243,21 @@ class IsModelExists
     }
 }
 
+class IsUBigIntString
+{
+    /**
+     * Check the input value, return a Ret object
+     *
+     * @param mixed $input
+     * @param string $name
+     * @return Ret
+     * @see BaseValidator::check
+     */
+    public static function check($input, string $name = '%name%'): \Wei\Ret
+    {
+    }
+}
+
 class Jwt
 {
     /**
@@ -6646,6 +6661,22 @@ class V
     public static function notModelExists($model = null, $column = 'id')
     {
     }
+
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsUBigIntString::__invoke
+     */
+    public static function uBigIntString($name = null, string $label = null, int $min = null, int $max = null)
+    {
+    }
+
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsUBigIntString::__invoke
+     */
+    public static function notUBigIntString($name = null, string $label = null, int $min = null, int $max = null)
+    {
+    }
 }
 
 namespace Miaoxing\Plugin\Service;
@@ -9842,6 +9873,21 @@ if (0) {
     }
 
     class IsModelExists
+    {
+        /**
+         * Check the input value, return a Ret object
+         *
+         * @param mixed $input
+         * @param string $name
+         * @return Ret
+         * @see BaseValidator::check
+         */
+        public function check($input, string $name = '%name%'): \Wei\Ret
+        {
+        }
+    }
+
+    class IsUBigIntString
     {
         /**
          * Check the input value, return a Ret object
@@ -13224,6 +13270,22 @@ if (0) {
          * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
          */
         public function notModelExists($model = null, $column = 'id')
+        {
+        }
+
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsUBigIntString::__invoke
+         */
+        public function uBigIntString($name = null, string $label = null, int $min = null, int $max = null)
+        {
+        }
+
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsUBigIntString::__invoke
+         */
+        public function notUBigIntString($name = null, string $label = null, int $min = null, int $max = null)
         {
         }
     }
