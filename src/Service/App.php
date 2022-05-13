@@ -59,6 +59,13 @@ class App extends \Wei\App
     protected $fallbackPathInfo = 'app';
 
     /**
+     * Whether the application is in demo mode
+     *
+     * @var bool
+     */
+    protected $isDemo = false;
+
+    /**
      * @var string
      * @internal
      */
@@ -274,6 +281,17 @@ class App extends \Wei\App
     public function getActionMethod($action)
     {
         return $action;
+    }
+
+    /**
+     * Returns whether the application is in demo mode
+     *
+     * @return bool
+     * @svc
+     */
+    protected function isDemo(): bool
+    {
+        return $this->isDemo;
     }
 
     protected function invokeApp(array $options = [])

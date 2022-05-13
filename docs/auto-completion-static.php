@@ -4,6 +4,15 @@ namespace Miaoxing\Plugin\Service;
 
 class App
 {
+    /**
+     * Returns whether the application is in demo mode
+     *
+     * @return bool
+     * @see App::isDemo
+     */
+    public static function isDemo(): bool
+    {
+    }
 }
 
 class AppModel
@@ -6684,6 +6693,15 @@ namespace Miaoxing\Plugin\Service;
 if (0) {
     class App
     {
+        /**
+         * Returns whether the application is in demo mode
+         *
+         * @return bool
+         * @see App::isDemo
+         */
+        public function isDemo(): bool
+        {
+        }
     }
 
     class AppModel
