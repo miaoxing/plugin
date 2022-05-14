@@ -14,6 +14,7 @@ use Wei\V;
 
 /**
  * @mixin \UserMixin
+ * @mixin \AppMixin
  */
 class UserModel extends BaseModel
 {
@@ -143,8 +144,10 @@ class UserModel extends BaseModel
         }
 
         // 3. 更新新密码
-        $this->setPlainPassword($req['password']);
-        $this->save();
+        if (!$this->app->isDemo()) {
+            $this->setPlainPassword($req['password']);
+            $this->save();
+        }
 
         User::logout();
 
