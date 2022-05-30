@@ -6,6 +6,20 @@ use Wei\Req;
 use Wei\Res;
 
 /**
+ * @OA\Schema(
+ *   schema="Ret",
+ *   required={"code", "message"}
+ * )
+ * @OA\Property(
+ *   property="code",
+ *   type="integer",
+ *   description="返回编号"
+ * )
+ * @OA\Property(
+ *   property="message",
+ *   type="string",
+ *   description="返回信息"
+ * )
  * @mixin \PluginMixin
  * @mixin \EnvMixin
  * @mixin \ReqMixin
