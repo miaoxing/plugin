@@ -1,3 +1,22 @@
+## [0.8.3](https://github.com/miaoxing/plugin/compare/v0.8.2...v0.8.3) (2022-06-01)
+
+
+### Features
+
+* 演示模式下，提交修改密码后不会改变原密码 ([f220dcd](https://github.com/miaoxing/plugin/commit/f220dcd76420ce1b9691082fd9c5ea7fad88a0b0))
+* **plugin, App:** 增加 `App::isDemo` 来判断应用是否处于演示模式 ([d09f7b2](https://github.com/miaoxing/plugin/commit/d09f7b2780391c3b2b10d29c90cf1e32b98101bf))
+* **plugin, isUBigIntString, experimental:** 增加 `IsUBigIntString` 校验服务，用于校验 `uBigInt`，同时允许空字符串 ([df9b764](https://github.com/miaoxing/plugin/commit/df9b764af566a3e15fd1106045c67607fc81015a))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.1.0` to `8.1.1`
+* **@mxjs/cli:** upgrade from `0.1.5` to `0.1.6`
+* **@wei/wei:** upgrade from `0.12.3` to `0.12.4`
+
 ## [0.8.2](https://github.com/miaoxing/plugin/compare/v0.8.1...v0.8.2) (2022-04-30)
 
 
