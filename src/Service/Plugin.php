@@ -354,7 +354,7 @@ class Plugin extends BaseService
 
             // 清除已有缓存
             if ($fresh || $this->isRefresh()) {
-                $this->cache->remove($cacheKey);
+                $this->cache->delete($cacheKey);
             }
 
             $this->events = $this->cache->remember($cacheKey, function () {
@@ -528,7 +528,7 @@ class Plugin extends BaseService
     protected function getCache($key, $refresh, callable $fn)
     {
         if ($refresh || $this->isRefresh()) {
-            $this->configCache->remove($key);
+            $this->configCache->delete($key);
         }
 
         return $this->configCache->remember($key, function () use ($fn) {

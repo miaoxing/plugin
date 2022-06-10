@@ -15,7 +15,7 @@ trait CacheTrait
     public function removeModelCache(): self
     {
         if ($this->getColumnValue('id')) {
-            $this->cache->remove($this->getModelCacheKey());
+            $this->cache->delete($this->getModelCacheKey());
         }
         return $this;
     }
