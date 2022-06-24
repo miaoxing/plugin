@@ -2195,6 +2195,16 @@ class ConfigModel
     public static function withDeleted(): self
     {
     }
+
+    /**
+     * Add a query to return only purged records
+     *
+     * @return $this
+     * @see ConfigModel::onlyPurged
+     */
+    public static function onlyPurged(): self
+    {
+    }
 }
 
 class Fs
@@ -3233,6 +3243,16 @@ class GlobalConfigModel
      * @see GlobalConfigModel::withDeleted
      */
     public static function withDeleted(): self
+    {
+    }
+
+    /**
+     * Add a query to return only purged records
+     *
+     * @return $this
+     * @see GlobalConfigModel::onlyPurged
+     */
+    public static function onlyPurged(): self
     {
     }
 }
@@ -8860,6 +8880,16 @@ if (0) {
         public function withDeleted(): self
         {
         }
+
+        /**
+         * Add a query to return only purged records
+         *
+         * @return $this
+         * @see ConfigModel::onlyPurged
+         */
+        public function onlyPurged(): self
+        {
+        }
     }
 
     class Fs
@@ -9886,6 +9916,16 @@ if (0) {
          * @see GlobalConfigModel::withDeleted
          */
         public function withDeleted(): self
+        {
+        }
+
+        /**
+         * Add a query to return only purged records
+         *
+         * @return $this
+         * @see GlobalConfigModel::onlyPurged
+         */
+        public function onlyPurged(): self
         {
         }
     }

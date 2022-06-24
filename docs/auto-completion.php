@@ -113,7 +113,7 @@ class QueryBuilderMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Ret $ret
+ * @property    Miaoxing\Plugin\Service\Ret $ret   schema="Ret",
  * @method      Miaoxing\Plugin\Service\Ret ret($message, $code = null, $type = null) Return operation result data
  */
 class RetMixin

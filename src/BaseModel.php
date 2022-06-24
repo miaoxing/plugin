@@ -21,6 +21,10 @@ abstract class BaseModel extends WeiBaseModel
 
     protected $deletedByColumn = 'deletedBy';
 
+    protected $purgedAtColumn = 'purgedAt';
+
+    protected $purgedByColumn = 'purgedBy';
+
     protected $guarded = [
         'id',
         'createdAt',
@@ -32,5 +36,7 @@ abstract class BaseModel extends WeiBaseModel
     protected $hidden = [
         'deletedBy',
         'deletedAt',
+        'purgedAt',
+        'purgedBy',
     ];
 }

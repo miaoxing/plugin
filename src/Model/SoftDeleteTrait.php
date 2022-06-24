@@ -11,7 +11,10 @@ use Wei\Time;
  *
  * @property-read string $deletedAtColumn The column contains delete time
  * @property-read string $deletedByColumn The column contains delete user id
- * @property-read string $deleteStatusColumn The column contains delete status value
+ * @property-read string $purgedAtColumn The column contains purge time
+ * @property-read string $purgedByColumn The column contains purge user id
+ * @property-read string $enableTrash Whether enable trash or not
+ * @property-read string $deletedStatusColumn The column contains delete status value
  */
 trait SoftDeleteTrait
 {
@@ -45,6 +48,24 @@ trait SoftDeleteTrait
     }
 
     /**
+     * Indicate whether the model has been purged
+     *
+     * @return bool
+     */
+    public function isPurged(): bool
+    {
+        return (bool) $this->get($this->getPurgedAtColumn());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnableTrash(): bool
+    {
+        return property_exists($this, 'enableTrash') ? $this->enableTrash : false;
+    }
+
+    /**
      * Restore the record to the normal state
      *
      * @return $this
@@ -59,6 +80,32 @@ trait SoftDeleteTrait
             $data[$statusColumn] = $this->getRestoreStatusValue();
         }
         return $this->saveAttributes($data);
+    }
+
+    /**
+     * Delete the record in the trash
+     *
+     * @return $this
+     */
+    public function purge(): self
+    {
+        return $this->saveAttributes([
+            $this->getPurgedAtColumn() => Time::now(),
+            $this->getPurgedByColumn() => User::id() ?: 0,
+        ]);
+    }
+
+    /**
+     * Restore the record to the trash
+     *
+     * @return $this
+     */
+    public function restorePurge(): self
+    {
+        return $this->saveAttributes([
+            $this->getPurgedAtColumn() => null,
+            $this->getPurgedByColumn() => 0,
+        ]);
     }
 
     /**
@@ -101,6 +148,11 @@ trait SoftDeleteTrait
     protected function onlyDeleted(): self
     {
         $this->unscoped('withoutDeleted');
+
+        if ($this->isEnableTrash()) {
+            $this->whereNull($this->getPurgedAtColumn());
+        }
+
         if ($statusColumn = $this->getDeleteStatusColumn()) {
             return $this->where($statusColumn, $this->getDeleteStatusValue());
         } else {
@@ -119,6 +171,17 @@ trait SoftDeleteTrait
         return $this->unscoped('withoutDeleted');
     }
 
+    /**
+     * Add a query to return only purged records
+     *
+     * @return $this
+     * @svc
+     */
+    protected function onlyPurged(): self
+    {
+        return $this->unscoped('withoutDeleted')->whereNotNull($this->getPurgedAtColumn());
+    }
+
     protected function getDeletedAtColumn(): string
     {
         return $this->deletedAtColumn ?? 'deleted_at';
@@ -127,6 +190,16 @@ trait SoftDeleteTrait
     protected function getDeletedByColumn(): string
     {
         return $this->deletedByColumn ?? 'deleted_by';
+    }
+
+    protected function getPurgedAtColumn(): string
+    {
+        return $this->purgedAtColumn ?? 'purged_at';
+    }
+
+    protected function getPurgedByColumn(): string
+    {
+        return $this->purgedByColumn ?? 'purged_by';
     }
 
     /**
@@ -196,6 +269,8 @@ trait SoftDeleteTrait
             $this->getDeletedAtColumn(),
             $this->getDeletedByColumn(),
             $this->getDeleteStatusColumn(),
+            $this->getPurgedAtColumn(),
+            $this->getPurgedByColumn(),
         ]));
     }
 }
