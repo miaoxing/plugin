@@ -1,3 +1,22 @@
+## [0.8.4](https://github.com/miaoxing/plugin/compare/v0.8.3...v0.8.4) (2022-07-01)
+
+
+### Features
+
+* **plugin:** `SoftDeleteTrait` 增加回收站功能 ([185566a](https://github.com/miaoxing/plugin/commit/185566a3137f94f25846499156b0a1d459202cf5))
+* **plugin:** 增加 `BasePage` 类，作为页面的基类 ([b86625a](https://github.com/miaoxing/plugin/commit/b86625a893cf9865e8f00b9fd39e1f14f17498e8))
+* **plugin:** 增加 `cache:clear` 命令 ([9d67360](https://github.com/miaoxing/plugin/commit/9d6736030816261e2463de672d974835ca22baa9))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.1.1` to `8.1.2`
+* **@mxjs/cli:** upgrade from `0.1.6` to `0.1.7`
+* **@wei/wei:** upgrade from `0.12.4` to `0.12.5`
+
 ## [0.8.3](https://github.com/miaoxing/plugin/compare/v0.8.2...v0.8.3) (2022-06-01)
 
 
