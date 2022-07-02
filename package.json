@@ -1,6 +1,6 @@
 {
   "name": "@miaoxing/plugin",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "private": true,
   "main": "index.js",
   "repository": "https://github.com/miaoxing/plugin",

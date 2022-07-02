@@ -1,3 +1,18 @@
+## [0.8.5](https://github.com/miaoxing/plugin/compare/v0.8.4...v0.8.5) (2022-07-02)
+
+
+### Bug Fixes
+
+* 解决 composer 2.2+ 默认不启用插件导致安装路径错误 ([c1cdbda](https://github.com/miaoxing/plugin/commit/c1cdbdaaca1cf5b1002291da7ba4f452fe1e0d25))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.12.5` to `0.12.6`
+
 ## [0.8.4](https://github.com/miaoxing/plugin/compare/v0.8.3...v0.8.4) (2022-07-01)
 
 
