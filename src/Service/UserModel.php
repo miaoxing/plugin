@@ -123,17 +123,15 @@ class UserModel extends BaseModel
     protected function updatePassword($req)
     {
         // 1. 校验
-        $ret = V::key('oldPassword', '旧密码')
-            ->key('password', '新密码')
-            ->when(wei()->user->enablePinCode, static function (V $v) {
-                $v->digit()->length(6);
-            }, static function (V $v) {
-                $v->minLength(6);
-            })
-            ->key('passwordConfirm', '重复密码')
-            ->equalTo($req['password'])
-            ->message('equalTo', '两次输入的密码不相等')
-            ->check($req);
+        $v = V::new();
+        $v->string('oldPassword', '旧密码');
+        $v->string('password', '新密码')->when(wei()->user->enablePinCode, static function (V $v) {
+            $v->digit()->length(6);
+        }, static function (V $v) {
+            $v->minLength(6);
+        });
+        $v->string('passwordConfirm', '重复密码')->equalTo($req['password'])->message('equalTo', '两次输入的密码不相等');
+        $ret = $v->check($req);
         if ($ret->isErr()) {
             return $ret;
         }
