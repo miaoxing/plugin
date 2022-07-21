@@ -538,32 +538,34 @@ PHP;
             $name = substr($name, 2);
 
             $dynamicMethod = Method::from([$class, '__invoke'])->cloneWithName(lcfirst($name));
+            $staticMethod = clone $dynamicMethod;
 
             // 移除 $input 参数
             $parameters = $dynamicMethod->getParameters();
             array_shift($parameters);
 
-            if ($class::BASIC_TYPE) {
-                // 加上 name 和 label
-                $nameParameter = new Parameter('name');
-                $nameParameter->setDefaultValue(null);
+            // 加上 key 和 label
+            $nameParameter = new Parameter('key');
+            $nameParameter->setDefaultValue(null);
 
-                $labelParameter = new Parameter('label');
-                $labelParameter->setType('string');
-                $labelParameter->setDefaultValue(null);
-                array_unshift($parameters, $nameParameter, $labelParameter);
-            }
+            $labelParameter = new Parameter('label');
+            $labelParameter->setType('string');
+            $labelParameter->setDefaultValue(null);
+            array_unshift($parameters, $nameParameter, $labelParameter);
 
             $dynamicMethod->setParameters($parameters);
 
             $dynamicMethod->setComment('@return $this');
             $dynamicMethod->addComment('@see \\' . $class . '::__invoke');
 
+            $staticMethod->setComment('@return $this');
+            $staticMethod->addComment('@see \\' . $class . '::__invoke');
+
             $methods[] = $dynamicMethod;
-            $staticMethods[] = (clone $dynamicMethod)->setStatic();
+            $staticMethods[] = $staticMethod->setStatic();
 
             $methods[] = $dynamicMethod->cloneWithName('not' . $name);
-            $staticMethods[] = $dynamicMethod->cloneWithName('not' . $name)->setStatic();
+            $staticMethods[] = $staticMethod->cloneWithName('not' . $name);
         }
 
         $dynamicClass->setMethods($methods);
