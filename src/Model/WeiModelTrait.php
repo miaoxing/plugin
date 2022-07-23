@@ -8,6 +8,8 @@ use Miaoxing\Plugin\Service\Cls;
 use Miaoxing\Plugin\Service\Str;
 use Miaoxing\Plugin\Service\User;
 use Wei\Base;
+use Wei\Db\QueryBuilderCacheTrait;
+use Wei\Db\QueryBuilderTrait;
 use Wei\Req;
 use Wei\Ret;
 use Wei\RetTrait;

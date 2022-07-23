@@ -106,13 +106,6 @@ class PluginMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\QueryBuilder $queryBuilder A SQL query builder class
- */
-class QueryBuilderMixin
-{
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\Ret $ret   schema="Ret",
  * @method      Miaoxing\Plugin\Service\Ret ret($message, $code = null, $type = null) Return operation result data
  */
@@ -203,7 +196,6 @@ class UserModelMixin
  * @mixin ObjectReqMixin
  * @mixin PageRouterMixin
  * @mixin PluginMixin
- * @mixin QueryBuilderMixin
  * @mixin RetMixin
  * @mixin SeederMixin
  * @mixin SessionMixin
@@ -277,9 +269,6 @@ $pageRouter = wei()->pageRouter;
 
 /** @var Miaoxing\Plugin\Service\Plugin $plugin */
 $plugin = wei()->plugin;
-
-/** @var Miaoxing\Plugin\Service\QueryBuilder $queryBuilder */
-$queryBuilder = wei()->queryBuilder;
 
 /** @var Miaoxing\Plugin\Service\Ret $ret */
 $ret = wei()->ret;

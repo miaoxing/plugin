@@ -8,7 +8,7 @@ use IteratorAggregate;
 use JsonSerializable;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Model\ModelTrait;
-use Miaoxing\Plugin\Model\QueryBuilderPropsTrait;
+use Wei\Db\QueryBuilderPropsTrait;
 
 /**
  * @internal 逐步完善后移到 Wei 中

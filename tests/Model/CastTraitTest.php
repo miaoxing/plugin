@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MiaoxingTest\Plugin\Model;
 
 use Miaoxing\Plugin\Model\ModelTrait;
-use Miaoxing\Plugin\Service\QueryBuilder;
+use Wei\QueryBuilder;
 use Miaoxing\Plugin\Service\WeiBaseModel;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Model\Fixture\TestCast;
