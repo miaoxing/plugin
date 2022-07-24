@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Test;
 
 use Miaoxing\Plugin\BaseService;
-use Miaoxing\Plugin\Service\Cls;
+use Wei\Cls;
 use PHPUnit\Framework\MockObject\MockObject;
 use Wei\Base;
 use Wei\Ret;
