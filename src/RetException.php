@@ -2,20 +2,8 @@
 
 namespace Miaoxing\Plugin;
 
-use Exception;
+use Wei\Ret\RetException as BaseRetException;
 
-class RetException extends Exception
+class RetException extends BaseRetException
 {
-    protected $ret;
-
-    public function __construct($ret)
-    {
-        $this->ret = $ret;
-        parent::__construct($ret['message'], $ret['code']);
-    }
-
-    public function getRet()
-    {
-        return $this->ret;
-    }
 }
