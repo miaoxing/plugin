@@ -3,13 +3,13 @@
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
 use Miaoxing\Plugin\Model\MineTrait;
-use Miaoxing\Plugin\Model\ModelTrait;
-use Miaoxing\Plugin\Service\WeiBaseModel;
+use Wei\BaseModel;
+use Wei\ModelTrait;
 
 /**
  * @property int|null $id
  */
-class TestMine extends WeiBaseModel
+class TestMine extends BaseModel
 {
     use MineTrait;
     use ModelTrait;

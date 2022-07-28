@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MiaoxingTest\Plugin\Model\Fixture;
 
-use Miaoxing\Plugin\Model\ModelTrait;
-use Miaoxing\Plugin\Service\WeiBaseModel;
+use Wei\BaseModel;
+use Wei\ModelTrait;
 
-class TestReqQueryDetail extends WeiBaseModel
+class TestReqQueryDetail extends BaseModel
 {
     use ModelTrait;
 }
