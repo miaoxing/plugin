@@ -3,9 +3,9 @@
 namespace Miaoxing\Plugin\Test;
 
 use Miaoxing\Plugin\BaseService;
-use Wei\Cls;
 use PHPUnit\Framework\MockObject\MockObject;
 use Wei\Base;
+use Wei\Cls;
 use Wei\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;

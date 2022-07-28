@@ -5,8 +5,8 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\ConstTrait;
 use Miaoxing\Plugin\Metadata\AppTrait;
-use Miaoxing\Plugin\Model\CacheTrait;
 use Miaoxing\Plugin\Model\ModelTrait;
+use Wei\Model\CacheTrait;
 
 /**
  * 应用模型

@@ -4,11 +4,11 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\Metadata\UserTrait;
-use Miaoxing\Plugin\Model\CacheTrait;
 use Miaoxing\Plugin\Model\HasAppIdTrait;
 use Miaoxing\Plugin\Model\ModelTrait;
 use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Miaoxing\Plugin\Model\SnowflakeTrait;
+use Wei\Model\CacheTrait;
 use Wei\Password;
 use Wei\V;
 

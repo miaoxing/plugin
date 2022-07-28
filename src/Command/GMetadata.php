@@ -3,11 +3,11 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
-use Miaoxing\Plugin\Model\CamelCaseTrait;
-use Miaoxing\Plugin\Service\WeiBaseModel;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
+use Wei\BaseModel;
+use Wei\Model\CamelCaseTrait;
 
 /**
  * @mixin \StrMixin
@@ -52,7 +52,7 @@ final class GMetadata extends BaseCommand
 
     protected function createClass($model, $plugin, $camelCase)
     {
-        /** @var WeiBaseModel $modelObject */
+        /** @var BaseModel $modelObject */
         $modelObject = $this->wei->get($model);
         $table = $modelObject->getDb()->getTable($modelObject->getTable());
         $columns = wei()->db->fetchAll('SHOW FULL COLUMNS FROM ' . $table);

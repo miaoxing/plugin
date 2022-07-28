@@ -4,7 +4,7 @@ namespace Miaoxing\Plugin\Resource;
 
 use Closure;
 use Miaoxing\Plugin\BaseService;
-use Miaoxing\Plugin\Service\WeiBaseModel;
+use Wei\BaseModel;
 
 /**
  * Convert the model object to array for API response, reference from Laravel
@@ -43,12 +43,12 @@ abstract class BaseResource extends BaseService
     /**
      * Convert the model object to array with wrapper and meta data
      *
-     * @param WeiBaseModel $model
+     * @param BaseModel $model
      * @return array
      * @svc
      * @todo 支持 meta 等数据
      */
-    protected function toArray(WeiBaseModel $model): array
+    protected function toArray(BaseModel $model): array
     {
         return [
             'data' => $this->transformData($model),
@@ -58,11 +58,11 @@ abstract class BaseResource extends BaseService
     /**
      * Convert the model object to array
      *
-     * @param WeiBaseModel $model
+     * @param \Wei\BaseModel $model
      * @return array
      * @svc
      */
-    protected function transformData(WeiBaseModel $model): array
+    protected function transformData(BaseModel $model): array
     {
         $resource = $this;
 
@@ -80,11 +80,11 @@ abstract class BaseResource extends BaseService
     /**
      * Transform the relation value when relation is loaded, or ignore the resource array key by condition
      *
-     * @param WeiBaseModel $model
+     * @param BaseModel $model
      * @param string $relation
      * @return array|MissingValue
      */
-    public static function transformDataWhenLoaded(WeiBaseModel $model, string $relation)
+    public static function transformDataWhenLoaded(BaseModel $model, string $relation)
     {
         // Loaded but may be null
         if ($model->isLoaded($relation) && $model->{$relation}) {
@@ -96,11 +96,11 @@ abstract class BaseResource extends BaseService
     /**
      * Alias of `transformWhenLoaded`
      *
-     * @param WeiBaseModel $model
+     * @param \Wei\BaseModel $model
      * @param string $relation
      * @return array|MissingValue
      */
-    public static function whenLoaded(WeiBaseModel $model, string $relation)
+    public static function whenLoaded(BaseModel $model, string $relation)
     {
         return static::transformDataWhenLoaded($model, $relation);
     }
@@ -135,10 +135,10 @@ abstract class BaseResource extends BaseService
      * Remove missing value and expand merged value
      *
      * @param array $data
-     * @param WeiBaseModel $model
+     * @param \Wei\BaseModel $model
      * @return array
      */
-    protected function filter(array $data, WeiBaseModel $model): array
+    protected function filter(array $data, BaseModel $model): array
     {
         $result = [];
         // TODO 调用了 merge 或 missing value 才需要循环检查
@@ -169,11 +169,11 @@ abstract class BaseResource extends BaseService
     /**
      * Return the model array by specified columns that will be merge into the resource array
      *
-     * @param WeiBaseModel $model
+     * @param \Wei\BaseModel $model
      * @param array $columns
      * @return MergeValue
      */
-    protected function extract(WeiBaseModel $model, array $columns): MergeValue
+    protected function extract(BaseModel $model, array $columns): MergeValue
     {
         $data = [];
         foreach ($columns as $column) {

@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Wei\BaseModel;
 use Wei\Req;
 use Wei\Res;
 
@@ -48,7 +49,7 @@ class Ret extends \Wei\Ret
         $res || $res = $this->res;
 
         $model = $this->getMetadata('model');
-        if ($model instanceof WeiBaseModel && $model->wasRecentlyCreated()) {
+        if ($model instanceof BaseModel && $model->wasRecentlyCreated()) {
             $res->setStatusCode(201);
         }
 

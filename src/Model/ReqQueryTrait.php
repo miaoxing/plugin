@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Plugin\Model;
 
-use Miaoxing\Plugin\Service\WeiBaseModel;
+use Wei\BaseModel;
 use Wei\Req;
 
 /**
@@ -277,10 +277,10 @@ trait ReqQueryTrait
      *
      * @param array $search
      * @param array $allows
-     * @param WeiBaseModel $model
+     * @param BaseModel $model
      * @return $this
      */
-    protected function processReqSearch(WeiBaseModel $model, array $search, array $allows): self
+    protected function processReqSearch(BaseModel $model, array $search, array $allows): self
     {
         foreach ($search as $name => $value) {
             if (!$this->isPresent($value)) {
@@ -308,11 +308,11 @@ trait ReqQueryTrait
     /**
      * Add query based on model and column name
      *
-     * @param WeiBaseModel $model
+     * @param BaseModel $model
      * @param string $name
      * @param mixed $value
      */
-    protected function addReqColumnQuery(WeiBaseModel $model, string $name, $value): void
+    protected function addReqColumnQuery(BaseModel $model, string $name, $value): void
     {
         [$name, $op] = $this->parseReqNameAndOp($name);
         if (!$model->hasColumn($name)) {

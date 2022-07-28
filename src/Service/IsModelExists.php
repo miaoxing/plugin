@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Wei\BaseModel;
 use Wei\BaseValidator;
 
 class IsModelExists extends BaseValidator
@@ -23,7 +24,7 @@ class IsModelExists extends BaseValidator
     /**
      * The class name of model or model instance
      *
-     * @var string|WeiBaseModel
+     * @var string|BaseModel
      */
     protected $model;
 
@@ -55,9 +56,9 @@ class IsModelExists extends BaseValidator
      */
     protected function doValidate($input)
     {
-        if (is_string($this->model) && is_subclass_of($this->model, WeiBaseModel::class)) {
+        if (is_string($this->model) && is_subclass_of($this->model, BaseModel::class)) {
             $this->model = $this->model::where($this->column, $input);
-        } elseif ($this->model instanceof WeiBaseModel) {
+        } elseif ($this->model instanceof BaseModel) {
             $this->model->where($this->column, $input);
         } else {
             throw new \InvalidArgumentException(sprintf(

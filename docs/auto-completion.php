@@ -17,13 +17,6 @@ class AppModelMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Cls $cls The class util service
- */
-class ClsMixin
-{
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\Config $config
  */
 class ConfigMixin
@@ -143,13 +136,6 @@ class StorageMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Str $str The string util service
- */
-class StrMixin
-{
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\Tester $tester 测试
  * @method      static tester($controller = null, $action = null)
  */
@@ -184,7 +170,6 @@ class UserModelMixin
 /**
  * @mixin AppMixin
  * @mixin AppModelMixin
- * @mixin ClsMixin
  * @mixin ConfigMixin
  * @mixin ConfigModelMixin
  * @mixin FsMixin
@@ -201,7 +186,6 @@ class UserModelMixin
  * @mixin SessionMixin
  * @mixin SnowflakeMixin
  * @mixin StorageMixin
- * @mixin StrMixin
  * @mixin TesterMixin
  * @mixin UploadMixin
  * @mixin UserMixin
@@ -227,9 +211,6 @@ $app = wei()->appModel;
 
 /** @var Miaoxing\Plugin\Service\AppModel|Miaoxing\Plugin\Service\AppModel[] $apps */
 $apps = wei()->appModel();
-
-/** @var Miaoxing\Plugin\Service\Cls $cls */
-$cls = wei()->cls;
 
 /** @var Miaoxing\Plugin\Service\Config $config */
 $config = wei()->config;
@@ -284,9 +265,6 @@ $snowflake = wei()->snowflake;
 
 /** @var Miaoxing\Plugin\Service\Storage $storage */
 $storage = wei()->storage;
-
-/** @var Miaoxing\Plugin\Service\Str $str */
-$str = wei()->str;
 
 /** @var Miaoxing\Plugin\Service\Tester $tester */
 $tester = wei()->tester;

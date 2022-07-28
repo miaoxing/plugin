@@ -2,8 +2,8 @@
 
 namespace Miaoxing\Plugin;
 
-use Miaoxing\Plugin\Model\CamelCaseTrait;
-use Miaoxing\Plugin\Service\WeiBaseModel;
+use Wei\BaseModel as WeiBaseModel;
+use Wei\Model\CamelCaseTrait;
 
 abstract class BaseModel extends WeiBaseModel
 {

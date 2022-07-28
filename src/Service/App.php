@@ -9,6 +9,7 @@ use Miaoxing\Plugin\RetException;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
+use Wei\BaseModel;
 use Wei\Res;
 
 /**
@@ -407,7 +408,7 @@ class App extends \Wei\App
         if (
             $type
             && !$type->isBuiltin()
-            && is_a($type->getName(), WeiBaseModel::class, true)
+            && is_a($type->getName(), BaseModel::class, true)
         ) {
             return $type->getName()::findOrFail($this->req['id']);
         }
