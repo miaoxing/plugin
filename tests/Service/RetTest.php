@@ -6,6 +6,8 @@ use Miaoxing\Plugin\BasePlugin;
 use Miaoxing\Plugin\Service\Plugin;
 use Miaoxing\Plugin\Service\Ret;
 use Miaoxing\Plugin\Test\BaseTestCase;
+use MiaoxingTest\Plugin\Model\Fixture\DbTrait;
+use MiaoxingTest\Plugin\Model\Fixture\TestUser;
 use Wei\Env;
 use Wei\Req;
 use Wei\Res;
@@ -15,6 +17,8 @@ use Wei\Res;
  */
 class RetTest extends BaseTestCase
 {
+    use DbTrait;
+
     public function testHtmlToRes()
     {
         $req = new Req([
@@ -98,5 +102,31 @@ class RetTest extends BaseTestCase
         $this->assertSame(999001, $ret->getCode());
 
         unlink($errorFile);
+    }
+
+    public function testToRetToRes()
+    {
+        $this->initFixtures();
+
+        $req = new Req([
+            'wei' => $this->wei,
+            'fromGlobal' => false,
+            'servers' => [
+                'HTTP_ACCEPT' => 'application/json',
+            ],
+        ]);
+        $res = new Res(['wei' => $this->wei]);
+
+        $user = TestUser::first();
+        /** @var Ret $ret */
+        $ret = $user->toRet();
+        $ret->toRes($req, $res);
+        $this->assertSame(200, $res->getStatusCode());
+
+        $user = TestUser::save();
+        /** @var Ret $ret */
+        $ret = $user->toRet();
+        $ret->toRes($req, $res);
+        $this->assertSame(201, $res->getStatusCode());
     }
 }

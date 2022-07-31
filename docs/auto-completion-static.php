@@ -18,6 +18,17 @@ class App
 class AppModel
 {
     /**
+     * Returns the success result with model data
+     *
+     * @param array|string|BaseResource|mixed $merge
+     * @return Ret
+     * @see AppModel::toRet
+     */
+    public static function toRet($merge = []): \Wei\Ret
+    {
+    }
+
+    /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
      * @param iterable $attributes
@@ -37,17 +48,6 @@ class AppModel
      * @see AppModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Returns the success result with model data
-     *
-     * @param array|string|BaseResource|mixed $merge
-     * @return Ret
-     * @see AppModel::toRet
-     */
-    public static function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -1176,6 +1176,17 @@ class Config
 class ConfigModel
 {
     /**
+     * Returns the success result with model data
+     *
+     * @param array|string|BaseResource|mixed $merge
+     * @return Ret
+     * @see ConfigModel::toRet
+     */
+    public static function toRet($merge = []): \Wei\Ret
+    {
+    }
+
+    /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
      * @param iterable $attributes
@@ -1195,17 +1206,6 @@ class ConfigModel
      * @see ConfigModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Returns the success result with model data
-     *
-     * @param array|string|BaseResource|mixed $merge
-     * @return Ret
-     * @see ConfigModel::toRet
-     */
-    public static function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -2226,6 +2226,17 @@ class Fs
 class GlobalConfigModel
 {
     /**
+     * Returns the success result with model data
+     *
+     * @param array|string|BaseResource|mixed $merge
+     * @return Ret
+     * @see GlobalConfigModel::toRet
+     */
+    public static function toRet($merge = []): \Wei\Ret
+    {
+    }
+
+    /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
      * @param iterable $attributes
@@ -2245,17 +2256,6 @@ class GlobalConfigModel
      * @see GlobalConfigModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Returns the success result with model data
-     *
-     * @param array|string|BaseResource|mixed $merge
-     * @return Ret
-     * @see GlobalConfigModel::toRet
-     */
-    public static function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -3988,17 +3988,6 @@ class User
     }
 
     /**
-     * Set each attribute value, without checking whether the column is fillable, and save the model
-     *
-     * @param iterable $attributes
-     * @return $this
-     * @see UserModel::saveAttributes
-     */
-    public static function saveAttributes(iterable $attributes = []): self
-    {
-    }
-
-    /**
      * Returns the success result with model data
      *
      * @param array|string|BaseResource|mixed $merge
@@ -4006,6 +3995,17 @@ class User
      * @see UserModel::toRet
      */
     public static function toRet($merge = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * Set each attribute value, without checking whether the column is fillable, and save the model
+     *
+     * @param iterable $attributes
+     * @return $this
+     * @see UserModel::saveAttributes
+     */
+    public static function saveAttributes(iterable $attributes = []): self
     {
     }
 
@@ -4952,6 +4952,17 @@ class UserModel
     }
 
     /**
+     * Returns the success result with model data
+     *
+     * @param array|string|BaseResource|mixed $merge
+     * @return Ret
+     * @see UserModel::toRet
+     */
+    public static function toRet($merge = []): \Wei\Ret
+    {
+    }
+
+    /**
      * Set each attribute value, without checking whether the column is fillable, and save the model
      *
      * @param iterable $attributes
@@ -4971,17 +4982,6 @@ class UserModel
      * @see UserModel::toArray
      */
     public static function toArray($returnFields = [], callable $prepend = null): array
-    {
-    }
-
-    /**
-     * Returns the success result with model data
-     *
-     * @param array|string|BaseResource|mixed $merge
-     * @return Ret
-     * @see UserModel::toRet
-     */
-    public static function toRet($merge = []): \Wei\Ret
     {
     }
 
@@ -5973,6 +5973,17 @@ if (0) {
     class AppModel
     {
         /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see AppModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
          * @param iterable $attributes
@@ -5992,17 +6003,6 @@ if (0) {
          * @see AppModel::toArray
          */
         public function toArray($returnFields = [], callable $prepend = null): array
-        {
-        }
-
-        /**
-         * Returns the success result with model data
-         *
-         * @param array|string|BaseResource|mixed $merge
-         * @return Ret
-         * @see AppModel::toRet
-         */
-        public function toRet($merge = []): \Wei\Ret
         {
         }
 
@@ -7119,6 +7119,17 @@ if (0) {
     class ConfigModel
     {
         /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see ConfigModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
          * @param iterable $attributes
@@ -7138,17 +7149,6 @@ if (0) {
          * @see ConfigModel::toArray
          */
         public function toArray($returnFields = [], callable $prepend = null): array
-        {
-        }
-
-        /**
-         * Returns the success result with model data
-         *
-         * @param array|string|BaseResource|mixed $merge
-         * @return Ret
-         * @see ConfigModel::toRet
-         */
-        public function toRet($merge = []): \Wei\Ret
         {
         }
 
@@ -8157,6 +8157,17 @@ if (0) {
     class GlobalConfigModel
     {
         /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see GlobalConfigModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
          * @param iterable $attributes
@@ -8176,17 +8187,6 @@ if (0) {
          * @see GlobalConfigModel::toArray
          */
         public function toArray($returnFields = [], callable $prepend = null): array
-        {
-        }
-
-        /**
-         * Returns the success result with model data
-         *
-         * @param array|string|BaseResource|mixed $merge
-         * @return Ret
-         * @see GlobalConfigModel::toRet
-         */
-        public function toRet($merge = []): \Wei\Ret
         {
         }
 
@@ -9907,17 +9907,6 @@ if (0) {
         }
 
         /**
-         * Set each attribute value, without checking whether the column is fillable, and save the model
-         *
-         * @param iterable $attributes
-         * @return $this
-         * @see UserModel::saveAttributes
-         */
-        public function saveAttributes(iterable $attributes = []): self
-        {
-        }
-
-        /**
          * Returns the success result with model data
          *
          * @param array|string|BaseResource|mixed $merge
@@ -9925,6 +9914,17 @@ if (0) {
          * @see UserModel::toRet
          */
         public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * Set each attribute value, without checking whether the column is fillable, and save the model
+         *
+         * @param iterable $attributes
+         * @return $this
+         * @see UserModel::saveAttributes
+         */
+        public function saveAttributes(iterable $attributes = []): self
         {
         }
 
@@ -10859,6 +10859,17 @@ if (0) {
         }
 
         /**
+         * Returns the success result with model data
+         *
+         * @param array|string|BaseResource|mixed $merge
+         * @return Ret
+         * @see UserModel::toRet
+         */
+        public function toRet($merge = []): \Wei\Ret
+        {
+        }
+
+        /**
          * Set each attribute value, without checking whether the column is fillable, and save the model
          *
          * @param iterable $attributes
@@ -10878,17 +10889,6 @@ if (0) {
          * @see UserModel::toArray
          */
         public function toArray($returnFields = [], callable $prepend = null): array
-        {
-        }
-
-        /**
-         * Returns the success result with model data
-         *
-         * @param array|string|BaseResource|mixed $merge
-         * @return Ret
-         * @see UserModel::toRet
-         */
-        public function toRet($merge = []): \Wei\Ret
         {
         }
 
