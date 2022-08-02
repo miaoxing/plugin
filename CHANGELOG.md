@@ -1,3 +1,36 @@
+# [0.9.0](https://github.com/miaoxing/plugin/compare/v0.8.5...v0.9.0) (2022-08-02)
+
+
+### Code Refactoring
+
+* **Cls:** 移动 `Cls` 到 `wei` 中 ([27d469b](https://github.com/miaoxing/plugin/commit/27d469b3f9307f5661b4b822782bbfdad622a998))
+* **Cls:** 移动 `Str` 到 `wei` 中 ([809f80f](https://github.com/miaoxing/plugin/commit/809f80f434d46ea9e37ba538ead9e2adef85ecfc))
+* **Model:** 移动模型基类到 `wei` 中 ([a9de076](https://github.com/miaoxing/plugin/commit/a9de07675fc2d87090d55ad7bd6d119ef1b00601))
+* **QueryBuilder:** 移动 `QueryBuilder` 到 `wei` 中 ([2f9a1f2](https://github.com/miaoxing/plugin/commit/2f9a1f212726ff4981cd11549dc6417966375968))
+
+
+### Features
+
+* **GAutoCompletion:** 生成代码提示支持新的校验器写法 ([85ff9c5](https://github.com/miaoxing/plugin/commit/85ff9c5bcd216bdbccf2aea0af587abfb0101680))
+
+
+### BREAKING CHANGES
+
+* **Model:** 移动模型基类到 `wei` 中
+* **Cls:** 移动 `Str` 到 `wei` 中
+* **Cls:** 移动 `Cls` 到 `wei` 中
+* **QueryBuilder:** 移动 `QueryBuilder` 到 `wei` 中
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.1.2` to `8.1.3`
+* **@mxjs/cli:** upgrade from `0.1.7` to `0.1.8`
+* **@wei/wei:** upgrade from `0.12.6` to `0.13.0`
+
 ## [0.8.5](https://github.com/miaoxing/plugin/compare/v0.8.4...v0.8.5) (2022-07-02)
 
 
