@@ -5,12 +5,12 @@ namespace Miaoxing\Plugin\Service;
 use Exception;
 use JsonSerializable;
 use Miaoxing\Plugin\BaseController;
-use Miaoxing\Plugin\RetException;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
 use Wei\BaseModel;
 use Wei\Res;
+use Wei\Ret\RetException;
 
 /**
  * 应用
