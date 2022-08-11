@@ -351,6 +351,8 @@ class User extends UserModel
      */
     protected function logout()
     {
+        $this->event->trigger('beforeUserLogout', [$this]);
+
         $this->setAttributesFromDb([]);
 
         $this->getAuth()->logout();
