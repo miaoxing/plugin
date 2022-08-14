@@ -13,7 +13,8 @@ class GMigration extends BaseCommand
 {
     protected function configure()
     {
-        $this->setDescription('Generate a plugin migration class')
+        $this->setAliases(['migration:g'])
+            ->setDescription('Generate a plugin migration class')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the migration')
             ->addArgument('plugin', InputArgument::OPTIONAL, 'The name of the plugin');
     }
