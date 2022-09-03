@@ -1,3 +1,22 @@
+## [0.9.1](https://github.com/miaoxing/plugin/compare/v0.9.0...v0.9.1) (2022-09-03)
+
+
+### Features
+
+* **plugin:** `cache:clear` 命令允许指定缓存名称 ([1ebcbd6](https://github.com/miaoxing/plugin/commit/1ebcbd65bbbd89a3d9c705e755738b168976a9d6))
+* 增加 `cache:delete` 命令，可用于删除指定名称的缓存 ([ce81f06](https://github.com/miaoxing/plugin/commit/ce81f0616395a134f52bcb62fe398fd2a0a7cc1b))
+* **plugin:** `g:migration` 增加 `migration:g` 别名 ([19369e7](https://github.com/miaoxing/plugin/commit/19369e729e78c8f412fe64792d728d3dae244ed7))
+* **plugin:** 增加 `beforeUserLogout` 事件 ([81772a3](https://github.com/miaoxing/plugin/commit/81772a344ae77373ba5cfe0e6b18d45735ca98ee))
+* **plugin:** 捕获 Ret 异常支持 `Wei\Ret\RetException` 基类 ([01d21dd](https://github.com/miaoxing/plugin/commit/01d21dd30a4d6b92076bba17bd279940f77abd69))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.13.0` to `0.14.0`
+
 # [0.9.0](https://github.com/miaoxing/plugin/compare/v0.8.5...v0.9.0) (2022-08-02)
 
 
