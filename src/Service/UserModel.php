@@ -123,7 +123,7 @@ class UserModel extends BaseModel
     protected function updatePassword($req)
     {
         // 1. 校验
-        $v = V::new();
+        $v = V::defaultNotEmpty();
         $v->string('oldPassword', '旧密码');
         $v->string('password', '新密码')->when(wei()->user->enablePinCode, static function (V $v) {
             $v->digit()->length(6);
