@@ -1,3 +1,18 @@
+## [0.9.2](https://github.com/miaoxing/plugin/compare/v0.9.1...v0.9.2) (2022-09-30)
+
+
+### Features
+
+* **plugin:** 增加 `cache:get` 命令 ([66b80c0](https://github.com/miaoxing/plugin/commit/66b80c0554b7a6770f349a01075d3d4d405e4ea6))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.14.0` to `0.15.0`
+
 ## [0.9.1](https://github.com/miaoxing/plugin/compare/v0.9.0...v0.9.1) (2022-09-03)
 
 
