@@ -13,13 +13,14 @@ use Wei\Model\CamelCaseTrait;
  * @mixin \StrMixin
  * @mixin \ClsMixin
  * @mixin \PluginMixin
+ * @mixin \CacheMixin
  * @internal will change in the future
  */
 final class GMetadata extends BaseCommand
 {
     public function handle()
     {
-        $id = $this->input->getArgument('plugin-id');
+        $id = $this->getPluginId();
 
         $plugin = wei()->plugin->getOneById($id);
 
@@ -47,7 +48,7 @@ final class GMetadata extends BaseCommand
     protected function configure()
     {
         $this
-            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
+            ->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 
     protected function createClass($model, $plugin, $camelCase)
@@ -211,5 +212,15 @@ final class GMetadata extends BaseCommand
         }
 
         return false;
+    }
+
+    protected function getPluginId(): string
+    {
+        $pluginId = $this->input->getArgument('plugin-id') ?: $this->cache->get('plugin:use');
+        if ($pluginId) {
+            return $pluginId;
+        }
+
+        throw new \RuntimeException(sprintf('Not enough arguments (missing: "plugin-id").'));
     }
 }
