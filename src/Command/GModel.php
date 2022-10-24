@@ -11,6 +11,8 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class GModel extends BaseCommand
 {
+    use PluginIdTrait;
+
     /**
      * @return int
      * @throws \Exception
@@ -18,7 +20,7 @@ class GModel extends BaseCommand
     public function handle()
     {
         $name = $this->input->getArgument('name');
-        $id = $this->input->getArgument('plugin-id');
+        $id = $this->getPluginId();
 
         $plugin = wei()->plugin->getOneById($id);
 
@@ -41,7 +43,7 @@ class GModel extends BaseCommand
     {
         $this
             ->addArgument('name', InputArgument::REQUIRED, 'The name of model')
-            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
+            ->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 
     protected function getFile(BasePlugin $plugin, $name)

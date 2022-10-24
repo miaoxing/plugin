@@ -10,14 +10,16 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class GTest extends BaseCommand
 {
+    use PluginIdTrait;
+
     protected function configure()
     {
-        $this->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
+        $this->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 
     protected function handle()
     {
-        $id = $this->input->getArgument('plugin-id');
+        $id = $this->getPluginId();
 
         $plugin = wei()->plugin->getOneById($id);
 

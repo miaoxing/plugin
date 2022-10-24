@@ -36,6 +36,8 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class GAutoCompletion extends BaseCommand
 {
+    use PluginIdTrait;
+
     /**
      * 所有的类生成一个文件
      */
@@ -172,7 +174,7 @@ class GAutoCompletion extends BaseCommand
     protected function configure()
     {
         $this->setDescription('Generate code auto completion for specified plugin')
-            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
+            ->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 
     /**
@@ -182,11 +184,11 @@ class GAutoCompletion extends BaseCommand
      */
     protected function handle()
     {
-        $id = $this->getArgument('plugin-id');
+        $id = $this->getPluginId();
         if ('wei' === $id) {
             [$services, $path, $generateViewVars] = $this->getWeiConfig();
         } else {
-            $plugin = $this->plugin->getOneById($this->input->getArgument('plugin-id'));
+            $plugin = $this->plugin->getOneById($id);
             $path = $plugin->getBasePath();
             $services = $this->getServerMap($plugin);
             $generateViewVars = true;

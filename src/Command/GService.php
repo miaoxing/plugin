@@ -10,11 +10,13 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class GService extends BaseCommand
 {
+    use PluginIdTrait;
+
     protected function configure()
     {
         $this
             ->addArgument('name', InputArgument::REQUIRED, 'The name of service')
-            ->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
+            ->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 
     /**
@@ -24,7 +26,7 @@ class GService extends BaseCommand
     protected function handle()
     {
         $name = $this->input->getArgument('name');
-        $id = $this->input->getArgument('plugin-id');
+        $id = $this->getPluginId();
 
         $plugin = wei()->plugin->getOneById($id);
 

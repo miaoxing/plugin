@@ -13,11 +13,12 @@ use Wei\Model\CamelCaseTrait;
  * @mixin \StrMixin
  * @mixin \ClsMixin
  * @mixin \PluginMixin
- * @mixin \CacheMixin
  * @internal will change in the future
  */
 final class GMetadata extends BaseCommand
 {
+    use PluginIdTrait;
+
     public function handle()
     {
         $id = $this->getPluginId();
@@ -212,15 +213,5 @@ final class GMetadata extends BaseCommand
         }
 
         return false;
-    }
-
-    protected function getPluginId(): string
-    {
-        $pluginId = $this->input->getArgument('plugin-id') ?: $this->cache->get('plugin:use');
-        if ($pluginId) {
-            return $pluginId;
-        }
-
-        throw new \RuntimeException(sprintf('Not enough arguments (missing: "plugin-id").'));
     }
 }
