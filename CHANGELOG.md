@@ -1,3 +1,25 @@
+## [0.9.3](https://github.com/miaoxing/plugin/compare/v0.9.2...v0.9.3) (2022-11-01)
+
+
+### Bug Fixes
+
+* 校验增加长度检查 ([4d22835](https://github.com/miaoxing/plugin/commit/4d2283511d5c0c795524c056d322cd2eebdb8395))
+
+
+### Features
+
+* **plugin:** `g:metadata` 支持使用默认插件编号 ([11b0246](https://github.com/miaoxing/plugin/commit/11b02466f8248fc0edddfd744d53e075b8a1bc3e))
+* **plugin:** 增加 `PluginUse` 和 `PluginUnuse` 命令，用于记录和删除默认使用的插件编号 ([3db9834](https://github.com/miaoxing/plugin/commit/3db98344cf72625d6693595f3da73089690e7ebb))
+* **plugin:** 带插件参数的命令都支持使用默认插件编号 ([2b93e51](https://github.com/miaoxing/plugin/commit/2b93e515445208ec32f36147722064d1a65b5ead))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.0` to `0.15.1`
+
 ## [0.9.2](https://github.com/miaoxing/plugin/compare/v0.9.1...v0.9.2) (2022-09-30)
 
 
