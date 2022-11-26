@@ -825,12 +825,21 @@ class AppModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column the ordering expression
+     * @param string|Raw $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
      * @see AppModel::orderBy
      */
-    public static function orderBy(string $column, $order = 'ASC'): self
+    public static function orderBy($column, $order = 'ASC'): self
+    {
+    }
+
+    /**
+     * @param scalar $expression
+     * @return $this
+     * @see AppModel::orderByRaw
+     */
+    public static function orderByRaw($expression): self
     {
     }
 
@@ -1983,12 +1992,21 @@ class ConfigModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column the ordering expression
+     * @param string|Raw $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
      * @see ConfigModel::orderBy
      */
-    public static function orderBy(string $column, $order = 'ASC'): self
+    public static function orderBy($column, $order = 'ASC'): self
+    {
+    }
+
+    /**
+     * @param scalar $expression
+     * @return $this
+     * @see ConfigModel::orderByRaw
+     */
+    public static function orderByRaw($expression): self
     {
     }
 
@@ -3033,12 +3051,21 @@ class GlobalConfigModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column the ordering expression
+     * @param string|Raw $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
      * @see GlobalConfigModel::orderBy
      */
-    public static function orderBy(string $column, $order = 'ASC'): self
+    public static function orderBy($column, $order = 'ASC'): self
+    {
+    }
+
+    /**
+     * @param scalar $expression
+     * @return $this
+     * @see GlobalConfigModel::orderByRaw
+     */
+    public static function orderByRaw($expression): self
     {
     }
 
@@ -3237,6 +3264,21 @@ class GlobalConfigModel
      * @see GlobalConfigModel::onlyPurged
      */
     public static function onlyPurged(): self
+    {
+    }
+}
+
+class IsBigIntString
+{
+    /**
+     * Check the input value, return a Ret object
+     *
+     * @param mixed $input
+     * @param string $name
+     * @return Ret
+     * @see BaseValidator::check
+     */
+    public static function check($input, string $name = '%name%'): \Wei\Ret
     {
     }
 }
@@ -3836,6 +3878,33 @@ class Upload
      * @see Upload::saveImage
      */
     public static function saveImage(array $options = []): \Wei\Ret
+    {
+    }
+
+    /**
+     * 获取音频的扩展名
+     *
+     * @see Upload::getAllowedAudioExts
+     */
+    public static function getAllowedAudioExts(): array
+    {
+    }
+
+    /**
+     * 检查扩展名是否为允许的音频类型
+     *
+     * @see Upload::isAllowedAudioExt
+     */
+    public static function isAllowedAudioExt(string $ext): bool
+    {
+    }
+
+    /**
+     * 上传音频文件
+     *
+     * @see Upload::saveAudio
+     */
+    public static function saveAudio(array $options = []): \Wei\Ret
     {
     }
 
@@ -4772,12 +4841,21 @@ class User
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column the ordering expression
+     * @param string|Raw $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
      * @see UserModel::orderBy
      */
-    public static function orderBy(string $column, $order = 'ASC'): self
+    public static function orderBy($column, $order = 'ASC'): self
+    {
+    }
+
+    /**
+     * @param scalar $expression
+     * @return $this
+     * @see UserModel::orderByRaw
+     */
+    public static function orderByRaw($expression): self
     {
     }
 
@@ -5759,12 +5837,21 @@ class UserModel
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $column the ordering expression
+     * @param string|Raw $column the ordering expression
      * @param string $order the ordering direction
      * @return $this
      * @see UserModel::orderBy
      */
-    public static function orderBy(string $column, $order = 'ASC'): self
+    public static function orderBy($column, $order = 'ASC'): self
+    {
+    }
+
+    /**
+     * @param scalar $expression
+     * @return $this
+     * @see UserModel::orderByRaw
+     */
+    public static function orderByRaw($expression): self
     {
     }
 
@@ -5921,6 +6008,22 @@ namespace Wei;
 
 class V
 {
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsBigIntString::__invoke
+     */
+    public static function bigIntString($input, int $min = null, int $max = null)
+    {
+    }
+
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsBigIntString::__invoke
+     */
+    public static function notBigIntString($input, int $min = null, int $max = null)
+    {
+    }
+
     /**
      * @return $this
      * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
@@ -6768,12 +6871,21 @@ if (0) {
          * Specifies an ordering for the query results.
          * Replaces any previously specified orderings, if any.
          *
-         * @param string $column the ordering expression
+         * @param string|Raw $column the ordering expression
          * @param string $order the ordering direction
          * @return $this
          * @see AppModel::orderBy
          */
-        public function orderBy(string $column, $order = 'ASC'): self
+        public function orderBy($column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @return $this
+         * @see AppModel::orderByRaw
+         */
+        public function orderByRaw($expression): self
         {
         }
 
@@ -7914,12 +8026,21 @@ if (0) {
          * Specifies an ordering for the query results.
          * Replaces any previously specified orderings, if any.
          *
-         * @param string $column the ordering expression
+         * @param string|Raw $column the ordering expression
          * @param string $order the ordering direction
          * @return $this
          * @see ConfigModel::orderBy
          */
-        public function orderBy(string $column, $order = 'ASC'): self
+        public function orderBy($column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @return $this
+         * @see ConfigModel::orderByRaw
+         */
+        public function orderByRaw($expression): self
         {
         }
 
@@ -8952,12 +9073,21 @@ if (0) {
          * Specifies an ordering for the query results.
          * Replaces any previously specified orderings, if any.
          *
-         * @param string $column the ordering expression
+         * @param string|Raw $column the ordering expression
          * @param string $order the ordering direction
          * @return $this
          * @see GlobalConfigModel::orderBy
          */
-        public function orderBy(string $column, $order = 'ASC'): self
+        public function orderBy($column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @return $this
+         * @see GlobalConfigModel::orderByRaw
+         */
+        public function orderByRaw($expression): self
         {
         }
 
@@ -9156,6 +9286,21 @@ if (0) {
          * @see GlobalConfigModel::onlyPurged
          */
         public function onlyPurged(): self
+        {
+        }
+    }
+
+    class IsBigIntString
+    {
+        /**
+         * Check the input value, return a Ret object
+         *
+         * @param mixed $input
+         * @param string $name
+         * @return Ret
+         * @see BaseValidator::check
+         */
+        public function check($input, string $name = '%name%'): \Wei\Ret
         {
         }
     }
@@ -9755,6 +9900,33 @@ if (0) {
          * @see Upload::saveImage
          */
         public function saveImage(array $options = []): \Wei\Ret
+        {
+        }
+
+        /**
+         * 获取音频的扩展名
+         *
+         * @see Upload::getAllowedAudioExts
+         */
+        public function getAllowedAudioExts(): array
+        {
+        }
+
+        /**
+         * 检查扩展名是否为允许的音频类型
+         *
+         * @see Upload::isAllowedAudioExt
+         */
+        public function isAllowedAudioExt(string $ext): bool
+        {
+        }
+
+        /**
+         * 上传音频文件
+         *
+         * @see Upload::saveAudio
+         */
+        public function saveAudio(array $options = []): \Wei\Ret
         {
         }
 
@@ -10679,12 +10851,21 @@ if (0) {
          * Specifies an ordering for the query results.
          * Replaces any previously specified orderings, if any.
          *
-         * @param string $column the ordering expression
+         * @param string|Raw $column the ordering expression
          * @param string $order the ordering direction
          * @return $this
          * @see UserModel::orderBy
          */
-        public function orderBy(string $column, $order = 'ASC'): self
+        public function orderBy($column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @return $this
+         * @see UserModel::orderByRaw
+         */
+        public function orderByRaw($expression): self
         {
         }
 
@@ -11654,12 +11835,21 @@ if (0) {
          * Specifies an ordering for the query results.
          * Replaces any previously specified orderings, if any.
          *
-         * @param string $column the ordering expression
+         * @param string|Raw $column the ordering expression
          * @param string $order the ordering direction
          * @return $this
          * @see UserModel::orderBy
          */
-        public function orderBy(string $column, $order = 'ASC'): self
+        public function orderBy($column, $order = 'ASC'): self
+        {
+        }
+
+        /**
+         * @param scalar $expression
+         * @return $this
+         * @see UserModel::orderByRaw
+         */
+        public function orderByRaw($expression): self
         {
         }
 
@@ -11819,6 +12009,22 @@ namespace Wei;
 if (0) {
     class V
     {
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsBigIntString::__invoke
+         */
+        public function bigIntString($key = null, string $label = null, int $min = null, int $max = null)
+        {
+        }
+
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsBigIntString::__invoke
+         */
+        public function notBigIntString($key = null, string $label = null, int $min = null, int $max = null)
+        {
+        }
+
         /**
          * @return $this
          * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke

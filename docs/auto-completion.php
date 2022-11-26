@@ -47,6 +47,14 @@ class GlobalConfigModelMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\IsBigIntString $isBigIntString
+ * @method      mixed isBigIntString($input, $min = null, $max = null)
+ */
+class IsBigIntStringMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
  * @method      bool isModelExists($input = null, $model = null, $column = 'id') Check if the input is existing model
  */
@@ -174,6 +182,7 @@ class UserModelMixin
  * @mixin ConfigModelMixin
  * @mixin FsMixin
  * @mixin GlobalConfigModelMixin
+ * @mixin IsBigIntStringMixin
  * @mixin IsModelExistsMixin
  * @mixin IsUBigIntStringMixin
  * @mixin JwtMixin
@@ -229,6 +238,9 @@ $globalConfig = wei()->globalConfigModel;
 
 /** @var Miaoxing\Plugin\Service\GlobalConfigModel|Miaoxing\Plugin\Service\GlobalConfigModel[] $globalConfigs */
 $globalConfigs = wei()->globalConfigModel();
+
+/** @var Miaoxing\Plugin\Service\IsBigIntString $isBigIntString */
+$isBigIntString = wei()->isBigIntString;
 
 /** @var Miaoxing\Plugin\Service\IsModelExists $isModelExists */
 $isModelExists = wei()->isModelExists;
