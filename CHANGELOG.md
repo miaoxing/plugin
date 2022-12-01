@@ -1,3 +1,19 @@
+## [0.9.4](https://github.com/miaoxing/plugin/compare/v0.9.3...v0.9.4) (2022-12-01)
+
+
+### Features
+
+* **isBigIntString:** 增加 `isBigIntString` 校验器 ([2913102](https://github.com/miaoxing/plugin/commit/291310270f08368541048c1c9c48d5cd5d5f97da))
+* **Upload:** 增加音频扩展名和相关操作 ([5ab9084](https://github.com/miaoxing/plugin/commit/5ab90847f5dfc5155a5af2e4c0b245d91681b4ec))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.1` to `0.15.2`
+
 ## [0.9.3](https://github.com/miaoxing/plugin/compare/v0.9.2...v0.9.3) (2022-11-01)
 
 
