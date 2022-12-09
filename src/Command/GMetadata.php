@@ -130,6 +130,8 @@ final class GMetadata extends BaseCommand
             case 'datetime':
             case 'date':
             case 'decimal':
+            case 'binary':
+            case 'varbinary':
                 return 'string';
 
             case 'json':
