@@ -256,7 +256,7 @@ class User extends UserModel
         }
 
         // 2. 检查手机/邮箱/用户名是否存在
-        $user = wei()->userModel();
+        $user = UserModel::new();
         switch (true) {
             case wei()->isMobileCn($data['username']):
                 $column = 'mobile';
