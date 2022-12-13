@@ -198,16 +198,6 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         return $finder->query("//*[contains(@class, '$class')]");
     }
 
-    /**
-     * @param string $message
-     * @param string $args
-     * @deprecated 使用 asset 的 message
-     */
-    public function step($message, $args = null)
-    {
-        // do nothing
-    }
-
     protected function buildRetMessage($ret, $assertMessage = null)
     {
         return $assertMessage . ' ret is ' . json_encode($ret, \JSON_UNESCAPED_UNICODE);
