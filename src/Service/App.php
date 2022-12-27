@@ -133,18 +133,6 @@ class App extends \Wei\App
     }
 
     /**
-     * 获取当前控制器下的视图文件,即可省略当前插件和控制器名称不写
-     *
-     * @param string $action
-     * @return string
-     * @deprecated
-     */
-    public function getControllerFile($action)
-    {
-        return $this->view->getFile($this->getDefaultTemplate(null, $action));
-    }
-
-    /**
      * 获取当前运行的插件名称
      *
      * @return string
@@ -247,18 +235,6 @@ class App extends \Wei\App
     {
         // NOTE: 控制器不存在时，回退的控制器不带有 admin
         return 0 === strpos($this->req->getRouterPathInfo(), '/admin');
-    }
-
-    /**
-     * 判断是否为API接口
-     *
-     * @return bool
-     * @deprecated
-     */
-    public function isApi()
-    {
-        $pathInfo = $this->req->getRouterPathInfo();
-        return 0 === strpos($pathInfo, '/api') || 0 === strpos($pathInfo, '/admin-api');
     }
 
     /**
