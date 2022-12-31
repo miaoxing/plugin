@@ -300,7 +300,7 @@ class User extends UserModel
      */
     protected function loginById($id)
     {
-        $user = wei()->userModel()->find($id);
+        $user = UserModel::find($id);
         if (!$user) {
             return err('用户不存在');
         } else {
@@ -318,7 +318,7 @@ class User extends UserModel
      */
     protected function loginBy($conditions, $data = [])
     {
-        $user = wei()->userModel()->findOrCreate($conditions, $data);
+        $user = UserModel::findOrCreate($conditions, $data);
         $this->loginByModel($user);
 
         return $this;
