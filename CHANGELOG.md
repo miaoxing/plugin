@@ -1,3 +1,37 @@
+# [0.10.0](https://github.com/miaoxing/plugin/compare/v0.9.4...v0.10.0) (2023-01-01)
+
+
+### Code Refactoring
+
+* **plugin:** `App` 移除废弃的 `getControllerFile` 和 `isApi` 方法 ([fa56d0f](https://github.com/miaoxing/plugin/commit/fa56d0f825a1b6a66174209435f45a90981fa665))
+* **plugin:** `BaseController` 移除废弃的功能，包括 `getControllerName`，`getActionName` 等 ([a6fd76b](https://github.com/miaoxing/plugin/commit/a6fd76b4251a50e91c1dd029d703f44acf4a3675))
+* **plugin:** `BaseTestCase` 移除废弃的 `step` 方法 ([7f9e227](https://github.com/miaoxing/plugin/commit/7f9e227f98aeb456840d92a0a75ecaf43dbc9735))
+* **plugin:** `ModelTrait` 移除废弃的 `__invoke` 方法，改用 `$wei->get($modelName)` 返回模型实例 ([4c5f5df](https://github.com/miaoxing/plugin/commit/4c5f5df8c85c968093798a5fe45e181e83009830))
+
+
+### Features
+
+* **plugin:** `BasePage` 增加 `pageInit` 事件 ([65a2847](https://github.com/miaoxing/plugin/commit/65a284705dd42fef2c22a665eba8a1a98b323e07))
+* **plugin:** GMetadata 支持识别 `binary` 和 `varbinary` 为 `string` ([1bfe2b4](https://github.com/miaoxing/plugin/commit/1bfe2b41e2bdb22666029ae96e46113ab86cea43))
+
+
+### BREAKING CHANGES
+
+* **plugin:** `ModelTrait` 移除废弃的 `__invoke` 方法，改用 `$wei->get($modelName)` 返回模型实例
+* **plugin:** `App` 移除废弃的 `getControllerFile` 和 `isApi` 方法
+* **plugin:** `BaseController` 移除废弃的功能，包括 `getControllerName`，`getActionName` 等
+* **plugin:** `BaseTestCase` 移除废弃的 `step` 方法
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.1.3` to `8.2.0`
+* **@mxjs/cli:** upgrade from `0.1.8` to `0.1.9`
+* **@wei/wei:** upgrade from `0.15.2` to `0.15.3`
+
 ## [0.9.4](https://github.com/miaoxing/plugin/compare/v0.9.3...v0.9.4) (2022-12-01)
 
 
