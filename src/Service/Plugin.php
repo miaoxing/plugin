@@ -44,6 +44,15 @@ class Plugin extends BaseService
     protected $autoload = true;
 
     /**
+     * The service names to ignore when generating the plugin config cache
+     *
+     * @var string[]
+     */
+    protected $ignoredServices = [
+        'snowflake',
+    ];
+
+    /**
      * A List of build-in plugins
      *
      * @var array
@@ -459,7 +468,10 @@ class Plugin extends BaseService
      */
     protected function getWeiAliases()
     {
-        return $this->classMap->generate($this->basePaths, '/Service/*.php', 'Service');
+        return array_diff_key(
+            $this->classMap->generate($this->basePaths, '/Service/*.php', 'Service'),
+            array_flip($this->ignoredServices)
+        );
     }
 
     /**
