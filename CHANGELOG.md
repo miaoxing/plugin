@@ -1,3 +1,20 @@
+## [0.10.1](https://github.com/miaoxing/plugin/compare/v0.10.0...v0.10.1) (2023-01-31)
+
+
+### Features
+
+* **Model:** 增加 `IpTrait`，用于为模型记录用户 IP 和端口 ([0b3f5a1](https://github.com/miaoxing/plugin/commit/0b3f5a10d81653342f8d79e20e5d28a3bfb2d73f))
+* **plugin:** 实现生成模型关联 ([3ebc66e](https://github.com/miaoxing/plugin/commit/3ebc66e4b694dcd8d9be225110f0c202701da53b))
+* **plugin:** 废弃 `Miaoxing\Plugin\Service\Snowflake`，改用 `Wei\Snowflake` ([e608200](https://github.com/miaoxing/plugin/commit/e60820024c3acde1d9fa3d0b630f25d64be4395f))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.3` to `0.15.4`
+
 # [0.10.0](https://github.com/miaoxing/plugin/compare/v0.9.4...v0.10.0) (2023-01-01)
 
 
