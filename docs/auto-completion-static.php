@@ -276,6 +276,18 @@ class AppModel
     }
 
     /**
+     * Execute a update query with specified data
+     *
+     * @param array|string $set
+     * @param mixed $value
+     * @return int
+     * @see AppModel::update
+     */
+    public static function update($set = [], $value = null): int
+    {
+    }
+
+    /**
      * @param array|string|true $scopes
      * @return $this
      * @see AppModel::unscoped
@@ -381,18 +393,6 @@ class AppModel
      * @see AppModel::max
      */
     public static function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see AppModel::update
-     */
-    public static function update($set = [], $value = null): int
     {
     }
 
@@ -614,12 +614,22 @@ class AppModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @param mixed $params
      * @return $this
      * @see AppModel::whereRaw
      */
     public static function whereRaw($expression, $params = null): self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed $value
+     * @return $this
+     * @see AppModel::whereNot
+     */
+    public static function whereNot($column, $value): self
     {
     }
 
@@ -835,7 +845,7 @@ class AppModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @return $this
      * @see AppModel::orderByRaw
      */
@@ -1443,6 +1453,18 @@ class ConfigModel
     }
 
     /**
+     * Execute a update query with specified data
+     *
+     * @param array|string $set
+     * @param mixed $value
+     * @return int
+     * @see ConfigModel::update
+     */
+    public static function update($set = [], $value = null): int
+    {
+    }
+
+    /**
      * @param array|string|true $scopes
      * @return $this
      * @see ConfigModel::unscoped
@@ -1548,18 +1570,6 @@ class ConfigModel
      * @see ConfigModel::max
      */
     public static function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see ConfigModel::update
-     */
-    public static function update($set = [], $value = null): int
     {
     }
 
@@ -1781,12 +1791,22 @@ class ConfigModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @param mixed $params
      * @return $this
      * @see ConfigModel::whereRaw
      */
     public static function whereRaw($expression, $params = null): self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed $value
+     * @return $this
+     * @see ConfigModel::whereNot
+     */
+    public static function whereNot($column, $value): self
     {
     }
 
@@ -2002,7 +2022,7 @@ class ConfigModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @return $this
      * @see ConfigModel::orderByRaw
      */
@@ -2502,6 +2522,18 @@ class GlobalConfigModel
     }
 
     /**
+     * Execute a update query with specified data
+     *
+     * @param array|string $set
+     * @param mixed $value
+     * @return int
+     * @see GlobalConfigModel::update
+     */
+    public static function update($set = [], $value = null): int
+    {
+    }
+
+    /**
      * @param array|string|true $scopes
      * @return $this
      * @see GlobalConfigModel::unscoped
@@ -2607,18 +2639,6 @@ class GlobalConfigModel
      * @see GlobalConfigModel::max
      */
     public static function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see GlobalConfigModel::update
-     */
-    public static function update($set = [], $value = null): int
     {
     }
 
@@ -2840,12 +2860,22 @@ class GlobalConfigModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @param mixed $params
      * @return $this
      * @see GlobalConfigModel::whereRaw
      */
     public static function whereRaw($expression, $params = null): self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed $value
+     * @return $this
+     * @see GlobalConfigModel::whereNot
+     */
+    public static function whereNot($column, $value): self
     {
     }
 
@@ -3061,7 +3091,7 @@ class GlobalConfigModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @return $this
      * @see GlobalConfigModel::orderByRaw
      */
@@ -3440,6 +3470,16 @@ class ObjectReq
      * @see Req::getHeader
      */
     public static function getHeader(string $name): ?string
+    {
+    }
+
+    /**
+     * Returns the server ip address
+     *
+     * @return string|null
+     * @see Req::getServerIp
+     */
+    public static function getServerIp(): ?string
     {
     }
 
@@ -4292,6 +4332,18 @@ class User
     }
 
     /**
+     * Execute a update query with specified data
+     *
+     * @param array|string $set
+     * @param mixed $value
+     * @return int
+     * @see UserModel::update
+     */
+    public static function update($set = [], $value = null): int
+    {
+    }
+
+    /**
      * @param array|string|true $scopes
      * @return $this
      * @see UserModel::unscoped
@@ -4397,18 +4449,6 @@ class User
      * @see UserModel::max
      */
     public static function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see UserModel::update
-     */
-    public static function update($set = [], $value = null): int
     {
     }
 
@@ -4630,12 +4670,22 @@ class User
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @param mixed $params
      * @return $this
      * @see UserModel::whereRaw
      */
     public static function whereRaw($expression, $params = null): self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed $value
+     * @return $this
+     * @see UserModel::whereNot
+     */
+    public static function whereNot($column, $value): self
     {
     }
 
@@ -4851,7 +4901,7 @@ class User
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @return $this
      * @see UserModel::orderByRaw
      */
@@ -5288,6 +5338,18 @@ class UserModel
     }
 
     /**
+     * Execute a update query with specified data
+     *
+     * @param array|string $set
+     * @param mixed $value
+     * @return int
+     * @see UserModel::update
+     */
+    public static function update($set = [], $value = null): int
+    {
+    }
+
+    /**
      * @param array|string|true $scopes
      * @return $this
      * @see UserModel::unscoped
@@ -5393,18 +5455,6 @@ class UserModel
      * @see UserModel::max
      */
     public static function max(string $column): ?string
-    {
-    }
-
-    /**
-     * Execute a update query with specified data
-     *
-     * @param array|string $set
-     * @param mixed $value
-     * @return int
-     * @see UserModel::update
-     */
-    public static function update($set = [], $value = null): int
     {
     }
 
@@ -5626,12 +5676,22 @@ class UserModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @param mixed $params
      * @return $this
      * @see UserModel::whereRaw
      */
     public static function whereRaw($expression, $params = null): self
+    {
+    }
+
+    /**
+     * @param mixed $column
+     * @param mixed $value
+     * @return $this
+     * @see UserModel::whereNot
+     */
+    public static function whereNot($column, $value): self
     {
     }
 
@@ -5847,7 +5907,7 @@ class UserModel
     }
 
     /**
-     * @param scalar $expression
+     * @param string $expression
      * @return $this
      * @see UserModel::orderByRaw
      */
@@ -6334,6 +6394,18 @@ if (0) {
         }
 
         /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see AppModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
          * @param array|string|true $scopes
          * @return $this
          * @see AppModel::unscoped
@@ -6439,18 +6511,6 @@ if (0) {
          * @see AppModel::max
          */
         public function max(string $column): ?string
-        {
-        }
-
-        /**
-         * Execute a update query with specified data
-         *
-         * @param array|string $set
-         * @param mixed $value
-         * @return int
-         * @see AppModel::update
-         */
-        public function update($set = [], $value = null): int
         {
         }
 
@@ -6660,12 +6720,22 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @param mixed $params
          * @return $this
          * @see AppModel::whereRaw
          */
         public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed $value
+         * @return $this
+         * @see AppModel::whereNot
+         */
+        public function whereNot($column, $value): self
         {
         }
 
@@ -6881,7 +6951,7 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @return $this
          * @see AppModel::orderByRaw
          */
@@ -7489,6 +7559,18 @@ if (0) {
         }
 
         /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see ConfigModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
          * @param array|string|true $scopes
          * @return $this
          * @see ConfigModel::unscoped
@@ -7594,18 +7676,6 @@ if (0) {
          * @see ConfigModel::max
          */
         public function max(string $column): ?string
-        {
-        }
-
-        /**
-         * Execute a update query with specified data
-         *
-         * @param array|string $set
-         * @param mixed $value
-         * @return int
-         * @see ConfigModel::update
-         */
-        public function update($set = [], $value = null): int
         {
         }
 
@@ -7815,12 +7885,22 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @param mixed $params
          * @return $this
          * @see ConfigModel::whereRaw
          */
         public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed $value
+         * @return $this
+         * @see ConfigModel::whereNot
+         */
+        public function whereNot($column, $value): self
         {
         }
 
@@ -8036,7 +8116,7 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @return $this
          * @see ConfigModel::orderByRaw
          */
@@ -8536,6 +8616,18 @@ if (0) {
         }
 
         /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see GlobalConfigModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
          * @param array|string|true $scopes
          * @return $this
          * @see GlobalConfigModel::unscoped
@@ -8641,18 +8733,6 @@ if (0) {
          * @see GlobalConfigModel::max
          */
         public function max(string $column): ?string
-        {
-        }
-
-        /**
-         * Execute a update query with specified data
-         *
-         * @param array|string $set
-         * @param mixed $value
-         * @return int
-         * @see GlobalConfigModel::update
-         */
-        public function update($set = [], $value = null): int
         {
         }
 
@@ -8862,12 +8942,22 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @param mixed $params
          * @return $this
          * @see GlobalConfigModel::whereRaw
          */
         public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed $value
+         * @return $this
+         * @see GlobalConfigModel::whereNot
+         */
+        public function whereNot($column, $value): self
         {
         }
 
@@ -9083,7 +9173,7 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @return $this
          * @see GlobalConfigModel::orderByRaw
          */
@@ -9462,6 +9552,16 @@ if (0) {
          * @see Req::getHeader
          */
         public function getHeader(string $name): ?string
+        {
+        }
+
+        /**
+         * Returns the server ip address
+         *
+         * @return string|null
+         * @see Req::getServerIp
+         */
+        public function getServerIp(): ?string
         {
         }
 
@@ -10314,6 +10414,18 @@ if (0) {
         }
 
         /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see UserModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
          * @param array|string|true $scopes
          * @return $this
          * @see UserModel::unscoped
@@ -10419,18 +10531,6 @@ if (0) {
          * @see UserModel::max
          */
         public function max(string $column): ?string
-        {
-        }
-
-        /**
-         * Execute a update query with specified data
-         *
-         * @param array|string $set
-         * @param mixed $value
-         * @return int
-         * @see UserModel::update
-         */
-        public function update($set = [], $value = null): int
         {
         }
 
@@ -10640,12 +10740,22 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @param mixed $params
          * @return $this
          * @see UserModel::whereRaw
          */
         public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed $value
+         * @return $this
+         * @see UserModel::whereNot
+         */
+        public function whereNot($column, $value): self
         {
         }
 
@@ -10861,7 +10971,7 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @return $this
          * @see UserModel::orderByRaw
          */
@@ -11298,6 +11408,18 @@ if (0) {
         }
 
         /**
+         * Execute a update query with specified data
+         *
+         * @param array|string $set
+         * @param mixed $value
+         * @return int
+         * @see UserModel::update
+         */
+        public function update($set = [], $value = null): int
+        {
+        }
+
+        /**
          * @param array|string|true $scopes
          * @return $this
          * @see UserModel::unscoped
@@ -11403,18 +11525,6 @@ if (0) {
          * @see UserModel::max
          */
         public function max(string $column): ?string
-        {
-        }
-
-        /**
-         * Execute a update query with specified data
-         *
-         * @param array|string $set
-         * @param mixed $value
-         * @return int
-         * @see UserModel::update
-         */
-        public function update($set = [], $value = null): int
         {
         }
 
@@ -11624,12 +11734,22 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @param mixed $params
          * @return $this
          * @see UserModel::whereRaw
          */
         public function whereRaw($expression, $params = null): self
+        {
+        }
+
+        /**
+         * @param mixed $column
+         * @param mixed $value
+         * @return $this
+         * @see UserModel::whereNot
+         */
+        public function whereNot($column, $value): self
         {
         }
 
@@ -11845,7 +11965,7 @@ if (0) {
         }
 
         /**
-         * @param scalar $expression
+         * @param string $expression
          * @return $this
          * @see UserModel::orderByRaw
          */

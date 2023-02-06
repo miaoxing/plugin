@@ -28,7 +28,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * 3. FILE_MODE_BY_CLASS
  * - 暂无区别，未实现
  *
- * @mixin \PluginMixin
+ * @mixin \PluginPropMixin
  * @mixin \ClassMapMixin
  * @mixin \StrMixin
  * @see StaticCallTest
@@ -250,6 +250,10 @@ class GAutoCompletion extends BaseCommand
             $content .= $this->generateClass($className, $docBlock) . "\n";
 
             $autoComplete .= ' * @mixin ' . $className . "\n";
+
+            $propDocBlock = rtrim($this->generateDocBlock($name, $class, false));
+            $propClassName = ucfirst($name) . 'PropMixin';
+            $content .= $this->generateClass($propClassName, $propDocBlock) . "\n";
         }
 
         $content .= $this->generateClass('AutoCompletion', rtrim($autoComplete));
@@ -328,10 +332,11 @@ PHP;
     /**
      * @param string $name
      * @param string $class
+     * @param mixed $generateInvoke
      * @return string
      * @throws \ReflectionException
      */
-    protected function generateDocBlock(string $name, string $class)
+    protected function generateDocBlock(string $name, string $class, $generateInvoke = true)
     {
         $docBlock = '';
         $ref = new ReflectionClass($class);
@@ -339,7 +344,7 @@ PHP;
 
         $docBlock .= rtrim(sprintf(' * @property    %s $%s %s', $class, $name, $docName)) . "\n";
 
-        if (method_exists($class, '__invoke')) {
+        if ($generateInvoke && method_exists($class, '__invoke')) {
             $method = $ref->getMethod('__invoke');
             $return = $this->getMethodReturn($ref, $method) ?: 'mixed';
             $methodName = $this->getDocCommentTitle($method->getDocComment()) ?: '';
