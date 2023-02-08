@@ -293,7 +293,7 @@ class App extends \Wei\App
             return $this->res->send();
         }
 
-        $method = $this->req->getMethod();
+        $method = strtolower($this->req->getMethod());
         if (!method_exists($page, $method)) {
             $this->res->setStatusCode(static::METHOD_NOT_ALLOWED);
             throw new \Exception('Method Not Allowed', static::METHOD_NOT_ALLOWED);
