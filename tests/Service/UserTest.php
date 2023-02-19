@@ -18,8 +18,10 @@ final class UserTest extends BaseTestCase
 
     public function testCur()
     {
+        User::loginByModel($this->getUser());
+
         $user = User::cur();
-        $this->assertInstanceOf(User::class, $user);
+        $this->assertNotInstanceOf(User::class, $user);
         $this->assertInstanceOf(UserModel::class, $user);
 
         $user2 = User::cur();
@@ -28,8 +30,9 @@ final class UserTest extends BaseTestCase
 
     public function testId()
     {
-        User::loginById('1');
-        $this->assertSame('1', User::id());
+        $user = $this->getUser();
+        User::loginById($user->id);
+        $this->assertSame($user->id, User::id());
 
         User::logout();
         $this->assertNull(User::id());
@@ -39,33 +42,32 @@ final class UserTest extends BaseTestCase
     {
         User::logout();
         $this->assertNull(User::id());
-        $this->assertSame('', User::cur()->name);
+        $this->assertNull(User::get('name'));
     }
 
     public function testUserSaveRefreshCurUserData()
     {
-        $curUser = User::cur();
+        $curUser = User::instance();
         $curUser->logout();
 
         $user = $this->getUser();
         $curUser->loginByModel($user);
-        $this->assertEquals('nickName', $curUser->nickName);
+        $this->assertEquals('nickName', $curUser->get('nickName'));
 
         $user->save(['nickName' => 'nickName2']);
-        $this->assertEquals('nickName2', $curUser->nickName);
+        $this->assertEquals('nickName2', $curUser->get('nickName'));
     }
 
     public function testLoginByModelAndSave()
     {
         $user = $this->getUser();
-        $curUser = User::cur();
 
-        $ret = $curUser->loginByModel($user);
+        $ret = User::loginByModel($user);
         $this->assertRetSuc($ret);
 
-        $curUser->save(['nickName' => 'nickName2']);
+        User::save(['nickName' => 'nickName2']);
 
-        $this->assertEquals('nickName2', $curUser['nickName']);
+        $this->assertEquals('nickName2', User::get('nickName'));
 
         $query = wei()->db->getLastQuery();
         $sql = 'UPDATE mx_users SET nick_name = ?, updated_by = ? WHERE id = ?';
@@ -75,15 +77,14 @@ final class UserTest extends BaseTestCase
     public function testLogout()
     {
         $user = $this->getUser();
-        $curUser = User::cur();
-        $curUser->loginByModel($user);
+        User::loginByModel($user);
 
-        $this->assertEquals($user->id, $curUser->id);
+        $this->assertEquals($user->id, User::id());
 
-        $curUser->logout();
+        User::logout();
 
-        $this->assertFalse($curUser->isLogin());
-        $this->assertNull($curUser->id);
+        $this->assertFalse(User::isLogin());
+        $this->assertNull(User::id());
     }
 
     public function testGetId()

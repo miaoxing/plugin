@@ -4,7 +4,9 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Auth\BaseAuth;
 use Miaoxing\Plugin\Auth\JwtAuth;
+use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\ConfigTrait;
+use Wei\Ret;
 
 /**
  * 用户
@@ -26,21 +28,28 @@ use Miaoxing\Plugin\ConfigTrait;
  * @property bool $enablePinCode
  * @mixin \EventMixin
  * @mixin \ReqMixin
- * @mixin \PasswordMixin
  */
-class User extends UserModel
+class User extends BaseService
 {
     use ConfigTrait {
         __get as getConfig;
     }
 
     /**
-     * 当前用户是唯一的
+     * 用户服务是唯一的
      *
      * @var bool
      */
     protected static $createNewInstance = false;
 
+    /**
+     * @var UserModel|null
+     */
+    protected $cur;
+
+    /**
+     * @experimental expected to change
+     */
     protected $configs = [
         'enablePinCode' => [
             'default' => false,
@@ -99,108 +108,95 @@ class User extends UserModel
     protected $auth;
 
     /**
-     * NOTE: 暂时只有__set有效
-     *
+     * @var array
+     * @internal
+     */
+    protected $columns = [];
+
+    /**
      * @param string $name
-     * @param mixed $value
      * @return mixed
      */
-    public function __set($name, $value = null)
+    public function __get($name)
     {
-        // NOTE: 设置前需主动加载，否则状态变为loaded，不会再去加载
-        $this->loadDbUser();
+        if (!$this->columns) {
+            $this->columns = UserModel::getColumns();
+        }
+        if (isset($this->columns[$name])) {
+            return $this->get($name);
+        }
 
-        return parent::__set($name, $value);
-    }
-
-    protected function toArray($returnFields = [], callable $prepend = null): array
-    {
-        $this->loadDbUser();
-
-        return parent::toArray($returnFields, $prepend);
+        return $this->getConfig($name);
     }
 
     /**
-     * {@inheritdoc}
+     * @param array|callable $returnFields
+     * @param callable|null $prepend
+     * @return array
+     * @experimental may be remove
+     * @svc
+     */
+    protected function toArray($returnFields = [], callable $prepend = null): array
+    {
+        return $this->cur()->toArray($returnFields, $prepend);
+    }
+
+    /**
+     * @param iterable $attributes
+     * @return UserModel
+     * @experimental may be remove
+     * @svc
      */
     protected function save(iterable $attributes = []): UserModel
     {
-        // 确保是更新操作,同时有ID作为更新条件
-        $this->new = false;
-        $this['id'] = $this->getAuth()->getData()['id'];
-
-        return parent::save($attributes);
+        return $this->cur()->save($attributes);
     }
 
     /**
-     * Record: 获取用户资料,优先从认证服务中获取
+     * 获取用户资料，优先从认证服务中获取
      *
-     * {@inheritdoc}
+     * @param string $name
+     * @return mixed
+     * @svc
      */
-    public function &get($name, &$exists = null, $throwException = true)
+    protected function get(string $name)
     {
-        // 未加载数据,已登录,认证服务中存在需要的key
         $data = $this->getAuth()->getData();
-        if ($this->isNew() && isset($data[$name])) {
-            $exists = true;
+        if (isset($data[$name])) {
             return $data[$name];
-        } else {
-            $this->loadDbUser();
-
-            return parent::get($name, $exists, $throwException);
         }
-    }
 
-    public function &__get($name)
-    {
-        $result = $this->getConfig($name);
-        return $result;
+        $user = $this->cur();
+        if ($user) {
+            return $user->get($name);
+        }
+
+        return null;
     }
 
     /**
-     * 从数据库中查找用户加载到当前记录中
-     */
-    protected function loadDbUser()
-    {
-        if (!$this->isNew() || !$this->isLogin()) {
-            return;
-        }
-
-        $id = $this->get('id');
-        $user = UserModel::new()
-            ->setCacheKey($this->getModelCacheKey($id))
-            ->findOrInit($id);
-
-        $this->loadRecordData($user);
-    }
-
-    /**
-     * 加载外部记录的数据
+     * Return the current user id
      *
-     * @param UserModel $user
-     */
-    protected function loadRecordData(UserModel $user)
-    {
-        $this->setAttributesFromDb($user->convertToDbAttributes());
-        $this->new = false;
-    }
-
-    /**
-     * @return string|null
+     * @return int|string|null
      * @svc
      */
     protected function id()
     {
-        return $this->id;
+        return $this->get('id');
     }
 
     /**
-     * @return $this
+     * Return the current user model
+     *
+     * @return UserModel
      * @svc
      */
-    protected function cur()
+    protected function cur(): ?UserModel
     {
-        return $this;
+        if (!$this->cur) {
+            $this->loadDbUser();
+        }
+        return $this->cur;
     }
 
     /**
@@ -209,7 +205,7 @@ class User extends UserModel
      * @return bool
      * @svc
      */
-    protected function isLogin()
+    protected function isLogin(): bool
     {
         return $this->getAuth()->isLogin();
     }
@@ -220,7 +216,7 @@ class User extends UserModel
      * @return Ret
      * @svc
      */
-    protected function checkLogin()
+    protected function checkLogin(): Ret
     {
         return $this->getAuth()->checkLogin();
     }
@@ -232,7 +228,7 @@ class User extends UserModel
      * @return Ret
      * @svc
      */
-    protected function login($data)
+    protected function login($data): Ret
     {
         // 1. 校验用户账号密码是否符合规则
         $validator = wei()->validate([
@@ -298,7 +294,7 @@ class User extends UserModel
      * @return Ret
      * @svc
      */
-    protected function loginById($id)
+    protected function loginById($id): Ret
     {
         $user = UserModel::find($id);
         if (!$user) {
@@ -311,14 +307,14 @@ class User extends UserModel
     /**
      * 根据条件查找或创建用户,并登录
      *
-     * @param mixed $conditions
-     * @param array $data
+     * @param array $conditions
+     * @param array|object $data
      * @return $this
      * @svc
      */
-    protected function loginBy($conditions, $data = [])
+    protected function loginBy(array $conditions, $data = []): self
     {
-        $user = UserModel::findOrCreate($conditions, $data);
+        $user = UserModel::findOrInitBy($conditions, $data);
         $this->loginByModel($user);
 
         return $this;
@@ -331,12 +327,11 @@ class User extends UserModel
      * @return Ret
      * @svc
      */
-    protected function loginByModel(UserModel $user)
+    protected function loginByModel(UserModel $user): Ret
     {
-        $this->loadRecordData($user);
-
         $ret = $this->getAuth()->login($user);
         if ($ret->isSuc()) {
+            $this->setCur($user);
             $this->event->trigger('userLogin', [$user]);
         }
 
@@ -349,13 +344,15 @@ class User extends UserModel
      * @return Ret
      * @svc
      */
-    protected function logout()
+    protected function logout(): Ret
     {
-        $this->event->trigger('beforeUserLogout', [$this]);
-
-        $this->setAttributesFromDb([]);
+        if (!$this->isLogin()) {
+            return err('用户未登录');
+        }
 
         $this->getAuth()->logout();
+        $this->event->trigger('beforeUserLogout', [$this->cur()]);
+        $this->setCur(null);
 
         return suc();
     }
@@ -367,7 +364,7 @@ class User extends UserModel
      * @return $this
      * @svc
      */
-    protected function refresh(UserModel $user)
+    protected function refresh(UserModel $user): self
     {
         if ($user->id === ($this->getAuth()->getData()['id'] ?? null)) {
             $this->loginByModel($user);
@@ -376,11 +373,43 @@ class User extends UserModel
         return $this;
     }
 
-    protected function getAuth()
+    /**
+     * @return BaseAuth
+     */
+    protected function getAuth(): BaseAuth
     {
         if (!$this->auth) {
             $this->auth = new $this->authClass();
         }
         return $this->auth;
+    }
+
+    /**
+     * Set the current user model
+     *
+     * @param UserModel|null $user
+     * @return $this
+     */
+    protected function setCur(?UserModel $user): self
+    {
+        $this->cur = $user;
+        return $this;
+    }
+
+    /**
+     * 从数据库中查找用户加载到当前记录中
+     *
+     * @internal
+     */
+    protected function loadDbUser()
+    {
+        if (!$this->isLogin()) {
+            return;
+        }
+
+        $id = $this->getAuth()->getData()['id'] ?? null;
+        $user = UserModel::new();
+        $user->setCacheKey($user->getModelCacheKey($id))->findOrInit($id);
+        $this->setCur($user);
     }
 }

@@ -35,7 +35,7 @@ class SessionAuthTest extends BaseTestCase
     public function testCurUserSave()
     {
         $this->initSession();
-        $curUser = wei()->user;
+        $curUser = User::cur();
 
         $curUser->save(['nickName' => 'nickName2']);
 
@@ -44,8 +44,7 @@ class SessionAuthTest extends BaseTestCase
         $this->assertEquals('nickName2', $curUser['nickName']);
 
         $query = wei()->db->getLastQuery();
-        $sql = 'UPDATE mx_users SET id = ?, nick_name = ?, updated_at = ?, updated_by = ? ';
-        $sql .= 'WHERE id = ?';
+        $sql = 'UPDATE mx_users SET nick_name = ?, updated_by = ? WHERE id = ?';
         $this->assertEquals($sql, $query);
     }
 
@@ -66,7 +65,7 @@ class SessionAuthTest extends BaseTestCase
         $user = $this->getUser();
         $this->initSession();
 
-        $curUser = wei()->user;
+        $curUser = User::cur();
 
         $this->assertEquals($user['id'], $curUser['id']);
         $this->assertEquals('name', $curUser['name']);
@@ -77,14 +76,6 @@ class SessionAuthTest extends BaseTestCase
             'SELECT * FROM `mx_users`',
             'WHERE `app_id` = ? AND `id` = ? LIMIT 1',
         ]), $query);
-    }
-
-    public function testLoadBeforeSet()
-    {
-        $this->initSession();
-
-        wei()->user->email = 'abc';
-        $this->assertEquals('name', wei()->user->name);
     }
 
     /**
