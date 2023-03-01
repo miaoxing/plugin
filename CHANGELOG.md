@@ -1,3 +1,30 @@
+# [0.11.0](https://github.com/miaoxing/plugin/compare/v0.10.1...v0.11.0) (2023-03-01)
+
+
+### Bug Fixes
+
+* **plugin:** `App` 执行方法前，将请求方式转换为小写，以便和方法名称一致 ([f838e41](https://github.com/miaoxing/plugin/commit/f838e41a8564fe7906e300a831fefd7573de7599))
+
+
+### Features
+
+* **plugin:** `user` 服务改为调用 `userModel` 的方法, 不继承 `userModel` ([30ee2a6](https://github.com/miaoxing/plugin/commit/30ee2a6245c621da14fbac807584c04a0ba5a2fd))
+* **plugin:** 废弃 `Miaoxing\Plugin\Service\IsModelExists` 改用 `Wei\IsModelExists` ([db58233](https://github.com/miaoxing/plugin/commit/db582333f62c5c066e6a757d6960e4f3aa261716))
+* **plugin, GAutoCompletion:** 增加生成 `XxxPropMixin`，只包含服务属性，不含服务方法 ([4f5f36e](https://github.com/miaoxing/plugin/commit/4f5f36e5b6f3e709d9829946eea5355796734b8c))
+
+
+### BREAKING CHANGES
+
+* **plugin:** `user` 服务改为调用 `userModel` 的方法, 不继承 `userModel`
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.4` to `0.15.5`
+
 ## [0.10.1](https://github.com/miaoxing/plugin/compare/v0.10.0...v0.10.1) (2023-01-31)
 
 
