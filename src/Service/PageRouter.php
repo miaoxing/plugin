@@ -208,7 +208,7 @@ class PageRouter extends BaseService
                 // Ignore empty array
                 if ($result) {
                     if (isset($pages[$path])) {
-                        $pages[$path] += $result;
+                        $pages[$path] = array_merge_recursive($result, $pages[$path]);
                     } else {
                         $pages[$path] = $result;
                     }
