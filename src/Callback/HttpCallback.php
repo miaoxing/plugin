@@ -2,15 +2,18 @@
 
 namespace Miaoxing\Plugin\Callback;
 
+use Wei\Event;
+use Wei\Http;
+
 abstract class HttpCallback
 {
     public const MAX_LOG_LENGTH = 1024;
 
     /**
      * @param mixed $response
-     * @param \Wei\Http $http
+     * @param Http $http
      */
-    public static function success($response, \Wei\Http $http)
+    public static function success($response, Http $http)
     {
         $retries = $http->getOption('retries');
         $leftRetries = $http->getOption('leftRetries');
@@ -25,9 +28,9 @@ abstract class HttpCallback
     /**
      * cURL请求发送失败的回调,记录错误原因和异常堆栈
      *
-     * @param \Wei\Http $http
+     * @param Http $http
      */
-    public static function error(\Wei\Http $http)
+    public static function error(Http $http)
     {
         // 只有重试了仍然错误才记录日志
         if ($http->getOption('leftRetries')) {
@@ -54,5 +57,10 @@ abstract class HttpCallback
             'code' => $exception->getCode(),
             'exception' => (string) $exception,
         ]);
+    }
+
+    public static function complete(Http $http)
+    {
+        Event::trigger('httpComplete', $http);
     }
 }

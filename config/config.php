@@ -69,6 +69,7 @@ return [
         'retries' => 2,
         'success' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'success'],
         'error' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'error'],
+        'complete' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'complete'],
     ],
 
     /* @see Wei\NearCache */
