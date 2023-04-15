@@ -1,3 +1,24 @@
+## [0.11.1](https://github.com/miaoxing/plugin/compare/v0.11.0...v0.11.1) (2023-04-15)
+
+
+### Bug Fixes
+
+* **plugin:** `PageRouter` 生成页面支持合并多级目录 ([1aa451e](https://github.com/miaoxing/plugin/commit/1aa451ebd72314b8e4cc3782b49b26a761375ca7))
+
+
+### Features
+
+* **plugin:** 增加 `httpComplete` 事件，在 HTTP 请求完成时触发 ([269ff1d](https://github.com/miaoxing/plugin/commit/269ff1da69b5501150b3ba21287e112bd2d9d707))
+* **plugin:** 增加超级管理员逻辑 ([68c9469](https://github.com/miaoxing/plugin/commit/68c9469128f2d45d5ce07eef9de822c26791900f))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.5` to `0.15.6`
+
 # [0.11.0](https://github.com/miaoxing/plugin/compare/v0.10.1...v0.11.0) (2023-03-01)
 
 
