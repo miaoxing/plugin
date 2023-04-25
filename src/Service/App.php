@@ -24,6 +24,8 @@ use Wei\Ret\RetException;
  */
 class App extends \Wei\App
 {
+    protected const NOT_FOUND = 404;
+
     protected const METHOD_NOT_ALLOWED = 405;
 
     /**
@@ -55,9 +57,9 @@ class App extends \Wei\App
     protected $defaultViewFile = '@plugin/_default.php';
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $fallbackPathInfo = 'app';
+    protected $fallbackPathInfo;
 
     /**
      * Whether the application is in demo mode
@@ -278,7 +280,11 @@ class App extends \Wei\App
         $pathInfo = $this->req->getRouterPathInfo();
         $result = $this->pageRouter->match($pathInfo);
         if (!$result) {
-            $result = $this->pageRouter->match($this->fallbackPathInfo);
+            if ($this->fallbackPathInfo) {
+                $result = $this->pageRouter->match($this->fallbackPathInfo);
+            } else {
+                throw new \Exception('Not Found', static::NOT_FOUND);
+            }
         }
 
         $this->req->set($result['params']);
