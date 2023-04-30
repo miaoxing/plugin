@@ -1,3 +1,18 @@
+## [0.11.2](https://github.com/miaoxing/plugin/compare/v0.11.1...v0.11.2) (2023-04-30)
+
+
+### Features
+
+* **plugin:** 页面不存在时，默认展示 404 ([26a8ed6](https://github.com/miaoxing/plugin/commit/26a8ed60224966eafe41ad01131bf9911d7ee926))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.6` to `0.15.7`
+
 ## [0.11.1](https://github.com/miaoxing/plugin/compare/v0.11.0...v0.11.1) (2023-04-15)
 
 
