@@ -101,6 +101,21 @@ class IsBigIntStringPropMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
+ * @method      bool isModelExists($input = null, $model = null, $column = 'id') Check if the input is existing model
+ */
+class IsModelExistsMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
+ */
+class IsModelExistsPropMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\IsUBigIntString $isUBigIntString
  * @method      mixed isUBigIntString($input, $min = null, $max = null)
  */
@@ -231,6 +246,20 @@ class SessionPropMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Snowflake $snowflake
+ */
+class SnowflakeMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\Snowflake $snowflake
+ */
+class SnowflakePropMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Storage $storage
  */
 class StorageMixin
@@ -310,6 +339,7 @@ class UserModelPropMixin
  * @mixin FsMixin
  * @mixin GlobalConfigModelMixin
  * @mixin IsBigIntStringMixin
+ * @mixin IsModelExistsMixin
  * @mixin IsUBigIntStringMixin
  * @mixin JwtMixin
  * @mixin LocalStorageMixin
@@ -319,6 +349,7 @@ class UserModelPropMixin
  * @mixin RetMixin
  * @mixin SeederMixin
  * @mixin SessionMixin
+ * @mixin SnowflakeMixin
  * @mixin StorageMixin
  * @mixin TesterMixin
  * @mixin UploadMixin

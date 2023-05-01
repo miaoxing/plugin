@@ -597,10 +597,10 @@ class AppModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = QueryBuilder::table('user')->where('id', 1);
-     * $users = QueryBuilder::table('user')->where('id', '>', 1);
-     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+     * $user = wei()->db('user')->where('id = 1');
+     * $user = wei()->db('user')->where('id = ?', 1);
+     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+     * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
      * @param array|Closure|string|null $column
@@ -790,16 +790,6 @@ class AppModel
      * @see AppModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * @param mixed $if
-     * @param mixed ...$args
-     * @return $this
-     * @see AppModel::whereIf
-     */
-    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -1784,10 +1774,10 @@ class ConfigModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = QueryBuilder::table('user')->where('id', 1);
-     * $users = QueryBuilder::table('user')->where('id', '>', 1);
-     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+     * $user = wei()->db('user')->where('id = 1');
+     * $user = wei()->db('user')->where('id = ?', 1);
+     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+     * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
      * @param array|Closure|string|null $column
@@ -1977,16 +1967,6 @@ class ConfigModel
      * @see ConfigModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * @param mixed $if
-     * @param mixed ...$args
-     * @return $this
-     * @see ConfigModel::whereIf
-     */
-    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -2863,10 +2843,10 @@ class GlobalConfigModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = QueryBuilder::table('user')->where('id', 1);
-     * $users = QueryBuilder::table('user')->where('id', '>', 1);
-     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+     * $user = wei()->db('user')->where('id = 1');
+     * $user = wei()->db('user')->where('id = ?', 1);
+     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+     * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
      * @param array|Closure|string|null $column
@@ -3056,16 +3036,6 @@ class GlobalConfigModel
      * @see GlobalConfigModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * @param mixed $if
-     * @param mixed ...$args
-     * @return $this
-     * @see GlobalConfigModel::whereIf
-     */
-    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -3329,6 +3299,21 @@ class GlobalConfigModel
 }
 
 class IsBigIntString
+{
+    /**
+     * Check the input value, return a Ret object
+     *
+     * @param mixed $input
+     * @param string $name
+     * @return Ret
+     * @see BaseValidator::check
+     */
+    public static function check($input, string $name = '%name%'): \Wei\Ret
+    {
+    }
+}
+
+class IsModelExists
 {
     /**
      * Check the input value, return a Ret object
@@ -3638,6 +3623,70 @@ class Seeder
 
 class Session
 {
+}
+
+class Snowflake
+{
+    /**
+     * @return int
+     * @see Snowflake::getWorkerId
+     */
+    public static function getWorkerId(): int
+    {
+    }
+
+    /**
+     * Set the worker id
+     *
+     * @param int $workerId
+     * @return $this
+     * @see Snowflake::setWorkerId
+     */
+    public static function setWorkerId(int $workerId): self
+    {
+    }
+
+    /**
+     * Return the start timestamp
+     *
+     * @return int
+     * @see Snowflake::getStartTimestamp
+     */
+    public static function getStartTimestamp(): int
+    {
+    }
+
+    /**
+     * Set the start timestamp
+     *
+     * @param int $startTimestamp
+     * @return $this
+     * @see Snowflake::setStartTimestamp
+     */
+    public static function setStartTimestamp(int $startTimestamp): self
+    {
+    }
+
+    /**
+     * Generate an id
+     *
+     * @return string
+     * @see Snowflake::next
+     */
+    public static function next(): string
+    {
+    }
+
+    /**
+     * Parse the given id, return timestamp, worker ID and sequence
+     *
+     * @param string|int $id
+     * @return array{timestamp: int, workerId: int, sequence: int}
+     * @see Snowflake::parse
+     */
+    public static function parse($id): array
+    {
+    }
 }
 
 class Storage
@@ -4666,10 +4715,10 @@ class UserModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = QueryBuilder::table('user')->where('id', 1);
-     * $users = QueryBuilder::table('user')->where('id', '>', 1);
-     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+     * $user = wei()->db('user')->where('id = 1');
+     * $user = wei()->db('user')->where('id = ?', 1);
+     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+     * $users = wei()->where(array('id' => array('1', '2', '3')));
      * ```
      *
      * @param array|Closure|string|null $column
@@ -4859,16 +4908,6 @@ class UserModel
      * @see UserModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
-    {
-    }
-
-    /**
-     * @param mixed $if
-     * @param mixed ...$args
-     * @return $this
-     * @see UserModel::whereIf
-     */
-    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -5098,6 +5137,22 @@ class V
      * @see \Miaoxing\Plugin\Service\IsBigIntString::__invoke
      */
     public static function notBigIntString($input, int $min = null, int $max = null)
+    {
+    }
+
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     */
+    public static function modelExists($input = null, $model = null, $column = 'id')
+    {
+    }
+
+    /**
+     * @return $this
+     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+     */
+    public static function notModelExists($input = null, $model = null, $column = 'id')
     {
     }
 
@@ -5704,10 +5759,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = QueryBuilder::table('user')->where('id', 1);
-         * $users = QueryBuilder::table('user')->where('id', '>', 1);
-         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
          * @param array|Closure|string|null $column
@@ -5897,16 +5952,6 @@ if (0) {
          * @see AppModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
-        {
-        }
-
-        /**
-         * @param mixed $if
-         * @param mixed ...$args
-         * @return $this
-         * @see AppModel::whereIf
-         */
-        public function whereIf($if, ...$args): self
         {
         }
 
@@ -6879,10 +6924,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = QueryBuilder::table('user')->where('id', 1);
-         * $users = QueryBuilder::table('user')->where('id', '>', 1);
-         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
          * @param array|Closure|string|null $column
@@ -7072,16 +7117,6 @@ if (0) {
          * @see ConfigModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
-        {
-        }
-
-        /**
-         * @param mixed $if
-         * @param mixed ...$args
-         * @return $this
-         * @see ConfigModel::whereIf
-         */
-        public function whereIf($if, ...$args): self
         {
         }
 
@@ -7946,10 +7981,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = QueryBuilder::table('user')->where('id', 1);
-         * $users = QueryBuilder::table('user')->where('id', '>', 1);
-         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
          * @param array|Closure|string|null $column
@@ -8139,16 +8174,6 @@ if (0) {
          * @see GlobalConfigModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
-        {
-        }
-
-        /**
-         * @param mixed $if
-         * @param mixed ...$args
-         * @return $this
-         * @see GlobalConfigModel::whereIf
-         */
-        public function whereIf($if, ...$args): self
         {
         }
 
@@ -8412,6 +8437,21 @@ if (0) {
     }
 
     class IsBigIntString
+    {
+        /**
+         * Check the input value, return a Ret object
+         *
+         * @param mixed $input
+         * @param string $name
+         * @return Ret
+         * @see BaseValidator::check
+         */
+        public function check($input, string $name = '%name%'): \Wei\Ret
+        {
+        }
+    }
+
+    class IsModelExists
     {
         /**
          * Check the input value, return a Ret object
@@ -8721,6 +8761,70 @@ if (0) {
 
     class Session
     {
+    }
+
+    class Snowflake
+    {
+        /**
+         * @return int
+         * @see Snowflake::getWorkerId
+         */
+        public function getWorkerId(): int
+        {
+        }
+
+        /**
+         * Set the worker id
+         *
+         * @param int $workerId
+         * @return $this
+         * @see Snowflake::setWorkerId
+         */
+        public function setWorkerId(int $workerId): self
+        {
+        }
+
+        /**
+         * Return the start timestamp
+         *
+         * @return int
+         * @see Snowflake::getStartTimestamp
+         */
+        public function getStartTimestamp(): int
+        {
+        }
+
+        /**
+         * Set the start timestamp
+         *
+         * @param int $startTimestamp
+         * @return $this
+         * @see Snowflake::setStartTimestamp
+         */
+        public function setStartTimestamp(int $startTimestamp): self
+        {
+        }
+
+        /**
+         * Generate an id
+         *
+         * @return string
+         * @see Snowflake::next
+         */
+        public function next(): string
+        {
+        }
+
+        /**
+         * Parse the given id, return timestamp, worker ID and sequence
+         *
+         * @param string|int $id
+         * @return array{timestamp: int, workerId: int, sequence: int}
+         * @see Snowflake::parse
+         */
+        public function parse($id): array
+        {
+        }
     }
 
     class Storage
@@ -9737,10 +9841,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = QueryBuilder::table('user')->where('id', 1);
-         * $users = QueryBuilder::table('user')->where('id', '>', 1);
-         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
-         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
+         * $user = wei()->db('user')->where('id = 1');
+         * $user = wei()->db('user')->where('id = ?', 1);
+         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
+         * $users = wei()->where(array('id' => array('1', '2', '3')));
          * ```
          *
          * @param array|Closure|string|null $column
@@ -9930,16 +10034,6 @@ if (0) {
          * @see UserModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
-        {
-        }
-
-        /**
-         * @param mixed $if
-         * @param mixed ...$args
-         * @return $this
-         * @see UserModel::whereIf
-         */
-        public function whereIf($if, ...$args): self
         {
         }
 
@@ -10172,6 +10266,22 @@ if (0) {
          * @see \Miaoxing\Plugin\Service\IsBigIntString::__invoke
          */
         public function notBigIntString($key = null, string $label = null, int $min = null, int $max = null)
+        {
+        }
+
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+         */
+        public function modelExists($key = null, string $label = null, $model = null, $column = 'id')
+        {
+        }
+
+        /**
+         * @return $this
+         * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
+         */
+        public function notModelExists($key = null, string $label = null, $model = null, $column = 'id')
         {
         }
 
