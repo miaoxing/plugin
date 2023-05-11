@@ -186,16 +186,15 @@ class GAutoCompletion extends BaseCommand
     {
         $id = $this->getPluginId();
         if ('wei' === $id) {
-            [$services, $path, $generateViewVars] = $this->getWeiConfig();
+            [$services, $path] = $this->getWeiConfig();
         } else {
             $plugin = $this->plugin->getOneById($id);
             $path = $plugin->getBasePath();
             $services = $this->getServerMap($plugin);
-            $generateViewVars = true;
         }
 
         // NOTE: 需生成两个文件，services.php 里的类才能正确跳转到源文件
-        $this->generateServices($services, $path, $generateViewVars);
+        $this->generateServices($services, $path);
         $this->generateStaticCalls($services, $path);
 
         return $this->suc('创建成功');
@@ -222,7 +221,7 @@ class GAutoCompletion extends BaseCommand
             }
         }
 
-        return [$services, 'packages/wei', false];
+        return [$services, 'packages/wei'];
     }
 
     /**
@@ -235,10 +234,9 @@ class GAutoCompletion extends BaseCommand
      *
      * @param array $services
      * @param string $path
-     * @param bool $generateViewVars
      * @throws \ReflectionException
      */
-    protected function generateServices(array $services, string $path, bool $generateViewVars = true)
+    protected function generateServices(array $services, string $path)
     {
         $content = "<?php\n\n";
         $autoComplete = '';
@@ -267,10 +265,7 @@ function wei()
     return new AutoCompletion();
 }
 
-
 PHP;
-
-        $generateViewVars && $content .= $this->generateViewVars($services);
 
         $this->createFile($path . '/docs/auto-completion.php', $content);
     }
@@ -356,36 +351,6 @@ PHP;
         }
 
         return $docBlock;
-    }
-
-    protected function generateViewVars($serviceMap)
-    {
-        $var = '';
-        foreach ($serviceMap as $name => $class) {
-            if ($var) {
-                $var .= "\n";
-            }
-
-            // 排除模型服务
-            $isModel = $this->wei->isEndsWith($name, 'Model', true);
-            if ($isModel) {
-                $varName = substr($name, 0, -5);
-            } else {
-                $varName = $name;
-            }
-
-            $var .= sprintf('/** @var %s $%s */' . "\n", $class, $varName);
-            $var .= sprintf('$%s = wei()->%s;' . "\n", $varName, $name);
-
-            if ($isModel) {
-                $varName = $this->str->pluralize($varName);
-                $var .= "\n";
-                $var .= sprintf('/** @var %s|%s[] $%s */' . "\n", $class, $class, $varName);
-                $var .= sprintf('$%s = wei()->%s();' . "\n", $varName, $name);
-            }
-        }
-
-        return $var;
     }
 
     protected function geParam(ReflectionMethod $method)
