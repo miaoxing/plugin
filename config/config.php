@@ -67,6 +67,7 @@ return [
     'http' => [
         'timeout' => 5000,
         'retries' => 2,
+        'header' => true,
         'success' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'success'],
         'error' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'error'],
         'complete' => [Miaoxing\Plugin\Callback\HttpCallback::class, 'complete'],
