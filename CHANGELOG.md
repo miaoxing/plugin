@@ -1,3 +1,31 @@
+# [0.12.0](https://github.com/miaoxing/plugin/compare/v0.11.2...v0.12.0) (2023-05-31)
+
+
+### Code Refactoring
+
+* **plugin:** `g:auto-completion` 命令不再生成视图变量 ([21661b6](https://github.com/miaoxing/plugin/commit/21661b60304da4df1bc1982b28a552c611ecc66f))
+
+
+### Features
+
+* **antd5:** 更新 `antd` 到 `5.1.6` ([00f3740](https://github.com/miaoxing/plugin/commit/00f3740fc7717f0cb0ad08250593931c5557bdf2))
+* **plugin:** HTTP 请求都开启 header，以便记录日志 ([12b14c1](https://github.com/miaoxing/plugin/commit/12b14c10b9d927aeef2054aa648416b3dc6ef064))
+
+
+### BREAKING CHANGES
+
+* **plugin:** `g:auto-completion` 命令不再生成视图变量
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.2.0` to `8.2.1`
+* **@mxjs/cli:** upgrade from `0.1.9` to `0.1.10`
+* **@wei/wei:** upgrade from `0.15.7` to `0.15.8`
+
 ## [0.11.2](https://github.com/miaoxing/plugin/compare/v0.11.1...v0.11.2) (2023-04-30)
 
 
