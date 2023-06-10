@@ -4,10 +4,10 @@ namespace Miaoxing\Plugin\Service;
 
 use Exception;
 use JsonSerializable;
-use Miaoxing\Plugin\BaseController;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
+use Wei\BaseController as WeiBaseController;
 use Wei\BaseModel;
 use Wei\Res;
 use Wei\Ret\RetException;
@@ -89,11 +89,9 @@ class App extends \Wei\App
     protected $models = [];
 
     /**
-     * @var array
+     * @var WeiBaseController|null
      */
-    private $page = [
-        'file' => '',
-    ];
+    private $curControllerInstance;
 
     /**
      * {@inheritdoc}
@@ -115,7 +113,7 @@ class App extends \Wei\App
      */
     public function getDefaultTemplate($controller = null, $action = null)
     {
-        $file = $controller ?: $this->page['file'];
+        $file = $controller ?: $this->controller;
         $file = dirname($file) . '/_' . basename($file);
 
         $plugin = $this->getPlugin();
@@ -141,9 +139,9 @@ class App extends \Wei\App
      */
     public function getPlugin()
     {
-        if (!$this->plugin && $this->page['file']) {
+        if (!$this->plugin && $this->controller) {
             // 认为第二部分是插件名称
-            list(, $plugin) = explode('/', $this->page['file'], 3);
+            [, $plugin] = explode('/', $this->controller, 3);
             $this->plugin = $plugin;
         }
         return $this->plugin;
@@ -263,6 +261,18 @@ class App extends \Wei\App
     }
 
     /**
+     * @return WeiBaseController
+     * @experimental
+     */
+    public function getCurControllerInstance(): WeiBaseController
+    {
+        if (!$this->curControllerInstance) {
+            $this->curControllerInstance = require $this->controller;
+        }
+        return $this->curControllerInstance;
+    }
+
+    /**
      * Returns whether the application is in demo mode
      *
      * @return bool
@@ -288,12 +298,8 @@ class App extends \Wei\App
         }
 
         $this->req->set($result['params']);
-        $page = require $result['file'];
-
-        $this->page = [
-            'file' => $result['file'],
-            'page' => $page,
-        ];
+        $this->setController($result['file']);
+        $page = $this->getCurControllerInstance();
 
         if ($this->req->isPreflight()) {
             return $this->res->send();
@@ -309,7 +315,7 @@ class App extends \Wei\App
     }
 
     /**
-     * @param BaseController $instance
+     * @param WeiBaseController $instance
      * @param string $action
      * @return Res
      * @throws Exception
