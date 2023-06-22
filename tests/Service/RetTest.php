@@ -49,7 +49,7 @@ class RetTest extends BaseTestCase
         $req = new Req([
             'wei' => $this->wei,
             'fromGlobal' => false,
-            'pathInfo' => '/m-api/test',
+            'pathInfo' => '/api/test',
         ]);
         $res = new Res(['wei' => $this->wei]);
 

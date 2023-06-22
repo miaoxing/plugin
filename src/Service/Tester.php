@@ -439,7 +439,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     protected function getAdminApi(string $page)
     {
-        return $this->get('/admin-api/' . $page);
+        return $this->get('/api/admin/' . $page);
     }
 
     /**
@@ -450,7 +450,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     protected function postAdminApi(string $page, $data = [])
     {
-        return $this->request($data)->call('/admin-api/' . $page, 'post');
+        return $this->request($data)->call('/api/admin/' . $page, 'post');
     }
 
     /**
@@ -461,7 +461,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     protected function patchAdminApi(string $page, $data = [])
     {
-        return $this->request($data)->patch('/admin-api/' . $page);
+        return $this->request($data)->patch('/api/admin/' . $page);
     }
 
     /**
@@ -472,7 +472,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     protected function putAdminApi(string $page, $data = [])
     {
-        return $this->request($data)->put('/admin-api/' . $page);
+        return $this->request($data)->put('/api/admin/' . $page);
     }
 
     /**
@@ -482,7 +482,7 @@ class Tester extends \Miaoxing\Plugin\BaseService
      */
     protected function deleteAdminApi(string $page)
     {
-        return $this->delete('/admin-api/' . $page);
+        return $this->delete('/api/admin/' . $page);
     }
 
     protected function getControllerByClass($class)
