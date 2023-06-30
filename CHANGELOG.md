@@ -1,3 +1,19 @@
+## [0.12.1](https://github.com/miaoxing/plugin/compare/v0.12.0...v0.12.1) (2023-06-30)
+
+
+### Features
+
+* **app:** 接口兼容使用 `api` 路径开头，移动端接口允许不以 m 开头 ([33b7c8b](https://github.com/miaoxing/plugin/commit/33b7c8b64b2cfd7aec3f1f973958db003f6941f1))
+* **plugin, experimental:** `App` 增加 `getCurControllerInstance` 方法，用于获取当前页面对象 ([bc3f69d](https://github.com/miaoxing/plugin/commit/bc3f69d63b11161230722c495aed83799075fd9e))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.8` to `0.15.9`
+
 # [0.12.0](https://github.com/miaoxing/plugin/compare/v0.11.2...v0.12.0) (2023-05-31)
 
 
