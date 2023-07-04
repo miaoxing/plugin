@@ -326,6 +326,35 @@ class Config extends \Wei\Config
     }
 
     /**
+     * Update config model value to cache
+     *
+     * @param ConfigModel|GlobalConfigModel $model
+     * @return $this
+     * @experimental
+     * @svc
+     */
+    protected function updateCache($model): self
+    {
+        $prefix = $this->getPrefix(get_class($model));
+        $this->cache->set($prefix . $model->name, $this->decode($model->value, $model->type));
+        return $this;
+    }
+
+    /**
+     * Remove config model value cache
+     *
+     * @param ConfigModel|GlobalConfigModel $model
+     * @return $this
+     * @experimental
+     * @svc
+     */
+    protected function deleteCache($model): self
+    {
+        $this->cache->delete($this->getPrefix(get_class($model)) . $model->name);
+        return $this;
+    }
+
+    /**
      * @return string
      * @internal
      */
@@ -587,7 +616,7 @@ class Config extends \Wei\Config
                 return filter_var($value, \FILTER_VALIDATE_BOOLEAN);
 
             case static::TYPE_ARRAY:
-                return json_decode($value, true);
+                return (array) json_decode($value, true);
 
             case static::TYPE_JSON:
                 return json_decode($value);

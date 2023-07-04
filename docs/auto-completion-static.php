@@ -1174,6 +1174,30 @@ class Config
     }
 
     /**
+     * Update config model value to cache
+     *
+     * @param ConfigModel|GlobalConfigModel $model
+     * @return $this
+     * @experimental
+     * @see Config::updateCache
+     */
+    public static function updateCache($model): self
+    {
+    }
+
+    /**
+     * Remove config model value cache
+     *
+     * @param ConfigModel|GlobalConfigModel $model
+     * @return $this
+     * @experimental
+     * @see Config::deleteCache
+     */
+    public static function deleteCache($model): self
+    {
+    }
+
+    /**
      * 更新配置到本地文件中
      *
      * @param array $configs
@@ -6332,6 +6356,30 @@ if (0) {
          * @see Config::publishPreload
          */
         public function publishPreload(): self
+        {
+        }
+
+        /**
+         * Update config model value to cache
+         *
+         * @param ConfigModel|GlobalConfigModel $model
+         * @return $this
+         * @experimental
+         * @see Config::updateCache
+         */
+        public function updateCache($model): self
+        {
+        }
+
+        /**
+         * Remove config model value cache
+         *
+         * @param ConfigModel|GlobalConfigModel $model
+         * @return $this
+         * @experimental
+         * @see Config::deleteCache
+         */
+        public function deleteCache($model): self
         {
         }
 
