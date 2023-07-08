@@ -7,6 +7,7 @@ use Miaoxing\Plugin\ConstTrait;
 use Miaoxing\Plugin\Metadata\ConfigTrait;
 use Miaoxing\Plugin\Model\HasAppIdTrait;
 use Miaoxing\Plugin\Model\ModelTrait;
+use Miaoxing\Plugin\Model\ReqQueryTrait;
 use Wei\Model\SoftDeleteTrait;
 
 /**
@@ -18,6 +19,7 @@ class ConfigModel extends BaseModel
     use ConstTrait;
     use HasAppIdTrait;
     use ModelTrait;
+    use ReqQueryTrait;
     use SoftDeleteTrait;
 
     public const TYPE_STRING = 's';
@@ -38,6 +40,10 @@ class ConfigModel extends BaseModel
 
     public const TYPE_EXPRESS = 'e';
 
+    protected $virtual = [
+        'typeName',
+    ];
+
     /**
      * @var array
      */
@@ -47,7 +53,19 @@ class ConfigModel extends BaseModel
         self::TYPE_INT => '整数',
         self::TYPE_FLOAT => '小数',
         self::TYPE_NULL => 'NULL',
+        self::TYPE_ARRAY => '数组',
         self::TYPE_JSON => 'JSON',
+        self::TYPE_OBJECT => '对象',
         self::TYPE_EXPRESS => '表达式',
     ];
+
+    /**
+     * 类型名称
+     *
+     * @return string|null
+     */
+    protected function getTypeNameAttribute(): ?string
+    {
+        return $this->typeNames[$this->type];
+    }
 }
