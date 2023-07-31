@@ -282,22 +282,32 @@ class Plugin extends BaseService
             return err('插件不存在');
         }
 
-        if ($this->isInstalled($id)) {
-            return err('插件已安装');
-        }
+        $installedIds = $this->getInstalledIds();
+        $toInstallIds = array_merge($plugin->getDepIds(), [$id]);
 
-        $ret = $plugin->install();
-        if ($ret->isErr()) {
+        $rets = [];
+        foreach ($toInstallIds as $pluginId) {
+            if (in_array($pluginId, $installedIds, true)) {
+                $rets[] = err(['插件 %s 已安装过', $pluginId]);
+                continue;
+            }
+
+            $plugin = $this->getById($pluginId);
+            $ret = $plugin->install();
+            if ($ret->isSuc()) {
+                $rets[] = suc(['插件 %s 安装成功', $pluginId]);
+                continue;
+            }
+
+            $ret['rets'] = $rets;
             return $ret;
         }
 
-        $pluginIds = $this->getInstalledIds();
-        $pluginIds[] = $id;
-        $this->setInstalledIds($pluginIds);
+        $this->setInstalledIds(array_merge($installedIds, $toInstallIds));
 
         $this->getEvents(true);
 
-        return $ret;
+        return suc(['rets' => $rets]);
     }
 
     /**
@@ -661,7 +671,7 @@ class Plugin extends BaseService
     protected function setInstalledIds(array $pluginIds)
     {
         $app = $this->app->getModel();
-        $app['pluginIds'] = array_filter($pluginIds);
+        $app['pluginIds'] = array_filter(array_unique($pluginIds));
         $app->save();
 
         return $this;

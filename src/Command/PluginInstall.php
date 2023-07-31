@@ -3,6 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
+use Wei\Ret;
 
 /**
  * @mixin \AppMixin
@@ -19,6 +20,11 @@ class PluginInstall extends BaseCommand
     {
         $this->app->setId($this->getArgument('app'));
         $ret = $this->plugin->install($this->getArgument('id'));
+
+        /** @var Ret $item */
+        foreach ($ret['rets'] ?? [] as $item) {
+            $this->output->writeln($item->isSuc() ? ('<info>' . $item->getMessage() . '</info>') : $item->getMessage());
+        }
         $this->ret($ret);
     }
 

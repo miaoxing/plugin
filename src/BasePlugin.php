@@ -141,6 +141,28 @@ abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
         return wei()->classMap->generate([$basePath], '/Controller/{*,*/*}.php', 'Controller', false);
     }
 
+    public function getDepIds(): array
+    {
+        $ids = [];
+        $composer = json_decode(file_get_contents($this->getBasePath() . '/composer.json'), true);
+        $require = $composer['require'] ?? [];
+
+        foreach ($require as $name => $version) {
+            $id = explode('/', $name)[1] ?? '';
+            if (!$id) {
+                continue;
+            }
+
+            $plugin = $this->plugin->getById($id);
+            if ($plugin) {
+                array_unshift($ids, $id);
+                $ids = array_merge($plugin->getDepIds(), $ids);
+            }
+        }
+
+        return array_unique($ids);
+    }
+
     /**
      * 加载插件的各项资源
      *
