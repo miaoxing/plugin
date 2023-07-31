@@ -1,3 +1,22 @@
+## [0.12.2](https://github.com/miaoxing/plugin/compare/v0.12.1...v0.12.2) (2023-07-31)
+
+
+### Features
+
+* **plugin:** `Config/GlobalConfigModel` 增加 `typeName` 虚拟属性，引入 `ReqQueryTrait` 等 ([36a72a4](https://github.com/miaoxing/plugin/commit/36a72a4c4387cf149ca8897188baa02f54e07917))
+* **plugin:** 安装插件时，同时安装依赖的插件 ([67521e8](https://github.com/miaoxing/plugin/commit/67521e829832b00d0bcd5afadd0f4b2b0708e637))
+* **plugin, experimental:** `Config` 增加 `update/deleteCache` 方法，用于更新/删除配置缓存 ([cab4fb7](https://github.com/miaoxing/plugin/commit/cab4fb700cfd2a8099417ace420a9ab72d0bef0d))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.2.1` to `8.2.2`
+* **@mxjs/cli:** upgrade from `0.1.10` to `0.1.11`
+* **@wei/wei:** upgrade from `0.15.9` to `0.15.10`
+
 ## [0.12.1](https://github.com/miaoxing/plugin/compare/v0.12.0...v0.12.1) (2023-06-30)
 
 
