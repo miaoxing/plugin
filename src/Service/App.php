@@ -223,8 +223,8 @@ class App extends \Wei\App
      */
     public function handleResponse($response)
     {
-        if ($response instanceof Ret || $this->isRet($response)) {
-            return $this->handleRet($response);
+        if ($response instanceof Ret) {
+            return $response->toRes($this->req, $this->res);
         } elseif ($response instanceof JsonSerializable) {
             return $this->res->json($response);
         } elseif (is_array($response)) {
@@ -428,38 +428,6 @@ class App extends \Wei\App
         }
 
         return $arg;
-    }
-
-    /**
-     * 转换Ret结构为response
-     *
-     * @param array|Ret $ret
-     * @return Res
-     * @throws Exception
-     */
-    protected function handleRet($ret)
-    {
-        if (is_array($ret)) {
-            if (1 === $ret['code']) {
-                $ret = Ret::suc($ret);
-            } else {
-                $ret = Ret::err($ret);
-            }
-        }
-        return $ret->toRes($this->req, $this->res);
-    }
-
-    /**
-     * 检查是否返回了Ret结构
-     *
-     * @param mixed $response
-     * @return bool
-     */
-    protected function isRet($response)
-    {
-        return is_array($response)
-            && array_key_exists('code', $response)
-            && array_key_exists('message', $response);
     }
 
     /**

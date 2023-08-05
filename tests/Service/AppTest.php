@@ -101,18 +101,6 @@ final class AppTest extends BaseTestCase
                 '{"message":"err","code":-2}',
             ],
             [
-                'returnCodeAndMessage',
-                '{"code":1,"message":"returnCodeAndMessage"}',
-            ],
-            [
-                'returnOnlyCode',
-                'returnOnlyCode',
-            ],
-            [
-                'returnOnlyMessage',
-                'returnOnlyMessage',
-            ],
-            [
                 'returnResponse',
                 'returnResponse',
             ],

@@ -29,30 +29,6 @@ return new class () extends BaseController {
         return $this->err('err', -2);
     }
 
-    public function returnCodeAndMessage()
-    {
-        $code = 1;
-        $message = 'returnCodeAndMessage';
-
-        return get_defined_vars();
-    }
-
-    public function returnOnlyCode()
-    {
-        $code = 1;
-
-        $this->app->setOption('defaultViewFile', 'tests/returnOnlyCode.php');
-        return get_defined_vars();
-    }
-
-    public function returnOnlyMessage()
-    {
-        $message = 'message';
-
-        $this->app->setOption('defaultViewFile', 'tests/returnOnlyMessage.php');
-        return get_defined_vars();
-    }
-
     public function returnResponse()
     {
         return $this->res->setContent('returnResponse');
