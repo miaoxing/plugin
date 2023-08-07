@@ -7,6 +7,8 @@ use Miaoxing\Plugin\Service\User;
 use Miaoxing\Plugin\Test\BaseTestCase;
 
 /**
+ * @mixin \ReqPropMixin
+ * @mixin \AppPropMixin
  * @internal
  */
 final class AppTest extends BaseTestCase
@@ -166,6 +168,33 @@ final class AppTest extends BaseTestCase
         $app->setModel(null);
         $model2 = $app->getModel();
         $this->assertNotSame($model, $model2);
+    }
+
+    public function testGetAction()
+    {
+        $pageRouter = $this->getServiceMock(PageRouter::class, ['match']);
+        $pageRouter->method('match')
+            ->willReturn([
+                'file' => __DIR__ . '/../Fixture/pages/rest/index.php',
+                'params' => [],
+            ]);
+
+        $this->app->pageRouter = $pageRouter;
+
+        $this->invokeApp();
+        $this->assertSame('get', $this->app->getAction());
+
+        $this->req->setMethod('POST');
+        $this->invokeApp();
+        $this->assertSame('post', $this->app->getAction());
+    }
+
+    protected function invokeApp()
+    {
+        ob_start();
+        // @phpstan-ignore-next-line 待整理出直接调用的方法
+        $this->app->invokeApp();
+        ob_end_clean();
     }
 
     protected function execute($action)

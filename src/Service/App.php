@@ -305,21 +305,22 @@ class App extends \Wei\App
             throw new \Exception('Not Found', static::NOT_FOUND);
         }
 
+        $action = strtolower($this->req->getMethod());
         $this->req->set($result['params']);
         $this->setController($result['file']);
+        $this->setAction($action);
         $page = $this->getCurControllerInstance();
 
         if ($this->req->isPreflight()) {
             return $this->res->send();
         }
 
-        $method = strtolower($this->req->getMethod());
-        if (!method_exists($page, $method)) {
+        if (!method_exists($page, $action)) {
             $this->res->setStatusCode(static::METHOD_NOT_ALLOWED);
             throw new \Exception('Method Not Allowed', static::METHOD_NOT_ALLOWED);
         }
 
-        return $this->execute($page, $method);
+        return $this->execute($page, $action);
     }
 
     /**
