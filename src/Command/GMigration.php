@@ -11,12 +11,14 @@ use Wei\Migration;
  */
 class GMigration extends BaseCommand
 {
+    use PluginIdTrait;
+
     protected function configure()
     {
         $this->setAliases(['migration:g'])
             ->setDescription('Generate a plugin migration class')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the migration')
-            ->addArgument('plugin', InputArgument::OPTIONAL, 'The name of the plugin');
+            ->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 
     /**
@@ -26,7 +28,7 @@ class GMigration extends BaseCommand
      */
     protected function handle()
     {
-        $plugin = $this->plugin->getOneById($this->getArgument('plugin'));
+        $plugin = $this->plugin->getOneById($this->getPluginId());
         $path = $plugin->getBasePath() . '/src/Migration';
         $reflection = new ReflectionClass($plugin);
         $namespace = $reflection->getNamespaceName() . '\\Migration';
