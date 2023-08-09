@@ -306,9 +306,18 @@ class App extends \Wei\App
         }
 
         $action = strtolower($this->req->getMethod());
-        $this->req->set($result['params']);
-        $this->setController($result['file']);
+        return $this->dispatch($result['file'], $action, $result['params']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dispatch($controller, $action = null, array $params = [], $throwException = true /* ignored */)
+    {
+        $this->setController($controller);
         $this->setAction($action);
+        $this->req->set($params);
+
         $page = $this->getCurControllerInstance();
 
         if ($this->req->isPreflight()) {

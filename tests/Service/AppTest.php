@@ -170,31 +170,26 @@ final class AppTest extends BaseTestCase
         $this->assertNotSame($model, $model2);
     }
 
-    public function testGetAction()
+    public function testGetControllerAndAction()
     {
-        $pageRouter = $this->getServiceMock(PageRouter::class, ['match']);
-        $pageRouter->method('match')
-            ->willReturn([
-                'file' => __DIR__ . '/../Fixture/pages/rest/index.php',
-                'params' => [],
-            ]);
+        $controller = __DIR__ . '/../Fixture/pages/rest/index.php';
 
-        $this->app->pageRouter = $pageRouter;
-
-        $this->invokeApp();
+        $res = $this->dispatch($controller, 'get');
+        $this->assertSame($controller, $this->app->getController());
         $this->assertSame('get', $this->app->getAction());
+        $this->assertSame('GET', $res);
 
-        $this->req->setMethod('POST');
-        $this->invokeApp();
+        $res = $this->dispatch($controller, 'post');
+        $this->assertSame($controller, $this->app->getController());
         $this->assertSame('post', $this->app->getAction());
+        $this->assertSame('POST', $res);
     }
 
-    protected function invokeApp()
+    protected function dispatch($controller, $action)
     {
         ob_start();
-        // @phpstan-ignore-next-line 待整理出直接调用的方法
-        $this->app->invokeApp();
-        ob_end_clean();
+        $this->app->dispatch($controller, $action);
+        return ob_get_clean();
     }
 
     protected function execute($action)

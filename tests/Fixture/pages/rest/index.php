@@ -3,11 +3,11 @@
 return new class () extends \Miaoxing\Plugin\BasePage {
     public function get()
     {
-        return 'get';
+        return 'GET';
     }
 
     public function post()
     {
-        return 'post';
+        return 'POST';
     }
 };
