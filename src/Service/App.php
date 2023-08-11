@@ -36,6 +36,11 @@ class App extends \Wei\App
     protected $controllerFormat = '';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $actionMethodFormat = '%action%';
+
+    /**
      * 当前运行的插件名称
      *
      * @var false|string
@@ -258,17 +263,6 @@ class App extends \Wei\App
     {
         $this->defaultViewFile = $defaultViewFile;
         return $this;
-    }
-
-    /**
-     * Returns the method name of specified acion
-     *
-     * @param string $action
-     * @return string
-     */
-    public function getActionMethod($action)
-    {
-        return $action;
     }
 
     /**
