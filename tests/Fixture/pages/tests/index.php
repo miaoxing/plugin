@@ -1,13 +1,16 @@
 <?php
 
-use Miaoxing\Plugin\BaseController;
+use Miaoxing\Plugin\BasePage;
 use Miaoxing\Plugin\Service\UserModel;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnResponse;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnRet;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnString;
 use Wei\RetTrait;
 
-return new class () extends BaseController {
+return new /**
+ * @mixin AppPropMixin
+ */
+class () extends BasePage {
     use RetTrait;
 
     public function __construct(array $options = [])

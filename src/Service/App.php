@@ -7,6 +7,7 @@ use JsonSerializable;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionParameter;
+use Wei\BaseController;
 use Wei\BaseController as WeiBaseController;
 use Wei\BaseModel;
 use Wei\Res;
@@ -327,7 +328,7 @@ class App extends \Wei\App
     }
 
     /**
-     * @param WeiBaseController $instance
+     * @param BaseController $instance
      * @param string $action
      * @return Res
      * @throws Exception
