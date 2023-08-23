@@ -48,9 +48,7 @@ class Plugin extends BaseService
      *
      * @var string[]
      */
-    protected $ignoredServices = [
-        'snowflake',
-    ];
+    protected $ignoredServices = [];
 
     /**
      * A List of build-in plugins
