@@ -19,9 +19,6 @@ return [
             'env',
             'plugin',
         ],
-        'providers' => [
-            'cache' => 'phpFileCache',
-        ],
     ],
 
     /* @see Miaoxing\Plugin\Service\Plugin */
