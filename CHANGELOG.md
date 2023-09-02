@@ -1,3 +1,38 @@
+# [0.13.0](https://github.com/miaoxing/plugin/compare/v0.12.2...v0.13.0) (2023-09-02)
+
+
+### Bug Fixes
+
+* **plugin:** `/api/admin/` 接口地址未判断为后台 ([c22281b](https://github.com/miaoxing/plugin/commit/c22281b9f5803e1ebd8c949d920f028a8d9236f4))
+
+
+### Code Refactoring
+
+* **App:** 移除旧版的 `isRet` 和 `handleRet` 方法 ([9909296](https://github.com/miaoxing/plugin/commit/9909296a65acf60327f23b0a023c8bf10d4c925f))
+
+
+### Features
+
+* **deprecated:** 废弃 `Miaoxing\Services\Service\Http`，改用 `Wei\Http` ([7184758](https://github.com/miaoxing/plugin/commit/7184758b020f10542eeb89e974558ed4aa9f6923))
+* **GMigration:** 支持读取默认插件 ([6e5aca9](https://github.com/miaoxing/plugin/commit/6e5aca93cdb6e4c714239e1d48cc613acf049557))
+* **plugin:** `App` 允许调用 `getAction` 获取当前执行的操作名称 ([c8642b8](https://github.com/miaoxing/plugin/commit/c8642b8452d1bd834b23e2d3c6fa95efcf4308ba))
+* **plugin:** `App` 初步实现 `dispatch` 方法，允许传入参数调用指定的操作 ([21725e0](https://github.com/miaoxing/plugin/commit/21725e0edff2a3c63f3f57481e030715fee45f06))
+
+
+### BREAKING CHANGES
+
+* **App:** `App` 移除旧版的 `isRet` 和 `handleRet` 方法
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.2.2` to `8.2.3`
+* **@mxjs/cli:** upgrade from `0.1.11` to `0.1.12`
+* **@wei/wei:** upgrade from `0.15.10` to `0.15.11`
+
 ## [0.12.2](https://github.com/miaoxing/plugin/compare/v0.12.1...v0.12.2) (2023-07-31)
 
 
