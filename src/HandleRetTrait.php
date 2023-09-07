@@ -4,6 +4,9 @@ namespace Miaoxing\Plugin;
 
 use Wei\Ret;
 
+/**
+ * @deprecated Use $ret->assert instead
+ */
 trait HandleRetTrait
 {
     /**
