@@ -2,8 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Miaoxing\Plugin\RetException;
 use Wei\Req;
+use Wei\Ret\RetException;
 
 /**
  * 测试
