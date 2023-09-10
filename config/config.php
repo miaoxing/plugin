@@ -21,14 +21,6 @@ return [
         ],
     ],
 
-    /* @see Miaoxing\Plugin\Service\Plugin */
-    'plugin' => [
-        'ignoredServices' => [
-            'snowflake',
-            'http',
-        ],
-    ],
-
     /* @see Wei\Asset */
     'asset' => [
         'version' => false,

@@ -47,6 +47,7 @@ class Plugin extends BaseService
      * The service names to ignore when generating the plugin config cache
      *
      * @var string[]
+     * @deprecated use @ignored in class doc comment
      */
     protected $ignoredServices = [];
 
