@@ -18,6 +18,15 @@ class PluginUse extends BaseCommand
     protected function handle()
     {
         $id = $this->input->getArgument('plugin-id');
+        if (!$id) {
+            $use = $this->cache->get('plugin:use');
+            if (!$use) {
+                $this->suc('Default Plugin not set');
+                return;
+            }
+            $this->suc(sprintf('The default plugin is: %s', $use));
+            return;
+        }
 
         $this->plugin->getOneById($id);
 
@@ -28,6 +37,6 @@ class PluginUse extends BaseCommand
 
     protected function configure()
     {
-        $this->addArgument('plugin-id', InputArgument::REQUIRED, 'The id of plugin');
+        $this->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 }
