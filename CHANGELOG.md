@@ -1,3 +1,26 @@
+## [0.13.1](https://github.com/miaoxing/plugin/compare/v0.13.0...v0.13.1) (2023-09-30)
+
+
+### Bug Fixes
+
+* **plugin:** `Tester` 捕获异常应为基类 ([29dd304](https://github.com/miaoxing/plugin/commit/29dd30457039b86671f817ac3f7f10916166d63d))
+
+
+### Features
+
+* **plugin:** `plugin:use` 命令允许留空参数来输出当前使用的插件 ([c43e063](https://github.com/miaoxing/plugin/commit/c43e063a31a6ca59a461f43cf31b7453c09d731b))
+* **plugin:** 废弃 `HandleRetTrait`，改为使用 `$ret->assert` 方法 ([3133160](https://github.com/miaoxing/plugin/commit/3133160e674e084d6fd595d28c87ed9a38315268))
+* **plugin, deprecated:** `Plugin` 废弃 `ignoredServices` 属性，改为使用 `[@ignored](https://github.com/ignored)` 注释 ([d877f08](https://github.com/miaoxing/plugin/commit/d877f08e98016711358ec9e1e77415be2b53cc92))
+* **plugin, deprecated:** 废弃 `Miaoxing\Plugin\RetException` ([f515cee](https://github.com/miaoxing/plugin/commit/f515cee711b340d82bde774224b162fae6227a36))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.11` to `0.15.12`
+
 # [0.13.0](https://github.com/miaoxing/plugin/compare/v0.12.2...v0.13.0) (2023-09-02)
 
 
