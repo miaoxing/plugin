@@ -19,10 +19,7 @@ class V20230201181853AddAdminTypeToUsersTable extends BaseMigration
 
         // NOTE: 不使用 UserModel，兼容单元测试时没有 appId 导致错误
         // UserModel::asc('id')->findOrInitBy()->save(['adminType' => UserModel::ADMIN_TYPE_SUPER]);
-        $user = QueryBuilder::table('users')->asc('id')->first();
-        if ($user) {
-            QueryBuilder::table('users')->where('id', $user['id'])->update('admin_type', UserModel::ADMIN_TYPE_SUPER);
-        }
+        QueryBuilder::table('users')->asc('id')->limit(1)->update('admin_type', UserModel::ADMIN_TYPE_SUPER);
     }
 
     /**
