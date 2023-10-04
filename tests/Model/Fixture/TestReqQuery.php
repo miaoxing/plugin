@@ -20,4 +20,9 @@ class TestReqQuery extends BaseModel
     {
         return $this->hasOne(TestReqQueryDetail::class);
     }
+
+    public function customDetail()
+    {
+        return $this->hasOne(TestReqQueryDetail::class);
+    }
 }

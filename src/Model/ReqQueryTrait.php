@@ -66,6 +66,21 @@ trait ReqQueryTrait
     protected $reqSearch = [];
 
     /**
+     * The relation names that available for relationship searches
+     *
+     * eg:
+     * [
+     *   'user',
+     *   'user.profile',
+     * ]
+     *
+     * Note: Currently only the first level relationship is supported
+     *
+     * @var array
+     */
+    protected $reqRelations = [];
+
+    /**
      * @param Req $req
      * @return $this
      */
@@ -273,6 +288,28 @@ trait ReqQueryTrait
     }
 
     /**
+     * Set the relation names that available for relationship searches
+     *
+     * @param array $relations
+     * @return $this
+     */
+    public function setReqRelations(array $relations): self
+    {
+        $this->reqRelations = $relations;
+        return $this;
+    }
+
+    /**
+     * Get the request
+     *
+     * @return array
+     */
+    public function getReqRelations(): array
+    {
+        return $this->reqRelations;
+    }
+
+    /**
      * Add search query based on request parameters and allowed search conditions
      *
      * @param array $search
@@ -287,7 +324,7 @@ trait ReqQueryTrait
                 continue;
             }
 
-            if (is_array($value) && $model->isRelation($name)) {
+            if (is_array($value) && ($this->isReqRelation($name) || $model->isRelation($name))) {
                 $this->selectMain()->leftJoinRelation($name);
                 $relation = $model->getRelationModel($name);
                 $this->processReqSearch($relation, $value, $allows[$name] ?? []);
@@ -303,6 +340,26 @@ trait ReqQueryTrait
             $this->addReqColumnQuery($model, $name, $value);
         }
         return $this;
+    }
+
+    /**
+     * Check if the specified name is available for relationship searches
+     *
+     * @param string $name
+     * @return bool
+     */
+    protected function isReqRelation(string $name): bool
+    {
+        foreach ($this->reqRelations as $relation) {
+            if ($name === $relation) {
+                return true;
+            }
+            // For nested relation like "user.order"
+            if (0 === strpos($relation, $name . '.')) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
