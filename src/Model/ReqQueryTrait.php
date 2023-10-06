@@ -324,6 +324,7 @@ trait ReqQueryTrait
                 continue;
             }
 
+            // @deprecated: call `isRelation` to check relation
             if (is_array($value) && ($this->isReqRelation($name) || $model->isRelation($name))) {
                 $this->selectMain()->leftJoinRelation($name);
                 $relation = $model->getRelationModel($name);
