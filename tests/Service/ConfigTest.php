@@ -580,6 +580,8 @@ class ConfigTest extends BaseTestCase
 
     public function testPreloadGlobal()
     {
+        Config::instance()->setOption('checkPreload', true);
+
         $key = Config::getPreloadVersionKey();
 
         Config::deleteGlobal($key);

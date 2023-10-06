@@ -66,6 +66,14 @@ class Config extends \Wei\Config
     protected $localFile = 'storage/configs/%env%.php';
 
     /**
+     * Whether to check update on preload
+     *
+     * @var bool
+     * @option
+     */
+    protected $checkPreload = false;
+
+    /**
      * @var array
      */
     protected $services = [];
@@ -305,7 +313,7 @@ class Config extends \Wei\Config
         $configs = $this->getPhpFileCache('global-config', []);
 
         // 2. 检查更新配置
-        if ($this->needsUpdatePreload($configs)) {
+        if ($this->checkPreload && $this->needsUpdatePreload($configs)) {
             $configs = $this->setPreloadCache();
         }
 
