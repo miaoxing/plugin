@@ -322,6 +322,24 @@ class Config extends \Wei\Config
     }
 
     /**
+     * 如果本地全局配置过时，则更新配置
+     *
+     * @return bool
+     * @experimental
+     * @svc
+     */
+    protected function updatePreloadIfExpired(): bool
+    {
+        $realVersion = $this->getGlobal($this->getPreloadVersionKey());
+        $localVersion = $this->wei->getConfig($this->getPreloadVersionKey());
+        if (!$localVersion || $realVersion > $localVersion) {
+            $this->setPreloadCache();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @return $this
      * @svc
      */

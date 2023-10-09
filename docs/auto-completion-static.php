@@ -355,6 +355,19 @@ class AppModel
     }
 
     /**
+     * Check if the query has result
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return bool
+     * @see AppModel::exists
+     */
+    public static function exists($column = null, $operator = null, $value = null): bool
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -597,10 +610,10 @@ class AppModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
+     * $user = QueryBuilder::table('user')->where('id', 1);
+     * $users = QueryBuilder::table('user')->where('id', '>', 1);
+     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
      * @param array|Closure|string|null $column
@@ -790,6 +803,16 @@ class AppModel
      * @see AppModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * @param mixed $if
+     * @param mixed ...$args
+     * @return $this
+     * @see AppModel::whereIf
+     */
+    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -1162,6 +1185,17 @@ class Config
      * @see Config::preloadGlobal
      */
     public static function preloadGlobal()
+    {
+    }
+
+    /**
+     * 如果本地全局配置过时，则更新配置
+     *
+     * @return bool
+     * @experimental
+     * @see Config::updatePreloadIfExpired
+     */
+    public static function updatePreloadIfExpired(): bool
     {
     }
 
@@ -1556,6 +1590,19 @@ class ConfigModel
     }
 
     /**
+     * Check if the query has result
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return bool
+     * @see ConfigModel::exists
+     */
+    public static function exists($column = null, $operator = null, $value = null): bool
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -1798,10 +1845,10 @@ class ConfigModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
+     * $user = QueryBuilder::table('user')->where('id', 1);
+     * $users = QueryBuilder::table('user')->where('id', '>', 1);
+     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
      * @param array|Closure|string|null $column
@@ -1991,6 +2038,16 @@ class ConfigModel
      * @see ConfigModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * @param mixed $if
+     * @param mixed ...$args
+     * @return $this
+     * @see ConfigModel::whereIf
+     */
+    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -2625,6 +2682,19 @@ class GlobalConfigModel
     }
 
     /**
+     * Check if the query has result
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return bool
+     * @see GlobalConfigModel::exists
+     */
+    public static function exists($column = null, $operator = null, $value = null): bool
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -2867,10 +2937,10 @@ class GlobalConfigModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
+     * $user = QueryBuilder::table('user')->where('id', 1);
+     * $users = QueryBuilder::table('user')->where('id', '>', 1);
+     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
      * @param array|Closure|string|null $column
@@ -3060,6 +3130,16 @@ class GlobalConfigModel
      * @see GlobalConfigModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * @param mixed $if
+     * @param mixed ...$args
+     * @return $this
+     * @see GlobalConfigModel::whereIf
+     */
+    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -4497,6 +4577,19 @@ class UserModel
     }
 
     /**
+     * Check if the query has result
+     *
+     * @param mixed|null $column
+     * @param mixed|null $operator
+     * @param mixed|null $value
+     * @return bool
+     * @see UserModel::exists
+     */
+    public static function exists($column = null, $operator = null, $value = null): bool
+    {
+    }
+
+    /**
      * @param string $column
      * @param string|null $index
      * @return array
@@ -4739,10 +4832,10 @@ class UserModel
      * Replaces any previously specified restrictions, if any.
      *
      * ```php
-     * $user = wei()->db('user')->where('id = 1');
-     * $user = wei()->db('user')->where('id = ?', 1);
-     * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-     * $users = wei()->where(array('id' => array('1', '2', '3')));
+     * $user = QueryBuilder::table('user')->where('id', 1);
+     * $users = QueryBuilder::table('user')->where('id', '>', 1);
+     * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+     * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
      * @param array|Closure|string|null $column
@@ -4932,6 +5025,16 @@ class UserModel
      * @see UserModel::whereHas
      */
     public static function whereHas(string $column, bool $has = true): self
+    {
+    }
+
+    /**
+     * @param mixed $if
+     * @param mixed ...$args
+     * @return $this
+     * @see UserModel::whereIf
+     */
+    public static function whereIf($if, ...$args): self
     {
     }
 
@@ -5553,6 +5656,19 @@ if (0) {
         }
 
         /**
+         * Check if the query has result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return bool
+         * @see AppModel::exists
+         */
+        public function exists($column = null, $operator = null, $value = null): bool
+        {
+        }
+
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -5783,10 +5899,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = wei()->db('user')->where('id = 1');
-         * $user = wei()->db('user')->where('id = ?', 1);
-         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * $user = QueryBuilder::table('user')->where('id', 1);
+         * $users = QueryBuilder::table('user')->where('id', '>', 1);
+         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
          * @param array|Closure|string|null $column
@@ -5976,6 +6092,16 @@ if (0) {
          * @see AppModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * @param mixed $if
+         * @param mixed ...$args
+         * @return $this
+         * @see AppModel::whereIf
+         */
+        public function whereIf($if, ...$args): self
         {
         }
 
@@ -6348,6 +6474,17 @@ if (0) {
          * @see Config::preloadGlobal
          */
         public function preloadGlobal()
+        {
+        }
+
+        /**
+         * 如果本地全局配置过时，则更新配置
+         *
+         * @return bool
+         * @experimental
+         * @see Config::updatePreloadIfExpired
+         */
+        public function updatePreloadIfExpired(): bool
         {
         }
 
@@ -6742,6 +6879,19 @@ if (0) {
         }
 
         /**
+         * Check if the query has result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return bool
+         * @see ConfigModel::exists
+         */
+        public function exists($column = null, $operator = null, $value = null): bool
+        {
+        }
+
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -6972,10 +7122,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = wei()->db('user')->where('id = 1');
-         * $user = wei()->db('user')->where('id = ?', 1);
-         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * $user = QueryBuilder::table('user')->where('id', 1);
+         * $users = QueryBuilder::table('user')->where('id', '>', 1);
+         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
          * @param array|Closure|string|null $column
@@ -7165,6 +7315,16 @@ if (0) {
          * @see ConfigModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * @param mixed $if
+         * @param mixed ...$args
+         * @return $this
+         * @see ConfigModel::whereIf
+         */
+        public function whereIf($if, ...$args): self
         {
         }
 
@@ -7799,6 +7959,19 @@ if (0) {
         }
 
         /**
+         * Check if the query has result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return bool
+         * @see GlobalConfigModel::exists
+         */
+        public function exists($column = null, $operator = null, $value = null): bool
+        {
+        }
+
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -8029,10 +8202,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = wei()->db('user')->where('id = 1');
-         * $user = wei()->db('user')->where('id = ?', 1);
-         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * $user = QueryBuilder::table('user')->where('id', 1);
+         * $users = QueryBuilder::table('user')->where('id', '>', 1);
+         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
          * @param array|Closure|string|null $column
@@ -8222,6 +8395,16 @@ if (0) {
          * @see GlobalConfigModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * @param mixed $if
+         * @param mixed ...$args
+         * @return $this
+         * @see GlobalConfigModel::whereIf
+         */
+        public function whereIf($if, ...$args): self
         {
         }
 
@@ -9659,6 +9842,19 @@ if (0) {
         }
 
         /**
+         * Check if the query has result
+         *
+         * @param mixed|null $column
+         * @param mixed|null $operator
+         * @param mixed|null $value
+         * @return bool
+         * @see UserModel::exists
+         */
+        public function exists($column = null, $operator = null, $value = null): bool
+        {
+        }
+
+        /**
          * @param string $column
          * @param string|null $index
          * @return array
@@ -9889,10 +10085,10 @@ if (0) {
          * Replaces any previously specified restrictions, if any.
          *
          * ```php
-         * $user = wei()->db('user')->where('id = 1');
-         * $user = wei()->db('user')->where('id = ?', 1);
-         * $users = wei()->db('user')->where(array('id' => '1', 'username' => 'twin'));
-         * $users = wei()->where(array('id' => array('1', '2', '3')));
+         * $user = QueryBuilder::table('user')->where('id', 1);
+         * $users = QueryBuilder::table('user')->where('id', '>', 1);
+         * $users = QueryBuilder::table('user')->where(['id' => '1', 'username' => 'twin']);
+         * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
          * @param array|Closure|string|null $column
@@ -10082,6 +10278,16 @@ if (0) {
          * @see UserModel::whereHas
          */
         public function whereHas(string $column, bool $has = true): self
+        {
+        }
+
+        /**
+         * @param mixed $if
+         * @param mixed ...$args
+         * @return $this
+         * @see UserModel::whereIf
+         */
+        public function whereIf($if, ...$args): self
         {
         }
 
