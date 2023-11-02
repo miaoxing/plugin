@@ -1,3 +1,21 @@
+## [0.13.2](https://github.com/miaoxing/plugin/compare/v0.13.1...v0.13.2) (2023-11-02)
+
+
+### Features
+
+* **plugin:** `ReqQuery` 支持设置 `reqRelations` 来允许查询关联数据 ([9825d8d](https://github.com/miaoxing/plugin/commit/9825d8dca71c7ff9ee4c33391937b5a61d24af43))
+* **plugin:** 增加 `config:preload` 命令，用于更新过期的预加载配置 ([7c2a521](https://github.com/miaoxing/plugin/commit/7c2a521894a986cb439c2f3f4fe15f196a3ede36))
+* **plugin, deprecated:** `ReqQuery` 废弃通过 `isRelation` 判断关联来查询数据 ([2b960f4](https://github.com/miaoxing/plugin/commit/2b960f44b80930b6a6831778b31565cc5d7f0c29))
+* **plugin, experimental:** 预加载配置时，默认不检查是否要更新配置 ([6595431](https://github.com/miaoxing/plugin/commit/6595431c63a8d3e5d4243b22f615f89495b6cec2))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.15.12` to `0.16.0`
+
 ## [0.13.1](https://github.com/miaoxing/plugin/compare/v0.13.0...v0.13.1) (2023-09-30)
 
 
