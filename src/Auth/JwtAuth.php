@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Auth;
 
-use Lcobucci\JWT\Token;
 use Miaoxing\Plugin\Service\Jwt;
 use Miaoxing\Plugin\Service\UserModel;
 
@@ -16,11 +15,12 @@ class JwtAuth extends BaseAuth
 
     public function login(UserModel $user)
     {
-        $token = $this->jwt->generate(['id' => $user->id]);
-        $this->loginRet = suc(['token' => $token]);
+        $data = ['id' => $user->id];
+        $token = $this->jwt->generate($data);
+        $this->loginRet = suc(['token' => $token, 'data' => $data]);
         return suc([
             'message' => '登录成功',
-            'token' => (string) $token,
+            'token' => $token,
         ]);
     }
 
@@ -32,7 +32,9 @@ class JwtAuth extends BaseAuth
     public function checkLogin()
     {
         if (null === $this->loginRet) {
-            $auth = $this->req->getServer('HTTP_AUTHORIZATION');
+            $auth = $this->req->getServer('HTTP_AUTHORIZATION', '');
+            // Remove "Bearer " prefix
+            $auth = explode(' ', $auth)[1] ?? $auth;
             if (!$auth) {
                 $ret = $this->loginRet();
             } else {
@@ -55,10 +57,8 @@ class JwtAuth extends BaseAuth
             return [];
         }
 
-        /** @var Token $token */
-        $token = $ret['token'];
         return [
-            'id' => $token->getClaim('id'),
+            'id' => $ret['data']['id'],
         ];
     }
 }

@@ -3453,7 +3453,7 @@ class Jwt
      * @return string
      * @see Jwt::getPrivateKey
      */
-    public static function getPrivateKey()
+    public static function getPrivateKey(): string
     {
     }
 
@@ -3462,7 +3462,7 @@ class Jwt
      * @return $this
      * @see Jwt::setPrivateKey
      */
-    public static function setPrivateKey(string $privateKey)
+    public static function setPrivateKey(string $privateKey): self
     {
     }
 
@@ -3470,7 +3470,7 @@ class Jwt
      * @return string
      * @see Jwt::getPublicKey
      */
-    public static function getPublicKey()
+    public static function getPublicKey(): string
     {
     }
 
@@ -3479,18 +3479,18 @@ class Jwt
      * @return $this
      * @see Jwt::setPublicKey
      */
-    public static function setPublicKey(string $publicKey)
+    public static function setPublicKey(string $publicKey): self
     {
     }
 
     /**
      * @param array $claims
      * @param int $expire
-     * @return Token
-     * @throws \Exception
+     * @return string
+     * @throws Exception
      * @see Jwt::generate
      */
-    public static function generate(array $claims, int $expire = 2592000): \Lcobucci\JWT\Token
+    public static function generate(array $claims, int $expire = 2592000): string
     {
     }
 
@@ -8718,7 +8718,7 @@ if (0) {
          * @return string
          * @see Jwt::getPrivateKey
          */
-        public function getPrivateKey()
+        public function getPrivateKey(): string
         {
         }
 
@@ -8727,7 +8727,7 @@ if (0) {
          * @return $this
          * @see Jwt::setPrivateKey
          */
-        public function setPrivateKey(string $privateKey)
+        public function setPrivateKey(string $privateKey): self
         {
         }
 
@@ -8735,7 +8735,7 @@ if (0) {
          * @return string
          * @see Jwt::getPublicKey
          */
-        public function getPublicKey()
+        public function getPublicKey(): string
         {
         }
 
@@ -8744,18 +8744,18 @@ if (0) {
          * @return $this
          * @see Jwt::setPublicKey
          */
-        public function setPublicKey(string $publicKey)
+        public function setPublicKey(string $publicKey): self
         {
         }
 
         /**
          * @param array $claims
          * @param int $expire
-         * @return Token
-         * @throws \Exception
+         * @return string
+         * @throws Exception
          * @see Jwt::generate
          */
-        public function generate(array $claims, int $expire = 2592000): \Lcobucci\JWT\Token
+        public function generate(array $claims, int $expire = 2592000): string
         {
         }
 

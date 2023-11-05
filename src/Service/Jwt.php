@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace Miaoxing\Plugin\Service;
 
-use DateTimeImmutable;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer;
-use Lcobucci\JWT\Signer\Key;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\Token;
-use Lcobucci\JWT\ValidationData;
+use Ahc\Jwt\JWT as AJtw;
+use Ahc\Jwt\JWTException;
 use Miaoxing\Plugin\BaseService;
+use ReqMixin;
 
 /**
- * @mixin \ReqMixin
+ * @mixin ReqMixin
  */
 class Jwt extends BaseService
 {
@@ -24,31 +19,35 @@ class Jwt extends BaseService
     /**
      * @var string
      */
-    protected $signerClass = Sha256::class;
+    protected $algo = 'RS256';
 
     /**
      * @var string
      */
-    protected $privateKey = 'file://storage/keys/private.key';
+    protected $privateKey = 'storage/keys/private.key';
 
     /**
      * @var string
      */
-    protected $publicKey = 'file://storage/keys/public.key';
+    protected $publicKey = 'storage/keys/public.key';
 
     /**
-     * @return Signer
+     * @var array
      */
-    public function getSigner(): Signer
-    {
-        return new $this->signerClass();
-    }
+    protected $messages = [
+        AJtw::ERROR_TOKEN_INVALID => '解析 Token 失败',
+        AJtw::ERROR_SIGNATURE_FAILED => 'Token 签名错误',
+        AJtw::ERROR_TOKEN_EXPIRED => [
+            'code' => self::CODE_EXPIRED,
+            'message' => 'Token 已过期',
+        ],
+    ];
 
     /**
      * @return string
      * @svc
      */
-    protected function getPrivateKey()
+    protected function getPrivateKey(): string
     {
         return $this->privateKey;
     }
@@ -58,7 +57,7 @@ class Jwt extends BaseService
      * @return $this
      * @svc
      */
-    protected function setPrivateKey(string $privateKey)
+    protected function setPrivateKey(string $privateKey): self
     {
         $this->privateKey = $privateKey;
         return $this;
@@ -68,7 +67,7 @@ class Jwt extends BaseService
      * @return string
      * @svc
      */
-    protected function getPublicKey()
+    protected function getPublicKey(): string
     {
         return $this->publicKey ?: $this->privateKey;
     }
@@ -78,7 +77,7 @@ class Jwt extends BaseService
      * @return $this
      * @svc
      */
-    protected function setPublicKey(string $publicKey)
+    protected function setPublicKey(string $publicKey): self
     {
         $this->publicKey = $publicKey;
         return $this;
@@ -87,22 +86,21 @@ class Jwt extends BaseService
     /**
      * @param array $claims
      * @param int $expire
-     * @return Token
+     * @return string
      * @throws \Exception
      * @svc
      */
-    protected function generate(array $claims, int $expire = 86400 * 30): Token
+    protected function generate(array $claims, int $expire = 86400 * 30): string
     {
-        $jti = base64_encode(random_bytes(8));
-        $builder = (new Builder())->issuedBy($this->req->getSchemeAndHost())
-            ->identifiedBy($jti)
-            ->withHeader('jti', $jti)
-            ->issuedAt(new DateTimeImmutable())
-            ->expiresAt(new DateTimeImmutable('@' . (time() + $expire)));
-        foreach ($claims as $name => $value) {
-            $builder->withClaim($name, $value);
-        }
-        return $builder->getToken($this->getSigner(), new Key($this->getPrivateKey()));
+        $jwt = new AJtw($this->getPrivateKey(), $this->algo);
+
+        return $jwt->encode(array_merge([
+            'iss' => $this->req->getSchemeAndHost(),
+            'iat' => time(),
+            'exp' => time() + $expire,
+        ], $claims), [
+            'jti' => base64_encode(random_bytes(8)),
+        ]);
     }
 
     /**
@@ -116,34 +114,20 @@ class Jwt extends BaseService
             return err('Token 不能为空');
         }
 
-        if (false !== strpos($token, ' ')) {
-            $token = explode(' ', $token)[1];
-        }
+        $jwt = new AJtw($this->getPrivateKey(), $this->algo);
 
         try {
-            $parsedToken = (new Parser())->parse($token);
-        } catch (\Throwable $e) {
-            return err([
-                'message' => '解析 Token 失败',
-                'detail' => $e->getMessage(),
-            ]);
+            $payload = $jwt->decode($token);
+        } catch (JWTException $e) {
+            $message = $this->messages[$e->getCode()] ?? $e->getMessage();
+            return err($message);
         }
 
-        if ($parsedToken->isExpired(new DateTimeImmutable())) {
-            return err('Token 已过期', static::CODE_EXPIRED);
-        }
-
-        if (!$parsedToken->verify($this->getSigner(), new Key($this->getPublicKey()))) {
-            return err('Token 签名错误');
-        }
-
-        $data = new ValidationData();
-        $data->setIssuer($this->req->getSchemeAndHost());
-        if (!$parsedToken->validate($data)) {
+        if (isset($payload['iss']) && $payload['iss'] !== $this->req->getSchemeAndHost()) {
             return err('Token 内容错误');
         }
 
-        return suc(['token' => $parsedToken]);
+        return suc(['data' => $payload]);
     }
 
     /**
@@ -175,12 +159,7 @@ class Jwt extends BaseService
 
     protected function write($path, $content): Ret
     {
-        if ('file://' === substr($path, 0, 7)) {
-            $path = substr($path, 7);
-        }
-
         $dir = dirname($path);
-        //return !(!\is_dir($directory) && !@\mkdir($directory, 0777, \true) && !\is_dir($directory));
         if (!is_dir($dir) && !@mkdir($dir, 0777, true) && !is_dir($dir)) {
             return err(['创建目录 %s 失败，请检查是否有权限操作', $dir]);
         }

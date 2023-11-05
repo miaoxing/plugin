@@ -14,4 +14,11 @@ class JwtAuthTest extends BaseTestCase
         $auth->login(UserModel::new());
         $this->assertTrue($auth->isLogin());
     }
+
+    public function testGetData()
+    {
+        $auth = new JwtAuth();
+        $auth->login(UserModel::new()->set('id', 999));
+        $this->assertSame('999', $auth->getData()['id']);
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Lcobucci\JWT\Token;
 use Miaoxing\Plugin\Service\Jwt;
 use Miaoxing\Plugin\Test\BaseTestCase;
 
@@ -16,15 +15,15 @@ class JwtTest extends BaseTestCase
         parent::setUpBeforeClass();
 
         $dir = sys_get_temp_dir();
-        Jwt::setPrivateKey('file://' . $dir . '/private.key')
-            ->setPublicKey('file://' . $dir . '/public.key')
+        Jwt::setPrivateKey($dir . '/private.key')
+            ->setPublicKey($dir . '/public.key')
             ->generateDefaultKeys();
     }
 
     public static function tearDownAfterClass(): void
     {
-        unlink(substr(Jwt::getPrivateKey(), strlen('file://')));
-        unlink(substr(Jwt::getPublicKey(), strlen('file://')));
+        unlink(Jwt::getPrivateKey());
+        unlink(Jwt::getPublicKey());
         parent::tearDownAfterClass();
     }
 
@@ -32,7 +31,7 @@ class JwtTest extends BaseTestCase
     {
         $token = Jwt::generate(['test' => '1']);
 
-        $this->assertInstanceOf(Token::class, $token);
+        $this->assertIsString($token);
     }
 
     public function testVerify()
@@ -40,6 +39,7 @@ class JwtTest extends BaseTestCase
         $token = Jwt::generate(['test' => '1']);
         $ret = Jwt::verify($token);
         $this->assertRetSuc($ret);
+        $this->assertSame('1', $ret['data']['test']);
     }
 
     public function testVerifyEmpty()
@@ -48,11 +48,10 @@ class JwtTest extends BaseTestCase
         $this->assertRetErr($ret, 'Token 不能为空');
     }
 
-    public function testVeifyParseFail()
+    public function testVerifyParseFail()
     {
         $ret = Jwt::verify('123');
         $this->assertRetErr($ret, '解析 Token 失败');
-        $this->assertSame('The JWT string must have two dots', $ret['detail']);
     }
 
     public function testVerifyExpired()
