@@ -258,7 +258,7 @@ class Plugin extends BaseService
     {
         if (!isset($this->pluginInstances[$id])) {
             $class = $this->getPluginClass($id);
-            if (!class_exists($class)) {
+            if (!$class || !class_exists($class)) {
                 $this->pluginInstances[$id] = false;
             } else {
                 $this->pluginInstances[$id] = new $class(['wei' => $this->wei]);
