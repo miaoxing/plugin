@@ -163,7 +163,6 @@ final class AppTest extends BaseTestCase
     {
         $app = wei()->app;
         $model = $app->getModel();
-        $this->assertInstanceOf(AppModel::class, $model);
 
         $app->setModel(null);
         $model2 = $app->getModel();

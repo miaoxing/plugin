@@ -31,7 +31,7 @@ class JwtTest extends BaseTestCase
     {
         $token = Jwt::generate(['test' => '1']);
 
-        $this->assertIsString($token);
+        $this->assertStringContainsString('.', $token);
     }
 
     public function testVerify()

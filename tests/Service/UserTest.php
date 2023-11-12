@@ -21,7 +21,6 @@ final class UserTest extends BaseTestCase
         User::loginByModel($this->getUser());
 
         $user = User::cur();
-        $this->assertNotInstanceOf(User::class, $user);
         $this->assertInstanceOf(UserModel::class, $user);
 
         $user2 = User::cur();

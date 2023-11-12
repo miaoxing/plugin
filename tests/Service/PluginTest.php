@@ -27,7 +27,7 @@ final class PluginTest extends BaseTestCase
     {
         $plugin = wei()->plugin->getOneById('plugin');
 
-        $this->assertInstanceOf(\Miaoxing\Plugin\BasePlugin::class, $plugin);
+        $this->assertSame('plugin', $plugin->getId());
     }
 
     public function testGetOneByIdButPluginNotExists()

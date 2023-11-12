@@ -181,8 +181,6 @@ class ResourceTest extends BaseTestCase
 
         $ret = $group->toRet(TestUserGroupResource::class);
 
-        $this->assertInstanceOf(Ret::class, $ret);
-
         $this->assertSame([
             'id' => 1,
             'name' => 'test',
@@ -197,8 +195,6 @@ class ResourceTest extends BaseTestCase
         ]);
 
         $ret = $group->toRet(TestUserGroupResource::new());
-
-        $this->assertInstanceOf(Ret::class, $ret);
 
         $this->assertSame([
             'id' => 1,
