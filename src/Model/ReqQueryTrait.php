@@ -166,7 +166,7 @@ trait ReqQueryTrait
                 );
             }
 
-            if (isset($item[0]) && !is_array($item[0])) {
+            if (!is_array($item[0])) {
                 $item[0] = [$item[0]];
             }
 
