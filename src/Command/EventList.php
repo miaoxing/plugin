@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Miaoxing\Plugin\Command;
 
 use Symfony\Component\Console\Helper\Table;
@@ -18,7 +20,7 @@ class EventList extends BaseCommand
      */
     public function handle()
     {
-        $this->app->setId((int) $this->getArgument('app'));
+        $this->app->setId($this->getArgument('app'));
         $events = $this->plugin->getEvents();
 
         $table = new Table($this->output);
