@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Test;
 
-use Miaoxing\Plugin\BaseService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Wei\Base;
 use Wei\Cls;
@@ -55,15 +54,15 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      *
      * @param string $class
      * @param array<string> $methods
-     * @return BaseService&MockObject
+     * @return Base&MockObject
      *
      * @phpstan-template T
-     * @phpstan-param class-string<BaseService>&class-string<T> $class
-     * @phpstan-return MockObject&BaseService&T
+     * @phpstan-param class-string<Base>&class-string<T> $class
+     * @phpstan-return MockObject&Base&T
      */
     public function getServiceMock(string $class, array $methods = [])
     {
-        /** @var MockObject&BaseService&T $service */
+        /** @var MockObject&Base&T $service */
         $service = $this->getMockBuilder($class)
             ->onlyMethods($methods)
             ->getMock();
@@ -78,11 +77,11 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      *
      * @param string $class
      * @param array<string> $methods
-     * @return BaseService&MockObject
+     * @return Base&MockObject
      *
      * @phpstan-template T
-     * @phpstan-param class-string<BaseService>&class-string<T> $class
-     * @phpstan-return MockObject&BaseService&T
+     * @phpstan-param class-string<Base>&class-string<T> $class
+     * @phpstan-return MockObject&Base&T
      */
     public function getModelServiceMock(string $class, array $methods = [])
     {
@@ -93,7 +92,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
         $str = $this->wei->str;
         $table = $str->pluralize($str->snake($name));
 
-        /** @var MockObject&BaseService&T $model */
+        /** @var MockObject&Base&T $model */
         $model = $this->getMockBuilder($class)
             ->onlyMethods($methods)
             ->setConstructorArgs([
