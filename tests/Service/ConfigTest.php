@@ -361,8 +361,13 @@ class ConfigTest extends BaseTestCase
 
     public function testSetMultipleWithEmptyArray()
     {
-        $config = Config::setMultiple([]);
-        $this->assertInstanceOf(Config::class, $config);
+        $values = Config::getMultiple([]);
+        $this->assertSame([], $values);
+
+        Config::setMultiple([]);
+
+        $values = Config::getMultiple([]);
+        $this->assertSame([], $values);
     }
 
     public function testGetSection()
