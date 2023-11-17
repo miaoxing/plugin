@@ -148,8 +148,6 @@ class Jwt extends BaseService
         $details = openssl_pkey_get_details($res);
         $publicKey = $details['key'];
 
-        openssl_free_key($res);
-
         $ret = $this->write($this->publicKey, $publicKey);
         if ($ret->isErr()) {
             return $ret;
