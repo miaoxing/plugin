@@ -9,6 +9,7 @@ use Wei\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;
 
+#[\AllowDynamicProperties]
 abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 {
     use ServiceTrait;
