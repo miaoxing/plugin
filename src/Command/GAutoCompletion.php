@@ -479,6 +479,7 @@ PHP;
 /**
 $comment
  */
+ #[\\AllowDynamicProperties]
 class $class
 {
 }

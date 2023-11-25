@@ -616,7 +616,7 @@ class AppModel
      * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
-     * @param array|Closure|string|null $column
+     * @param array|\Closure|string|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
@@ -1851,7 +1851,7 @@ class ConfigModel
      * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
-     * @param array|Closure|string|null $column
+     * @param array|\Closure|string|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
@@ -2943,7 +2943,7 @@ class GlobalConfigModel
      * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
-     * @param array|Closure|string|null $column
+     * @param array|\Closure|string|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
@@ -3487,7 +3487,7 @@ class Jwt
      * @param array $claims
      * @param int $expire
      * @return string
-     * @throws Exception
+     * @throws \Exception
      * @see Jwt::generate
      */
     public static function generate(array $claims, int $expire = 2592000): string
@@ -4838,7 +4838,7 @@ class UserModel
      * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
      * ```
      *
-     * @param array|Closure|string|null $column
+     * @param array|\Closure|string|null $column
      * @param mixed|null $operator
      * @param mixed|null $value
      * @return $this
@@ -5905,7 +5905,7 @@ if (0) {
          * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
-         * @param array|Closure|string|null $column
+         * @param array|\Closure|string|null $column
          * @param mixed|null $operator
          * @param mixed|null $value
          * @return $this
@@ -7128,7 +7128,7 @@ if (0) {
          * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
-         * @param array|Closure|string|null $column
+         * @param array|\Closure|string|null $column
          * @param mixed|null $operator
          * @param mixed|null $value
          * @return $this
@@ -8208,7 +8208,7 @@ if (0) {
          * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
-         * @param array|Closure|string|null $column
+         * @param array|\Closure|string|null $column
          * @param mixed|null $operator
          * @param mixed|null $value
          * @return $this
@@ -8752,7 +8752,7 @@ if (0) {
          * @param array $claims
          * @param int $expire
          * @return string
-         * @throws Exception
+         * @throws \Exception
          * @see Jwt::generate
          */
         public function generate(array $claims, int $expire = 2592000): string
@@ -10091,7 +10091,7 @@ if (0) {
          * $users = QueryBuilder::table('user')->where(['id' => ['1', '2', '3']]);
          * ```
          *
-         * @param array|Closure|string|null $column
+         * @param array|\Closure|string|null $column
          * @param mixed|null $operator
          * @param mixed|null $value
          * @return $this
