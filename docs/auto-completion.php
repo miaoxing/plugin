@@ -408,9 +408,9 @@ class AutoCompletion
 }
 
 /**
- * @return AutoCompletion
+ * @return AutoCompletion|Wei\Wei
  */
 function wei()
 {
-    return new AutoCompletion();
+    return new AutoCompletion(func_get_args());
 }
