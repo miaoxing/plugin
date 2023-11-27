@@ -15,7 +15,7 @@ class ResourceTest extends BaseTestCase
     {
         parent::setUpBeforeClass();
 
-        static::setTablePrefix('p_');
+        self::setTablePrefix('p_');
         static::dropTables();
         static::createTables();
     }
@@ -24,7 +24,7 @@ class ResourceTest extends BaseTestCase
     {
         parent::tearDownAfterClass();
         static::dropTables();
-        static::resetTablePrefix();
+        self::resetTablePrefix();
     }
 
     public function testToArray()

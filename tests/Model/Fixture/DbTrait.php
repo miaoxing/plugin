@@ -61,12 +61,12 @@ trait DbTrait
 
     private static function setTablePrefix($tablePrefix = '')
     {
-        static::$tablePrefix = wei()->db->getTablePrefix();
+        self::$tablePrefix = wei()->db->getTablePrefix();
         wei()->db->setTablePrefix($tablePrefix);
     }
 
     private static function resetTablePrefix()
     {
-        wei()->db->setTablePrefix(static::$tablePrefix);
+        wei()->db->setTablePrefix(self::$tablePrefix);
     }
 }
