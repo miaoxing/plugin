@@ -6,6 +6,7 @@ namespace Miaoxing\Plugin\Model;
  * Add user IP to model object
  *
  * @property-read string $createdIpColumn The column contains create user IP
+ * @mixin \ReqPropMixin
  */
 trait IpTrait
 {
