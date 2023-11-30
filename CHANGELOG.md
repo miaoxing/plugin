@@ -1,3 +1,35 @@
+# [0.14.0](https://github.com/miaoxing/plugin/compare/v0.13.2...v0.14.0) (2023-11-30)
+
+
+### Bug Fixes
+
+* **Jwt:** PHP 8 remove deprecated openssl_free_key function ([69e53f4](https://github.com/miaoxing/plugin/commit/69e53f4404a8246005a4e1e5c8370e613d22d78b))
+* **plugin:** phpstan EventList Parameter [#1](https://github.com/miaoxing/miaoxing/issues/1) $id of method Miaoxing\Plugin\Service\App::setId() expects string|null, int given. ([6b5c10f](https://github.com/miaoxing/plugin/commit/6b5c10f3e20ac3a5f753b39525555a3ce37e40f4))
+* **plugin:** 移除 phpstan 版本限制 ([583de45](https://github.com/miaoxing/plugin/commit/583de4508b195bfabecba42837654b3ff8a17c85))
+* **Plugin:** PHP 8.1 Passing null to parameter of type string is deprecated ([642be41](https://github.com/miaoxing/plugin/commit/642be41e085e178762894c6c25221a06324484d6))
+
+
+### Features
+
+* **Jwt:** 底层实现更换为 `adhocore/jwt`，以便兼容 PHP 7 和 8，更新 Jwt 服务的方法和返回值 ([b1461d2](https://github.com/miaoxing/plugin/commit/b1461d2c6d6eefb46405667973f7322a81a1e456))
+* **plugin:** `GAutoCompletion` 生成 `wei` 函数增加返回值和参数 ([a433fb0](https://github.com/miaoxing/plugin/commit/a433fb00dc729f35d64f8516e17a49cc7bb39e43))
+* **plugin:** `GAutoCompletion` 生成的类文件增加 `AllowDynamicProperties` ([3ae1deb](https://github.com/miaoxing/plugin/commit/3ae1deb8cd17577fa12897e860780768abadcfd8))
+
+
+### BREAKING CHANGES
+
+* **Jwt:** 底层实现更换为 `adhocore/jwt`，以便兼容 PHP 7 和 8，更新 Jwt 服务的方法和返回值
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `8.2.3` to `8.2.4`
+* **@mxjs/cli:** upgrade from `0.1.12` to `0.1.13`
+* **@wei/wei:** upgrade from `0.16.0` to `0.17.0`
+
 ## [0.13.2](https://github.com/miaoxing/plugin/compare/v0.13.1...v0.13.2) (2023-11-02)
 
 
