@@ -134,6 +134,7 @@ trait ConstTrait
      */
     public function whereConstKey($prefix, $reqKey = null)
     {
+        // @phpstan-ignore-next-line
         if (!$this instanceof ReqQueryTrait) {
             throw new \Exception('Not support');
         }
