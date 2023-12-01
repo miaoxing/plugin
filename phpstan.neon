@@ -12,3 +12,4 @@ parameters:
 
     ignoreErrors:
         - "#^Unsafe usage of new static\\(\\)\\.$#"
+        - "#^Trait Miaoxing\\\\Plugin\\\\Model\\\\SoftDeleteTrait is used zero times and is not analysed\\.$#"
