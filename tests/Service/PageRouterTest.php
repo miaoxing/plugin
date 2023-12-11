@@ -52,7 +52,7 @@ class PageRouterTest extends BaseTestCase
         }
 
         if ($result && !isset($result['paths'])) {
-            $result['paths'] = array_map(function ($path) {
+            $result['paths'] = array_map(static function ($path) {
                 return '/' . $path;
             }, explode('/', $result['file']));
         }

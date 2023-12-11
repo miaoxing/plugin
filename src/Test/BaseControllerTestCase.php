@@ -4,7 +4,6 @@ namespace Miaoxing\Plugin\Test;
 
 use Miaoxing\Plugin\Service\Tester;
 use Miaoxing\Plugin\Service\User;
-use RuntimeException;
 
 /**
  * @mixin \AppMixin
@@ -57,7 +56,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
         $controllerClass = end($controllerClasses);
         $actions = get_class_methods($controllerClass);
         if (!$actions) {
-            throw new RuntimeException(sprintf(
+            throw new \RuntimeException(sprintf(
                 'Action method not found in controller %s class %s',
                 $controller,
                 $controllerClass

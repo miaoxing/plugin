@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Wei\BaseCache;
 
@@ -24,7 +23,7 @@ class CacheClear extends BaseCommand
         if ($driver) {
             $cache = $this->wei->get($driver);
             if (!$cache instanceof BaseCache) {
-                throw new InvalidArgumentException(sprintf('Driver "%s" is not a instance of BaseCache', $driver));
+                throw new \InvalidArgumentException(sprintf('Driver "%s" is not a instance of BaseCache', $driver));
             }
         } else {
             $cache = $this->cache;

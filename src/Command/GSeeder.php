@@ -3,7 +3,6 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\Service\Seeder;
-use ReflectionClass;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -27,7 +26,7 @@ class GSeeder extends BaseCommand
     {
         $plugin = $this->plugin->getOneById($this->getArgument('plugin'));
         $path = $plugin->getBasePath() . '/src/Seeder';
-        $reflection = new ReflectionClass($plugin);
+        $reflection = new \ReflectionClass($plugin);
         $namespace = $reflection->getNamespaceName() . '\\Seeder';
 
         Seeder::setOutput($this->output)->create([

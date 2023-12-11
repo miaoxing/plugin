@@ -19,9 +19,9 @@ final class ReqQueryTraitTest extends BaseTestCase
     {
         parent::setUpBeforeClass();
 
-        static::$tablePrefix = wei()->db->getTablePrefix();
+        self::$tablePrefix = wei()->db->getTablePrefix();
         wei()->db->setTablePrefix('');
-        static::dropTables();
+        self::dropTables();
 
         wei()->schema->table('test_req_queries')
             ->id('id')
@@ -51,8 +51,8 @@ final class ReqQueryTraitTest extends BaseTestCase
 
     public static function tearDownAfterClass(): void
     {
-        static::dropTables();
-        wei()->db->setTablePrefix(static::$tablePrefix);
+        self::dropTables();
+        wei()->db->setTablePrefix(self::$tablePrefix);
         parent::tearDownAfterClass();
     }
 

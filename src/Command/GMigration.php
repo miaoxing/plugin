@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use ReflectionClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Wei\Migration;
 
@@ -30,7 +29,7 @@ class GMigration extends BaseCommand
     {
         $plugin = $this->plugin->getOneById($this->getPluginId());
         $path = $plugin->getBasePath() . '/src/Migration';
-        $reflection = new ReflectionClass($plugin);
+        $reflection = new \ReflectionClass($plugin);
         $namespace = $reflection->getNamespaceName() . '\\Migration';
 
         Migration::setOutput($this->output)->create([

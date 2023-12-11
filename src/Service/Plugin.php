@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Exception;
 use Miaoxing\Plugin\BaseService;
 
 /**
@@ -236,13 +235,13 @@ class Plugin extends BaseService
      *
      * @param string $id
      * @return \Miaoxing\Plugin\BasePlugin
-     * @throws Exception 当插件类不存在时
+     * @throws \Exception 当插件类不存在时
      */
     public function getOneById($id)
     {
         $plugin = $this->getById($id);
         if (!$plugin) {
-            throw new Exception(sprintf('Plugin "%s" not found', $id));
+            throw new \Exception(sprintf('Plugin "%s" not found', $id));
         }
 
         return $plugin;
@@ -506,7 +505,7 @@ class Plugin extends BaseService
      *
      * @param bool $refresh
      * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     protected function getPluginClasses($refresh = false)
     {
@@ -552,7 +551,7 @@ class Plugin extends BaseService
             $this->configCache->delete($key);
         }
 
-        return $this->configCache->remember($key, function () use ($fn) {
+        return $this->configCache->remember($key, static function () use ($fn) {
             return $fn();
         });
     }

@@ -189,11 +189,11 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      */
     public function findByClass($html, $class)
     {
-        $dom = new \DomDocument();
+        $dom = new \DOMDocument();
         libxml_use_internal_errors(true);
         $dom->loadHTML($html);
         libxml_clear_errors();
-        $finder = new \DomXPath($dom);
+        $finder = new \DOMXPath($dom);
 
         return $finder->query("//*[contains(@class, '$class')]");
     }

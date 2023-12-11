@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Resource;
 
-use Closure;
 use Miaoxing\Plugin\BaseService;
 use Wei\BaseModel;
 
@@ -196,14 +195,14 @@ abstract class BaseResource extends BaseService
             return static::missingValue();
         }
 
-        return $value instanceof Closure ? $value() : $value;
+        return $value instanceof \Closure ? $value() : $value;
     }
 
     /**
      * Return an array that will be merged into the resource array, or ignore the value by condition
      *
      * @param bool $bool
-     * @param array|Closure $value
+     * @param array|\Closure $value
      * @return MergeValue|MissingValue
      */
     protected function mergeWhen(bool $bool, $value)
@@ -212,6 +211,6 @@ abstract class BaseResource extends BaseService
             return static::missingValue();
         }
 
-        return new MergeValue($value instanceof Closure ? $value() : $value);
+        return new MergeValue($value instanceof \Closure ? $value() : $value);
     }
 }

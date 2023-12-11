@@ -9,8 +9,6 @@ use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
-use ReflectionClass;
-use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -100,7 +98,7 @@ class GAutoCompletion extends BaseCommand
                 continue;
             }
 
-            $refClass = new ReflectionClass($serviceClass);
+            $refClass = new \ReflectionClass($serviceClass);
 
             $staticNamespace = $staticFile->addNamespace($refClass->getNamespaceName());
             $dynamicNamespace = $dynamicFile->addNamespace($refClass->getNamespaceName());
@@ -116,7 +114,7 @@ class GAutoCompletion extends BaseCommand
             $methods = [];
             $staticMethods = [];
             $see = '@see ' . $refClass->getShortName() . '::';
-            foreach ($refClass->getMethods(ReflectionMethod::IS_PROTECTED) as $refMethod) {
+            foreach ($refClass->getMethods(\ReflectionMethod::IS_PROTECTED) as $refMethod) {
                 // NOTE: 单文件下，如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
                 if ($this->excludeParentMethods && $refMethod->getDeclaringClass()->getName() !== $serviceClass) {
                     continue;
@@ -216,7 +214,7 @@ class GAutoCompletion extends BaseCommand
         }
 
         foreach ($services as $name => $class) {
-            if ((new ReflectionClass($class))->isAbstract()) {
+            if ((new \ReflectionClass($class))->isAbstract()) {
                 unset($services[$name]);
             }
         }
@@ -287,7 +285,7 @@ PHP;
 
         // Wrap `if (0) ` outside class definition
         $index = 0;
-        $dynamics = preg_replace_callback('/    namespace (.+?)\n/mi', function ($matches) use (&$index) {
+        $dynamics = preg_replace_callback('/    namespace (.+?)\n/mi', static function ($matches) use (&$index) {
             ++$index;
             $prefix = 1 === $index ? '' : "\n}\n";
             return $prefix . ltrim($matches[0]) . "\nif (0) {";
@@ -334,7 +332,7 @@ PHP;
     protected function generateDocBlock(string $name, string $class, $generateInvoke = true)
     {
         $docBlock = '';
-        $ref = new ReflectionClass($class);
+        $ref = new \ReflectionClass($class);
         $docName = $this->getDocCommentTitle($ref->getDocComment());
 
         $docBlock .= rtrim(sprintf(' * @property    %s $%s %s', $class, $name, $docName)) . "\n";
@@ -353,7 +351,7 @@ PHP;
         return $docBlock;
     }
 
-    protected function geParam(ReflectionMethod $method)
+    protected function geParam(\ReflectionMethod $method)
     {
         $params = $method->getParameters();
         if (!$params) {
@@ -389,7 +387,7 @@ PHP;
         }
     }
 
-    protected function getMethodReturn(ReflectionClass $class, ReflectionMethod $method)
+    protected function getMethodReturn(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $doc = $method->getDocComment();
         preg_match('/@return (.+?)\n/', $doc, $matches);
@@ -468,7 +466,7 @@ PHP;
         return implode("\n", $array);
     }
 
-    protected function isApi(ReflectionMethod $method)
+    protected function isApi(\ReflectionMethod $method)
     {
         return strpos($method->getDocComment(), '* @svc');
     }

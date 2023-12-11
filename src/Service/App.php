@@ -3,10 +3,6 @@
 namespace Miaoxing\Plugin\Service;
 
 use Exception;
-use JsonSerializable;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionParameter;
 use Wei\BaseController;
 use Wei\BaseController as WeiBaseController;
 use Wei\BaseModel;
@@ -168,7 +164,7 @@ class App extends \Wei\App
      * Return the current application model object
      *
      * @return AppModel
-     * @throws Exception When the application not found
+     * @throws \Exception When the application not found
      */
     public function getModel(): AppModel
     {
@@ -225,13 +221,13 @@ class App extends \Wei\App
      *
      * @param mixed $response
      * @return Res
-     * @throws Exception
+     * @throws \Exception
      */
     public function handleResponse($response)
     {
         if ($response instanceof Ret) {
             return $response->toRes($this->req, $this->res);
-        } elseif ($response instanceof JsonSerializable) {
+        } elseif ($response instanceof \JsonSerializable) {
             return $this->res->json($response);
         } elseif (is_array($response)) {
             $template = $this->getDefaultTemplate();
@@ -331,7 +327,7 @@ class App extends \Wei\App
      * @param BaseController $instance
      * @param string $action
      * @return Res
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute($instance, $action)
     {
@@ -357,7 +353,7 @@ class App extends \Wei\App
             return $response;
         };
 
-        $next = function () use (&$middleware, &$next, $callback, $wei, $instance) {
+        $next = static function () use (&$middleware, &$next, $callback, $wei, $instance) {
             $config = array_splice($middleware, 0, 1);
             if ($config) {
                 $class = key($config);
@@ -377,11 +373,11 @@ class App extends \Wei\App
      * @param object $instance
      * @param string $method
      * @return array
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     protected function buildActionArgs($instance, string $method)
     {
-        $ref = new ReflectionMethod($instance, $method);
+        $ref = new \ReflectionMethod($instance, $method);
         $params = $ref->getParameters();
         if (!$params || 'req' === $params[0]->getName()) {
             return [$this->req, $this->res];
@@ -395,11 +391,11 @@ class App extends \Wei\App
     }
 
     /**
-     * @param ReflectionParameter $param
+     * @param \ReflectionParameter $param
      * @return mixed
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
-    protected function buildActionArg(ReflectionParameter $param)
+    protected function buildActionArg(\ReflectionParameter $param)
     {
         /** @link https://github.com/phpstan/phpstan/issues/1133 */
         /** @var \ReflectionNamedType|null $type */
@@ -416,7 +412,7 @@ class App extends \Wei\App
 
         // Handle other class
         if ($type && !$type->isBuiltin()) {
-            throw new Exception('Unsupported action parameter type: ' . $type);
+            throw new \Exception('Unsupported action parameter type: ' . $type);
         }
 
         // TODO Throw exception for unsupported builtin type
@@ -426,7 +422,7 @@ class App extends \Wei\App
             if ($param->isDefaultValueAvailable()) {
                 $arg = $param->getDefaultValue();
             } else {
-                throw new Exception('Missing required parameter: ' . $param->getName(), 400);
+                throw new \Exception('Missing required parameter: ' . $param->getName(), 400);
             }
         } elseif ($type) {
             settype($arg, $type->getName());

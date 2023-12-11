@@ -3,8 +3,6 @@
 namespace Miaoxing\Plugin\Command;
 
 use Miaoxing\Plugin\BasePlugin;
-use ReflectionClass;
-use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 use Wei\BaseModel;
 use Wei\Model\CamelCaseTrait;
@@ -85,7 +83,7 @@ final class GMetadata extends BaseCommand
         }
 
         // 获取getXxxAttribute的定义
-        $reflectionClass = new ReflectionClass($modelObject);
+        $reflectionClass = new \ReflectionClass($modelObject);
         preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($modelObject)), $matches);
         foreach ($matches[1] as $key => $attr) {
             $propertyName = $camelCase ? lcfirst($attr) : $this->str->snake($attr);
@@ -190,7 +188,7 @@ final class GMetadata extends BaseCommand
         chmod($file, 0777);
     }
 
-    protected function getMethodReturn(ReflectionClass $class, ReflectionMethod $method)
+    protected function getMethodReturn(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $doc = $method->getDocComment();
         preg_match('/@return (.+?)\n/', $doc, $matches);
