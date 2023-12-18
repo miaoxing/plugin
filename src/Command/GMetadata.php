@@ -43,7 +43,7 @@ final class GMetadata extends BaseCommand
             $this->createClass($name, $plugin, $camelCase);
         }
 
-        return $this->suc('创建成功');
+        $this->suc('创建成功');
     }
 
     protected function configure()
