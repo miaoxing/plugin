@@ -14,7 +14,7 @@ use Miaoxing\Plugin\Service\Ret;
  * @mixin \AppMixin
  * @mixin \PluginMixin
  */
-abstract class BasePlugin extends \Miaoxing\Plugin\BaseService
+abstract class BasePlugin extends BaseService
 {
     /**
      * 插件的简短名称

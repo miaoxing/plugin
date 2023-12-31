@@ -57,7 +57,7 @@ abstract class BaseResource extends BaseService
     /**
      * Convert the model object to array
      *
-     * @param \Wei\BaseModel $model
+     * @param BaseModel $model
      * @return array
      * @svc
      */
@@ -95,7 +95,7 @@ abstract class BaseResource extends BaseService
     /**
      * Alias of `transformWhenLoaded`
      *
-     * @param \Wei\BaseModel $model
+     * @param BaseModel $model
      * @param string $relation
      * @return array|MissingValue
      */
@@ -134,7 +134,7 @@ abstract class BaseResource extends BaseService
      * Remove missing value and expand merged value
      *
      * @param array $data
-     * @param \Wei\BaseModel $model
+     * @param BaseModel $model
      * @return array
      */
     protected function filter(array $data, BaseModel $model): array
@@ -168,7 +168,7 @@ abstract class BaseResource extends BaseService
     /**
      * Return the model array by specified columns that will be merge into the resource array
      *
-     * @param \Wei\BaseModel $model
+     * @param BaseModel $model
      * @param array $columns
      * @return MergeValue
      */
