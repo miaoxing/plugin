@@ -45,17 +45,17 @@ class () extends BasePage {
 
     public function returnRetInMiddleware()
     {
-        throw new \Exception('test error');
+        throw new Exception('test error');
     }
 
     public function returnStringInMiddleware()
     {
-        throw new \Exception('test error');
+        throw new Exception('test error');
     }
 
     public function returnResponseInMiddleware()
     {
-        throw new \Exception('test error');
+        throw new Exception('test error');
     }
 
     public function param($id)
