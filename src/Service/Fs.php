@@ -24,7 +24,7 @@ class Fs extends BaseService
      *
      * @svc
      */
-    protected function getExt(string $file, string $default = null): ?string
+    protected function getExt(string $file, ?string $default = null): ?string
     {
         $pos = strrpos($file, '.');
         if (false !== $pos) {

@@ -226,7 +226,7 @@ final class ReqQueryTraitTest extends BaseTestCase
         $this->assertSame('SELECT * FROM `test_req_queries`' . ($sql ? ' ORDER BY ' . $sql : ''), $query->getRawSql());
     }
 
-    public function providerForSetReqOrderBy(): array
+    public static function providerForSetReqOrderBy(): array
     {
         return [
             [
@@ -360,7 +360,7 @@ final class ReqQueryTraitTest extends BaseTestCase
         $this->assertSame($sql, $query->getRawSql());
     }
 
-    public function providerForSetReqSearch(): array
+    public static function providerForSetReqSearch(): array
     {
         return [
             [

@@ -74,7 +74,7 @@ class PageRouter extends BaseService
      * @param array|null $pages
      * @return $this
      */
-    public function setPages(array $pages = null): self
+    public function setPages(?array $pages = null): self
     {
         $this->pages = $pages;
         return $this;

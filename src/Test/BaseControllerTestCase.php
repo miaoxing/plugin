@@ -49,7 +49,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
         }
     }
 
-    public function providerForActions()
+    public static function providerForActions()
     {
         $controller = $this->getController();
         $controllerClasses = $this->app->getControllerClasses($controller);

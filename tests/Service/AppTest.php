@@ -91,7 +91,7 @@ final class AppTest extends BaseTestCase
         $this->assertSame($content, $response);
     }
 
-    public function dataForResponse()
+    public static function dataForResponse()
     {
         return [
             [

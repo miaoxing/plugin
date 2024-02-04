@@ -73,7 +73,7 @@ class () extends BasePage {
         return $id;
     }
 
-    public function paramWithTypeAndDefaultValue(bool $isEnabled = null)
+    public function paramWithTypeAndDefaultValue(?bool $isEnabled = null)
     {
         return var_export($isEnabled, true);
     }

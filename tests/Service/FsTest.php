@@ -19,7 +19,7 @@ class FsTest extends BaseTestCase
         $this->assertSame($ext, $this->fs->getExt($path));
     }
 
-    public function providerForGetExt(): array
+    public static function providerForGetExt(): array
     {
         return [
             ['test.jpg', 'jpg'],

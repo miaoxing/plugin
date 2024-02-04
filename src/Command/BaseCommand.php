@@ -33,7 +33,7 @@ abstract class BaseCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $name = null)
+    public function __construct(?string $name = null)
     {
         $this->wei = wei();
 
