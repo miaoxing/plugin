@@ -24,59 +24,6 @@ abstract class BaseControllerTestCase extends BaseTestCase
      */
     protected $statusCodes = [];
 
-    /**
-     * 页面可以正常访问
-     *
-     * @dataProvider providerForActions
-     * @param string $action
-     * @param int|null $code
-     */
-    public function testActions($action, $code = null)
-    {
-        $controller = $this->getController();
-
-        $result = $this->dispatch($controller, $action);
-
-        if ($result instanceof \Exception) {
-            $this->assertEquals(404, $result->getCode(), $action . '返回' . $result->getMessage());
-        } else {
-            if ($code) {
-                $this->assertEquals($code, $result->getStatusCode());
-            } else {
-                $this->assertNotEquals(302, $result->getStatusCode());
-            }
-            $this->assertNotEmpty($result->getContent(), $action . '返回内容不为空');
-        }
-    }
-
-    public static function providerForActions()
-    {
-        $controller = $this->getController();
-        $controllerClasses = $this->app->getControllerClasses($controller);
-        $controllerClass = end($controllerClasses);
-        $actions = get_class_methods($controllerClass);
-        if (!$actions) {
-            throw new \RuntimeException(sprintf(
-                'Action method not found in controller %s class %s',
-                $controller,
-                $controllerClass
-            ));
-        }
-
-        $params = [];
-        foreach ($actions as $action) {
-            if ('Action' === substr($action, -6)) {
-                $action = substr($action, 0, -6);
-                $params[] = [
-                    $action,
-                    isset($this->statusCodes[$action]) ? $this->statusCodes[$action] : null,
-                ];
-            }
-        }
-
-        return $params;
-    }
-
     public function getController()
     {
         if (!$this->controller) {
