@@ -466,7 +466,7 @@ class ConfigTest extends BaseTestCase
         }
     }
 
-    public function providerForTypes(): array
+    public static function providerForTypes(): array
     {
         return [
             ['test1', null],

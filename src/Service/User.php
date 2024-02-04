@@ -136,7 +136,7 @@ class User extends BaseService
      * @experimental may be remove
      * @svc
      */
-    protected function toArray($returnFields = [], callable $prepend = null): array
+    protected function toArray($returnFields = [], ?callable $prepend = null): array
     {
         return $this->cur()->toArray($returnFields, $prepend);
     }

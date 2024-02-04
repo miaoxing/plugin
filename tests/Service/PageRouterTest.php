@@ -14,7 +14,7 @@ class PageRouterTest extends BaseTestCase
      * @param array|null $result
      * @dataProvider providerForMatch
      */
-    public function testMatch(string $pathInfo, array $result = null)
+    public function testMatch(string $pathInfo, ?array $result = null)
     {
         $this->pageRouter->setPages([
             '/assignees' => [
@@ -60,7 +60,7 @@ class PageRouterTest extends BaseTestCase
         $this->assertSame($result, $this->pageRouter->match($pathInfo));
     }
 
-    public function providerForMatch()
+    public static function providerForMatch()
     {
         return [
             [

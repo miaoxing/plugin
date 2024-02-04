@@ -43,7 +43,7 @@ class Ret extends \Wei\Ret
      * @return Res
      * @throws \Exception
      */
-    public function toRes(Req $req = null, Res $res = null)
+    public function toRes(?Req $req = null, ?Res $res = null)
     {
         $req || $req = $this->req;
         $res || $res = $this->res;
