@@ -114,7 +114,7 @@ class Jwt extends BaseService
             return err('Token 不能为空');
         }
 
-        $jwt = new AJtw($this->getPrivateKey(), $this->algo);
+        $jwt = new AJtw($this->getPrivateKey(), $this->algo, \PHP_INT_MAX);
 
         try {
             $payload = $jwt->decode($token);
