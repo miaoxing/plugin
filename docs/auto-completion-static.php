@@ -3697,6 +3697,10 @@ class Ret
     }
 }
 
+class Schedule
+{
+}
+
 class Seeder
 {
     /**
@@ -8960,6 +8964,10 @@ if (0) {
         public function alert($message, $code = null)
         {
         }
+    }
+
+    class Schedule
+    {
     }
 
     class Seeder

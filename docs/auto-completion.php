@@ -247,6 +247,22 @@ class RetPropMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Schedule $schedule
+ */
+ #[\AllowDynamicProperties]
+class ScheduleMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\Schedule $schedule
+ */
+ #[\AllowDynamicProperties]
+class SchedulePropMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Seeder $seeder Seeder
  */
  #[\AllowDynamicProperties]
@@ -393,6 +409,7 @@ class UserModelPropMixin
  * @mixin PageRouterMixin
  * @mixin PluginMixin
  * @mixin RetMixin
+ * @mixin ScheduleMixin
  * @mixin SeederMixin
  * @mixin SessionMixin
  * @mixin SnowflakeMixin

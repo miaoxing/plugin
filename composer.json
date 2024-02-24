@@ -14,7 +14,8 @@
     "doctrine/inflector": "^1.4|^2.0",
     "adhocore/jwt": "^1.1.2",
     "fakerphp/faker": "^1.14",
-    "composer/installers": "^1.11.0"
+    "composer/installers": "^1.11.0",
+    "dragonmantank/cron-expression": "^2||^3"
   },
   "require-dev": {
     "miaoxing/dev": "^9.1.0",
