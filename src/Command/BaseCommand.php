@@ -11,6 +11,7 @@ use Wei\Ret;
 use Wei\ServiceTrait;
 use Wei\Wei;
 
+#[\AllowDynamicProperties]
 abstract class BaseCommand extends Command
 {
     use ServiceTrait;
