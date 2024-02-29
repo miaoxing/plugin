@@ -1,3 +1,16 @@
+## [0.14.4](https://github.com/miaoxing/plugin/compare/v0.14.3...v0.14.4) (2024-02-29)
+
+
+### Bug Fixes
+
+* **plugin:** `Jwt` token 未到时间就过期 ([cd2d27d](https://github.com/miaoxing/plugin/commit/cd2d27d4550f9e1455876c9ecc84fea4af9412b9))
+* **plugin, php8:** Creation of dynamic property xxx is deprecated ([0b6a0a3](https://github.com/miaoxing/plugin/commit/0b6a0a3dc3c798670bdcfe5fa4f47a5c54e0fbfc))
+
+
+### Features
+
+* **plugin, experimental:** 增加 `Schedule` 服务和相关功能 ([7b6f13a](https://github.com/miaoxing/plugin/commit/7b6f13aadb839767556c5e13ce084a66ec3727bd))
+
 ## [0.14.3](https://github.com/miaoxing/plugin/compare/v0.14.2...v0.14.3) (2024-02-20)
 
 
