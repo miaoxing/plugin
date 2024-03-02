@@ -1024,6 +1024,14 @@ class AppModel
     }
 }
 
+class BaseJob
+{
+}
+
+class CliApp
+{
+}
+
 class Config
 {
     /**
@@ -2308,6 +2316,10 @@ class ConfigModel
     public static function onlyPurged(): self
     {
     }
+}
+
+class DbQueue
+{
 }
 
 class Fs
@@ -3639,6 +3651,18 @@ class Plugin
     }
 }
 
+class Queue
+{
+}
+
+class QueueWorker
+{
+}
+
+class RedisQueue
+{
+}
+
 class Ret
 {
     /**
@@ -3852,6 +3876,10 @@ class Storage
     public static function writeFile(string $file, array $options = []): \Wei\Ret
     {
     }
+}
+
+class SyncQueue
+{
 }
 
 class Tester
@@ -6317,6 +6345,14 @@ if (0) {
         }
     }
 
+    class BaseJob
+    {
+    }
+
+    class CliApp
+    {
+    }
+
     class Config
     {
         /**
@@ -7589,6 +7625,10 @@ if (0) {
         public function onlyPurged(): self
         {
         }
+    }
+
+    class DbQueue
+    {
     }
 
     class Fs
@@ -8908,6 +8948,18 @@ if (0) {
         }
     }
 
+    class Queue
+    {
+    }
+
+    class QueueWorker
+    {
+    }
+
+    class RedisQueue
+    {
+    }
+
     class Ret
     {
         /**
@@ -9121,6 +9173,10 @@ if (0) {
         public function writeFile(string $file, array $options = []): \Wei\Ret
         {
         }
+    }
+
+    class SyncQueue
+    {
     }
 
     class Tester
