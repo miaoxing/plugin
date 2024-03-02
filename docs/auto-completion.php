@@ -34,6 +34,39 @@ class AppModelPropMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\BaseJob $baseJob
+ */
+ #[\AllowDynamicProperties]
+class BaseJobMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\BaseJob $baseJob
+ */
+ #[\AllowDynamicProperties]
+class BaseJobPropMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\CliApp $cliApp
+ * @method      mixed cliApp()
+ */
+ #[\AllowDynamicProperties]
+class CliAppMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\CliApp $cliApp
+ */
+ #[\AllowDynamicProperties]
+class CliAppPropMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Config $config
  */
  #[\AllowDynamicProperties]
@@ -62,6 +95,22 @@ class ConfigModelMixin
  */
  #[\AllowDynamicProperties]
 class ConfigModelPropMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\DbQueue $dbQueue
+ */
+ #[\AllowDynamicProperties]
+class DbQueueMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\DbQueue $dbQueue
+ */
+ #[\AllowDynamicProperties]
+class DbQueuePropMixin
 {
 }
 
@@ -230,6 +279,54 @@ class PluginPropMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\Queue $queue
+ */
+ #[\AllowDynamicProperties]
+class QueueMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\Queue $queue
+ */
+ #[\AllowDynamicProperties]
+class QueuePropMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\QueueWorker $queueWorker
+ */
+ #[\AllowDynamicProperties]
+class QueueWorkerMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\QueueWorker $queueWorker
+ */
+ #[\AllowDynamicProperties]
+class QueueWorkerPropMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\RedisQueue $redisQueue
+ */
+ #[\AllowDynamicProperties]
+class RedisQueueMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\RedisQueue $redisQueue
+ */
+ #[\AllowDynamicProperties]
+class RedisQueuePropMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Ret $ret   schema="Ret",
  * @method      Miaoxing\Plugin\Service\Ret ret($message, $code = null, $type = null) Return operation result data
  */
@@ -328,6 +425,22 @@ class StoragePropMixin
 }
 
 /**
+ * @property    Miaoxing\Plugin\Service\SyncQueue $syncQueue
+ */
+ #[\AllowDynamicProperties]
+class SyncQueueMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\SyncQueue $syncQueue
+ */
+ #[\AllowDynamicProperties]
+class SyncQueuePropMixin
+{
+}
+
+/**
  * @property    Miaoxing\Plugin\Service\Tester $tester 测试
  * @method      static tester($controller = null, $action = null)
  */
@@ -396,8 +509,11 @@ class UserModelPropMixin
 /**
  * @mixin AppMixin
  * @mixin AppModelMixin
+ * @mixin BaseJobMixin
+ * @mixin CliAppMixin
  * @mixin ConfigMixin
  * @mixin ConfigModelMixin
+ * @mixin DbQueueMixin
  * @mixin FsMixin
  * @mixin GlobalConfigModelMixin
  * @mixin IsBigIntStringMixin
@@ -408,12 +524,16 @@ class UserModelPropMixin
  * @mixin ObjectReqMixin
  * @mixin PageRouterMixin
  * @mixin PluginMixin
+ * @mixin QueueMixin
+ * @mixin QueueWorkerMixin
+ * @mixin RedisQueueMixin
  * @mixin RetMixin
  * @mixin ScheduleMixin
  * @mixin SeederMixin
  * @mixin SessionMixin
  * @mixin SnowflakeMixin
  * @mixin StorageMixin
+ * @mixin SyncQueueMixin
  * @mixin TesterMixin
  * @mixin UploadMixin
  * @mixin UserMixin
