@@ -2,9 +2,16 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Queue\BaseJob;
+
 class Queue extends BaseQueue
 {
     protected $driver = 'dbQueue';
+
+    public function dispatch(BaseJob $job)
+    {
+        return $this->getObject()->dispatch($job);
+    }
 
     public function push(string $job, $data = '', string $queue = null)
     {
@@ -34,5 +41,16 @@ class Queue extends BaseQueue
     public function getObject(): BaseQueue
     {
         return $this->{$this->driver};
+    }
+
+    public function setDriver(string $driver): self
+    {
+        $this->driver = $driver;
+        return $this;
+    }
+
+    public function clear(): void
+    {
+        $this->getObject()->clear();
     }
 }

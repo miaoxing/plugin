@@ -2,6 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Queue\BaseJob;
+
 /**
  * @mixin \RedisMixin
  */
@@ -214,5 +216,10 @@ class RedisQueue extends BaseQueue
     public function setExpire(?int $seconds)
     {
         $this->expire = $seconds;
+    }
+
+    public function clear(): void
+    {
+        $this->redis()->del($this->getQueue());
     }
 }

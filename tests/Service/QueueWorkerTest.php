@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\BaseJob;
+use Miaoxing\Plugin\Queue\BaseJob;
 use Miaoxing\Plugin\Service\Queue;
 use Miaoxing\Plugin\Service\QueueWorker;
 use Miaoxing\Plugin\Test\BaseTestCase;

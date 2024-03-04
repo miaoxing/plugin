@@ -34,22 +34,6 @@ class AppModelPropMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\BaseJob $baseJob
- */
- #[\AllowDynamicProperties]
-class BaseJobMixin
-{
-}
-
-/**
- * @property    Miaoxing\Plugin\Service\BaseJob $baseJob
- */
- #[\AllowDynamicProperties]
-class BaseJobPropMixin
-{
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\CliApp $cliApp
  * @method      mixed cliApp()
  */
@@ -509,7 +493,6 @@ class UserModelPropMixin
 /**
  * @mixin AppMixin
  * @mixin AppModelMixin
- * @mixin BaseJobMixin
  * @mixin CliAppMixin
  * @mixin ConfigMixin
  * @mixin ConfigModelMixin

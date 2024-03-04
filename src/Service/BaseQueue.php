@@ -3,12 +3,14 @@
 namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
  * 基于 Laravel Queue 简化的队列服务
  *
  * @link https://github.com/laravel/framework/tree/5.1/src/Illuminate/Queue
  * @mixin \EventPropMixin
+ * @mixin \QueueWorkerPropMixin
  */
 abstract class BaseQueue extends BaseService
 {
@@ -20,9 +22,22 @@ abstract class BaseQueue extends BaseService
     protected $name = 'default';
 
     /**
-     * @var string
+     * @var array<BaseJob>
      */
-    protected $jobClass = BaseJob::class;
+    protected $jobs = [];
+
+    public function dispatch(BaseJob $job)
+    {
+        return $this->push(get_class($job), $job->getPayload()['data'], $job->getQueueName());
+    }
+
+    public function __destruct()
+    {
+        foreach ($this->jobs as $job) {
+            $this->push(get_class($job), $job->getPayload());
+        }
+        $this->jobs = [];
+    }
 
     /**
      * Push a new job onto the queue.
@@ -123,11 +138,11 @@ abstract class BaseQueue extends BaseService
      * @param array $payload
      * @param string|null $id
      * @param string|null $queue
-     * @return BaseJob
+     * @return \Miaoxing\Plugin\Queue\BaseJob
      */
     protected function createJob(array $payload, string $id = null, string $queue = null): BaseJob
     {
-        return new $this->jobClass([
+        return new $payload['job']([
             'wei' => $this->wei,
             'id' => $id,
             'queue' => $this,
@@ -204,7 +219,7 @@ abstract class BaseQueue extends BaseService
      * Pop the next job off of the queue.
      *
      * @param string|null $queue
-     * @return BaseJob|null
+     * @return \Miaoxing\Plugin\Queue\BaseJob|null
      */
     abstract public function pop(string $queue = null): ?BaseJob;
 
@@ -215,4 +230,11 @@ abstract class BaseQueue extends BaseService
      * @param int|null $id
      */
     abstract public function delete(array $payload, int $id = null);
+
+    /**
+     * Clear all jobs from the queue.
+     *
+     * @return void
+     */
+    abstract public function clear(): void;
 }
