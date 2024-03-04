@@ -2,14 +2,11 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\Service\BaseJob;
+use Miaoxing\Plugin\Queue\BaseJob;
 
 class RedisQueueJob extends BaseJob
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function __invoke()
+    public function __invoke($data)
     {
     }
 }

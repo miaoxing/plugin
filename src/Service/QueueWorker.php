@@ -4,6 +4,7 @@ namespace Miaoxing\Plugin\Service;
 
 use Exception;
 use Miaoxing\Plugin\BaseService;
+use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
  * @property \Wei\Logger $logger
@@ -96,11 +97,11 @@ class QueueWorker extends BaseService
     /**
      * Listen to the given queue in a loop.
      *
-     * @param  string $queueName
-     * @param  int $delay
-     * @param  int $memory
-     * @param  int $sleep
-     * @param  int $maxTries
+     * @param string $queueName
+     * @param int $delay
+     * @param int $memory
+     * @param int $sleep
+     * @param int $maxTries
      * @return array
      */
     public function daemon($queueName = null, $delay = 0, $memory = 128, $sleep = 3, $maxTries = 0)
@@ -126,10 +127,10 @@ class QueueWorker extends BaseService
     /**
      * Run the next job for the daemon worker.
      *
-     * @param  string $queueName
-     * @param  int $delay
-     * @param  int $sleep
-     * @param  int $maxTries
+     * @param string $queueName
+     * @param int $delay
+     * @param int $sleep
+     * @param int $maxTries
      */
     protected function runNextJobForDaemon($queueName, $delay, $sleep, $maxTries)
     {
@@ -153,13 +154,13 @@ class QueueWorker extends BaseService
     /**
      * Listen to the given queue.
      *
-     * @param  string $queueName
-     * @param  int $delay
-     * @param  int $sleep
-     * @param  int $maxTries
+     * @param string $queueName
+     * @param int $delay
+     * @param int $sleep
+     * @param int $maxTries
      * @return array
      */
-    public function pop($queueName, $delay = 0, $sleep = 3, $maxTries = 0)
+    public function pop(string $queueName = null, int $delay = 0, int $sleep = 3, int $maxTries = 0)
     {
         $job = $this->getNextJob($this->queue, $queueName);
 
@@ -179,10 +180,10 @@ class QueueWorker extends BaseService
      * Get the next job from the queue connection.
      *
      * @param BaseQueue $driver
-     * @param  string $queueName
+     * @param string|null $queueName
      * @return BaseJob|null
      */
-    protected function getNextJob($driver, $queueName)
+    protected function getNextJob(BaseQueue $driver, string $queueName = null)
     {
         if (null === $queueName) {
             return $driver->pop();
@@ -200,18 +201,14 @@ class QueueWorker extends BaseService
     /**
      * Process a given job from the queue.
      *
-     * @param  BaseJob $job
-     * @param  int $maxTries
-     * @param  int $delay
+     * @param BaseJob $job
+     * @param int $maxTries
+     * @param int $delay
      * @return array|null
      * @throws \Exception
      */
     public function process(BaseJob $job, $maxTries = 0, $delay = 0)
     {
-        if ($maxTries > 0 && $job->attempts() > $maxTries) {
-            return $this->logFailedJob($job);
-        }
-
         try {
             // First we will fire off the job. Once it is done we will see if it will
             // be auto-deleted after processing and if so we will go ahead and run
@@ -228,6 +225,10 @@ class QueueWorker extends BaseService
                 $job->release($delay);
             }
 
+            if ($maxTries > 0 && $job->attempts() >= $maxTries) {
+                $this->logFailedJob($job, $e);
+            }
+
             throw $e;
         }
     }
@@ -235,7 +236,7 @@ class QueueWorker extends BaseService
     /**
      * Raise the after queue job event.
      *
-     * @param  BaseJob $job
+     * @param BaseJob $job
      */
     protected function raiseAfterJobEvent(BaseJob $job)
     {
@@ -245,17 +246,18 @@ class QueueWorker extends BaseService
     /**
      * Log a failed job into storage.
      *
-     * @param  BaseJob $job
+     * @param BaseJob $job
      * @return array
      */
-    protected function logFailedJob(BaseJob $job)
+    protected function logFailedJob(BaseJob $job, \Exception $e)
     {
         $this->logger->alert('Queue job failed', $job->getPayload());
 
         if ($this->logFailedJobsToDb) {
             $this->db->insert('queue_failed_jobs', [
-                'queue' => $job->getQueueName(),
+                'queue' => $job->getQueueName() ?? '',
                 'payload' => json_encode($job->getPayload(), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE),
+                'exception' => (string)$e,
                 'created_at' => date('Y-m-d H:i:s', $this->getTime()),
             ]);
         }
@@ -270,7 +272,7 @@ class QueueWorker extends BaseService
     /**
      * Raise the failed queue job event.
      *
-     * @param  BaseJob $job
+     * @param BaseJob $job
      */
     protected function raiseFailedJobEvent(BaseJob $job)
     {
@@ -288,7 +290,7 @@ class QueueWorker extends BaseService
         $condition = 'all' === $id ? false : ['id' => $id];
         $jobs = wei()->db->selectAll('queue_failed_jobs', $condition);
         if (!$jobs) {
-            return ['code' => -1, 'message' => 'Job not found'];
+            return ['code' => -1, 'message' => 'BaseJob not found'];
         }
 
         foreach ($jobs as $job) {
@@ -308,13 +310,13 @@ class QueueWorker extends BaseService
      */
     public function forget($id)
     {
-        return (bool) $this->db->delete('queue_failed_jobs', ['id' => $id]);
+        return (bool)$this->db->delete('queue_failed_jobs', ['id' => $id]);
     }
 
     /**
      * Determine if the memory limit has been exceeded.
      *
-     * @param  int $memoryLimit
+     * @param int $memoryLimit
      * @return bool
      */
     public function memoryExceeded($memoryLimit)
@@ -346,7 +348,7 @@ class QueueWorker extends BaseService
     /**
      * Sleep the script for a given number of seconds.
      *
-     * @param  int $seconds
+     * @param int $seconds
      */
     public function sleep($seconds)
     {
@@ -376,7 +378,7 @@ class QueueWorker extends BaseService
     /**
      * Determine if the queue worker should restart.
      *
-     * @param  int|null $lastRestart
+     * @param int|null $lastRestart
      * @return bool
      */
     protected function queueShouldRestart($lastRestart)

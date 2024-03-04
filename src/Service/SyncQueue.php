@@ -2,23 +2,26 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Queue\BaseJob;
+
 class SyncQueue extends BaseQueue
 {
+    public function dispatch(BaseJob $job)
+    {
+        $this->jobs[] = $job;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function push(string $job, $data = '', string $queue = null)
     {
-        $queueJob = $this->createJob($this->createPayload($job, $data, $queue));
+        $this->jobs[] = $this->createJob($this->createPayload($job, $data, $queue));
 
-        try {
-            $queueJob->fire();
-            $this->raiseAfterJobEvent($queueJob);
-        } catch (\Exception $e) {
-            $this->handleFailedJob($queueJob);
-            throw $e;
-        }
-
+        // TODO sync 什么时候触发？
+//        $this->queueWorker->work([
+//            'queueName' => $queue,
+//        ]);
         return 0;
     }
 
@@ -42,6 +45,12 @@ class SyncQueue extends BaseQueue
      */
     public function pop($queue = null): ?BaseJob
     {
+        foreach ($this->jobs as $i => $job) {
+            if ($job->getQueueName() === $queue) {
+                unset($this->jobs[$i]);
+                return $job;
+            }
+        }
         return null;
     }
 
@@ -52,37 +61,8 @@ class SyncQueue extends BaseQueue
     {
     }
 
-    /**
-     * Raise the after queue job event.
-     *
-     * @param  BaseJob $job
-     * @return void
-     */
-    protected function raiseAfterJobEvent(BaseJob $job)
+    public function clear(): void
     {
-        $this->event->trigger('queueAfter', ['sync', $job, $job->getPayload()]);
-    }
-
-    /**
-     * Handle the failed job.
-     *
-     * @param  BaseJob $job
-     * @return void
-     */
-    protected function handleFailedJob(BaseJob $job)
-    {
-        $job->failed();
-        $this->raiseFailedJobEvent($job);
-    }
-
-    /**
-     * Raise the failed queue job event.
-     *
-     * @param  BaseJob $job
-     * @return void
-     */
-    protected function raiseFailedJobEvent(BaseJob $job)
-    {
-        $this->event->trigger('queueFailed', ['sync', $job, $job->getPayload()]);
+        $this->jobs = [];
     }
 }

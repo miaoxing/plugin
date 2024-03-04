@@ -2,7 +2,7 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\BaseJob;
+use Miaoxing\Plugin\Queue\BaseJob;
 use Miaoxing\Plugin\Service\RedisQueue;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\RedisQueueJob;

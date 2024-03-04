@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Miaoxing\Plugin\Queue\BaseJob;
 use Wei\QueryBuilder;
 use Wei\Schema;
 
@@ -19,13 +20,6 @@ class DbQueue extends BaseQueue
     protected $table = 'queue_jobs';
 
     /**
-     * The name of the default queue.
-     *
-     * @var string
-     */
-    protected $default = 'queue';
-
-    /**
      * The expiration time of a job.
      *
      * @var int|null
@@ -37,7 +31,7 @@ class DbQueue extends BaseQueue
      */
     public function push(string $job, $data = '', string $queue = null)
     {
-        $payload = json_encode($this->createPayload($job, $data), \JSON_UNESCAPED_SLASHES);
+        $payload = $this->createPayload($job, $data);
 
         return $this->pushRaw($payload, $queue);
     }
@@ -54,7 +48,7 @@ class DbQueue extends BaseQueue
 
         $this->db->insert($this->table, [
             'queue' => $this->getQueue($queue),
-            'payload' => $payload,
+            'payload' => json_encode($payload, \JSON_UNESCAPED_SLASHES),
             'created_at' => date('Y-m-d H:i:s'),
             'available_at' => date('Y-m-d H:i:s', $availableAt),
         ]);
@@ -75,7 +69,7 @@ class DbQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function pop($queue = null)
+    public function pop(string $queue = null): ?BaseJob
     {
         $queue = $this->getQueue($queue);
 
@@ -91,6 +85,7 @@ class DbQueue extends BaseQueue
         }
 
         $pdo->commit();
+        return null;
     }
 
     /**
@@ -102,20 +97,28 @@ class DbQueue extends BaseQueue
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function clear(): void
+    {
+        $this->db->delete($this->table, []);
+    }
+
+    /**
      * Get the queue or return the default.
      *
-     * @param  string|null  $queue
+     * @param string|null $queue
      * @return string
      */
     protected function getQueue($queue)
     {
-        return $queue ?: $this->default;
+        return $queue ?: $this->name;
     }
 
     /**
      * Get the next available job for the queue.
      *
-     * @param  string|null  $queue
+     * @param string|null $queue
      * @return array|null
      */
     protected function getNextAvailableJob($queue)
@@ -123,7 +126,7 @@ class DbQueue extends BaseQueue
         $job = QueryBuilder::table($this->table)
             ->where(['queue' => $this->getQueue($queue)])
             ->whereRaw(
-                // available or reserved but expired
+            // available or reserved but expired
                 '(reserved_at IS NULL AND available_at <= ?) OR (reserved_at <= ?)',
                 [date('Y-m-d H:i:s'), date('Y-m-d H:i:s', time() - $this->expire)]
             )
@@ -133,7 +136,7 @@ class DbQueue extends BaseQueue
 
         if ($job) {
             $job['payload'] = json_decode($job['payload'], true);
-            $job['payload']['attempts'] = $job['attempts'];
+            $job['payload']['attempts'] = $job['attempts'] ?: 1;
         }
 
         return $job;

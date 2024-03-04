@@ -2,12 +2,11 @@
 
 namespace MiaoxingTest\Plugin\Fixture;
 
-use Miaoxing\Plugin\Job;
-use Miaoxing\Plugin\Service\BaseJob;
+use Miaoxing\Plugin\Queue\BaseJob;
 
-class FailingSyncQueueTestHandler extends Job
+class FailingSyncQueueTestHandler extends BaseJob
 {
-    public function __invoke(BaseJob $job, $data)
+    public function __invoke($data)
     {
         throw new \Exception();
     }

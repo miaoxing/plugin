@@ -1024,10 +1024,6 @@ class AppModel
     }
 }
 
-class BaseJob
-{
-}
-
 class CliApp
 {
 }
@@ -6343,10 +6339,6 @@ if (0) {
         public function isRelation(string $method): bool
         {
         }
-    }
-
-    class BaseJob
-    {
     }
 
     class CliApp

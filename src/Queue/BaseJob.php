@@ -1,13 +1,14 @@
 <?php
 
-namespace Miaoxing\Plugin\Service;
+namespace Miaoxing\Plugin\Queue;
 
 use Miaoxing\Plugin\BaseService;
 
 /**
- * @property BaseQueue $queue
+ * @mixin \LoggerPropMixin
+ * @mixin \QueuePropMixin
  */
-class BaseJob extends BaseService
+abstract class BaseJob extends BaseService
 {
     /**
      * @var array
@@ -15,16 +16,9 @@ class BaseJob extends BaseService
     protected $payload = [];
 
     /**
-     * The job handler instance.
-     *
-     * @var mixed
-     */
-    protected $instance;
-
-    /**
      * The name of the queue the job belongs to.
      *
-     * @var string
+     * @var string|null
      */
     protected $queueName;
 
@@ -48,16 +42,58 @@ class BaseJob extends BaseService
     protected $id;
 
     /**
+     * Dispatch the current job with the given arguments.
+     *
+     * @param mixed ...$args
+     * @return static
+     */
+    public static function dispatch(...$args): self
+    {
+        return new static([
+            'payload' => [
+                'data' => $args,
+            ],
+        ]);
+    }
+
+    /**
+     * Dispatch the current job with the given arguments if the given condition is true.
+     *
+     * @param mixed $condition
+     * @param mixed ...$args
+     * @return mixed|void
+     */
+    public static function dispatchIf($condition, ...$args)
+    {
+        if ($condition) {
+            return static::dispatch(...$args);
+        }
+    }
+
+    /**
+     * Dispatch the current job with the given arguments unless the given condition is true.
+     *
+     * @param mixed $condition
+     * @param mixed ...$args
+     * @return mixed|void
+     */
+    public static function dispatchUnless($condition, ...$args)
+    {
+        if (!$condition) {
+            return static::dispatch(...$args);
+        }
+    }
+
+    abstract public function __invoke($data);
+
+    /**
      * Fire the job.
      *
      * @return void
      */
     public function fire()
     {
-        $this->instance = new $this->payload['job']([
-            'wei' => $this->wei,
-        ]);
-        $this->instance->__invoke($this, $this->payload['data']);
+        return $this->__invoke($this->payload['data']);
     }
 
     /**
@@ -120,7 +156,7 @@ class BaseJob extends BaseService
      */
     public function attempts(): int
     {
-        return $this->payload['attempts'];
+        return $this->payload['attempts'] ?? 1;
     }
 
     /**
@@ -140,15 +176,12 @@ class BaseJob extends BaseService
      */
     public function failed()
     {
-        if (method_exists($this->instance, 'failed')) {
-            $this->instance->failed();
-        }
     }
 
     /**
      * Calculate the number of seconds with the given delay.
      *
-     * @param  \DateTime|int $delay
+     * @param \DateTime|int $delay
      * @return int
      */
     protected function getSeconds($delay): int
@@ -156,7 +189,7 @@ class BaseJob extends BaseService
         if ($delay instanceof \DateTime) {
             return max(0, $delay->getTimestamp() - $this->getTime());
         }
-        return (int) $delay;
+        return (int)$delay;
     }
 
     /**
@@ -180,12 +213,31 @@ class BaseJob extends BaseService
     }
 
     /**
+     * Set the queue name of current job
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function onQueue(string $name): self
+    {
+        $this->queueName = $name;
+        return $this;
+    }
+
+    /**
      * Get the name of current queue
      *
-     * @return string
+     * @return string|null
      */
-    public function getQueueName(): string
+    public function getQueueName(): ?string
     {
         return $this->queueName;
+    }
+
+    public function __destruct()
+    {
+        if (!$this->isDeleted()) {
+            $this->queue->dispatch($this);
+        }
     }
 }
