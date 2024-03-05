@@ -9,8 +9,6 @@ use Miaoxing\Plugin\Queue\BaseJob;
  * 基于 Laravel Queue 简化的队列服务
  *
  * @link https://github.com/laravel/framework/tree/5.1/src/Illuminate/Queue
- * @mixin \EventPropMixin
- * @mixin \QueueWorkerPropMixin
  */
 abstract class BaseQueue extends BaseService
 {
@@ -22,80 +20,6 @@ abstract class BaseQueue extends BaseService
     protected $name = 'default';
 
     /**
-     * @var array<BaseJob>
-     */
-    protected $jobs = [];
-
-    public function dispatch(BaseJob $job)
-    {
-        return $this->push(get_class($job), $job->getPayload()['data'], $job->getQueueName());
-    }
-
-    public function __destruct()
-    {
-        foreach ($this->jobs as $job) {
-            $this->push(get_class($job), $job->getPayload());
-        }
-        $this->jobs = [];
-    }
-
-    /**
-     * Push a new job onto the queue.
-     *
-     * @param string $queue
-     * @param string $job
-     * @param mixed $data
-     * @return mixed
-     */
-    public function pushOn(string $queue, string $job, $data = '')
-    {
-        return $this->push($job, $data, $queue);
-    }
-
-    /**
-     * Push a new job onto the queue after a delay.
-     *
-     * @param string $queue
-     * @param \DateTime|int $delay
-     * @param string $job
-     * @param mixed $data
-     * @return mixed
-     */
-    public function laterOn(string $queue, $delay, string $job, $data = '')
-    {
-        return $this->later($delay, $job, $data, $queue);
-    }
-
-    /**
-     * Push an array of jobs with different jobs and same data.
-     *
-     * @param array $jobs
-     * @param mixed $data
-     * @param string|null $queue
-     * @return void
-     */
-    public function bulk(array $jobs, $data = '', string $queue = null)
-    {
-        foreach ($jobs as $job) {
-            $this->push($job, $data, $queue);
-        }
-    }
-
-    /**
-     * Push an array of jobs with different data and some jobs.
-     *
-     * @param string $job
-     * @param array $data
-     * @param string|null $queue
-     */
-    public function pushMulti(string $job, array $data = [], string $queue = null)
-    {
-        foreach ($data as $row) {
-            $this->push($job, $row, $queue);
-        }
-    }
-
-    /**
      * Returns the name of the default queue.
      *
      * @return string
@@ -103,6 +27,17 @@ abstract class BaseQueue extends BaseService
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * Push a job object onto the queue.
+     *
+     * @param BaseJob $job
+     * @return mixed
+     */
+    public function pushJob(BaseJob $job): void
+    {
+        $this->push(get_class($job), $job->getPayload()['data'], $job->getQueueName());
     }
 
     /**
@@ -119,26 +54,12 @@ abstract class BaseQueue extends BaseService
     }
 
     /**
-     * Set additional meta on a payload string.
-     *
-     * @param array $payload
-     * @param string $key
-     * @param mixed $value
-     * @return array
-     */
-    protected function setMeta(array $payload, string $key, $value): array
-    {
-        $payload[$key] = $value;
-        return $payload;
-    }
-
-    /**
      * Create a job instance.
      *
      * @param array $payload
      * @param string|null $id
      * @param string|null $queue
-     * @return \Miaoxing\Plugin\Queue\BaseJob
+     * @return BaseJob
      */
     protected function createJob(array $payload, string $id = null, string $queue = null): BaseJob
     {
@@ -152,20 +73,6 @@ abstract class BaseQueue extends BaseService
     }
 
     /**
-     * Calculate the number of seconds with the given delay.
-     *
-     * @param \DateTime|int $delay
-     * @return int
-     */
-    protected function getSeconds($delay): int
-    {
-        if ($delay instanceof \DateTime) {
-            return max(0, $delay->getTimestamp() - $this->getTime());
-        }
-        return (int)$delay;
-    }
-
-    /**
      * Get the current UNIX timestamp.
      *
      * @return int
@@ -173,6 +80,24 @@ abstract class BaseQueue extends BaseService
     protected function getTime(): int
     {
         return time();
+    }
+
+    /**
+     * @param mixed $value
+     * @return false|string
+     */
+    protected function serialize($value)
+    {
+        return json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function unserialize($value)
+    {
+        return json_decode($value, true);
     }
 
     /**
@@ -190,9 +115,9 @@ abstract class BaseQueue extends BaseService
      * @param string $job
      * @param mixed $data
      * @param string|null $queue
-     * @return mixed
+     * @return void
      */
-    abstract public function push(string $job, $data = '', string $queue = null);
+    abstract public function push(string $job, $data = '', string $queue = null): void;
 
     /**
      * Push a raw payload onto the queue.
@@ -202,7 +127,7 @@ abstract class BaseQueue extends BaseService
      * @param array $options
      * @return mixed
      */
-    abstract public function pushRaw(array $payload, string $queue = null, array $options = []);
+    abstract public function pushRaw(array $payload, string $queue = null, array $options = []): void;
 
     /**
      * Push a new job onto the queue after a delay.
@@ -213,13 +138,13 @@ abstract class BaseQueue extends BaseService
      * @param string|null $queue
      * @return mixed
      */
-    abstract public function later($delay, string $job, $data = '', string $queue = null);
+    abstract public function later($delay, string $job, $data = '', string $queue = null): void;
 
     /**
      * Pop the next job off of the queue.
      *
      * @param string|null $queue
-     * @return \Miaoxing\Plugin\Queue\BaseJob|null
+     * @return BaseJob|null
      */
     abstract public function pop(string $queue = null): ?BaseJob;
 
@@ -228,8 +153,9 @@ abstract class BaseQueue extends BaseService
      *
      * @param array $payload
      * @param int|null $id
+     * @return bool
      */
-    abstract public function delete(array $payload, int $id = null);
+    abstract public function delete(array $payload, int $id = null): bool;
 
     /**
      * Clear all jobs from the queue.

@@ -4,11 +4,9 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\Queue\BaseJob;
 use Wei\QueryBuilder;
-use Wei\Schema;
 
 /**
- * @property Schema $schema
- * @property Db $db
+ * @mixin \DbPropMixin
  */
 class DbQueue extends BaseQueue
 {
@@ -29,41 +27,37 @@ class DbQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function push(string $job, $data = '', string $queue = null)
+    public function push(string $job, $data = '', string $queue = null): void
     {
-        $payload = $this->createPayload($job, $data);
-
-        return $this->pushRaw($payload, $queue);
+        $this->pushRaw($this->createPayload($job, $data), $queue);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pushRaw(array $payload, string $queue = null, array $options = [])
+    public function pushRaw(array $payload, string $queue = null, array $options = []): void
     {
-        $availableAt = time();
+        $availableAt = $this->getTime();
         if (isset($options['delay'])) {
             $availableAt += $options['delay'];
         }
 
         $this->db->insert($this->table, [
             'queue' => $this->getQueue($queue),
-            'payload' => json_encode($payload, \JSON_UNESCAPED_SLASHES),
+            'payload' => $this->serialize($payload),
             'created_at' => date('Y-m-d H:i:s'),
             'available_at' => date('Y-m-d H:i:s', $availableAt),
         ]);
-
-        return $this->db->lastInsertId();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function later($delay, $job, $data = '', $queue = null)
+    public function later($delay, $job, $data = '', $queue = null): void
     {
-        $payload = json_encode($this->createPayload($job, $data), \JSON_UNESCAPED_SLASHES);
+        $payload = $this->createPayload($job, $data);
 
-        return $this->pushRaw($payload, $queue, ['delay' => $delay]);
+        $this->pushRaw($payload, $queue, ['delay' => $delay]);
     }
 
     /**
@@ -91,9 +85,9 @@ class DbQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function delete($payload, $id = null)
+    public function delete($payload, $id = null): bool
     {
-        $this->db->delete($this->table, ['id' => $id]);
+        return (bool)$this->db->delete($this->table, ['id' => $id]);
     }
 
     /**
@@ -110,7 +104,7 @@ class DbQueue extends BaseQueue
      * @param string|null $queue
      * @return string
      */
-    protected function getQueue($queue)
+    protected function getQueue(string $queue = null): string
     {
         return $queue ?: $this->name;
     }
@@ -121,22 +115,23 @@ class DbQueue extends BaseQueue
      * @param string|null $queue
      * @return array|null
      */
-    protected function getNextAvailableJob($queue)
+    protected function getNextAvailableJob(?string $queue): ?array
     {
+        $time = $this->getTime();
         $job = QueryBuilder::table($this->table)
             ->where(['queue' => $this->getQueue($queue)])
             ->whereRaw(
             // available or reserved but expired
                 '(reserved_at IS NULL AND available_at <= ?) OR (reserved_at <= ?)',
-                [date('Y-m-d H:i:s'), date('Y-m-d H:i:s', time() - $this->expire)]
+                [date('Y-m-d H:i:s', $time), date('Y-m-d H:i:s', $time - $this->expire)]
             )
             ->asc('id')
             ->forUpdate()
             ->fetch();
 
         if ($job) {
-            $job['payload'] = json_decode($job['payload'], true);
-            $job['payload']['attempts'] = $job['attempts'] ?: 1;
+            $job['payload'] = $this->unserialize($job['payload']);
+            $job['payload']['attempts'] = $job['attempts'];
         }
 
         return $job;
@@ -148,15 +143,15 @@ class DbQueue extends BaseQueue
      * @param array $job
      * @return array
      */
-    protected function markJobAsReserved($job)
+    protected function markJobAsReserved(array $job): array
     {
         ++$job['attempts'];
-        $job['reserved_at'] = $this->getTime();
+        $job['reserved_at'] = date('Y-m-d H:i:s', $this->getTime());
 
         QueryBuilder::table($this->table)
             ->where(['id' => $job['id']])
             ->update([
-                'reserved_at' => date('Y-m-d H:i:s', $job['reserved_at']),
+                'reserved_at' => $job['reserved_at'],
                 'attempts' => $job['attempts'],
             ]);
 
