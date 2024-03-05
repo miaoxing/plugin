@@ -6,26 +6,29 @@ use Miaoxing\Plugin\Queue\BaseJob;
 
 class Queue extends BaseQueue
 {
-    protected $driver = 'dbQueue';
+    /**
+     * @var string
+     */
+    protected $driver = 'syncQueue';
 
-    public function dispatch(BaseJob $job)
+    public function pushJob(BaseJob $job): void
     {
-        return $this->getObject()->dispatch($job);
+        $this->getObject()->pushJob($job);
     }
 
-    public function push(string $job, $data = '', string $queue = null)
+    public function push(string $job, $data = '', string $queue = null): void
     {
-        return $this->getObject()->push($job, $data, $queue);
+        $this->getObject()->push($job, $data, $queue);
     }
 
-    public function pushRaw(array $payload, string $queue = null, array $options = [])
+    public function pushRaw(array $payload, string $queue = null, array $options = []): void
     {
-        return $this->getObject()->pushRaw($payload, $queue, $options);
+        $this->getObject()->pushRaw($payload, $queue, $options);
     }
 
-    public function later($delay, $job, $data = '', $queue = null)
+    public function later($delay, $job, $data = '', $queue = null): void
     {
-        return $this->getObject()->later($delay, $job, $data, $queue);
+        $this->getObject()->later($delay, $job, $data, $queue);
     }
 
     public function pop($queue = null): ?BaseJob
@@ -33,14 +36,14 @@ class Queue extends BaseQueue
         return $this->getObject()->pop($queue);
     }
 
-    public function delete($payload, $id = null)
+    public function delete($payload, $id = null): bool
     {
         return $this->getObject()->delete($payload, $id);
     }
 
-    public function getObject(): BaseQueue
+    public function clear(): void
     {
-        return $this->{$this->driver};
+        $this->getObject()->clear();
     }
 
     public function setDriver(string $driver): self
@@ -49,8 +52,13 @@ class Queue extends BaseQueue
         return $this;
     }
 
-    public function clear(): void
+    public function getDriver(): string
     {
-        $this->getObject()->clear();
+        return $this->driver;
+    }
+
+    public function getObject(): BaseQueue
+    {
+        return $this->{$this->driver};
     }
 }

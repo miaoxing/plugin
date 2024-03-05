@@ -2,15 +2,14 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Exception;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
- * @property \Wei\Logger $logger
- * @property \Wei\Event $event
- * @property \Wei\Cache $cache
- * @property \Wei\Db $db
+ * @mixin \CachePropMixin
+ * @mixin \DbPropMixin
+ * @mixin \EventPropMixin
+ * @mixin \LoggerPropMixin
  * @mixin \QueuePropMixin
  */
 class QueueWorker extends BaseService
@@ -73,7 +72,7 @@ class QueueWorker extends BaseService
      * Run the worker instance.
      *
      * @param array $options
-     * @return array
+     * @return array{job: BaseJob, failed: bool}
      */
     public function work(array $options = [])
     {
@@ -229,7 +228,7 @@ class QueueWorker extends BaseService
                 $this->logFailedJob($job, $e);
             }
 
-            throw $e;
+            return ['job' => $job, 'failed' => true];
         }
     }
 
@@ -240,7 +239,7 @@ class QueueWorker extends BaseService
      */
     protected function raiseAfterJobEvent(BaseJob $job)
     {
-        $this->event->trigger('queueAfter', [$job, $job->getPayload()]);
+        $this->event->trigger('queueAfter', $job);
     }
 
     /**
@@ -353,6 +352,24 @@ class QueueWorker extends BaseService
     public function sleep($seconds)
     {
         sleep($seconds);
+    }
+
+    /**
+     * @param int $sleep
+     * @return self
+     */
+    public function setSleep(int $sleep): self
+    {
+        $this->sleep = $sleep;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSleep(): int
+    {
+        return $this->sleep;
     }
 
     /**

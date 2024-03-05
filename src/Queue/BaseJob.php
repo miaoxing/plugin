@@ -61,7 +61,7 @@ abstract class BaseJob extends BaseService
      *
      * @param mixed $condition
      * @param mixed ...$args
-     * @return mixed|void
+     * @return BaseJob|void
      */
     public static function dispatchIf($condition, ...$args)
     {
@@ -75,7 +75,7 @@ abstract class BaseJob extends BaseService
      *
      * @param mixed $condition
      * @param mixed ...$args
-     * @return mixed|void
+     * @return BaseJob|void
      */
     public static function dispatchUnless($condition, ...$args)
     {
@@ -156,7 +156,7 @@ abstract class BaseJob extends BaseService
      */
     public function attempts(): int
     {
-        return $this->payload['attempts'] ?? 1;
+        return $this->payload['attempts'] ?? 0;
     }
 
     /**
@@ -225,6 +225,18 @@ abstract class BaseJob extends BaseService
     }
 
     /**
+     * Set the delay second of current job
+     *
+     * @param int $seconds
+     * @return $this
+     */
+    public function delay(int $seconds): self
+    {
+        $this->payload['delay'] = $seconds;
+        return $this;
+    }
+
+    /**
      * Get the name of current queue
      *
      * @return string|null
@@ -234,10 +246,10 @@ abstract class BaseJob extends BaseService
         return $this->queueName;
     }
 
-    public function __destruct()
-    {
-        if (!$this->isDeleted()) {
-            $this->queue->dispatch($this);
-        }
-    }
+//    public function __destruct()
+//    {
+//        if (!$this->isDeleted()) {
+//            $this->queue->pushJob($this);
+//        }
+//    }
 }

@@ -2,9 +2,11 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
+use Miaoxing\Plugin\Service\QueueWorker;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\FailingSyncQueueTestHandler;
 use MiaoxingTest\Plugin\Fixture\Job\TestJob;
+use MiaoxingTest\Plugin\Fixture\Job\TestRetryJob;
 use Wei\Event;
 
 /**
@@ -17,14 +19,14 @@ class QueueTest extends BaseTestCase
     {
         parent::setUp();
         $this->queue->clear();
-        $this->queueWorker->setOption('sleep', 0);
+        $this->queueWorker->setSleep(0);
     }
 
     public function tearDown(): void
     {
-        parent::tearDown();
-
         $this->wei->remove('queueWorker');
+
+        parent::tearDown();
     }
 
     public function testDispatch()
@@ -71,16 +73,13 @@ class QueueTest extends BaseTestCase
         $this->assertArrayNotHasKey('__queue', $_SERVER);
     }
 
-
     public function testDispatchOnQueue()
     {
         unset($_SERVER['__queue']);
 
         TestJob::dispatch('test')->onQueue('test');
 
-        $this->queueWorker->work([
-            'queueName' => 'default',
-        ]);
+        $this->queueWorker->work();
         $this->assertArrayNotHasKey('__queue', $_SERVER);
 
         $this->queueWorker->work([
@@ -101,12 +100,35 @@ class QueueTest extends BaseTestCase
             ->method('trigger')
             ->with('queueFailed');
 
-        FailingSyncQueueTestHandler::dispatch(['foo' => 'bar']);
-
         try {
+            FailingSyncQueueTestHandler::dispatch(['foo' => 'bar']);
             $this->queueWorker->work();
         } catch (\Exception $e) {
             $this->assertTrue($_SERVER['__sync.failed']);
         }
+    }
+
+    public function testTries()
+    {
+        // 为了能直接获取到失败的任务
+        $this->dbQueue->setOption('expire', 0);
+
+        // TODO 主动插入
+        $job = TestRetryJob::dispatch('test');
+        $this->queue->pushJob($job);
+
+        $result = $this->queueWorker->work([
+            'tries' => 2,
+        ]);
+        $this->assertTrue($result['failed']);
+        $this->assertSame(0, $result['job']->attempts());
+
+        $result = $this->queueWorker->work();
+        $this->assertTrue($result['failed']);
+        $this->assertSame(1, $result['job']->attempts());
+
+        $result = $this->queueWorker->work();
+        $this->assertFalse($result['failed']);
+        $this->assertSame(2, $result['job']->attempts());
     }
 }

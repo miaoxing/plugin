@@ -19,24 +19,24 @@ class RedisQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function push(string $job, $data = '', string $queue = null)
+    public function push(string $job, $data = '', string $queue = null): void
     {
-        return $this->pushRaw($this->createPayload($job, $data), $queue);
+        $this->pushRaw($this->createPayload($job, $data), $queue);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pushRaw(array $payload, string $queue = null, array $options = [])
+    public function pushRaw(array $payload, string $queue = null, array $options = []): void
     {
-        $this->redis()->rpush($this->getQueue($queue), $payload);
-        return $payload['id'];
+        $this->redis()->rpush($this->getQueue($queue), $this->serialize($payload));
+//        return $payload['id'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function later($delay, $job, $data = '', $queue = null)
+    public function later($delay, $job, $data = '', $queue = null): void
     {
         $payload = $this->createPayload($job, $data);
 
@@ -44,7 +44,7 @@ class RedisQueue extends BaseQueue
 
         $this->redis()->zadd($this->getQueue($queue) . ':delayed', $this->getTime() + $delay, $payload);
 
-        return $payload['id'];
+//        return $payload['id'];
     }
 
     /**
@@ -69,6 +69,7 @@ class RedisQueue extends BaseQueue
 
         $payload = $this->redis()->lpop($queue);
         if ($payload) {
+            $payload = $this->unserialize($payload);
             $this->redis()->zadd($queue . ':reserved', $this->getTime() + $this->expire, $payload);
             return $this->createJob($payload);
         }
@@ -79,9 +80,9 @@ class RedisQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function delete($payload, $id = null)
+    public function delete($payload, $id = null): bool
     {
-        $this->redis()->zrem($this->getQueue() . ':reserved', $payload);
+        return (bool)$this->redis()->zrem($this->getQueue() . ':reserved', $payload);
     }
 
     /**
@@ -221,5 +222,33 @@ class RedisQueue extends BaseQueue
     public function clear(): void
     {
         $this->redis()->del($this->getQueue());
+    }
+
+    /**
+     * Calculate the number of seconds with the given delay.
+     *
+     * @param \DateTime|int $delay
+     * @return int
+     */
+    protected function getSeconds($delay): int
+    {
+        if ($delay instanceof \DateTime) {
+            return max(0, $delay->getTimestamp() - $this->getTime());
+        }
+        return (int)$delay;
+    }
+
+    /**
+     * Set additional meta on a payload string.
+     *
+     * @param array $payload
+     * @param string $key
+     * @param mixed $value
+     * @return array
+     */
+    protected function setMeta(array $payload, string $key, $value): array
+    {
+        $payload[$key] = $value;
+        return $payload;
     }
 }
