@@ -9,16 +9,16 @@ class Queue extends BaseQueue
     /**
      * @var string
      */
-    protected $driver = 'syncQueue';
+    protected $driver = 'redisQueue';
 
     public function pushJob(BaseJob $job): void
     {
         $this->getObject()->pushJob($job);
     }
 
-    public function push(string $job, $data = '', string $queue = null): void
+    public function push(string $job, $data = '', string $queue = null, $options = []): void
     {
-        $this->getObject()->push($job, $data, $queue);
+        $this->getObject()->push($job, $data, $queue, $options);
     }
 
     public function pushRaw(array $payload, string $queue = null, array $options = []): void

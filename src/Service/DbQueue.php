@@ -27,9 +27,9 @@ class DbQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function push(string $job, $data = '', string $queue = null): void
+    public function push(string $job, $data = '', string $queue = null, array $options = []): void
     {
-        $this->pushRaw($this->createPayload($job, $data), $queue);
+        $this->pushRaw($this->createPayload($job, $data), $queue, $options);
     }
 
     /**
@@ -37,7 +37,7 @@ class DbQueue extends BaseQueue
      */
     public function pushRaw(array $payload, string $queue = null, array $options = []): void
     {
-        $availableAt = $this->getTime();
+        $createdAt = $availableAt = $this->getTime();
         if (isset($options['delay'])) {
             $availableAt += $options['delay'];
         }
@@ -45,7 +45,7 @@ class DbQueue extends BaseQueue
         $this->db->insert($this->table, [
             'queue' => $this->getQueue($queue),
             'payload' => $this->serialize($payload),
-            'created_at' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s', $createdAt),
             'available_at' => date('Y-m-d H:i:s', $availableAt),
         ]);
     }

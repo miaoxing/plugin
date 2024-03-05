@@ -18,6 +18,10 @@ abstract class BaseQueue extends BaseService
      * @var string
      */
     protected $name = 'default';
+    /**
+     * @var int
+     */
+    protected $time;
 
     /**
      * Returns the name of the default queue.
@@ -37,7 +41,9 @@ abstract class BaseQueue extends BaseService
      */
     public function pushJob(BaseJob $job): void
     {
-        $this->push(get_class($job), $job->getPayload()['data'], $job->getQueueName());
+        $this->push(get_class($job), $job->getPayload()['data'], $job->getQueueName(), [
+            'delay' => $job->getDelay(),
+        ]);
     }
 
     /**
@@ -79,7 +85,13 @@ abstract class BaseQueue extends BaseService
      */
     protected function getTime(): int
     {
-        return time();
+        return $this->time ?: time();
+    }
+
+    public function setTime(int $time): self
+    {
+        $this->time = $time;
+        return $this;
     }
 
     /**
@@ -115,9 +127,10 @@ abstract class BaseQueue extends BaseService
      * @param string $job
      * @param mixed $data
      * @param string|null $queue
+     * @param array $options
      * @return void
      */
-    abstract public function push(string $job, $data = '', string $queue = null): void;
+    abstract public function push(string $job, $data = '', string $queue = null, array $options = []): void;
 
     /**
      * Push a raw payload onto the queue.

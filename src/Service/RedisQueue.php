@@ -18,10 +18,19 @@ class RedisQueue extends BaseQueue
 
     /**
      * {@inheritdoc}
+     * @param string $job
+     * @param string $data
+     * @param string|null $queue
+     * @param array $options
      */
-    public function push(string $job, $data = '', string $queue = null): void
+    public function push(string $job, $data = '', string $queue = null, array $options = []): void
     {
-        $this->pushRaw($this->createPayload($job, $data), $queue);
+        if (isset($options['delay']) && $options['delay'] > 0) {
+            $this->later($options['delay'], $job, $data, $queue);
+            return;
+        }
+
+        $this->pushRaw($this->createPayload($job, $data), $queue, $options);
     }
 
     /**
@@ -29,7 +38,7 @@ class RedisQueue extends BaseQueue
      */
     public function pushRaw(array $payload, string $queue = null, array $options = []): void
     {
-        $this->redis()->rpush($this->getQueue($queue), $this->serialize($payload));
+        $this->getRedis()->rpush($this->getQueue($queue), $this->serialize($payload));
 //        return $payload['id'];
     }
 
@@ -42,7 +51,7 @@ class RedisQueue extends BaseQueue
 
         $delay = $this->getSeconds($delay);
 
-        $this->redis()->zadd($this->getQueue($queue) . ':delayed', $this->getTime() + $delay, $payload);
+        $this->getRedis()->zadd($this->getQueue($queue) . ':delayed', $this->getTime() + $delay, $this->serialize($payload));
 
 //        return $payload['id'];
     }
@@ -53,25 +62,25 @@ class RedisQueue extends BaseQueue
     public function release(array $payload, int $delay)
     {
         $payload = $this->setMeta($payload, 'attempts', $payload['attempts'] + 1);
-        $this->redis()->zadd($this->getQueue() . ':delayed', $this->getTime() + $delay, $payload);
+        $this->getRedis()->zadd($this->getQueue() . ':delayed', $this->getTime() + $delay, $this->serialize($payload));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pop($queue = null): ?BaseJob
+    public function pop($name = null): ?BaseJob
     {
-        $queue = $this->getQueue($queue);
+        $queue = $this->getQueue($name);
 
         if (null !== $this->expire) {
             $this->migrateAllExpiredJobs($queue);
         }
 
-        $payload = $this->redis()->lpop($queue);
+        $payload = $this->getRedis()->lpop($queue);
         if ($payload) {
+            $this->getRedis()->zadd($queue . ':reserved', $this->getTime() + $this->expire, $payload);
             $payload = $this->unserialize($payload);
-            $this->redis()->zadd($queue . ':reserved', $this->getTime() + $this->expire, $payload);
-            return $this->createJob($payload);
+            return $this->createJob($payload, $payload['id'], $name);
         }
 
         return null;
@@ -82,7 +91,7 @@ class RedisQueue extends BaseQueue
      */
     public function delete($payload, $id = null): bool
     {
-        return (bool)$this->redis()->zrem($this->getQueue() . ':reserved', $payload);
+        return (bool)$this->getRedis()->zrem($this->getQueue() . ':reserved', $payload);
     }
 
     /**
@@ -130,7 +139,7 @@ class RedisQueue extends BaseQueue
      */
     protected function getExpiredJobs(string $from, int $time): array
     {
-        return $this->redis()->zrangebyscore($from, '-inf', $time);
+        return $this->getRedis()->zrangebyscore($from, '-inf', $time);
     }
 
     /**
@@ -142,7 +151,7 @@ class RedisQueue extends BaseQueue
      */
     protected function removeExpiredJobs(string $from, int $time)
     {
-        $this->redis()->zremrangebyscore($from, '-inf', $time);
+        $this->getRedis()->zremrangebyscore($from, '-inf', $time);
     }
 
     /**
@@ -154,7 +163,7 @@ class RedisQueue extends BaseQueue
      */
     protected function pushExpiredJobsOntoNewQueue(string $to, array $jobs)
     {
-        call_user_func_array([$this->redis(), 'rpush'], array_merge([$to], $jobs));
+        call_user_func_array([$this->getRedis(), 'rpush'], array_merge([$to], $jobs));
     }
 
     /**
@@ -169,7 +178,7 @@ class RedisQueue extends BaseQueue
     {
         $payload = parent::createPayload($job, $data);
         $payload = $this->setMeta($payload, 'id', $this->getRandomId());
-        return $this->setMeta($payload, 'attempts', 1);
+        return $this->setMeta($payload, 'attempts', 0);
     }
 
     /**
@@ -221,7 +230,9 @@ class RedisQueue extends BaseQueue
 
     public function clear(): void
     {
-        $this->redis()->del($this->getQueue());
+        $this->redis->getObject()->del($this->getQueue());
+        $this->redis->getObject()->del($this->getQueue() . ':delayed');
+        $this->redis->getObject()->del($this->getQueue() . ':reserved');
     }
 
     /**
@@ -250,5 +261,15 @@ class RedisQueue extends BaseQueue
     {
         $payload[$key] = $value;
         return $payload;
+    }
+
+    /**
+     * Get the Redis instance.
+     *
+     * @return \Redis
+     */
+    protected function getRedis()
+    {
+        return $this->redis->getObject();
     }
 }

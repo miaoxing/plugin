@@ -10,8 +10,6 @@ class TestRetryJob extends BaseJob
     {
         if ($this->attempts() < 2) {
             throw new \Exception('test');
-        } else {
-            $this->delete();
         }
     }
 }

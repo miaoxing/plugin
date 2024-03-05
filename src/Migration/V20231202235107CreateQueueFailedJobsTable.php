@@ -13,11 +13,11 @@ class V20231202235107CreateQueueFailedJobsTable extends BaseMigration
     {
         $this->schema->table('queue_failed_jobs')
             ->bigId()
-            ->text('connection')
-            ->text('queue')
-            ->longText('payload')
+            ->string('driver')
+            ->string('queue')
+            ->json('payload')
             ->longText('exception')
-            ->timestamp('failed_at')
+            ->timestamp('created_at')
             ->exec();
     }
 

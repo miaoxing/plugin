@@ -42,6 +42,18 @@ abstract class BaseJob extends BaseService
     protected $id;
 
     /**
+     * @return $this
+     * @svc
+     */
+    protected function enqueue(...$args): self
+    {
+        $this->payload['data'] = $args;
+
+        $this->queue->pushJob($this);
+        return $this;
+    }
+
+    /**
      * Dispatch the current job with the given arguments.
      *
      * @param mixed ...$args
@@ -93,7 +105,12 @@ abstract class BaseJob extends BaseService
      */
     public function fire()
     {
-        return $this->__invoke($this->payload['data']);
+        $this->__invoke($this->payload['data']);
+
+        // Auto delete if no error
+        if (!$this->isDeletedOrReleased()) {
+            $this->delete();
+        }
     }
 
     /**
@@ -170,6 +187,16 @@ abstract class BaseJob extends BaseService
     }
 
     /**
+     * @param array $payload
+     * @return $this
+     */
+    public function setPayload(array $payload): self
+    {
+        $this->payload = $payload;
+        return $this;
+    }
+
+    /**
      * Call when the job is failed
      *
      * @return void
@@ -217,11 +244,22 @@ abstract class BaseJob extends BaseService
      *
      * @param string $name
      * @return $this
+     * @svc
      */
-    public function onQueue(string $name): self
+    protected function onQueue(string $name): self
     {
         $this->queueName = $name;
         return $this;
+    }
+
+    /**
+     * Get the name of current queue
+     *
+     * @return string|null
+     */
+    public function getQueueName(): ?string
+    {
+        return $this->queueName;
     }
 
     /**
@@ -237,13 +275,11 @@ abstract class BaseJob extends BaseService
     }
 
     /**
-     * Get the name of current queue
-     *
-     * @return string|null
+     * @return int
      */
-    public function getQueueName(): ?string
+    public function getDelay(): int
     {
-        return $this->queueName;
+        return $this->payload['delay'] ?? 0;
     }
 
 //    public function __destruct()
