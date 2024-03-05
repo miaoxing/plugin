@@ -26,6 +26,11 @@ class SyncQueue extends BaseQueue
      */
     public function pushJob(BaseJob $job): void
     {
+        // TODO
+        $payload = $job->getPayload();
+        $payload['job'] = get_class($job);
+        $job->setPayload($payload);
+
         $this->jobs[] = $job;
 
         // Run directly
@@ -39,7 +44,7 @@ class SyncQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function push(string $job, $data = '', string $queue = null): void
+    public function push(string $job, $data = '', string $queue = null, array $options = []): void
     {
         $this->pushJob($this->createJob($this->createPayload($job, $data), $queue));
     }
@@ -94,5 +99,15 @@ class SyncQueue extends BaseQueue
     public function clear(): void
     {
         $this->jobs = [];
+    }
+
+    /**
+     * @param bool $manual
+     * @return SyncQueue
+     */
+    public function setManual(bool $manual): self
+    {
+        $this->manual = $manual;
+        return $this;
     }
 }

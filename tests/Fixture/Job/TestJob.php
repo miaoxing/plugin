@@ -9,7 +9,5 @@ class TestJob extends BaseJob
     public function __invoke($data)
     {
         $_SERVER['__queue'] = $data;
-
-        $this->delete();
     }
 }

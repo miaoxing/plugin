@@ -2,22 +2,27 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-use Miaoxing\Plugin\Service\QueueWorker;
 use Miaoxing\Plugin\Test\BaseTestCase;
 use MiaoxingTest\Plugin\Fixture\FailingSyncQueueTestHandler;
 use MiaoxingTest\Plugin\Fixture\Job\TestJob;
+use MiaoxingTest\Plugin\Fixture\Job\TestRelease;
 use MiaoxingTest\Plugin\Fixture\Job\TestRetryJob;
 use Wei\Event;
+use Wei\QueryBuilder;
 
 /**
  * @mixin \QueuePropMixin
  * @mixin \QueueWorkerPropMixin
+ * @mixin \DbMixin
  */
 class QueueTest extends BaseTestCase
 {
     public function setUp(): void
     {
         parent::setUp();
+
+//        $this->queue = $this->redisQueue;
+
         $this->queue->clear();
         $this->queueWorker->setSleep(0);
     }
@@ -44,7 +49,8 @@ class QueueTest extends BaseTestCase
     {
         unset($_SERVER['__queue']);
 
-        TestJob::dispatch('foo', 'bar');
+        $job = TestJob::dispatch('foo', 'bar');
+        $this->queue->pushJob($job);
 
         $this->queueWorker->work();
 
@@ -108,17 +114,84 @@ class QueueTest extends BaseTestCase
         }
     }
 
-    public function testTries()
+    public function testId()
     {
-        // 为了能直接获取到失败的任务
-        $this->dbQueue->setOption('expire', 0);
+        $job = TestJob::enqueue();
+        $this->assertNotEmpty($job->getId());
 
-        // TODO 主动插入
+        $job2 = TestJob::enqueue();
+        $this->assertNotEmpty($job2->getId());
+
+        $this->assertNotEmpty($job->getId(), $job2->getId());
+    }
+
+    public function testQueueName()
+    {
         $job = TestRetryJob::dispatch('test');
+        $this->assertNull($job->getQueueName());
+
+        $job->onQueue('test');
+        $this->assertSame('test', $job->getQueueName());
+    }
+
+    public function testDelay()
+    {
+        $job = TestJob::dispatch('test');
+        $this->assertSame(0, $job->getDelay());
+
+        $job->delay(10);
+        $this->assertSame(10, $job->getDelay());
+
         $this->queue->pushJob($job);
 
+        $result = $this->queueWorker->work();
+        $this->assertFalse($result['failed']);
+        $this->assertNull($result['job']);
+
+        $this->queue->setTime(time() + 10);
+        $result = $this->queueWorker->work();
+        $this->assertFalse($result['failed']);
+        $this->assertNotNull($result['job']);
+    }
+
+    public function testRelease()
+    {
+        // TODO release后可以再次获取到
+        $this->dbQueue->setOption('expire', 0);
+
+        TestRelease::enqueue('release');
+
+        // Released
+        $result = $this->queueWorker->work();
+        $this->assertFalse($result['failed']);
+        $this->assertNotNull($result['job']);
+        $this->assertTrue($result['job']->isReleased());
+        $this->assertFalse($result['job']->isDeleted());
+
+        // Released
+        $result = $this->queueWorker->work();
+        $this->assertFalse($result['failed']);
+        $this->assertNotNull($result['job']);
+        $this->assertTrue($result['job']->isReleased());
+        $this->assertFalse($result['job']->isDeleted());
+
+        // Processed
+        $result = $this->queueWorker->work();
+        $this->assertFalse($result['failed']);
+        $this->assertNotNull($result['job']);
+        $this->assertFalse($result['job']->isReleased());
+        $this->assertTrue($result['job']->isDeleted());
+    }
+
+    public function testRetrySuccess()
+    {
+        // TODO 失败后可以再次获取到
+        $this->queue->setOption('expire', 0);
+
+        TestRetryJob::enqueue('test');
+
         $result = $this->queueWorker->work([
-            'tries' => 2,
+            'tries' => 3,
         ]);
         $this->assertTrue($result['failed']);
         $this->assertSame(0, $result['job']->attempts());
@@ -130,5 +203,35 @@ class QueueTest extends BaseTestCase
         $result = $this->queueWorker->work();
         $this->assertFalse($result['failed']);
         $this->assertSame(2, $result['job']->attempts());
+    }
+
+    public function testJobWillBeDeletedAfterFail()
+    {
+        TestRetryJob::enqueue('test');
+
+        $result = $this->queueWorker->work();
+
+        $this->assertTrue($result['failed']);
+        $this->assertTrue($result['job']->isDeleted());
+    }
+
+    public function testLogFailJob()
+    {
+        $queueName = 'fail';
+
+        TestRetryJob::onQueue($queueName)->enqueue('test');
+
+        $result = $this->queueWorker->work(['queueName' => $queueName]);
+        $this->assertTrue($result['failed']);
+
+        $job = QueryBuilder::table('queue_failed_jobs')->desc('id')->fetch();
+
+        $this->assertSame($this->queue->getDriver(), $job['driver']);
+        $this->assertSame($queueName, $job['queue']);
+
+        $payload = json_decode($job['payload'], true);
+        $this->assertSame(TestRetryJob::class, $payload['job']);
+
+        $this->assertStringStartsWith('Exception: test', $job['exception']);
     }
 }

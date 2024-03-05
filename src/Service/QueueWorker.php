@@ -74,7 +74,7 @@ class QueueWorker extends BaseService
      * @param array $options
      * @return array{job: BaseJob, failed: bool}
      */
-    public function work(array $options = [])
+    public function work(array $options = []): array
     {
         $options && $this->setOption($options);
 
@@ -96,14 +96,14 @@ class QueueWorker extends BaseService
     /**
      * Listen to the given queue in a loop.
      *
-     * @param string $queueName
+     * @param string|null $queueName
      * @param int $delay
      * @param int $memory
      * @param int $sleep
      * @param int $maxTries
-     * @return array
+     * @return void
      */
-    public function daemon($queueName = null, $delay = 0, $memory = 128, $sleep = 3, $maxTries = 0)
+    public function daemon(string $queueName = null, int $delay = 0, int $memory = 128, int $sleep = 3, int $maxTries = 0): void
     {
         $startTime = $this->getTime();
         $lastRestart = $this->getTimestampOfLastQueueRestart();
@@ -131,7 +131,7 @@ class QueueWorker extends BaseService
      * @param int $sleep
      * @param int $maxTries
      */
-    protected function runNextJobForDaemon($queueName, $delay, $sleep, $maxTries)
+    protected function runNextJobForDaemon(string $queueName, int $delay, int $sleep, int $maxTries)
     {
         try {
             $this->pop($queueName, $delay, $sleep, $maxTries);
@@ -145,7 +145,7 @@ class QueueWorker extends BaseService
      *
      * @return bool
      */
-    protected function daemonShouldRun()
+    protected function daemonShouldRun(): bool
     {
         return false !== $this->event->until('queueLooping');
     }
@@ -153,13 +153,13 @@ class QueueWorker extends BaseService
     /**
      * Listen to the given queue.
      *
-     * @param string $queueName
+     * @param string|null $queueName
      * @param int $delay
      * @param int $sleep
      * @param int $maxTries
      * @return array
      */
-    public function pop(string $queueName = null, int $delay = 0, int $sleep = 3, int $maxTries = 0)
+    public function pop(string $queueName = null, int $delay = 0, int $sleep = 3, int $maxTries = 0): array
     {
         $job = $this->getNextJob($this->queue, $queueName);
 
@@ -176,13 +176,13 @@ class QueueWorker extends BaseService
     }
 
     /**
-     * Get the next job from the queue connection.
+     * Get the next job from the queue driver.
      *
      * @param BaseQueue $driver
      * @param string|null $queueName
      * @return BaseJob|null
      */
-    protected function getNextJob(BaseQueue $driver, string $queueName = null)
+    protected function getNextJob(BaseQueue $driver, string $queueName = null): ?BaseJob
     {
         if (null === $queueName) {
             return $driver->pop();
@@ -203,10 +203,9 @@ class QueueWorker extends BaseService
      * @param BaseJob $job
      * @param int $maxTries
      * @param int $delay
-     * @return array|null
-     * @throws \Exception
+     * @return array
      */
-    public function process(BaseJob $job, $maxTries = 0, $delay = 0)
+    public function process(BaseJob $job, int $maxTries = 0, int $delay = 0): array
     {
         try {
             // First we will fire off the job. Once it is done we will see if it will
@@ -217,15 +216,12 @@ class QueueWorker extends BaseService
 
             return ['job' => $job, 'failed' => false];
         } catch (\Exception $e) {
-            // If we catch an exception, we will attempt to release the job back onto
-            // the queue so it is not lost. This will let is be retried at a later
-            // time by another listener (or the same one). We will do that here.
-            if (!$job->isDeleted()) {
-                $job->release($delay);
-            }
-
-            if ($maxTries > 0 && $job->attempts() >= $maxTries) {
+            if ($maxTries > 0 && $job->attempts() + 1 >= $maxTries) {
+                // If the maximum number of retries has been reached, we will log and delete the job
                 $this->logFailedJob($job, $e);
+            } elseif (!$job->isDeleted()) {
+                // Otherwise we release back to the queue so we can try running again
+                $job->release($delay);
             }
 
             return ['job' => $job, 'failed' => true];
@@ -246,15 +242,17 @@ class QueueWorker extends BaseService
      * Log a failed job into storage.
      *
      * @param BaseJob $job
-     * @return array
+     * @param \Exception $e
+     * @return void
      */
-    protected function logFailedJob(BaseJob $job, \Exception $e)
+    protected function logFailedJob(BaseJob $job, \Exception $e): void
     {
         $this->logger->alert('Queue job failed', $job->getPayload());
 
         if ($this->logFailedJobsToDb) {
             $this->db->insert('queue_failed_jobs', [
-                'queue' => $job->getQueueName() ?? '',
+                'driver' => $this->queue->getDriver(),
+                'queue' => $job->getQueueName() ?? $this->queue->getName(),
                 'payload' => json_encode($job->getPayload(), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE),
                 'exception' => (string)$e,
                 'created_at' => date('Y-m-d H:i:s', $this->getTime()),
@@ -264,8 +262,6 @@ class QueueWorker extends BaseService
         $job->delete();
         $job->failed();
         $this->raiseFailedJobEvent($job);
-
-        return ['job' => $job, 'failed' => true];
     }
 
     /**
@@ -284,7 +280,7 @@ class QueueWorker extends BaseService
      * @param mixed $id
      * @return array
      */
-    public function retry($id)
+    public function retry($id): array
     {
         $condition = 'all' === $id ? false : ['id' => $id];
         $jobs = wei()->db->selectAll('queue_failed_jobs', $condition);
@@ -307,7 +303,7 @@ class QueueWorker extends BaseService
      * @param int $id
      * @return bool
      */
-    public function forget($id)
+    public function forget(int $id): bool
     {
         return (bool)$this->db->delete('queue_failed_jobs', ['id' => $id]);
     }
@@ -318,7 +314,7 @@ class QueueWorker extends BaseService
      * @param int $memoryLimit
      * @return bool
      */
-    public function memoryExceeded($memoryLimit)
+    public function memoryExceeded(int $memoryLimit): bool
     {
         return (memory_get_usage() / 1024 / 1024) >= $memoryLimit;
     }
@@ -330,7 +326,7 @@ class QueueWorker extends BaseService
      * @param int $timeLimit
      * @return bool
      */
-    public function timeExceeded($startTime, $timeLimit)
+    public function timeExceeded(int $startTime, int $timeLimit): bool
     {
         return $this->getTime() - $startTime > $timeLimit;
     }
@@ -349,7 +345,7 @@ class QueueWorker extends BaseService
      *
      * @param int $seconds
      */
-    public function sleep($seconds)
+    public function sleep(int $seconds)
     {
         sleep($seconds);
     }
@@ -373,11 +369,21 @@ class QueueWorker extends BaseService
     }
 
     /**
+     * @param int $tries
+     * @return $this
+     */
+    public function setTries(int $tries): self
+    {
+        $this->tries = $tries;
+        return $this;
+    }
+
+    /**
      * Get the current UNIX timestamp.
      *
      * @return int
      */
-    protected function getTime()
+    protected function getTime(): int
     {
         return time();
     }
@@ -385,11 +391,11 @@ class QueueWorker extends BaseService
     /**
      * Get the last queue restart timestamp, or null.
      *
-     * @return int|null
+     * @return int
      */
-    protected function getTimestampOfLastQueueRestart()
+    protected function getTimestampOfLastQueueRestart(): int
     {
-        return $this->cache->get('wei:queue:restart');
+        return (int)$this->cache->get('wei:queue:restart');
     }
 
     /**
@@ -398,7 +404,7 @@ class QueueWorker extends BaseService
      * @param int|null $lastRestart
      * @return bool
      */
-    protected function queueShouldRestart($lastRestart)
+    protected function queueShouldRestart(?int $lastRestart): bool
     {
         return $this->getTimestampOfLastQueueRestart() != $lastRestart;
     }
