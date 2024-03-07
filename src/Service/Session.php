@@ -13,7 +13,7 @@ class Session extends \Wei\Session
             $wei = $options['wei'];
             // NOTE: namespace cant be int, why?
             // @internal namespace may be change in the future
-            $options['namespace'] = 'miaoxing-' . $wei->app->getId();
+            $options['namespace'] = 'miaoxing-' . $wei->app->getJobId();
         }
 
         parent::__construct($options);

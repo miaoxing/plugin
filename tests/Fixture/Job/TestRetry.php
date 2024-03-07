@@ -4,11 +4,11 @@ namespace MiaoxingTest\Plugin\Fixture\Job;
 
 use Miaoxing\Plugin\Queue\BaseJob;
 
-class TestRetryJob extends BaseJob
+class TestRetry extends BaseJob
 {
-    public function __invoke($data)
+    public function __invoke(): void
     {
-        if ($this->attempts() < 2) {
+        if ($this->attempts() < 3) {
             throw new \Exception('test');
         }
     }

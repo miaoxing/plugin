@@ -5,7 +5,7 @@ namespace Miaoxing\Plugin\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * @mixin \QueueWorkerMixin
+ * @mixin \QueueWorkerPropMixin
  */
 class QueueRetry extends BaseCommand
 {

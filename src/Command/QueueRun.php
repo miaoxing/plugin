@@ -5,14 +5,13 @@ namespace Miaoxing\Plugin\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * @mixin \QueueWorkerMixin
+ * @mixin \QueueWorkerPropMixin
  */
-class QueueDaemon extends BaseCommand
+class QueueRun extends BaseCommand
 {
     protected function handle()
     {
-        $this->queueWorker->work([
-            'daemon' => true,
+        $this->queueWorker->run([
             'queueName' => $this->getArgument('name'),
         ]);
     }

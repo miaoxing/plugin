@@ -5,7 +5,9 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
- * @mixin \RedisMixin
+ * @mixin \RedisPropMixin
+ * @mixin \TimePropMixin
+ * @mixin \RandomPropMixin
  */
 class RedisQueue extends BaseQueue
 {
@@ -18,57 +20,31 @@ class RedisQueue extends BaseQueue
 
     /**
      * {@inheritdoc}
-     * @param string $job
-     * @param string $data
-     * @param string|null $queue
-     * @param array $options
      */
-    public function push(string $job, $data = '', string $queue = null, array $options = []): void
+    public function pushRaw(array $payload, string $queue = null, array $options = []): string
     {
         if (isset($options['delay']) && $options['delay'] > 0) {
-            $this->later($options['delay'], $job, $data, $queue);
-            return;
+            $this->laterRaw($queue, $payload, $options['delay']);
+        } else {
+            $this->getRedis()->rpush($this->getQueue($queue), $this->serialize($payload));
         }
 
-        $this->pushRaw($this->createPayload($job, $data), $queue, $options);
+        return $payload['id'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pushRaw(array $payload, string $queue = null, array $options = []): void
+    public function release(array $payload, $delay): void
     {
-        $this->getRedis()->rpush($this->getQueue($queue), $this->serialize($payload));
-//        return $payload['id'];
+        $payload['attempts'] = ($payload['attempts'] ?? 0) + 1;
+        $this->getRedis()->zadd($this->getQueue() . ':delayed', $this->time->timestamp() + $delay, $this->serialize($payload));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function later($delay, $job, $data = '', $queue = null): void
-    {
-        $payload = $this->createPayload($job, $data);
-
-        $delay = $this->getSeconds($delay);
-
-        $this->getRedis()->zadd($this->getQueue($queue) . ':delayed', $this->getTime() + $delay, $this->serialize($payload));
-
-//        return $payload['id'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function release(array $payload, int $delay)
-    {
-        $payload = $this->setMeta($payload, 'attempts', $payload['attempts'] + 1);
-        $this->getRedis()->zadd($this->getQueue() . ':delayed', $this->getTime() + $delay, $this->serialize($payload));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pop($name = null): ?BaseJob
+    public function pop(string $name = null): ?BaseJob
     {
         $queue = $this->getQueue($name);
 
@@ -78,7 +54,7 @@ class RedisQueue extends BaseQueue
 
         $payload = $this->getRedis()->lpop($queue);
         if ($payload) {
-            $this->getRedis()->zadd($queue . ':reserved', $this->getTime() + $this->expire, $payload);
+            $this->getRedis()->zadd($queue . ':reserved', $this->time->timestamp() + $this->expire, $payload);
             $payload = $this->unserialize($payload);
             return $this->createJob($payload, $payload['id'], $name);
         }
@@ -89,9 +65,40 @@ class RedisQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function delete($payload, $id = null): bool
+    public function delete(array $payload, string $id = null): bool
     {
-        return (bool)$this->getRedis()->zrem($this->getQueue() . ':reserved', $payload);
+        return (bool) $this->getRedis()->zrem($this->getQueue() . ':reserved', $this->serialize($payload));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function clear(): void
+    {
+        $this->redis->getObject()->del($this->getQueue());
+        $this->redis->getObject()->del($this->getQueue() . ':delayed');
+        $this->redis->getObject()->del($this->getQueue() . ':reserved');
+    }
+
+    /**
+     * Get the expiration time in seconds.
+     *
+     * @return int|null
+     */
+    public function getExpire(): ?int
+    {
+        return $this->expire;
+    }
+
+    /**
+     * Set the expiration time in seconds.
+     *
+     * @param int|null $seconds
+     * @return void
+     */
+    public function setExpire(?int $seconds)
+    {
+        $this->expire = $seconds;
     }
 
     /**
@@ -119,7 +126,7 @@ class RedisQueue extends BaseQueue
         // First we need to get all of jobs that have expired based on the current time
         // so that we can push them onto the main queue. After we get them we simply
         // remove them from this "delay" queues. All of this within a transaction.
-        $jobs = $this->getExpiredJobs($from, $time = $this->getTime());
+        $jobs = $this->getExpiredJobs($from, $time = $this->time->timestamp());
 
         // If we actually found any jobs, we will remove them from the old queue and we
         // will insert them onto the new (ready) "queue". This means they will stand
@@ -167,33 +174,33 @@ class RedisQueue extends BaseQueue
     }
 
     /**
+     * Push a raw payload onto the queue with a given delay.
+     *
+     * @param \DateTime|int $delay
+     * @param array $payload
+     * @param string|null $queue
+     * @return string The id of the job
+     */
+    protected function laterRaw($delay, array $payload, string $queue = null): ?string
+    {
+        $this->getRedis()->zadd($this->getQueue($queue) . ':delayed', $this->time->timestamp() + $delay, $this->serialize($payload));
+        return $payload['id'] ?? null;
+    }
+
+    /**
      * Create a payload string from the given job and data.
      *
-     * @param string $job
+     * @param string|BaseJob $job
      * @param mixed $data
      * @param string|null $queue
      * @return array
      */
-    protected function createPayload(string $job, $data = '', string $queue = null): array
+    protected function createPayload($job, $data = '', string $queue = null): array
     {
         $payload = parent::createPayload($job, $data);
-        $payload = $this->setMeta($payload, 'id', $this->getRandomId());
-        return $this->setMeta($payload, 'attempts', 0);
-    }
-
-    /**
-     * Get a random ID string.
-     *
-     * @return string
-     */
-    protected function getRandomId(): string
-    {
-        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $str = '';
-        for ($i = 0; $i < 32; ++$i) {
-            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
-        }
-        return $str;
+        $payload['id'] = $this->random->string(32);
+        $payload['attempts'] = 0;
+        return $payload;
     }
 
     /**
@@ -205,62 +212,6 @@ class RedisQueue extends BaseQueue
     protected function getQueue(string $name = null): string
     {
         return 'queues:' . ($name ?: $this->name);
-    }
-
-    /**
-     * Get the expiration time in seconds.
-     *
-     * @return int|null
-     */
-    public function getExpire(): ?int
-    {
-        return $this->expire;
-    }
-
-    /**
-     * Set the expiration time in seconds.
-     *
-     * @param int|null $seconds
-     * @return void
-     */
-    public function setExpire(?int $seconds)
-    {
-        $this->expire = $seconds;
-    }
-
-    public function clear(): void
-    {
-        $this->redis->getObject()->del($this->getQueue());
-        $this->redis->getObject()->del($this->getQueue() . ':delayed');
-        $this->redis->getObject()->del($this->getQueue() . ':reserved');
-    }
-
-    /**
-     * Calculate the number of seconds with the given delay.
-     *
-     * @param \DateTime|int $delay
-     * @return int
-     */
-    protected function getSeconds($delay): int
-    {
-        if ($delay instanceof \DateTime) {
-            return max(0, $delay->getTimestamp() - $this->getTime());
-        }
-        return (int)$delay;
-    }
-
-    /**
-     * Set additional meta on a payload string.
-     *
-     * @param array $payload
-     * @param string $key
-     * @param mixed $value
-     * @return array
-     */
-    protected function setMeta(array $payload, string $key, $value): array
-    {
-        $payload[$key] = $value;
-        return $payload;
     }
 
     /**

@@ -11,9 +11,11 @@ use Miaoxing\Plugin\BaseService;
 abstract class BaseJob extends BaseService
 {
     /**
-     * @var array
+     * The id of the job in the queue, not the current object id
+     *
+     * @var string|null
      */
-    protected $payload = [];
+    protected $jobId;
 
     /**
      * The name of the queue the job belongs to.
@@ -21,6 +23,13 @@ abstract class BaseJob extends BaseService
      * @var string|null
      */
     protected $queueName;
+
+    /**
+     * The data of the job.
+     *
+     * @var array
+     */
+    protected $payload = [];
 
     /**
      * Indicates if the job has been deleted.
@@ -37,80 +46,77 @@ abstract class BaseJob extends BaseService
     protected $released = false;
 
     /**
-     * @var int
+     * Indicates if the job is failed.
+     *
+     * @var bool
      */
-    protected $id;
+    protected $failed = false;
 
     /**
-     * @return $this
-     * @svc
+     * {@inheritdoc}
      */
-    protected function enqueue(...$args): self
+    public static function __callStatic(string $method, array $args)
     {
-        $this->payload['data'] = $args;
+        if ('dispatch' === $method) {
+            // Pass dispatch arguments to the constructor
+            return (new static(...$args))->handleDispatch();
+        } else {
+            return parent::__callStatic($method, $args);
+        }
+    }
 
-        $this->queue->pushJob($this);
+    /**
+     * Run the job
+     *
+     * @return void
+     */
+    abstract public function __invoke(): void;
+
+    /**
+     * Call when the job is failed
+     *
+     * @return void
+     */
+    public function failed(): void
+    {
+    }
+
+    /**
+     * Set the job as failed.
+     *
+     * @return void
+     */
+    public function setFailed()
+    {
+        $this->failed = true;
+    }
+
+    /**
+     * Determine if the job is failed.
+     *
+     * @return bool
+     */
+    public function isFailed(): bool
+    {
+        return $this->failed;
+    }
+
+    /**
+     * @param string $jobId
+     * @return $this
+     */
+    public function setJobId(string $jobId): self
+    {
+        $this->jobId = $jobId;
         return $this;
     }
 
     /**
-     * Dispatch the current job with the given arguments.
-     *
-     * @param mixed ...$args
-     * @return static
+     * @return string|null
      */
-    public static function dispatch(...$args): self
+    public function getJobId(): ?string
     {
-        return new static([
-            'payload' => [
-                'data' => $args,
-            ],
-        ]);
-    }
-
-    /**
-     * Dispatch the current job with the given arguments if the given condition is true.
-     *
-     * @param mixed $condition
-     * @param mixed ...$args
-     * @return BaseJob|void
-     */
-    public static function dispatchIf($condition, ...$args)
-    {
-        if ($condition) {
-            return static::dispatch(...$args);
-        }
-    }
-
-    /**
-     * Dispatch the current job with the given arguments unless the given condition is true.
-     *
-     * @param mixed $condition
-     * @param mixed ...$args
-     * @return BaseJob|void
-     */
-    public static function dispatchUnless($condition, ...$args)
-    {
-        if (!$condition) {
-            return static::dispatch(...$args);
-        }
-    }
-
-    abstract public function __invoke($data);
-
-    /**
-     * Fire the job.
-     *
-     * @return void
-     */
-    public function fire()
-    {
-        $this->__invoke($this->payload['data']);
-
-        // Auto delete if no error
-        if (!$this->isDeletedOrReleased()) {
-            $this->delete();
-        }
+        return $this->jobId;
     }
 
     /**
@@ -118,9 +124,9 @@ abstract class BaseJob extends BaseService
      *
      * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->queue->delete($this->payload, $this->id);
+        $this->queue->delete($this->jobId);
         $this->deleted = true;
     }
 
@@ -137,12 +143,12 @@ abstract class BaseJob extends BaseService
     /**
      * Release the job back into the queue.
      *
-     * @param int $delay
+     * @param \DateTime|int $delay
      * @return void
      */
-    public function release(int $delay = 0)
+    public function release($delay = 0): void
     {
-        $this->queue->release($this->payload, $delay);
+        $this->queue->release($this->queueName, $this, $delay);
         $this->released = true;
     }
 
@@ -173,7 +179,7 @@ abstract class BaseJob extends BaseService
      */
     public function attempts(): int
     {
-        return $this->payload['attempts'] ?? 0;
+        return $this->payload['attempts'] ?? 1;
     }
 
     /**
@@ -197,46 +203,73 @@ abstract class BaseJob extends BaseService
     }
 
     /**
-     * Call when the job is failed
+     * Set the delay second of current job
      *
+     * @param \DateTime|int $seconds
+     * @return $this
+     */
+    public function delay($seconds): self
+    {
+        $this->payload['delay'] = $seconds;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDelay()
+    {
+        return $this->payload['delay'] ?? 0;
+    }
+
+    /**
+     * Get the name of current queue
+     *
+     * @return string|null
+     */
+    public function getQueueName(): ?string
+    {
+        return $this->queueName;
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        $data = [];
+        $properties = (new \ReflectionClass($this))->getProperties(\ReflectionProperty::IS_PROTECTED);
+        foreach ($properties as $property) {
+            if ($property->class !== static::class) {
+                continue;
+            }
+
+            $value = $this->{$property->name};
+            $data[$property->name] = $value;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
      * @return void
      */
-    public function failed()
+    public function __unserialize(array $data): void
     {
-    }
-
-    /**
-     * Calculate the number of seconds with the given delay.
-     *
-     * @param \DateTime|int $delay
-     * @return int
-     */
-    protected function getSeconds($delay): int
-    {
-        if ($delay instanceof \DateTime) {
-            return max(0, $delay->getTimestamp() - $this->getTime());
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
         }
-        return (int)$delay;
     }
 
     /**
-     * Get the current system time.
+     * Dispatch the current job with the given arguments.
      *
-     * @return int
+     * @svc
      */
-    protected function getTime(): int
+    protected function dispatch(...$args): self
     {
-        return time();
-    }
-
-    /**
-     * Get the name of the queued job class.
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->payload['job'];
+        return $this->handleDispatch(func_get_args());
     }
 
     /**
@@ -253,39 +286,36 @@ abstract class BaseJob extends BaseService
     }
 
     /**
-     * Get the name of current queue
-     *
-     * @return string|null
-     */
-    public function getQueueName(): ?string
-    {
-        return $this->queueName;
-    }
-
-    /**
-     * Set the delay second of current job
-     *
-     * @param int $seconds
+     * @param array $args
      * @return $this
      */
-    public function delay(int $seconds): self
+    protected function handleDispatch(array $args = []): self
     {
-        $this->payload['delay'] = $seconds;
+        if (func_get_args()) {
+            $this->setProperties($args);
+        }
+
+        $this->queue->push($this);
         return $this;
     }
 
     /**
-     * @return int
+     * Set the parameters of the `dispatch` method to properties of the object
+     *
+     * @param array $args
+     * @return $this
+     * @experimental
      */
-    public function getDelay(): int
+    protected function setProperties(array $args): self
     {
-        return $this->payload['delay'] ?? 0;
+        $method = new \ReflectionMethod($this, '__construct');
+        foreach ($method->getParameters() as $i => $parameter) {
+            if (isset($args[$i])) {
+                $this->{$parameter->getName()} = $args[$i];
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                $this->{$parameter->getName()} = $parameter->getDefaultValue();
+            }
+        }
+        return $this;
     }
-
-//    public function __destruct()
-//    {
-//        if (!$this->isDeleted()) {
-//            $this->queue->pushJob($this);
-//        }
-//    }
 }

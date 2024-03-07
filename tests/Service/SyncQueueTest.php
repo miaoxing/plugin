@@ -5,9 +5,9 @@ namespace MiaoxingTest\Plugin\Service;
 /**
  * @mixin \SyncQueueMixin
  */
-class SyncQueueTest extends QueueTest
+class SyncQueueTest extends BaseQueueTest
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
