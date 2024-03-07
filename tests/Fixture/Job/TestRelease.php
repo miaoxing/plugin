@@ -6,7 +6,7 @@ use Miaoxing\Plugin\Queue\BaseJob;
 
 class TestRelease extends BaseJob
 {
-    public function __invoke($data)
+    public function __invoke(): void
     {
         if (!isset($_SERVER['__release'])) {
             $_SERVER['__release'] = 0;

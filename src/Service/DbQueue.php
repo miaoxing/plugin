@@ -7,6 +7,7 @@ use Wei\QueryBuilder;
 
 /**
  * @mixin \DbPropMixin
+ * @mixin \TimePropMixin
  */
 class DbQueue extends BaseQueue
 {
@@ -18,64 +19,49 @@ class DbQueue extends BaseQueue
     protected $table = 'queue_jobs';
 
     /**
-     * The expiration time of a job.
+     * The number of seconds before a reserved job will be available.
      *
-     * @var int|null
+     * @var int
      */
-    protected $expire = 60;
+    protected $retryAfter = 60;
 
     /**
      * {@inheritdoc}
      */
-    public function push(string $job, $data = '', string $queue = null, array $options = []): void
+    public function pushRaw(array $payload, ?string $queue = null, $delay = 0): string
     {
-        $this->pushRaw($this->createPayload($job, $data), $queue, $options);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pushRaw(array $payload, string $queue = null, array $options = []): void
-    {
-        $createdAt = $availableAt = $this->getTime();
-        if (isset($options['delay'])) {
-            $availableAt += $options['delay'];
+        $createdAt = $availableAt = $this->time->timestamp();
+        if ($delay > 0) {
+            $availableAt += $delay;
         }
 
         $this->db->insert($this->table, [
-            'queue' => $this->getQueue($queue),
+            'queue' => $this->getName($queue),
             'payload' => $this->serialize($payload),
+            'attempts' => $payload['attempts'] ?? 0,
             'created_at' => date('Y-m-d H:i:s', $createdAt),
             'available_at' => date('Y-m-d H:i:s', $availableAt),
         ]);
+
+        return $this->db->lastInsertId();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function later($delay, $job, $data = '', $queue = null): void
+    public function pop(?string $name = null): ?BaseJob
     {
-        $payload = $this->createPayload($job, $data);
-
-        $this->pushRaw($payload, $queue, ['delay' => $delay]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pop(string $queue = null): ?BaseJob
-    {
-        $queue = $this->getQueue($queue);
+        $name = $this->getName($name);
 
         $pdo = $this->db->getPdo();
         $pdo->beginTransaction();
 
-        if ($job = $this->getNextAvailableJob($queue)) {
+        if ($job = $this->getNextAvailableJob($name)) {
             $job = $this->markJobAsReserved($job);
 
             $pdo->commit();
 
-            return $this->createJob($job['payload'], $job['id'], $queue);
+            return $this->createJob($job['payload'], $job['id'], $name);
         }
 
         $pdo->commit();
@@ -85,9 +71,9 @@ class DbQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function delete($payload, $id = null): bool
+    public function delete(string $id): bool
     {
-        return (bool)$this->db->delete($this->table, ['id' => $id]);
+        return (bool) $this->db->delete($this->table, ['id' => $id]);
     }
 
     /**
@@ -99,14 +85,21 @@ class DbQueue extends BaseQueue
     }
 
     /**
-     * Get the queue or return the default.
-     *
-     * @param string|null $queue
-     * @return string
+     * @return int
      */
-    protected function getQueue(string $queue = null): string
+    public function getRetryAfter(): int
     {
-        return $queue ?: $this->name;
+        return $this->retryAfter;
+    }
+
+    /**
+     * @param int $retryAfter
+     * @return DbQueue
+     */
+    public function setRetryAfter(int $retryAfter): self
+    {
+        $this->retryAfter = $retryAfter;
+        return $this;
     }
 
     /**
@@ -117,13 +110,13 @@ class DbQueue extends BaseQueue
      */
     protected function getNextAvailableJob(?string $queue): ?array
     {
-        $time = $this->getTime();
+        $time = $this->time->timestamp();
         $job = QueryBuilder::table($this->table)
-            ->where(['queue' => $this->getQueue($queue)])
+            ->where(['queue' => $this->getName($queue)])
             ->whereRaw(
             // available or reserved but expired
                 '(reserved_at IS NULL AND available_at <= ?) OR (reserved_at <= ?)',
-                [date('Y-m-d H:i:s', $time), date('Y-m-d H:i:s', $time - $this->expire)]
+                [date('Y-m-d H:i:s', $time), date('Y-m-d H:i:s', $time - $this->retryAfter)]
             )
             ->asc('id')
             ->forUpdate()
@@ -145,14 +138,14 @@ class DbQueue extends BaseQueue
      */
     protected function markJobAsReserved(array $job): array
     {
-        ++$job['attempts'];
-        $job['reserved_at'] = date('Y-m-d H:i:s', $this->getTime());
+        ++$job['payload']['attempts'];
+        $job['reserved_at'] = date('Y-m-d H:i:s', $this->time->timestamp());
 
         QueryBuilder::table($this->table)
             ->where(['id' => $job['id']])
             ->update([
                 'reserved_at' => $job['reserved_at'],
-                'attempts' => $job['attempts'],
+                'attempts' => $job['payload']['attempts'],
             ]);
 
         return $job;

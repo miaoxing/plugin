@@ -3,7 +3,7 @@
 namespace Miaoxing\Plugin\Command;
 
 /**
- * @mixin \QueueWorkerMixin
+ * @mixin \QueueWorkerPropMixin
  */
 class QueueRestart extends BaseCommand
 {

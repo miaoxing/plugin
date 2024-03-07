@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Service;
 
+use Illuminate\Queue\Jobs\Job;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Queue\BaseJob;
 
@@ -11,6 +12,7 @@ use Miaoxing\Plugin\Queue\BaseJob;
  * @mixin \EventPropMixin
  * @mixin \LoggerPropMixin
  * @mixin \QueuePropMixin
+ * @mixin \TimePropMixin
  */
 class QueueWorker extends BaseService
 {
@@ -20,16 +22,9 @@ class QueueWorker extends BaseService
     protected $queueName;
 
     /**
-     * Run the worker in daemon mode
-     *
-     * @var bool
-     */
-    protected $daemon = false;
-
-    /**
      * Number of seconds to sleep when no job is available
      *
-     * @var int
+     * @var int|float
      */
     protected $sleep = 3;
 
@@ -38,7 +33,7 @@ class QueueWorker extends BaseService
      *
      * @var int
      */
-    protected $tries = 1;
+    protected $maxTries = 1;
 
     /**
      * Amount of time to delay failed jobs
@@ -48,11 +43,18 @@ class QueueWorker extends BaseService
     protected $delay = 0;
 
     /**
+     * The job number to run a daemon
+     *
+     * @var int
+     */
+    protected $jobLimit = 0;
+
+    /**
      * The memory limit in megabytes
      *
      * @var int
      */
-    protected $memory = 100;
+    protected $memoryLimit = 100;
 
     /**
      * The time limit to run a daemon
@@ -69,20 +71,63 @@ class QueueWorker extends BaseService
     protected $logFailedJobsToDb = true;
 
     /**
-     * Run the worker instance.
+     * Listen to the given queue in a loop.
      *
      * @param array $options
-     * @return array{job: BaseJob, failed: bool}
+     * @return void
      */
-    public function work(array $options = []): array
+    public function run(array $options = []): void
     {
         $options && $this->setOption($options);
 
-        if ($this->daemon) {
-            return $this->daemon($this->queueName, $this->delay, $this->memory, $this->sleep, $this->tries);
+        $startTime = $this->time->timestamp();
+        $lastRestart = $this->getTimestampOfLastQueueRestart();
+
+        $jobCount = 0;
+        while (true) {
+            $job = null;
+            if ($this->daemonShouldRun()) {
+                $job = $this->runNextJobForDaemon();
+            }
+
+            if ($job) {
+                ++$jobCount;
+            } else {
+                $this->sleep($this->sleep);
+            }
+
+            if (
+                $this->jobLimitExceeded($jobCount)
+                || $this->timeExceeded($startTime, $this->timeLimit)
+                || $this->memoryExceeded($this->memoryLimit)
+                || $this->queueShouldRestart($lastRestart)
+            ) {
+                $this->triggerAfterQueueStopEvent();
+                return;
+            }
+        }
+    }
+
+    /**
+     * Run the next job on the queue
+     *
+     * @param array $options
+     * @return BaseJob|null
+     */
+    public function runNextJob(array $options = []): ?BaseJob
+    {
+        $options && $this->setOption($options);
+
+        $job = $this->getNextJob($this->queue, $this->queueName);
+
+        // If we're able to pull a job off of the stack, we will process it and
+        // then immediately return back out. If there is no job on the queue
+        // we will "sleep" the worker for the specified number of seconds.
+        if (null !== $job) {
+            $this->runJob($job, $this->maxTries, $this->delay);
         }
 
-        return $this->pop($this->queueName, $this->delay, $this->sleep, $this->tries);
+        return $job;
     }
 
     /**
@@ -90,188 +135,7 @@ class QueueWorker extends BaseService
      */
     public function restart()
     {
-        $this->cache->set('wei:queue:restart', $this->getTime());
-    }
-
-    /**
-     * Listen to the given queue in a loop.
-     *
-     * @param string|null $queueName
-     * @param int $delay
-     * @param int $memory
-     * @param int $sleep
-     * @param int $maxTries
-     * @return void
-     */
-    public function daemon(string $queueName = null, int $delay = 0, int $memory = 128, int $sleep = 3, int $maxTries = 0): void
-    {
-        $startTime = $this->getTime();
-        $lastRestart = $this->getTimestampOfLastQueueRestart();
-
-        while (true) {
-            if ($this->daemonShouldRun()) {
-                $this->runNextJobForDaemon($queueName, $delay, $sleep, $maxTries);
-            } else {
-                $this->sleep($sleep);
-            }
-
-            if ($this->timeExceeded($startTime, $this->timeLimit)
-                || $this->memoryExceeded($memory)
-                || $this->queueShouldRestart($lastRestart)) {
-                $this->stop();
-            }
-        }
-    }
-
-    /**
-     * Run the next job for the daemon worker.
-     *
-     * @param string $queueName
-     * @param int $delay
-     * @param int $sleep
-     * @param int $maxTries
-     */
-    protected function runNextJobForDaemon(string $queueName, int $delay, int $sleep, int $maxTries)
-    {
-        try {
-            $this->pop($queueName, $delay, $sleep, $maxTries);
-        } catch (\Exception $e) {
-            $this->logger->alert($e);
-        }
-    }
-
-    /**
-     * Determine if the daemon should process on this iteration.
-     *
-     * @return bool
-     */
-    protected function daemonShouldRun(): bool
-    {
-        return false !== $this->event->until('queueLooping');
-    }
-
-    /**
-     * Listen to the given queue.
-     *
-     * @param string|null $queueName
-     * @param int $delay
-     * @param int $sleep
-     * @param int $maxTries
-     * @return array
-     */
-    public function pop(string $queueName = null, int $delay = 0, int $sleep = 3, int $maxTries = 0): array
-    {
-        $job = $this->getNextJob($this->queue, $queueName);
-
-        // If we're able to pull a job off of the stack, we will process it and
-        // then immediately return back out. If there is no job on the queue
-        // we will "sleep" the worker for the specified number of seconds.
-        if (null !== $job) {
-            return $this->process($job, $maxTries, $delay);
-        }
-
-        $this->sleep($sleep);
-
-        return ['job' => null, 'failed' => false];
-    }
-
-    /**
-     * Get the next job from the queue driver.
-     *
-     * @param BaseQueue $driver
-     * @param string|null $queueName
-     * @return BaseJob|null
-     */
-    protected function getNextJob(BaseQueue $driver, string $queueName = null): ?BaseJob
-    {
-        if (null === $queueName) {
-            return $driver->pop();
-        }
-
-        foreach (explode(',', $queueName) as $queue) {
-            if (null !== ($job = $driver->pop($queue))) {
-                return $job;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Process a given job from the queue.
-     *
-     * @param BaseJob $job
-     * @param int $maxTries
-     * @param int $delay
-     * @return array
-     */
-    public function process(BaseJob $job, int $maxTries = 0, int $delay = 0): array
-    {
-        try {
-            // First we will fire off the job. Once it is done we will see if it will
-            // be auto-deleted after processing and if so we will go ahead and run
-            // the delete method on the job. Otherwise we will just keep moving.
-            $job->fire();
-            $this->raiseAfterJobEvent($job);
-
-            return ['job' => $job, 'failed' => false];
-        } catch (\Exception $e) {
-            if ($maxTries > 0 && $job->attempts() + 1 >= $maxTries) {
-                // If the maximum number of retries has been reached, we will log and delete the job
-                $this->logFailedJob($job, $e);
-            } elseif (!$job->isDeleted()) {
-                // Otherwise we release back to the queue so we can try running again
-                $job->release($delay);
-            }
-
-            return ['job' => $job, 'failed' => true];
-        }
-    }
-
-    /**
-     * Raise the after queue job event.
-     *
-     * @param BaseJob $job
-     */
-    protected function raiseAfterJobEvent(BaseJob $job)
-    {
-        $this->event->trigger('queueAfter', $job);
-    }
-
-    /**
-     * Log a failed job into storage.
-     *
-     * @param BaseJob $job
-     * @param \Exception $e
-     * @return void
-     */
-    protected function logFailedJob(BaseJob $job, \Exception $e): void
-    {
-        $this->logger->alert('Queue job failed', $job->getPayload());
-
-        if ($this->logFailedJobsToDb) {
-            $this->db->insert('queue_failed_jobs', [
-                'driver' => $this->queue->getDriver(),
-                'queue' => $job->getQueueName() ?? $this->queue->getName(),
-                'payload' => json_encode($job->getPayload(), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE),
-                'exception' => (string)$e,
-                'created_at' => date('Y-m-d H:i:s', $this->getTime()),
-            ]);
-        }
-
-        $job->delete();
-        $job->failed();
-        $this->raiseFailedJobEvent($job);
-    }
-
-    /**
-     * Raise the failed queue job event.
-     *
-     * @param BaseJob $job
-     */
-    protected function raiseFailedJobEvent(BaseJob $job)
-    {
-        $this->event->trigger('queueFailed', [$job, $job->getPayload()]);
+        $this->cache->set('wei:queue:restart', $this->time->timestamp());
     }
 
     /**
@@ -305,7 +169,18 @@ class QueueWorker extends BaseService
      */
     public function forget(int $id): bool
     {
-        return (bool)$this->db->delete('queue_failed_jobs', ['id' => $id]);
+        return (bool) $this->db->delete('queue_failed_jobs', ['id' => $id]);
+    }
+
+    /**
+     * Determine if the job limit has been exceeded.
+     *
+     * @param int $jobLimit
+     * @return bool
+     */
+    public function jobLimitExceeded(int $jobLimit): bool
+    {
+        return $this->jobLimit && $this->jobLimit <= $jobLimit;
     }
 
     /**
@@ -328,64 +203,189 @@ class QueueWorker extends BaseService
      */
     public function timeExceeded(int $startTime, int $timeLimit): bool
     {
-        return $this->getTime() - $startTime > $timeLimit;
-    }
-
-    /**
-     * Stop listening and bail out of the script.
-     */
-    public function stop()
-    {
-        $this->event->trigger('queueStopping');
-        exit;
+        return $this->time->timestamp() - $startTime >= $timeLimit;
     }
 
     /**
      * Sleep the script for a given number of seconds.
      *
-     * @param int $seconds
+     * @param int|float $seconds
      */
-    public function sleep(int $seconds)
+    public function sleep($seconds)
     {
         sleep($seconds);
     }
 
     /**
-     * @param int $sleep
+     * @param int|float $sleep
      * @return self
      */
-    public function setSleep(int $sleep): self
+    public function setSleep($sleep): self
     {
         $this->sleep = $sleep;
         return $this;
     }
 
     /**
-     * @return int
+     * @return int|float
      */
-    public function getSleep(): int
+    public function getSleep()
     {
         return $this->sleep;
     }
 
     /**
-     * @param int $tries
+     * @param int $maxTries
      * @return $this
      */
-    public function setTries(int $tries): self
+    public function setMaxTries(int $maxTries): self
     {
-        $this->tries = $tries;
+        $this->maxTries = $maxTries;
         return $this;
     }
 
     /**
-     * Get the current UNIX timestamp.
-     *
-     * @return int
+     * Run the next job for the daemon worker.
      */
-    protected function getTime(): int
+    protected function runNextJobForDaemon(): ?BaseJob
     {
-        return time();
+        try {
+            return $this->runNextJob();
+        } catch (\Exception $e) {
+            $this->logger->alert($e);
+            return null;
+        }
+    }
+
+    /**
+     * Get the next job from the queue driver.
+     *
+     * @param BaseQueue $driver
+     * @param string|null $queueName
+     * @return BaseJob|null
+     */
+    protected function getNextJob(BaseQueue $driver, ?string $queueName = null): ?BaseJob
+    {
+        if (null === $queueName) {
+            return $driver->pop();
+        }
+
+        foreach (explode(',', $queueName) as $queue) {
+            if (null !== ($job = $driver->pop($queue))) {
+                return $job;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Process a given job from the queue.
+     *
+     * @param BaseJob $job
+     * @param int $maxTries
+     * @param int $delay
+     */
+    protected function runJob(BaseJob $job, int $maxTries = 0, int $delay = 0): void
+    {
+        try {
+            // First we will fire off the job. Once it is done we will see if it will
+            // be auto-deleted after processing and if so we will go ahead and run
+            // the delete method on the job. Otherwise we will just keep moving.
+            $this->triggerBeforeJobProcessEvent($job);
+
+            $job->__invoke();
+
+            $this->triggerAfterJobProcessEvent($job);
+
+            // Auto delete if no error
+            if (!$job->isDeletedOrReleased()) {
+                $job->delete();
+            }
+        } catch (\Throwable $e) {
+            if ($maxTries > 0 && $job->attempts() >= $maxTries) {
+                // If the maximum number of retries has been reached, we will log and delete the job
+                $this->handleJobFailed($job, $e);
+            } elseif (!$job->isDeleted()) {
+                // Otherwise we release back to the queue so we can try running again
+                $job->release($delay);
+            }
+        }
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @param BaseJob $job
+     * @param \Throwable $e
+     * @return void
+     */
+    protected function handleJobFailed(BaseJob $job, \Throwable $e): void
+    {
+        $this->logger->alert('Queue job failed', $job->getPayload());
+
+        if ($this->logFailedJobsToDb) {
+            $this->db->insert('queue_failed_jobs', [
+                'driver' => $this->queue->getDriver(),
+                'queue' => $job->getQueueName() ?? $this->queue->getName(),
+                'payload' => json_encode($job->getPayload(), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE),
+                'exception' => (string) $e,
+                'created_at' => date('Y-m-d H:i:s', $this->time->timestamp()),
+            ]);
+        }
+
+        $job->setFailed();
+        $job->delete();
+        $job->failed();
+        $this->triggerQueueJobFailEvent($job);
+    }
+
+    /**
+     * Raise the after queue job event.
+     *
+     * @param BaseJob $job
+     */
+    protected function triggerBeforeJobProcessEvent(BaseJob $job)
+    {
+        $this->event->trigger('beforeQueueJobProcess', $job);
+    }
+
+    /**
+     * Raise the after queue job event.
+     *
+     * @param BaseJob $job
+     */
+    protected function triggerAfterJobProcessEvent(BaseJob $job)
+    {
+        $this->event->trigger('afterQueueJobProcess', $job);
+    }
+
+    /**
+     * Raise the failed queue job event.
+     *
+     * @param BaseJob $job
+     */
+    protected function triggerQueueJobFailEvent(BaseJob $job)
+    {
+        $this->event->trigger('queueJobFail', $job);
+    }
+
+    /**
+     * Stop listening and bail out of the script.
+     */
+    protected function triggerAfterQueueStopEvent()
+    {
+        $this->event->trigger('afterQueueStop');
+    }
+
+    /**
+     * Determine if the daemon should process on this iteration.
+     *
+     * @return bool
+     */
+    protected function daemonShouldRun(): bool
+    {
+        return false !== $this->event->until('queueLooping');
     }
 
     /**
@@ -395,7 +395,7 @@ class QueueWorker extends BaseService
      */
     protected function getTimestampOfLastQueueRestart(): int
     {
-        return (int)$this->cache->get('wei:queue:restart');
+        return (int) $this->cache->get('wei:queue:restart');
     }
 
     /**

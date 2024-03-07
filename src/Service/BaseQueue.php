@@ -6,9 +6,7 @@ use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
- * 基于 Laravel Queue 简化的队列服务
- *
- * @link https://github.com/laravel/framework/tree/5.1/src/Illuminate/Queue
+ * The base class for queue service
  */
 abstract class BaseQueue extends BaseService
 {
@@ -18,43 +16,118 @@ abstract class BaseQueue extends BaseService
      * @var string
      */
     protected $name = 'default';
-    /**
-     * @var int
-     */
-    protected $time;
 
     /**
-     * Returns the name of the default queue.
+     * Get the queue name or return the default name.
      *
+     * @param string|null $name
      * @return string
      */
-    public function getName(): string
+    public function getName(?string $name = null): string
     {
-        return $this->name;
+        return $name ?: $this->name;
     }
 
     /**
-     * Push a job object onto the queue.
+     * Push a new job onto the queue.
      *
-     * @param BaseJob $job
-     * @return mixed
+     * @param string|BaseJob $job The job class name or the job object
+     * @param mixed $data
+     * @param string|null $queue
+     * @param int $delay
+     * @return string The id of the job
      */
-    public function pushJob(BaseJob $job): void
+    public function push($job, $data = '', ?string $queue = null, $delay = 0): string
     {
-        $this->push(get_class($job), $job->getPayload()['data'], $job->getQueueName(), [
-            'delay' => $job->getDelay(),
-        ]);
+        if ($job instanceof BaseJob) {
+            // NOTE: $data, $queue and $delay arguments are ignored
+            $data = $this->getPayloadData($job);
+            $queue = $job->getQueueName();
+            $delay = $job->getDelay();
+            $name = get_class($job);
+        } else {
+            $name = $job;
+        }
+
+        $id = $this->pushRaw($this->createPayload($name, $data), $queue, $delay);
+
+        if ($job instanceof BaseJob) {
+            $job->setJobId($id);
+        }
+
+        return $id;
+    }
+
+    /**
+     * Push a raw payload onto the queue.
+     *
+     * @param array $payload
+     * @param string|null $queue
+     * @param int $delay
+     * @return string The id of the job
+     */
+    abstract public function pushRaw(array $payload, ?string $queue = null, $delay = 0): string;
+
+    /**
+     * Push a new job onto the queue after a delay.
+     *
+     * @param int $delay
+     * @param string|BaseJob $job
+     * @param mixed $data
+     * @param string|null $queue
+     * @return string The id of the job
+     */
+    public function later($delay, $job, $data = '', ?string $queue = null): string
+    {
+        return $this->push($job, $data, $queue, $delay);
+    }
+
+    /**
+     * Pop the next job off of the queue.
+     *
+     * @param string|null $name The name of the queue
+     * @return BaseJob|null
+     */
+    abstract public function pop(?string $name = null): ?BaseJob;
+
+    /**
+     * Delete the job from the queue.
+     *
+     * @param string $id
+     * @return bool
+     */
+    abstract public function delete(string $id): bool;
+
+    /**
+     * Clear all jobs from the queue.
+     *
+     * @return void
+     */
+    abstract public function clear(): void;
+
+    /**
+     * Release the job back into the queue
+     *
+     * @param string $queue
+     * @param BaseJob $job
+     * @param int $delay
+     * @return void
+     */
+    public function release(string $queue, BaseJob $job, $delay): void
+    {
+        $this->delete($job->getJobId());
+        $this->pushRaw($job->getPayload(), $queue, $delay);
     }
 
     /**
      * Create a payload string from the given job and data.
      *
-     * @param string $job
+     * @param string|BaseJob $job
      * @param mixed $data
-     * @param string|null $queue
+     * @param string|null $queue Allow to custom payload by queue name
      * @return array
      */
-    protected function createPayload(string $job, $data = '', string $queue = null): array
+    protected function createPayload($job, $data = '', ?string $queue = null): array
     {
         return ['job' => $job, 'data' => $data];
     }
@@ -62,45 +135,44 @@ abstract class BaseQueue extends BaseService
     /**
      * Create a job instance.
      *
-     * @param array $payload
-     * @param string|null $id
-     * @param string|null $queue
+     * @param array{job: class-string<BaseJob>, data?: array} $payload
+     * @param string $id
+     * @param string $queue
      * @return BaseJob
+     * @experimental
      */
-    protected function createJob(array $payload, string $id = null, string $queue = null): BaseJob
+    protected function createJob(array $payload, string $id, string $queue): BaseJob
     {
-        return new $payload['job']([
-            'wei' => $this->wei,
-            'id' => $id,
-            'queue' => $this,
-            'queueName' => $queue,
-            'payload' => $payload,
-        ]);
-    }
+        // Convert payload data to object properties
+        $properties = [];
+        if (isset($payload['data'])) {
+            foreach ($payload['data'] as $name => $value) {
+                $properties[$name] = $value;
+            }
+        }
 
-    /**
-     * Get the current UNIX timestamp.
-     *
-     * @return int
-     */
-    protected function getTime(): int
-    {
-        return $this->time ?: time();
-    }
-
-    public function setTime(int $time): self
-    {
-        $this->time = $time;
-        return $this;
+        // NOTE: __construct is not called
+        /** @var BaseJob $job */
+        $job = (new \ReflectionClass($payload['job']))->newInstanceWithoutConstructor();
+        $job->setOption(
+            [
+                'wei' => $this->wei,
+                'jobId' => $id,
+                'queue' => $this,
+                'queueName' => $queue,
+                'payload' => $payload,
+            ] + $properties
+        );
+        return $job;
     }
 
     /**
      * @param mixed $value
-     * @return false|string
+     * @return string
      */
-    protected function serialize($value)
+    protected function serialize($value): string
     {
-        return json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+        return serialize($value);
     }
 
     /**
@@ -109,71 +181,27 @@ abstract class BaseQueue extends BaseService
      */
     protected function unserialize($value)
     {
-        return json_decode($value, true);
+        return unserialize($value);
     }
 
     /**
-     * Release the job back into the queue
-     * @param array $payload
-     * @param int $delay
+     * Get payload data from the protected properties of the object
+     *
+     * @param BaseJob $job
+     * @return array
+     * @internal
      */
-    public function release(array $payload, int $delay)
+    protected function getPayloadData(BaseJob $job): array
     {
+        $data = [];
+        $class = get_class($job);
+        $props = (new \ReflectionClass($job))->getProperties(\ReflectionProperty::IS_PROTECTED);
+        foreach ($props as $prop) {
+            if ($prop->class === $class) {
+                $prop->setAccessible(true);
+                $data[$prop->getName()] = $prop->getValue($job);
+            }
+        }
+        return $data;
     }
-
-    /**
-     * Push a new job onto the queue.
-     *
-     * @param string $job
-     * @param mixed $data
-     * @param string|null $queue
-     * @param array $options
-     * @return void
-     */
-    abstract public function push(string $job, $data = '', string $queue = null, array $options = []): void;
-
-    /**
-     * Push a raw payload onto the queue.
-     *
-     * @param array $payload
-     * @param string|null $queue
-     * @param array $options
-     * @return mixed
-     */
-    abstract public function pushRaw(array $payload, string $queue = null, array $options = []): void;
-
-    /**
-     * Push a new job onto the queue after a delay.
-     *
-     * @param \DateTime|int $delay
-     * @param string $job
-     * @param mixed $data
-     * @param string|null $queue
-     * @return mixed
-     */
-    abstract public function later($delay, string $job, $data = '', string $queue = null): void;
-
-    /**
-     * Pop the next job off of the queue.
-     *
-     * @param string|null $queue
-     * @return BaseJob|null
-     */
-    abstract public function pop(string $queue = null): ?BaseJob;
-
-    /**
-     * Delete the job from the queue.
-     *
-     * @param array $payload
-     * @param int|null $id
-     * @return bool
-     */
-    abstract public function delete(array $payload, int $id = null): bool;
-
-    /**
-     * Clear all jobs from the queue.
-     *
-     * @return void
-     */
-    abstract public function clear(): void;
 }

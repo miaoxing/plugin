@@ -5,12 +5,14 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
- * @mixin \QueueWorkerMixin
+ * @mixin \QueueWorkerPropMixin
+ * @mixin \RandomPropMixin
+ * @mixin \LoggerPropMixin
  */
 class SyncQueue extends BaseQueue
 {
     /**
-     * @var array<BaseJob>
+     * @var array<array>
      */
     protected $jobs = [];
 
@@ -24,56 +26,42 @@ class SyncQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function pushJob(BaseJob $job): void
+    public function pushRaw(array $payload, ?string $queue = null, $delay = 0): string
     {
-        // TODO
-        $payload = $job->getPayload();
-        $payload['job'] = get_class($job);
-        $job->setPayload($payload);
+        if ($delay > 0) {
+            $this->logger->info('Sync queue does not support delay', $payload);
+        }
 
-        $this->jobs[] = $job;
+        $queue = $this->getName($queue);
+        $id = $this->random->string(32);
+        $this->jobs[] = [
+            'id' => $id,
+            'queue' => $queue,
+            'payload' => $payload,
+        ];
 
         // Run directly
         if (!$this->manual) {
-            $this->queueWorker->work([
-                'queueName' => $job->getQueueName(),
+            $this->queueWorker->runNextJob([
+                'queueName' => $queue,
             ]);
         }
+
+        return $id;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function push(string $job, $data = '', string $queue = null, array $options = []): void
+    public function pop(?string $name = null): ?BaseJob
     {
-        $this->pushJob($this->createJob($this->createPayload($job, $data), $queue));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pushRaw(array $payload, string $queue = null, array $options = []): void
-    {
-        $this->pushJob($this->createJob($payload, null, $queue));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function later($delay, $job, $data = '', $queue = null): void
-    {
-        $this->push($job, $data, $queue);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pop(string $queue = null): ?BaseJob
-    {
+        $name = $this->getName($name);
         foreach ($this->jobs as $i => $job) {
-            if ($job->getQueueName() === $queue) {
+            if ($job['queue'] === $name) {
                 unset($this->jobs[$i]);
-                return $job;
+                $payload = $job['payload'];
+                $payload['attempts'] = ($payload['attempts'] ?? 0) + 1;
+                return $this->createJob($payload, $job['id'], $name);
             }
         }
         return null;
@@ -82,10 +70,10 @@ class SyncQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function delete($payload, $id = null): bool
+    public function delete(string $id): bool
     {
         foreach ($this->jobs as $i => $job) {
-            if ($job->getId() === $id) {
+            if ($job['id'] === $id) {
                 unset($this->jobs[$i]);
                 return true;
             }

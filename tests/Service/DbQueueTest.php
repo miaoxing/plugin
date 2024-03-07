@@ -2,12 +2,17 @@
 
 namespace MiaoxingTest\Plugin\Service;
 
-class DbQueueTest extends QueueTest
+/**
+ * @mixin \DbQueuePropMixin
+ */
+class DbQueueTest extends BaseQueueTest
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->queue->setDriver('dbQueue');
+
+        $this->dbQueue->setRetryAfter(0);
     }
 }
