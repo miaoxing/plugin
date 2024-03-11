@@ -5,58 +5,68 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
+ * A queue service based on Redis steam
+ *
  * @mixin \RedisPropMixin
  * @mixin \TimePropMixin
- * @mixin \RandomPropMixin
  */
 class RedisQueue extends BaseQueue
 {
     /**
-     * The expiration time of a job.
+     * The name of the consumer group.
      *
-     * @var int|null
+     * @var string
      */
-    protected $expire = 60;
+    protected $group = 'group';
+
+    /**
+     * The name of the consumer.
+     *
+     * @var string
+     */
+    protected $consumer = 'consumer';
+
+    /**
+     * The queue names that have been created
+     *
+     * @var array<string, bool>
+     */
+    protected $createdGroups = [];
 
     /**
      * {@inheritdoc}
      */
-    public function pushRaw(array $payload, string $queue = null, array $options = []): string
+    public function pushRaw(array $payload, ?string $queue = null, $delay = 0): string
     {
-        if (isset($options['delay']) && $options['delay'] > 0) {
-            $this->laterRaw($queue, $payload, $options['delay']);
+        if ($delay > 0) {
+            return $this->laterRaw($delay, $payload, $queue);
         } else {
-            $this->getRedis()->rpush($this->getQueue($queue), $this->serialize($payload));
+            // * means auto generate id
+            return $this->getRedis()->xAdd($this->getQueueKey($queue), '*', ['payload' => $this->serialize($payload)]);
         }
-
-        return $payload['id'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function release(array $payload, $delay): void
+    public function pop(?string $name = null): ?BaseJob
     {
-        $payload['attempts'] = ($payload['attempts'] ?? 0) + 1;
-        $this->getRedis()->zadd($this->getQueue() . ':delayed', $this->time->timestamp() + $delay, $this->serialize($payload));
-    }
+        $key = $this->getQueueKey($name);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function pop(string $name = null): ?BaseJob
-    {
-        $queue = $this->getQueue($name);
+        $this->createGroupOnce($key);
+        $this->migrateAllExpiredJobs($key);
 
-        if (null !== $this->expire) {
-            $this->migrateAllExpiredJobs($queue);
-        }
+        // Get the first message without blocking from the queue
+        // > means read from the beginning
+        /** @phpstan-ignore-next-line Parameter #5 $block of method Redis::xReadGroup() expects int, null given. */
+        $messages = $this->getRedis()->xReadGroup($this->group, $this->consumer, [$key => '>'], 1, null);
 
-        $payload = $this->getRedis()->lpop($queue);
-        if ($payload) {
-            $this->getRedis()->zadd($queue . ':reserved', $this->time->timestamp() + $this->expire, $payload);
-            $payload = $this->unserialize($payload);
-            return $this->createJob($payload, $payload['id'], $name);
+        if ($messages) {
+            $id = key($messages[$key]);
+            $message = current($messages[$key]);
+            $payload = $this->unserialize($message['payload']);
+            $payload['attempts'] = ($payload['attempts'] ?? 0) + 1;
+            return $this->createJob($payload, $id, $this->getName($name));
         }
 
         return null;
@@ -65,9 +75,10 @@ class RedisQueue extends BaseQueue
     /**
      * {@inheritdoc}
      */
-    public function delete(array $payload, string $id = null): bool
+    public function delete(string $id): bool
     {
-        return (bool) $this->getRedis()->zrem($this->getQueue() . ':reserved', $this->serialize($payload));
+        $this->getRedis()->xAck($this->getQueueKey(), $this->group, [$id]);
+        return (bool) $this->getRedis()->xDel($this->getQueueKey(), [$id]);
     }
 
     /**
@@ -75,30 +86,26 @@ class RedisQueue extends BaseQueue
      */
     public function clear(): void
     {
-        $this->redis->getObject()->del($this->getQueue());
-        $this->redis->getObject()->del($this->getQueue() . ':delayed');
-        $this->redis->getObject()->del($this->getQueue() . ':reserved');
+        $this->getRedis()->del($this->getQueueKey(), $this->getQueueKey() . ':delayed');
     }
 
     /**
-     * Get the expiration time in seconds.
+     * Create a group to read messages
      *
-     * @return int|null
-     */
-    public function getExpire(): ?int
-    {
-        return $this->expire;
-    }
-
-    /**
-     * Set the expiration time in seconds.
+     * Redis needs to create a group before reading messages
      *
-     * @param int|null $seconds
+     * @param string|null $queue
      * @return void
+     * @internal
      */
-    public function setExpire(?int $seconds)
+    protected function createGroupOnce(?string $queue = null): void
     {
-        $this->expire = $seconds;
+        if (!isset($this->createdGroups[$queue])) {
+            $this->createdGroups[$queue] = true;
+            // `0` means read from the beginning
+            // `true` means create the stream if it is not exists
+            $this->getRedis()->xGroup('CREATE', $queue, $this->group, '0', true);
+        }
     }
 
     /**
@@ -109,68 +116,19 @@ class RedisQueue extends BaseQueue
      */
     protected function migrateAllExpiredJobs(string $queue)
     {
-        $this->migrateExpiredJobs($queue . ':delayed', $queue);
-        $this->migrateExpiredJobs($queue . ':reserved', $queue);
-    }
+        $luaScript = <<<'LUA'
+local streamKey = KEYS[1]
+local delayedKey = streamKey .. ':delayed'
+local timestamp = ARGV[1]
 
-    /**
-     * Migrate the delayed jobs that are ready to the regular queue.
-     *
-     * @param string $from
-     * @param string $to
-     * @return void
-     */
-    public function migrateExpiredJobs(string $from, string $to)
-    {
-        // TODO Use transaction
-        // First we need to get all of jobs that have expired based on the current time
-        // so that we can push them onto the main queue. After we get them we simply
-        // remove them from this "delay" queues. All of this within a transaction.
-        $jobs = $this->getExpiredJobs($from, $time = $this->time->timestamp());
+local delayedMessages = redis.call('ZRANGEBYSCORE', delayedKey, '-inf', timestamp)
 
-        // If we actually found any jobs, we will remove them from the old queue and we
-        // will insert them onto the new (ready) "queue". This means they will stand
-        // ready to be processed by the queue worker whenever their turn comes up.
-        if (count($jobs) > 0) {
-            $this->removeExpiredJobs($from, $time);
-            $this->pushExpiredJobsOntoNewQueue($to, $jobs);
-        }
-    }
-
-    /**
-     * Get the expired jobs from a given queue.
-     *
-     * @param string $from
-     * @param int $time
-     * @return array
-     */
-    protected function getExpiredJobs(string $from, int $time): array
-    {
-        return $this->getRedis()->zrangebyscore($from, '-inf', $time);
-    }
-
-    /**
-     * Remove the expired jobs from a given queue.
-     *
-     * @param string $from
-     * @param int $time
-     * @return void
-     */
-    protected function removeExpiredJobs(string $from, int $time)
-    {
-        $this->getRedis()->zremrangebyscore($from, '-inf', $time);
-    }
-
-    /**
-     * Push all of the given jobs onto another queue.
-     *
-     * @param string $to
-     * @param array $jobs
-     * @return void
-     */
-    protected function pushExpiredJobsOntoNewQueue(string $to, array $jobs)
-    {
-        call_user_func_array([$this->getRedis(), 'rpush'], array_merge([$to], $jobs));
+for _, delayedMessage in ipairs(delayedMessages) do
+    redis.call('XADD', streamKey, '*', 'payload', delayedMessage)
+    redis.call('ZREM', delayedKey, delayedMessage)
+end
+LUA;
+        $this->getRedis()->eval($luaScript, [$queue, $this->time->timestamp()], 1);
     }
 
     /**
@@ -181,35 +139,28 @@ class RedisQueue extends BaseQueue
      * @param string|null $queue
      * @return string The id of the job
      */
-    protected function laterRaw($delay, array $payload, string $queue = null): ?string
+    protected function laterRaw($delay, array $payload, ?string $queue = null): ?string
     {
-        $this->getRedis()->zadd($this->getQueue($queue) . ':delayed', $this->time->timestamp() + $delay, $this->serialize($payload));
-        return $payload['id'] ?? null;
+        // Add id to make sure the job in the Redis sorted set is unique
+        if (!isset($payload['id'])) {
+            $payload['id'] = uniqid('', true);
+        }
+
+        $this->getRedis()->zAdd(
+            $this->getQueueKey($queue) . ':delayed',
+            $this->time->timestamp() + $delay,
+            $this->serialize($payload)
+        );
+        return $payload['id'];
     }
 
     /**
-     * Create a payload string from the given job and data.
-     *
-     * @param string|BaseJob $job
-     * @param mixed $data
-     * @param string|null $queue
-     * @return array
-     */
-    protected function createPayload($job, $data = '', string $queue = null): array
-    {
-        $payload = parent::createPayload($job, $data);
-        $payload['id'] = $this->random->string(32);
-        $payload['attempts'] = 0;
-        return $payload;
-    }
-
-    /**
-     * Get the queue or return the default.
+     * Get the key or return the default key.
      *
      * @param string|null $name
      * @return string
      */
-    protected function getQueue(string $name = null): string
+    protected function getQueueKey(?string $name = null): string
     {
         return 'queues:' . ($name ?: $this->name);
     }
@@ -217,7 +168,7 @@ class RedisQueue extends BaseQueue
     /**
      * Get the Redis instance.
      *
-     * @return \Redis
+     * @return \Redis|\RedisCluster
      */
     protected function getRedis()
     {
