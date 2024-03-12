@@ -1024,10 +1024,6 @@ class AppModel
     }
 }
 
-class CliApp
-{
-}
-
 class Config
 {
     /**
@@ -2314,6 +2310,10 @@ class ConfigModel
     }
 }
 
+class ConsoleApp
+{
+}
+
 class DbQueue
 {
 }
@@ -3425,21 +3425,6 @@ class IsBigIntString
     }
 }
 
-class IsModelExists
-{
-    /**
-     * Check the input value, return a Ret object
-     *
-     * @param mixed $input
-     * @param string $name
-     * @return Ret
-     * @see BaseValidator::check
-     */
-    public static function check($input, string $name = '%name%'): \Wei\Ret
-    {
-    }
-}
-
 class IsUBigIntString
 {
     /**
@@ -3751,70 +3736,6 @@ class Seeder
 
 class Session
 {
-}
-
-class Snowflake
-{
-    /**
-     * @return int
-     * @see Snowflake::getWorkerId
-     */
-    public static function getWorkerId(): int
-    {
-    }
-
-    /**
-     * Set the worker id
-     *
-     * @param int $workerId
-     * @return $this
-     * @see Snowflake::setWorkerId
-     */
-    public static function setWorkerId(int $workerId): self
-    {
-    }
-
-    /**
-     * Return the start timestamp
-     *
-     * @return int
-     * @see Snowflake::getStartTimestamp
-     */
-    public static function getStartTimestamp(): int
-    {
-    }
-
-    /**
-     * Set the start timestamp
-     *
-     * @param int $startTimestamp
-     * @return $this
-     * @see Snowflake::setStartTimestamp
-     */
-    public static function setStartTimestamp(int $startTimestamp): self
-    {
-    }
-
-    /**
-     * Generate an id
-     *
-     * @return string
-     * @see Snowflake::next
-     */
-    public static function next(): string
-    {
-    }
-
-    /**
-     * Parse the given id, return timestamp, worker ID and sequence
-     *
-     * @param string|int $id
-     * @return array{timestamp: int, workerId: int, sequence: int}
-     * @see Snowflake::parse
-     */
-    public static function parse($id): array
-    {
-    }
 }
 
 class Storage
@@ -5297,22 +5218,6 @@ class V
 
     /**
      * @return $this
-     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
-     */
-    public static function modelExists($input = null, $model = null, $column = 'id')
-    {
-    }
-
-    /**
-     * @return $this
-     * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
-     */
-    public static function notModelExists($input = null, $model = null, $column = 'id')
-    {
-    }
-
-    /**
-     * @return $this
      * @see \Miaoxing\Plugin\Service\IsUBigIntString::__invoke
      */
     public static function uBigIntString($input, int $min = null, int $max = null)
@@ -6339,10 +6244,6 @@ if (0) {
         public function isRelation(string $method): bool
         {
         }
-    }
-
-    class CliApp
-    {
     }
 
     class Config
@@ -7619,6 +7520,10 @@ if (0) {
         }
     }
 
+    class ConsoleApp
+    {
+    }
+
     class DbQueue
     {
     }
@@ -8718,21 +8623,6 @@ if (0) {
         }
     }
 
-    class IsModelExists
-    {
-        /**
-         * Check the input value, return a Ret object
-         *
-         * @param mixed $input
-         * @param string $name
-         * @return Ret
-         * @see BaseValidator::check
-         */
-        public function check($input, string $name = '%name%'): \Wei\Ret
-        {
-        }
-    }
-
     class IsUBigIntString
     {
         /**
@@ -9044,70 +8934,6 @@ if (0) {
 
     class Session
     {
-    }
-
-    class Snowflake
-    {
-        /**
-         * @return int
-         * @see Snowflake::getWorkerId
-         */
-        public function getWorkerId(): int
-        {
-        }
-
-        /**
-         * Set the worker id
-         *
-         * @param int $workerId
-         * @return $this
-         * @see Snowflake::setWorkerId
-         */
-        public function setWorkerId(int $workerId): self
-        {
-        }
-
-        /**
-         * Return the start timestamp
-         *
-         * @return int
-         * @see Snowflake::getStartTimestamp
-         */
-        public function getStartTimestamp(): int
-        {
-        }
-
-        /**
-         * Set the start timestamp
-         *
-         * @param int $startTimestamp
-         * @return $this
-         * @see Snowflake::setStartTimestamp
-         */
-        public function setStartTimestamp(int $startTimestamp): self
-        {
-        }
-
-        /**
-         * Generate an id
-         *
-         * @return string
-         * @see Snowflake::next
-         */
-        public function next(): string
-        {
-        }
-
-        /**
-         * Parse the given id, return timestamp, worker ID and sequence
-         *
-         * @param string|int $id
-         * @return array{timestamp: int, workerId: int, sequence: int}
-         * @see Snowflake::parse
-         */
-        public function parse($id): array
-        {
-        }
     }
 
     class Storage
@@ -10576,22 +10402,6 @@ if (0) {
          * @see \Miaoxing\Plugin\Service\IsBigIntString::__invoke
          */
         public function notBigIntString($key = null, string $label = null, int $min = null, int $max = null)
-        {
-        }
-
-        /**
-         * @return $this
-         * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
-         */
-        public function modelExists($key = null, string $label = null, $model = null, $column = 'id')
-        {
-        }
-
-        /**
-         * @return $this
-         * @see \Miaoxing\Plugin\Service\IsModelExists::__invoke
-         */
-        public function notModelExists($key = null, string $label = null, $model = null, $column = 'id')
         {
         }
 

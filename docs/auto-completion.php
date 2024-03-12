@@ -34,23 +34,6 @@ class AppModelPropMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\CliApp $cliApp
- * @method      mixed cliApp()
- */
- #[\AllowDynamicProperties]
-class CliAppMixin
-{
-}
-
-/**
- * @property    Miaoxing\Plugin\Service\CliApp $cliApp
- */
- #[\AllowDynamicProperties]
-class CliAppPropMixin
-{
-}
-
-/**
  * @property    Miaoxing\Plugin\Service\Config $config
  */
  #[\AllowDynamicProperties]
@@ -79,6 +62,23 @@ class ConfigModelMixin
  */
  #[\AllowDynamicProperties]
 class ConfigModelPropMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\ConsoleApp $consoleApp
+ * @method      mixed consoleApp()
+ */
+ #[\AllowDynamicProperties]
+class ConsoleAppMixin
+{
+}
+
+/**
+ * @property    Miaoxing\Plugin\Service\ConsoleApp $consoleApp
+ */
+ #[\AllowDynamicProperties]
+class ConsoleAppPropMixin
 {
 }
 
@@ -144,23 +144,6 @@ class IsBigIntStringMixin
  */
  #[\AllowDynamicProperties]
 class IsBigIntStringPropMixin
-{
-}
-
-/**
- * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
- * @method      bool isModelExists($input = null, $model = null, $column = 'id') Check if the input is existing model
- */
- #[\AllowDynamicProperties]
-class IsModelExistsMixin
-{
-}
-
-/**
- * @property    Miaoxing\Plugin\Service\IsModelExists $isModelExists
- */
- #[\AllowDynamicProperties]
-class IsModelExistsPropMixin
 {
 }
 
@@ -263,7 +246,7 @@ class PluginPropMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Queue $queue
+ * @property    Miaoxing\Plugin\Service\Queue $queue The wrapper class for queue service
  */
  #[\AllowDynamicProperties]
 class QueueMixin
@@ -271,7 +254,7 @@ class QueueMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\Queue $queue
+ * @property    Miaoxing\Plugin\Service\Queue $queue The wrapper class for queue service
  */
  #[\AllowDynamicProperties]
 class QueuePropMixin
@@ -295,7 +278,7 @@ class QueueWorkerPropMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\RedisQueue $redisQueue
+ * @property    Miaoxing\Plugin\Service\RedisQueue $redisQueue A queue service based on Redis steam
  */
  #[\AllowDynamicProperties]
 class RedisQueueMixin
@@ -303,7 +286,7 @@ class RedisQueueMixin
 }
 
 /**
- * @property    Miaoxing\Plugin\Service\RedisQueue $redisQueue
+ * @property    Miaoxing\Plugin\Service\RedisQueue $redisQueue A queue service based on Redis steam
  */
  #[\AllowDynamicProperties]
 class RedisQueuePropMixin
@@ -373,22 +356,6 @@ class SessionMixin
  */
  #[\AllowDynamicProperties]
 class SessionPropMixin
-{
-}
-
-/**
- * @property    Miaoxing\Plugin\Service\Snowflake $snowflake
- */
- #[\AllowDynamicProperties]
-class SnowflakeMixin
-{
-}
-
-/**
- * @property    Miaoxing\Plugin\Service\Snowflake $snowflake
- */
- #[\AllowDynamicProperties]
-class SnowflakePropMixin
 {
 }
 
@@ -493,14 +460,13 @@ class UserModelPropMixin
 /**
  * @mixin AppMixin
  * @mixin AppModelMixin
- * @mixin CliAppMixin
  * @mixin ConfigMixin
  * @mixin ConfigModelMixin
+ * @mixin ConsoleAppMixin
  * @mixin DbQueueMixin
  * @mixin FsMixin
  * @mixin GlobalConfigModelMixin
  * @mixin IsBigIntStringMixin
- * @mixin IsModelExistsMixin
  * @mixin IsUBigIntStringMixin
  * @mixin JwtMixin
  * @mixin LocalStorageMixin
@@ -514,7 +480,6 @@ class UserModelPropMixin
  * @mixin ScheduleMixin
  * @mixin SeederMixin
  * @mixin SessionMixin
- * @mixin SnowflakeMixin
  * @mixin StorageMixin
  * @mixin SyncQueueMixin
  * @mixin TesterMixin
