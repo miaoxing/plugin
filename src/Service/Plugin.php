@@ -565,7 +565,8 @@ class Plugin extends BaseService
      */
     protected function has($id)
     {
-        return class_exists($this->getPluginClass($id));
+        $class = $this->getPluginClass($id);
+        return $class && class_exists($class);
     }
 
     /**
