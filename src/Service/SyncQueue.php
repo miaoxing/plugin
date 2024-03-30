@@ -6,7 +6,6 @@ use Miaoxing\Plugin\Queue\BaseJob;
 
 /**
  * @mixin \QueueWorkerPropMixin
- * @mixin \RandomPropMixin
  * @mixin \LoggerPropMixin
  */
 class SyncQueue extends BaseQueue
@@ -32,8 +31,8 @@ class SyncQueue extends BaseQueue
             $this->logger->info('Sync queue does not support delay', $payload);
         }
 
+        $id = $this->generateId();
         $queue = $this->getName($queue);
-        $id = $this->random->string(32);
         $this->jobs[] = [
             'id' => $id,
             'queue' => $queue,
@@ -97,5 +96,15 @@ class SyncQueue extends BaseQueue
     {
         $this->manual = $manual;
         return $this;
+    }
+
+    /**
+     * Generate a unique job id
+     *
+     * @return string
+     */
+    protected function generateId(): string
+    {
+        return uniqid('', true);
     }
 }
