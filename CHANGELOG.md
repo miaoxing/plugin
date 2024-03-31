@@ -1,3 +1,34 @@
+## [0.14.5](https://github.com/miaoxing/plugin/compare/v0.14.4...v0.14.5) (2024-03-31)
+
+
+### Bug Fixes
+
+* **plugin): class_exists(:** Passing null to parameter [#1](https://github.com/miaoxing/miaoxing/issues/1) ($class) of type string is deprecated ([9885840](https://github.com/miaoxing/plugin/commit/9885840d87638d15eea98a29aba6537c6c3a5738))
+
+
+### Features
+
+* **plugin:** `RedisQueue` 改为通过 stream 实现 ([bde1002](https://github.com/miaoxing/plugin/commit/bde10024b8d87f91b67eef00bf770634f77450be))
+* **plugin:** 增加 `g:job` 命令，用于生成队列任务 ([fdfd425](https://github.com/miaoxing/plugin/commit/fdfd425f97c92835de2dca0be8265f3d19c28108))
+* **plugin:** 增加 `queue:listen` 命令，用于解决更改代码需重启 worker 的问题 ([f578a56](https://github.com/miaoxing/plugin/commit/f578a569bb8bcc3d5b6bb40e37d6c5495abffa35))
+* **plugin:** 增加 `Queue` 相关服务 ([69ea101](https://github.com/miaoxing/plugin/commit/69ea101859e23d8cf7a325c0944a25efb96d8f99))
+* **plugin:** 增加队列相关命令 ([0e5bb7d](https://github.com/miaoxing/plugin/commit/0e5bb7dbe9dce2a9a72a4cb409d8b2b0f84405ce))
+* **plugin:** 重写队列 ([1f6cdf0](https://github.com/miaoxing/plugin/commit/1f6cdf05eefbc46a9ef3f403f076d815291b7019))
+* **plugin:** 重写队列 2 ([85db3a7](https://github.com/miaoxing/plugin/commit/85db3a72680d81ef1dbb1f218282daa574657019))
+* **plugin:** 重写队列 3 ([7e469e2](https://github.com/miaoxing/plugin/commit/7e469e26368ef52fbaaf6a65e79b261520271eb6))
+* **plugin:** 重写队列 4 ([8df4fc6](https://github.com/miaoxing/plugin/commit/8df4fc676fc2c2832ac02375906beb5c02526b7f))
+* **plugin, experimental:** 增加 `ConsoleApp` 服务，用于命令行脚本 ([cafa768](https://github.com/miaoxing/plugin/commit/cafa768e390ca0be19ea68aa51ecec6bce0e6932))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `9.1.0` to `9.1.1`
+* **@mxjs/cli:** upgrade from `0.1.15` to `0.1.16`
+* **@wei/wei:** upgrade from `0.17.3` to `0.17.4`
+
 ## [0.14.4](https://github.com/miaoxing/plugin/compare/v0.14.3...v0.14.4) (2024-02-29)
 
 
