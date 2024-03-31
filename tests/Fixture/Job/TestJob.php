@@ -4,6 +4,9 @@ namespace MiaoxingTest\Plugin\Fixture\Job;
 
 use Miaoxing\Plugin\Queue\BaseJob;
 
+/**
+ * @mixin \ArrayCachePropMixin
+ */
 class TestJob extends BaseJob
 {
     protected $prop1;
@@ -20,7 +23,7 @@ class TestJob extends BaseJob
 
     public function __invoke(): void
     {
-        $_SERVER['__prop1'] = $this->prop1 ?: 'test';
+        $this->arrayCache->set('__prop1', $this->prop1 ?: 'test');
     }
 
     public function getProp1()

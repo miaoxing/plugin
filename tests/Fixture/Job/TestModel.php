@@ -4,6 +4,9 @@ namespace MiaoxingTest\Plugin\Fixture\Job;
 
 use Miaoxing\Plugin\Queue\BaseJob;
 
+/**
+ * @mixin \ArrayCachePropMixin
+ */
 class TestModel extends BaseJob
 {
     protected $model;
@@ -17,6 +20,6 @@ class TestModel extends BaseJob
 
     public function __invoke(): void
     {
-        $_SERVER['__queue'] = $this->model->toArray();
+        $this->arrayCache->set('__queue', $this->model->toArray());
     }
 }

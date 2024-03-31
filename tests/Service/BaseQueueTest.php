@@ -19,6 +19,7 @@ use Wei\QueryBuilder;
  * @mixin \DbPropMixin
  * @mixin \TimePropMixin
  * @mixin \CachePropMixin
+ * @mixin \ArrayCachePropMixin
  */
 abstract class BaseQueueTest extends BaseTestCase
 {
@@ -41,18 +42,18 @@ abstract class BaseQueueTest extends BaseTestCase
 
     public function testDispatch()
     {
-        unset($_SERVER['__prop1']);
+        $this->arrayCache->delete('__prop1');
 
         TestJob::dispatch();
 
         $this->queueWorker->runNextJob();
 
-        $this->assertSame('test', $_SERVER['__prop1']);
+        $this->assertSame('test', $this->arrayCache->get('__prop1'));
     }
 
     public function testDispatchWithArgs()
     {
-        unset($_SERVER['__prop1']);
+        $this->arrayCache->delete('__prop1');
 
         TestJob::dispatch('foo', 'bar');
 
@@ -63,7 +64,7 @@ abstract class BaseQueueTest extends BaseTestCase
         $this->assertSame(['prop1' => 'foo', 'prop2' => 'bar'], $job->getPayload()['data']);
 
         // Called __invoke
-        $this->assertSame('foo', $_SERVER['__prop1']);
+        $this->assertSame('foo', $this->arrayCache->get('__prop1'));
 
         // Set prop values
         $this->assertSame('foo', $job->getProp1());
@@ -90,7 +91,7 @@ abstract class BaseQueueTest extends BaseTestCase
 
         $this->queueWorker->runNextJob();
 
-        $this->assertSame($model->toArray(), $_SERVER['__queue']);
+        $this->assertSame($model->toArray(), $this->arrayCache->get('__queue'));
     }
 
     public function testDispatchWithModelCollArgs()
@@ -103,23 +104,23 @@ abstract class BaseQueueTest extends BaseTestCase
 
         $this->queueWorker->runNextJob();
 
-        $this->assertCount(2, $_SERVER['__queue']);
-        $this->assertSame($model->toArray(), $_SERVER['__queue']);
+        $this->assertCount(2, $this->arrayCache->get('__queue'));
+        $this->assertSame($model->toArray(), $this->arrayCache->get('__queue'));
     }
 
     public function testDispatchOnQueue()
     {
-        unset($_SERVER['__prop1']);
+        $this->arrayCache->delete('__prop1');
 
         TestJob::onQueue('test')->dispatch('prop1', 'prop2');
 
         $this->queueWorker->runNextJob();
-        $this->assertArrayNotHasKey('__prop1', $_SERVER);
+        $this->assertFalse($this->arrayCache->has('__prop1'));
 
         $this->queueWorker->runNextJob([
             'queueName' => 'test',
         ]);
-        $this->assertSame('prop1', $_SERVER['__prop1']);
+        $this->assertSame('prop1', $this->arrayCache->get('__prop1'));
     }
 
     public function testId()
@@ -210,6 +211,9 @@ abstract class BaseQueueTest extends BaseTestCase
         $this->assertFalse($job->isFailed());
         $this->assertFalse($job->isReleased());
         $this->assertTrue($job->isDeleted());
+
+        // Clear state in `TestRelease`
+        $this->arrayCache->clear();
     }
 
     public function testRetry()
