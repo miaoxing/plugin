@@ -61,6 +61,6 @@ class GlobalConfigModel extends BaseModel
      */
     protected function getTypeNameAttribute(): ?string
     {
-        return $this->typeNames[$this->type];
+        return $this->typeNames[$this->type] ?? null;
     }
 }
