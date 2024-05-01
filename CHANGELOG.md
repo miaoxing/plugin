@@ -1,3 +1,10 @@
+## [0.14.6](https://github.com/miaoxing/plugin/compare/v0.14.5...v0.14.6) (2024-05-01)
+
+
+### Bug Fixes
+
+* **config:** 类型为 null 时获取名称错误 ([b19f466](https://github.com/miaoxing/plugin/commit/b19f466ba898db59f4bf88161bb2d243536bcc03))
+
 ## [0.14.5](https://github.com/miaoxing/plugin/compare/v0.14.4...v0.14.5) (2024-03-31)
 
 
