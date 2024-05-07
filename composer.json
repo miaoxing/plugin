@@ -19,7 +19,8 @@
   },
   "require-dev": {
     "miaoxing/dev": "^9.1.1",
-    "nette/php-generator": "^3.4"
+    "nette/php-generator": "^3.4",
+    "symfony/var-dumper": ">=5"
   },
   "autoload": {
     "files": [
