@@ -1,0 +1,43 @@
+{
+  "name": "miaoxing/dash-id",
+  "type": "miaoxing-plugin",
+  "description": "Miaoxing Plugin",
+  "authors": [
+    {
+      "name": "twinh",
+      "email": "twinhuang@qq.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Miaoxing\\PascalId\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MiaoxingTest\\PascalId\\": "tests"
+    }
+  },
+  "require": {
+    "miaoxing/plugin": "^0.9.3"
+  },
+  "require-dev": {
+    "miaoxing/dev": "^8.1.3"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "phpstan/extension-installer": true
+    }
+  },
+  "extra": {
+    "require-ci": {
+      "miaoxing/dev": "miaoxing/dev as 8.x-dev",
+      "miaoxing/phpstan-miaoxing": "miaoxing/phpstan-miaoxing as 1.x-dev",
+      "miaoxing/plugin": "miaoxing/plugin as 0.9.x-dev",
+      "wei/wei": "twinh/wei as 0.15.x-dev"
+    }
+  }
+}
