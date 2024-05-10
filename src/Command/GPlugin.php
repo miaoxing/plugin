@@ -26,11 +26,11 @@ class GPlugin extends BaseCommand
      */
     protected function handle()
     {
-        $dashId = $this->str->dash($this->getArgument('id'));
-        $camelId = $this->str->camel($dashId);
+        $camelId = $this->str->camel($this->getArgument('id'));
+        $dashId = $this->str->dash($camelId);
         $pascalId = ucfirst($camelId);
 
-        $name = $this->getArgument('name');
+        $name = $this->getArgument('name') ?: ucwords(strtr($dashId, '-', ' '));
 
         if ($this->plugin->has($dashId)) {
             return $this->err(sprintf('Plugin "%s" exists', $dashId));
