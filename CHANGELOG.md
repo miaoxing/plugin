@@ -1,3 +1,19 @@
+## [0.14.7](https://github.com/miaoxing/plugin/compare/v0.14.6...v0.14.7) (2024-05-30)
+
+
+### Features
+
+* **plugin:** `g:plugin` 标题为空时根据插件 id 生成标题，id 传入 snake 格式时转换为 dash 格式 ([aad6e5d](https://github.com/miaoxing/plugin/commit/aad6e5d34f233ae74cd54e645a2a7a2771b733b9))
+* **plugin:** 增加 `g:plugin` 插件 ([7570851](https://github.com/miaoxing/plugin/commit/7570851e9a5f437496cff12e0940557066f15a91))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.17.4` to `0.17.5`
+
 ## [0.14.6](https://github.com/miaoxing/plugin/compare/v0.14.5...v0.14.6) (2024-05-01)
 
 
