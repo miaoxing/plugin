@@ -2,10 +2,8 @@
 
 namespace Miaoxing\Plugin\Service;
 
-use Exception;
 use Wei\BaseController;
 use Wei\BaseController as WeiBaseController;
-use Wei\BaseModel;
 use Wei\Res;
 use Wei\Ret\RetException;
 
@@ -342,8 +340,7 @@ class App extends \Wei\App
             $method = $this->getActionMethod($action);
             // TODO 和 forward 异常合并一起处理
             try {
-                $args = $this->buildActionArgs($instance, $method);
-                $response = $instance->{$method}(...$args);
+                $response = $instance->{$method}($this->req, $this->res);
             } catch (RetException $e) {
                 return $e->getRet();
             }
@@ -367,68 +364,6 @@ class App extends \Wei\App
         };
 
         return $this->handleResponse($next())->send();
-    }
-
-    /**
-     * @param object $instance
-     * @param string $method
-     * @return array
-     * @throws \ReflectionException
-     */
-    protected function buildActionArgs($instance, string $method)
-    {
-        $ref = new \ReflectionMethod($instance, $method);
-        $params = $ref->getParameters();
-        if (!$params || 'req' === $params[0]->getName()) {
-            return [$this->req, $this->res];
-        }
-
-        $args = [];
-        foreach ($params as $param) {
-            $args[] = $this->buildActionArg($param);
-        }
-        return $args;
-    }
-
-    /**
-     * @param \ReflectionParameter $param
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    protected function buildActionArg(\ReflectionParameter $param)
-    {
-        /** @link https://github.com/phpstan/phpstan/issues/1133 */
-        /** @var \ReflectionNamedType|null $type */
-        $type = $param->getType();
-
-        // Handle Model class
-        if (
-            $type
-            && !$type->isBuiltin()
-            && is_a($type->getName(), BaseModel::class, true)
-        ) {
-            return $type->getName()::findOrFail($this->req['id']);
-        }
-
-        // Handle other class
-        if ($type && !$type->isBuiltin()) {
-            throw new \Exception('Unsupported action parameter type: ' . $type);
-        }
-
-        // TODO Throw exception for unsupported builtin type
-        // Handle builtin type
-        $arg = $this->req[$param->getName()];
-        if (null === $arg) {
-            if ($param->isDefaultValueAvailable()) {
-                $arg = $param->getDefaultValue();
-            } else {
-                throw new \Exception('Missing required parameter: ' . $param->getName(), 400);
-            }
-        } elseif ($type) {
-            settype($arg, $type->getName());
-        }
-
-        return $arg;
     }
 
     /**

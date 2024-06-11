@@ -1,7 +1,6 @@
 <?php
 
 use Miaoxing\Plugin\BasePage;
-use Miaoxing\Plugin\Service\UserModel;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnResponse;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnRet;
 use MiaoxingTest\Plugin\Fixture\Middleware\ReturnString;
@@ -56,30 +55,5 @@ class () extends BasePage {
     public function returnResponseInMiddleware()
     {
         throw new Exception('test error');
-    }
-
-    public function param($id)
-    {
-        return $id;
-    }
-
-    public function paramWithType(int $id)
-    {
-        return gettype($id) . '-' . $id;
-    }
-
-    public function paramWithDefaultValue($id = 'test')
-    {
-        return $id;
-    }
-
-    public function paramWithTypeAndDefaultValue(?bool $isEnabled = null)
-    {
-        return var_export($isEnabled, true);
-    }
-
-    public function paramModel(UserModel $user)
-    {
-        return 'user:' . $user->id;
     }
 };

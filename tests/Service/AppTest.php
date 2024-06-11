@@ -13,53 +13,6 @@ use Miaoxing\Plugin\Test\BaseTestCase;
  */
 final class AppTest extends BaseTestCase
 {
-    public function testParamAction()
-    {
-        wei()->req->set('id', 'id');
-        $response = $this->execute('param');
-        $this->assertSame('id', $response);
-    }
-
-    public function testParamWithTypeAction()
-    {
-        wei()->req->set('id', '1');
-        $response = $this->execute('paramWithType');
-        $this->assertSame('integer-1', $response);
-    }
-
-    public function testParamWithDefaultValueAction()
-    {
-        $response = $this->execute('paramWithDefaultValue');
-        $this->assertSame('test', $response);
-    }
-
-    public function testParamWithTypeAndDefaultValueAction()
-    {
-        $response = $this->execute('paramWithTypeAndDefaultValue');
-        $this->assertSame('NULL', $response);
-
-        wei()->req->set('isEnabled', '1');
-        $response = $this->execute('paramWithTypeAndDefaultValue');
-        $this->assertSame('true', $response);
-
-        wei()->req->set('isEnabled', '0');
-        $response = $this->execute('paramWithTypeAndDefaultValue');
-        $this->assertSame('false', $response);
-    }
-
-    public function testParamRequiredAction()
-    {
-        $this->expectExceptionObject(new \Exception('Missing required parameter: id', 400));
-        $this->execute('param');
-    }
-
-    public function testParamModelAction()
-    {
-        wei()->req->set('id', '1');
-        $response = $this->execute('paramModel');
-        $this->assertSame('user:1', $response);
-    }
-
     /**
      * 测试返回数据
      *
