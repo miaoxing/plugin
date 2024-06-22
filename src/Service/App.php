@@ -302,7 +302,7 @@ class App extends \Wei\App
         $page = $this->getCurControllerInstance();
 
         // TODO allow execute middleware before action
-        if ($action !== 'options' && !method_exists($page, $action)) {
+        if ('options' !== $action && !method_exists($page, $action)) {
             $this->res->setStatusCode(static::METHOD_NOT_ALLOWED);
             throw new \Exception('Method Not Allowed', static::METHOD_NOT_ALLOWED);
         }
