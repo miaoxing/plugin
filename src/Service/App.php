@@ -69,12 +69,6 @@ class App extends \Wei\App
     protected $isDemo = false;
 
     /**
-     * @var string
-     * @internal
-     */
-    protected $accessControlAllowOrigin = '*';
-
-    /**
      * The id of the current application
      *
      * @var string
@@ -109,8 +103,6 @@ class App extends \Wei\App
      */
     public function __invoke(array $options = [])
     {
-        $this->prepareHeaders();
-
         // Load global config
         $this->config->preloadGlobal();
 
@@ -309,11 +301,8 @@ class App extends \Wei\App
 
         $page = $this->getCurControllerInstance();
 
-        if ($this->req->isPreflight()) {
-            return $this->res->send();
-        }
-
-        if (!method_exists($page, $action)) {
+        // TODO allow execute middleware before action
+        if ($action !== 'options' && !method_exists($page, $action)) {
             $this->res->setStatusCode(static::METHOD_NOT_ALLOWED);
             throw new \Exception('Method Not Allowed', static::METHOD_NOT_ALLOWED);
         }
@@ -438,23 +427,5 @@ class App extends \Wei\App
         }
 
         return null;
-    }
-
-    /**
-     * 根据请求设置跨域标头信息
-     *
-     * @return void
-     * @internal
-     */
-    public function prepareHeaders()
-    {
-        $this->res->setHeader('Access-Control-Allow-Origin', $this->accessControlAllowOrigin);
-        if ($this->req->isPreflight()) {
-            $this->res
-                ->setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
-                // NOTE: antd upload 组件上传会加上 XMLHttpRequest 头
-                ->setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, X-Requested-With')
-                ->setHeader('Access-Control-Max-Age', 0);
-        }
     }
 }
