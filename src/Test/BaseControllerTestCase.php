@@ -27,7 +27,7 @@ abstract class BaseControllerTestCase extends BaseTestCase
     public function getController()
     {
         if (!$this->controller) {
-            preg_match('/Controller\\\\(.+?)ControllerTest/', static::class, $matches);
+            preg_match('/Controller\\\(.+?)ControllerTest/', static::class, $matches);
             $values = [];
             foreach (explode('\\', $matches[1]) as $value) {
                 $values[] = lcfirst($value);

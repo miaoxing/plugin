@@ -53,7 +53,7 @@ class GRelation extends BaseCommand
 
         // Generate file
         $phpFile = new PhpFile();
-        $namespace = $phpFile->addNamespace('Miaoxing\\' . $pluginNamespace . '\\Model');
+        $namespace = $phpFile->addNamespace('Miaoxing\\' . $pluginNamespace . '\Model');
         $namespace->addUse($class);
 
         // Generate trait

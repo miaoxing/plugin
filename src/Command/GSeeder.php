@@ -27,7 +27,7 @@ class GSeeder extends BaseCommand
         $plugin = $this->plugin->getOneById($this->getArgument('plugin'));
         $path = $plugin->getBasePath() . '/src/Seeder';
         $reflection = new \ReflectionClass($plugin);
-        $namespace = $reflection->getNamespaceName() . '\\Seeder';
+        $namespace = $reflection->getNamespaceName() . '\Seeder';
 
         Seeder::setOutput($this->output)->create([
             'name' => $this->getArgument('name'),

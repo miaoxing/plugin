@@ -30,7 +30,7 @@ class GMigration extends BaseCommand
         $plugin = $this->plugin->getOneById($this->getPluginId());
         $path = $plugin->getBasePath() . '/src/Migration';
         $reflection = new \ReflectionClass($plugin);
-        $namespace = $reflection->getNamespaceName() . '\\Migration';
+        $namespace = $reflection->getNamespaceName() . '\Migration';
 
         Migration::setOutput($this->output)->create([
             'name' => $this->getArgument('name'),
