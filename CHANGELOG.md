@@ -1,3 +1,20 @@
+# [0.15.0](https://github.com/miaoxing/plugin/compare/v0.14.7...v0.15.0) (2024-06-30)
+
+
+### Bug Fixes
+
+* **plugin:** 增加 `symfony/console` 依赖 ([6845ca0](https://github.com/miaoxing/plugin/commit/6845ca0fa737a401c4a6663a20e49be2a0bf5ef4))
+
+
+### Code Refactoring
+
+* **plugin:** `App` 移除自动注入参数到控制器的功能 ([873b202](https://github.com/miaoxing/plugin/commit/873b202784be54ea8f614dd08d797ee84183029d))
+
+
+### BREAKING CHANGES
+
+* **plugin:** `App` 移除自动注入参数到控制器的功能
+
 ## [0.14.7](https://github.com/miaoxing/plugin/compare/v0.14.6...v0.14.7) (2024-05-30)
 
 
