@@ -50,5 +50,10 @@
       "miaoxing/phpstan-miaoxing": "miaoxing/phpstan-miaoxing as 3.x-dev",
       "wei/wei": "twinh/wei as 0.17.x-dev"
     }
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "@php wei g:auto-completion"
+    ]
   }
 }
