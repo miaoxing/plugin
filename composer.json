@@ -10,7 +10,7 @@
   "require": {
     "ext-json": "*",
     "ext-openssl": "*",
-    "wei/wei": "^0.17.5",
+    "wei/wei": "^0.17.6",
     "doctrine/inflector": "^1.4|^2.0",
     "adhocore/jwt": "^1.1.2",
     "fakerphp/faker": "^1.14",
@@ -19,7 +19,7 @@
     "dragonmantank/cron-expression": "^2||^3"
   },
   "require-dev": {
-    "miaoxing/dev": "^9.1.1",
+    "miaoxing/dev": "^9.1.2",
     "nette/php-generator": "^3.4",
     "symfony/var-dumper": ">=5"
   },
@@ -46,7 +46,7 @@
   },
   "extra": {
     "require-ci": {
-      "miaoxing/dev": "miaoxing/dev as 8.x-dev",
+      "miaoxing/dev": "miaoxing/dev as 9.x-dev",
       "miaoxing/phpstan-miaoxing": "miaoxing/phpstan-miaoxing as 3.x-dev",
       "wei/wei": "twinh/wei as 0.17.x-dev"
     }
