@@ -40,11 +40,7 @@ foreach (['GITHUB_ACTIONS'] as $ci) {
 $wei->setConfig(getConfig($files));
 
 // 测试前生成 jwt key
-$path = Jwt::getPublicKey();
-if ('file://' === substr($path, 0, 7)) {
-    $path = substr($path, 7);
-}
-if (!is_file($path)) {
+if (!is_file(Jwt::getPublicKey())) {
     Jwt::generateDefaultKeys();
 }
 
