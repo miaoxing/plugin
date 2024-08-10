@@ -32,7 +32,7 @@ class ResourceTest extends BaseTestCase
         $user = TestUser::new();
         $user->name = 'test';
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [
@@ -48,7 +48,7 @@ class ResourceTest extends BaseTestCase
     {
         $user = TestUser::new();
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [
@@ -64,7 +64,7 @@ class ResourceTest extends BaseTestCase
     {
         $user = TestUser::new();
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [
@@ -80,7 +80,7 @@ class ResourceTest extends BaseTestCase
     {
         $user = TestUser::new();
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [
@@ -99,7 +99,7 @@ class ResourceTest extends BaseTestCase
     {
         $user = TestUser::new();
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [
@@ -120,7 +120,7 @@ class ResourceTest extends BaseTestCase
         $user->name = 'foo';
         $user->address = 'bar';
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [
@@ -147,7 +147,7 @@ class ResourceTest extends BaseTestCase
         $user = TestUser::new();
         $user->find(1);
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [
@@ -207,7 +207,7 @@ class ResourceTest extends BaseTestCase
         $user->name = 'foo';
         $user->address = 'bar';
 
-        $resource = new class () extends TestUserResource {
+        $resource = new class extends TestUserResource {
             public function transform(TestUser $user)
             {
                 return [

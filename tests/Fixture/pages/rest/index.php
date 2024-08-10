@@ -1,6 +1,6 @@
 <?php
 
-return new class () extends Miaoxing\Plugin\BasePage {
+return new class extends Miaoxing\Plugin\BasePage {
     public function get()
     {
         return 'GET';

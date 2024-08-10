@@ -9,7 +9,7 @@ use Wei\RetTrait;
 return new /**
  * @mixin AppPropMixin
  */
-class () extends BasePage {
+class extends BasePage {
     use RetTrait;
 
     public function __construct(array $options = [])
