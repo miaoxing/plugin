@@ -2,7 +2,6 @@
 
 namespace Miaoxing\Plugin\Command;
 
-use Miaoxing\Plugin\BasePlugin;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\Parameter;
@@ -15,16 +14,17 @@ use Symfony\Component\Console\Input\InputArgument;
  * 生成自动完成的代码文件
  *
  * 可行方案
- * 1. FILE_MODE_SINGLE + excludeParentMethods=false (推荐)
+ * 1. 静态和动态方法合并在一起 + excludeParentMethods=false (推荐)
  * - PHPStorm 识别稳定
  * - 生成代码多
  *
- * 2. FILE_MODE_BY_TYPE + excludeParentMethods=true
+ * 2. 静态和动态方法分开为独立文件 + excludeParentMethods=true
  * - PHPStorm 识别不稳定，多次重启后能识别到
  * - 生成代码少
  *
- * 3. FILE_MODE_BY_CLASS
- * - 暂无区别，未实现
+ * 3. 每个类生成一个文件
+ * - 暂无区别
+ * - 生成文件过多
  *
  * @mixin \PluginPropMixin
  * @mixin \ClassMapMixin
@@ -34,44 +34,31 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class GAutoCompletion extends BaseCommand
 {
-    use PluginIdTrait;
-
-    /**
-     * 所有的类生成一个文件
-     */
-    public const FILE_MODE_SINGLE = 1;
-
-    /**
-     * 生成两个文件，一个存放静态方法，一个存放动态方法
-     */
-    public const FILE_MODE_BY_TYPE = 2;
-
-    /**
-     * 每个类生成一个文件
-     */
-    public const FILE_MODE_BY_CLASS = 3;
-
     protected static $defaultName = 'g:auto-completion';
 
     /**
      * @var bool
      */
-    protected $generateEmptyClass = true;
+    protected bool $generateEmptyClass = false;
 
     /**
      * @var bool
      */
-    protected $excludeParentMethods = false;
+    protected bool $excludeParentMethods = false;
 
     /**
      * @var bool
      */
-    protected $addNoinspectionComment = false;
+    protected bool $addNoinspectionComment = false;
 
     /**
+     * 每个文件最多的方法数
+     *
+     * 生成文件过大 PHPStorm 不会解析
+     *
      * @var int
      */
-    protected $fileMode = self::FILE_MODE_SINGLE;
+    protected int $maxMethodCount = 3000;
 
     /**
      * Generate static calls code completion
@@ -82,9 +69,16 @@ class GAutoCompletion extends BaseCommand
      */
     public function generateStaticCalls(array $services, string $path)
     {
+        $staticFiles = [];
+        $dynamicFiles = [];
+
         $printer = new PsrPrinter();
+
         $staticFile = new PhpFile();
+        $staticFiles[] = $staticFile;
+
         $dynamicFile = new PhpFile();
+        $dynamicFiles[] = $dynamicFile;
 
         if ($this->addNoinspectionComment) {
             $staticFile->addComment('@noinspection PhpDocSignatureInspection')
@@ -92,10 +86,21 @@ class GAutoCompletion extends BaseCommand
                 ->addComment('@noinspection PhpInconsistentReturnPointsInspection');
         }
 
-        foreach ($services as $name => $serviceClass) {
+        $methodCount = 0;
+        foreach ($services as $serviceClass) {
             // 忽略 trait
             if (!class_exists($serviceClass)) {
                 continue;
+            }
+
+            if ($methodCount >= $this->maxMethodCount) {
+                $methodCount = 0;
+
+                $staticFile = new PhpFile();
+                $staticFiles[] = $staticFile;
+
+                $dynamicFile = new PhpFile();
+                $dynamicFiles[] = $dynamicFile;
             }
 
             $refClass = new \ReflectionClass($serviceClass);
@@ -113,23 +118,25 @@ class GAutoCompletion extends BaseCommand
 
             $methods = [];
             $staticMethods = [];
-            $see = '@see ' . $refClass->getShortName() . '::';
             foreach ($refClass->getMethods(\ReflectionMethod::IS_PROTECTED) as $refMethod) {
                 // NOTE: 单文件下，如果排除了父类方法，第二级的子类(例如AppModel)没有代码提示
                 if ($this->excludeParentMethods && $refMethod->getDeclaringClass()->getName() !== $serviceClass) {
                     continue;
                 }
 
-                if ($this->isApi($refMethod)) {
-                    // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
-                    $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
-
-                    $see = '@see ' . $refMethod->getDeclaringClass()->getShortName() . '::' . $refMethod->getName();
-                    $method->setComment(str_replace('@svc', $see, $method->getComment()));
-
-                    $methods[] = $method;
-                    $staticMethods[] = (clone $method)->setStatic();
+                if (!$this->isApi($refMethod)) {
+                    continue;
                 }
+
+                // NOTE: 使用注释，PHPStorm 也不会识别为动态调用
+                $method = Method::from([$serviceClass, $refMethod->getName()])->setPublic();
+
+                $see = '@see ' . $refMethod->getDeclaringClass()->getShortName() . '::' . $refMethod->getName();
+                $method->setComment(str_replace('@svc', $see, $method->getComment()));
+
+                $methods[] = $method;
+                $staticMethods[] = (clone $method)->setStatic();
+                ++$methodCount;
             }
 
             if ($this->generateEmptyClass || $staticMethods) {
@@ -150,20 +157,7 @@ class GAutoCompletion extends BaseCommand
             return;
         }
 
-        switch ($this->fileMode) {
-            default:
-            case self::FILE_MODE_SINGLE:
-                $this->writeSingle($printer, $staticFile, $dynamicFile, $path);
-                break;
-
-            case self::FILE_MODE_BY_TYPE:
-                $this->writeByType($printer, $staticFile, $dynamicFile, $path);
-                break;
-
-            case self::FILE_MODE_BY_CLASS:
-                $this->writeByClass($printer, $staticFile, $dynamicFile, $path);
-                break;
-        }
+        $this->writeFiles($printer, $staticFiles, $dynamicFiles, $path);
     }
 
     /**
@@ -182,13 +176,13 @@ class GAutoCompletion extends BaseCommand
      */
     protected function handle()
     {
-        $id = $this->getPluginId();
+        $id = $this->getArgument('plugin-id');
+        // @experimental
         if ('wei' === $id) {
             [$services, $path] = $this->getWeiConfig();
         } else {
-            $plugin = $this->plugin->getOneById($id);
-            $path = $plugin->getBasePath();
-            $services = $this->getServerMap($plugin);
+            $services = $this->wei->getAliases();
+            $path = getcwd();
         }
 
         // NOTE: 需生成两个文件，services.php 里的类才能正确跳转到源文件
@@ -268,58 +262,43 @@ PHP;
         $this->createFile($path . '/docs/auto-completion.php', $content);
     }
 
-    protected function writeSingle(PsrPrinter $printer, PhpFile $staticFile, PhpFile $dynamicFile, string $path)
+    protected function writeFiles(PsrPrinter $printer, array $staticFiles, array $dynamicFiles, string $path)
     {
-        $statics = $printer->printFile($staticFile);
-        $dynamics = $printer->printFile($dynamicFile);
+        $this->deleteStaticFiles($path);
 
-        // Remove first (<?php\n) line
-        $dynamics = substr($dynamics, strpos($dynamics, "\n") + 1);
+        foreach ($staticFiles as $i => $staticFile) {
+            $dynamicFile = $dynamicFiles[$i];
 
-        // indent 4 spaces
-        $lines = [];
-        foreach (explode("\n", $dynamics) as $line) {
-            $lines[] = $line ? ('    ' . $line) : '';
+            $statics = $printer->printFile($staticFile);
+            $dynamics = $printer->printFile($dynamicFile);
+
+            // Remove first (<?php\n) line
+            $dynamics = substr($dynamics, strpos($dynamics, "\n") + 1);
+
+            // indent 4 spaces
+            $lines = [];
+            foreach (explode("\n", $dynamics) as $line) {
+                $lines[] = $line ? ('    ' . $line) : '';
+            }
+            $dynamics = implode("\n", $lines);
+
+            // Wrap `if (0) ` outside class definition
+            $index = 0;
+            $dynamics = preg_replace_callback('/    namespace (.+?)\n/mi', static function ($matches) use (&$index) {
+                ++$index;
+                $prefix = 1 === $index ? '' : "\n}\n";
+                return $prefix . ltrim($matches[0]) . "\nif (0) {";
+            }, $dynamics);
+            $dynamics .= "}\n";
+
+            $content = $statics . $dynamics;
+            $this->createFile($path . '/docs/auto-completion-static-' . ($i + 1) . '.php', $content);
         }
-        $dynamics = implode("\n", $lines);
-
-        // Wrap `if (0) ` outside class definition
-        $index = 0;
-        $dynamics = preg_replace_callback('/    namespace (.+?)\n/mi', static function ($matches) use (&$index) {
-            ++$index;
-            $prefix = 1 === $index ? '' : "\n}\n";
-            return $prefix . ltrim($matches[0]) . "\nif (0) {";
-        }, $dynamics);
-        $dynamics .= "}\n";
-
-        $content = $statics . $dynamics;
-        $this->createFile($path . '/docs/auto-completion-static.php', $content);
 
         $file = $path . '/docs/auto-completion-dynamic.php';
         if (is_file($file)) {
             unlink($file);
         }
-    }
-
-    protected function writeByType(PsrPrinter $printer, PhpFile $staticFile, PhpFile $dynamicFile, string $path)
-    {
-        $statics = $printer->printFile($staticFile);
-        $this->createFile($path . '/docs/auto-completion-static.php', $statics);
-
-        $dynamics = $printer->printFile($dynamicFile);
-        $this->createFile($path . '/docs/auto-completion-dynamic.php', $dynamics);
-    }
-
-    protected function writeByClass(PsrPrinter $printer, PhpFile $staticFile, PhpFile $dynamicFile, string $path)
-    {
-        throw new \RuntimeException('Not supported yet');
-//        $header = $printer->printFile($staticFile) . "\n";
-//        foreach ($statics as $name => $content) {
-//            $this->createFile($path . '/docs/auto-completion-static-' . $name . '.php', $header . $content);
-//        }
-//        foreach ($dynamics as $name => $content) {
-//            $this->createFile($path . '/docs/auto-completion-dynamic-' . $name . '.php', $header . $content);
-//        }
     }
 
     /**
@@ -446,17 +425,6 @@ PHP;
         }
     }
 
-    /**
-     * @param BasePlugin $plugin
-     * @return array
-     */
-    protected function getServerMap(BasePlugin $plugin)
-    {
-        $basePath = $plugin->getBasePath() . '/src';
-
-        return wei()->classMap->generate([$basePath], '/Service/*.php', 'Service', false);
-    }
-
     protected function intent($content, $space = '    ')
     {
         $array = [];
@@ -483,6 +451,14 @@ class $class
 }
 
 PHP;
+    }
+
+    protected function deleteStaticFiles(string $path)
+    {
+        $files = glob($path . '/docs/auto-completion-static-*.php');
+        foreach ($files as $file) {
+            unlink($file);
+        }
     }
 
     private function addValidatorMethods(array $services, PhpFile $staticFile, PhpFile $dynamicFile)
