@@ -204,7 +204,10 @@ class GAutoCompletion extends BaseCommand
         $files = glob($path . '/*.php');
         foreach ($files as $file) {
             $name = basename($file, '.php');
-            $services[lcfirst($name)] = 'Wei\\' . $name;
+            $class = 'Wei\\' . $name;
+            if (class_exists($class)) {
+                $services[lcfirst($name)] = $class;
+            }
         }
 
         foreach ($services as $name => $class) {
