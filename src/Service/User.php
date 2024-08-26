@@ -7,6 +7,7 @@ use Miaoxing\Plugin\Auth\JwtAuth;
 use Miaoxing\Plugin\BaseService;
 use Miaoxing\Plugin\ConfigTrait;
 use Wei\Ret;
+use Wei\Time;
 
 /**
  * 用户
@@ -284,7 +285,14 @@ class User extends BaseService
         }
 
         // 5. 验证通过,登录用户
-        return $this->loginByModel($user);
+        $ret = $this->loginByModel($user);
+        if ($ret->isErr()) {
+            return $ret;
+        }
+
+        $user->lastLoginAt = Time::now();
+        $user->save();
+        return $ret;
     }
 
     /**
