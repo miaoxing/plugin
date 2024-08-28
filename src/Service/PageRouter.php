@@ -37,6 +37,12 @@ class PageRouter extends BaseService
     {
         $paths = explode('/', ltrim($pathInfo, '/'));
         $pages = $this->getPages();
+
+        // Handle index page
+        if ('/' === $pathInfo) {
+            $pages = ['/' => $pages];
+        }
+
         $result = $this->matchPaths($paths, $pages);
         if (!$result) {
             return null;

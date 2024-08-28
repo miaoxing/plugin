@@ -425,6 +425,21 @@ class PageRouterTest extends BaseTestCase
         ], $this->pageRouter->match('/orgs/miaoxing/teams/miaoxing/discussions/1/comments/2/reactions'));
     }
 
+    public function testMatchIndex()
+    {
+        $this->pageRouter->setPages([
+            'file' => 'index.php',
+        ]);
+        $this->assertSame([
+            'file' => 'index.php',
+            'params' => [],
+            'paths' => [
+                '/',
+                '/index.php',
+            ],
+        ], $this->pageRouter->match('/'));
+    }
+
     public function testIgnoreConfig()
     {
         $this->pageRouter->setPages([
