@@ -586,4 +586,17 @@ class PageRouterTest extends BaseTestCase
             ],
         ], $pages);
     }
+
+    public function testGenerateIndexPage()
+    {
+        $dir = dirname(__DIR__) . '/Fixture/pages/rest';
+        $this->pageRouter->setPageDirGlob($dir);
+
+        $pages = $this->pageRouter->generatePages();
+
+        $this->assertSame([
+            'file' => 'index.php',
+            'path' => $dir,
+        ], $pages);
+    }
 }
