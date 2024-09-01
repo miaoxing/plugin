@@ -1,3 +1,34 @@
+# [0.16.0](https://github.com/miaoxing/plugin/compare/v0.15.2...v0.16.0) (2024-09-01)
+
+
+### Bug Fixes
+
+* **PageRouter:** 解决首页未识别 ([5184b1a](https://github.com/miaoxing/plugin/commit/5184b1a2b97c137cc0ee8ab6de4d0c2e8f9b7c3d))
+* **plugin:** `GAutoCompletion` 忽略类名不存在的情况 ([89868c9](https://github.com/miaoxing/plugin/commit/89868c990fdff3934b4b17300e50569932fd99e1))
+* **plugin:** 添加 nette/php-generator 依赖，以便其他插件使用 `GAutoCompletion` 命令 ([77b8832](https://github.com/miaoxing/plugin/commit/77b8832f24123850166050809f12730e1d802ebb))
+* **user:** 用户登录后，更新最后登录时间 ([7cb559a](https://github.com/miaoxing/plugin/commit/7cb559a0e6bcd4de02135c52dd264c2366dfe4bd))
+
+
+### Features
+
+* 插件增加 wei 命令行入口 ([c33fc1f](https://github.com/miaoxing/plugin/commit/c33fc1f0b41e4b67480123f9255f77ab73c4b27b))
+* **plugin:** `GAutoCompletion` 改为对所有服务生成文件，并生成到根目录的 docs 下 ([fb6e09c](https://github.com/miaoxing/plugin/commit/fb6e09cbc6555bd08ebb2e133866e4d355ab5464))
+
+
+### BREAKING CHANGES
+
+* **plugin:** `GAutoCompletion` 改为对所有服务生成文件，并生成到根目录的 docs 下
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `9.1.3` to `9.2.0`
+* **@mxjs/cli:** upgrade from `0.1.18` to `0.1.19`
+* **@wei/wei:** upgrade from `0.17.7` to `0.17.8`
+
 ## [0.15.2](https://github.com/miaoxing/plugin/compare/v0.15.1...v0.15.2) (2024-08-03)
 
 
