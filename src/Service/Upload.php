@@ -15,6 +15,7 @@ class Upload extends \Wei\Upload
         'png',
         'bmp',
         'gif',
+        'svg',
     ];
 
     /**
