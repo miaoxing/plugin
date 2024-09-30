@@ -1,3 +1,10 @@
+## [0.16.1](https://github.com/miaoxing/plugin/compare/v0.16.0...v0.16.1) (2024-09-30)
+
+
+### Features
+
+* **plugin:** 上传图片支持 svg 类型 ([ebacb05](https://github.com/miaoxing/plugin/commit/ebacb054d469a78f1fe48be39f476025f05d8c83))
+
 # [0.16.0](https://github.com/miaoxing/plugin/compare/v0.15.2...v0.16.0) (2024-09-01)
 
 
