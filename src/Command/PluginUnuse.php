@@ -19,4 +19,9 @@ class PluginUnuse extends BaseCommand
 
         $this->suc('Remove default plugin');
     }
+
+    protected function configure()
+    {
+        $this->setDescription('Remove the default plugin set by `plugin:use`');
+    }
 }
