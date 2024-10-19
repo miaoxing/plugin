@@ -310,7 +310,7 @@ class Config extends \Wei\Config
     protected function preloadGlobal()
     {
         // 1. 先获取本地配置
-        $configs = $this->getPhpFileCache('global-config', []);
+        $configs = (array) $this->getPhpFileCache('global-config', []);
 
         // 2. 检查更新配置
         if ($this->checkPreload && $this->needsUpdatePreload($configs)) {
