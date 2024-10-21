@@ -22,7 +22,7 @@ class GRelation extends BaseCommand
 
     protected function handle()
     {
-        $name = $this->getArgument('model');
+        $name = lcfirst($this->getArgument('model'));
         if (!$this->wei->has($name)) {
             return $this->err(sprintf('模型 %s 不存在', $name));
         }
