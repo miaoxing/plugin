@@ -37,7 +37,7 @@ class PluginUse extends BaseCommand
 
     protected function configure()
     {
-        $this->setDescription('Set the default plugin, which will be used by default when you run the commands without plugin id')
+        $this->setDescription('Set the default plugin, which will be used when run the commands without plugin id')
             ->addArgument('plugin-id', InputArgument::OPTIONAL, 'The id of plugin');
     }
 }
