@@ -1,3 +1,33 @@
+# [0.17.0](https://github.com/miaoxing/plugin/compare/v0.16.1...v0.17.0) (2024-11-01)
+
+
+### Bug Fixes
+
+* **plugin:** 转换配置为数组，解决文件异常导致内容非数组出错 ([c5a5544](https://github.com/miaoxing/plugin/commit/c5a55447c849a5bbe5c016368a48fa87ae0fb39f))
+
+
+### Code Refactoring
+
+* **plugin:** 移除废弃的 `SoftDeleteTrait`，改用 `Wei\Model\SoftDeleteTrait` ([93e727a](https://github.com/miaoxing/plugin/commit/93e727a3dc81acade580be488193520d527641bd))
+
+
+### Features
+
+* **plugin:** `g:relation` 命令支持传入首字母大写的模型名称，例如粘贴复制的类名 ([bec8ddc](https://github.com/miaoxing/plugin/commit/bec8ddca41b9ee0599d94d18527c6de88994dfa3))
+
+
+### BREAKING CHANGES
+
+* **plugin:** 移除废弃的 `SoftDeleteTrait`，改用 `Wei\Model\SoftDeleteTrait`
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.17.8` to `0.17.9`
+
 ## [0.16.1](https://github.com/miaoxing/plugin/compare/v0.16.0...v0.16.1) (2024-09-30)
 
 

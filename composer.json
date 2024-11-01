@@ -10,7 +10,7 @@
   "require": {
     "ext-json": "*",
     "ext-openssl": "*",
-    "wei/wei": "^0.17.8",
+    "wei/wei": "^0.17.9",
     "doctrine/inflector": "^1.4|^2.0",
     "adhocore/jwt": "^1.1.2",
     "fakerphp/faker": "^1.14",
