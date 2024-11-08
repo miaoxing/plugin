@@ -1,5 +1,7 @@
 <?php
 
+use Wei\Str;
+
 return [
     /* @see Wei\Wei */
     'wei' => [
@@ -74,6 +76,12 @@ return [
     /* @see Wei\PhpFileCache */
     'phpFileCache' => [
         'dir' => 'storage/cache',
+    ],
+
+    /* @see Wei\QueryBuilder */
+    'queryBuilder' => [
+        'phpKeyConverter' => [Str::class, 'camel'],
+        'dbKeyConverter' => [Str::class, 'snake'],
     ],
 
     /* @see Wei\Redis */
