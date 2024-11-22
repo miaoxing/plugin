@@ -5,6 +5,7 @@ namespace Miaoxing\Plugin\Service;
 use Miaoxing\Plugin\BaseService;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Dotenv\Dotenv;
 use Wei\Wei;
 
 /**
@@ -17,13 +18,18 @@ class ConsoleApp extends BaseService
     /**
      * @var string[]
      */
-    protected $commandDirs = [
+    protected array $commandDirs = [
         'src',
         'plugins/*/src',
     ];
 
     public function __invoke(): int
     {
+        if (is_file('.env')) {
+            $dotenv = new Dotenv();
+            $dotenv->loadEnv('.env');
+        }
+
         $this->config->preloadGlobal();
 
         $app = new Application('Wei', Wei::VERSION);
