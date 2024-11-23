@@ -5,13 +5,25 @@ namespace Miaoxing\Plugin\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 
+/**
+ * @mixin \ReqPropMixin
+ */
 class Dev extends BaseCommand
 {
+    protected int $defaultPort = 8000;
+
     protected function configure()
     {
+        $url = $this->req->getServer('APP_URL');
+        if ($url) {
+            $components = parse_url($url);
+        }
+
+        $port = $components['port'] ?? $this->defaultPort;
+        $host = $components['host'] ?? 'localhost';
         $this->setDescription('Start a PHP development server')
-            ->addOption('port', null, InputOption::VALUE_OPTIONAL, 'The port of dev server', 8888)
-            ->addOption('host', null, InputOption::VALUE_OPTIONAL, 'The host of dev server', 'localhost');
+            ->addOption('port', null, InputOption::VALUE_OPTIONAL, 'The port of dev server', $port)
+            ->addOption('host', null, InputOption::VALUE_OPTIONAL, 'The host of dev server', $host);
     }
 
     protected function handle()
