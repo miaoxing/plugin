@@ -1,3 +1,25 @@
+## [0.17.1](https://github.com/miaoxing/plugin/compare/v0.17.0...v0.17.1) (2024-11-30)
+
+
+### Bug Fixes
+
+* **plugin:** 调用 QueryBuilder 获取表格列应转换为驼峰格式 ([7d98d75](https://github.com/miaoxing/plugin/commit/7d98d751c7cee9d497d7fea442a10af8ffbf29b7))
+
+
+### Features
+
+* **plugin:** 从 .env 文件读取 APP_URL 并用于 dev server 配置 ([87e0788](https://github.com/miaoxing/plugin/commit/87e0788a029caf6676c0c0eae42ccdc40731ec74))
+* **plugin:** 命令行下加载 .env 配置文件 ([a89f533](https://github.com/miaoxing/plugin/commit/a89f533458bcf5955ffddaf2376417d7b17a11d3))
+* **plugin:** 增加 dev 命令，用于启动开发服务器 ([3c5fc5f](https://github.com/miaoxing/plugin/commit/3c5fc5fa67c9b9caa5580f0ea6afc21f8670ea5a))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.17.9` to `0.18.0`
+
 # [0.17.0](https://github.com/miaoxing/plugin/compare/v0.16.1...v0.17.0) (2024-11-01)
 
 
