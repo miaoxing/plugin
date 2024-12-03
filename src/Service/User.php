@@ -340,6 +340,8 @@ class User extends BaseService
         $ret = $this->getAuth()->login($user);
         if ($ret->isSuc()) {
             $this->setCur($user);
+            $this->event->trigger('login', [$user]);
+            // @deprecated
             $this->event->trigger('userLogin', [$user]);
         }
 
@@ -359,6 +361,8 @@ class User extends BaseService
         }
 
         $this->getAuth()->logout();
+        $this->event->trigger('logout', [$this->cur()]);
+        // @@deprecated
         $this->event->trigger('beforeUserLogout', [$this->cur()]);
         $this->setCur(null);
 
