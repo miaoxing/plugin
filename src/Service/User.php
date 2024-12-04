@@ -271,23 +271,23 @@ class User extends BaseService
         $user = $user->findBy($column, $data['username']);
 
         if (!$user) {
-            return err('用户名不存在或密码错误');
+            return $this->loginFailed('用户名不存在或密码错误', $user, $data);
         }
 
         // 3. 检查用户是否有效
         if (!$user->isEnabled) {
-            return err('用户未启用,无法登录');
+            return $this->loginFailed('用户未启用,无法登录', $user, $data);
         }
 
         // 4. 验证密码是否正确
         if (!$user->verifyPassword($data['password'])) {
-            return err('用户不存在或密码错误');
+            return $this->loginFailed('用户不存在或密码错误', $user, $data);
         }
 
         // 5. 验证通过,登录用户
         $ret = $this->loginByModel($user);
         if ($ret->isErr()) {
-            return $ret;
+            return $this->loginFailed($ret, $user, $data);
         }
 
         $user->lastLoginAt = Time::now();
@@ -423,5 +423,21 @@ class User extends BaseService
         $user = UserModel::new();
         $user->setCacheKey($user->getModelCacheKey($id))->findOrInit($id);
         $this->setCur($user);
+    }
+
+    /**
+     * Trigger the `loginFailed` event and return error result
+     *
+     * @param string|Ret $messageOrRet
+     * @param UserModel|null $user
+     * @param mixed $data
+     * @return Ret
+     * @internal
+     */
+    protected function loginFailed($messageOrRet, ?UserModel $user = null, $data = []): Ret
+    {
+        $ret = $messageOrRet instanceof Ret ? $messageOrRet : err($messageOrRet);
+        $this->event->trigger('loginFailed', [$user, $ret, $data]);
+        return $ret;
     }
 }
