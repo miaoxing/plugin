@@ -9,6 +9,7 @@ use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
 use Symfony\Component\Console\Input\InputArgument;
+use Wei\BaseValidator;
 
 /**
  * 生成自动完成的代码文件
@@ -468,7 +469,7 @@ PHP;
     {
         $validators = [];
         foreach ($services as $name => $class) {
-            if ('is' === substr($name, 0, 2)) {
+            if ('is' === substr($name, 0, 2) && is_subclass_of($class, BaseValidator::class)) {
                 $validators[$name] = $class;
             }
         }
