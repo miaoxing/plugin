@@ -418,6 +418,9 @@ trait ReqQueryTrait
             case '':
                 return $this->where($column, '=', $value);
 
+            case 'ne':
+                return $this->where($column, '!=', $value);
+
             case 'ct':
                 return $this->whereContains($column, $value);
 
