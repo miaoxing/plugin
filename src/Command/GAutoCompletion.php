@@ -8,6 +8,7 @@ use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Wei\BaseValidator;
 
@@ -33,6 +34,7 @@ use Wei\BaseValidator;
  * @see StaticCallTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[AsCommand(name: 'g:auto-completion')]
 class GAutoCompletion extends BaseCommand
 {
     protected static $defaultName = 'g:auto-completion';
