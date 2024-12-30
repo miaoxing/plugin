@@ -1,3 +1,29 @@
+## [0.17.2](https://github.com/miaoxing/plugin/compare/v0.17.1...v0.17.2) (2024-12-30)
+
+
+### Bug Fixes
+
+* **plugin:** `BaseCommand::execute` 方法兼容 symfony/console 7 ([39326db](https://github.com/miaoxing/plugin/commit/39326dbd782bf5bb39a6d24ca8c97df7f5fbd8fb))
+* **plugin:** `GAutoCompletion` 增加 AsCommand 属性以兼容 sf console 6,7 ([b7d65d8](https://github.com/miaoxing/plugin/commit/b7d65d828f7a2f86a6ff6e4da370a072e9d040f9))
+* **plugin:** 解决 `GAutoCompletion` 类名以 `is` 开头（如 `issue`）错误识别为校验器类导致错误 ([fd191f9](https://github.com/miaoxing/plugin/commit/fd191f98376344f4f1a473df16d84295ec68a8cc))
+
+
+### Features
+
+* **Model:** `ReqQueryTrait` 支持不等于查询 ([b317c99](https://github.com/miaoxing/plugin/commit/b317c9900f23d971321214424b15be42201c98a1))
+* **plugin:** 增加 `loginFailed` 事件 ([9f913ed](https://github.com/miaoxing/plugin/commit/9f913eddb00e900374c8c16f8715662a5c3b5e3c))
+* **plugin, deprecated:** 增加 `login`, `logout` 事件，废弃 `userLogin`, `beforeUserLogout` 事件 ([cc1bb5e](https://github.com/miaoxing/plugin/commit/cc1bb5ebaaa78ccf2af36d699e300dd31e2653b1))
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `9.2.0` to `9.3.0`
+* **@mxjs/cli:** upgrade from `0.1.19` to `0.1.20`
+* **@wei/wei:** upgrade from `0.18.0` to `0.18.1`
+
 ## [0.17.1](https://github.com/miaoxing/plugin/compare/v0.17.0...v0.17.1) (2024-11-30)
 
 
