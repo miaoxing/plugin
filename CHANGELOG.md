@@ -1,3 +1,15 @@
+## [0.17.3](https://github.com/miaoxing/plugin/compare/v0.17.2...v0.17.3) (2024-12-31)
+
+
+
+
+
+### Dependencies
+
+* **@miaoxing/dev:** upgrade from `9.3.0` to `9.3.1`
+* **@mxjs/cli:** upgrade from `0.1.20` to `0.1.21`
+* **@wei/wei:** upgrade from `0.18.1` to `0.18.2`
+
 ## [0.17.2](https://github.com/miaoxing/plugin/compare/v0.17.1...v0.17.2) (2024-12-30)
 
 
