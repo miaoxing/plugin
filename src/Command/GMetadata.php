@@ -6,10 +6,13 @@ use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
 use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Wei\BaseModel;
 use Wei\Model\CamelCaseTrait;
+use Wei\Model\Relation;
+use Wei\ModelTrait;
 
 /**
  * @mixin \StrPropMixin
@@ -62,6 +65,9 @@ final class GMetadata extends BaseCommand
 
         // 生成 getXxxAttribute 的方法定义的属性的注释
         $docBlocks = array_merge($docBlocks, $this->getDocBlocksFromAccessors($reflectionClass, $camelCase));
+
+        // 获取关联的定义
+        $docBlocks = array_merge($docBlocks, $this->getDocBlocksFromRelationMethods($reflectionClass));
 
         $docComment = $reflectionClass->getDocComment();
         $factory = DocBlockFactory::createInstance();
