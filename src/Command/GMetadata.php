@@ -23,25 +23,32 @@ use Wei\ModelTrait;
  */
 final class GMetadata extends BaseCommand
 {
-    use PluginIdTrait;
-
     public function handle()
     {
-        $id = $this->getPluginId();
+        $pluginIds = [];
+        $pluginId = $this->getArgument('plugin-id');
+        if ($pluginId) {
+            $pluginIds[] = $pluginId;
+        } else {
+            foreach ($this->plugin->getAll() as $plugin) {
+                $pluginIds[] = $plugin->getId();
+            }
+        }
 
-        $plugin = $this->plugin->getOneById($id);
-
-        $services = $this->classMap->generate(
-            [$plugin->getBasePath() . '/src'],
-            '/Service/?*Model.php', // 排除 Model.php
-            'Service',
-            false
-        );
-
-        foreach ($services as $name => $class) {
-            $uses = $this->cls->usesDeep($class);
-            $camelCase = isset($uses[CamelCaseTrait::class]);
-            $this->updateClass($name, $camelCase);
+        foreach ($pluginIds as $pluginId) {
+            $plugin = $this->plugin->getOneById($pluginId);
+            $services = $this->classMap->generate(
+                [$plugin->getBasePath() . '/src'],
+                '/Service/?*Model.php', // 排除 Model.php
+                'Service',
+                false
+            );
+            foreach ($services as $class) {
+                if (!is_subclass_of($class, BaseModel::class)) {
+                    continue;
+                }
+                $this->updateClass($class);
+            }
         }
 
         $this->suc('创建成功');
@@ -54,14 +61,15 @@ final class GMetadata extends BaseCommand
             ->addOption('rewrite', 'r', InputOption::VALUE_NONE, 'Whether to rewrite the existing metadata');
     }
 
-    protected function updateClass($model, $camelCase)
+    protected function updateClass(string $modelClass)
     {
-        /** @var BaseModel $modelObject */
-        $modelObject = $this->wei->get($model);
-        $reflectionClass = new ReflectionClass($modelObject);
+        /** @var BaseModel $model */
+        $model = new $modelClass();
+        $reflectionClass = new ReflectionClass($model);
+        $camelCase = $this->cls->usesDeep($modelClass)[CamelCaseTrait::class] ?? false;
 
         // 生成表格字段的属性的注释
-        $docBlocks = $this->getDocBlocksFromTable($modelObject, $camelCase);
+        $docBlocks = $this->getDocBlocksFromTable($model, $camelCase);
 
         // 生成 getXxxAttribute 的方法定义的属性的注释
         $docBlocks = array_merge($docBlocks, $this->getDocBlocksFromAccessors($reflectionClass, $camelCase));
