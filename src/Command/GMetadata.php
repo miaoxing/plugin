@@ -233,7 +233,7 @@ final class GMetadata extends BaseCommand
         foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if ($this->isRelation($method, $reflectionClass)) {
                 $propertyName = $method->getName();
-                $returnName = $method->getReturnType()->getName();
+                $returnName = $this->getReturnName($method);
                 $properties[$propertyName] = rtrim(sprintf(
                     ' * @property %s $%s %s',
                     class_exists($returnName) ? ('\\' . $returnName) : $returnName,
@@ -243,6 +243,40 @@ final class GMetadata extends BaseCommand
             }
         }
         return $properties;
+    }
+
+    /**
+     * 获取方法的返回类型，优先从注释获取，其次是方法的返回类型
+     *
+     * @param ReflectionMethod $method
+     * @return string
+     */
+    protected function getReturnName(ReflectionMethod $method): string
+    {
+        $docComment = $method->getDocComment();
+        if ($docComment) {
+            $returns = $this->createDocblock($docComment)->getTagsByName('return');
+            if ($returns) {
+                return (string) $returns[0]->getType();
+            }
+        }
+        return $method->getReturnType()->getName();
+    }
+
+    /**
+     * 创建 DocBlock 对象
+     *
+     * @param string $docComment
+     * @return DocBlock
+     */
+    protected function createDocblock(string $docComment): DocBlock
+    {
+        $factory = DocBlockFactory::createInstance();
+        if ($docComment) {
+            return $factory->create($docComment);
+        } else {
+            return new DocBlock();
+        }
     }
 
     protected function isRelation(ReflectionMethod $method, ReflectionClass $reflectionClass): bool
