@@ -171,12 +171,14 @@ final class GMetadata extends BaseCommand
         $docBlocks = [];
         foreach ($columns as $column) {
             $propertyName = $camelCase ? $this->str->camel($column['Field']) : $column['Field'];
+            $cast = $modelColumns[$propertyName]['cast'] ?? null;
 
-            $phpType = $this->getPhpType($column['Type']);
-
-            // TODO 支持其他类型
-            if ('json' === $column['Type'] && ($modelColumns[$propertyName]['cast'] ?? null) === 'object') {
+            if ('list' === $cast || 'list' === ($cast[0] ?? null)) {
+                $phpType = 'array';
+            } elseif ('object' === $cast) {
                 $phpType = 'object';
+            } else {
+                $phpType = $this->getPhpType($column['Type']);
             }
 
             if (isset($modelColumns[$propertyName]['nullable']) && $modelColumns[$propertyName]['nullable']) {
