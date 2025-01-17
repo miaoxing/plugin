@@ -4,7 +4,6 @@ namespace Miaoxing\Plugin\Service;
 
 use Miaoxing\Plugin\BaseModel;
 use Miaoxing\Plugin\ConstTrait;
-use Miaoxing\Plugin\Metadata\AppTrait;
 use Miaoxing\Plugin\Model\ModelTrait;
 use Wei\Model\CacheTrait;
 
@@ -12,10 +11,19 @@ use Wei\Model\CacheTrait;
  * 应用模型
  *
  * @property array $pluginIds 已安装的插件编号
+ * @property string|null $id
+ * @property int $userId 所属用户的编号
+ * @property string $name 名称
+ * @property string $domain 绑定的域名
+ * @property string $description 描述
+ * @property int $status 状态
+ * @property string|null $createdAt
+ * @property string|null $updatedAt
+ * @property string $createdBy
+ * @property string $updatedBy
  */
 class AppModel extends BaseModel
 {
-    use AppTrait;
     use CacheTrait;
     use ConstTrait;
     use ModelTrait;
