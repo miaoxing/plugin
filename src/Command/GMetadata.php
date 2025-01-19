@@ -5,8 +5,6 @@ namespace Miaoxing\Plugin\Command;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
 use phpDocumentor\Reflection\DocBlockFactory;
-use ReflectionClass;
-use ReflectionMethod;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Wei\BaseModel;
@@ -65,7 +63,7 @@ final class GMetadata extends BaseCommand
     {
         /** @var BaseModel $model */
         $model = new $modelClass();
-        $reflectionClass = new ReflectionClass($model);
+        $reflectionClass = new \ReflectionClass($model);
         $camelCase = $this->cls->usesDeep($modelClass)[CamelCaseTrait::class] ?? false;
 
         // 生成表格字段的属性的注释
@@ -200,14 +198,18 @@ final class GMetadata extends BaseCommand
     /**
      * 生成 getXxxAttribute 的方法定义的属性的注释
      *
-     * @param ReflectionClass $reflectionClass
+     * @param \ReflectionClass $reflectionClass
      * @param bool $camelCase
      * @return array
      */
-    protected function getDocBlocksFromAccessors(ReflectionClass $reflectionClass, bool $camelCase): array
+    protected function getDocBlocksFromAccessors(\ReflectionClass $reflectionClass, bool $camelCase): array
     {
         $docBlocks = [];
-        preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($reflectionClass->getName())), $matches);
+        preg_match_all(
+            '/(?<=^|;)get([^;]+?)Attribute(;|$)/',
+            implode(';', get_class_methods($reflectionClass->getName())),
+            $matches
+        );
         foreach ($matches[1] as $key => $attr) {
             $propertyName = $camelCase ? lcfirst($attr) : $this->str->snake($attr);
             if (isset($docBlocks[$propertyName])) {
@@ -217,7 +219,7 @@ final class GMetadata extends BaseCommand
             $method = rtrim($matches[0][$key], ';');
             $reflectionMethod = $reflectionClass->getMethod($method);
             $name = $this->getDocCommentTitle($reflectionMethod->getDocComment());
-            $return = $this->getMethodReturn($reflectionClass, $reflectionMethod) ?: 'mixed';
+            $return = $this->getMethodReturn($reflectionMethod);
             $docBlocks[$propertyName] = rtrim(sprintf(' * @property %s $%s %s', $return, $propertyName, $name));
         }
         return $docBlocks;
@@ -226,19 +228,19 @@ final class GMetadata extends BaseCommand
     /**
      * 生成关联方法的注释
      *
-     * @param ReflectionClass $reflectionClass
+     * @param \ReflectionClass $reflectionClass
      * @return array
      */
-    protected function getDocBlocksFromRelationMethods(ReflectionClass $reflectionClass): array
+    protected function getDocBlocksFromRelationMethods(\ReflectionClass $reflectionClass): array
     {
         $properties = [];
-        foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             if ($this->isRelation($method, $reflectionClass)) {
                 $propertyName = $method->getName();
-                $returnName = $this->getReturnName($method);
+                $returnName = $this->getMethodReturn($method);
                 $properties[$propertyName] = rtrim(sprintf(
                     ' * @property %s $%s %s',
-                    class_exists($returnName) ? ('\\' . $returnName) : $returnName,
+                    $returnName,
                     $propertyName,
                     $this->getDocCommentTitle($method->getDocComment())
                 ));
@@ -247,41 +249,7 @@ final class GMetadata extends BaseCommand
         return $properties;
     }
 
-    /**
-     * 获取方法的返回类型，优先从注释获取，其次是方法的返回类型
-     *
-     * @param ReflectionMethod $method
-     * @return string
-     */
-    protected function getReturnName(ReflectionMethod $method): string
-    {
-        $docComment = $method->getDocComment();
-        if ($docComment) {
-            $returns = $this->createDocblock($docComment)->getTagsByName('return');
-            if ($returns) {
-                return (string) $returns[0]->getType();
-            }
-        }
-        return $method->getReturnType()->getName();
-    }
-
-    /**
-     * 创建 DocBlock 对象
-     *
-     * @param string $docComment
-     * @return DocBlock
-     */
-    protected function createDocblock(string $docComment): DocBlock
-    {
-        $factory = DocBlockFactory::createInstance();
-        if ($docComment) {
-            return $factory->create($docComment);
-        } else {
-            return new DocBlock();
-        }
-    }
-
-    protected function isRelation(ReflectionMethod $method, ReflectionClass $reflectionClass): bool
+    protected function isRelation(\ReflectionMethod $method, \ReflectionClass $reflectionClass): bool
     {
         // PHP 8
         if (method_exists($method, 'getAttributes') && $method->getAttributes(Relation::class)) {
@@ -313,15 +281,38 @@ final class GMetadata extends BaseCommand
         return true;
     }
 
-    protected function getMethodReturn(ReflectionClass $class, ReflectionMethod $method)
+    /**
+     * 获取方法的返回类型，优先从注释获取，其次是方法的返回类型
+     *
+     * @param \ReflectionMethod $method
+     * @return string
+     */
+    protected function getMethodReturn(\ReflectionMethod $method): string
     {
-        $doc = $method->getDocComment();
-        preg_match('/@return (.+?)\n/', $doc, $matches);
-        if (!$matches) {
-            return false;
+        $docComment = $method->getDocComment();
+        if ($docComment) {
+            // 不使用 PHPDoc 解析，因为类名默认会加上全局命名空间
+            preg_match('/@return (.+?)\s/', $docComment, $matches);
+            if ($matches) {
+                return $matches[1];
+            }
         }
 
-        return $matches[1] ?: false;
+        $returnType = $method->getReturnType();
+        if (!$returnType) {
+            return 'mixed';
+        }
+
+        // 使用静态解析，不使用反射，因为返回值会包含命名空间，实际命名空间已经导入了
+        $startLine = $method->getStartLine();
+        $endLine = $method->getEndLine();
+        $source = file($method->getFileName());
+        $methodCode = implode('', array_slice($source, $startLine - 1, $endLine - $startLine + 1));
+        preg_match('/\)\s*:\s*(.+?)\s/', $methodCode, $matches);
+        if ($matches) {
+            return $matches[1];
+        }
+        return 'mixed';
     }
 
     /**
@@ -374,11 +365,11 @@ final class GMetadata extends BaseCommand
     /**
      * 更新类注释为新的内容
      *
-     * @param ReflectionClass $reflectionClass
+     * @param \ReflectionClass $reflectionClass
      * @param string $newDocComment
      * @return void
      */
-    protected function updateDocComment(ReflectionClass $reflectionClass, string $newDocComment)
+    protected function updateDocComment(\ReflectionClass $reflectionClass, string $newDocComment)
     {
         $file = $reflectionClass->getFileName();
         $fileContent = file_get_contents($file);
@@ -386,10 +377,10 @@ final class GMetadata extends BaseCommand
         $docComment = $reflectionClass->getDocComment();
         if (!$docComment) {
             $startLine = $reflectionClass->getStartLine();
-            $lines = explode(PHP_EOL, $fileContent);
+            $lines = explode(\PHP_EOL, $fileContent);
 
             array_splice($lines, $startLine - 1, 0, [$newDocComment]);
-            $fileContent = implode(PHP_EOL, $lines);
+            $fileContent = implode(\PHP_EOL, $lines);
         } else {
             $fileContent = str_replace($docComment, $newDocComment, $fileContent);
         }
