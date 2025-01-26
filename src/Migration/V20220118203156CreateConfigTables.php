@@ -2,6 +2,7 @@
 
 namespace Miaoxing\Plugin\Migration;
 
+use Miaoxing\Plugin\Service\PresetColumns;
 use Wei\Migration\BaseMigration;
 
 class V20220118203156CreateConfigTables extends BaseMigration
@@ -13,7 +14,7 @@ class V20220118203156CreateConfigTables extends BaseMigration
     {
         $this->schema->table('configs')
             ->id()
-            ->uBigInt('app_id')->comment('应用编号')
+            ->add(PresetColumns::appId())
             ->string('name', 64)
             ->char('type', 1)->comment('值的类型,s:字符串')
             ->string('value', 2048)
