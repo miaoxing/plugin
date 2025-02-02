@@ -1,3 +1,28 @@
+## [0.17.4](https://github.com/miaoxing/plugin/compare/v0.17.3...v0.17.4) (2025-02-02)
+
+
+### Bug Fixes
+
+* **plugin, experimental:** 解决通过反射读到的类名会多出命名空间 ([ae239ed](https://github.com/miaoxing/plugin/commit/ae239edd2e28d05912141d4d4d3b618a1f2d86fe))
+
+
+### Features
+
+* **plugin:** `GMetadata` 生成方法注释时，支持读取 PHPDoc 的自定义返回值 ([f2d1b42](https://github.com/miaoxing/plugin/commit/f2d1b42cc2c0e2ab76d1d59156ecdb82dd3a9fb6))
+* **plugin, experimental:** `GMetadata` 增加生成关联方法的注释 ([5471d0a](https://github.com/miaoxing/plugin/commit/5471d0ab4c1d884bf7ed672a2ae810773fb92159))
+* **plugin, experimental:** `GMetadata` 支持不传入 plugin-id, 生成所有模型类的元数据 ([3e5b06a](https://github.com/miaoxing/plugin/commit/3e5b06acfff26791b392cbdd3864c675add28372))
+* **plugin, experimental:** `GMetadata` 改为生成注释到模型类，默认新增注释，支持重写注释 ([c9c1e05](https://github.com/miaoxing/plugin/commit/c9c1e058c42a3e5894641c35427fc692d3a3d467))
+* **plugin, experimental:** `GMetadata` 生成类型时，优先通过 cast 识别出 `array` 和 `object` 类型 ([f558a35](https://github.com/miaoxing/plugin/commit/f558a35bbe4bbd3b39ecad1521ec8cd16428cd99))
+* **plugin, experimental:** 增加 `PresetColumns` 服务，用于生成常用的字段 ([f29fcd3](https://github.com/miaoxing/plugin/commit/f29fcd3cb0abd42c989f4c5a09c5deb01cb94c12))
+
+
+
+
+
+### Dependencies
+
+* **@wei/wei:** upgrade from `0.18.2` to `0.18.3`
+
 ## [0.17.3](https://github.com/miaoxing/plugin/compare/v0.17.2...v0.17.3) (2024-12-31)
 
 
