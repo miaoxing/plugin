@@ -83,6 +83,21 @@ class ScheduleTest extends BaseTestCase
         $this->assertEmpty($result);
     }
 
+    /**
+     * @dataProvider dataProviderForCron
+     * @param mixed $method
+     * @param mixed $params
+     * @param mixed $next
+     */
+    public function testCron($method, $params, $next)
+    {
+        $task = new Task();
+        $task->{$method}(...$params);
+        $task->setNow(new \DateTime('2023-01-01 00:00:00'));
+        $date = $task->getNextRunDate();
+        $this->assertSame($next, $date->format('Y-m-d H:i:s'));
+    }
+
     public static function dataProviderForCron(): array
     {
         return [
@@ -118,20 +133,5 @@ class ScheduleTest extends BaseTestCase
             ['quarterly', [], '2023-04-01 00:00:00'],
             ['yearly', [], '2024-01-01 00:00:00'],
         ];
-    }
-
-    /**
-     * @dataProvider dataProviderForCron
-     * @param mixed $method
-     * @param mixed $params
-     * @param mixed $next
-     */
-    public function testCron($method, $params, $next)
-    {
-        $task = new Task();
-        $task->{$method}(...$params);
-        $task->setNow(new \DateTime('2023-01-01 00:00:00'));
-        $date = $task->getNextRunDate();
-        $this->assertSame($next, $date->format('Y-m-d H:i:s'));
     }
 }
